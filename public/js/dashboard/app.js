@@ -1886,7 +1886,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.prev = 0;
                 _context.next = 3;
-                return _api_httpClient__WEBPACK_IMPORTED_MODULE_1__.default.post('/users', {
+                return _api_httpClient__WEBPACK_IMPORTED_MODULE_1__.default.get('/users/1', {
                   name: 'test'
                 });
 
@@ -1981,7 +1981,7 @@ var httpClient = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
   baseURL: 'http://disertatie.test/api',
   timeout: 60000,
   // indicates, 1000ms ie. 1 second
-  withCredentials: false,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',

@@ -15,7 +15,7 @@
         methods: {
             async test() {
                 try {
-                    await httpClient.post('/users', {name: 'test'});
+                    await httpClient.get('/users/1', {name: 'test'});
                 } catch ( error ) {
                     console.log(error)
                 }

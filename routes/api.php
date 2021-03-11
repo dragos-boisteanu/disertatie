@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('api')->post('/users', 'Api\Dashboard\UserController@store');
-Route::middleware('api')->get('/users', 'Api\Dashboard\UserController@show');
+Route::middleware('auth:sanctum')->post('/users', 'Api\Dashboard\UserController@store');
+Route::middleware('auth:sanctum')->get('/users/{id}', 'Api\Dashboard\UserController@show');
 
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
