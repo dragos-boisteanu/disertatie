@@ -1978,7 +1978,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 var httpClient = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
-  baseURL: 'http://disertatie.test/api',
+  baseURL: 'http://disertatie.test/api/dashboard',
   timeout: 60000,
   // indicates, 1000ms ie. 1 second
   withCredentials: true,

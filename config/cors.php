@@ -15,14 +15,14 @@ return [
     |
     */
 
-    'paths' => ['http://api.disertatie.test/dashboard/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api.disertatie.test/api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://api.disertatie.test'],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
-
+ 
     'allowed_headers' => ['*'],
 
     'exposed_headers' => ['*'],
