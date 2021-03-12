@@ -3,16 +3,43 @@ import VueRouter from 'vue-router';
 
 import Home from '../views/HomeView.vue';
 
+import UsersViewList from '../views/users/UsersListView.vue';
+import UserView from '../views/users/UserView.vue';
+
 const baseUrl = '/dashboard'
 const routes = [
     {
         path: `${baseUrl}/`,
-        name: 'Home',
+        name: 'Dashboard',
         component: Home,
         meta: {
-            breadcrumb: 'Home',
+            breadcrumb: 'Dashboard',
+        },
+    },
+    {
+        path: `${baseUrl}/users`,
+        name: 'Users',
+        component: UsersViewList,
+        meta: {
+            breadcrumb:  {
+                label: 'Users',
+                parent: 'Dashboard'
+            }
         }
+    },
+    {
+        path: `${baseUrl}/users/:id`,
+        name: 'User',
+        component: UserView,
+        meta: {
+            breadcrumb: {
+                label: 'Profile',
+                parent: 'Users'
+            }
+        }
+
     }
+    
 ];
 
 const router = new VueRouter({

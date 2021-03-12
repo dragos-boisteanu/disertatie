@@ -1,25 +1,33 @@
 <template>
-    <div>
-        <h1>Vue Router Demo App</h1>
+    <div class="h-full flex flex-col">   
+        <div>
+            <Header/>
+            <UtilityBar/>
+            <Breadcrumbs/>
+        </div>
 
         <router-view></router-view>
-        <button @click="test">
-            GET
-        </button>
     </div>
 </template>
 <script>
     import httpClient from './api/httpClient';
+    import Header from './components/header/HeaderComponent';
+    import UtilityBar from './components/header/utility_bar/UtilityBarComponent';
 
     export default {
         methods: {
-            async test() {
-                try {
-                    await httpClient.get('/users/1', {name: 'test'});
-                } catch ( error ) {
-                    console.log(error)
-                }
-            }
+           
+        },
+        components: {
+            Header,
+            UtilityBar
         }
     }
 </script>
+
+<style>
+
+    a.router-link-active.router-link-exact-active {
+        @apply text-orange-700;
+    }
+</style>
