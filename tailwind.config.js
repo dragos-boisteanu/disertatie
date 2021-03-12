@@ -24,7 +24,7 @@ module.exports = {
     variants: {
         extend: {
             opacity: ['disabled'],
-            display: ['last'],
+            pointerEvents: ['hover'],
         },
     },
 

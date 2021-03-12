@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Dashboard\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefix'=>'dashboard'], function() {   
-    Route::post('/users', 'UserController@store');
-    Route::get('/users/{id}', 'UserController@show');
+    // Route::resource('user', [UserController::class]);
+    Route::get('/users', 'UserController@index');
+    // Route::get('/users/{id}', 'UserController@show');
 });
 
 
