@@ -2257,6 +2257,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -23086,7 +23089,7 @@ var render = function() {
                       _c("div", { staticClass: "flex-1" }, [
                         _c(
                           "div",
-                          { staticClass: "capitalize" },
+                          { staticClass: "capitalize text-base font-semibold" },
                           [
                             _c("span", [_vm._v(_vm._s(user.first_name))]),
                             _vm._v(" "),
@@ -23095,17 +23098,17 @@ var render = function() {
                           1
                         ),
                         _vm._v(" "),
-                        _c("div", { staticClass: "font-medium text-xs mt-1" }, [
+                        _c("div", { staticClass: "font-medium" }, [
                           _vm._v(
-                            "\n                             " +
+                            "\n                            " +
                               _vm._s(user.email) +
-                              " "
-                          ),
-                          _c("span", { staticClass: "font-semibold" }, [
-                            _vm._v(" / ")
-                          ]),
+                              "\n                         "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "mt-1 text-xs" }, [
                           _vm._v(
-                            " " +
+                            "\n                            " +
                               _vm._s(user.phone_number) +
                               "\n                         "
                           )
@@ -23125,7 +23128,7 @@ var render = function() {
                           "div",
                           {
                             staticClass:
-                              "py-1 px-2 mt-1 text-xs text-white rounded-sm bg-green-500"
+                              "py-1 px-2 mt-2 text-xs text-white rounded-sm bg-green-500"
                           },
                           [
                             _vm._v(

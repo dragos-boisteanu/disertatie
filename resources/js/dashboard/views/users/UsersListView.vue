@@ -17,18 +17,21 @@
                             <!-- <img class="w-full h-full"/> -->
                         </div>
                         <div class="flex-1">
-                            <div class="capitalize">
+                            <div class="capitalize text-base font-semibold">
                                <span>{{ user.first_name}}</span>  <spab>{{user.name}}</spab>
                             </div>
-                            <div class="font-medium text-xs mt-1">
-                                {{ user.email}} <span class="font-semibold"> / </span> {{ user.phone_number}}
+                            <div class="font-medium">
+                               {{ user.email}}
+                            </div>
+                            <div class="mt-1 text-xs">
+                               {{ user.phone_number}}
                             </div>
                         </div>
                         <div>
                             <div class="text-xs font-semibold">
                                 #{{user.id}}
                             </div>
-                            <div class="py-1 px-2 mt-1 text-xs text-white rounded-sm bg-green-500">
+                            <div class="py-1 px-2 mt-2 text-xs text-white rounded-sm bg-green-500">
                                 active
                             </div>
                         </div>
