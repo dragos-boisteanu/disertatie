@@ -2197,6 +2197,66 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -22167,7 +22227,7 @@ var render = function() {
                 "div",
                 {
                   key: key,
-                  staticClass: "breadcrumb-item hober:pointer-event-none",
+                  staticClass: "breadcrumb-item",
                   attrs: { "aria-current": "page" }
                 },
                 [
@@ -22939,18 +22999,179 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c(
+        "button",
+        {
+          staticClass:
+            "w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500"
+        },
+        [_vm._v("\n        Filter\n    ")]
+      ),
+      _vm._v(" "),
+      _c(
         "ul",
-        {},
+        { staticClass: "w-full mt-3 pt-3 border-t border-gray-100" },
         _vm._l(_vm.getUsers, function(user) {
-          return _c("li", { key: user.id }, [
-            _vm._v(
-              "\n             " +
-                _vm._s(user.id) +
-                " - " +
-                _vm._s(user.name) +
-                "\n         "
-            )
-          ])
+          return _c(
+            "li",
+            {
+              key: user.id,
+              staticClass:
+                "p-2 rounded text-sm shadow-sm border-b-4 border-fuchsia-600 hover:shadow-md"
+            },
+            [
+              _c(
+                "router-link",
+                { attrs: { to: { name: "User", params: { id: 1 } } } },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "w-full flex justify-start items-center pb-1 border-b border-gray-100"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "w-16 h-16 mr-4 bg-gray-500 rounded-md"
+                        },
+                        [
+                          _c(
+                            "svg",
+                            {
+                              attrs: {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                viewBox: "0 0 24 24",
+                                fill: "white",
+                                width: "64px",
+                                height: "64px"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: { d: "M0 0h24v24H0z", fill: "none" }
+                              }),
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                                }
+                              })
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "flex-1" }, [
+                        _c("div", [
+                          _vm._v(
+                            "\n                             Firstname Name \n                         "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "font-medium mt-1" }, [
+                          _vm._v(
+                            "\n                             user@mail.com\n                         "
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c("div", { staticClass: "text-xs font-semibold" }, [
+                          _vm._v(
+                            "\n                             #23413\n                         "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "py-1 px-2 mt-1 text-xs text-white rounded-sm bg-green-500"
+                          },
+                          [
+                            _vm._v(
+                              "\n                             active\n                         "
+                            )
+                          ]
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-1" }, [
+                    _c(
+                      "div",
+                      { staticClass: "flex justify-between items-center" },
+                      [
+                        _c("div", [
+                          _c("span", [
+                            _vm._v(
+                              "\n                                 20\n                             "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "font-semibold" }, [
+                            _vm._v(
+                              "\n                                 orders\n                             "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c("span", [
+                            _vm._v(
+                              "\n                                 12\n                             "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "font-semibold" }, [
+                            _vm._v(
+                              "\n                                 reservation\n                             "
+                            )
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "mt-2 flex justify-between items-center" },
+                      [
+                        _c("div", [
+                          _c("span", { staticClass: "font-semibold" }, [
+                            _vm._v(
+                              "\n                                 Joined on:\n                             "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(
+                              "\n                                 23-12-2020\n                             "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "py-1 px-2 mt-1 text-xs text-white rounded-sm bg-lightBlue-600"
+                          },
+                          [
+                            _vm._v(
+                              "\n                             role\n                         "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ],
+            1
+          )
         }),
         0
       )
