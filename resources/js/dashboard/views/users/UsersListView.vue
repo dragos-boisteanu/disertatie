@@ -17,16 +17,16 @@
                             <!-- <img class="w-full h-full"/> -->
                         </div>
                         <div class="flex-1">
-                            <div>
-                                Firstname Name 
+                            <div class="capitalize">
+                               <span>{{ user.first_name}}</span>  <spab>{{user.name}}</spab>
                             </div>
-                            <div class="font-medium mt-1">
-                                user@mail.com
+                            <div class="font-medium text-xs mt-1">
+                                {{ user.email}} <span class="font-semibold"> / </span> {{ user.phone_number}}
                             </div>
                         </div>
                         <div>
                             <div class="text-xs font-semibold">
-                                #23413
+                                #{{user.id}}
                             </div>
                             <div class="py-1 px-2 mt-1 text-xs text-white rounded-sm bg-green-500">
                                 active
@@ -57,8 +57,8 @@
                                 <span class="font-semibold">
                                     Joined on:
                                 </span>
-                                <span>
-                                    23-12-2020
+                                <span class="text-xs">
+                                    {{ user.created_at | formatDate }}
                                 </span>
                             </div>
                             <div class="py-1 px-2 mt-1 text-xs text-white rounded-sm bg-lightBlue-600">
