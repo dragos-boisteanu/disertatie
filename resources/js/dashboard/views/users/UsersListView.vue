@@ -18,7 +18,7 @@
                         </div>
                         <div class="flex-1">
                             <div class="capitalize text-base font-semibold">
-                               <span>{{ user.first_name}}</span>  <spab>{{user.name}}</spab>
+                               <span>{{ user.first_name}}</span>  <span>{{user.name}}</span>
                             </div>
                             <div class="font-medium">
                                {{ user.email}}
@@ -31,9 +31,7 @@
                             <div class="text-xs font-semibold">
                                 #{{user.id}}
                             </div>
-                            <div class="py-1 px-2 mt-2 text-xs text-white rounded-sm bg-green-500">
-                                active
-                            </div>
+                            <Status :deleted-at="user.deletedAt"/>
                         </div>
                     </div>
                     <div class="mt-1">
@@ -61,11 +59,11 @@
                                     Joined on:
                                 </span>
                                 <span class="text-xs">
-                                    {{ user.created_at | formatDate }}
+                                    {{ user.createdAt | formatDate }}
                                 </span>
                             </div>
                             <div class="py-1 px-2 mt-1 text-xs text-white rounded-sm bg-lightBlue-600">
-                                role
+                                {{user.role}}
                             </div>
                         </div>
                     </div>
@@ -76,9 +74,12 @@
 </template>
 
 <script>
-    import ViewContainer from '../ViewContainer';
     import store from '../../store/index';
     import { mapGetters } from 'vuex';
+
+    import ViewContainer from '../ViewContainer';
+    import Status from '../../components/StatusComponent';
+ 
 
     export default {
         async beforeRouteEnter (to, from, next) {
@@ -108,7 +109,8 @@
         },  
 
         components: {
-            ViewContainer
+            ViewContainer,
+            Status
         }
     }
 </script>

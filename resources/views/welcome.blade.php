@@ -17,6 +17,6 @@
         <script src="{{ asset('js/dashboard/app.js') }}" defer></script>
     </head>
     <body class="antialiased">
-        
+        <a href="{{route('dashboard')}}">Dashboard</a>
     </body>
 </html>

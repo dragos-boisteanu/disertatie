@@ -19,7 +19,7 @@ const actions = {
             console.log('here');
             const response = await downloadUsers(page);
             console.log(response)
-            commit('SET_USERS', response.data.data);
+            commit('SET_USERS', response.data.data.users);
         } catch (error) {
             throw error; 
         }
