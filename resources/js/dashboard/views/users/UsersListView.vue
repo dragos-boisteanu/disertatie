@@ -109,7 +109,7 @@
         computed: {
             ...mapGetters('Users', ['getUsers', 'getNextPage']),
             showMoreState() {
-                return this.getNextPage !== -1
+                return this.getNextPage !== -1;
             }
         },
 

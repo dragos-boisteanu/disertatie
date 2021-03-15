@@ -1,10 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Home from '../views/HomeView.vue';
+// import Home from '../views/HomeView.vue';
 
-import UsersViewList from '../views/users/UsersListView.vue';
-import UserView from '../views/users/UserView.vue';
+// import UsersViewList from '../views/users/UsersListView.vue';
+// import UserView from '../views/users/UserView.vue';
+
+const UsersViewList = () => import(/* webpackChunkName: "group-users" */ '../views/users/UsersListView.vue');
+const UserView = () => import(/* webpackChunkName: "group-users" */ '../views/users/UserView.vue');
+
+const Home = () => import('../views/HomeView.vue');
 
 const baseUrl = '/dashboard'
 const routes = [

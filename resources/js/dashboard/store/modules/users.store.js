@@ -23,6 +23,10 @@ const getters = {
 }
 
 const actions = {
+    reset({ commit }) {
+        commit('RESET');
+    },
+
     async fetchUsers({commit}, query) {
         try {
             const response = await downloadUsers(query);
@@ -34,7 +38,7 @@ const actions = {
             if(links.next) {
                 commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length-1));
             }else {
-                commit('SAVE_NEXT_PAGE', 1);
+                commit('SAVE_NEXT_PAGE', -1);
             }    
         } catch (error) {
             throw error; 
@@ -53,7 +57,7 @@ const actions = {
             if(links.next) {
                 commit('SAVE_FILTERED_NEXT_PAGE', links.next.substr(links.next.length-1));
             }else {
-                commit('SAVE_FILTERED_NEXT_PAGE', 1);
+                commit('SAVE_FILTERED_NEXT_PAGE', -1);
             }    
 
         } catch ( error ) {
@@ -68,10 +72,18 @@ const actions = {
         } catch (error) {
             throw error; 
         }
-    }
+    },
+    
 }
 
 const mutations = {
+    RESET(state) {
+        const newState = initialState();
+        Object.keys(newState).forEach(key => {
+            state[key] = newState[key]
+        })
+    },
+
     SET_USERS(state, users) {
         state.users.push(...users);
     },
@@ -80,6 +92,7 @@ const mutations = {
         state.users.slice(0, state.users.length);
         state.users = users;
     },
+
 
     REFRESH_USERS(state, users) {
         state.users = users;

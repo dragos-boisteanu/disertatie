@@ -15,9 +15,25 @@
                 @keyup="callFilter"
             />
 
-            <input id="id" name="id" type="text" class="mt-3 w-full border-b border-lightBlue-600 p-2 text-sm rounded-sm outline-none" placeholder="First name"/>
+            <input 
+                id="id" 
+                name="id" 
+                type="text" 
+                class="mt-3 w-full border-b border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                placeholder="First name"
+                v-model="filterData.firstName"
+                @keyup="callFilter"    
+            />
 
-            <input id="id" name="id" type="text" class="mt-3 w-full border-b border-lightBlue-600 p-2 text-sm rounded-sm outline-none" placeholder="Name"/>
+            <input 
+                id="id" 
+                name="id" 
+                type="text" 
+                class="mt-3 w-full border-b border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                placeholder="Name"
+                v-model="filterData.name"
+                @keyup="callFilter"    
+            />
             <div class="mt-3 pb-2 border-b border-lightBlue-600">
                 <div class="mb-2 text-base font-semibold">
                     Roles
@@ -57,7 +73,7 @@
 
     export default {
         computed: {
-            ...mapGetters('Users', ['getFilteredNextPage']),
+            ...mapGetters('Users', ['getNextPage', 'getFilteredNextPage']),
             ...mapGetters('Roles', ['getRoles']),
         },
 
@@ -72,7 +88,7 @@
         },
 
         methods: {
-            ...mapActions('Users', ['fetchFilteredUsers']),
+            ...mapActions('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset']),
 
             callFilter: _debounce( async function() {
                 try {
@@ -80,22 +96,30 @@
                         page: this.getFilteredNextPage
                     }
 
+                    let counter = 0;
+
                     if(this.filterData.id.length > 0) {
                         query.id = this.filterData.id;
+                        counter++;
                     }
 
-                    if(this.filterData.firstName.lenght > 0) {
+                    if(this.filterData.firstName.length > 0) {
                         query.firstName = this.filterData.firstName
+                        counter++;
                     }
 
                     if(this.filterData.name.length > 0) {
                         query.name = this.filterData.name
+                        counter++;
                     }
-
-                    await this.fetchFilteredUsers(query, true);
-                       
                     
-
+                    if(counter > 0) {
+                        await this.fetchFilteredUsers(query);
+                    } else {
+                        this.reset();
+                        await this.fetchUsers({page:1});
+                    }
+                    
                 } catch ( error ) {
                     console.log(error)
                 }
