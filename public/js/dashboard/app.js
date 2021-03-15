@@ -2296,6 +2296,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2337,7 +2344,66 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {};
   },
-  methods: {},
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Users', ['refreshUsers', 'fetchUsers'])), {}, {
+    loadMoreUsers: function loadMoreUsers() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return _this.fetchUsers();
+
+              case 3:
+                _context2.next = 8;
+                break;
+
+              case 5:
+                _context2.prev = 5;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 8:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 5]]);
+      }))();
+    },
+    refreshUsersList: function refreshUsersList() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return _this2.refreshUsers();
+
+              case 3:
+                _context3.next = 8;
+                break;
+
+              case 5:
+                _context3.prev = 5;
+                _context3.t0 = _context3["catch"](0);
+                console.log(_context3.t0);
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 5]]);
+      }))();
+    }
+  }),
   components: {
     ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_2__.default,
     Status: _components_StatusComponent__WEBPACK_IMPORTED_MODULE_3__.default
@@ -2672,35 +2738,71 @@ var getters = {
 var actions = {
   fetchUsers: function fetchUsers(_ref, page) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var commit, response;
+      var commit, response, users, links;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               commit = _ref.commit;
               _context.prev = 1;
-              console.log('here');
-              _context.next = 5;
+              _context.next = 4;
               return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUsers)(page);
 
-            case 5:
+            case 4:
               response = _context.sent;
-              console.log(response);
-              commit('SET_USERS', response.data.data.users);
-              _context.next = 13;
+              users = response.data.data.users;
+              links = response.data.links;
+              commit('SET_USERS', users);
+
+              if (links.next) {
+                commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length - 1));
+              }
+
+              _context.next = 14;
               break;
 
-            case 10:
-              _context.prev = 10;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 13:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 10]]);
+      }, _callee, null, [[1, 11]]);
+    }))();
+  },
+  refreshUsers: function refreshUsers(_ref2) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref2.commit;
+              _context2.prev = 1;
+              _context2.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUsers)(1);
+
+            case 4:
+              response = _context2.sent;
+              commit('REFRESH_USERS', response.data.data.users);
+              _context2.next = 11;
+              break;
+
+            case 8:
+              _context2.prev = 8;
+              _context2.t0 = _context2["catch"](1);
+              throw _context2.t0;
+
+            case 11:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 8]]);
     }))();
   }
 };
@@ -2710,11 +2812,17 @@ var mutations = {
 
     (_state$users = state.users).push.apply(_state$users, _toConsumableArray(users));
   },
+  REFRESH_USERS: function REFRESH_USERS(state, users) {
+    state.users = users;
+  },
   ADD_USER: function ADD_USER(state, user) {
     state.users.unshift(user);
   },
   REMOVE_USER: function REMOVE_USER(state, index) {
     state.users.splice(index, 1);
+  },
+  SAVE_NEXT_PAGE: function SAVE_NEXT_PAGE(state, page) {
+    state.nextPage = page;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -23174,6 +23282,16 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
+        "button",
+        {
+          staticClass:
+            "w-full py-1 mt-2 text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500",
+          on: { click: _vm.refreshUsersList }
+        },
+        [_vm._v("\n        Refresh\n    ")]
+      ),
+      _vm._v(" "),
+      _c(
         "ul",
         { staticClass: "w-full mt-3 pt-3 border-t border-gray-100" },
         _vm._l(_vm.getUsers, function(user) {
@@ -23181,8 +23299,7 @@ var render = function() {
             "li",
             {
               key: user.id,
-              staticClass:
-                "p-2 rounded text-sm shadow-sm border-b-4 border-fuchsia-600 hover:shadow-md"
+              staticClass: "p-2 mt-4 rounded text-sm shadow-md  hover:shadow-lg"
             },
             [
               _c(
@@ -23199,7 +23316,7 @@ var render = function() {
                       _c(
                         "div",
                         {
-                          staticClass: "w-16 h-16 mr-4 bg-gray-500 rounded-md"
+                          staticClass: "w-12 h-12 mr-4 bg-gray-500 rounded-md"
                         },
                         [
                           _c(
@@ -23209,8 +23326,8 @@ var render = function() {
                                 xmlns: "http://www.w3.org/2000/svg",
                                 viewBox: "0 0 24 24",
                                 fill: "white",
-                                width: "64px",
-                                height: "64px"
+                                width: "48px",
+                                height: "48px"
                               }
                             },
                             [
@@ -23229,17 +23346,13 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("div", { staticClass: "flex-1" }, [
-                        _c(
-                          "div",
-                          { staticClass: "capitalize text-base font-semibold" },
-                          [
-                            _c("span", [_vm._v(_vm._s(user.first_name))]),
-                            _vm._v(" "),
-                            _c("span", [_vm._v(_vm._s(user.name))])
-                          ]
-                        ),
+                        _c("div", { staticClass: "capitalize font-semibold" }, [
+                          _c("span", [_vm._v(_vm._s(user.first_name))]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v(_vm._s(user.name))])
+                        ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "font-medium" }, [
+                        _c("div", { staticClass: "font-light" }, [
                           _vm._v(
                             "\n                            " +
                               _vm._s(user.email) +
@@ -23355,6 +23468,15 @@ var render = function() {
           )
         }),
         0
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "mt-4 text-sm text-lightBlue-500",
+          on: { click: _vm.loadMoreUsers }
+        },
+        [_vm._v("\n       Load more\n   ")]
       )
     ],
     2

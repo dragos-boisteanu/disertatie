@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +19,11 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
 
-Route::get('/dashboard/{any?}', 'Web\Dashboard\SpaController@index')->where('any', '.*')->middleware(['auth', 'dashboard.access'])->name('dashboard');
+
+
+Route::get('/dashboard/{any?}', 'Web\Dashboard\SpaController@index')->where('any', '.*')
+    ->middleware(['auth', 'dashboard.access', 'verified'])->name('dashboard');
 
 
 require __DIR__.'/auth.php';

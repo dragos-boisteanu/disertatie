@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('role')->paginate();
+        $users = User::with('role')->simplePaginate(5);
 
         return new UserCollection($users);
     }

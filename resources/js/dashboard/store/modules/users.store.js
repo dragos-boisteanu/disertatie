@@ -16,10 +16,23 @@ const getters = {
 const actions = {
     async fetchUsers({commit}, page) {
         try {
-            console.log('here');
             const response = await downloadUsers(page);
-            console.log(response)
-            commit('SET_USERS', response.data.data.users);
+            const users = response.data.data.users;
+            const links = response.data.links;
+            commit('SET_USERS',users );
+            
+            if(links.next) {
+                commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length-1));
+            }
+        } catch (error) {
+            throw error; 
+        }
+    },
+
+    async refreshUsers({commit}) {
+        try {
+            const response = await downloadUsers(1);
+            commit('REFRESH_USERS', response.data.data.users);
         } catch (error) {
             throw error; 
         }
@@ -31,12 +44,20 @@ const mutations = {
         state.users.push(...users);
     },
 
+    REFRESH_USERS(state, users) {
+        state.users = users;
+    },
+
     ADD_USER(state, user) {
         state.users.unshift(user);
     },
     
     REMOVE_USER(state, index) {
         state.users.splice(index, 1);
+    },
+
+    SAVE_NEXT_PAGE(state, page) {
+        state.nextPage = page;
     }
 }
 
