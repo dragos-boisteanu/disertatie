@@ -1,5 +1,6 @@
 <template>
    <ViewContainer>
+       <UsersFilter/>
        <template slot="header">
            Users List
        </template>
@@ -12,7 +13,7 @@
            Refresh
        </button>
 
-      <ul class="w-full mt-3 pt-3 border-t border-gray-100">
+        <ul class="w-full mt-3 pt-3 border-t border-gray-100">
             <li v-for="user in getUsers" :key="user.id" class="p-2 mt-4 rounded text-sm shadow-md  hover:shadow-lg">
                 <router-link :to="{name: 'User', params:{id:1}}">
                     <div class="w-full flex justify-start items-center pb-1 border-b border-gray-100">
@@ -74,9 +75,13 @@
                 </router-link>
             </li>
       </ul>
-      <button class="mt-4 text-sm text-lightBlue-500" @click="loadMoreUsers">
-          Load more
-      </button>
+      
+      <div class="mt-5 text-center" v-if="showMoreState">
+            <button class="w-full py-1 mt-2 text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500" @click="loadMoreUsers">
+                Load more
+            </button>
+      </div>
+      
    </ViewContainer>
 </template>
 
@@ -86,23 +91,26 @@
 
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
- 
+    import UsersFilter from '../../components/filter/UsersFilterComponent';
+    
 
     export default {
         async beforeRouteEnter (to, from, next) {
             console.log(store.getters['Users/getUsers'].length)
             if(store.getters['Users/getUsers'].length === 0) {
-                await store.dispatch('Users/fetchUsers', 1);
+                await store.dispatch('Users/fetchUsers', {page: 1});
                 next();
             } else {
-                
                 next();
             }
              
         },
 
         computed: {
-            ...mapGetters('Users', ['getUsers', ]),
+            ...mapGetters('Users', ['getUsers', 'getNextPage']),
+            showMoreState() {
+                return this.getNextPage !== -1
+            }
         },
 
         data() {
@@ -115,7 +123,7 @@
             ...mapActions('Users', ['refreshUsers', 'fetchUsers']),
             async loadMoreUsers() {
                 try {
-                    await this.fetchUsers()
+                    await this.fetchUsers({page:this.getNextPage})
                 } catch ( error ) {
                     console.log(error)
                 }
@@ -127,13 +135,14 @@
                 } catch ( error ) {
                     console.log(error);
                 }
-                
+
             }
         },  
 
         components: {
             ViewContainer,
-            Status
+            Status,
+            UsersFilter
         }
     }
 </script>

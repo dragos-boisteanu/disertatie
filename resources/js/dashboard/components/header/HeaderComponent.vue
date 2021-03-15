@@ -15,7 +15,7 @@
                 </div>
                 <div class="user-menu">
                     user dropdown
-                </div>
+                </div> 
                 <ul class="navigation-link">
                     <SliderNavigationComponent name="Dashboard" @click="toggleSliderState"></SliderNavigationComponent>
                     <SliderNavigationComponent name="Users" @click="toggleSliderState"></SliderNavigationComponent>
@@ -24,6 +24,13 @@
                     <SliderNavigationComponent name="Stocks"></SliderNavigationComponent>
                     <SliderNavigationComponent name="Locations"></SliderNavigationComponent>
                 </ul>
+                <form method="POST" action='/logout'>
+                    <input type="hidden" name="_token" :value="csrf"/>
+
+                    <button class="text-white">
+                        Logout
+                    </button>
+                </form>
             </div>
         </BackdropComponent>
     </div>
@@ -38,6 +45,7 @@
         data() {
             return {
                 showSliderState: false,
+                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
 

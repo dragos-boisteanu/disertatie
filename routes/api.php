@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Dashboard\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +15,9 @@ use App\Http\Controllers\Api\Dashboard\UserController;
 
 
 Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefix'=>'dashboard'], function() {   
-    // Route::resource('user', [UserController::class]);
-    Route::get('/users', 'UserController@index');
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('roles', RoleController::class);
+    // Route::get('/users', 'UserController@index');
     // Route::get('/users/{id}', 'UserController@show');
 });
 
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });

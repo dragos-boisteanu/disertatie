@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "dayjs": "^1.10.4",
+        "lodash": "^4.17.21",
         "vue": "^2.6.12",
         "vue-2-breadcrumbs": "^0.7.12",
         "vue-progressbar": "^0.7.5",

@@ -14,10 +14,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('role')->simplePaginate(5);
-
+        $users = User::filter($request)->with('role')->simplePaginate(5);
         return new UserCollection($users);
     }
 

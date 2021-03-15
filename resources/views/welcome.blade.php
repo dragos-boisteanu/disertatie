@@ -14,9 +14,17 @@
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
         <!-- Scripts -->
-        <script src="{{ asset('js/dashboard/app.js') }}" defer></script>
+        <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="antialiased">
         <a href="{{route('dashboard')}}">Dashboard</a>
+        @auth
+            <form method="post" action="{{route('logout')}}">
+                @csrf
+                <button>
+                    Logout
+                </button>
+            </form>
+        @endauth
     </body>
 </html>

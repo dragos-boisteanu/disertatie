@@ -11,8 +11,10 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/dashboard/app.js', 'public/js/dashboard').postCss('resources/css/app.css', 'public/css', [
-    require('postcss-import'),
-    require('tailwindcss'),
-    require('autoprefixer'),
+mix.js('resources/js/dashboard/app.js', 'public/js/dashboard')
+    .js('resources/js/client/app.js', 'public/js')
+    .postCss('resources/css/app.css', 'public/css', [
+        require('postcss-import'),
+        require('tailwindcss'),
+        require('autoprefixer'),
 ]).vue().version();

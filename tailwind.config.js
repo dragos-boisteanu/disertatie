@@ -26,7 +26,7 @@ module.exports = {
             opacity: ['disabled'],
             pointerEvents: ['hover'],
             boxShadow: ['active'],
-            backgroundColor: ['active'],
+            backgroundColor: ['active', 'disabled'],
         },
     },
 

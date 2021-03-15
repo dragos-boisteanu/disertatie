@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Web\Api\Dashboard;
+namespace App\Http\Controllers\Api\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Models\Role;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\RoleCollection;
 
 class RoleController extends Controller
 {
@@ -14,18 +16,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Role::all();
+
+        return new RoleCollection($roles);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,16 +44,6 @@ class RoleController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

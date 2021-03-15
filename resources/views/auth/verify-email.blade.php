@@ -22,7 +22,7 @@
                 @csrf
 
                 <div class="flex">
-                    <x-label for="email" :value="__('Wrong address ? Change it here')" />
+                    {{-- <x-label for="email" :value="__('Wrong address ?')" /> --}}
                     <x-input id="email" class="block mt-1 w-full" type="email" name="email" placeholder="New email address"/>
                 </div>
 

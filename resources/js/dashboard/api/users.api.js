@@ -4,7 +4,7 @@ import httpClient from './httpClient';
 
 const END_POINT = '/users';
 
-const downloadUsers = (page) => httpClient.get(`${END_POINT}?page=${page}`);
+const downloadUsers = (query) => httpClient.get(`${END_POINT}`, {params: query});
 const downloadUser = (id) => httpClient.get(`${END_POINT}/${id}`);
 const patchUser = (user) => httpClient.patch(`${END_POINT}/${user.id}`, user);
 const disableUser = (id) => httpClient.delete(`${END_POINT}/${id}/disable`, {data: id});

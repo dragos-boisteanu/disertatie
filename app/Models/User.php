@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Role;
+use Illuminate\Http\Request;
+use App\Filters\User\UserFilter;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -52,5 +56,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function addresses() 
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function scopeFilter(Builder $builder, Request $request)
+    {
+        return (new UserFilter($request))->filter($builder);
     }
 }
