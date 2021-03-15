@@ -179,7 +179,10 @@
 
             async refreshUsersList() {
                 try {
-                    this.$router.replace({name:'Users', query: {}});
+                    if(Object.keys(this.$route.query).length > 0) { 
+                        this.$router.replace({name:'Users', query: {}});
+                    }
+                    
                     await this.refreshUsers();
                 } catch ( error ) {
                     console.log(error);

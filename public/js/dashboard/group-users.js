@@ -561,10 +561,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context3.prev = 0;
 
-                _this2.$router.replace({
-                  name: 'Users',
-                  query: {}
-                });
+                if (Object.keys(_this2.$route.query).length > 0) {
+                  _this2.$router.replace({
+                    name: 'Users',
+                    query: {}
+                  });
+                }
 
                 _context3.next = 4;
                 return _this2.refreshUsers();
