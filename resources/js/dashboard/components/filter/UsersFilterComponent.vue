@@ -139,6 +139,7 @@
                     }
 
                     this.$router.replace({name:'Users', query: {...query}});
+                    
                     this.reset();
                     await this.fetchUsers(query);
                   

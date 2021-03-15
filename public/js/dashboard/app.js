@@ -2403,9 +2403,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* provided dependency */ var process = __webpack_require__(/*! process/browser */ "./node_modules/process/browser.js");
 
- // import Home from '../views/HomeView.vue';
-// import UsersViewList from '../views/users/UsersListView.vue';
-// import UserView from '../views/users/UserView.vue';
+
 
 var UsersViewList = function UsersViewList() {
   return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/UsersListView.vue */ "./resources/js/dashboard/views/users/UsersListView.vue"));

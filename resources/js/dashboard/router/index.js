@@ -1,11 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-// import Home from '../views/HomeView.vue';
-
-// import UsersViewList from '../views/users/UsersListView.vue';
-// import UserView from '../views/users/UserView.vue';
-
 const UsersViewList = () => import(/* webpackChunkName: "group-users" */ '../views/users/UsersListView.vue');
 const UserView = () => import(/* webpackChunkName: "group-users" */ '../views/users/UserView.vue');
 

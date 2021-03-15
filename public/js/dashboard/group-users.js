@@ -315,6 +315,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -421,35 +433,52 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var query;
+      var query, _query$roles;
+
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              console.log(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length);
-
               if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0)) {
-                _context.next = 8;
+                _context.next = 12;
                 break;
               }
 
               query = {
                 page: 1
               };
-              _context.next = 5;
-              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', {
-                query: query
-              });
 
-            case 5:
-              next();
+              if (to.query.id) {
+                query.id = to.query.id;
+              }
+
+              if (to.query.firstName) {
+                query.firstName = to.query.firstName;
+              }
+
+              if (to.query.name) {
+                query.name = to.query.name;
+              }
+
+              if (to.query.roles) {
+                query.roles = [];
+
+                (_query$roles = query.roles).push.apply(_query$roles, _toConsumableArray(to.query.roles));
+              }
+
+              ;
               _context.next = 9;
-              break;
-
-            case 8:
-              next();
+              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', query);
 
             case 9:
+              next();
+              _context.next = 13;
+              break;
+
+            case 12:
+              next();
+
+            case 13:
             case "end":
               return _context.stop();
           }
@@ -472,31 +501,54 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var query, _query$roles2;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                _context2.next = 3;
-                return _this.fetchUsers({
+                query = {
                   page: _this.getNextPage
-                });
+                };
 
-              case 3:
-                _context2.next = 8;
+                if (_this.$route.query.id) {
+                  query.id = _this.$route.query.id;
+                }
+
+                if (_this.$route.query.firstName) {
+                  query.firstName = _this.$route.query.firstName;
+                }
+
+                if (_this.$route.query.name) {
+                  query.name = _this.$route.query.name;
+                }
+
+                if (_this.$route.query.roles) {
+                  query.roles = [];
+
+                  (_query$roles2 = query.roles).push.apply(_query$roles2, _toConsumableArray(_this.$route.query.roles));
+                }
+
+                ;
+                _context2.next = 9;
+                return _this.fetchUsers(query);
+
+              case 9:
+                _context2.next = 14;
                 break;
 
-              case 5:
-                _context2.prev = 5;
+              case 11:
+                _context2.prev = 11;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 8:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 5]]);
+        }, _callee2, null, [[0, 11]]);
       }))();
     },
     refreshUsersList: function refreshUsersList() {
@@ -508,24 +560,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.prev = 0;
-                _context3.next = 3;
+
+                _this2.$router.replace({
+                  name: 'Users',
+                  query: {}
+                });
+
+                _context3.next = 4;
                 return _this2.refreshUsers();
 
-              case 3:
-                _context3.next = 8;
+              case 4:
+                _context3.next = 9;
                 break;
 
-              case 5:
-                _context3.prev = 5;
+              case 6:
+                _context3.prev = 6;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 8:
+              case 9:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 5]]);
+        }, _callee3, null, [[0, 6]]);
       }))();
     },
     toggleFilterState: function toggleFilterState() {

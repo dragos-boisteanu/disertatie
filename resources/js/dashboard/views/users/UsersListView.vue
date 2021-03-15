@@ -94,6 +94,7 @@
 
 <script>
     import store from '../../store/index';
+
     import { mapGetters, mapActions } from 'vuex';
 
     import ViewContainer from '../ViewContainer';
@@ -103,12 +104,29 @@
 
     export default {
         async beforeRouteEnter (to, from, next) {
-            console.log(store.getters['Users/getUsers'].length)
             if(store.getters['Users/getUsers'].length === 0) {
                 const query = {
                     page: 1,
                 }
-                await store.dispatch('Users/fetchUsers', {query});
+
+                if(to.query.id) {
+                    query.id = to.query.id;
+                }
+
+                if(to.query.firstName) {
+                    query.firstName = to.query.firstName;
+                }
+
+                if(to.query.name) {
+                    query.name = to.query.name;
+                }
+
+                if(to.query.roles) {
+                    query.roles = [];
+                    query.roles.push(...to.query.roles)
+                };
+
+                await store.dispatch('Users/fetchUsers', query);
                 next();
             } else {
                 next();
@@ -132,7 +150,28 @@
             ...mapActions('Users', ['refreshUsers', 'fetchUsers']),
             async loadMoreUsers() {
                 try {
-                    await this.fetchUsers({page:this.getNextPage})
+                    const query = {
+                        page:this.getNextPage,
+                    }
+
+                    if(this.$route.query.id) {
+                        query.id = this.$route.query.id;
+                    }
+
+                    if(this.$route.query.firstName) {
+                        query.firstName = this.$route.query.firstName;
+                    }
+
+                    if(this.$route.query.name) {
+                        query.name = this.$route.query.name;
+                    }
+
+                   if(this.$route.query.roles) {
+                        query.roles = [];
+                        query.roles.push(...this.$route.query.roles)
+                    };
+
+                    await this.fetchUsers(query)
                 } catch ( error ) {
                     console.log(error)
                 }
@@ -140,6 +179,7 @@
 
             async refreshUsersList() {
                 try {
+                    this.$router.replace({name:'Users', query: {}});
                     await this.refreshUsers();
                 } catch ( error ) {
                     console.log(error);
