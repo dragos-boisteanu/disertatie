@@ -1,11 +1,18 @@
 <template>
    <ViewContainer>
-       <UsersFilter/>
+        <UsersFilter
+            v-show="showFilterState"
+            @closed="toggleFilterState"
+        />
+
        <template slot="header">
            Users List
        </template>
 
-       <button class="w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500">
+       <button 
+            class="w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500"
+            @click="toggleFilterState"
+        >
            Filter
        </button>
 
@@ -98,24 +105,26 @@
         async beforeRouteEnter (to, from, next) {
             console.log(store.getters['Users/getUsers'].length)
             if(store.getters['Users/getUsers'].length === 0) {
-                await store.dispatch('Users/fetchUsers', {page: 1});
+                const query = {
+                    page: 1,
+                }
+                await store.dispatch('Users/fetchUsers', {query});
                 next();
             } else {
                 next();
             }
-             
         },
 
         computed: {
             ...mapGetters('Users', ['getUsers', 'getNextPage']),
             showMoreState() {
-                return this.getNextPage !== -1;
+                return this.getNextPage ? true : false;
             }
         },
 
         data() {
             return {
-                
+                showFilterState: false,
             }
         },
 
@@ -135,7 +144,10 @@
                 } catch ( error ) {
                     console.log(error);
                 }
+            },
 
+            toggleFilterState() {
+                this.showFilterState = !this.showFilterState;
             }
         },  
 

@@ -3,7 +3,6 @@ import { downloadUsers, downloadUser, patchUser,  disableUser, deleteUser } from
 const initialState = () => ({
     users: [],
     nextPage: 1,
-    filteredNextPage: 1,
 });
 
 const state = initialState();
@@ -16,10 +15,6 @@ const getters = {
     getNextPage(state) {
         return state.nextPage;
     },
-
-    getFilteredNextPage(state) {
-        return state.filteredNextPage;
-    }
 }
 
 const actions = {
@@ -32,14 +27,16 @@ const actions = {
             const response = await downloadUsers(query);
             const users = response.data.data.users;
             const links = response.data.links;
+            const meta = response.data.meta;
    
             commit('SET_USERS',users );
 
             if(links.next) {
                 commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length-1));
             }else {
-                commit('SAVE_NEXT_PAGE', -1);
-            }    
+                commit('SAVE_NEXT_PAGE', null);
+            }
+
         } catch (error) {
             throw error; 
         }
@@ -93,7 +90,6 @@ const mutations = {
         state.users = users;
     },
 
-
     REFRESH_USERS(state, users) {
         state.users = users;
         state.nextPage = 2;
@@ -111,9 +107,6 @@ const mutations = {
         state.nextPage = page;
     },
 
-    SAVE_FILTERED_NEXT_PAGE(state, page) {
-        state.filteredNextPage = page;
-    }
 }
 
 export default {

@@ -16,6 +16,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+       
         $users = User::filter($request)->with('role')->simplePaginate(5);
         return new UserCollection($users);
     }

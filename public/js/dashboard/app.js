@@ -2641,8 +2641,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var initialState = function initialState() {
   return {
     users: [],
-    nextPage: 1,
-    filteredNextPage: 1
+    nextPage: 1
   };
 };
 
@@ -2653,9 +2652,6 @@ var getters = {
   },
   getNextPage: function getNextPage(state) {
     return state.nextPage;
-  },
-  getFilteredNextPage: function getFilteredNextPage(state) {
-    return state.filteredNextPage;
   }
 };
 var actions = {
@@ -2665,7 +2661,7 @@ var actions = {
   },
   fetchUsers: function fetchUsers(_ref2, query) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var commit, response, users, links;
+      var commit, response, users, links, meta;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -2679,28 +2675,29 @@ var actions = {
               response = _context.sent;
               users = response.data.data.users;
               links = response.data.links;
+              meta = response.data.meta;
               commit('SET_USERS', users);
 
               if (links.next) {
                 commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length - 1));
               } else {
-                commit('SAVE_NEXT_PAGE', -1);
+                commit('SAVE_NEXT_PAGE', null);
               }
 
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 11]]);
+      }, _callee, null, [[1, 12]]);
     }))();
   },
   fetchFilteredUsers: function fetchFilteredUsers(_ref3, query) {
@@ -2803,9 +2800,6 @@ var mutations = {
   },
   SAVE_NEXT_PAGE: function SAVE_NEXT_PAGE(state, page) {
     state.nextPage = page;
-  },
-  SAVE_FILTERED_NEXT_PAGE: function SAVE_FILTERED_NEXT_PAGE(state, page) {
-    state.filteredNextPage = page;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({

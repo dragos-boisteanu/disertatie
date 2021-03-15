@@ -62,6 +62,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -100,6 +103,33 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -172,79 +202,85 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Users', ['getNextPage', 'getFilteredNextPage'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])),
+  mounted: function mounted() {
+    this.filterData.id = this.$route.query.id ? this.$route.query.id : '';
+    this.filterData.firstName = this.$route.query.firstName ? this.$route.query.firstName : '';
+    this.filterData.name = this.$route.query.name ? this.$route.query.name : '';
+
+    if (this.$route.query.roles) {
+      var _this$filterData$role;
+
+      (_this$filterData$role = this.filterData.roles).push.apply(_this$filterData$role, _toConsumableArray(this.$route.query.roles));
+    }
+
+    ;
+  },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Users', ['getNextPage'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])),
   data: function data() {
     return {
       filterData: {
         id: '',
         firstName: '',
-        name: ''
+        name: '',
+        roles: []
       }
     };
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset'])), {}, {
     callFilter: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var query, counter;
+      var query;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
               query = {
-                page: this.getFilteredNextPage
+                page: 1
               };
-              counter = 0;
 
               if (this.filterData.id.length > 0) {
                 query.id = this.filterData.id;
-                counter++;
               }
 
               if (this.filterData.firstName.length > 0) {
                 query.firstName = this.filterData.firstName;
-                counter++;
               }
 
               if (this.filterData.name.length > 0) {
                 query.name = this.filterData.name;
-                counter++;
               }
 
-              if (!(counter > 0)) {
-                _context.next = 11;
-                break;
+              if (this.filterData.roles.length > 0) {
+                query.roles = this.filterData.roles;
               }
 
-              _context.next = 9;
-              return this.fetchFilteredUsers(query);
-
-            case 9:
-              _context.next = 14;
-              break;
-
-            case 11:
-              this.reset();
-              _context.next = 14;
-              return this.fetchUsers({
-                page: 1
+              this.$router.replace({
+                name: 'Users',
+                query: _objectSpread({}, query)
               });
+              this.reset();
+              _context.next = 10;
+              return this.fetchUsers(query);
 
-            case 14:
-              _context.next = 19;
+            case 10:
+              _context.next = 15;
               break;
 
-            case 16:
-              _context.prev = 16;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 19:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 16]]);
-    })), 500)
+      }, _callee, this, [[0, 12]]);
+    })), 750),
+    close: function close() {
+      this.$emit('closed');
+    }
   }),
   components: {
     FilterComponent: _FilterComponent__WEBPACK_IMPORTED_MODULE_1__.default
@@ -370,6 +406,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -378,6 +421,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var query;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -385,24 +429,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               console.log(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length);
 
               if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0)) {
-                _context.next = 7;
+                _context.next = 8;
                 break;
               }
 
-              _context.next = 4;
-              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', {
+              query = {
                 page: 1
+              };
+              _context.next = 5;
+              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', {
+                query: query
               });
 
-            case 4:
+            case 5:
               next();
-              _context.next = 8;
+              _context.next = 9;
               break;
 
-            case 7:
+            case 8:
               next();
 
-            case 8:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -412,11 +459,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Users', ['getUsers', 'getNextPage'])), {}, {
     showMoreState: function showMoreState() {
-      return this.getNextPage !== -1;
+      return this.getNextPage ? true : false;
     }
   }),
   data: function data() {
-    return {};
+    return {
+      showFilterState: false
+    };
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['refreshUsers', 'fetchUsers'])), {}, {
     loadMoreUsers: function loadMoreUsers() {
@@ -478,6 +527,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3, null, [[0, 5]]);
       }))();
+    },
+    toggleFilterState: function toggleFilterState() {
+      this.showFilterState = !this.showFilterState;
     }
   }),
   components: {
@@ -1576,8 +1628,15 @@ var render = function() {
   return _c("Backdrop", [
     _c(
       "div",
-      { staticClass: "h-full w-3/4 shadow-md bg-coolGray-100" },
+      { staticClass: "relative h-full w-3/4 shadow-md bg-coolGray-100" },
       [
+        _c(
+          "div",
+          { staticClass: "absolute top-2 right-2 z-10 cursor-pointer" },
+          [_vm._t("close")],
+          2
+        ),
+        _vm._v(" "),
         _c(
           "div",
           {
@@ -1620,8 +1679,34 @@ var render = function() {
   return _c(
     "FilterComponent",
     [
+      _c("template", { slot: "close" }, [
+        _c(
+          "svg",
+          {
+            attrs: {
+              xmlns: "http://www.w3.org/2000/svg",
+              viewBox: "0 0 24 24",
+              fill: "black",
+              width: "24px",
+              height: "24px"
+            },
+            on: { click: _vm.close }
+          },
+          [
+            _c("path", { attrs: { d: "M0 0h24v24H0z", fill: "none" } }),
+            _vm._v(" "),
+            _c("path", {
+              attrs: {
+                d:
+                  "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              }
+            })
+          ]
+        )
+      ]),
+      _vm._v(" "),
       _c("template", { slot: "header" }, [
-        _c("div", {}, [_vm._v("\n            Users Filter\n        ")])
+        _vm._v("\n        Users Filter\n    ")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "mt-5 px-3" }, [
@@ -1635,7 +1720,7 @@ var render = function() {
             }
           ],
           staticClass:
-            "w-full border-b border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
+            "w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
           attrs: { id: "id", name: "id", type: "text", placeholder: "ID" },
           domProps: { value: _vm.filterData.id },
           on: {
@@ -1659,7 +1744,7 @@ var render = function() {
             }
           ],
           staticClass:
-            "mt-3 w-full border-b border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
+            "mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
           attrs: {
             id: "id",
             name: "id",
@@ -1688,7 +1773,7 @@ var render = function() {
             }
           ],
           staticClass:
-            "mt-3 w-full border-b border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
+            "mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
           attrs: { id: "id", name: "id", type: "text", placeholder: "Name" },
           domProps: { value: _vm.filterData.name },
           on: {
@@ -1702,86 +1787,140 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _c("div", { staticClass: "mt-3 pb-2 border-b border-lightBlue-600" }, [
-          _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
-            _vm._v("\n                Roles\n            ")
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "flex items-center flex-wrap gap-2" },
-            _vm._l(_vm.getRoles, function(role) {
-              return _c(
-                "div",
-                {
-                  key: role.id,
-                  staticClass: "flex justify-between items-center"
-                },
-                [
-                  _c("input", {
-                    staticClass: "mr-1 outline-none",
-                    attrs: { id: role.name, name: role.name, type: "checkbox" },
-                    domProps: { value: role.id }
-                  }),
-                  _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mt-3 pb-2 border-b-2 border-lightBlue-600" },
+          [
+            _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
+              _vm._v("\n                Roles\n            ")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "flex items-center flex-wrap gap-2" },
+              _vm._l(_vm.getRoles, function(role) {
+                return _c(
+                  "div",
+                  {
+                    key: role.id,
+                    staticClass: "flex justify-between items-center"
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filterData.roles,
+                          expression: "filterData.roles"
+                        }
+                      ],
+                      staticClass: "mr-1 outline-none",
+                      attrs: {
+                        id: role.name,
+                        name: role.name,
+                        type: "checkbox"
+                      },
+                      domProps: {
+                        value: role.id,
+                        checked: Array.isArray(_vm.filterData.roles)
+                          ? _vm._i(_vm.filterData.roles, role.id) > -1
+                          : _vm.filterData.roles
+                      },
+                      on: {
+                        click: _vm.callFilter,
+                        change: function($event) {
+                          var $$a = _vm.filterData.roles,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = role.id,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(
+                                  _vm.filterData,
+                                  "roles",
+                                  $$a.concat([$$v])
+                                )
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  _vm.filterData,
+                                  "roles",
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
+                          } else {
+                            _vm.$set(_vm.filterData, "roles", $$c)
+                          }
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "text-sm capitalize",
+                        attrs: { for: role.name }
+                      },
+                      [_vm._v(_vm._s(role.name))]
+                    )
+                  ]
+                )
+              }),
+              0
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mt-3 pb-2 border-b-2 border-lightBlue-600" },
+          [
+            _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
+              _vm._v("\n                Joined date\n            ")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "flex flex-col gap-2 items-start justify-start" },
+              [
+                _c("div", { staticClass: "flex" }, [
                   _c(
                     "label",
                     {
-                      staticClass: "text-sm capitalize",
-                      attrs: { for: role.name }
+                      staticClass: "text-sm font-semibold mr-2 w-11",
+                      attrs: { for: "fromDate" }
                     },
-                    [_vm._v(_vm._s(role.name))]
-                  )
-                ]
-              )
-            }),
-            0
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "mt-3 pb-2 border-b border-lightBlue-600" }, [
-          _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
-            _vm._v("\n                Joined date\n            ")
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "flex flex-col gap-2 items-start justify-start" },
-            [
-              _c("div", { staticClass: "flex" }, [
-                _c(
-                  "label",
-                  {
-                    staticClass: "font-semibold mr-2 w-11",
-                    attrs: { for: "fromDate" }
-                  },
-                  [_vm._v("From:")]
-                ),
+                    [_vm._v("From:")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "p-0 px-2 text-xs text-center",
+                    attrs: { type: "date", id: "fromDate", name: "from_date" }
+                  })
+                ]),
                 _vm._v(" "),
-                _c("input", {
-                  staticClass: "p-0 px-2 text-xs text-center",
-                  attrs: { type: "date", id: "fromDate", name: "from_date" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "flex" }, [
-                _c(
-                  "label",
-                  {
-                    staticClass: "font-semibold mr-2 w-11",
-                    attrs: { for: "toDate" }
-                  },
-                  [_vm._v("To:")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "p-0 px-2 text-xs text-center",
-                  attrs: { type: "date", id: "fromDate", name: "to_date" }
-                })
-              ])
-            ]
-          )
-        ])
+                _c("div", { staticClass: "flex" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "text-sm font-semibold mr-2 w-11",
+                      attrs: { for: "toDate" }
+                    },
+                    [_vm._v("To:")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "p-0 px-2 text-xs text-center",
+                    attrs: { type: "date", id: "fromDate", name: "to_date" }
+                  })
+                ])
+              ]
+            )
+          ]
+        )
       ])
     ],
     2
@@ -1852,7 +1991,17 @@ var render = function() {
   return _c(
     "ViewContainer",
     [
-      _c("UsersFilter"),
+      _c("UsersFilter", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showFilterState,
+            expression: "showFilterState"
+          }
+        ],
+        on: { closed: _vm.toggleFilterState }
+      }),
       _vm._v(" "),
       _c("template", { slot: "header" }, [
         _vm._v("\n        Users List\n    ")
@@ -1862,7 +2011,8 @@ var render = function() {
         "button",
         {
           staticClass:
-            "w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500"
+            "w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500",
+          on: { click: _vm.toggleFilterState }
         },
         [_vm._v("\n        Filter\n    ")]
       ),
