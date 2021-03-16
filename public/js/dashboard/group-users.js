@@ -475,6 +475,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1469,7 +1476,10 @@ var render = function() {
   return _c("Backdrop", [
     _c(
       "div",
-      { staticClass: "relative h-full w-3/4 shadow-md bg-coolGray-100" },
+      {
+        staticClass:
+          "relative h-full w-3/4 shadow-md bg-coolGray-100 md:w-2/4 lg:w-1/4"
+      },
       [
         _c(
           "div",
@@ -1850,7 +1860,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "flex-1 w-full p-3 pt-0" },
+    { staticClass: "flex-1 w-full p-3 pt-0 bg-gray-50" },
     [
       _c(
         "h2",
@@ -1899,101 +1909,131 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c(
-        "button",
+        "div",
         {
-          staticClass:
-            "w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500",
-          on: { click: _vm.toggleFilterState }
-        },
-        [_vm._v("\n        Filter\n    ")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass:
-            "w-full py-1 mt-2 text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500",
-          on: { click: _vm.refreshUsersList }
-        },
-        [_vm._v("\n        Refresh\n    ")]
-      ),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.orderBy,
-              expression: "orderBy"
-            }
-          ],
-          staticClass:
-            "w-full p-1 mt-2 text-base border-gray-300 border rounded-sm",
-          on: {
-            change: [
-              function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.orderBy = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              },
-              _vm.order
-            ]
-          }
+          staticClass: "flex flex-col md:flex-row md:justify-between items-end"
         },
         [
-          _c("option", { domProps: { value: 1 } }, [_vm._v("Name asc")]),
+          _c(
+            "div",
+            {
+              staticClass: "w-full md:flex md:flex-row md:gap-3 md:items-center"
+            },
+            [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-20",
+                  on: { click: _vm.toggleFilterState }
+                },
+                [_vm._v("\n                 Filter\n             ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "w-full py-1 mt-2  text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-20 md:mt-0",
+                  on: { click: _vm.refreshUsersList }
+                },
+                [_vm._v("\n                 Refresh\n             ")]
+              )
+            ]
+          ),
           _vm._v(" "),
-          _c("option", { domProps: { value: 2 } }, [_vm._v("Name desc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 3 } }, [_vm._v("First Name asc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 4 } }, [_vm._v("First Name desc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 5 } }, [_vm._v("Email asc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 6 } }, [_vm._v("Email desc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 7 } }, [_vm._v("Role asc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 8 } }, [_vm._v("Role desc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 9 } }, [_vm._v("Orders asc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 10 } }, [_vm._v("Orders desc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 11 } }, [
-            _vm._v("Reservations asc")
-          ]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 12 } }, [
-            _vm._v("Reservations desc")
-          ]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 13 } }, [_vm._v("Joined at asc")]),
-          _vm._v(" "),
-          _c("option", { domProps: { value: 14 } }, [_vm._v("Joined at desc")])
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.orderBy,
+                  expression: "orderBy"
+                }
+              ],
+              staticClass:
+                "w-full p-1 mt-2 text-base border-gray-300 border rounded-sm md:w-auto",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.orderBy = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.order
+                ]
+              }
+            },
+            [
+              _c("option", { domProps: { value: 1 } }, [_vm._v("Name asc")]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 2 } }, [_vm._v("Name desc")]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 3 } }, [
+                _vm._v("First Name asc")
+              ]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 4 } }, [
+                _vm._v("First Name desc")
+              ]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 5 } }, [_vm._v("Email asc")]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 6 } }, [_vm._v("Email desc")]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 7 } }, [_vm._v("Role asc")]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 8 } }, [_vm._v("Role desc")]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 9 } }, [_vm._v("Orders asc")]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 10 } }, [
+                _vm._v("Orders desc")
+              ]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 11 } }, [
+                _vm._v("Reservations asc")
+              ]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 12 } }, [
+                _vm._v("Reservations desc")
+              ]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 13 } }, [
+                _vm._v("Joined at asc")
+              ]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: 14 } }, [
+                _vm._v("Joined at desc")
+              ])
+            ]
+          )
         ]
       ),
       _vm._v(" "),
       _c(
         "ul",
-        { staticClass: "w-full mt-3 pt-3 border-t border-gray-100" },
+        {
+          staticClass:
+            "w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4"
+        },
         _vm._l(_vm.getUsers, function(user) {
           return _c(
             "li",
             {
               key: user.id,
-              staticClass: "p-2 mt-4 rounded text-sm shadow-md  hover:shadow-lg"
+              staticClass:
+                "w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 xl:w-375px 2xl:w-410px"
             },
             [
               _c(
@@ -2165,12 +2205,12 @@ var render = function() {
       ),
       _vm._v(" "),
       _vm.showMoreState
-        ? _c("div", { staticClass: "mt-5 text-center" }, [
+        ? _c("div", { staticClass: "mt-5 text-center md:text-right" }, [
             _c(
               "button",
               {
                 staticClass:
-                  "w-full py-1 mt-2 text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500",
+                  "w-full py-1 mt-2 text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-28",
                 on: { click: _vm.loadMoreUsers }
               },
               [_vm._v("\n             Load more\n         ")]

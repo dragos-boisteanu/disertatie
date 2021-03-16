@@ -16,6 +16,11 @@ module.exports = {
             fontSize: {
                 xxs: ['10.4px', ' 1.063rem'],
                 // xxs: ['.65rem', ' 1.063rem'],
+            },
+            width: {
+                '49': '49%',
+                '410px': '410px',
+                '375px': '375px'
             }            
         },
         colors,

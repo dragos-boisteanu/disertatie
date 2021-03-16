@@ -1,6 +1,6 @@
 <template>
     <Backdrop>
-        <div class="relative h-full w-3/4 shadow-md bg-coolGray-100">
+        <div class="relative h-full w-3/4 shadow-md bg-coolGray-100 md:w-2/4 lg:w-1/4">
             <div class="absolute top-2 right-2 z-10 cursor-pointer">
                 <slot name="close"></slot>
             </div>

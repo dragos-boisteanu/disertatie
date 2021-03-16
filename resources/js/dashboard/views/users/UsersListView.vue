@@ -9,39 +9,44 @@
            Users List
        </template>
 
-       <button 
-            class="w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500"
-            @click="toggleFilterState"
-        >
-           Filter
-       </button>
-
-       <button class="w-full py-1 mt-2 text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500" @click="refreshUsersList">
-           Refresh
-       </button>
-
-       <select  
-            @change="order"
-            v-model="orderBy"
-            class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm">
-            <option :value="1">Name asc</option>
-            <option :value="2">Name desc</option>
-            <option :value="3">First Name asc</option>
-            <option :value="4">First Name desc</option>
-            <option :value="5">Email asc</option>
-            <option :value="6">Email desc</option>
-            <option :value="7">Role asc</option>
-            <option :value="8">Role desc</option>
-            <option :value="9">Orders asc</option>
-            <option :value="10">Orders desc</option>
-            <option :value="11">Reservations asc</option>
-            <option :value="12">Reservations desc</option>
-            <option :value="13">Joined at asc</option>
-            <option :value="14">Joined at desc</option>
-       </select>
-
-        <ul class="w-full mt-3 pt-3 border-t border-gray-100">
-            <li v-for="user in getUsers" :key="user.id" class="p-2 mt-4 rounded text-sm shadow-md  hover:shadow-lg">
+        <div class="flex flex-col md:flex-row md:justify-between items-end">
+            <div class="w-full md:flex md:flex-row md:gap-3 md:items-center">
+                <button 
+                    class="w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-20"
+                    @click="toggleFilterState"
+                    >
+                    Filter
+                </button>
+                <button 
+                    class="w-full py-1 mt-2  text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-20 md:mt-0" 
+                    @click="refreshUsersList">
+                    Refresh
+                </button>
+            </div>
+        
+            <select  
+                @change="order"
+                v-model="orderBy"
+                class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm md:w-auto">
+                <option :value="1">Name asc</option>
+                <option :value="2">Name desc</option>
+                <option :value="3">First Name asc</option>
+                <option :value="4">First Name desc</option>
+                <option :value="5">Email asc</option>
+                <option :value="6">Email desc</option>
+                <option :value="7">Role asc</option>
+                <option :value="8">Role desc</option>
+                <option :value="9">Orders asc</option>
+                <option :value="10">Orders desc</option>
+                <option :value="11">Reservations asc</option>
+                <option :value="12">Reservations desc</option>
+                <option :value="13">Joined at asc</option>
+                <option :value="14">Joined at desc</option>
+            </select>
+        </div>
+      
+        <ul class="w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4">
+            <li v-for="user in getUsers" :key="user.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 xl:w-375px 2xl:w-410px">
                 <router-link :to="{name: 'User', params:{id:1}}">
                     <div class="w-full flex justify-start items-center pb-1 border-b border-gray-100">
                         <div class="w-12 h-12 mr-4 bg-gray-500 rounded-md">
@@ -103,8 +108,10 @@
             </li>
       </ul>
       
-      <div class="mt-5 text-center" v-if="showMoreState">
-            <button class="w-full py-1 mt-2 text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500" @click="loadMoreUsers">
+      <div class="mt-5 text-center md:text-right" v-if="showMoreState">
+            <button 
+                class="w-full py-1 mt-2 text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-28" 
+                @click="loadMoreUsers">
                 Load more
             </button>
       </div>
