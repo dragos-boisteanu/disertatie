@@ -1896,6 +1896,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -1925,7 +1926,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Roles', ['getRoles'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Roles', ['getRoles'])), {}, {
+    mobile: function mobile() {
+      return this.$mq === 'sm' || this.$mq === 'md' || this.$mq === 'lg';
+    },
+    desktop: function desktop() {
+      return this.$mq === 'xl' || this.$mq === 'xxl';
+    }
+  }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Roles', ['fetchRoles'])), {}, {
     downloadRoles: function downloadRoles() {
       var _this2 = this;
@@ -2432,15 +2440,16 @@ var deleteUser = function deleteUser(id) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ "./resources/js/dashboard/App.vue");
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./resources/js/dashboard/router/index.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store */ "./resources/js/dashboard/store/index.js");
-/* harmony import */ var vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-2-breadcrumbs */ "./node_modules/vue-2-breadcrumbs/lib/vue-2-breadcrumbs.umd.js");
-/* harmony import */ var vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Breadcrumbs.vue */ "./resources/js/dashboard/components/Breadcrumbs.vue");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var vue_mq__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-mq */ "./node_modules/vue-mq/dist/vue-mq.es.js");
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ "./resources/js/dashboard/router/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store */ "./resources/js/dashboard/store/index.js");
+/* harmony import */ var vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-2-breadcrumbs */ "./node_modules/vue-2-breadcrumbs/lib/vue-2-breadcrumbs.umd.js");
+/* harmony import */ var vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Breadcrumbs.vue */ "./resources/js/dashboard/components/Breadcrumbs.vue");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_6__);
 __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -2450,17 +2459,30 @@ __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_6__.default.use((vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_3___default()), _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_4__.default);
-vue__WEBPACK_IMPORTED_MODULE_6__.default.filter("formatDate", function (date) {
+
+vue__WEBPACK_IMPORTED_MODULE_7__.default.use((vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_4___default()), _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_5__.default);
+vue__WEBPACK_IMPORTED_MODULE_7__.default.use(vue_mq__WEBPACK_IMPORTED_MODULE_1__.default, {
+  breakpoints: {
+    // default breakpoints - customize this
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+    xxl: 1536
+  },
+  defaultBreakpoint: 'sm' // customize this for SSR
+
+});
+vue__WEBPACK_IMPORTED_MODULE_7__.default.filter("formatDate", function (date) {
   if (!date) {
     return null;
   }
 
-  return dayjs__WEBPACK_IMPORTED_MODULE_5___default()(date).format('DD/MM/YYYY HH:mm');
+  return dayjs__WEBPACK_IMPORTED_MODULE_6___default()(date).format('DD/MM/YYYY HH:mm');
 });
-new vue__WEBPACK_IMPORTED_MODULE_6__.default({
-  router: _router__WEBPACK_IMPORTED_MODULE_1__.default,
-  store: _store__WEBPACK_IMPORTED_MODULE_2__.default,
+new vue__WEBPACK_IMPORTED_MODULE_7__.default({
+  router: _router__WEBPACK_IMPORTED_MODULE_2__.default,
+  store: _store__WEBPACK_IMPORTED_MODULE_3__.default,
   render: function render(h) {
     return h(_App_vue__WEBPACK_IMPORTED_MODULE_0__.default);
   }
@@ -2976,6 +2998,66 @@ var mutations = {
 
 !function(t,e){ true?module.exports=e():0}(this,function(){"use strict";var t="millisecond",e="second",n="minute",r="hour",i="day",s="week",u="month",a="quarter",o="year",f="date",h=/^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[^0-9]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/,c=/\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,d={name:"en",weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_")},$=function(t,e,n){var r=String(t);return!r||r.length>=e?t:""+Array(e+1-r.length).join(n)+t},l={s:$,z:function(t){var e=-t.utcOffset(),n=Math.abs(e),r=Math.floor(n/60),i=n%60;return(e<=0?"+":"-")+$(r,2,"0")+":"+$(i,2,"0")},m:function t(e,n){if(e.date()<n.date())return-t(n,e);var r=12*(n.year()-e.year())+(n.month()-e.month()),i=e.clone().add(r,u),s=n-i<0,a=e.clone().add(r+(s?-1:1),u);return+(-(r+(n-i)/(s?i-a:a-i))||0)},a:function(t){return t<0?Math.ceil(t)||0:Math.floor(t)},p:function(h){return{M:u,y:o,w:s,d:i,D:f,h:r,m:n,s:e,ms:t,Q:a}[h]||String(h||"").toLowerCase().replace(/s$/,"")},u:function(t){return void 0===t}},y="en",M={};M[y]=d;var m=function(t){return t instanceof S},D=function(t,e,n){var r;if(!t)return y;if("string"==typeof t)M[t]&&(r=t),e&&(M[t]=e,r=t);else{var i=t.name;M[i]=t,r=i}return!n&&r&&(y=r),r||!n&&y},v=function(t,e){if(m(t))return t.clone();var n="object"==typeof e?e:{};return n.date=t,n.args=arguments,new S(n)},g=l;g.l=D,g.i=m,g.w=function(t,e){return v(t,{locale:e.$L,utc:e.$u,x:e.$x,$offset:e.$offset})};var S=function(){function d(t){this.$L=D(t.locale,null,!0),this.parse(t)}var $=d.prototype;return $.parse=function(t){this.$d=function(t){var e=t.date,n=t.utc;if(null===e)return new Date(NaN);if(g.u(e))return new Date;if(e instanceof Date)return new Date(e);if("string"==typeof e&&!/Z$/i.test(e)){var r=e.match(h);if(r){var i=r[2]-1||0,s=(r[7]||"0").substring(0,3);return n?new Date(Date.UTC(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)):new Date(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)}}return new Date(e)}(t),this.$x=t.x||{},this.init()},$.init=function(){var t=this.$d;this.$y=t.getFullYear(),this.$M=t.getMonth(),this.$D=t.getDate(),this.$W=t.getDay(),this.$H=t.getHours(),this.$m=t.getMinutes(),this.$s=t.getSeconds(),this.$ms=t.getMilliseconds()},$.$utils=function(){return g},$.isValid=function(){return!("Invalid Date"===this.$d.toString())},$.isSame=function(t,e){var n=v(t);return this.startOf(e)<=n&&n<=this.endOf(e)},$.isAfter=function(t,e){return v(t)<this.startOf(e)},$.isBefore=function(t,e){return this.endOf(e)<v(t)},$.$g=function(t,e,n){return g.u(t)?this[e]:this.set(n,t)},$.unix=function(){return Math.floor(this.valueOf()/1e3)},$.valueOf=function(){return this.$d.getTime()},$.startOf=function(t,a){var h=this,c=!!g.u(a)||a,d=g.p(t),$=function(t,e){var n=g.w(h.$u?Date.UTC(h.$y,e,t):new Date(h.$y,e,t),h);return c?n:n.endOf(i)},l=function(t,e){return g.w(h.toDate()[t].apply(h.toDate("s"),(c?[0,0,0,0]:[23,59,59,999]).slice(e)),h)},y=this.$W,M=this.$M,m=this.$D,D="set"+(this.$u?"UTC":"");switch(d){case o:return c?$(1,0):$(31,11);case u:return c?$(1,M):$(0,M+1);case s:var v=this.$locale().weekStart||0,S=(y<v?y+7:y)-v;return $(c?m-S:m+(6-S),M);case i:case f:return l(D+"Hours",0);case r:return l(D+"Minutes",1);case n:return l(D+"Seconds",2);case e:return l(D+"Milliseconds",3);default:return this.clone()}},$.endOf=function(t){return this.startOf(t,!1)},$.$set=function(s,a){var h,c=g.p(s),d="set"+(this.$u?"UTC":""),$=(h={},h[i]=d+"Date",h[f]=d+"Date",h[u]=d+"Month",h[o]=d+"FullYear",h[r]=d+"Hours",h[n]=d+"Minutes",h[e]=d+"Seconds",h[t]=d+"Milliseconds",h)[c],l=c===i?this.$D+(a-this.$W):a;if(c===u||c===o){var y=this.clone().set(f,1);y.$d[$](l),y.init(),this.$d=y.set(f,Math.min(this.$D,y.daysInMonth())).$d}else $&&this.$d[$](l);return this.init(),this},$.set=function(t,e){return this.clone().$set(t,e)},$.get=function(t){return this[g.p(t)]()},$.add=function(t,a){var f,h=this;t=Number(t);var c=g.p(a),d=function(e){var n=v(h);return g.w(n.date(n.date()+Math.round(e*t)),h)};if(c===u)return this.set(u,this.$M+t);if(c===o)return this.set(o,this.$y+t);if(c===i)return d(1);if(c===s)return d(7);var $=(f={},f[n]=6e4,f[r]=36e5,f[e]=1e3,f)[c]||1,l=this.$d.getTime()+t*$;return g.w(l,this)},$.subtract=function(t,e){return this.add(-1*t,e)},$.format=function(t){var e=this;if(!this.isValid())return"Invalid Date";var n=t||"YYYY-MM-DDTHH:mm:ssZ",r=g.z(this),i=this.$locale(),s=this.$H,u=this.$m,a=this.$M,o=i.weekdays,f=i.months,h=function(t,r,i,s){return t&&(t[r]||t(e,n))||i[r].substr(0,s)},d=function(t){return g.s(s%12||12,t,"0")},$=i.meridiem||function(t,e,n){var r=t<12?"AM":"PM";return n?r.toLowerCase():r},l={YY:String(this.$y).slice(-2),YYYY:this.$y,M:a+1,MM:g.s(a+1,2,"0"),MMM:h(i.monthsShort,a,f,3),MMMM:h(f,a),D:this.$D,DD:g.s(this.$D,2,"0"),d:String(this.$W),dd:h(i.weekdaysMin,this.$W,o,2),ddd:h(i.weekdaysShort,this.$W,o,3),dddd:o[this.$W],H:String(s),HH:g.s(s,2,"0"),h:d(1),hh:d(2),a:$(s,u,!0),A:$(s,u,!1),m:String(u),mm:g.s(u,2,"0"),s:String(this.$s),ss:g.s(this.$s,2,"0"),SSS:g.s(this.$ms,3,"0"),Z:r};return n.replace(c,function(t,e){return e||l[t]||r.replace(":","")})},$.utcOffset=function(){return 15*-Math.round(this.$d.getTimezoneOffset()/15)},$.diff=function(t,f,h){var c,d=g.p(f),$=v(t),l=6e4*($.utcOffset()-this.utcOffset()),y=this-$,M=g.m(this,$);return M=(c={},c[o]=M/12,c[u]=M,c[a]=M/3,c[s]=(y-l)/6048e5,c[i]=(y-l)/864e5,c[r]=y/36e5,c[n]=y/6e4,c[e]=y/1e3,c)[d]||y,h?M:g.a(M)},$.daysInMonth=function(){return this.endOf(u).$D},$.$locale=function(){return M[this.$L]},$.locale=function(t,e){if(!t)return this.$L;var n=this.clone(),r=D(t,e,!0);return r&&(n.$L=r),n},$.clone=function(){return g.w(this.$d,this)},$.toDate=function(){return new Date(this.valueOf())},$.toJSON=function(){return this.isValid()?this.toISOString():null},$.toISOString=function(){return this.$d.toISOString()},$.toString=function(){return this.$d.toUTCString()},d}(),p=S.prototype;return v.prototype=p,[["$ms",t],["$s",e],["$m",n],["$H",r],["$W",i],["$M",u],["$y",o],["$D",f]].forEach(function(t){p[t[1]]=function(e){return this.$g(e,t[0],t[1])}}),v.extend=function(t,e){return t.$i||(t(e,S,v),t.$i=!0),v},v.locale=D,v.isDayjs=m,v.unix=function(t){return v(1e3*t)},v.en=M[y],v.Ls=M,v.p={},v});
 
+
+/***/ }),
+
+/***/ "./node_modules/json2mq/index.js":
+/*!***************************************!*\
+  !*** ./node_modules/json2mq/index.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var camel2hyphen = __webpack_require__(/*! string-convert/camel2hyphen */ "./node_modules/string-convert/camel2hyphen.js");
+
+var isDimension = function (feature) {
+  var re = /[height|width]$/;
+  return re.test(feature);
+};
+
+var obj2mq = function (obj) {
+  var mq = '';
+  var features = Object.keys(obj);
+  features.forEach(function (feature, index) {
+    var value = obj[feature];
+    feature = camel2hyphen(feature);
+    // Add px to dimension features
+    if (isDimension(feature) && typeof value === 'number') {
+      value = value + 'px';
+    }
+    if (value === true) {
+      mq += feature;
+    } else if (value === false) {
+      mq += 'not ' + feature;
+    } else {
+      mq += '(' + feature + ': ' + value + ')';
+    }
+    if (index < features.length-1) {
+      mq += ' and '
+    }
+  });
+  return mq;
+};
+
+var json2mq = function (query) {
+  var mq = '';
+  if (typeof query === 'string') {
+    return query;
+  }
+  // Handling array of media queries
+  if (query instanceof Array) {
+    query.forEach(function (q, index) {
+      mq += obj2mq(q);
+      if (index < query.length-1) {
+        mq += ', '
+      }
+    });
+    return mq;
+  }
+  // Handling single media query
+  return obj2mq(query);
+};
+
+module.exports = json2mq;
 
 /***/ }),
 
@@ -25743,6 +25825,24 @@ try {
 
 /***/ }),
 
+/***/ "./node_modules/string-convert/camel2hyphen.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/string-convert/camel2hyphen.js ***!
+  \*****************************************************/
+/***/ ((module) => {
+
+var camel2hyphen = function (str) {
+  return str
+          .replace(/[A-Z]/g, function (match) {
+            return '-' + match.toLowerCase();
+          })
+          .toLowerCase();
+};
+
+module.exports = camel2hyphen;
+
+/***/ }),
+
 /***/ "./node_modules/vue-2-breadcrumbs/lib/vue-2-breadcrumbs.umd.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/vue-2-breadcrumbs/lib/vue-2-breadcrumbs.umd.js ***!
@@ -26519,43 +26619,48 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "h-full flex flex-col " }, [
-    _c(
-      "div",
-      { staticClass: "block lg:hidden" },
-      [
-        _c("Header"),
-        _vm._v(" "),
-        _c("UtilityBar"),
-        _vm._v(" "),
-        _c("Breadcrumbs")
-      ],
-      1
-    ),
+    _vm.mobile
+      ? _c(
+          "div",
+          { staticClass: "block" },
+          [
+            _c("Header"),
+            _vm._v(" "),
+            _c("UtilityBar"),
+            _vm._v(" "),
+            _c("Breadcrumbs")
+          ],
+          1
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "flex flex-1" }, [
-      _c(
-        "div",
-        { staticClass: "hidden lg:block lg:flex-auto lg:w-52" },
-        [_c("Navigation")],
-        1
-      ),
+      _vm.desktop
+        ? _c(
+            "div",
+            { staticClass: "xl:flex-auto xl:w-52" },
+            [_c("Navigation")],
+            1
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
         { staticClass: "flex flex-col w-full" },
         [
-          _c(
-            "div",
-            { staticClass: "hidden lg:block" },
-            [
-              _c("Header"),
-              _vm._v(" "),
-              _c("UtilityBar"),
-              _vm._v(" "),
-              _c("Breadcrumbs")
-            ],
-            1
-          ),
+          _vm.desktop
+            ? _c(
+                "div",
+                [
+                  _c("Header"),
+                  _vm._v(" "),
+                  _c("UtilityBar"),
+                  _vm._v(" "),
+                  _c("Breadcrumbs")
+                ],
+                1
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c("router-view")
         ],
@@ -27509,6 +27614,194 @@ function normalizeComponent (
     options: options
   }
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-mq/dist/vue-mq.es.js":
+/*!***********************************************!*\
+  !*** ./node_modules/vue-mq/dist/vue-mq.es.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var json2mq__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! json2mq */ "./node_modules/json2mq/index.js");
+/* harmony import */ var json2mq__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(json2mq__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+function convertBreakpointsToMediaQueries(breakpoints) {
+  var keys = Object.keys(breakpoints);
+  var values = keys.map(function (key) {
+    return breakpoints[key];
+  });
+  var breakpointValues = [0].concat(_toConsumableArray(values.slice(0, -1)));
+  var mediaQueries = breakpointValues.reduce(function (sum, value, index) {
+    var options = Object.assign({
+      minWidth: value
+    }, index < keys.length - 1 ? {
+      maxWidth: breakpointValues[index + 1] - 1
+    } : {});
+    var mediaQuery = json2mq__WEBPACK_IMPORTED_MODULE_0___default()(options);
+    return Object.assign(sum, _defineProperty({}, keys[index], mediaQuery));
+  }, {});
+  return mediaQueries;
+}
+function transformValuesFromBreakpoints(breakpoints, values, currentBreakpoint) {
+  var findClosestValue = function findClosestValue(currentBreakpoint) {
+    if (values[currentBreakpoint] !== undefined) return values[currentBreakpoint];
+    var index = breakpoints.findIndex(function (b) {
+      return b === currentBreakpoint;
+    });
+    var newBreakpoint = index !== -1 || index !== 0 ? breakpoints[index - 1] : null;
+    if (!newBreakpoint) return values[index];
+    return values[newBreakpoint] !== undefined ? values[newBreakpoint] : findClosestValue(newBreakpoint);
+  };
+
+  return findClosestValue(currentBreakpoint);
+}
+function selectBreakpoints(breakpoints, currentBreakpoint) {
+  var index = breakpoints.findIndex(function (b) {
+    return b === currentBreakpoint;
+  });
+  return breakpoints.slice(index);
+}
+function subscribeToMediaQuery(mediaQuery, enter) {
+  var mql = window.matchMedia(mediaQuery);
+
+  var cb = function cb(_ref) {
+    var matches = _ref.matches;
+    if (matches) enter();
+  };
+
+  mql.addListener(cb); //subscribing
+
+  cb(mql); //initial trigger
+}
+
+function isArray(arg) {
+  return Object.prototype.toString.call(arg) === '[object Array]';
+}
+
+// USAGE
+// mq-layout(mq="lg")
+//   p I’m lg
+var component = {
+  props: {
+    mq: {
+      required: true,
+      type: [String, Array]
+    }
+  },
+  computed: {
+    plusModifier: function plusModifier() {
+      return !isArray(this.mq) && this.mq.slice(-1) === '+';
+    },
+    activeBreakpoints: function activeBreakpoints() {
+      var breakpoints = Object.keys(this.$mqAvailableBreakpoints);
+      var mq = this.plusModifier ? this.mq.slice(0, -1) : isArray(this.mq) ? this.mq : [this.mq];
+      return this.plusModifier ? selectBreakpoints(breakpoints, mq) : mq;
+    }
+  },
+  render: function render(h, props) {
+    var shouldRenderChildren = this.activeBreakpoints.includes(this.$mq);
+    return shouldRenderChildren ? h('div', this.$slots.default) : h();
+  }
+};
+
+var DEFAULT_BREAKPOINT = {
+  sm: 450,
+  md: 1250,
+  lg: Infinity
+};
+
+var install = function install(Vue) {
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$breakpoints = _ref.breakpoints,
+      breakpoints = _ref$breakpoints === void 0 ? DEFAULT_BREAKPOINT : _ref$breakpoints,
+      _ref$defaultBreakpoin = _ref.defaultBreakpoint,
+      defaultBreakpoint = _ref$defaultBreakpoin === void 0 ? 'sm' : _ref$defaultBreakpoin;
+
+  var hasSetupListeners = false; // Init reactive component
+
+  var reactorComponent = new Vue({
+    data: function data() {
+      return {
+        currentBreakpoint: defaultBreakpoint
+      };
+    }
+  });
+  Vue.filter('mq', function (currentBreakpoint, values) {
+    return transformValuesFromBreakpoints(Object.keys(breakpoints), values, currentBreakpoint);
+  });
+  Vue.mixin({
+    computed: {
+      $mq: function $mq() {
+        return reactorComponent.currentBreakpoint;
+      }
+    },
+    created: function created() {
+      if (this.$isServer) reactorComponent.currentBreakpoint = defaultBreakpoint;
+    },
+    mounted: function mounted() {
+      if (!hasSetupListeners) {
+        var mediaQueries = convertBreakpointsToMediaQueries(breakpoints); // setup listeners
+
+        var _loop = function _loop(key) {
+          var mediaQuery = mediaQueries[key];
+
+          var enter = function enter() {
+            reactorComponent.currentBreakpoint = key;
+          };
+
+          subscribeToMediaQuery(mediaQuery, enter);
+        };
+
+        for (var key in mediaQueries) {
+          _loop(key);
+        }
+
+        hasSetupListeners = true;
+      }
+    }
+  });
+  Vue.prototype.$mqAvailableBreakpoints = breakpoints;
+  Vue.component('MqLayout', component);
+};
+
+var index = {
+  install: install
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (index);
 
 
 /***/ }),

@@ -1,16 +1,17 @@
 <template>
-    <div class="h-full flex flex-col ">   
-        <div class="block lg:hidden">
+    <div class="h-full flex flex-col "> 
+         <!-- <h1>current: {{$mq}}</h1>   -->
+        <div class="block" v-if="mobile">
             <Header/>
             <UtilityBar/>
             <Breadcrumbs/>
         </div>
         <div class="flex flex-1">
-            <div class="hidden lg:block lg:flex-auto lg:w-52">
+            <div class="xl:flex-auto xl:w-52" v-if="desktop">
                 <Navigation/>
             </div>
             <div class="flex flex-col w-full">
-                <div class="hidden lg:block">  
+                <div v-if="desktop">  
                     <Header/> 
                     <UtilityBar/>
                     <Breadcrumbs/>
@@ -36,6 +37,14 @@
 
         computed: {
             ...mapGetters('Roles', ['getRoles']),
+            mobile() {
+                return this.$mq === 'sm' || this.$mq === 'md' || this.$mq === 'lg';
+            },
+
+            desktop() {
+                return this.$mq === 'xl' || this.$mq === 'xxl';
+            }
+
         },
 
         methods: {
