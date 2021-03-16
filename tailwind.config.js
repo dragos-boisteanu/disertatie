@@ -19,8 +19,12 @@ module.exports = {
             },
             width: {
                 '49': '49%',
+                '375px': '375px',
+                '350px': '350px',
                 '410px': '410px',
-                '375px': '375px'
+            },
+            screens: {
+                'xl': '1281px',
             }            
         },
         colors,

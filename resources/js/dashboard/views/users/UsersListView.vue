@@ -44,9 +44,9 @@
                 <option :value="14">Joined at desc</option>
             </select>
         </div>
-      
+      <!-- xl:w-375px -->
         <ul class="w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4">
-            <li v-for="user in getUsers" :key="user.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 xl:w-375px 2xl:w-410px">
+            <li v-for="user in getUsers" :key="user.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-410px">
                 <router-link :to="{name: 'User', params:{id:1}}">
                     <div class="w-full flex justify-start items-center pb-1 border-b border-gray-100">
                         <div class="w-12 h-12 mr-4 bg-gray-500 rounded-md">
