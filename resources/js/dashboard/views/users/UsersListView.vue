@@ -1,7 +1,7 @@
 <template>
    <ViewContainer>
         <UsersFilter
-            v-show="showFilterState"
+            v-if="showFilterState"
             @closed="toggleFilterState"
         />
 
@@ -20,6 +20,26 @@
            Refresh
        </button>
 
+       <select  
+            @change="order"
+            v-model="orderBy"
+            class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm">
+            <option :value="1">Name asc</option>
+            <option :value="2">Name desc</option>
+            <option :value="3">First Name asc</option>
+            <option :value="4">First Name desc</option>
+            <option :value="5">Email asc</option>
+            <option :value="6">Email desc</option>
+            <option :value="7">Role asc</option>
+            <option :value="8">Role desc</option>
+            <option :value="9">Orders asc</option>
+            <option :value="10">Orders desc</option>
+            <option :value="11">Reservations asc</option>
+            <option :value="12">Reservations desc</option>
+            <option :value="13">Joined at asc</option>
+            <option :value="14">Joined at desc</option>
+       </select>
+
         <ul class="w-full mt-3 pt-3 border-t border-gray-100">
             <li v-for="user in getUsers" :key="user.id" class="p-2 mt-4 rounded text-sm shadow-md  hover:shadow-lg">
                 <router-link :to="{name: 'User', params:{id:1}}">
@@ -30,13 +50,13 @@
                         </div>
                         <div class="flex-1">
                             <div class="capitalize font-semibold">
-                               <span>{{ user.first_name}}</span>  <span>{{user.name}}</span>
+                               <span>{{ user.firstName}}</span>  <span>{{user.name}}</span>
                             </div>
                             <div class="font-light">
                                {{ user.email}}
                             </div>
                             <div class="mt-1 text-xs">
-                               {{ user.phone_number}}
+                               {{ user.phoneNumber}}
                             </div>
                         </div>
                         <div>
@@ -121,6 +141,14 @@
                     query.name = to.query.name;
                 }
 
+                if(to.query.email) {
+                    query.email = to.query.email;
+                }
+
+                if(to.query.phoneNumber) {
+                    query.phoneNumber = to.query.phoneNumber;
+                }
+
                 if(to.query.roles) {
                     query.roles = [];
                     query.roles.push(...to.query.roles)
@@ -143,15 +171,22 @@
         data() {
             return {
                 showFilterState: false,
+                orderBy: 14,
             }
         },
 
         methods: { 
-            ...mapActions('Users', ['refreshUsers', 'fetchUsers']),
+            ...mapActions('Users', ['refreshUsers', 'fetchUsers', 'sortUsersList']),
+
+            reorder() {
+
+            },
+
             async loadMoreUsers() {
                 try {
                     const query = {
-                        page:this.getNextPage,
+                        page: this.getNextPage,
+                        orderBy: this.orderBy
                     }
 
                     if(this.$route.query.id) {
@@ -166,12 +201,22 @@
                         query.name = this.$route.query.name;
                     }
 
-                   if(this.$route.query.roles) {
+                    if(this.$route.query.email) {
+                        query.email = this.$route.query.email;
+                    }
+
+                    if(this.$route.query.phoneNumber) {
+                        query.phoneNumber = this.$route.query.phoneNumber;
+                    }
+
+                    if(this.$route.query.roles) {
                         query.roles = [];
                         query.roles.push(...this.$route.query.roles)
                     };
 
                     await this.fetchUsers(query)
+
+                    this.order();
                 } catch ( error ) {
                     console.log(error)
                 }
@@ -184,9 +229,14 @@
                     }
                     
                     await this.refreshUsers();
+                    this.orderBy = 14;
                 } catch ( error ) {
                     console.log(error);
                 }
+            },
+
+            order() {
+                this.sortUsersList(this.orderBy);
             },
 
             toggleFilterState() {

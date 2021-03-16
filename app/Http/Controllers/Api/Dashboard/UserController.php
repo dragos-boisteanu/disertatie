@@ -16,8 +16,64 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-       
-        $users = User::filter($request)->with('role')->simplePaginate(5);
+        $query = User::filter($request);
+
+        if(!$request->orderBy) {
+            $orderByValue = 14;
+        } else {
+            $orderByValue = $request->orderBy;
+        }
+
+        $query->orderBy('id', 'desc');
+        
+        switch($orderByValue) {
+            case 1:
+                $query->orderBy('name', 'asc');
+                break;
+            case 2: 
+                $query->orderBy('name', 'desc');
+                break;
+            case 3:
+                $query->orderBy('first_name', 'asc');
+                break;
+            case 4:
+                $query->orderBy('first_name', 'desc');
+                break;
+            case 5:
+                $query->orderBy('email', 'asc');
+                break;
+            case 6:
+                $query->orderBy('emal', 'desc');
+                break;
+            case 7:        
+                $query->orderBy('role_id', 'asc');
+                break;
+            case 8:
+                $query->orderBy('role_id', 'desc');
+                break;
+            // TO DO: special order by for orders and reservations count
+            // case 9:
+            //     $query->orderBy('orders', 'asc');
+            //     break;
+            // case 10:
+            //     $query->orderBy('orders', 'desc');
+            //     break;
+            // case 11:
+            //     $query->orderBy('reservations', 'asc');
+            //     break;
+            // case 12:
+            //     $query->orderBy('reservations', 'desc');
+            //     break;
+            case 13:
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 14:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $users = $query->with('role')->simplePaginate(5);
+
         return new UserCollection($users);
     }
 

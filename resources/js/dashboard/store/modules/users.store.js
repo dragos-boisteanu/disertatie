@@ -1,4 +1,5 @@
 import { downloadUsers, downloadUser, patchUser,  disableUser, deleteUser } from '../../api/users.api';
+import _orderBy from 'lodash/orderBy';
 
 const initialState = () => ({
     users: [],
@@ -70,6 +71,10 @@ const actions = {
             throw error; 
         }
     },
+
+    sortUsersList({commit}, sortBy) {
+       commit('SORT_USERS', sortBy);
+    }
     
 }
 
@@ -106,6 +111,53 @@ const mutations = {
     SAVE_NEXT_PAGE(state, page) {
         state.nextPage = page;
     },
+
+    SORT_USERS(state, sortBy) {
+        switch(sortBy) {
+            case 1:
+                state.users = _orderBy(state.users, [user => user.name.toLowerCase()], ['asc']);
+                break;
+            case 2:
+                state.users = _orderBy(state.users, [user => user.name.toLowerCase()], ['desc']);
+                break;
+            case 3:
+                state.users = _orderBy(state.users, [user => user.firstName.toLowerCase()], ['asc']);
+                break;
+            case 4:
+                state.users = _orderBy(state.users, [user => user.firstName.toLowerCase()], ['desc']);
+                break;
+            case 5:
+                state.users = _orderBy(state.users, [user => user.email.toLowerCase()], ['asc']);
+                break;
+            case 6: 
+                state.users = _orderBy(state.users, [user => user.email.toLowerCase()], ['desc']);
+                break;
+            case 7: 
+                state.users = _orderBy(state.users, ['roleId'], ['desc']);
+                break;
+            case 8:
+                state.users = _orderBy(state.users, ['roleId'], ['asc']);
+                break;
+            case 9: 
+                state.users = _orderBy(state.users, ['orders'], ['desc']);
+                break;
+            case 10:
+                state.users = _orderBy(state.users, ['orders'], ['asc']);
+                break;
+            case 11: 
+                state.users = _orderBy(state.users, ['reservations'], ['desc']);
+                break;
+            case 12:
+                state.users = _orderBy(state.users, ['reservations'], ['asc']);
+                break;
+            case 13:
+                state.users = _orderBy(state.users, ['createdAt'], ['asc']);
+                break;
+            case 14:
+                state.users = _orderBy(state.users, ['createdAt'], ['desc']);
+                break;
+        }
+    }
 
 }
 

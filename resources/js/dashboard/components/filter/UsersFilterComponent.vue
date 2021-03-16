@@ -24,7 +24,7 @@
             />
 
             <input 
-                id="id" 
+                id="name" 
                 name="id" 
                 type="text" 
                 class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
@@ -35,11 +35,31 @@
 
             <input 
                 id="id" 
-                name="id" 
+                name="name" 
                 type="text" 
                 class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Name"
                 v-model="filterData.name"
+                @keyup="callFilter"    
+            />
+
+            <input 
+                id="email" 
+                name="email" 
+                type="text" 
+                class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                placeholder="Email"
+                v-model="filterData.email"
+                @keyup="callFilter"    
+            />
+
+            <input 
+                id="phoneNumber" 
+                name="phoneNumber" 
+                type="text" 
+                class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                placeholder="Phone number"
+                v-model="filterData.phoneNumber"
                 @keyup="callFilter"    
             />
 
@@ -92,6 +112,8 @@
             this.filterData.id =  this.$route.query.id ? this.$route.query.id : '';
             this.filterData.firstName = this.$route.query.firstName ? this.$route.query.firstName : '';
             this.filterData.name = this.$route.query.name ? this.$route.query.name : '';
+            this.filterData.email = this.$route.query.email ? this.$route.query.email : '';
+            this.filterData.phoneNumber = this.$route.query.phoneNumber ? this.$route.query.phoneNumber : '';
             if(this.$route.query.roles) {
                 this.filterData.roles.push(...this.$route.query.roles)
             };
@@ -109,6 +131,8 @@
                     firstName: '',
                     name: '',
                     roles: [],
+                    email: '',
+                    phoneNumber: ''
                 },
             }
         },
@@ -118,9 +142,7 @@
 
             callFilter: _debounce( async function() {
                 try {
-                    const query = {
-                        page: 1,
-                    }
+                    const query = {}
 
                     if(this.filterData.id.length > 0) {
                         query.id = this.filterData.id;
@@ -132,6 +154,14 @@
 
                     if(this.filterData.name.length > 0) {
                         query.name = this.filterData.name;
+                    }
+
+                    if(this.filterData.email.length > 0) {
+                        query.email = this.filterData.email;
+                    }
+
+                    if(this.filterData.phoneNumber.length > 0) {
+                        query.phoneNumber = this.filterData.phoneNumber;
                     }
 
                     if(this.filterData.roles.length > 0 ) {

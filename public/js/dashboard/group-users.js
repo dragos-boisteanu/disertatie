@@ -198,6 +198,26 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -206,6 +226,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     this.filterData.id = this.$route.query.id ? this.$route.query.id : '';
     this.filterData.firstName = this.$route.query.firstName ? this.$route.query.firstName : '';
     this.filterData.name = this.$route.query.name ? this.$route.query.name : '';
+    this.filterData.email = this.$route.query.email ? this.$route.query.email : '';
+    this.filterData.phoneNumber = this.$route.query.phoneNumber ? this.$route.query.phoneNumber : '';
 
     if (this.$route.query.roles) {
       var _this$filterData$role;
@@ -222,7 +244,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         id: '',
         firstName: '',
         name: '',
-        roles: []
+        roles: [],
+        email: '',
+        phoneNumber: ''
       }
     };
   },
@@ -234,9 +258,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              query = {
-                page: 1
-              };
+              query = {};
 
               if (this.filterData.id.length > 0) {
                 query.id = this.filterData.id;
@@ -250,6 +272,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 query.name = this.filterData.name;
               }
 
+              if (this.filterData.email.length > 0) {
+                query.email = this.filterData.email;
+              }
+
+              if (this.filterData.phoneNumber.length > 0) {
+                query.phoneNumber = this.filterData.phoneNumber;
+              }
+
               if (this.filterData.roles.length > 0) {
                 query.roles = this.filterData.roles;
               }
@@ -259,24 +289,24 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 query: _objectSpread({}, query)
               });
               this.reset();
-              _context.next = 10;
+              _context.next = 12;
               return this.fetchUsers(query);
 
-            case 10:
-              _context.next = 15;
+            case 12:
+              _context.next = 17;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 14:
+              _context.prev = 14;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 15:
+            case 17:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 12]]);
+      }, _callee, this, [[0, 14]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -425,6 +455,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -440,7 +490,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0)) {
-                _context.next = 12;
+                _context.next = 14;
                 break;
               }
 
@@ -460,6 +510,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 query.name = to.query.name;
               }
 
+              if (to.query.email) {
+                query.email = to.query.email;
+              }
+
+              if (to.query.phoneNumber) {
+                query.phoneNumber = to.query.phoneNumber;
+              }
+
               if (to.query.roles) {
                 query.roles = [];
 
@@ -467,18 +525,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
 
               ;
-              _context.next = 9;
+              _context.next = 11;
               return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', query);
 
-            case 9:
+            case 11:
               next();
-              _context.next = 13;
+              _context.next = 15;
               break;
 
-            case 12:
+            case 14:
               next();
 
-            case 13:
+            case 15:
             case "end":
               return _context.stop();
           }
@@ -493,10 +551,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   }),
   data: function data() {
     return {
-      showFilterState: false
+      showFilterState: false,
+      orderBy: 14
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['refreshUsers', 'fetchUsers'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['refreshUsers', 'fetchUsers', 'sortUsersList'])), {}, {
+    reorder: function reorder() {},
     loadMoreUsers: function loadMoreUsers() {
       var _this = this;
 
@@ -509,7 +569,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context2.prev = 0;
                 query = {
-                  page: _this.getNextPage
+                  page: _this.getNextPage,
+                  orderBy: _this.orderBy
                 };
 
                 if (_this.$route.query.id) {
@@ -524,6 +585,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   query.name = _this.$route.query.name;
                 }
 
+                if (_this.$route.query.email) {
+                  query.email = _this.$route.query.email;
+                }
+
+                if (_this.$route.query.phoneNumber) {
+                  query.phoneNumber = _this.$route.query.phoneNumber;
+                }
+
                 if (_this.$route.query.roles) {
                   query.roles = [];
 
@@ -531,24 +600,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 ;
-                _context2.next = 9;
+                _context2.next = 11;
                 return _this.fetchUsers(query);
 
-              case 9:
-                _context2.next = 14;
+              case 11:
+                _this.order();
+
+                _context2.next = 17;
                 break;
 
-              case 11:
-                _context2.prev = 11;
+              case 14:
+                _context2.prev = 14;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 14:
+              case 17:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 11]]);
+        }, _callee2, null, [[0, 14]]);
       }))();
     },
     refreshUsersList: function refreshUsersList() {
@@ -572,21 +643,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this2.refreshUsers();
 
               case 4:
-                _context3.next = 9;
+                _this2.orderBy = 14;
+                _context3.next = 10;
                 break;
 
-              case 6:
-                _context3.prev = 6;
+              case 7:
+                _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 9:
+              case 10:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 6]]);
+        }, _callee3, null, [[0, 7]]);
       }))();
+    },
+    order: function order() {
+      this.sortUsersList(this.orderBy);
     },
     toggleFilterState: function toggleFilterState() {
       this.showFilterState = !this.showFilterState;
@@ -598,60 +673,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     UsersFilter: _components_filter_UsersFilterComponent__WEBPACK_IMPORTED_MODULE_4__.default
   }
 });
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_Symbol.js":
-/*!****************************************!*\
-  !*** ./node_modules/lodash/_Symbol.js ***!
-  \****************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var root = __webpack_require__(/*! ./_root */ "./node_modules/lodash/_root.js");
-
-/** Built-in value references. */
-var Symbol = root.Symbol;
-
-module.exports = Symbol;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseGetTag.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_baseGetTag.js ***!
-  \********************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var Symbol = __webpack_require__(/*! ./_Symbol */ "./node_modules/lodash/_Symbol.js"),
-    getRawTag = __webpack_require__(/*! ./_getRawTag */ "./node_modules/lodash/_getRawTag.js"),
-    objectToString = __webpack_require__(/*! ./_objectToString */ "./node_modules/lodash/_objectToString.js");
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
-}
-
-module.exports = baseGetTag;
-
 
 /***/ }),
 
@@ -680,127 +701,6 @@ function baseTrim(string) {
 }
 
 module.exports = baseTrim;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_freeGlobal.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_freeGlobal.js ***!
-  \********************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-/** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof __webpack_require__.g == 'object' && __webpack_require__.g && __webpack_require__.g.Object === Object && __webpack_require__.g;
-
-module.exports = freeGlobal;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_getRawTag.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/_getRawTag.js ***!
-  \*******************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var Symbol = __webpack_require__(/*! ./_Symbol */ "./node_modules/lodash/_Symbol.js");
-
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var nativeObjectToString = objectProto.toString;
-
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-/**
- * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the raw `toStringTag`.
- */
-function getRawTag(value) {
-  var isOwn = hasOwnProperty.call(value, symToStringTag),
-      tag = value[symToStringTag];
-
-  try {
-    value[symToStringTag] = undefined;
-    var unmasked = true;
-  } catch (e) {}
-
-  var result = nativeObjectToString.call(value);
-  if (unmasked) {
-    if (isOwn) {
-      value[symToStringTag] = tag;
-    } else {
-      delete value[symToStringTag];
-    }
-  }
-  return result;
-}
-
-module.exports = getRawTag;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_objectToString.js":
-/*!************************************************!*\
-  !*** ./node_modules/lodash/_objectToString.js ***!
-  \************************************************/
-/***/ ((module) => {
-
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var nativeObjectToString = objectProto.toString;
-
-/**
- * Converts `value` to a string using `Object.prototype.toString`.
- *
- * @private
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
- */
-function objectToString(value) {
-  return nativeObjectToString.call(value);
-}
-
-module.exports = objectToString;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_root.js":
-/*!**************************************!*\
-  !*** ./node_modules/lodash/_root.js ***!
-  \**************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ "./node_modules/lodash/_freeGlobal.js");
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-module.exports = root;
 
 
 /***/ }),
@@ -1031,125 +931,6 @@ function debounce(func, wait, options) {
 }
 
 module.exports = debounce;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isObject.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/isObject.js ***!
-  \*****************************************/
-/***/ ((module) => {
-
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
- */
-function isObject(value) {
-  var type = typeof value;
-  return value != null && (type == 'object' || type == 'function');
-}
-
-module.exports = isObject;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isObjectLike.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/isObjectLike.js ***!
-  \*********************************************/
-/***/ ((module) => {
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return value != null && typeof value == 'object';
-}
-
-module.exports = isObjectLike;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isSymbol.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/isSymbol.js ***!
-  \*****************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ "./node_modules/lodash/_baseGetTag.js"),
-    isObjectLike = __webpack_require__(/*! ./isObjectLike */ "./node_modules/lodash/isObjectLike.js");
-
-/** `Object#toString` result references. */
-var symbolTag = '[object Symbol]';
-
-/**
- * Checks if `value` is classified as a `Symbol` primitive or object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
- * @example
- *
- * _.isSymbol(Symbol.iterator);
- * // => true
- *
- * _.isSymbol('abc');
- * // => false
- */
-function isSymbol(value) {
-  return typeof value == 'symbol' ||
-    (isObjectLike(value) && baseGetTag(value) == symbolTag);
-}
-
-module.exports = isSymbol;
 
 
 /***/ }),
@@ -1806,7 +1587,7 @@ var render = function() {
           staticClass:
             "mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
           attrs: {
-            id: "id",
+            id: "name",
             name: "id",
             type: "text",
             placeholder: "First name"
@@ -1834,7 +1615,7 @@ var render = function() {
           ],
           staticClass:
             "mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
-          attrs: { id: "id", name: "id", type: "text", placeholder: "Name" },
+          attrs: { id: "id", name: "name", type: "text", placeholder: "Name" },
           domProps: { value: _vm.filterData.name },
           on: {
             keyup: _vm.callFilter,
@@ -1843,6 +1624,64 @@ var render = function() {
                 return
               }
               _vm.$set(_vm.filterData, "name", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.filterData.email,
+              expression: "filterData.email"
+            }
+          ],
+          staticClass:
+            "mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
+          attrs: {
+            id: "email",
+            name: "email",
+            type: "text",
+            placeholder: "Email"
+          },
+          domProps: { value: _vm.filterData.email },
+          on: {
+            keyup: _vm.callFilter,
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.filterData, "email", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.filterData.phoneNumber,
+              expression: "filterData.phoneNumber"
+            }
+          ],
+          staticClass:
+            "mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
+          attrs: {
+            id: "phoneNumber",
+            name: "phoneNumber",
+            type: "text",
+            placeholder: "Phone number"
+          },
+          domProps: { value: _vm.filterData.phoneNumber },
+          on: {
+            keyup: _vm.callFilter,
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.filterData, "phoneNumber", $event.target.value)
             }
           }
         }),
@@ -2051,17 +1890,9 @@ var render = function() {
   return _c(
     "ViewContainer",
     [
-      _c("UsersFilter", {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.showFilterState,
-            expression: "showFilterState"
-          }
-        ],
-        on: { closed: _vm.toggleFilterState }
-      }),
+      _vm.showFilterState
+        ? _c("UsersFilter", { on: { closed: _vm.toggleFilterState } })
+        : _vm._e(),
       _vm._v(" "),
       _c("template", { slot: "header" }, [
         _vm._v("\n        Users List\n    ")
@@ -2085,6 +1916,73 @@ var render = function() {
           on: { click: _vm.refreshUsersList }
         },
         [_vm._v("\n        Refresh\n    ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.orderBy,
+              expression: "orderBy"
+            }
+          ],
+          staticClass:
+            "w-full p-1 mt-2 text-base border-gray-300 border rounded-sm",
+          on: {
+            change: [
+              function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.orderBy = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              },
+              _vm.order
+            ]
+          }
+        },
+        [
+          _c("option", { domProps: { value: 1 } }, [_vm._v("Name asc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 2 } }, [_vm._v("Name desc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 3 } }, [_vm._v("First Name asc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 4 } }, [_vm._v("First Name desc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 5 } }, [_vm._v("Email asc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 6 } }, [_vm._v("Email desc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 7 } }, [_vm._v("Role asc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 8 } }, [_vm._v("Role desc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 9 } }, [_vm._v("Orders asc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 10 } }, [_vm._v("Orders desc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 11 } }, [
+            _vm._v("Reservations asc")
+          ]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 12 } }, [
+            _vm._v("Reservations desc")
+          ]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 13 } }, [_vm._v("Joined at asc")]),
+          _vm._v(" "),
+          _c("option", { domProps: { value: 14 } }, [_vm._v("Joined at desc")])
+        ]
       ),
       _vm._v(" "),
       _c(
@@ -2143,7 +2041,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "flex-1" }, [
                         _c("div", { staticClass: "capitalize font-semibold" }, [
-                          _c("span", [_vm._v(_vm._s(user.first_name))]),
+                          _c("span", [_vm._v(_vm._s(user.firstName))]),
                           _vm._v(" "),
                           _c("span", [_vm._v(_vm._s(user.name))])
                         ]),
@@ -2159,7 +2057,7 @@ var render = function() {
                         _c("div", { staticClass: "mt-1 text-xs" }, [
                           _vm._v(
                             "\n                            " +
-                              _vm._s(user.phone_number) +
+                              _vm._s(user.phoneNumber) +
                               "\n                         "
                           )
                         ])
