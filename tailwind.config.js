@@ -33,7 +33,7 @@ module.exports = {
     variants: {
         extend: {
             opacity: ['disabled'],
-            pointerEvents: ['hover'],
+            pointerEvents: ['hover', 'disabled'],
             boxShadow: ['active'],
             backgroundColor: ['active', 'disabled'],
         },

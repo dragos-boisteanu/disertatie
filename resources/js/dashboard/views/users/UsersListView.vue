@@ -132,33 +132,34 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(store.getters['Users/getUsers'].length === 0) {
+                const urlQuery = to.query;
                 const query = {
                     page: 1,
                 }
 
-                if(to.query.id) {
-                    query.id = to.query.id;
+                if(urlQuery.id) {
+                    query.id = urlQuery.id;
                 }
 
-                if(to.query.firstName) {
-                    query.firstName = to.query.firstName;
+                if(urlQuery.firstName) {
+                    query.firstName = urlQuery.firstName;
                 }
 
-                if(to.query.name) {
-                    query.name = to.query.name;
+                if(urlQuery.name) {
+                    query.name = urlQuery.name;
                 }
 
-                if(to.query.email) {
-                    query.email = to.query.email;
+                if(urlQuery.email) {
+                    query.email = urlQuery.email;
                 }
 
-                if(to.query.phoneNumber) {
-                    query.phoneNumber = to.query.phoneNumber;
+                if(urlQuery.phoneNumber) {
+                    query.phoneNumber = urlQuery.phoneNumber;
                 }
 
-                if(to.query.roles) {
+                if(urlQuery.roles) {
                     query.roles = [];
-                    query.roles.push(...to.query.roles)
+                    query.roles.push(...urlQuery.roles)
                 };
 
                 await store.dispatch('Users/fetchUsers', query);
@@ -187,34 +188,35 @@
 
             async loadMoreUsers() {
                 try {
+                    const urlQuery = this.$route.query;
                     const query = {
                         page: this.getNextPage,
                         orderBy: this.orderBy
                     }
 
-                    if(this.$route.query.id) {
-                        query.id = this.$route.query.id;
+                    if(urlQuery.id) {
+                        query.id = urlQuery.id;
                     }
 
-                    if(this.$route.query.firstName) {
-                        query.firstName = this.$route.query.firstName;
+                    if(urlQuery.firstName) {
+                        query.firstName = urlQuery.firstName;
                     }
 
-                    if(this.$route.query.name) {
-                        query.name = this.$route.query.name;
+                    if(urlQuery.name) {
+                        query.name = urlQuery.name;
                     }
 
-                    if(this.$route.query.email) {
-                        query.email = this.$route.query.email;
+                    if(urlQuery.email) {
+                        query.email = urlQuery.email;
                     }
 
-                    if(this.$route.query.phoneNumber) {
-                        query.phoneNumber = this.$route.query.phoneNumber;
+                    if(urlQuery.phoneNumber) {
+                        query.phoneNumber = urlQuery.phoneNumber;
                     }
 
-                    if(this.$route.query.roles) {
+                    if(urlQuery.roles) {
                         query.roles = [];
-                        query.roles.push(...this.$route.query.roles)
+                        query.roles.push(...urlQuery.roles)
                     };
 
                     await this.fetchUsers(query)

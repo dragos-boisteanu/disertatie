@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
+use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\UserStoreRequest;
 
 class UserController extends Controller
 {
@@ -84,9 +88,16 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        return $request->all();
+        $input = $request->user;
+
+        $input['password'] = Hash::make(Str::random(8));
+        
+        $user = User::create($input);
+
+        event(new Registered($user));
+        return ['id'=>$user->id, 'createdAt'=>$user->created_at];
     }
 
     /**

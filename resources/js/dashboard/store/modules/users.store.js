@@ -75,8 +75,7 @@ const actions = {
     async addUser({commit}, user) {
         try {
             const response = await storeUser(user);
-            console.log(response);  
-            commit('ADD_USER', response.data.user)
+            // commit('ADD_USER', response.data.user)
         } catch (error) {
             throw error;
         }

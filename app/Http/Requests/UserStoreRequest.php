@@ -24,12 +24,18 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'birth_date' => 'required|date',
-            'phone_number' => 'required|string|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|confirmed|min:8',
+            'user.first_name' => 'required|string|max:1',
+            'user.name' => 'required|string|max:255',
+            'user.birthdate' => 'required|date',
+            'user.phone_number' => 'required|string|unique:users,phone_number',
+            'user.email' => 'required|string|email|max:255|unique:users,email',
+
+            'user.address.first_name' => 'required|string|max:255',
+            'user.address.name' => 'required|string|max:255',
+            'user.address.phone_number' => 'required|string',
+            'user.address.county_id' => 'required|integer',
+            'user.address.city_id' => 'required|integer',
+            'user.address.address' => 'required|string|max:255'
         ];
     }
 }
