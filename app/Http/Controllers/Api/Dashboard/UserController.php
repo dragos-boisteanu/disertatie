@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         $query = User::filter($request);
 
-        if(!$request->orderBy) {
+        if(!isset($request->orderBy)) {
             $orderByValue = 14;
         } else {
             $orderByValue = $request->orderBy;

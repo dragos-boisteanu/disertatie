@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 const UsersViewList = () => import(/* webpackChunkName: "group-users" */ '../views/users/UsersListView.vue');
 const UserView = () => import(/* webpackChunkName: "group-users" */ '../views/users/UserView.vue');
+const CreateUserView = () => import (/* webpackChunkName: "group-users" */ '../views/users/CreateUserView.vue');
 
 const Home = () => import('../views/HomeView.vue');
 
@@ -28,6 +29,17 @@ const routes = [
         }
     },
     {
+        path: `${baseUrl}/users/create`,
+        name: 'CreateUser',
+        component: CreateUserView,
+        meta: {
+            breadcrumb: {
+                label: 'Create user account',
+                parent: 'Users'
+            }
+        }
+    },
+    {
         path: `${baseUrl}/users/:id`,
         name: 'User',
         component: UserView,
@@ -37,8 +49,7 @@ const routes = [
                 parent: 'Users'
             }
         }
-
-    }
+    },
     
 ];
 

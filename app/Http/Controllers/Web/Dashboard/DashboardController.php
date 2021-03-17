@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class SpaController extends Controller
+class DashboardController extends Controller
 {
     public function index() 
     {

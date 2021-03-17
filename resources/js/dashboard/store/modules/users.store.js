@@ -1,4 +1,4 @@
-import { downloadUsers, downloadUser, patchUser,  disableUser, deleteUser } from '../../api/users.api';
+import { downloadUsers, downloadUser, storeUser, patchUser,  disableUser, deleteUser } from '../../api/users.api';
 import _orderBy from 'lodash/orderBy';
 
 const initialState = () => ({
@@ -69,6 +69,16 @@ const actions = {
             commit('REFRESH_USERS', response.data.data.users);
         } catch (error) {
             throw error; 
+        }
+    },
+
+    async addUser({commit}, user) {
+        try {
+            const response = await storeUser(user);
+            console.log(response);  
+            commit('ADD_USER', response.data.user)
+        } catch (error) {
+            throw error;
         }
     },
 

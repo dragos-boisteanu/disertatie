@@ -5,9 +5,9 @@
             @closed="toggleFilterState"
         />
 
-       <template slot="header">
+        <template slot="header">
            Users List
-       </template>
+        </template>
 
         <div class="flex flex-col md:flex-row md:justify-between items-end">
             <div class="w-full md:flex md:flex-row md:gap-3 md:items-center">
@@ -184,10 +184,6 @@
 
         methods: { 
             ...mapActions('Users', ['refreshUsers', 'fetchUsers', 'sortUsersList']),
-
-            reorder() {
-
-            },
 
             async loadMoreUsers() {
                 try {

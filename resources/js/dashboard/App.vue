@@ -32,11 +32,17 @@
             if(this.getRoles.length === 0) {
                 await this.downloadRoles();
             }
+
+            if(this.getCounties.length === 0) {
+                await this.fetchCounties();
+            }
             
         },
 
         computed: {
             ...mapGetters('Roles', ['getRoles']),
+            ...mapGetters('Counties', ['getCounties']),
+
             mobile() {
                 return this.$mq === 'sm' || this.$mq === 'md' || this.$mq === 'lg';
             },
@@ -49,6 +55,7 @@
 
         methods: {
             ...mapActions('Roles', ['fetchRoles']),
+            ...mapActions('Counties', ['fetchCounties']),
 
             async downloadRoles() {
                 try {

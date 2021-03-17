@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 
 
-Route::get('/dashboard/{any?}', 'Web\Dashboard\SpaController@index')->where('any', '.*')
+Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->where('any', '.*')
     ->middleware(['verified', 'auth', 'dashboard.access'])->name('dashboard');
 
 

@@ -9,6 +9,7 @@
         <ul class="navigation-link">
             <NavigationLink name="Dashboard"/>
             <NavigationLink name="Users"/>
+            <NavigationLink name="CreateUser"/>
             <NavigationLink name="Orders"/>
             <NavigationLink name="Products"/>
             <NavigationLink name="Stocks"/>

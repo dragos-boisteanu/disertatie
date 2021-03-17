@@ -1919,6 +1919,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.downloadRoles();
 
             case 3:
+              if (!(_this.getCounties.length === 0)) {
+                _context.next = 6;
+                break;
+              }
+
+              _context.next = 6;
+              return _this.fetchCounties();
+
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -1926,7 +1935,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Roles', ['getRoles'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Counties', ['getCounties'])), {}, {
     mobile: function mobile() {
       return this.$mq === 'sm' || this.$mq === 'md' || this.$mq === 'lg';
     },
@@ -1934,7 +1943,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return this.$mq === 'xl' || this.$mq === 'xxl';
     }
   }),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Roles', ['fetchRoles'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Counties', ['fetchCounties'])), {}, {
     downloadRoles: function downloadRoles() {
       var _this2 = this;
 
@@ -2219,6 +2228,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2331,6 +2341,35 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/api/counties.api.js":
+/*!****************************************************!*\
+  !*** ./resources/js/dashboard/api/counties.api.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "downloadCounties": () => (/* binding */ downloadCounties),
+/* harmony export */   "downloadCities": () => (/* binding */ downloadCities)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+var BASE_URL = 'http://disertatie.test/api/client';
+
+var downloadCounties = function downloadCounties() {
+  return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(BASE_URL, "/counties"));
+};
+
+var downloadCities = function downloadCities(id) {
+  return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(BASE_URL, "/cities/").concat(id));
+};
+
+
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/api/httpClient.js":
 /*!**************************************************!*\
   !*** ./resources/js/dashboard/api/httpClient.js ***!
@@ -2394,6 +2433,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "downloadUsers": () => (/* binding */ downloadUsers),
 /* harmony export */   "downloadUser": () => (/* binding */ downloadUser),
+/* harmony export */   "storeUser": () => (/* binding */ storeUser),
 /* harmony export */   "patchUser": () => (/* binding */ patchUser),
 /* harmony export */   "disableUser": () => (/* binding */ disableUser),
 /* harmony export */   "deleteUser": () => (/* binding */ deleteUser)
@@ -2410,6 +2450,12 @@ var downloadUsers = function downloadUsers(query) {
 
 var downloadUser = function downloadUser(id) {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT, "/").concat(id));
+};
+
+var storeUser = function storeUser(user) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(END_POINT), {
+    user: user
+  });
 };
 
 var patchUser = function patchUser(user) {
@@ -2515,6 +2561,10 @@ var UserView = function UserView() {
   return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/UserView.vue */ "./resources/js/dashboard/views/users/UserView.vue"));
 };
 
+var CreateUserView = function CreateUserView() {
+  return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/CreateUserView.vue */ "./resources/js/dashboard/views/users/CreateUserView.vue"));
+};
+
 var Home = function Home() {
   return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
 };
@@ -2535,6 +2585,16 @@ var routes = [{
     breadcrumb: {
       label: 'Users',
       parent: 'Dashboard'
+    }
+  }
+}, {
+  path: "".concat(baseUrl, "/users/create"),
+  name: 'CreateUser',
+  component: CreateUserView,
+  meta: {
+    breadcrumb: {
+      label: 'Create user account',
+      parent: 'Users'
     }
   }
 }, {
@@ -2593,6 +2653,120 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.use(vuex__WEBPACK_IMPORTED_MODULE_2__.d
     }
   }
 }));
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/store/modules/counties.store.js":
+/*!****************************************************************!*\
+  !*** ./resources/js/dashboard/store/modules/counties.store.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _api_counties_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/counties.api */ "./resources/js/dashboard/api/counties.api.js");
+function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+var initialState = function initialState() {
+  return {
+    counties: []
+  };
+};
+
+var state = initialState();
+var getters = {
+  getCounties: function getCounties(state) {
+    return state.counties;
+  }
+};
+var actions = {
+  fetchCounties: function fetchCounties(_ref) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref.commit;
+              _context.prev = 1;
+              _context.next = 4;
+              return (0,_api_counties_api__WEBPACK_IMPORTED_MODULE_1__.downloadCounties)();
+
+            case 4:
+              response = _context.sent;
+              commit('SET_COUNTRIES', response.data.data.counties);
+              _context.next = 11;
+              break;
+
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](1);
+              throw _context.t0;
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[1, 8]]);
+    }))();
+  },
+  fetchCitites: function fetchCitites(_ref2, countyId) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _objectDestructuringEmpty(_ref2);
+
+              _context2.prev = 1;
+              _context2.next = 4;
+              return (0,_api_counties_api__WEBPACK_IMPORTED_MODULE_1__.downloadCities)(countyId);
+
+            case 4:
+              response = _context2.sent;
+              return _context2.abrupt("return", response.data.data.cities);
+
+            case 8:
+              _context2.prev = 8;
+              _context2.t0 = _context2["catch"](1);
+              throw _context2.t0;
+
+            case 11:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 8]]);
+    }))();
+  }
+};
+var mutations = {
+  SET_COUNTRIES: function SET_COUNTRIES(state, countries) {
+    state.counties = countries;
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
 
 /***/ }),
 
@@ -2874,8 +3048,40 @@ var actions = {
       }, _callee3, null, [[1, 8]]);
     }))();
   },
-  sortUsersList: function sortUsersList(_ref5, sortBy) {
-    var commit = _ref5.commit;
+  addUser: function addUser(_ref5, user) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              commit = _ref5.commit;
+              _context4.prev = 1;
+              _context4.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.storeUser)(user);
+
+            case 4:
+              response = _context4.sent;
+              console.log(response);
+              commit('ADD_USER', response.data.user);
+              _context4.next = 12;
+              break;
+
+            case 9:
+              _context4.prev = 9;
+              _context4.t0 = _context4["catch"](1);
+              throw _context4.t0;
+
+            case 12:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[1, 9]]);
+    }))();
+  },
+  sortUsersList: function sortUsersList(_ref6, sortBy) {
+    var commit = _ref6.commit;
     commit('SORT_USERS', sortBy);
   }
 };
@@ -27365,6 +27571,8 @@ var render = function() {
           _vm._v(" "),
           _c("NavigationLink", { attrs: { name: "Users" } }),
           _vm._v(" "),
+          _c("NavigationLink", { attrs: { name: "CreateUser" } }),
+          _vm._v(" "),
           _c("NavigationLink", { attrs: { name: "Orders" } }),
           _vm._v(" "),
           _c("NavigationLink", { attrs: { name: "Products" } }),
@@ -44227,6 +44435,7 @@ var index = {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var map = {
+	"./counties.store.js": "./resources/js/dashboard/store/modules/counties.store.js",
 	"./roles.store.js": "./resources/js/dashboard/store/modules/roles.store.js",
 	"./users.store.js": "./resources/js/dashboard/store/modules/users.store.js"
 };

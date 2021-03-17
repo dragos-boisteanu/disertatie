@@ -15,9 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefix'=>'dashboard'], function() {   
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('roles', RoleController::class);
+    Route::apiResource('users', 'UserController');
+    Route::apiResource('roles', 'RoleController');
     // Route::get('/users', 'UserController@index');
     // Route::get('/users/{id}', 'UserController@show');
+});
+
+Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {
+    Route::get('counties', 'CountyController@index');
+    Route::get('cities/{id}','CityController@index');
 });
 
