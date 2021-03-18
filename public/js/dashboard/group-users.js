@@ -297,7 +297,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
     callFilter: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var query;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -352,20 +352,30 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               return this.fetchUsers(query);
 
             case 15:
-              _context.next = 20;
+              this.openNotification({
+                type: 'ok',
+                message: 'Done',
+                show: true
+              });
+              _context.next = 22;
               break;
 
-            case 17:
-              _context.prev = 17;
+            case 18:
+              _context.prev = 18;
               _context.t0 = _context["catch"](0);
+              this.openNotification({
+                type: 'err',
+                message: _context.t0,
+                show: true
+              });
               console.log(_context.t0);
 
-            case 20:
+            case 22:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 17]]);
+      }, _callee, this, [[0, 18]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -1032,7 +1042,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 
@@ -1127,7 +1136,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       orderBy: 14
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['refreshUsers', 'fetchUsers', 'sortUsersList'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['refreshUsers', 'fetchUsers', 'sortUsersList'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), {}, {
     loadMoreUsers: function loadMoreUsers() {
       var _this = this;
 
@@ -1191,20 +1200,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 15:
                 _this.order();
 
-                _context2.next = 21;
+                _this.openNotification({
+                  type: 'ok',
+                  message: 'Done',
+                  show: true
+                });
+
+                _context2.next = 22;
                 break;
 
-              case 18:
-                _context2.prev = 18;
+              case 19:
+                _context2.prev = 19;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 21:
+              case 22:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 18]]);
+        }, _callee2, null, [[0, 19]]);
       }))();
     },
     refreshUsersList: function refreshUsersList() {
@@ -1229,20 +1244,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
                 _this2.orderBy = 14;
-                _context3.next = 10;
+
+                _this2.openNotification({
+                  type: 'ok',
+                  message: 'Done',
+                  show: true
+                });
+
+                _context3.next = 11;
                 break;
 
-              case 7:
-                _context3.prev = 7;
+              case 8:
+                _context3.prev = 8;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 10:
+              case 11:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 7]]);
+        }, _callee3, null, [[0, 8]]);
       }))();
     },
     order: function order() {

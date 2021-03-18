@@ -17,7 +17,7 @@
                 id="id" 
                 name="id" 
                 type="text"
-                class="w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none" 
+                class="w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="ID"
                 v-model="filterData.id"
                 @keyup="callFilter"
@@ -187,6 +187,7 @@
 
         methods: {
             ...mapActions('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset']),
+            ...mapActions('Notification', ['openNotification']),
 
             callFilter: _debounce( async function() {
                 try {
@@ -231,9 +232,22 @@
                     this.$router.replace({name:'Users', query: {...query}});
                     
                     this.reset();
+
                     await this.fetchUsers(query);
+
+                    this.openNotification({
+                        type:'ok',
+                        message: 'Done',
+                        show: true
+                    })
                   
                 } catch ( error ) {
+                    this.openNotification({
+                        type:'err',
+                        message: error,
+                        show: true
+
+                    })
                     console.log(error)
                 }
             }, 750),
