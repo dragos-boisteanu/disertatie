@@ -29,7 +29,7 @@ class UserStoreRequest extends FormRequest
             'user.birthdate' => 'required|date',
             'user.phone_number' => 'required|string|unique:users,phone_number',
             'user.email' => 'required|string|email|max:255|unique:users,email',
-            'user.role' => 'required|integer',
+            'user.role_id' => 'required|integer',
             
             'user.address.first_name' => 'required|string|max:255',
             'user.address.name' => 'required|string|max:255',
@@ -48,6 +48,7 @@ class UserStoreRequest extends FormRequest
             'user.birthdate' => 'birthdate',
             'user.phone_number' => 'phone number',
             'user.email' => 'email',
+            'user.role_id' => 'role',
 
             'user.address.first_name' => 'first name',
             'user.address.name' => 'name',

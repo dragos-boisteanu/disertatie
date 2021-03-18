@@ -628,18 +628,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 4:
                 _this.restForm();
 
+                _this.waiting = false;
                 _context.next = 12;
                 break;
 
-              case 7:
-                _context.prev = 7;
+              case 8:
+                _context.prev = 8;
                 _context.t0 = _context["catch"](0);
-                console.log(_context.t0.response.data.errors); // this.$refs.observer.setErrors({
-                //         firstName:[
-                //             "You must provide an email",
-                //             "This is not a valid eamil"
-                //         ]    
-                // });
 
                 _this.$refs.observer.setErrors(_context.t0.response.data.errors);
 
@@ -650,7 +645,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee, null, [[0, 8]]);
       }))();
     },
     getCitites: function getCitites() {
@@ -2843,7 +2838,10 @@ var render = function() {
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
-                                  attrs: { vid: "role", rules: "required" },
+                                  attrs: {
+                                    vid: "user.role",
+                                    rules: "required"
+                                  },
                                   scopedSlots: _vm._u(
                                     [
                                       {

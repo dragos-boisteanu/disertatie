@@ -91,7 +91,7 @@
                         </div>
                         <div class="mt-2">
                             <label for="role" class="text-sm font-semibold">Role</label>
-                            <ValidationProvider vid="role" rules="required" v-slot="{ errors }">
+                            <ValidationProvider vid="user.role" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="role"
@@ -280,15 +280,8 @@
                     this.waiting = true;
                     await this.addUser(this.user);
                     this.restForm();
-                } catch ( error ) {
-                    console.log( error.response.data.errors);
-                    // this.$refs.observer.setErrors({
-                    //         firstName:[
-                    //             "You must provide an email",
-                    //             "This is not a valid eamil"
-                    //         ]    
-                        
-                    // });
+                    this.waiting = false;
+                } catch ( error ) {            
                     this.$refs.observer.setErrors(error.response.data.errors)
                     this.waiting = false;
                 }
