@@ -21,7 +21,7 @@ module.exports = {
                 '49': '49%',
                 '375px': '375px',
                 '350px': '350px',
-                '410px': '410px',
+                '400px': '400px',
             },
             screens: {
                 'xl': '1281px',

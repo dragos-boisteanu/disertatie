@@ -28,12 +28,12 @@ const actions = {
             const response = await downloadUsers(query);
             const users = response.data.data.users;
             const links = response.data.links;
-            const meta = response.data.meta;
    
             commit('SET_USERS',users );
 
             if(links.next) {
-                commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length-1));
+                const lastIndex = links.next.indexOf('=');
+                commit('SAVE_NEXT_PAGE', links.next.substr(lastIndex+1));
             }else {
                 commit('SAVE_NEXT_PAGE', null);
             }

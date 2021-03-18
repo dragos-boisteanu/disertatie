@@ -3126,7 +3126,7 @@ var actions = {
   },
   fetchUsers: function fetchUsers(_ref2, query) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var commit, response, users, links, meta;
+      var commit, response, users, links, lastIndex;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -3140,29 +3140,29 @@ var actions = {
               response = _context.sent;
               users = response.data.data.users;
               links = response.data.links;
-              meta = response.data.meta;
               commit('SET_USERS', users);
 
               if (links.next) {
-                commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length - 1));
+                lastIndex = links.next.indexOf('=');
+                commit('SAVE_NEXT_PAGE', links.next.substr(lastIndex + 1));
               } else {
                 commit('SAVE_NEXT_PAGE', null);
               }
 
-              _context.next = 15;
+              _context.next = 14;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 15:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 12]]);
+      }, _callee, null, [[1, 11]]);
     }))();
   },
   fetchFilteredUsers: function fetchFilteredUsers(_ref3, query) {
