@@ -1,5 +1,5 @@
 <template>
-    <div class="py-1 px-2 mt-2 text-xs text-white rounded-sm"
+    <div class="py-1 px-2 text-xs text-white rounded-sm"
         :class="statusClass"
     >
        {{ status }}                              

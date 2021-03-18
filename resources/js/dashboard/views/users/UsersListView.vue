@@ -54,7 +54,7 @@
                         </div>
                         <div class="flex-1">
                             <div class="capitalize font-semibold">
-                               <span>{{ user.firstName}}</span>  <span>{{user.name}}</span>
+                               <span>{{ user.firstName}}</span> <span>{{user.name}}</span>
                             </div>
                             <div class="font-light">
                                {{ user.email}}
@@ -67,7 +67,9 @@
                             <div class="text-xs font-semibold">
                                 #{{user.id}}
                             </div>
-                            <Status :deleted-at="user.deletedAt"/>
+                            <div class="mt-2">
+                                <Status :deleted-at="user.deletedAt"/>
+                            </div>
                         </div>
                     </div>
                     <div class="mt-1">

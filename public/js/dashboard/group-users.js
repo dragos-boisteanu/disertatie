@@ -894,6 +894,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store/index */ "./resources/js/dashboard/store/index.js");
+/* harmony import */ var _ViewContainer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ViewContainer */ "./resources/js/dashboard/views/ViewContainer.vue");
+/* harmony import */ var _components_StatusComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/StatusComponent */ "./resources/js/dashboard/components/StatusComponent.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -906,6 +908,46 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
@@ -984,6 +1026,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     setUser: function setUser(user) {
       this.user = user;
     }
+  },
+  components: {
+    ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_2__.default,
+    Status: _components_StatusComponent__WEBPACK_IMPORTED_MODULE_3__.default
   }
 });
 
@@ -1031,6 +1077,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
 //
 //
 //
@@ -2131,7 +2179,7 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "py-1 px-2 mt-2 text-xs text-white rounded-sm",
+      staticClass: "py-1 px-2 text-xs text-white rounded-sm",
       class: _vm.statusClass
     },
     [_vm._v("\n   " + _vm._s(_vm.status) + "                              \n")]
@@ -4655,10 +4703,108 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v("\n    ID: "),
-    _c("span", [_vm._v(_vm._s(_vm.user.id))])
-  ])
+  return _c(
+    "ViewContainer",
+    [
+      _c("template", { slot: "header" }, [
+        _vm._v("\n       User #" + _vm._s(_vm.user.id) + "\n    ")
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "w-full pb-2 mb-2 flex flex-col justify-center items-center border-b border-gray-100"
+        },
+        [
+          _c("div", { staticClass: "w-32 h-32 bg-gray-500 rounded-md" }, [
+            _c(
+              "svg",
+              {
+                attrs: {
+                  xmlns: "http://www.w3.org/2000/svg",
+                  viewBox: "0 0 24 24",
+                  fill: "white",
+                  width: "128px",
+                  height: "128px"
+                }
+              },
+              [
+                _c("path", { attrs: { d: "M0 0h24v24H0z", fill: "none" } }),
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                  }
+                })
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "flex justify-between w-32 mt-2" },
+            [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "py-1 px-2 text-xs text-white rounded-sm bg-lightBlue-600"
+                },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(_vm.user.role) +
+                      "\n            "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("Status", { attrs: { "deleted-at": _vm.user.deletedAt } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "font-semibold text-2xl mt-2" }, [
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.user.firstName) +
+                " " +
+                _vm._s(_vm.user.name) +
+                "\n        "
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "text-sm mt-2" }, [
+            _vm._v("\n            " + _vm._s(_vm.user.email) + " "),
+            _c("span", { staticClass: "mx-2" }, [_vm._v("|")]),
+            _vm._v(" " + _vm._s(_vm.user.phoneNumber) + "\n        ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex items-baseline mt-2" }, [
+            _c("span", { staticClass: "font-semibold text-sm mr-2" }, [
+              _vm._v("\n                Joined on:\n            ")
+            ]),
+            _vm._v(" "),
+            _c("span", { staticClass: "text-xs" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm._f("formatDate")(_vm.user.createdAt)) +
+                  "\n            "
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", [_vm._v("\n        Shifts\n    ")]),
+      _vm._v(" "),
+      _c("div", [_vm._v("\n        Orders (20)\n    ")]),
+      _vm._v(" "),
+      _c("div", [_vm._v("\n        Reservations\n    ")])
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -4889,23 +5035,26 @@ var render = function() {
                         ])
                       ]),
                       _vm._v(" "),
-                      _c(
-                        "div",
-                        [
-                          _c("div", { staticClass: "text-xs font-semibold" }, [
-                            _vm._v(
-                              "\n                             #" +
-                                _vm._s(user.id) +
-                                "\n                         "
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("Status", {
-                            attrs: { "deleted-at": user.deletedAt }
-                          })
-                        ],
-                        1
-                      )
+                      _c("div", [
+                        _c("div", { staticClass: "text-xs font-semibold" }, [
+                          _vm._v(
+                            "\n                             #" +
+                              _vm._s(user.id) +
+                              "\n                         "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "mt-2" },
+                          [
+                            _c("Status", {
+                              attrs: { "deleted-at": user.deletedAt }
+                            })
+                          ],
+                          1
+                        )
+                      ])
                     ]
                   ),
                   _vm._v(" "),
