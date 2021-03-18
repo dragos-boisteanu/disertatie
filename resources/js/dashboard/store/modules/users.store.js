@@ -1,5 +1,6 @@
 import { downloadUsers, downloadUser, storeUser, patchUser,  disableUser, deleteUser } from '../../api/users.api';
 import _orderBy from 'lodash/orderBy';
+import _find from 'lodash/find';
 
 const initialState = () => ({
     users: [],
@@ -16,6 +17,7 @@ const getters = {
     getNextPage(state) {
         return state.nextPage;
     },
+   
 }
 
 const actions = {
@@ -80,6 +82,25 @@ const actions = {
             throw error;
         }
     },
+
+    async fetchUser({}, id) {
+        try {
+            const response = await downloadUser(id);
+            return response.data.data;
+        } catch ( error ) {
+            throw error
+        }
+    },
+
+
+    async getUser({state}, id) {
+        for(let user of state.users) {
+            if(user.id === id) {    
+                return user;
+            }
+        }
+    },
+
 
     sortUsersList({commit}, sortBy) {
        commit('SORT_USERS', sortBy);

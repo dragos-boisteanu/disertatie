@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Resources\User as ResourcesUser;
 
 class UserController extends Controller
 {
@@ -30,7 +31,7 @@ class UserController extends Controller
             $orderByValue = $request->orderBy;
         }
 
-        $query->orderBy('id', 'desc');
+        $query->orderBy('id', 'asc');
         
         switch($orderByValue) {
             case 1:
@@ -124,7 +125,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return 'test';
+        $user = User::findOrFail($id);
+
+        return new ResourcesUser($user);
     }
 
     /**
