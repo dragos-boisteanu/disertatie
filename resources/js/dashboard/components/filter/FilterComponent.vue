@@ -10,7 +10,6 @@
            
             <slot></slot>
         </div>
-       
     </Backdrop>
 </template>
 

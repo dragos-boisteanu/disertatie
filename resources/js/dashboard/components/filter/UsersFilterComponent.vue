@@ -80,6 +80,35 @@
                     </div>
                 </div>
             </div>
+            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+                <div class="mb-2 text-base font-semibold">
+                    Has email verified
+                </div>
+                <div class="flex items-center flex-wrap gap-2">
+                    <div class="flex justify-between items-center">
+                        <input 
+                            id="isVerified"
+                            name="verified" type="radio" 
+                            value="1" 
+                            v-model="filterData.verified"
+                            class="mr-1 outline-none"
+                            @click="callFilter"
+                        />
+                        <label for="isVerified" class="text-sm capitalize">Verified</label>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <input 
+                            id="isNotVerified"
+                            name="verified" type="radio" 
+                            value="2" 
+                            v-model="filterData.verified"
+                            class="mr-1 outline-none"
+                            @click="callFilter"
+                        />
+                        <label for="isNotVerified" class="text-sm capitalize">Not verified</label>
+                    </div>
+                </div>
+            </div>
            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
                 <div class="mb-2 text-base font-semibold">
                     Joined date
@@ -130,7 +159,7 @@
             this.filterData.phoneNumber = this.$route.query.phoneNumber ? this.$route.query.phoneNumber : '';
             this.filterData.fromDate = this.$route.query.fromDate ? this.$route.query.fromDate : '';
             this.filterData.toDate = this.$route.query.toDate ? this.$route.query.toDate : '';
-            
+            this.filterData.verified = this.$route.query.verified ? this.$route.query.verified : '';
             if(this.$route.query.roles) {
                 this.filterData.roles.push(...this.$route.query.roles)
             };
@@ -150,6 +179,7 @@
                     roles: [],
                     email: '',
                     phoneNumber: '',
+                    verified: '',
                     fromDate: '',
                     toDate: '',
                 },
@@ -193,6 +223,10 @@
 
                     if(this.filterData.toDate.length > 0 ) {
                         query.toDate = this.filterData.toDate;
+                    }
+
+                    if(this.filterData.verified.length > 0 ) {
+                        query.verified = this.filterData.verified;
                     }
 
                     this.$router.replace({name:'Users', query: {...query}});

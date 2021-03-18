@@ -25,5 +25,6 @@ class UserFilter extends AbstractFilter
       'status' => StatusFilter::class,
       'fromDate' => FromDateFilter::class,
       'toDate' => ToDateFilter::class,
+      'verified' => EmailVerifiedFilter::class,
    ];
 }

@@ -170,6 +170,10 @@
                     query.toDate = urlQuery.toDate;
                 }
 
+                if(urlQuery.verified) {
+                    query.verified = urlQuery.verified;
+                }
+
                 await store.dispatch('Users/fetchUsers', query);
                 next();
             } else {
@@ -233,6 +237,10 @@
 
                     if(urlQuery.toDate) {
                         query.toDate = urlQuery.toDate;
+                    }
+
+                    if(urlQuery.verified) {
+                        query.verified = urlQuery.verified;
                     }
 
                     await this.fetchUsers(query)

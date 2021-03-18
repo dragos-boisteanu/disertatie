@@ -64,7 +64,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -232,6 +231,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -244,6 +272,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     this.filterData.phoneNumber = this.$route.query.phoneNumber ? this.$route.query.phoneNumber : '';
     this.filterData.fromDate = this.$route.query.fromDate ? this.$route.query.fromDate : '';
     this.filterData.toDate = this.$route.query.toDate ? this.$route.query.toDate : '';
+    this.filterData.verified = this.$route.query.verified ? this.$route.query.verified : '';
 
     if (this.$route.query.roles) {
       var _this$filterData$role;
@@ -263,6 +292,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         roles: [],
         email: '',
         phoneNumber: '',
+        verified: '',
         fromDate: '',
         toDate: ''
       }
@@ -310,29 +340,33 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 query.toDate = this.filterData.toDate;
               }
 
+              if (this.filterData.verified.length > 0) {
+                query.verified = this.filterData.verified;
+              }
+
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
               });
               this.reset();
-              _context.next = 14;
+              _context.next = 15;
               return this.fetchUsers(query);
 
-            case 14:
-              _context.next = 19;
+            case 15:
+              _context.next = 20;
               break;
 
-            case 16:
-              _context.prev = 16;
+            case 17:
+              _context.prev = 17;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 19:
+            case 20:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 16]]);
+      }, _callee, this, [[0, 17]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -1015,7 +1049,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0)) {
-                _context.next = 17;
+                _context.next = 18;
                 break;
               }
 
@@ -1060,18 +1094,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 query.toDate = urlQuery.toDate;
               }
 
-              _context.next = 14;
+              if (urlQuery.verified) {
+                query.verified = urlQuery.verified;
+              }
+
+              _context.next = 15;
               return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', query);
 
-            case 14:
+            case 15:
               next();
-              _context.next = 18;
+              _context.next = 19;
               break;
 
-            case 17:
+            case 18:
               next();
 
-            case 18:
+            case 19:
             case "end":
               return _context.stop();
           }
@@ -1144,26 +1182,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   query.toDate = urlQuery.toDate;
                 }
 
-                _context2.next = 14;
+                if (urlQuery.verified) {
+                  query.verified = urlQuery.verified;
+                }
+
+                _context2.next = 15;
                 return _this.fetchUsers(query);
 
-              case 14:
+              case 15:
                 _this.order();
 
-                _context2.next = 20;
+                _context2.next = 21;
                 break;
 
-              case 17:
-                _context2.prev = 17;
+              case 18:
+                _context2.prev = 18;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 20:
+              case 21:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 17]]);
+        }, _callee2, null, [[0, 18]]);
       }))();
     },
     refreshUsersList: function refreshUsersList() {
@@ -2389,6 +2431,90 @@ var render = function() {
               }),
               0
             )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mt-3 pb-2 border-b-2 border-lightBlue-600" },
+          [
+            _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
+              _vm._v("\n                Has email verified\n            ")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "flex items-center flex-wrap gap-2" }, [
+              _c("div", { staticClass: "flex justify-between items-center" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.filterData.verified,
+                      expression: "filterData.verified"
+                    }
+                  ],
+                  staticClass: "mr-1 outline-none",
+                  attrs: {
+                    id: "isVerified",
+                    name: "verified",
+                    type: "radio",
+                    value: "1"
+                  },
+                  domProps: { checked: _vm._q(_vm.filterData.verified, "1") },
+                  on: {
+                    click: _vm.callFilter,
+                    change: function($event) {
+                      return _vm.$set(_vm.filterData, "verified", "1")
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "text-sm capitalize",
+                    attrs: { for: "isVerified" }
+                  },
+                  [_vm._v("Verified")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex justify-between items-center" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.filterData.verified,
+                      expression: "filterData.verified"
+                    }
+                  ],
+                  staticClass: "mr-1 outline-none",
+                  attrs: {
+                    id: "isNotVerified",
+                    name: "verified",
+                    type: "radio",
+                    value: "2"
+                  },
+                  domProps: { checked: _vm._q(_vm.filterData.verified, "2") },
+                  on: {
+                    click: _vm.callFilter,
+                    change: function($event) {
+                      return _vm.$set(_vm.filterData, "verified", "2")
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "text-sm capitalize",
+                    attrs: { for: "isNotVerified" }
+                  },
+                  [_vm._v("Not verified")]
+                )
+              ])
+            ])
           ]
         ),
         _vm._v(" "),
