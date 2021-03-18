@@ -259,7 +259,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
 
 
 
@@ -2528,13 +2527,13 @@ var render = function() {
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "flex flex-col gap-2 items-start justify-start" },
+              { staticClass: "flex  flex-col items-start gap-3 md:flex-row" },
               [
-                _c("div", { staticClass: "flex" }, [
+                _c("div", { staticClass: "flex items-center" }, [
                   _c(
                     "label",
                     {
-                      staticClass: "text-sm font-semibold mr-2 w-11",
+                      staticClass: "text-sm font-semibold mr-3",
                       attrs: { for: "fromDate" }
                     },
                     [_vm._v("From:")]
@@ -2549,7 +2548,8 @@ var render = function() {
                         expression: "filterData.fromDate"
                       }
                     ],
-                    staticClass: "p-0 px-2 text-xs text-center",
+                    staticClass:
+                      "py-1 px-2 text-sm text-center border-b-2 border-lightBlue-600 rounded-sm",
                     attrs: { type: "date", id: "fromDate", name: "from_date" },
                     domProps: { value: _vm.filterData.fromDate },
                     on: {
@@ -2568,11 +2568,11 @@ var render = function() {
                   })
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "flex" }, [
+                _c("div", { staticClass: "flex items-center" }, [
                   _c(
                     "label",
                     {
-                      staticClass: "text-sm font-semibold mr-2 w-11",
+                      staticClass: "text-sm font-semibold mr-3",
                       attrs: { for: "toDate" }
                     },
                     [_vm._v("To:")]
@@ -2587,7 +2587,8 @@ var render = function() {
                         expression: "filterData.toDate"
                       }
                     ],
-                    staticClass: "p-0 px-2 text-xs text-center",
+                    staticClass:
+                      "py-1 px-2 text-sm text-center border-b-2 border-lightBlue-600 rounded-sm",
                     attrs: { type: "date", id: "fromDate", name: "to_date" },
                     domProps: { value: _vm.filterData.toDate },
                     on: {
