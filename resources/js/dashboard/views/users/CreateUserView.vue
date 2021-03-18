@@ -6,7 +6,7 @@
 
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
-                <div class="flex flex-col lg:flex-row lg:gap-x-6 lg:w-3/4">
+                <div class="flex flex-col lg:flex-row lg:gap-x-6 lg:w-3/5">
                     <div class="pb-5 border-b border-gray-200 lg:border-r lg:pr-5 lg:border-b-0 lg:pb-0 lg:flex-auto">
                         <h2 class="mb-5 text-xl font-semibold">
                             Account details
@@ -367,8 +367,11 @@
                     await this.addUser(payload);
                     this.restForm();
                     this.waiting = false;
-                } catch ( error ) {            
-                    this.$refs.observer.setErrors(error.response.data.errors)
+                } catch ( error ) {  
+                    if(error.response.data.errors) {
+                        this.$refs.observer.setErrors(error.response.data.errors)
+                    }         
+                
                     this.waiting = false;
                 }
             },

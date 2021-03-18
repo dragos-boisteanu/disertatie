@@ -723,7 +723,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _context.prev = 10;
                 _context.t0 = _context["catch"](0);
 
-                _this.$refs.observer.setErrors(_context.t0.response.data.errors);
+                if (_context.t0.response.data.errors) {
+                  _this.$refs.observer.setErrors(_context.t0.response.data.errors);
+                }
 
                 _this.waiting = false;
 
@@ -2491,7 +2493,7 @@ var render = function() {
                       "div",
                       {
                         staticClass:
-                          "flex flex-col lg:flex-row lg:gap-x-6 lg:w-3/4"
+                          "flex flex-col lg:flex-row lg:gap-x-6 lg:w-3/5"
                       },
                       [
                         _c(

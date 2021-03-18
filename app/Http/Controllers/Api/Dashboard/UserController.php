@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Models\User;
+use App\Models\Address;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Events\AccountCreated;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\UserStoreRequest;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserController extends Controller
 {
@@ -81,7 +85,6 @@ class UserController extends Controller
         return new UserCollection($users);
     }
 
-   
     /**
      * Store a newly created resource in storage.
      *
@@ -90,14 +93,34 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $input = $request->input('data.user');
+       
+            
+        $userInputData = $request->input('data.user');
+        $userInputData['password'] = Hash::make(Str::random(8));
 
-        $input['password'] = Hash::make(Str::random(8));
+        try {
+            DB::beginTransaction();
+
+            $user = User::create($userInputData);
+    
+            if($request->has('data.address')) {
+                $addressInputData = $request->input('data.address');
+                $addressInputData['user_id'] = $user->id;
+                Address::create($addressInputData); 
+            }
+
+            event(new AccountCreated($user));
+            DB::commit();
+            return ['id'=>$user->id, 'createdAt'=>$user->created_at];
+           
+        } catch (\Illuminate\Database\QueryException $ex) {
+            DB::rollBack();
+            return response()->json($ex, 500);
+        }
+      
+       
         
-        $user = User::create($input);
-
-        event(new Registered($user));
-        return ['id'=>$user->id, 'createdAt'=>$user->created_at];
+       
     }
 
     /**
