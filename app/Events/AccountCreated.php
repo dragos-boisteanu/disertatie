@@ -2,23 +2,25 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
+use App\Models\User;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\InteractsWithSockets;
 
 class AccountCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $user;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->user = $user;
     }
 
     /**

@@ -4104,7 +4104,8 @@ var render = function() {
                                                       {
                                                         attrs: {
                                                           value: "",
-                                                          disabled: ""
+                                                          disabled: "",
+                                                          selected: ""
                                                         }
                                                       },
                                                       [

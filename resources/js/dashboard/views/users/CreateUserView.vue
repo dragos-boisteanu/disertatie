@@ -253,7 +253,7 @@
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"               
                                 >
-                                    <option value="" disabled>Select user city</option>
+                                    <option value="" disabled selected>Select user city</option>
                                     <option v-for="city in cities" :key="city.id" :value="city.id">{{city.name}}</option>
                                 </select>
                             </ValidationProvider>
