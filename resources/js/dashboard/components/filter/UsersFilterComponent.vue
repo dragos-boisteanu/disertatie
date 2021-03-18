@@ -87,12 +87,26 @@
                 <div class="flex flex-col gap-2 items-start justify-start">
                     <div class="flex">
                         <label class="text-sm font-semibold mr-2 w-11" for="fromDate">From:</label>
-                        <input type="date" id="fromDate" name="from_date" class="p-0 px-2 text-xs text-center"/>
+                        <input 
+                            type="date" 
+                            id="fromDate" 
+                            name="from_date" 
+                            v-model="filterData.fromDate"
+                            class="p-0 px-2 text-xs text-center"
+                            @change="callFilter"
+                        />
                     </div>
                     
                     <div class="flex">
                         <label class="text-sm font-semibold mr-2 w-11"  for="toDate">To:</label>
-                        <input type="date" id="fromDate" name="to_date" class="p-0 px-2 text-xs text-center"/>
+                        <input 
+                            type="date" 
+                            id="fromDate" 
+                            name="to_date" 
+                            v-model="filterData.toDate"
+                            class="p-0 px-2 text-xs text-center"
+                            @change="callFilter"
+                        />
                     </div>
                 </div>
             </div>
@@ -114,6 +128,9 @@
             this.filterData.name = this.$route.query.name ? this.$route.query.name : '';
             this.filterData.email = this.$route.query.email ? this.$route.query.email : '';
             this.filterData.phoneNumber = this.$route.query.phoneNumber ? this.$route.query.phoneNumber : '';
+            this.filterData.fromDate = this.$route.query.fromDate ? this.$route.query.fromDate : '';
+            this.filterData.toDate = this.$route.query.toDate ? this.$route.query.toDate : '';
+            
             if(this.$route.query.roles) {
                 this.filterData.roles.push(...this.$route.query.roles)
             };
@@ -132,7 +149,9 @@
                     name: '',
                     roles: [],
                     email: '',
-                    phoneNumber: ''
+                    phoneNumber: '',
+                    fromDate: '',
+                    toDate: '',
                 },
             }
         },
@@ -166,6 +185,14 @@
 
                     if(this.filterData.roles.length > 0 ) {
                         query.roles = this.filterData.roles;
+                    }
+
+                    if(this.filterData.fromDate.length > 0 ) {
+                        query.fromDate = this.filterData.fromDate;
+                    }
+
+                    if(this.filterData.toDate.length > 0 ) {
+                        query.toDate = this.filterData.toDate;
                     }
 
                     this.$router.replace({name:'Users', query: {...query}});

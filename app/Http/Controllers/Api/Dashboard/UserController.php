@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
-use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\UserStoreRequest;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserController extends Controller
 {
@@ -93,8 +91,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-       
-            
+         
         $userInputData = $request->input('data.user');
         $userInputData['password'] = Hash::make(Str::random(8));
 
@@ -117,10 +114,6 @@ class UserController extends Controller
             DB::rollBack();
             return response()->json($ex, 500);
         }
-      
-       
-        
-       
     }
 
     /**

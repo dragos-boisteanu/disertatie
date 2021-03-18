@@ -10,6 +10,8 @@ use App\Filters\AbstractFilter;
 use App\Filters\User\RolesFilter;
 use App\Filters\PhoneNumberFilter;
 use App\Filters\User\FirstNameFilter;
+use App\Filters\CreatedAt\ToDateFilter;
+use App\Filters\CreatedAt\FromDateFilter;
 
 class UserFilter extends AbstractFilter
 {
@@ -21,5 +23,7 @@ class UserFilter extends AbstractFilter
       'phoneNumber' => PhoneNumberFilter::class,
       'roles' => RolesFilter::class,
       'status' => StatusFilter::class,
+      'fromDate' => FromDateFilter::class,
+      'toDate' => ToDateFilter::class,
    ];
 }

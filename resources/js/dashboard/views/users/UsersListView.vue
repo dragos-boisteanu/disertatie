@@ -162,6 +162,14 @@
                     query.roles.push(...urlQuery.roles)
                 };
 
+                if(urlQuery.fromDate) {
+                    query.fromDate = urlQuery.fromDate;
+                }
+
+                if(urlQuery.toDate) {
+                    query.toDate = urlQuery.toDate;
+                }
+
                 await store.dispatch('Users/fetchUsers', query);
                 next();
             } else {
@@ -218,6 +226,14 @@
                         query.roles = [];
                         query.roles.push(...urlQuery.roles)
                     };
+
+                    if(urlQuery.fromDate) {
+                        query.fromDate = urlQuery.fromDate;
+                    }
+
+                    if(urlQuery.toDate) {
+                        query.toDate = urlQuery.toDate;
+                    }
 
                     await this.fetchUsers(query)
 

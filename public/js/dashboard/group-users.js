@@ -218,6 +218,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -228,6 +242,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     this.filterData.name = this.$route.query.name ? this.$route.query.name : '';
     this.filterData.email = this.$route.query.email ? this.$route.query.email : '';
     this.filterData.phoneNumber = this.$route.query.phoneNumber ? this.$route.query.phoneNumber : '';
+    this.filterData.fromDate = this.$route.query.fromDate ? this.$route.query.fromDate : '';
+    this.filterData.toDate = this.$route.query.toDate ? this.$route.query.toDate : '';
 
     if (this.$route.query.roles) {
       var _this$filterData$role;
@@ -246,7 +262,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         name: '',
         roles: [],
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        fromDate: '',
+        toDate: ''
       }
     };
   },
@@ -284,29 +302,37 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 query.roles = this.filterData.roles;
               }
 
+              if (this.filterData.fromDate.length > 0) {
+                query.fromDate = this.filterData.fromDate;
+              }
+
+              if (this.filterData.toDate.length > 0) {
+                query.toDate = this.filterData.toDate;
+              }
+
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
               });
               this.reset();
-              _context.next = 12;
+              _context.next = 14;
               return this.fetchUsers(query);
 
-            case 12:
-              _context.next = 17;
+            case 14:
+              _context.next = 19;
               break;
 
-            case 14:
-              _context.prev = 14;
+            case 16:
+              _context.prev = 16;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 17:
+            case 19:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 14]]);
+      }, _callee, this, [[0, 16]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -989,7 +1015,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0)) {
-                _context.next = 15;
+                _context.next = 17;
                 break;
               }
 
@@ -1025,18 +1051,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
 
               ;
-              _context.next = 12;
+
+              if (urlQuery.fromDate) {
+                query.fromDate = urlQuery.fromDate;
+              }
+
+              if (urlQuery.toDate) {
+                query.toDate = urlQuery.toDate;
+              }
+
+              _context.next = 14;
               return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', query);
 
-            case 12:
+            case 14:
               next();
-              _context.next = 16;
+              _context.next = 18;
               break;
 
-            case 15:
+            case 17:
               next();
 
-            case 16:
+            case 18:
             case "end":
               return _context.stop();
           }
@@ -1100,26 +1135,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 ;
-                _context2.next = 12;
+
+                if (urlQuery.fromDate) {
+                  query.fromDate = urlQuery.fromDate;
+                }
+
+                if (urlQuery.toDate) {
+                  query.toDate = urlQuery.toDate;
+                }
+
+                _context2.next = 14;
                 return _this.fetchUsers(query);
 
-              case 12:
+              case 14:
                 _this.order();
 
-                _context2.next = 18;
+                _context2.next = 20;
                 break;
 
-              case 15:
-                _context2.prev = 15;
+              case 17:
+                _context2.prev = 17;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 18:
+              case 20:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 15]]);
+        }, _callee2, null, [[0, 17]]);
       }))();
     },
     refreshUsersList: function refreshUsersList() {
@@ -2371,8 +2415,30 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filterData.fromDate,
+                        expression: "filterData.fromDate"
+                      }
+                    ],
                     staticClass: "p-0 px-2 text-xs text-center",
-                    attrs: { type: "date", id: "fromDate", name: "from_date" }
+                    attrs: { type: "date", id: "fromDate", name: "from_date" },
+                    domProps: { value: _vm.filterData.fromDate },
+                    on: {
+                      change: _vm.callFilter,
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.filterData,
+                          "fromDate",
+                          $event.target.value
+                        )
+                      }
+                    }
                   })
                 ]),
                 _vm._v(" "),
@@ -2387,8 +2453,26 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filterData.toDate,
+                        expression: "filterData.toDate"
+                      }
+                    ],
                     staticClass: "p-0 px-2 text-xs text-center",
-                    attrs: { type: "date", id: "fromDate", name: "to_date" }
+                    attrs: { type: "date", id: "fromDate", name: "to_date" },
+                    domProps: { value: _vm.filterData.toDate },
+                    on: {
+                      change: _vm.callFilter,
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.filterData, "toDate", $event.target.value)
+                      }
+                    }
                   })
                 ])
               ]
