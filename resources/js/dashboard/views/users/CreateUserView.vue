@@ -16,11 +16,11 @@
                         </div>
                         <div>
                             <label for="firstName" class="text-sm font-semibold">First name</label>
-                            <ValidationProvider vid="user.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="data.user.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="firstName"
-                                    name="First name" 
+                                    name="first name" 
                                     type="text" 
                                     v-model="user.first_name" 
                                     :disabled="waiting"   
@@ -31,12 +31,12 @@
                         </div>
                         <div class="mt-2">
                             <label for="name" class="text-sm font-semibold">Name</label>
-                            <ValidationProvider vid="user.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="data.user.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="name" 
                                     type="text" 
-                                    name="Name"
+                                    name="name"
                                     v-model="user.name" 
                                     :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
@@ -46,12 +46,12 @@
                         </div>
                         <div class="mt-2">
                             <label for="birthdate" class="text-sm font-semibold">Birthdate</label>
-                            <ValidationProvider vid="user.birthdate" rules="required" v-slot="{ errors }">
+                            <ValidationProvider vid="data.user.birthdate" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="birthdate" 
                                     type="date" 
-                                    name="Birthdate"
+                                    name="birthdate"
                                     v-model="user.birthdate"
                                     :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
@@ -61,12 +61,12 @@
                         </div>
                         <div class="mt-2">
                             <label for="email" class="text-sm font-semibold">Email</label>
-                            <ValidationProvider vid="user.email" rules="required|email|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="data.user.email" rules="required|email|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="email" 
                                     type="text" 
-                                    name="Email"
+                                    name="email"
                                     v-model="user.email" 
                                     :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
@@ -76,12 +76,12 @@
                         </div>
                         <div class="mt-2">
                             <label for="phone_number" class="text-sm font-semibold">Phone number</label>
-                            <ValidationProvider  vid="user.phone_number" rules="required" v-slot="{ errors }">
+                            <ValidationProvider  vid="data.user.phone_number" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="phoneNumber" 
                                     type="text" 
-                                    name="Phone number"
+                                    name="phone number"
                                     v-model="user.phone_number"
                                     :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
@@ -91,11 +91,11 @@
                         </div>
                         <div class="mt-2">
                             <label for="role" class="text-sm font-semibold">Role</label>
-                            <ValidationProvider vid="user.role" rules="required" v-slot="{ errors }">
+                            <ValidationProvider vid="data.user.role" rules="required|integer" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="role"
-                                    name="Role"
+                                    name="role"
                                     v-model="user.role_id" 
                                     :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500 capitalize"
@@ -105,53 +105,89 @@
                                 </select>
                             </ValidationProvider>
                         </div>
-
-                        
                     </div>
                     <div class="mt-5 pb-5 lg:flex-auto lg:mt-0">
                         <h2 class="mb-5 text-xl font-semibold">
-                            Address
+                            <input type="checkbox" v-model="addressState" @click="toggleAddressState"> Address (optional)
                         </h2>
                         <div class="mt-2">
                             <label for="addressFirstName" class="text-sm font-semibold">First name</label>
-                            <ValidationProvider vid="user.address.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="data.address.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }" v-if="addressState">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="addressFirstName" 
-                                    name="First name"
+                                    name="first name"
                                     type="text" 
-                                    v-model="user.address.first_name"
-                                    :disabled="waiting"   
+                                    v-model="address.first_name"
+                                    :disabled="waiting || !addressState"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"
+                                    
                                 />
-                                </ValidationProvider>
+                            </ValidationProvider>
+                            <ValidationProvider vid="data.address.first_name" rules="alpha_spaces|max:255" v-slot="{ errors }" v-else>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <input 
+                                    id="addressFirstName" 
+                                    name="first name"
+                                    type="text" 
+                                    v-model="address.first_name"
+                                    :disabled="waiting || !addressState"   
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                    :class="{'border-red-600': errors[0]}"
+                                    
+                                />
+                            </ValidationProvider>
                         </div>
                         <div class="mt-2">
                             <label for="addressName" class="text-sm font-semibold">Name</label>
-                            <ValidationProvider vid="user.address.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="data.address.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }" v-if="addressState">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="addressName" 
                                     type="text" 
-                                    name="Name"
-                                    v-model="user.address.name" 
-                                    :disabled="waiting"   
+                                    name="name"
+                                    v-model="address.name" 
+                                    :disabled="waiting || !addressState"   
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                    :class="{'border-red-600': errors[0]}"
+                                />
+                            </ValidationProvider>
+                            <ValidationProvider vid="data.address.name" rules="alpha_spaces|max:255" v-slot="{ errors }" v-else>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <input 
+                                    id="addressName" 
+                                    type="text" 
+                                    name="name"
+                                    v-model="address.name" 
+                                    :disabled="waiting || !addressState"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"
                                 />
                             </ValidationProvider>
                         </div>
                         <div class="mt-2">
-                            <label for="addressPhoneNumber" vid="user.address.phone_number" class="text-sm font-semibold">Phone number</label>
-                            <ValidationProvider rules="required|max:255" v-slot="{ errors }">
+                            <label for="addressPhoneNumber" class="text-sm font-semibold">Phone number</label>
+                            <ValidationProvider vid="data.address.phone_number" rules="required|max:255" v-slot="{ errors }" v-if="addressState">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="addressPhoneNumber" 
                                     type="text" 
-                                    name="Phone number"
-                                    v-model="user.address.phone_number" 
-                                    :disabled="waiting"   
+                                    name="phone number"
+                                    v-model="address.phone_number" 
+                                    :disabled="waiting || !addressState"   
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                    :class="{'border-red-600': errors[0]}"
+                                />
+                            </ValidationProvider>
+                            <ValidationProvider vid="data.address.phone_number" rules="max:255" v-slot="{ errors }" v-else>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <input 
+                                    id="addressPhoneNumber" 
+                                    type="text" 
+                                    name="phone number"
+                                    v-model="address.phone_number" 
+                                    :disabled="waiting || !addressState"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': errors[0]}"
                                 />
@@ -159,14 +195,29 @@
                         </div>
                         <div class="mt-2">
                             <label for="addressCounty" class="text-sm font-semibold">County</label>
-                            <ValidationProvider vid="user.address.county_id" rules="required" v-slot="{ errors }">
+                            <ValidationProvider vid="data.address.county_id" rules="required|integer" v-slot="{ errors }" v-if="addressState">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="addressCounty"
-                                    name="Country"
-                                    v-model="user.address.county_id"
+                                    name="country"
+                                    v-model="address.county_id"
                                     @change="getCitites" 
-                                    :disabled="waiting"   
+                                    :disabled="waiting || !addressState"   
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                    :class="{'border-red-600': errors[0]}"
+                                >
+                                    <option value="" disabled>Select user country</option>
+                                    <option v-for="county in getCounties" :key="county.id" :value="county.id"> {{county.name}} </option>
+                                </select>
+                            </ValidationProvider>
+                            <ValidationProvider vid="data.address.county_id" rules="integer" v-slot="{ errors }" v-else>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <select 
+                                    id="addressCounty"
+                                    name="country"
+                                    v-model="address.county_id"
+                                    @change="getCitites" 
+                                    :disabled="waiting || !addressState"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"
                                 >
@@ -178,13 +229,27 @@
 
                         <div class="mt-2">
                             <label for="addressCity" class="text-sm font-semibold">City</label>
-                            <ValidationProvider vid="user.address.city_id" rules="required" v-slot="{ errors }">
+                            <ValidationProvider vid="data.address.city_id" rules="required|integer" v-slot="{ errors }" v-if="addressState">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="addressCity"
-                                    name="City"
-                                    v-model="user.address.city_id"
-                                    :disabled="citiesSelectState || waiting"
+                                    name="city"
+                                    v-model="address.city_id"
+                                    :disabled="citiesSelectState || waiting || !addressState"
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                    :class="{'border-red-600': errors[0]}"               
+                                >
+                                    <option value="" disabled>Select user city</option>
+                                    <option v-for="city in cities" :key="city.id" :value="city.id">{{city.name}}</option>
+                                </select>
+                            </ValidationProvider>
+                            <ValidationProvider vid="data.address.city_id" rules="integer" v-slot="{ errors }" v-else>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <select 
+                                    id="addressCity"
+                                    name="city"
+                                    v-model="address.city_id"
+                                    :disabled="citiesSelectState || waiting || !addressState"
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"               
                                 >
@@ -196,14 +261,26 @@
 
                         <div class="mt-2">
                             <label for="addressAddress" class="text-sm font-semibold">Address</label>
-                            <ValidationProvider vid="user.address.address" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="data.address.address" rules="required|alpha_spaces|max:255" v-slot="{ errors }" v-if="addressState">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="addressAddress" 
-                                    name="Address"
+                                    name="address"
                                     type="text" 
-                                    v-model="user.address.address"
-                                    :disabled="waiting"
+                                    v-model="address.address"
+                                    :disabled="waiting || !addressState"
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                    :class="{'border-red-600': errors[0]}"    
+                                />
+                            </ValidationProvider>
+                            <ValidationProvider vid="data.address.address" rules="alpha_spaces|max:255" v-slot="{ errors }" v-else>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <input 
+                                    id="addressAddress" 
+                                    name="address"
+                                    type="text" 
+                                    v-model="address.address"
+                                    :disabled="waiting || !addressState"
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"    
                                 />
@@ -243,7 +320,7 @@
             ...mapGetters('Roles', ['getRoles']),
 
             citiesSelectState() {
-                return this.user.address.county_id ? false : true;
+                return this.address.county_id ? false : true;
             }
         },
 
@@ -252,6 +329,7 @@
                 waiting: false,
                 counties: [],
                 cities: [],
+                addressState: false,
                 user: {
                     first_name: '',
                     name: '',
@@ -259,14 +337,14 @@
                     phone_number: '',
                     birthdate: '',
                     role_id: 1,
-                    address: {
-                        first_name: '',
-                        name: '',
-                        phone_number: '',
-                        county_id: '',
-                        city_id: '',
-                        address: ''
-                    }
+                },
+                address: {
+                    first_name: '',
+                    name: '',
+                    phone_number: '',
+                    county_id: '',
+                    city_id: '',
+                    address: ''
                 }
             }
         },
@@ -278,7 +356,15 @@
             async submit() {
                 try {
                     this.waiting = true;
-                    await this.addUser(this.user);
+                    const payload = {
+                        user: this.user
+                    }
+
+                    if(this.addressState) {
+                        payload.address = this.address
+                    }
+
+                    await this.addUser(payload);
                     this.restForm();
                     this.waiting = false;
                 } catch ( error ) {            
@@ -289,7 +375,7 @@
             
             async getCitites() {
                 try {
-                    this.cities= await this.fetchCitites(this.user.address.county_id);
+                    this.cities= await this.fetchCitites(this.address.county_id);
                 } catch ( error ) {
                     console.log(error)
                 }
@@ -305,7 +391,21 @@
                     phone_number: '',
                     birthdate: '',
                     role_id: 1,
-                    address: {
+                }
+                this.address = {
+                    state: false,
+                    first_name: '',
+                    name: '',
+                    phone_number: '',
+                    county_id: '',
+                    city_id: '',
+                    address: ''
+                }
+            },
+
+            toggleAddressState() {
+                if(this.addressState) {
+                    this.address = {
                         first_name: '',
                         name: '',
                         phone_number: '',
@@ -314,6 +414,8 @@
                         address: ''
                     }
                 }
+                this.addressState = !this.addressState
+                console.log(this.addressState)
             }
         },
 

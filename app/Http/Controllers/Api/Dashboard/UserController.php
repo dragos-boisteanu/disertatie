@@ -90,7 +90,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $input = $request->user;
+        $input = $request->input('data.user');
 
         $input['password'] = Hash::make(Str::random(8));
         

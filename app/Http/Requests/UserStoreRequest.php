@@ -24,38 +24,38 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'user.first_name' => 'required|string|max:255',
-            'user.name' => 'required|string|max:255',
-            'user.birthdate' => 'required|date',
-            'user.phone_number' => 'required|string|unique:users,phone_number',
-            'user.email' => 'required|string|email|max:255|unique:users,email',
-            'user.role_id' => 'required|integer',
+            'data.user.first_name' => 'required|string|max:255',
+            'data.user.name' => 'required|string|max:255',
+            'data.user.birthdate' => 'required|date',
+            'data.user.phone_number' => 'required|string|unique:users,phone_number',
+            'data.user.email' => 'required|string|email|max:255|unique:users,email',
+            'data.user.role_id' => 'required|integer',
             
-            'user.address.first_name' => 'required|string|max:255',
-            'user.address.name' => 'required|string|max:255',
-            'user.address.phone_number' => 'required|string',
-            'user.address.county_id' => 'required|integer',
-            'user.address.city_id' => 'required|integer',
-            'user.address.address' => 'required|string|max:255'
+            'data.address.first_name' => 'sometimes|required|string|max:255',
+            'data.address.name' => 'sometimes|required|string|max:255',
+            'data.address.phone_number' => 'sometimes|required|string',
+            'data.address.county_id' => 'sometimes|required|integer',
+            'data.address.city_id' => 'sometimes|required|integer',
+            'data.address.address' => 'sometimes|required|string|max:255'
         ];
     }
 
     public function attributes()
     {
         return [
-            'user.first_name' => 'first name',
-            'user.name' => 'name',
-            'user.birthdate' => 'birthdate',
-            'user.phone_number' => 'phone number',
-            'user.email' => 'email',
-            'user.role_id' => 'role',
+            'data.user.first_name' => 'first name',
+            'data.user.name' => 'name',
+            'data.user.birthdate' => 'birthdate',
+            'data.user.phone_number' => 'phone number',
+            'data.user.email' => 'email',
+            'data.user.role_id' => 'role',
 
-            'user.address.first_name' => 'first name',
-            'user.address.name' => 'name',
-            'user.address.phone_number' => 'phone number',
-            'user.address.county_id' => 'county',
-            'user.address.city_id' => 'vity',
-            'user.address.address' => 'address'
+            'data.address.first_name' => 'first name',
+            'data.address.name' => 'name',
+            'data.address.phone_number' => 'phone number',
+            'data.address.county_id' => 'county',
+            'data.address.city_id' => 'vity',
+            'data.address.address' => 'address'
         ];
     }
 }

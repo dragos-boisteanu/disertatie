@@ -2452,9 +2452,9 @@ var downloadUser = function downloadUser(id) {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT, "/").concat(id));
 };
 
-var storeUser = function storeUser(user) {
+var storeUser = function storeUser(data) {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(END_POINT), {
-    user: user
+    data: data
   });
 };
 
@@ -2498,6 +2498,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
 /* harmony import */ var vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vee-validate/dist/rules */ "./node_modules/vee-validate/dist/rules.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -2513,10 +2519,21 @@ __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 
 
 (0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.setInteractionMode)('eager');
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('required', vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.required);
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('email', vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.email);
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('alpha_spaces', vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.alpha_spaces);
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('max', vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.max);
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('required', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.required), {}, {
+  message: 'The {_field_} field is required.'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('integer', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.integer), {}, {
+  message: 'The {_field_} must be an integer'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('email', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.email), {}, {
+  message: 'The {_field_} must be a valid email address.'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('alpha_spaces', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.alpha_spaces), {}, {
+  message: 'The {_field_} must only contain letters.'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('max', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.max), {}, {
+  message: 'The {_field_} must not be greater than {max} characters.'
+}));
 vue__WEBPACK_IMPORTED_MODULE_9__.default.component('ValidationProvider', vee_validate__WEBPACK_IMPORTED_MODULE_7__.ValidationProvider);
 vue__WEBPACK_IMPORTED_MODULE_9__.default.component('ValidationObserver', vee_validate__WEBPACK_IMPORTED_MODULE_7__.ValidationObserver);
 vue__WEBPACK_IMPORTED_MODULE_9__.default.use((vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_4___default()), _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_5__.default);

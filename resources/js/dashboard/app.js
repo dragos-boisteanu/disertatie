@@ -16,15 +16,35 @@ import dayjs from 'dayjs';
 
 import { ValidationProvider, extend } from 'vee-validate';
 import {ValidationObserver } from 'vee-validate'
-import { required, alpha_spaces,  max, email } from 'vee-validate/dist/rules';
+import { required, alpha_spaces,  max, email, integer } from 'vee-validate/dist/rules';
 import { setInteractionMode } from 'vee-validate';
 
 setInteractionMode('eager');
 
-extend('required', required );
-extend('email', email);
-extend('alpha_spaces', alpha_spaces);
-extend('max', max);
+extend('required', {
+    ...required,
+    message: 'The {_field_} field is required.'
+});
+
+extend('integer', {
+    ...integer,
+    message: 'The {_field_} must be an integer'
+});
+
+extend('email', {
+    ...email,
+    message: 'The {_field_} must be a valid email address.'
+});
+
+extend('alpha_spaces', {
+    ...alpha_spaces,
+    message: 'The {_field_} must only contain letters.'
+});
+
+extend('max', {
+    ...max,
+    message: 'The {_field_} must not be greater than {max} characters.'
+});
 
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
