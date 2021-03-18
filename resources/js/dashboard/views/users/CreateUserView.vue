@@ -16,7 +16,7 @@
                         </div>
                         <div>
                             <label for="firstName" class="text-sm font-semibold">First name</label>
-                            <ValidationProvider vid="firstName" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="user.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="firstName"
@@ -31,7 +31,7 @@
                         </div>
                         <div class="mt-2">
                             <label for="name" class="text-sm font-semibold">Name</label>
-                            <ValidationProvider rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="user.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="name" 
@@ -46,7 +46,7 @@
                         </div>
                         <div class="mt-2">
                             <label for="birthdate" class="text-sm font-semibold">Birthdate</label>
-                            <ValidationProvider rules="required" v-slot="{ errors }">
+                            <ValidationProvider vid="user.birthdate" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="birthdate" 
@@ -61,7 +61,7 @@
                         </div>
                         <div class="mt-2">
                             <label for="email" class="text-sm font-semibold">Email</label>
-                            <ValidationProvider rules="required|email|max:255" v-slot="{ errors }">
+                            <ValidationProvider vid="user.email" rules="required|email|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="email" 
@@ -76,10 +76,10 @@
                         </div>
                         <div class="mt-2">
                             <label for="phone_number" class="text-sm font-semibold">Phone number</label>
-                            <ValidationProvider rules="required" v-slot="{ errors }">
+                            <ValidationProvider  vid="user.phone_number" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
-                                    id="phone_number" 
+                                    id="phoneNumber" 
                                     type="text" 
                                     name="Phone number"
                                     v-model="user.phone_number"
@@ -91,7 +91,7 @@
                         </div>
                         <div class="mt-2">
                             <label for="role" class="text-sm font-semibold">Role</label>
-                            <ValidationProvider rules="required" v-slot="{ errors }">
+                            <ValidationProvider vid="role" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="role"
@@ -113,11 +113,11 @@
                             Address
                         </h2>
                         <div class="mt-2">
-                            <label for="first_name" class="text-sm font-semibold">First name</label>
-                            <ValidationProvider rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <label for="addressFirstName" class="text-sm font-semibold">First name</label>
+                            <ValidationProvider vid="user.address.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
-                                    id="first_name" 
+                                    id="addressFirstName" 
                                     name="First name"
                                     type="text" 
                                     v-model="user.address.first_name"
@@ -128,11 +128,11 @@
                                 </ValidationProvider>
                         </div>
                         <div class="mt-2">
-                            <label for="name" class="text-sm font-semibold">Name</label>
-                            <ValidationProvider rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <label for="addressName" class="text-sm font-semibold">Name</label>
+                            <ValidationProvider vid="user.address.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
-                                    id="name" 
+                                    id="addressName" 
                                     type="text" 
                                     name="Name"
                                     v-model="user.address.name" 
@@ -143,11 +143,11 @@
                             </ValidationProvider>
                         </div>
                         <div class="mt-2">
-                            <label for="phone_number" class="text-sm font-semibold">Phone number</label>
+                            <label for="addressPhoneNumber" vid="user.address.phone_number" class="text-sm font-semibold">Phone number</label>
                             <ValidationProvider rules="required|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
-                                    id="phone_number" 
+                                    id="addressPhoneNumber" 
                                     type="text" 
                                     name="Phone number"
                                     v-model="user.address.phone_number" 
@@ -158,11 +158,11 @@
                             </ValidationProvider>
                         </div>
                         <div class="mt-2">
-                            <label for="county" class="text-sm font-semibold">County</label>
-                            <ValidationProvider rules="required" v-slot="{ errors }">
+                            <label for="addressCounty" class="text-sm font-semibold">County</label>
+                            <ValidationProvider vid="user.address.county_id" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
-                                    id="county"
+                                    id="addressCounty"
                                     name="Country"
                                     v-model="user.address.county_id"
                                     @change="getCitites" 
@@ -177,11 +177,11 @@
                         </div>
 
                         <div class="mt-2">
-                            <label for="city" class="text-sm font-semibold">City</label>
-                            <ValidationProvider rules="required" v-slot="{ errors }">
+                            <label for="addressCity" class="text-sm font-semibold">City</label>
+                            <ValidationProvider vid="user.address.city_id" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
-                                    id="city"
+                                    id="addressCity"
                                     name="City"
                                     v-model="user.address.city_id"
                                     :disabled="citiesSelectState || waiting"
@@ -195,11 +195,11 @@
                         </div>
 
                         <div class="mt-2">
-                            <label for="address" class="text-sm font-semibold">Address</label>
-                            <ValidationProvider rules="required|alpha_spaces|max:255" v-slot="{ errors }">
+                            <label for="addressAddress" class="text-sm font-semibold">Address</label>
+                            <ValidationProvider vid="user.address.address" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
-                                    id="address" 
+                                    id="addressAddress" 
                                     name="Address"
                                     type="text" 
                                     v-model="user.address.address"

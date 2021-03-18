@@ -2433,7 +2433,7 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
                                   attrs: {
-                                    vid: "firstName",
+                                    vid: "user.first_name",
                                     rules: "required|alpha_spaces|max:255"
                                   },
                                   scopedSlots: _vm._u(
@@ -2515,6 +2515,7 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
                                   attrs: {
+                                    vid: "user.name",
                                     rules: "required|alpha_spaces|max:255"
                                   },
                                   scopedSlots: _vm._u(
@@ -2595,7 +2596,10 @@ var render = function() {
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
-                                  attrs: { rules: "required" },
+                                  attrs: {
+                                    vid: "user.birthdate",
+                                    rules: "required"
+                                  },
                                   scopedSlots: _vm._u(
                                     [
                                       {
@@ -2674,7 +2678,10 @@ var render = function() {
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
-                                  attrs: { rules: "required|email|max:255" },
+                                  attrs: {
+                                    vid: "user.email",
+                                    rules: "required|email|max:255"
+                                  },
                                   scopedSlots: _vm._u(
                                     [
                                       {
@@ -2753,7 +2760,10 @@ var render = function() {
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
-                                  attrs: { rules: "required" },
+                                  attrs: {
+                                    vid: "user.phone_number",
+                                    rules: "required"
+                                  },
                                   scopedSlots: _vm._u(
                                     [
                                       {
@@ -2786,7 +2796,7 @@ var render = function() {
                                                 "border-red-600": errors[0]
                                               },
                                               attrs: {
-                                                id: "phone_number",
+                                                id: "phoneNumber",
                                                 type: "text",
                                                 name: "Phone number",
                                                 disabled: _vm.waiting
@@ -2833,7 +2843,7 @@ var render = function() {
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
-                                  attrs: { rules: "required" },
+                                  attrs: { vid: "role", rules: "required" },
                                   scopedSlots: _vm._u(
                                     [
                                       {
@@ -2947,13 +2957,14 @@ var render = function() {
                                   "label",
                                   {
                                     staticClass: "text-sm font-semibold",
-                                    attrs: { for: "first_name" }
+                                    attrs: { for: "addressFirstName" }
                                   },
                                   [_vm._v("First name")]
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
                                   attrs: {
+                                    vid: "user.address.first_name",
                                     rules: "required|alpha_spaces|max:255"
                                   },
                                   scopedSlots: _vm._u(
@@ -2989,7 +3000,7 @@ var render = function() {
                                                 "border-red-600": errors[0]
                                               },
                                               attrs: {
-                                                id: "first_name",
+                                                id: "addressFirstName",
                                                 name: "First name",
                                                 type: "text",
                                                 disabled: _vm.waiting
@@ -3031,13 +3042,14 @@ var render = function() {
                                   "label",
                                   {
                                     staticClass: "text-sm font-semibold",
-                                    attrs: { for: "name" }
+                                    attrs: { for: "addressName" }
                                   },
                                   [_vm._v("Name")]
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
                                   attrs: {
+                                    vid: "user.address.name",
                                     rules: "required|alpha_spaces|max:255"
                                   },
                                   scopedSlots: _vm._u(
@@ -3072,7 +3084,7 @@ var render = function() {
                                                 "border-red-600": errors[0]
                                               },
                                               attrs: {
-                                                id: "name",
+                                                id: "addressName",
                                                 type: "text",
                                                 name: "Name",
                                                 disabled: _vm.waiting
@@ -3113,7 +3125,10 @@ var render = function() {
                                   "label",
                                   {
                                     staticClass: "text-sm font-semibold",
-                                    attrs: { for: "phone_number" }
+                                    attrs: {
+                                      for: "addressPhoneNumber",
+                                      vid: "user.address.phone_number"
+                                    }
                                   },
                                   [_vm._v("Phone number")]
                                 ),
@@ -3154,7 +3169,7 @@ var render = function() {
                                                 "border-red-600": errors[0]
                                               },
                                               attrs: {
-                                                id: "phone_number",
+                                                id: "addressPhoneNumber",
                                                 type: "text",
                                                 name: "Phone number",
                                                 disabled: _vm.waiting
@@ -3196,13 +3211,16 @@ var render = function() {
                                   "label",
                                   {
                                     staticClass: "text-sm font-semibold",
-                                    attrs: { for: "county" }
+                                    attrs: { for: "addressCounty" }
                                   },
                                   [_vm._v("County")]
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
-                                  attrs: { rules: "required" },
+                                  attrs: {
+                                    vid: "user.address.county_id",
+                                    rules: "required"
+                                  },
                                   scopedSlots: _vm._u(
                                     [
                                       {
@@ -3239,7 +3257,7 @@ var render = function() {
                                                   "border-red-600": errors[0]
                                                 },
                                                 attrs: {
-                                                  id: "county",
+                                                  id: "addressCounty",
                                                   name: "Country",
                                                   disabled: _vm.waiting
                                                 },
@@ -3334,13 +3352,16 @@ var render = function() {
                                   "label",
                                   {
                                     staticClass: "text-sm font-semibold",
-                                    attrs: { for: "city" }
+                                    attrs: { for: "addressCity" }
                                   },
                                   [_vm._v("City")]
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
-                                  attrs: { rules: "required" },
+                                  attrs: {
+                                    vid: "user.address.city_id",
+                                    rules: "required"
+                                  },
                                   scopedSlots: _vm._u(
                                     [
                                       {
@@ -3376,7 +3397,7 @@ var render = function() {
                                                   "border-red-600": errors[0]
                                                 },
                                                 attrs: {
-                                                  id: "city",
+                                                  id: "addressCity",
                                                   name: "City",
                                                   disabled:
                                                     _vm.citiesSelectState ||
@@ -3457,13 +3478,14 @@ var render = function() {
                                   "label",
                                   {
                                     staticClass: "text-sm font-semibold",
-                                    attrs: { for: "address" }
+                                    attrs: { for: "addressAddress" }
                                   },
                                   [_vm._v("Address")]
                                 ),
                                 _vm._v(" "),
                                 _c("ValidationProvider", {
                                   attrs: {
+                                    vid: "user.address.address",
                                     rules: "required|alpha_spaces|max:255"
                                   },
                                   scopedSlots: _vm._u(
@@ -3499,7 +3521,7 @@ var render = function() {
                                                 "border-red-600": errors[0]
                                               },
                                               attrs: {
-                                                id: "address",
+                                                id: "addressAddress",
                                                 name: "Address",
                                                 type: "text",
                                                 disabled: _vm.waiting
