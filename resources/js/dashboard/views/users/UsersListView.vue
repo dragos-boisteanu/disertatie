@@ -133,48 +133,9 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(store.getters['Users/getUsers'].length === 0) {
-                const urlQuery = to.query;
-                const query = {
-                    page: 1,
-                }
-
-                if(urlQuery.id) {
-                    query.id = urlQuery.id;
-                }
-
-                if(urlQuery.firstName) {
-                    query.firstName = urlQuery.firstName;
-                }
-
-                if(urlQuery.name) {
-                    query.name = urlQuery.name;
-                }
-
-                if(urlQuery.email) {
-                    query.email = urlQuery.email;
-                }
-
-                if(urlQuery.phoneNumber) {
-                    query.phoneNumber = urlQuery.phoneNumber;
-                }
-
-                if(urlQuery.roles) {
-                    query.roles = [];
-                    query.roles.push(...urlQuery.roles)
-                };
-
-                if(urlQuery.fromDate) {
-                    query.fromDate = urlQuery.fromDate;
-                }
-
-                if(urlQuery.toDate) {
-                    query.toDate = urlQuery.toDate;
-                }
-
-                if(urlQuery.verified) {
-                    query.verified = urlQuery.verified;
-                }
-
+                const query = to.query
+                query.page = 1;
+    
                 await store.dispatch('Users/fetchUsers', query);
                 next();
             } else {
@@ -203,49 +164,10 @@
 
             async loadMoreUsers() {
                 try {
-                    const urlQuery = this.$route.query;
-                    const query = {
-                        page: this.getNextPage,
-                        orderBy: this.orderBy
-                    }
-
-                    if(urlQuery.id) {
-                        query.id = urlQuery.id;
-                    }
-
-                    if(urlQuery.firstName) {
-                        query.firstName = urlQuery.firstName;
-                    }
-
-                    if(urlQuery.name) {
-                        query.name = urlQuery.name;
-                    }
-
-                    if(urlQuery.email) {
-                        query.email = urlQuery.email;
-                    }
-
-                    if(urlQuery.phoneNumber) {
-                        query.phoneNumber = urlQuery.phoneNumber;
-                    }
-
-                    if(urlQuery.roles) {
-                        query.roles = [];
-                        query.roles.push(...urlQuery.roles)
-                    };
-
-                    if(urlQuery.fromDate) {
-                        query.fromDate = urlQuery.fromDate;
-                    }
-
-                    if(urlQuery.toDate) {
-                        query.toDate = urlQuery.toDate;
-                    }
-
-                    if(urlQuery.verified) {
-                        query.verified = urlQuery.verified;
-                    }
-
+                    const query = this.$route.query;
+                    query.page = this.getNextPage,
+                    query.orderBy = this.orderBy
+        
                     await this.fetchUsers(query)
 
                     this.order();

@@ -151,17 +151,18 @@
     export default {
 
         mounted() {
-            this.filterData.id =  this.$route.query.id ? this.$route.query.id : '';
-            this.filterData.firstName = this.$route.query.firstName ? this.$route.query.firstName : '';
-            this.filterData.name = this.$route.query.name ? this.$route.query.name : '';
-            this.filterData.email = this.$route.query.email ? this.$route.query.email : '';
-            this.filterData.phoneNumber = this.$route.query.phoneNumber ? this.$route.query.phoneNumber : '';
-            this.filterData.fromDate = this.$route.query.fromDate ? this.$route.query.fromDate : '';
-            this.filterData.toDate = this.$route.query.toDate ? this.$route.query.toDate : '';
-            this.filterData.verified = this.$route.query.verified ? this.$route.query.verified : '';
-            if(this.$route.query.roles) {
-                this.filterData.roles.push(...this.$route.query.roles)
-            };
+            const routerQuery = this.$route.query;
+            
+            Object.keys(routerQuery).forEach(key => {
+                if(routerQuery[key].length > 0) {
+                    if(key === 'roles') {
+                        this.filterData[key] = [];
+                        this.filterData[key].push(...routerQuery[key])
+                    } else {
+                        this.filterData[key] = routerQuery[key];
+                    }
+                }
+            })
         },
 
         computed: {
@@ -174,8 +175,8 @@
                 filterData: {
                     id: '',
                     firstName: '',
-                    name: '',
-                    roles: [],
+                    name: [],
+                    roles: '',
                     email: '',
                     phoneNumber: '',
                     verified: '',
@@ -193,41 +194,11 @@
                 try {
                     const query = {}
 
-                    if(this.filterData.id.length > 0) {
-                        query.id = this.filterData.id;
-                    }
-
-                    if(this.filterData.firstName.length > 0) {
-                        query.firstName = this.filterData.firstName;
-                    }
-
-                    if(this.filterData.name.length > 0) {
-                        query.name = this.filterData.name;
-                    }
-
-                    if(this.filterData.email.length > 0) {
-                        query.email = this.filterData.email;
-                    }
-
-                    if(this.filterData.phoneNumber.length > 0) {
-                        query.phoneNumber = this.filterData.phoneNumber;
-                    }
-
-                    if(this.filterData.roles.length > 0 ) {
-                        query.roles = this.filterData.roles;
-                    }
-
-                    if(this.filterData.fromDate.length > 0 ) {
-                        query.fromDate = this.filterData.fromDate;
-                    }
-
-                    if(this.filterData.toDate.length > 0 ) {
-                        query.toDate = this.filterData.toDate;
-                    }
-
-                    if(this.filterData.verified.length > 0 ) {
-                        query.verified = this.filterData.verified;
-                    }
+                    Object.keys(this.filterData).forEach(key => {
+                        if(this.filterData[key].length > 0) {
+                            query[key] = this.filterData[key];
+                        }
+                    })
 
                     this.$router.replace({name:'Users', query: {...query}});
                     

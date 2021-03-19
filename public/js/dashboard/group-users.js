@@ -264,22 +264,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
-    this.filterData.id = this.$route.query.id ? this.$route.query.id : '';
-    this.filterData.firstName = this.$route.query.firstName ? this.$route.query.firstName : '';
-    this.filterData.name = this.$route.query.name ? this.$route.query.name : '';
-    this.filterData.email = this.$route.query.email ? this.$route.query.email : '';
-    this.filterData.phoneNumber = this.$route.query.phoneNumber ? this.$route.query.phoneNumber : '';
-    this.filterData.fromDate = this.$route.query.fromDate ? this.$route.query.fromDate : '';
-    this.filterData.toDate = this.$route.query.toDate ? this.$route.query.toDate : '';
-    this.filterData.verified = this.$route.query.verified ? this.$route.query.verified : '';
+    var _this = this;
 
-    if (this.$route.query.roles) {
-      var _this$filterData$role;
+    var routerQuery = this.$route.query;
+    Object.keys(routerQuery).forEach(function (key) {
+      if (routerQuery[key].length > 0) {
+        if (key === 'roles') {
+          var _this$filterData$key;
 
-      (_this$filterData$role = this.filterData.roles).push.apply(_this$filterData$role, _toConsumableArray(this.$route.query.roles));
-    }
+          _this.filterData[key] = [];
 
-    ;
+          (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
+        } else {
+          _this.filterData[key] = routerQuery[key];
+        }
+      }
+    });
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Users', ['getNextPage'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])),
   data: function data() {
@@ -287,8 +287,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       filterData: {
         id: '',
         firstName: '',
-        name: '',
-        roles: [],
+        name: [],
+        roles: '',
         email: '',
         phoneNumber: '',
         verified: '',
@@ -299,6 +299,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
     callFilter: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var _this2 = this;
+
       var query;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
@@ -306,62 +308,30 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             case 0:
               _context.prev = 0;
               query = {};
-
-              if (this.filterData.id.length > 0) {
-                query.id = this.filterData.id;
-              }
-
-              if (this.filterData.firstName.length > 0) {
-                query.firstName = this.filterData.firstName;
-              }
-
-              if (this.filterData.name.length > 0) {
-                query.name = this.filterData.name;
-              }
-
-              if (this.filterData.email.length > 0) {
-                query.email = this.filterData.email;
-              }
-
-              if (this.filterData.phoneNumber.length > 0) {
-                query.phoneNumber = this.filterData.phoneNumber;
-              }
-
-              if (this.filterData.roles.length > 0) {
-                query.roles = this.filterData.roles;
-              }
-
-              if (this.filterData.fromDate.length > 0) {
-                query.fromDate = this.filterData.fromDate;
-              }
-
-              if (this.filterData.toDate.length > 0) {
-                query.toDate = this.filterData.toDate;
-              }
-
-              if (this.filterData.verified.length > 0) {
-                query.verified = this.filterData.verified;
-              }
-
+              Object.keys(this.filterData).forEach(function (key) {
+                if (_this2.filterData[key].length > 0) {
+                  query[key] = _this2.filterData[key];
+                }
+              });
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
               });
               this.reset();
-              _context.next = 15;
+              _context.next = 7;
               return this.fetchUsers(query);
 
-            case 15:
+            case 7:
               this.openNotification({
                 type: 'ok',
                 message: 'Done',
                 show: true
               });
-              _context.next = 22;
+              _context.next = 14;
               break;
 
-            case 18:
-              _context.prev = 18;
+            case 10:
+              _context.prev = 10;
               _context.t0 = _context["catch"](0);
               this.openNotification({
                 type: 'err',
@@ -370,12 +340,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               });
               console.log(_context.t0);
 
-            case 22:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 18]]);
+      }, _callee, this, [[0, 10]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -1061,18 +1031,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -1207,74 +1165,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var urlQuery, query, _query$roles;
-
+      var query;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0)) {
-                _context.next = 18;
+                _context.next = 8;
                 break;
               }
 
-              urlQuery = to.query;
-              query = {
-                page: 1
-              };
-
-              if (urlQuery.id) {
-                query.id = urlQuery.id;
-              }
-
-              if (urlQuery.firstName) {
-                query.firstName = urlQuery.firstName;
-              }
-
-              if (urlQuery.name) {
-                query.name = urlQuery.name;
-              }
-
-              if (urlQuery.email) {
-                query.email = urlQuery.email;
-              }
-
-              if (urlQuery.phoneNumber) {
-                query.phoneNumber = urlQuery.phoneNumber;
-              }
-
-              if (urlQuery.roles) {
-                query.roles = [];
-
-                (_query$roles = query.roles).push.apply(_query$roles, _toConsumableArray(urlQuery.roles));
-              }
-
-              ;
-
-              if (urlQuery.fromDate) {
-                query.fromDate = urlQuery.fromDate;
-              }
-
-              if (urlQuery.toDate) {
-                query.toDate = urlQuery.toDate;
-              }
-
-              if (urlQuery.verified) {
-                query.verified = urlQuery.verified;
-              }
-
-              _context.next = 15;
+              query = to.query;
+              query.page = 1;
+              _context.next = 5;
               return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', query);
 
-            case 15:
+            case 5:
               next();
-              _context.next = 19;
+              _context.next = 9;
               break;
 
-            case 18:
+            case 8:
               next();
 
-            case 19:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -1298,63 +1212,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var urlQuery, query, _query$roles2;
-
+        var query;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                urlQuery = _this.$route.query;
-                query = {
-                  page: _this.getNextPage,
-                  orderBy: _this.orderBy
-                };
-
-                if (urlQuery.id) {
-                  query.id = urlQuery.id;
-                }
-
-                if (urlQuery.firstName) {
-                  query.firstName = urlQuery.firstName;
-                }
-
-                if (urlQuery.name) {
-                  query.name = urlQuery.name;
-                }
-
-                if (urlQuery.email) {
-                  query.email = urlQuery.email;
-                }
-
-                if (urlQuery.phoneNumber) {
-                  query.phoneNumber = urlQuery.phoneNumber;
-                }
-
-                if (urlQuery.roles) {
-                  query.roles = [];
-
-                  (_query$roles2 = query.roles).push.apply(_query$roles2, _toConsumableArray(urlQuery.roles));
-                }
-
-                ;
-
-                if (urlQuery.fromDate) {
-                  query.fromDate = urlQuery.fromDate;
-                }
-
-                if (urlQuery.toDate) {
-                  query.toDate = urlQuery.toDate;
-                }
-
-                if (urlQuery.verified) {
-                  query.verified = urlQuery.verified;
-                }
-
-                _context2.next = 15;
+                query = _this.$route.query;
+                query.page = _this.getNextPage, query.orderBy = _this.orderBy;
+                _context2.next = 5;
                 return _this.fetchUsers(query);
 
-              case 15:
+              case 5:
                 _this.order();
 
                 _this.openNotification({
@@ -1363,20 +1232,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   show: true
                 });
 
-                _context2.next = 22;
+                _context2.next = 12;
                 break;
 
-              case 19:
-                _context2.prev = 19;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 22:
+              case 12:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 19]]);
+        }, _callee2, null, [[0, 9]]);
       }))();
     },
     refreshUsersList: function refreshUsersList() {
