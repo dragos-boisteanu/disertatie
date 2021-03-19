@@ -94,10 +94,14 @@ const actions = {
 
 
     async getUser({state}, id) {
-        for(let user of state.users) {
-            if(user.id === id) {    
+        try {
+            let user = _.find(state.users, ['id', id]);
+            if(user) {
                 return user;
             }
+            return this.fetchUser(id);
+        } catch ( error ) {
+            throw error
         }
     },
 

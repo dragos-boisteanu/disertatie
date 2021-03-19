@@ -3088,13 +3088,11 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
@@ -3304,61 +3302,39 @@ var actions = {
     }))();
   },
   getUser: function getUser(_ref7, id) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-      var state, _iterator, _step, user;
+    var _this = this;
 
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+      var state, user;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
               state = _ref7.state;
-              _iterator = _createForOfIteratorHelper(state.users);
-              _context6.prev = 2;
+              _context6.prev = 1;
+              user = _.find(state.users, ['id', id]);
 
-              _iterator.s();
-
-            case 4:
-              if ((_step = _iterator.n()).done) {
-                _context6.next = 10;
-                break;
-              }
-
-              user = _step.value;
-
-              if (!(user.id === id)) {
-                _context6.next = 8;
+              if (!user) {
+                _context6.next = 5;
                 break;
               }
 
               return _context6.abrupt("return", user);
 
+            case 5:
+              return _context6.abrupt("return", _this.fetchUser(id));
+
             case 8:
-              _context6.next = 4;
-              break;
+              _context6.prev = 8;
+              _context6.t0 = _context6["catch"](1);
+              throw _context6.t0;
 
-            case 10:
-              _context6.next = 15;
-              break;
-
-            case 12:
-              _context6.prev = 12;
-              _context6.t0 = _context6["catch"](2);
-
-              _iterator.e(_context6.t0);
-
-            case 15:
-              _context6.prev = 15;
-
-              _iterator.f();
-
-              return _context6.finish(15);
-
-            case 18:
+            case 11:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[2, 12, 15, 18]]);
+      }, _callee6, null, [[1, 8]]);
     }))();
   },
   sortUsersList: function sortUsersList(_ref8, sortBy) {
