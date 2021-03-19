@@ -287,8 +287,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       filterData: {
         id: '',
         firstName: '',
-        name: [],
-        roles: '',
+        name: '',
+        roles: [],
         email: '',
         phoneNumber: '',
         verified: '',

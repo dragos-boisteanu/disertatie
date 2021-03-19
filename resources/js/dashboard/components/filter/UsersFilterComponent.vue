@@ -175,8 +175,8 @@
                 filterData: {
                     id: '',
                     firstName: '',
-                    name: [],
-                    roles: '',
+                    name: '',
+                    roles: [],
                     email: '',
                     phoneNumber: '',
                     verified: '',
