@@ -3271,22 +3271,23 @@ var actions = {
       }, _callee4, null, [[1, 7]]);
     }))();
   },
-  fetchUser: function fetchUser(_ref6, id) {
+  updateUser: function updateUser(_ref6, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-      var response;
+      var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              _objectDestructuringEmpty(_ref6);
-
+              commit = _ref6.commit;
               _context5.prev = 1;
               _context5.next = 4;
-              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUser)(id);
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.patchUser)(payload.user);
 
             case 4:
               response = _context5.sent;
-              return _context5.abrupt("return", response.data.data);
+              console.log(response.data);
+              _context5.next = 11;
+              break;
 
             case 8:
               _context5.prev = 8;
@@ -3301,28 +3302,22 @@ var actions = {
       }, _callee5, null, [[1, 8]]);
     }))();
   },
-  getUser: function getUser(_ref7, id) {
-    var _this = this;
-
+  fetchUser: function fetchUser(_ref7, id) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-      var state, user;
+      var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              state = _ref7.state;
+              _objectDestructuringEmpty(_ref7);
+
               _context6.prev = 1;
-              user = _.find(state.users, ['id', id]);
+              _context6.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUser)(id);
 
-              if (!user) {
-                _context6.next = 5;
-                break;
-              }
-
-              return _context6.abrupt("return", user);
-
-            case 5:
-              return _context6.abrupt("return", _this.fetchUser(id));
+            case 4:
+              response = _context6.sent;
+              return _context6.abrupt("return", response.data.data);
 
             case 8:
               _context6.prev = 8;
@@ -3337,8 +3332,44 @@ var actions = {
       }, _callee6, null, [[1, 8]]);
     }))();
   },
-  sortUsersList: function sortUsersList(_ref8, sortBy) {
-    var commit = _ref8.commit;
+  getUser: function getUser(_ref8, id) {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+      var state, user;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              state = _ref8.state;
+              _context7.prev = 1;
+              user = _.find(state.users, ['id', id]);
+
+              if (!user) {
+                _context7.next = 5;
+                break;
+              }
+
+              return _context7.abrupt("return", user);
+
+            case 5:
+              return _context7.abrupt("return", _this.fetchUser(id));
+
+            case 8:
+              _context7.prev = 8;
+              _context7.t0 = _context7["catch"](1);
+              throw _context7.t0;
+
+            case 11:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[1, 8]]);
+    }))();
+  },
+  sortUsersList: function sortUsersList(_ref9, sortBy) {
+    var commit = _ref9.commit;
     commit('SORT_USERS', sortBy);
   }
 };
@@ -30478,21 +30509,24 @@ var render = function() {
   return _vm.$breadcrumbs.length
     ? _c(
         "nav",
-        { staticClass: "breadcrumbs", attrs: { "aria-label": "breadcrumbs" } },
+        {
+          staticClass: "breadcrumbs flex items-center px-2 py-1 bg-gray-700 ",
+          attrs: { "aria-label": "breadcrumbs" }
+        },
         _vm._l(_vm.$breadcrumbs, function(crumb, key) {
           return crumb.meta.breadcrumb
             ? _c(
                 "div",
                 {
                   key: key,
-                  staticClass: "breadcrumb-item",
+                  staticClass: "breadcrumb-item mr-2 text-xs",
                   attrs: { "aria-current": "page" }
                 },
                 [
                   _c(
                     "router-link",
                     {
-                      staticClass: "hover:pointer-events-none",
+                      staticClass: "text-gray-400  hover:text-gray-50 ",
                       attrs: { to: { path: _vm.getPath(crumb) }, exact: "" }
                     },
                     [_vm._v(_vm._s(_vm.getBreadcrumb(crumb.meta.breadcrumb)))]

@@ -3,13 +3,7 @@
 @import 'tailwindcss/utilities';
 
 
-.breadcrumbs {
-    @apply flex items-center px-2 py-1 bg-gray-700;
-}
 
-.breadcrumbs .breadcrumb-item {
-    @apply mr-2 text-xs;
-}
 
 .breadcrumbs .breadcrumb-item:after {
     content: '/';
@@ -20,14 +14,6 @@
     content: '';
 }
 
-.breadcrumbs a {
-    @apply text-gray-400;
-}
-
-.breadcrumbs a:hover {
-    @apply text-gray-50;
-}
-
 .breadcrumbs .router-link-exact-active,
 .breadcrumbs .router-link-active {
     @apply text-orange-500 font-medium;
@@ -35,6 +21,5 @@
 
 .breadcrumbs .router-link-exact-active:hover,
 .breadcrumbs .router-link-active:hover {
-    pointer-events: none;
-    cursor: default;
+    @apply cursor-default pointer-events-none;
 }

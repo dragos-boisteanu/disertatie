@@ -65,7 +65,7 @@
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="email" 
-                                    type="text" 
+                                    type="email" 
                                     name="email"
                                     v-model="user.email" 
                                     :disabled="waiting"   
