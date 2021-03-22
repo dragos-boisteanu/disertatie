@@ -336,7 +336,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              query = {};
+              query = {
+                orderBy: this.$route.query.orderBy || 14
+              };
               Object.keys(this.filterData).forEach(function (key) {
                 if (_this2.filterData[key].length > 0) {
                   query[key] = _this2.filterData[key];
@@ -1550,6 +1552,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
+  mounted: function mounted() {
+    if (this.$route.query.orderBy) {
+      this.orderBy = this.$route.query.orderBy;
+    } else {
+      this.orderBy = 14;
+    }
+  },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Users', ['getUsers', 'getNextPage'])), {}, {
     showMoreState: function showMoreState() {
       return this.getNextPage ? true : false;
@@ -1558,7 +1567,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       showFilterState: false,
-      orderBy: 14
+      orderBy: 0
     };
   },
   methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('Users', ['refreshUsers', 'fetchUsers', 'sortUsersList'])), (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('Notification', ['openNotification'])), {}, {
@@ -1578,7 +1587,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this.fetchUsers(query);
 
               case 5:
-                _this.order();
+                _this.orderUsers();
 
                 _this.openNotification({
                   type: 'ok',
@@ -1648,6 +1657,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     order: function order() {
+      var query = {
+        orderBy: this.orderBy
+      };
+      this.$router.replace({
+        name: 'Users',
+        query: _objectSpread({}, query)
+      });
+      this.orderUsers();
+    },
+    orderUsers: function orderUsers() {
       this.sortUsersList(this.orderBy);
     },
     toggleFilterState: function toggleFilterState() {

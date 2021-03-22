@@ -142,6 +142,14 @@
             }
         },
 
+        mounted() {
+            if(this.$route.query.orderBy) {
+                this.orderBy = this.$route.query.orderBy;
+            } else {
+                this.orderBy = 14;
+            }
+        },
+
         computed: {
             ...mapGetters('Users', ['getUsers', 'getNextPage']),
 
@@ -153,7 +161,7 @@
         data() {
             return {
                 showFilterState: false,
-                orderBy: 14,
+                orderBy: 0,
             }
         },
 
@@ -169,7 +177,7 @@
         
                     await this.fetchUsers(query)
 
-                    this.order();
+                    this.orderUsers();
                     
                     this.openNotification({
                         type:'ok',
@@ -200,6 +208,14 @@
             },
 
             order() {
+                const query = {
+                    orderBy: this.orderBy
+                }
+                this.$router.replace({name:'Users', query: {...query}});
+                this.orderUsers();
+            },
+
+            orderUsers() {
                 this.sortUsersList(this.orderBy);
             },
 

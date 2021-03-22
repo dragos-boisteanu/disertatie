@@ -152,7 +152,6 @@
 
         mounted() {
             const routerQuery = this.$route.query;
-            
             Object.keys(routerQuery).forEach(key => {
                 if(routerQuery[key].length > 0) {
                     if(key === 'roles') {
@@ -192,7 +191,9 @@
 
             callFilter: _debounce( async function() {
                 try {
-                    const query = {}
+                    const query = {
+                        orderBy: this.$route.query.orderBy || 14,
+                    }
 
                     Object.keys(this.filterData).forEach(key => {
                         if(this.filterData[key].length > 0) {
