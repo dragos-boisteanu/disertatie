@@ -18,21 +18,21 @@
             </div>
             <div class="flex flex-col items-center justify-center md:items-start">
                 <div class="flex justify-center w-full mt-2 md:justify-start">
-                    <Status :deleted-at="user.deletedAt"/>
-                    <Role :roleId="user.roleId"/>
+                    <Status :deleted-at="user.deleted_at"/>
+                    <Role :roleId="user.role_id"/>
                 </div>
                     <div class="font-semibold text-2xl mt-2">
-                        {{user.firstName}} {{user.name}}
+                        {{user.first_name}} {{user.name}}
                     </div>
                 <div class="text-sm mt-2">
-                    <a :href="`mailto:${user.email}`">{{user.email}}</a> <span class="mx-2">|</span> <a :href="`tel:${user.phoneNumber}`">{{user.phoneNumber}}</a>
+                    <a :href="`mailto:${user.email}`">{{user.email}}</a> <span class="mx-2">|</span> <a :href="`tel:${user.phone_number}`">{{user.phone_number}}</a>
                 </div>
                 <div class="flex items-baseline mt-2">
                     <span class="font-semibold text-sm mr-2">
                         Joined on:
                     </span>
                     <span class="text-xs">
-                        {{ user.createdAt | formatDate }}
+                        {{ user.created_at | formatDate }}
                     </span>
                 </div>
                 <button 
@@ -94,7 +94,7 @@
         methods: {
             updateUser(patchedUser) {
                 Object.keys(patchedUser).forEach(key => {         
-                    this.user[this.toCamel(key)] = patchedUser[key];
+                    this.user[key] = patchedUser[key];
                 })
             },
 
@@ -106,13 +106,6 @@
                 this.user = user;
             },
 
-            toCamel: (s) => {
-                return s.replace(/([-_][a-z])/ig, ($1) => {
-                    return $1.toUpperCase()
-                    .replace('-', '')
-                    .replace('_', '');
-                });
-            }
         },
         
         components: {

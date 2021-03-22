@@ -20,7 +20,7 @@
 
             role() {
                 return this.getRoles.filter(role => {
-                    return role.id == this.roleId
+                    return role.id === this.roleId
                 })[0];
            }
         }

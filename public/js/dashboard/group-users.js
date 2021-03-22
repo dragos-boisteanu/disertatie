@@ -566,7 +566,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 counter = 0;
                 Object.keys(_this.user).forEach(function (key) {
                   if (_this.localUser[key] != _this.user[key]) {
-                    payload.user[_this.toSnakeCase(key)] = _this.localUser[key];
+                    payload.user[key] = _this.localUser[key];
                     counter++;
                   }
                 });
@@ -608,9 +608,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }, _callee, null, [[0, 15]]);
       }))();
-    },
-    toSnakeCase: function toSnakeCase(string) {
-      return string.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
     },
     close: function close() {
       this.$emit('close');
@@ -660,7 +657,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       return this.getRoles.filter(function (role) {
-        return role.id == _this.roleId;
+        return role.id === _this.roleId;
       })[0];
     }
   })
@@ -1065,7 +1062,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.restForm();
 
                 _this.waiting = false;
-                _context.next = 14;
+                _context.next = 15;
                 break;
 
               case 10:
@@ -1076,9 +1073,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
                 }
 
+                console.log(_context.t0);
                 _this.waiting = false;
 
-              case 14:
+              case 15:
               case "end":
                 return _context.stop();
             }
@@ -1327,7 +1325,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       Object.keys(patchedUser).forEach(function (key) {
-        _this.user[_this.toCamel(key)] = patchedUser[key];
+        _this.user[key] = patchedUser[key];
       });
     },
     toggleEditUserState: function toggleEditUserState() {
@@ -1335,11 +1333,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     setUser: function setUser(user) {
       this.user = user;
-    },
-    toCamel: function toCamel(s) {
-      return s.replace(/([-_][a-z])/ig, function ($1) {
-        return $1.toUpperCase().replace('-', '').replace('_', '');
-      });
     }
   },
   components: {
@@ -3249,8 +3242,8 @@ var render = function() {
                                         {
                                           name: "model",
                                           rawName: "v-model",
-                                          value: _vm.localUser.firstName,
-                                          expression: "localUser.firstName"
+                                          value: _vm.localUser.first_name,
+                                          expression: "localUser.first_name"
                                         }
                                       ],
                                       staticClass:
@@ -3262,7 +3255,7 @@ var render = function() {
                                         type: "text"
                                       },
                                       domProps: {
-                                        value: _vm.localUser.firstName
+                                        value: _vm.localUser.first_name
                                       },
                                       on: {
                                         input: function($event) {
@@ -3271,7 +3264,7 @@ var render = function() {
                                           }
                                           _vm.$set(
                                             _vm.localUser,
-                                            "firstName",
+                                            "first_name",
                                             $event.target.value
                                           )
                                         }
@@ -3532,8 +3525,8 @@ var render = function() {
                                         {
                                           name: "model",
                                           rawName: "v-model",
-                                          value: _vm.localUser.phoneNumber,
-                                          expression: "localUser.phoneNumber"
+                                          value: _vm.localUser.phone_number,
+                                          expression: "localUser.phone_number"
                                         }
                                       ],
                                       staticClass:
@@ -3545,7 +3538,7 @@ var render = function() {
                                         type: "text"
                                       },
                                       domProps: {
-                                        value: _vm.localUser.phoneNumber
+                                        value: _vm.localUser.phone_number
                                       },
                                       on: {
                                         input: function($event) {
@@ -3554,7 +3547,7 @@ var render = function() {
                                           }
                                           _vm.$set(
                                             _vm.localUser,
-                                            "phoneNumber",
+                                            "phone_number",
                                             $event.target.value
                                           )
                                         }
@@ -3605,8 +3598,8 @@ var render = function() {
                                           {
                                             name: "model",
                                             rawName: "v-model",
-                                            value: _vm.localUser.roleId,
-                                            expression: "localUser.roleId"
+                                            value: _vm.localUser.role_id,
+                                            expression: "localUser.role_id"
                                           }
                                         ],
                                         staticClass:
@@ -3631,7 +3624,7 @@ var render = function() {
                                               })
                                             _vm.$set(
                                               _vm.localUser,
-                                              "roleId",
+                                              "role_id",
                                               $event.target.multiple
                                                 ? $$selectedVal
                                                 : $$selectedVal[0]
@@ -5801,10 +5794,10 @@ var render = function() {
                     },
                     [
                       _c("Status", {
-                        attrs: { "deleted-at": _vm.user.deletedAt }
+                        attrs: { "deleted-at": _vm.user.deleted_at }
                       }),
                       _vm._v(" "),
-                      _c("Role", { attrs: { roleId: _vm.user.roleId } })
+                      _c("Role", { attrs: { roleId: _vm.user.role_id } })
                     ],
                     1
                   ),
@@ -5812,7 +5805,7 @@ var render = function() {
                   _c("div", { staticClass: "font-semibold text-2xl mt-2" }, [
                     _vm._v(
                       "\n                    " +
-                        _vm._s(_vm.user.firstName) +
+                        _vm._s(_vm.user.first_name) +
                         " " +
                         _vm._s(_vm.user.name) +
                         "\n                "
@@ -5828,8 +5821,8 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "a",
-                      { attrs: { href: "tel:" + _vm.user.phoneNumber } },
-                      [_vm._v(_vm._s(_vm.user.phoneNumber))]
+                      { attrs: { href: "tel:" + _vm.user.phone_number } },
+                      [_vm._v(_vm._s(_vm.user.phone_number))]
                     )
                   ]),
                   _vm._v(" "),
@@ -5843,7 +5836,7 @@ var render = function() {
                     _c("span", { staticClass: "text-xs" }, [
                       _vm._v(
                         "\n                    " +
-                          _vm._s(_vm._f("formatDate")(_vm.user.createdAt)) +
+                          _vm._s(_vm._f("formatDate")(_vm.user.created_at)) +
                           "\n                "
                       )
                     ])
@@ -6080,7 +6073,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "flex-1" }, [
                         _c("div", { staticClass: "capitalize font-semibold" }, [
-                          _c("span", [_vm._v(_vm._s(user.firstName))]),
+                          _c("span", [_vm._v(_vm._s(user.first_name))]),
                           _vm._v(" "),
                           _c("span", [_vm._v(_vm._s(user.name))])
                         ]),
@@ -6096,7 +6089,7 @@ var render = function() {
                         _c("div", { staticClass: "mt-1 text-xs" }, [
                           _vm._v(
                             "\n                            " +
-                              _vm._s(user.phoneNumber) +
+                              _vm._s(user.phone_number) +
                               "\n                         "
                           )
                         ])
@@ -6116,7 +6109,7 @@ var render = function() {
                           { staticClass: "mt-2" },
                           [
                             _c("Status", {
-                              attrs: { "deleted-at": user.deletedAt }
+                              attrs: { "deleted-at": user.deleted_at }
                             })
                           ],
                           1
@@ -6174,13 +6167,13 @@ var render = function() {
                           _c("span", { staticClass: "text-xs" }, [
                             _vm._v(
                               "\n                                 " +
-                                _vm._s(_vm._f("formatDate")(user.createdAt)) +
+                                _vm._s(_vm._f("formatDate")(user.created_at)) +
                                 "\n                             "
                             )
                           ])
                         ]),
                         _vm._v(" "),
-                        _c("Role", { attrs: { roleId: user.roleId } })
+                        _c("Role", { attrs: { roleId: user.role_id } })
                       ],
                       1
                     )

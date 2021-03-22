@@ -370,7 +370,8 @@
                 } catch ( error ) {  
                     if(error.response.data.errors) {
                         this.$refs.observer.setErrors(error.response.data.errors)
-                    }         
+                    }  
+                     console.log(error)       
                 
                     this.waiting = false;
                 }

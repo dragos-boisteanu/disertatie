@@ -26,14 +26,13 @@ class UserController extends Controller
     {
         $query = User::filter($request);
 
-        if(!isset($request->orderBy)) {
+        if(!$request->has('orderBy')) {
             $orderByValue = 14;
         } else {
             $orderByValue = $request->orderBy;
         }
 
-        $query->orderBy('id', 'asc');
-        
+      
         switch($orderByValue) {
             case 1:
                 $query->orderBy('name', 'asc');
@@ -80,6 +79,8 @@ class UserController extends Controller
                 break;
         }
 
+        $query->orderBy('id', 'asc');
+        
         $users = $query->with('role')->simplePaginate(5);
 
         return new UserCollection($users);
@@ -110,7 +111,7 @@ class UserController extends Controller
 
             event(new AccountCreated($user));
             DB::commit();
-            return ['id'=>$user->id, 'createdAt'=>$user->created_at];
+            return ['user' => ['id'=>$user->id, 'created_at'=>$user->created_at]];
            
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();

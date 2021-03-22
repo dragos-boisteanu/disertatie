@@ -1,6 +1,7 @@
 import { downloadUsers, downloadUser, storeUser, patchUser,  disableUser, deleteUser } from '../../api/users.api';
 import _orderBy from 'lodash/orderBy';
 import _find from 'lodash/find';
+import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
     users: [],
@@ -74,10 +75,13 @@ const actions = {
         }
     },
 
-    async addUser({commit}, user) {
+    async addUser({commit}, payload) {
         try {
-            const response = await storeUser(user);
-            // commit('ADD_USER', response.data.user)
+            const response = await storeUser(payload);
+            payload.user.id = response.data.user.id;
+            payload.user.created_at = response.data.user.created_at;
+            payload.user.deleted_at = null;
+            commit('ADD_USER', payload.user)
         } catch (error) {
             throw error;
         }
@@ -85,7 +89,8 @@ const actions = {
 
     async updateUser({commit}, payload) {
         try {
-            const response = await patchUser(payload.user);
+            await patchUser(payload.user);
+            commit('PATCH_USER', payload);
         } catch (  error ) {
             throw error
         }
@@ -150,6 +155,20 @@ const mutations = {
         state.users.splice(index, 1);
     },
 
+    PATCH_USER(state, payload) {
+        if(state.users.length > 0) {
+            const selectedUserIndex = _.findIndex(state.users, ['id', payload.user.id]);
+            const vm = payload.vm;
+            Object.keys(payload.user).forEach(key => {
+                console.log('user: ', state.users[selectedUserIndex]);
+                console.log('key: ', key);
+                console.log('payload[key]: ', payload.user[key]);
+                vm.$set(state.users[selectedUserIndex], key, payload.user[key])
+            })
+        }
+        
+    },
+
     SAVE_NEXT_PAGE(state, page) {
         state.nextPage = page;
     },
@@ -163,10 +182,10 @@ const mutations = {
                 state.users = _orderBy(state.users, [user => user.name.toLowerCase()], ['desc']);
                 break;
             case 3:
-                state.users = _orderBy(state.users, [user => user.firstName.toLowerCase()], ['asc']);
+                state.users = _orderBy(state.users, [user => user.first_name.toLowerCase()], ['asc']);
                 break;
             case 4:
-                state.users = _orderBy(state.users, [user => user.firstName.toLowerCase()], ['desc']);
+                state.users = _orderBy(state.users, [user => user.first_name.toLowerCase()], ['desc']);
                 break;
             case 5:
                 state.users = _orderBy(state.users, [user => user.email.toLowerCase()], ['asc']);
@@ -175,10 +194,10 @@ const mutations = {
                 state.users = _orderBy(state.users, [user => user.email.toLowerCase()], ['desc']);
                 break;
             case 7: 
-                state.users = _orderBy(state.users, ['roleId'], ['desc']);
+                state.users = _orderBy(state.users, ['role_id'], ['desc']);
                 break;
             case 8:
-                state.users = _orderBy(state.users, ['roleId'], ['asc']);
+                state.users = _orderBy(state.users, ['role_id'], ['asc']);
                 break;
             case 9: 
                 state.users = _orderBy(state.users, ['orders'], ['desc']);
@@ -193,10 +212,10 @@ const mutations = {
                 state.users = _orderBy(state.users, ['reservations'], ['asc']);
                 break;
             case 13:
-                state.users = _orderBy(state.users, ['createdAt'], ['asc']);
+                state.users = _orderBy(state.users, ['created_at'], ['asc']);
                 break;
             case 14:
-                state.users = _orderBy(state.users, ['createdAt'], ['desc']);
+                state.users = _orderBy(state.users, ['created_at'], ['desc']);
                 break;
         }
     }

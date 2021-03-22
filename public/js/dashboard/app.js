@@ -3084,6 +3084,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_orderBy__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_4__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -3103,6 +3105,7 @@ function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -3241,7 +3244,7 @@ var actions = {
       }, _callee3, null, [[1, 8]]);
     }))();
   },
-  addUser: function addUser(_ref5, user) {
+  addUser: function addUser(_ref5, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
       var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
@@ -3251,29 +3254,33 @@ var actions = {
               commit = _ref5.commit;
               _context4.prev = 1;
               _context4.next = 4;
-              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.storeUser)(user);
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.storeUser)(payload);
 
             case 4:
               response = _context4.sent;
-              _context4.next = 10;
+              payload.user.id = response.data.user.id;
+              payload.user.created_at = response.data.user.created_at;
+              payload.user.deleted_at = null;
+              commit('ADD_USER', payload.user);
+              _context4.next = 14;
               break;
 
-            case 7:
-              _context4.prev = 7;
+            case 11:
+              _context4.prev = 11;
               _context4.t0 = _context4["catch"](1);
               throw _context4.t0;
 
-            case 10:
+            case 14:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[1, 7]]);
+      }, _callee4, null, [[1, 11]]);
     }))();
   },
   updateUser: function updateUser(_ref6, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-      var commit, response;
+      var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
@@ -3284,7 +3291,7 @@ var actions = {
               return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.patchUser)(payload.user);
 
             case 4:
-              response = _context5.sent;
+              commit('PATCH_USER', payload);
               _context5.next = 10;
               break;
 
@@ -3398,6 +3405,19 @@ var mutations = {
   REMOVE_USER: function REMOVE_USER(state, index) {
     state.users.splice(index, 1);
   },
+  PATCH_USER: function PATCH_USER(state, payload) {
+    if (state.users.length > 0) {
+      var selectedUserIndex = _.findIndex(state.users, ['id', payload.user.id]);
+
+      var vm = payload.vm;
+      Object.keys(payload.user).forEach(function (key) {
+        console.log('user: ', state.users[selectedUserIndex]);
+        console.log('key: ', key);
+        console.log('payload[key]: ', payload.user[key]);
+        vm.$set(state.users[selectedUserIndex], key, payload.user[key]);
+      });
+    }
+  },
   SAVE_NEXT_PAGE: function SAVE_NEXT_PAGE(state, page) {
     state.nextPage = page;
   },
@@ -3417,13 +3437,13 @@ var mutations = {
 
       case 3:
         state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-          return user.firstName.toLowerCase();
+          return user.first_name.toLowerCase();
         }], ['asc']);
         break;
 
       case 4:
         state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-          return user.firstName.toLowerCase();
+          return user.first_name.toLowerCase();
         }], ['desc']);
         break;
 
@@ -3440,11 +3460,11 @@ var mutations = {
         break;
 
       case 7:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['roleId'], ['desc']);
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['desc']);
         break;
 
       case 8:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['roleId'], ['asc']);
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['asc']);
         break;
 
       case 9:
@@ -3464,11 +3484,11 @@ var mutations = {
         break;
 
       case 13:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['createdAt'], ['asc']);
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['asc']);
         break;
 
       case 14:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['createdAt'], ['desc']);
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['desc']);
         break;
     }
   }

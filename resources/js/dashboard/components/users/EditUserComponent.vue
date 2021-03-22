@@ -14,7 +14,7 @@
                                 id="firstName" 
                                 name="first name"
                                 type="text" 
-                                v-model="localUser.firstName"
+                                v-model="localUser.first_name"
                                 class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                                 :class="{'border-red-600': errors[0]}" 
                             />
@@ -70,7 +70,7 @@
                                 id="phone" 
                                 name="phone number"
                                 type="text" 
-                                v-model="localUser.phoneNumber"
+                                v-model="localUser.phone_number"
                                 class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                                 :class="{'border-red-600': errors[0]}" 
                             />
@@ -83,7 +83,7 @@
                             <select 
                                 id="role" 
                                 name="role"
-                                v-model="localUser.roleId"
+                                v-model="localUser.role_id"
                                 class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                                 :class="{'border-red-600': errors[0]}"   
                             >
@@ -155,8 +155,7 @@
                     let counter = 0;
                     Object.keys(this.user).forEach(key => {
                         if(this.localUser[key] != this.user[key]) {
-                            
-                            payload.user[this.toSnakeCase(key)] = this.localUser[key];
+                            payload.user[key] = this.localUser[key];
                             counter++;
                         }
                     })
@@ -173,10 +172,6 @@
                 } catch ( error ) {
                     console.log(error);
                 }
-            },
-
-            toSnakeCase(string) {
-                return string.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
             },
 
             close() {
