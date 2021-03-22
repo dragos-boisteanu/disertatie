@@ -3,6 +3,7 @@
         <EditUser 
             v-if="editUserState" 
             @close="toggleEditUserState"
+            @updated="updateUser"
             :user="user"
         >
         </EditUser>
@@ -91,12 +92,26 @@
         },
 
         methods: {
+            updateUser(patchedUser) {
+                Object.keys(patchedUser).forEach(key => {         
+                    this.user[this.toCamel(key)] = patchedUser[key];
+                })
+            },
+
             toggleEditUserState() {
                 this.editUserState = !this.editUserState;
             },
 
             setUser(user) {
                 this.user = user;
+            },
+
+            toCamel: (s) => {
+                return s.replace(/([-_][a-z])/ig, ($1) => {
+                    return $1.toUpperCase()
+                    .replace('-', '')
+                    .replace('_', '');
+                });
             }
         },
         

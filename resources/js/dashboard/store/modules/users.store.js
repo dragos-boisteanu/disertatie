@@ -86,7 +86,6 @@ const actions = {
     async updateUser({commit}, payload) {
         try {
             const response = await patchUser(payload.user);
-            console.log(response.data);
         } catch (  error ) {
             throw error
         }

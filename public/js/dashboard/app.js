@@ -3285,21 +3285,20 @@ var actions = {
 
             case 4:
               response = _context5.sent;
-              console.log(response.data);
-              _context5.next = 11;
+              _context5.next = 10;
               break;
 
-            case 8:
-              _context5.prev = 8;
+            case 7:
+              _context5.prev = 7;
               _context5.t0 = _context5["catch"](1);
               throw _context5.t0;
 
-            case 11:
+            case 10:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[1, 8]]);
+      }, _callee5, null, [[1, 7]]);
     }))();
   },
   fetchUser: function fetchUser(_ref7, id) {

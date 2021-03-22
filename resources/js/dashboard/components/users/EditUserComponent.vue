@@ -147,27 +147,36 @@
                 try {
                     const payload = {
                         vm: this,
-                        user: {}
+                        user: {
+                            id: this.user.id
+                        }
                     };
+
                     let counter = 0;
                     Object.keys(this.user).forEach(key => {
                         if(this.localUser[key] != this.user[key]) {
-                            payload.user[key] = this.localUser[key];
+                            
+                            payload.user[this.toSnakeCase(key)] = this.localUser[key];
                             counter++;
                         }
                     })
 
                     if(counter > 0) {
-                        console.log(payload);
+                        await this.updateUser(payload);
+                        this.$emit('updated', payload.user);
                         counter = 0;
+                        this.close();
                     } else {
                         console.log('Change soemthing before updating the user data.');
                     }
-                   
 
                 } catch ( error ) {
                     console.log(error);
                 }
+            },
+
+            toSnakeCase(string) {
+                return string.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
             },
 
             close() {

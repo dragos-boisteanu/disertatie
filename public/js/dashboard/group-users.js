@@ -556,36 +556,61 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                try {
-                  payload = {
-                    vm: _this,
-                    user: {}
-                  };
-                  counter = 0;
-                  Object.keys(_this.user).forEach(function (key) {
-                    if (_this.localUser[key] != _this.user[key]) {
-                      payload.user[key] = _this.localUser[key];
-                      counter++;
-                    }
-                  });
-
-                  if (counter > 0) {
-                    console.log(payload);
-                    counter = 0;
-                  } else {
-                    console.log('Change soemthing before updating the user data.');
+                _context.prev = 0;
+                payload = {
+                  vm: _this,
+                  user: {
+                    id: _this.user.id
                   }
-                } catch (error) {
-                  console.log(error);
+                };
+                counter = 0;
+                Object.keys(_this.user).forEach(function (key) {
+                  if (_this.localUser[key] != _this.user[key]) {
+                    payload.user[_this.toSnakeCase(key)] = _this.localUser[key];
+                    counter++;
+                  }
+                });
+
+                if (!(counter > 0)) {
+                  _context.next = 12;
+                  break;
                 }
 
-              case 1:
+                _context.next = 7;
+                return _this.updateUser(payload);
+
+              case 7:
+                _this.$emit('updated', payload.user);
+
+                counter = 0;
+
+                _this.close();
+
+                _context.next = 13;
+                break;
+
+              case 12:
+                console.log('Change soemthing before updating the user data.');
+
+              case 13:
+                _context.next = 18;
+                break;
+
+              case 15:
+                _context.prev = 15;
+                _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
+
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee);
+        }, _callee, null, [[0, 15]]);
       }))();
+    },
+    toSnakeCase: function toSnakeCase(string) {
+      return string.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
     },
     close: function close() {
       this.$emit('close');
@@ -1173,6 +1198,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -1252,11 +1278,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
+    updateUser: function updateUser(patchedUser) {
+      var _this = this;
+
+      Object.keys(patchedUser).forEach(function (key) {
+        _this.user[_this.toCamel(key)] = patchedUser[key];
+      });
+    },
     toggleEditUserState: function toggleEditUserState() {
       this.editUserState = !this.editUserState;
     },
     setUser: function setUser(user) {
       this.user = user;
+    },
+    toCamel: function toCamel(s) {
+      return s.replace(/([-_][a-z])/ig, function ($1) {
+        return $1.toUpperCase().replace('-', '').replace('_', '');
+      });
     }
   },
   components: {
@@ -5551,7 +5589,7 @@ var render = function() {
       _vm.editUserState
         ? _c("EditUser", {
             attrs: { user: _vm.user },
-            on: { close: _vm.toggleEditUserState }
+            on: { close: _vm.toggleEditUserState, updated: _vm.updateUser }
           })
         : _vm._e(),
       _vm._v(" "),

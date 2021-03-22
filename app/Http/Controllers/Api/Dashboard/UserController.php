@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Events\AccountCreated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserPatchRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
 use App\Http\Requests\UserStoreRequest;
@@ -137,9 +138,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserPatchRequest $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->update($request->validated());
+
+        return response()->json(null, 200);
     }
 
     /**
