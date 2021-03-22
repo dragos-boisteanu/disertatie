@@ -22,7 +22,6 @@ class User extends JsonResource
             'birthdate' => $this->birthdate,
             'email' => $this->email,
             'phoneNumber' => $this->phone_number,
-            'role' => $this->role->name,
             'roleId' => $this->role->id,
             'deletedAt' => $this->deleted_at,
             'createdAt' => $this->created_at

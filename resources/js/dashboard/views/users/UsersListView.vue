@@ -100,9 +100,7 @@
                                     {{ user.createdAt | formatDate }}
                                 </span>
                             </div>
-                            <div class="py-1 px-2 mt-1 text-xs text-white rounded-sm bg-lightBlue-600">
-                                {{user.role}}
-                            </div>
+                            <Role :roleId="user.roleId"/>
                         </div>
                     </div>
                 </router-link>
@@ -127,6 +125,7 @@
 
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
+    import Role from '../../components/users/RoleComponent';
     import UsersFilter from '../../components/filter/UsersFilterComponent';
     
 
@@ -212,6 +211,7 @@
         components: {
             ViewContainer,
             Status,
+            Role,
             UsersFilter
         }
     }

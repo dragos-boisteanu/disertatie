@@ -1,5 +1,5 @@
 <template>
-    <ViewContainer>
+    <ViewContainer v-if="user" >
         <EditUser 
             v-if="editUserState" 
             @close="toggleEditUserState"
@@ -19,9 +19,7 @@
             <div class="flex flex-col items-center justify-center md:items-start">
                 <div class="flex justify-center w-full mt-2 md:justify-start">
                     <Status :deleted-at="user.deletedAt"/>
-                    <div class="py-1 px-2 ml-2 text-xs text-white rounded-sm bg-lightBlue-600">
-                        {{user.role}}
-                    </div>
+                    <Role :roleId="user.roleId"/>
                 </div>
                     <div class="font-semibold text-2xl mt-2">
                         {{user.firstName}} {{user.name}}
@@ -63,6 +61,7 @@
     import store from '../../store/index';
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
+    import Role from '../../components/users/RoleComponent';
     import EditUser from '../../components/users/EditUserComponent';
 
     export default {
@@ -84,10 +83,11 @@
             }
         },
 
+        
         data() {
             return {
                 editUserState: false,
-                user: {}
+                user: null
             }
         },
 
@@ -118,6 +118,7 @@
         components: {
             ViewContainer,
             Status,
+            Role,
             EditUser
         }
     }
