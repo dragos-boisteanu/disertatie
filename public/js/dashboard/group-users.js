@@ -528,6 +528,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -542,6 +553,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
+      waiting: false,
       localUser: {}
     };
   },
@@ -557,6 +569,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
+                _this.waiting = true;
                 payload = {
                   vm: _this,
                   user: {
@@ -572,41 +585,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 });
 
                 if (!(counter > 0)) {
-                  _context.next = 12;
+                  _context.next = 13;
                   break;
                 }
 
-                _context.next = 7;
+                _context.next = 8;
                 return _this.updateUser(payload);
 
-              case 7:
+              case 8:
                 _this.$emit('updated', payload.user);
 
                 counter = 0;
 
                 _this.close();
 
-                _context.next = 13;
+                _context.next = 14;
                 break;
-
-              case 12:
-                console.log('Change soemthing before updating the user data.');
 
               case 13:
-                _context.next = 18;
+                console.log('Change soemthing before updating the user data.');
+
+              case 14:
+                _this.waiting = false;
+                _context.next = 20;
                 break;
 
-              case 15:
-                _context.prev = 15;
+              case 17:
+                _context.prev = 17;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
-              case 18:
+              case 20:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 15]]);
+        }, _callee, null, [[0, 17]]);
       }))();
     },
     close: function close() {
@@ -3252,7 +3266,8 @@ var render = function() {
                                       attrs: {
                                         id: "firstName",
                                         name: "first name",
-                                        type: "text"
+                                        type: "text",
+                                        disabled: _vm.waiting
                                       },
                                       domProps: {
                                         value: _vm.localUser.first_name
@@ -3326,7 +3341,8 @@ var render = function() {
                                       attrs: {
                                         id: "name",
                                         name: "name",
-                                        type: "text"
+                                        type: "text",
+                                        disabled: _vm.waiting
                                       },
                                       domProps: { value: _vm.localUser.name },
                                       on: {
@@ -3395,7 +3411,8 @@ var render = function() {
                                       attrs: {
                                         id: "birthdate",
                                         name: "birthdate",
-                                        type: "date"
+                                        type: "date",
+                                        disabled: _vm.waiting
                                       },
                                       domProps: {
                                         value: _vm.localUser.birthdate
@@ -3535,7 +3552,8 @@ var render = function() {
                                       attrs: {
                                         id: "phone",
                                         name: "phone number",
-                                        type: "text"
+                                        type: "text",
+                                        disabled: _vm.waiting
                                       },
                                       domProps: {
                                         value: _vm.localUser.phone_number
@@ -3605,7 +3623,11 @@ var render = function() {
                                         staticClass:
                                           "w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                         class: { "border-red-600": errors[0] },
-                                        attrs: { id: "role", name: "role" },
+                                        attrs: {
+                                          id: "role",
+                                          name: "role",
+                                          disabled: _vm.waiting
+                                        },
                                         on: {
                                           change: function($event) {
                                             var $$selectedVal = Array.prototype.filter
@@ -3662,27 +3684,68 @@ var render = function() {
           ])
         }),
         _vm._v(" "),
-        _c("div", { staticClass: "w-full text-right" }, [
-          _c(
-            "button",
-            {
-              staticClass:
-                "bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner",
-              on: { click: _vm.update }
-            },
-            [_vm._v("\n                Save\n            ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass:
-                "bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600",
-              on: { click: _vm.close }
-            },
-            [_vm._v("\n                Cancel\n            ")]
-          )
-        ])
+        _c(
+          "div",
+          { staticClass: "w-full flex justify-end items-center mt-4" },
+          [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none",
+                attrs: { type: "submit", disabled: _vm.waiting },
+                on: { click: _vm.update }
+              },
+              [
+                _vm.waiting
+                  ? _c(
+                      "svg",
+                      {
+                        staticClass: "animate-spin mr-3 h-5 w-5 text-white",
+                        attrs: {
+                          xmlns: "http://www.w3.org/2000/svg",
+                          fill: "none",
+                          viewBox: "0 0 24 24"
+                        }
+                      },
+                      [
+                        _c("circle", {
+                          staticClass: "opacity-25",
+                          attrs: {
+                            cx: "12",
+                            cy: "12",
+                            r: "10",
+                            stroke: "currentColor",
+                            "stroke-width": "4"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("path", {
+                          staticClass: "opacity-75",
+                          attrs: {
+                            fill: "currentColor",
+                            d:
+                              "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          }
+                        })
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v("\n                Save\n            ")
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600",
+                on: { click: _vm.close }
+              },
+              [_vm._v("\n                Cancel\n            ")]
+            )
+          ]
+        )
       ],
       1
     )

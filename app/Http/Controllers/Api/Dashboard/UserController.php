@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Models\User;
 use App\Models\Address;
 use Illuminate\Support\Str;
+use App\Events\EmailUpdated;
 use Illuminate\Http\Request;
 use App\Events\AccountCreated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserPatchRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
+use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\UserPatchRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\User as ResourcesUser;
 
@@ -145,6 +147,11 @@ class UserController extends Controller
 
         $user->update($request->validated());
 
+        if($request->has('email')) {
+            $user->email_verified_at = null;
+            $user->save();
+            event( new Registered($user));
+        }
         return response()->json(null, 200);
     }
 

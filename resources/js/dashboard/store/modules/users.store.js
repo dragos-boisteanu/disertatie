@@ -44,9 +44,8 @@ const actions = {
         } catch (error) {
             throw error; 
         }
-
     },
-
+    
     async fetchFilteredUsers({commit}, query) {
         try {
             const response = await downloadUsers(query);

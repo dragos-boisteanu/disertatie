@@ -15,6 +15,7 @@
                                 name="first name"
                                 type="text" 
                                 v-model="localUser.first_name"
+                                :disabled="waiting"
                                 class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                                 :class="{'border-red-600': errors[0]}" 
                             />
@@ -29,6 +30,7 @@
                                 name="name"
                                 type="text" 
                                 v-model="localUser.name"
+                                :disabled="waiting"
                                 class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                                 :class="{'border-red-600': errors[0]}" 
                             />
@@ -43,6 +45,7 @@
                                 name="birthdate"
                                 type="date" 
                                 v-model="localUser.birthdate"
+                                :disabled="waiting"
                                 class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                                 :class="{'border-red-600': errors[0]}" 
                             />
@@ -71,6 +74,7 @@
                                 name="phone number"
                                 type="text" 
                                 v-model="localUser.phone_number"
+                                :disabled="waiting"
                                 class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                                 :class="{'border-red-600': errors[0]}" 
                             />
@@ -84,6 +88,7 @@
                                 id="role" 
                                 name="role"
                                 v-model="localUser.role_id"
+                                :disabled="waiting"
                                 class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                                 :class="{'border-red-600': errors[0]}"   
                             >
@@ -93,11 +98,17 @@
                     </ValidationProvider>
                 </form>
             </ValidationObserver>
-            <div class="w-full text-right">
+            <div class="w-full flex justify-end items-center mt-4">
                 <button 
-                    class="bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner"
+                    type="submit"
+                    :disabled="waiting"  
+                    class="flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none"
                     @click="update"
                 >
+                    <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
                     Save
                 </button>
                 <button 
@@ -132,6 +143,7 @@
 
         data() {
             return { 
+                waiting: false,
                 localUser: {}
             }
         },
@@ -145,6 +157,7 @@
             ...mapActions('Users', ['updateUser']),
             async update() {
                 try {
+                    this.waiting = true;
                     const payload = {
                         vm: this,
                         user: {
@@ -168,6 +181,8 @@
                     } else {
                         console.log('Change soemthing before updating the user data.');
                     }
+
+                    this.waiting = false;
 
                 } catch ( error ) {
                     console.log(error);
