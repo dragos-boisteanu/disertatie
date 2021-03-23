@@ -2785,8 +2785,26 @@ __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
   message: 'The {_field_} must only contain letters and numbers'
 }));
 (0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('max', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.max), {}, {
-  message: 'The {_field_} must not be greater than {max} characters.'
+  message: 'The {_field_} must not be greater than {length} characters.',
+  params: ['length']
 }));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('min', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.min), {}, {
+  message: 'The {_field_} must not be shorter than {length} character',
+  params: ['length']
+})); // extend('max_value', {
+//     ...max_value,
+//     message: 'The {_field_} value must not be greater than {max_value}',
+//     params: ['max_value'],
+// })
+
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('max_value', {
+  validate: function validate(value, _ref) {
+    var max = _ref.max;
+    return value <= max;
+  },
+  params: ['max'],
+  message: 'The {_field_} value must not be greater than {max}'
+});
 vue__WEBPACK_IMPORTED_MODULE_9__.default.component('ValidationProvider', vee_validate__WEBPACK_IMPORTED_MODULE_7__.ValidationProvider);
 vue__WEBPACK_IMPORTED_MODULE_9__.default.component('ValidationObserver', vee_validate__WEBPACK_IMPORTED_MODULE_7__.ValidationObserver);
 vue__WEBPACK_IMPORTED_MODULE_9__.default.use((vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_4___default()), _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_5__.default);

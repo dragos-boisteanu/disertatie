@@ -852,7 +852,10 @@ var render = function() {
                         _vm._v(" "),
                         _c("ValidationProvider", {
                           staticClass: "w-full mt-2",
-                          attrs: { vid: "price", rules: "required" },
+                          attrs: {
+                            vid: "price",
+                            rules: "required|double:2,comma"
+                          },
                           scopedSlots: _vm._u(
                             [
                               {
@@ -893,7 +896,7 @@ var render = function() {
                                       attrs: {
                                         id: "unitPrice",
                                         name: "price",
-                                        type: "number",
+                                        type: "text",
                                         disabled: _vm.waiting
                                       },
                                       domProps: {
@@ -925,7 +928,7 @@ var render = function() {
                           staticClass: "w-full mt-2",
                           attrs: {
                             vid: "data.product.vat",
-                            rules: "required|digits:2"
+                            rules: "required|integer|max_value:99|max:2"
                           },
                           scopedSlots: _vm._u(
                             [
@@ -940,7 +943,7 @@ var render = function() {
                                         staticClass: "text-sm font-semibold",
                                         attrs: { for: "name" }
                                       },
-                                      [_vm._v("VAT")]
+                                      [_vm._v("VAT ( % )")]
                                     ),
                                     _vm._v(" "),
                                     _c(

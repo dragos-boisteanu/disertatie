@@ -64,21 +64,21 @@
                             <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }}</option>
                         </select>
                     </ValidationProvider>
-                    <ValidationProvider vid="price" rules="required" v-slot="{ errors }" class="w-full mt-2">
+                    <ValidationProvider vid="price" rules="required|double:2,comma" v-slot="{ errors }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Price</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
                             id="unitPrice"
                             name="price" 
-                            type="number" 
+                            type="text" 
                             v-model="product.unit_price" 
                             :disabled="waiting"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                             :class="{'border-red-600': errors[0]}"
                         />
                     </ValidationProvider>
-                    <ValidationProvider vid="data.product.vat" rules="required|digits:2" v-slot="{ errors }" class="w-full mt-2">
-                        <label for="name" class="text-sm font-semibold">VAT</label>
+                    <ValidationProvider vid="data.product.vat" rules="required|integer|max_value:99|max:2" v-slot="{ errors }" class="w-full mt-2">
+                        <label for="name" class="text-sm font-semibold">VAT ( % )</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
                             id="vat"

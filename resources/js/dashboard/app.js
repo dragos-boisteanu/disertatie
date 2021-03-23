@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 
 import { ValidationProvider, extend } from 'vee-validate';
 import {ValidationObserver } from 'vee-validate'
-import { required, alpha_spaces,  max, email, integer, double, digits, alpha_num } from 'vee-validate/dist/rules';
+import { required, alpha_spaces, min, max, email, integer, double, digits, alpha_num, max_value } from 'vee-validate/dist/rules';
 import { setInteractionMode } from 'vee-validate';
 
 setInteractionMode('eager');
@@ -59,8 +59,30 @@ extend('alpha_num', {
 
 extend('max', {
     ...max,
-    message: 'The {_field_} must not be greater than {max} characters.'
+    message: 'The {_field_} must not be greater than {length} characters.',
+    params: ['length']
 });
+
+extend('min', {
+    ...min,
+    message: 'The {_field_} must not be shorter than {length} character',
+    params: ['length']
+})
+
+// extend('max_value', {
+//     ...max_value,
+//     message: 'The {_field_} value must not be greater than {max_value}',
+//     params: ['max_value'],
+// })
+
+extend('max_value', {
+    validate(value, { max }) {
+        return value <= max;
+    },
+    params: ['max'],
+    message: 'The {_field_} value must not be greater than {max}',
+  });
+  
 
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
