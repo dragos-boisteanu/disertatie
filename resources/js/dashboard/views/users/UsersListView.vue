@@ -127,15 +127,16 @@
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
     import UsersFilter from '../../components/filter/UsersFilterComponent';
-    
 
     export default {
         async beforeRouteEnter (to, from, next) {
-            if(store.getters['Users/getUsers'].length === 0) {
+            if(store.getters['Users/getUsers'].length === 0 || Object.keys(to.query).length === 0) {
+                store.dispatch('Users/reset');
                 const query = to.query
                 query.page = 1;
     
                 await store.dispatch('Users/fetchUsers', query);
+                
                 next();
             } else {
                 next();
@@ -148,6 +149,8 @@
             } else {
                 this.orderBy = 14;
             }
+
+            this.orderUsers()
         },
 
         computed: {
@@ -194,12 +197,14 @@
                     if(Object.keys(this.$route.query).length > 0) { 
                         this.$router.replace({name:'Users', query: {}});
                     }
-                    
+
                     await this.refreshUsers();
+
                     this.orderBy = 14;
+                    
                     this.openNotification({
                         type:'ok',
-                        message: 'Done',
+                        message: 'Refresh complete',
                         show: true
                     })
                 } catch ( error ) {
@@ -208,14 +213,11 @@
             },
 
             order() {
-                const query = {
-                    orderBy: this.orderBy
-                }
-                this.$router.replace({name:'Users', query: {...query}});
                 this.orderUsers();
             },
 
             orderUsers() {
+
                 this.sortUsersList(this.orderBy);
             },
 

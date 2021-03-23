@@ -336,33 +336,32 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              query = {
-                orderBy: this.$route.query.orderBy || 14
-              };
+              query = {};
               Object.keys(this.filterData).forEach(function (key) {
                 if (_this2.filterData[key].length > 0) {
                   query[key] = _this2.filterData[key];
                 }
               });
+              query['page'] = 1;
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
               });
               this.reset();
-              _context.next = 7;
+              _context.next = 8;
               return this.fetchUsers(query);
 
-            case 7:
+            case 8:
               this.openNotification({
                 type: 'ok',
                 message: 'Done',
                 show: true
               });
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 10:
-              _context.prev = 10;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](0);
               this.openNotification({
                 type: 'err',
@@ -371,12 +370,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               });
               console.log(_context.t0);
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 10]]);
+      }, _callee, this, [[0, 11]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -1526,25 +1525,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0)) {
-                _context.next = 8;
+              if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0 || Object.keys(to.query).length === 0)) {
+                _context.next = 9;
                 break;
               }
 
+              _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/reset');
               query = to.query;
               query.page = 1;
-              _context.next = 5;
+              _context.next = 6;
               return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', query);
 
-            case 5:
+            case 6:
               next();
-              _context.next = 9;
+              _context.next = 10;
               break;
 
-            case 8:
+            case 9:
               next();
 
-            case 9:
+            case 10:
             case "end":
               return _context.stop();
           }
@@ -1558,6 +1558,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     } else {
       this.orderBy = 14;
     }
+
+    this.orderUsers();
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Users', ['getUsers', 'getNextPage'])), {}, {
     showMoreState: function showMoreState() {
@@ -1636,7 +1638,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this2.openNotification({
                   type: 'ok',
-                  message: 'Done',
+                  message: 'Refresh complete',
                   show: true
                 });
 
@@ -1657,13 +1659,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     order: function order() {
-      var query = {
-        orderBy: this.orderBy
-      };
-      this.$router.replace({
-        name: 'Users',
-        query: _objectSpread({}, query)
-      });
       this.orderUsers();
     },
     orderUsers: function orderUsers() {

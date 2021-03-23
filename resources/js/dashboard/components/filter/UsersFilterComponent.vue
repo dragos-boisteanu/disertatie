@@ -191,15 +191,15 @@
 
             callFilter: _debounce( async function() {
                 try {
-                    const query = {
-                        orderBy: this.$route.query.orderBy || 14,
-                    }
+                    const query = {}
 
                     Object.keys(this.filterData).forEach(key => {
                         if(this.filterData[key].length > 0) {
                             query[key] = this.filterData[key];
                         }
                     })
+
+                    query['page'] = 1;
 
                     this.$router.replace({name:'Users', query: {...query}});
                     
