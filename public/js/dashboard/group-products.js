@@ -204,7 +204,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)('Products', ['addProduct', 'testBarcode'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)('Products', ['addProduct', 'getProductByBarcode'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -228,8 +228,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _context.t0 = _context["catch"](0);
 
                 if (_context.t0.response.data.errors) {
-                  console.log(_context.t0.response.data.errors);
-
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
                 }
 
@@ -244,7 +242,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee, null, [[0, 7]]);
       }))();
     },
-    findProduct: function findProduct() {
+    getProduct: function getProduct() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -255,7 +253,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 0:
                 _context2.prev = 0;
                 _context2.next = 3;
-                return _this2.testBarcode(_this2.product.barcode);
+                return _this2.getProductByBarcode(_this2.product.barcode);
 
               case 3:
                 response = _context2.sent;
@@ -571,8 +569,8 @@ var render = function() {
                                             {
                                               name: "model",
                                               rawName: "v-model",
-                                              value: _vm.product.barcode,
-                                              expression: "product.barcode"
+                                              value: _vm.product.getProduct,
+                                              expression: "product.getProduct"
                                             }
                                           ],
                                           staticClass:
@@ -587,7 +585,7 @@ var render = function() {
                                             disabled: _vm.waiting
                                           },
                                           domProps: {
-                                            value: _vm.product.barcode
+                                            value: _vm.product.getProduct
                                           },
                                           on: {
                                             blur: _vm.findProduct,
@@ -597,7 +595,7 @@ var render = function() {
                                               }
                                               _vm.$set(
                                                 _vm.product,
-                                                "barcode",
+                                                "getProduct",
                                                 $event.target.value
                                               )
                                             }

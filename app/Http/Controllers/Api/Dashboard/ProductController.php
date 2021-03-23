@@ -94,7 +94,7 @@ class ProductController extends Controller
         //
     }
 
-    public function checkProductByBarcode($barcode) 
+    public function getProductByBarcode($barcode) 
     {
         $product = Product::where('barcode', $barcode)->with('stock')->first();
 

@@ -1,4 +1,4 @@
-import {downloadProducts, downloadProduct, storeProduct, patchProduct, disableProductm, checkProduct} from '../../api/products.api';
+import {downloadProducts, downloadProduct, storeProduct, patchProduct, disableProductm, downloadProductByBarcode} from '../../api/products.api';
 
 const initialState = () => ({
     products: [],
@@ -22,10 +22,10 @@ const actions = {
         }
     },
 
-    async testBarcode({}, payload) {
+    async getProductByBarcode({}, payload) {
         try {
             console.log(payload)
-            const response = await checkProduct(payload);
+            const response = await downloadProductByBarcode(payload);
             return response;
         } catch ( error ) {
             throw error;

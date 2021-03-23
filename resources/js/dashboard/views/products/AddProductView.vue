@@ -16,7 +16,7 @@
                                 id="barcode"
                                 name="barcode" 
                                 type="text" 
-                                v-model="product.barcode" 
+                                v-model="product.getProduct" 
                                 @blur="findProduct"
                                 :disabled="waiting"   
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
@@ -179,7 +179,7 @@
         },
 
         methods: {
-            ...mapActions('Products', ['addProduct', 'testBarcode']),
+            ...mapActions('Products', ['addProduct', 'getProductByBarcode']),
 
             async submit() {
                 try {
@@ -191,7 +191,6 @@
                 } catch ( error ) {
                    
                     if(error.response.data.errors) {
-                         console.log(error.response.data.errors)
                         this.$refs.observer.setErrors(error.response.data.errors)
                     }  
                     this.waiting = false
@@ -199,9 +198,9 @@
                 }
             },
 
-            async findProduct() {
+            async getProduct() {
                 try {
-                    const response = await this.testBarcode(this.product.barcode);
+                    const response = await this.getProductByBarcode(this.product.barcode);
                     this.product = response.data.data;
                     console.log(response.data.data);
                 } catch (error) {

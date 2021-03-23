@@ -2508,7 +2508,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "storeProduct": () => (/* binding */ storeProduct),
 /* harmony export */   "patchProduct": () => (/* binding */ patchProduct),
 /* harmony export */   "disableProduct": () => (/* binding */ disableProduct),
-/* harmony export */   "checkProduct": () => (/* binding */ checkProduct)
+/* harmony export */   "downloadProductByBarcode": () => (/* binding */ downloadProductByBarcode)
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
@@ -2538,7 +2538,7 @@ var disableProduct = function disableProduct(id) {
   });
 };
 
-var checkProduct = function checkProduct(barcode) {
+var downloadProductByBarcode = function downloadProductByBarcode(barcode) {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT, "/check-barcode/").concat(barcode));
 };
 
@@ -3145,7 +3145,7 @@ var actions = {
       }, _callee, null, [[1, 7]]);
     }))();
   },
-  testBarcode: function testBarcode(_ref2, payload) {
+  getProductByBarcode: function getProductByBarcode(_ref2, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
       var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
@@ -3157,7 +3157,7 @@ var actions = {
               _context2.prev = 1;
               console.log(payload);
               _context2.next = 5;
-              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.checkProduct)(payload);
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProductByBarcode)(payload);
 
             case 5:
               response = _context2.sent;

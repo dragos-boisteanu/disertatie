@@ -17,7 +17,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('users', 'UserController');
     Route::apiResource('roles', 'RoleController');
     Route::apiResource('products', 'ProductController');
-    Route::get('/products/check-barcode/{barcode}', 'ProductController@checkProductByBarcode');
+    Route::get('/products/check-barcode/{barcode}', 'ProductController@getProductByBarcode');
 });
 
 Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {
