@@ -1008,16 +1008,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3916,523 +3906,487 @@ var render = function() {
                               )
                             ]),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              [
-                                _c(
-                                  "label",
+                            _c("ValidationProvider", {
+                              attrs: {
+                                vid: "data.user.first_name",
+                                rules: "required|alpha_spaces|max:255"
+                              },
+                              scopedSlots: _vm._u(
+                                [
                                   {
-                                    staticClass: "text-sm font-semibold",
-                                    attrs: { for: "firstName" }
-                                  },
-                                  [_vm._v("First name")]
-                                ),
-                                _vm._v(" "),
-                                _c("ValidationProvider", {
-                                  attrs: {
-                                    vid: "data.user.first_name",
-                                    rules: "required|alpha_spaces|max:255"
-                                  },
-                                  scopedSlots: _vm._u(
-                                    [
-                                      {
-                                        key: "default",
-                                        fn: function(ref) {
-                                          var errors = ref.errors
-                                          return [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "text-xs text-red-600 font-semibold mb-1"
-                                              },
-                                              [_vm._v(" " + _vm._s(errors[0]))]
-                                            ),
-                                            _vm._v(" "),
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value: _vm.user.first_name,
-                                                  expression: "user.first_name"
-                                                }
-                                              ],
-                                              staticClass:
-                                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                              class: {
-                                                "border-red-600": errors[0]
-                                              },
-                                              attrs: {
-                                                id: "firstName",
-                                                name: "first name",
-                                                type: "text",
-                                                disabled: _vm.waiting
-                                              },
-                                              domProps: {
-                                                value: _vm.user.first_name
-                                              },
-                                              on: {
-                                                input: function($event) {
-                                                  if ($event.target.composing) {
-                                                    return
-                                                  }
-                                                  _vm.$set(
-                                                    _vm.user,
-                                                    "first_name",
-                                                    $event.target.value
-                                                  )
-                                                }
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var errors = ref.errors
+                                      return [
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass:
+                                              "text-sm font-semibold",
+                                            attrs: { for: "firstName" }
+                                          },
+                                          [_vm._v("First name")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs text-red-600 font-semibold mb-1"
+                                          },
+                                          [_vm._v(" " + _vm._s(errors[0]))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.user.first_name,
+                                              expression: "user.first_name"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          class: {
+                                            "border-red-600": errors[0]
+                                          },
+                                          attrs: {
+                                            id: "firstName",
+                                            name: "first name",
+                                            type: "text",
+                                            disabled: _vm.waiting
+                                          },
+                                          domProps: {
+                                            value: _vm.user.first_name
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
                                               }
-                                            })
-                                          ]
-                                        }
-                                      }
-                                    ],
-                                    null,
-                                    true
-                                  )
-                                })
-                              ],
-                              1
-                            ),
+                                              _vm.$set(
+                                                _vm.user,
+                                                "first_name",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            }),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "mt-2" },
-                              [
-                                _c(
-                                  "label",
+                            _c("ValidationProvider", {
+                              staticClass: "mt-2",
+                              attrs: {
+                                vid: "data.user.name",
+                                rules: "required|alpha_spaces|max:255"
+                              },
+                              scopedSlots: _vm._u(
+                                [
                                   {
-                                    staticClass: "text-sm font-semibold",
-                                    attrs: { for: "name" }
-                                  },
-                                  [_vm._v("Name")]
-                                ),
-                                _vm._v(" "),
-                                _c("ValidationProvider", {
-                                  attrs: {
-                                    vid: "data.user.name",
-                                    rules: "required|alpha_spaces|max:255"
-                                  },
-                                  scopedSlots: _vm._u(
-                                    [
-                                      {
-                                        key: "default",
-                                        fn: function(ref) {
-                                          var errors = ref.errors
-                                          return [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "text-xs text-red-600 font-semibold mb-1"
-                                              },
-                                              [_vm._v(" " + _vm._s(errors[0]))]
-                                            ),
-                                            _vm._v(" "),
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value: _vm.user.name,
-                                                  expression: "user.name"
-                                                }
-                                              ],
-                                              staticClass:
-                                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                              class: {
-                                                "border-red-600": errors[0]
-                                              },
-                                              attrs: {
-                                                id: "name",
-                                                type: "text",
-                                                name: "name",
-                                                disabled: _vm.waiting
-                                              },
-                                              domProps: {
-                                                value: _vm.user.name
-                                              },
-                                              on: {
-                                                input: function($event) {
-                                                  if ($event.target.composing) {
-                                                    return
-                                                  }
-                                                  _vm.$set(
-                                                    _vm.user,
-                                                    "name",
-                                                    $event.target.value
-                                                  )
-                                                }
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var errors = ref.errors
+                                      return [
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass:
+                                              "text-sm font-semibold",
+                                            attrs: { for: "name" }
+                                          },
+                                          [_vm._v("Name")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs text-red-600 font-semibold mb-1"
+                                          },
+                                          [_vm._v(" " + _vm._s(errors[0]))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.user.name,
+                                              expression: "user.name"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          class: {
+                                            "border-red-600": errors[0]
+                                          },
+                                          attrs: {
+                                            id: "name",
+                                            type: "text",
+                                            name: "name",
+                                            disabled: _vm.waiting
+                                          },
+                                          domProps: { value: _vm.user.name },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
                                               }
-                                            })
-                                          ]
-                                        }
-                                      }
-                                    ],
-                                    null,
-                                    true
-                                  )
-                                })
-                              ],
-                              1
-                            ),
+                                              _vm.$set(
+                                                _vm.user,
+                                                "name",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            }),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "mt-2" },
-                              [
-                                _c(
-                                  "label",
+                            _c("ValidationProvider", {
+                              staticClass: "mt-2",
+                              attrs: {
+                                vid: "data.user.birthdate",
+                                rules: "required"
+                              },
+                              scopedSlots: _vm._u(
+                                [
                                   {
-                                    staticClass: "text-sm font-semibold",
-                                    attrs: { for: "birthdate" }
-                                  },
-                                  [_vm._v("Birthdate")]
-                                ),
-                                _vm._v(" "),
-                                _c("ValidationProvider", {
-                                  attrs: {
-                                    vid: "data.user.birthdate",
-                                    rules: "required"
-                                  },
-                                  scopedSlots: _vm._u(
-                                    [
-                                      {
-                                        key: "default",
-                                        fn: function(ref) {
-                                          var errors = ref.errors
-                                          return [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "text-xs text-red-600 font-semibold mb-1"
-                                              },
-                                              [_vm._v(" " + _vm._s(errors[0]))]
-                                            ),
-                                            _vm._v(" "),
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value: _vm.user.birthdate,
-                                                  expression: "user.birthdate"
-                                                }
-                                              ],
-                                              staticClass:
-                                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                              class: {
-                                                "border-red-600": errors[0]
-                                              },
-                                              attrs: {
-                                                id: "birthdate",
-                                                type: "date",
-                                                name: "birthdate",
-                                                disabled: _vm.waiting
-                                              },
-                                              domProps: {
-                                                value: _vm.user.birthdate
-                                              },
-                                              on: {
-                                                input: function($event) {
-                                                  if ($event.target.composing) {
-                                                    return
-                                                  }
-                                                  _vm.$set(
-                                                    _vm.user,
-                                                    "birthdate",
-                                                    $event.target.value
-                                                  )
-                                                }
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var errors = ref.errors
+                                      return [
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass:
+                                              "text-sm font-semibold",
+                                            attrs: { for: "birthdate" }
+                                          },
+                                          [_vm._v("Birthdate")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs text-red-600 font-semibold mb-1"
+                                          },
+                                          [_vm._v(" " + _vm._s(errors[0]))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.user.birthdate,
+                                              expression: "user.birthdate"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          class: {
+                                            "border-red-600": errors[0]
+                                          },
+                                          attrs: {
+                                            id: "birthdate",
+                                            type: "date",
+                                            name: "birthdate",
+                                            disabled: _vm.waiting
+                                          },
+                                          domProps: {
+                                            value: _vm.user.birthdate
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
                                               }
-                                            })
-                                          ]
-                                        }
-                                      }
-                                    ],
-                                    null,
-                                    true
-                                  )
-                                })
-                              ],
-                              1
-                            ),
+                                              _vm.$set(
+                                                _vm.user,
+                                                "birthdate",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            }),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "mt-2" },
-                              [
-                                _c(
-                                  "label",
+                            _c("ValidationProvider", {
+                              staticClass: "mt-2",
+                              attrs: {
+                                vid: "data.user.email",
+                                rules: "required|email|max:255"
+                              },
+                              scopedSlots: _vm._u(
+                                [
                                   {
-                                    staticClass: "text-sm font-semibold",
-                                    attrs: { for: "email" }
-                                  },
-                                  [_vm._v("Email")]
-                                ),
-                                _vm._v(" "),
-                                _c("ValidationProvider", {
-                                  attrs: {
-                                    vid: "data.user.email",
-                                    rules: "required|email|max:255"
-                                  },
-                                  scopedSlots: _vm._u(
-                                    [
-                                      {
-                                        key: "default",
-                                        fn: function(ref) {
-                                          var errors = ref.errors
-                                          return [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "text-xs text-red-600 font-semibold mb-1"
-                                              },
-                                              [_vm._v(" " + _vm._s(errors[0]))]
-                                            ),
-                                            _vm._v(" "),
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value: _vm.user.email,
-                                                  expression: "user.email"
-                                                }
-                                              ],
-                                              staticClass:
-                                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                              class: {
-                                                "border-red-600": errors[0]
-                                              },
-                                              attrs: {
-                                                id: "email",
-                                                type: "email",
-                                                name: "email",
-                                                disabled: _vm.waiting
-                                              },
-                                              domProps: {
-                                                value: _vm.user.email
-                                              },
-                                              on: {
-                                                input: function($event) {
-                                                  if ($event.target.composing) {
-                                                    return
-                                                  }
-                                                  _vm.$set(
-                                                    _vm.user,
-                                                    "email",
-                                                    $event.target.value
-                                                  )
-                                                }
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var errors = ref.errors
+                                      return [
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass:
+                                              "text-sm font-semibold",
+                                            attrs: { for: "email" }
+                                          },
+                                          [_vm._v("Email")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs text-red-600 font-semibold mb-1"
+                                          },
+                                          [_vm._v(" " + _vm._s(errors[0]))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.user.email,
+                                              expression: "user.email"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          class: {
+                                            "border-red-600": errors[0]
+                                          },
+                                          attrs: {
+                                            id: "email",
+                                            type: "email",
+                                            name: "email",
+                                            disabled: _vm.waiting
+                                          },
+                                          domProps: { value: _vm.user.email },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
                                               }
-                                            })
-                                          ]
-                                        }
-                                      }
-                                    ],
-                                    null,
-                                    true
-                                  )
-                                })
-                              ],
-                              1
-                            ),
+                                              _vm.$set(
+                                                _vm.user,
+                                                "email",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            }),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "mt-2" },
-                              [
-                                _c(
-                                  "label",
+                            _c("ValidationProvider", {
+                              staticClass: "mt-2",
+                              attrs: {
+                                vid: "data.user.phone_number",
+                                rules: "required"
+                              },
+                              scopedSlots: _vm._u(
+                                [
                                   {
-                                    staticClass: "text-sm font-semibold",
-                                    attrs: { for: "phone_number" }
-                                  },
-                                  [_vm._v("Phone number")]
-                                ),
-                                _vm._v(" "),
-                                _c("ValidationProvider", {
-                                  attrs: {
-                                    vid: "data.user.phone_number",
-                                    rules: "required"
-                                  },
-                                  scopedSlots: _vm._u(
-                                    [
-                                      {
-                                        key: "default",
-                                        fn: function(ref) {
-                                          var errors = ref.errors
-                                          return [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "text-xs text-red-600 font-semibold mb-1"
-                                              },
-                                              [_vm._v(" " + _vm._s(errors[0]))]
-                                            ),
-                                            _vm._v(" "),
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value: _vm.user.phone_number,
-                                                  expression:
-                                                    "user.phone_number"
-                                                }
-                                              ],
-                                              staticClass:
-                                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                              class: {
-                                                "border-red-600": errors[0]
-                                              },
-                                              attrs: {
-                                                id: "phoneNumber",
-                                                type: "text",
-                                                name: "phone number",
-                                                disabled: _vm.waiting
-                                              },
-                                              domProps: {
-                                                value: _vm.user.phone_number
-                                              },
-                                              on: {
-                                                input: function($event) {
-                                                  if ($event.target.composing) {
-                                                    return
-                                                  }
-                                                  _vm.$set(
-                                                    _vm.user,
-                                                    "phone_number",
-                                                    $event.target.value
-                                                  )
-                                                }
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var errors = ref.errors
+                                      return [
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass:
+                                              "text-sm font-semibold",
+                                            attrs: { for: "phone_number" }
+                                          },
+                                          [_vm._v("Phone number")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs text-red-600 font-semibold mb-1"
+                                          },
+                                          [_vm._v(" " + _vm._s(errors[0]))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.user.phone_number,
+                                              expression: "user.phone_number"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          class: {
+                                            "border-red-600": errors[0]
+                                          },
+                                          attrs: {
+                                            id: "phoneNumber",
+                                            type: "text",
+                                            name: "phone number",
+                                            disabled: _vm.waiting
+                                          },
+                                          domProps: {
+                                            value: _vm.user.phone_number
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
                                               }
-                                            })
-                                          ]
-                                        }
-                                      }
-                                    ],
-                                    null,
-                                    true
-                                  )
-                                })
-                              ],
-                              1
-                            ),
+                                              _vm.$set(
+                                                _vm.user,
+                                                "phone_number",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            }),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "mt-2" },
-                              [
-                                _c(
-                                  "label",
+                            _c("ValidationProvider", {
+                              staticClass: "mt-2",
+                              attrs: {
+                                vid: "data.user.role",
+                                rules: "required|integer"
+                              },
+                              scopedSlots: _vm._u(
+                                [
                                   {
-                                    staticClass: "text-sm font-semibold",
-                                    attrs: { for: "role" }
-                                  },
-                                  [_vm._v("Role")]
-                                ),
-                                _vm._v(" "),
-                                _c("ValidationProvider", {
-                                  attrs: {
-                                    vid: "data.user.role",
-                                    rules: "required|integer"
-                                  },
-                                  scopedSlots: _vm._u(
-                                    [
-                                      {
-                                        key: "default",
-                                        fn: function(ref) {
-                                          var errors = ref.errors
-                                          return [
-                                            _c(
-                                              "div",
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var errors = ref.errors
+                                      return [
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass:
+                                              "text-sm font-semibold",
+                                            attrs: { for: "role" }
+                                          },
+                                          [_vm._v("Role")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs text-red-600 font-semibold mb-1"
+                                          },
+                                          [_vm._v(" " + _vm._s(errors[0]))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "select",
+                                          {
+                                            directives: [
                                               {
-                                                staticClass:
-                                                  "text-xs text-red-600 font-semibold mb-1"
-                                              },
-                                              [_vm._v(" " + _vm._s(errors[0]))]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "select",
-                                              {
-                                                directives: [
-                                                  {
-                                                    name: "model",
-                                                    rawName: "v-model",
-                                                    value: _vm.user.role_id,
-                                                    expression: "user.role_id"
-                                                  }
-                                                ],
-                                                staticClass:
-                                                  "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500 capitalize",
-                                                class: {
-                                                  "border-red-600": errors[0]
-                                                },
-                                                attrs: {
-                                                  id: "role",
-                                                  name: "role",
-                                                  disabled: _vm.waiting
-                                                },
-                                                on: {
-                                                  change: function($event) {
-                                                    var $$selectedVal = Array.prototype.filter
-                                                      .call(
-                                                        $event.target.options,
-                                                        function(o) {
-                                                          return o.selected
-                                                        }
-                                                      )
-                                                      .map(function(o) {
-                                                        var val =
-                                                          "_value" in o
-                                                            ? o._value
-                                                            : o.value
-                                                        return val
-                                                      })
-                                                    _vm.$set(
-                                                      _vm.user,
-                                                      "role_id",
-                                                      $event.target.multiple
-                                                        ? $$selectedVal
-                                                        : $$selectedVal[0]
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              _vm._l(_vm.getRoles, function(
-                                                role
-                                              ) {
-                                                return _c(
-                                                  "option",
-                                                  {
-                                                    key: role.id,
-                                                    domProps: { value: role.id }
-                                                  },
-                                                  [_vm._v(_vm._s(role.name))]
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value: _vm.user.role_id,
+                                                expression: "user.role_id"
+                                              }
+                                            ],
+                                            staticClass:
+                                              "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500 capitalize",
+                                            class: {
+                                              "border-red-600": errors[0]
+                                            },
+                                            attrs: {
+                                              id: "role",
+                                              name: "role",
+                                              disabled: _vm.waiting
+                                            },
+                                            on: {
+                                              change: function($event) {
+                                                var $$selectedVal = Array.prototype.filter
+                                                  .call(
+                                                    $event.target.options,
+                                                    function(o) {
+                                                      return o.selected
+                                                    }
+                                                  )
+                                                  .map(function(o) {
+                                                    var val =
+                                                      "_value" in o
+                                                        ? o._value
+                                                        : o.value
+                                                    return val
+                                                  })
+                                                _vm.$set(
+                                                  _vm.user,
+                                                  "role_id",
+                                                  $event.target.multiple
+                                                    ? $$selectedVal
+                                                    : $$selectedVal[0]
                                                 )
-                                              }),
-                                              0
+                                              }
+                                            }
+                                          },
+                                          _vm._l(_vm.getRoles, function(role) {
+                                            return _c(
+                                              "option",
+                                              {
+                                                key: role.id,
+                                                domProps: { value: role.id }
+                                              },
+                                              [_vm._v(_vm._s(role.name))]
                                             )
-                                          ]
-                                        }
-                                      }
-                                    ],
-                                    null,
-                                    true
-                                  )
-                                })
-                              ],
-                              1
-                            )
-                          ]
+                                          }),
+                                          0
+                                        )
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            })
+                          ],
+                          1
                         ),
                         _vm._v(" "),
                         _c(
@@ -4452,7 +4406,10 @@ var render = function() {
                                       expression: "addressState"
                                     }
                                   ],
-                                  attrs: { type: "checkbox" },
+                                  attrs: {
+                                    id: "addressToggle",
+                                    type: "checkbox"
+                                  },
                                   domProps: {
                                     checked: Array.isArray(_vm.addressState)
                                       ? _vm._i(_vm.addressState, null) > -1
@@ -4484,8 +4441,11 @@ var render = function() {
                                     }
                                   }
                                 }),
-                                _vm._v(
-                                  " Address (optional)\n                    "
+                                _vm._v(" "),
+                                _c(
+                                  "label",
+                                  { attrs: { for: "addressToggle" } },
+                                  [_vm._v("Address (optional)")]
                                 )
                               ]
                             ),

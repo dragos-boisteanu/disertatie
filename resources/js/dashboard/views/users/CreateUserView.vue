@@ -14,9 +14,8 @@
                         <div>
                             IMAGE UPLOAD
                         </div>
-                        <div>
+                         <ValidationProvider vid="data.user.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                             <label for="firstName" class="text-sm font-semibold">First name</label>
-                            <ValidationProvider vid="data.user.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="firstName"
@@ -27,11 +26,9 @@
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': errors[0]}"
                                 />
-                            </ValidationProvider>
-                        </div>
-                        <div class="mt-2">
+                        </ValidationProvider>
+                        <ValidationProvider vid="data.user.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }" class="mt-2">
                             <label for="name" class="text-sm font-semibold">Name</label>
-                            <ValidationProvider vid="data.user.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="name" 
@@ -42,11 +39,9 @@
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': errors[0]}"
                                 />
-                            </ValidationProvider>
-                        </div>
-                        <div class="mt-2">
+                        </ValidationProvider>
+                        <ValidationProvider vid="data.user.birthdate" rules="required" v-slot="{ errors }" class="mt-2">
                             <label for="birthdate" class="text-sm font-semibold">Birthdate</label>
-                            <ValidationProvider vid="data.user.birthdate" rules="required" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="birthdate" 
@@ -57,11 +52,10 @@
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"   
                                 />
-                            </ValidationProvider>
-                        </div>
-                        <div class="mt-2">
+                        </ValidationProvider>
+                        <ValidationProvider vid="data.user.email" rules="required|email|max:255" v-slot="{ errors }" class="mt-2">
                             <label for="email" class="text-sm font-semibold">Email</label>
-                            <ValidationProvider vid="data.user.email" rules="required|email|max:255" v-slot="{ errors }">
+                            
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="email" 
@@ -72,11 +66,9 @@
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"   
                                 />
-                            </ValidationProvider>
-                        </div>
-                        <div class="mt-2">
-                            <label for="phone_number" class="text-sm font-semibold">Phone number</label>
-                            <ValidationProvider  vid="data.user.phone_number" rules="required" v-slot="{ errors }">
+                        </ValidationProvider>
+                        <ValidationProvider  vid="data.user.phone_number" rules="required" v-slot="{ errors }" class="mt-2">
+                                <label for="phone_number" class="text-sm font-semibold">Phone number</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="phoneNumber" 
@@ -87,11 +79,9 @@
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                                     :class="{'border-red-600': errors[0]}"
                                 />
-                            </ValidationProvider>
-                        </div>
-                        <div class="mt-2">
+                        </ValidationProvider>
+                        <ValidationProvider vid="data.user.role" rules="required|integer" v-slot="{ errors }" class="mt-2">
                             <label for="role" class="text-sm font-semibold">Role</label>
-                            <ValidationProvider vid="data.user.role" rules="required|integer" v-slot="{ errors }">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="role"
@@ -103,16 +93,18 @@
                                 >
                                     <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
                                 </select>
-                            </ValidationProvider>
-                        </div>
+                        </ValidationProvider>
                     </div>
+
+
+
                     <div class="mt-5 pb-5 lg:flex-auto lg:mt-0">
                         <h2 class="mb-5 text-xl font-semibold">
-                            <input type="checkbox" v-model="addressState" @click="toggleAddressState"> Address (optional)
+                            <input id="addressToggle" type="checkbox" v-model="addressState" @click="toggleAddressState"> <label for="addressToggle">Address (optional)</label>
                         </h2>
                         <div class="mt-2">
                             <label for="addressFirstName" class="text-sm font-semibold">First name</label>
-                            <ValidationProvider vid="data.address.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }" v-if="addressState">
+                            <ValidationProvider vid="data.address.first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }" v-if="addressState" >
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="addressFirstName" 
@@ -139,7 +131,7 @@
                                 />
                             </ValidationProvider>
                         </div>
-                        <div class="mt-2">
+                        <div class="mt-2">     
                             <label for="addressName" class="text-sm font-semibold">Name</label>
                             <ValidationProvider vid="data.address.name" rules="required|alpha_spaces|max:255" v-slot="{ errors }" v-if="addressState">
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
@@ -168,7 +160,7 @@
                         </div>
                         <div class="mt-2">
                             <label for="addressPhoneNumber" class="text-sm font-semibold">Phone number</label>
-                            <ValidationProvider vid="data.address.phone_number" rules="required|max:255" v-slot="{ errors }" v-if="addressState">
+                            <ValidationProvider vid="data.address.phone_number" rules="required|max:255" v-slot="{ errors }" v-if="addressState" >
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="addressPhoneNumber" 
@@ -195,7 +187,7 @@
                         </div>
                         <div class="mt-2">
                             <label for="addressCounty" class="text-sm font-semibold">County</label>
-                            <ValidationProvider vid="data.address.county_id" rules="required|integer" v-slot="{ errors }" v-if="addressState">
+                            <ValidationProvider vid="data.address.county_id" rules="required|integer" v-slot="{ errors }" v-if="addressState">    
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="addressCounty"
@@ -225,8 +217,7 @@
                                     <option v-for="county in getCounties" :key="county.id" :value="county.id"> {{county.name}} </option>
                                 </select>
                             </ValidationProvider>
-                        </div>
-
+                         </div>
                         <div class="mt-2">
                             <label for="addressCity" class="text-sm font-semibold">City</label>
                             <ValidationProvider vid="data.address.city_id" rules="required|integer" v-slot="{ errors }" v-if="addressState">
@@ -258,7 +249,6 @@
                                 </select>
                             </ValidationProvider>
                         </div>
-
                         <div class="mt-2">
                             <label for="addressAddress" class="text-sm font-semibold">Address</label>
                             <ValidationProvider vid="data.address.address" rules="required|alpha_spaces|max:255" v-slot="{ errors }" v-if="addressState">
