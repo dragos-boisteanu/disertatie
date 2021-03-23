@@ -12,6 +12,7 @@
             <NavigationLink name="CreateUser"/>
             <NavigationLink name="Orders"/>
             <NavigationLink name="Products"/>
+             <NavigationLink name="AddProduct"/>
             <NavigationLink name="Stocks"/>
             <NavigationLink name="Locations"/>
         </ul>

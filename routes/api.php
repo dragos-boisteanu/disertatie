@@ -13,12 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefix'=>'dashboard'], function() {   
     Route::apiResource('users', 'UserController');
     Route::apiResource('roles', 'RoleController');
-    // Route::get('/users', 'UserController@index');
-    // Route::get('/users/{id}', 'UserController@show');
+    Route::apiResource('products', 'ProductController');
+    Route::get('/products/check-barcode/{barcode}', 'ProductController@checkProductByBarcode');
 });
 
 Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {

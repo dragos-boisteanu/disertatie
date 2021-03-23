@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->integer('weight');
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('category_id')->constrained();
-            $table->foreignId('stock_id')->constrained()->nullable()->onDelete('cascade');
+            // $table->foreignId('stock_id')->constrained()->nullable()->onDelete('cascade');
             $table->softDeletes();
         });
     }

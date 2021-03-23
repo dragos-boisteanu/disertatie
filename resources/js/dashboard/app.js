@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 
 import { ValidationProvider, extend } from 'vee-validate';
 import {ValidationObserver } from 'vee-validate'
-import { required, alpha_spaces,  max, email, integer } from 'vee-validate/dist/rules';
+import { required, alpha_spaces,  max, email, integer, double, digits, alpha_num } from 'vee-validate/dist/rules';
 import { setInteractionMode } from 'vee-validate';
 
 setInteractionMode('eager');
@@ -31,6 +31,16 @@ extend('integer', {
     message: 'The {_field_} must be an integer'
 });
 
+extend('double', {
+  ...double,
+  message: 'The {_field_} must be an double with 2 decimals separated by comma'
+});
+
+extend('digits', {
+  ...digits,
+  message: 'The {_field_} must be an integer with 2 digits'
+})
+
 extend('email', {
     ...email,
     message: 'The {_field_} must be a valid email address.'
@@ -40,6 +50,12 @@ extend('alpha_spaces', {
     ...alpha_spaces,
     message: 'The {_field_} must only contain letters.'
 });
+
+extend('alpha_num', {
+  ...alpha_num,
+  message: 'The {_field_} must only contain letters and numbers'
+});
+
 
 extend('max', {
     ...max,

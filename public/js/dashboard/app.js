@@ -2323,6 +2323,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2493,6 +2494,58 @@ var httpClient = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/api/products.api.js":
+/*!****************************************************!*\
+  !*** ./resources/js/dashboard/api/products.api.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "downloadProducts": () => (/* binding */ downloadProducts),
+/* harmony export */   "downloadProduct": () => (/* binding */ downloadProduct),
+/* harmony export */   "storeProduct": () => (/* binding */ storeProduct),
+/* harmony export */   "patchProduct": () => (/* binding */ patchProduct),
+/* harmony export */   "disableProduct": () => (/* binding */ disableProduct),
+/* harmony export */   "checkProduct": () => (/* binding */ checkProduct)
+/* harmony export */ });
+/* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
+
+var END_POINT = '/products';
+
+var downloadProducts = function downloadProducts() {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT));
+};
+
+var downloadProduct = function downloadProduct(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT, "/").concat(id));
+};
+
+var storeProduct = function storeProduct(data) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(END_POINT), data);
+};
+
+var patchProduct = function patchProduct(data) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(END_POINT, "/").concat(data.id), {
+    product: product
+  });
+};
+
+var disableProduct = function disableProduct(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(END_POINT, "/disable"), {
+    data: id
+  });
+};
+
+var checkProduct = function checkProduct(barcode) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT, "/check-barcode/").concat(barcode));
+};
+
+
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/api/roles.api.js":
 /*!*************************************************!*\
   !*** ./resources/js/dashboard/api/roles.api.js ***!
@@ -2619,11 +2672,20 @@ __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 (0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('integer', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.integer), {}, {
   message: 'The {_field_} must be an integer'
 }));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('double', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.double), {}, {
+  message: 'The {_field_} must be an double with 2 decimals separated by comma'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('digits', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.digits), {}, {
+  message: 'The {_field_} must be an integer with 2 digits'
+}));
 (0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('email', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.email), {}, {
   message: 'The {_field_} must be a valid email address.'
 }));
 (0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('alpha_spaces', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.alpha_spaces), {}, {
   message: 'The {_field_} must only contain letters.'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('alpha_num', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.alpha_num), {}, {
+  message: 'The {_field_} must only contain letters and numbers'
 }));
 (0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('max', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.max), {}, {
   message: 'The {_field_} must not be greater than {max} characters.'
@@ -2677,7 +2739,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var UsersViewList = function UsersViewList() {
+var UsersListView = function UsersListView() {
   return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/UsersListView.vue */ "./resources/js/dashboard/views/users/UsersListView.vue"));
 };
 
@@ -2687,6 +2749,14 @@ var UserView = function UserView() {
 
 var CreateUserView = function CreateUserView() {
   return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/CreateUserView.vue */ "./resources/js/dashboard/views/users/CreateUserView.vue"));
+};
+
+var ProductsListView = function ProductsListView() {
+  return __webpack_require__.e(/*! import() | group-products */ "group-products").then(__webpack_require__.bind(__webpack_require__, /*! ../views/products/ProductsListView.vue */ "./resources/js/dashboard/views/products/ProductsListView.vue"));
+};
+
+var AddProductView = function AddProductView() {
+  return __webpack_require__.e(/*! import() | group-products */ "group-products").then(__webpack_require__.bind(__webpack_require__, /*! ../views/products/AddProductView.vue */ "./resources/js/dashboard/views/products/AddProductView.vue"));
 };
 
 var Home = function Home() {
@@ -2704,7 +2774,7 @@ var routes = [{
 }, {
   path: "".concat(baseUrl, "/users"),
   name: 'Users',
-  component: UsersViewList,
+  component: UsersListView,
   meta: {
     breadcrumb: {
       label: 'Users',
@@ -2729,6 +2799,26 @@ var routes = [{
     breadcrumb: {
       label: 'Profile',
       parent: 'Users'
+    }
+  }
+}, {
+  path: "".concat(baseUrl, "/products"),
+  name: 'Products',
+  component: ProductsListView,
+  meta: {
+    breadcrumb: {
+      label: 'Product lists',
+      parent: 'Dashboard'
+    }
+  }
+}, {
+  path: "".concat(baseUrl, "/products/create"),
+  name: 'AddProduct',
+  component: AddProductView,
+  meta: {
+    breadcrumb: {
+      label: 'Add new product',
+      parent: 'Products'
     }
   }
 }];
@@ -2974,6 +3064,120 @@ var mutations = {
     state.notification.show = false, state.notification.type = '', state.notification.message = '';
   }
 };
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/store/modules/products.store.js":
+/*!****************************************************************!*\
+  !*** ./resources/js/dashboard/store/modules/products.store.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _api_products_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/products.api */ "./resources/js/dashboard/api/products.api.js");
+function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+var initialState = function initialState() {
+  return {
+    products: [],
+    nextPage: 1
+  };
+};
+
+var state = initialState();
+var getters = {
+  getProducts: function getProducts(state) {
+    return state.products;
+  },
+  getNextPage: function getNextPage(state) {
+    return state.nextPage;
+  }
+};
+var actions = {
+  addProduct: function addProduct(_ref, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref.commit;
+              _context.prev = 1;
+              _context.next = 4;
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.storeProduct)(payload);
+
+            case 4:
+              response = _context.sent;
+              _context.next = 10;
+              break;
+
+            case 7:
+              _context.prev = 7;
+              _context.t0 = _context["catch"](1);
+              throw _context.t0;
+
+            case 10:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[1, 7]]);
+    }))();
+  },
+  testBarcode: function testBarcode(_ref2, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _objectDestructuringEmpty(_ref2);
+
+              _context2.prev = 1;
+              console.log(payload);
+              _context2.next = 5;
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.checkProduct)(payload);
+
+            case 5:
+              response = _context2.sent;
+              return _context2.abrupt("return", response);
+
+            case 9:
+              _context2.prev = 9;
+              _context2.t0 = _context2["catch"](1);
+              throw _context2.t0;
+
+            case 12:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 9]]);
+    }))();
+  }
+};
+var mutations = {};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   namespaced: true,
   state: state,
@@ -31212,6 +31416,8 @@ var render = function() {
           _vm._v(" "),
           _c("NavigationLink", { attrs: { name: "Products" } }),
           _vm._v(" "),
+          _c("NavigationLink", { attrs: { name: "AddProduct" } }),
+          _vm._v(" "),
           _c("NavigationLink", { attrs: { name: "Stocks" } }),
           _vm._v(" "),
           _c("NavigationLink", { attrs: { name: "Locations" } })
@@ -48072,6 +48278,7 @@ var index = {
 var map = {
 	"./counties.store.js": "./resources/js/dashboard/store/modules/counties.store.js",
 	"./notification.store.js": "./resources/js/dashboard/store/modules/notification.store.js",
+	"./products.store.js": "./resources/js/dashboard/store/modules/products.store.js",
 	"./roles.store.js": "./resources/js/dashboard/store/modules/roles.store.js",
 	"./users.store.js": "./resources/js/dashboard/store/modules/users.store.js"
 };
@@ -48175,7 +48382,7 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"group-users":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
+/******/ 			if ({"group-users":1,"group-products":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
