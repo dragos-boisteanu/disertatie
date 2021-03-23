@@ -13,7 +13,10 @@ const getters = {
 }
 
 const actions = {
-
+    reset({ commit }) {
+        commit('RESET');
+    },
+    
     async addProduct({commit}, payload) {
         try {
             const response = await storeProduct(payload);
@@ -34,7 +37,12 @@ const actions = {
 }
 
 const mutations = {
-
+    RESET(state) {
+        const newState = initialState();
+        Object.keys(newState).forEach(key => {
+            state[key] = newState[key]
+        })
+    },
 }
 
 export default {

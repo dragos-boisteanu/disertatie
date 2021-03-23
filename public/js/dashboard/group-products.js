@@ -184,11 +184,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Units', ['getUnits'])),
   data: function data() {
     return {
       waiting: false,
@@ -200,7 +199,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         vat: '',
         weight: '',
         unit_id: '',
-        quantity: ''
+        quantity: '',
+        category_id: ''
       }
     };
   },
@@ -252,13 +252,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                _context2.next = 3;
+
+                if (!(_this2.barcode.lenth > 0)) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                _context2.next = 4;
                 return _this2.getProductByBarcode(_this2.product.barcode);
 
-              case 3:
+              case 4:
                 response = _context2.sent;
                 _this2.product = response.data.data;
-                console.log(response.data.data);
+
+              case 6:
                 _context2.next = 11;
                 break;
 
@@ -588,7 +595,7 @@ var render = function() {
                                             value: _vm.product.getProduct
                                           },
                                           on: {
-                                            blur: _vm.findProduct,
+                                            blur: _vm.getProduct,
                                             input: function($event) {
                                               if ($event.target.composing) {
                                                 return
@@ -777,120 +784,115 @@ var render = function() {
                           1
                         ),
                         _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "w-full mt-2" },
-                          [
-                            _c("ValidationProvider", {
-                              attrs: {
-                                vid: "category_id",
-                                rules: "required|integer"
-                              },
-                              scopedSlots: _vm._u(
-                                [
-                                  {
-                                    key: "default",
-                                    fn: function(ref) {
-                                      var errors = ref.errors
-                                      return [
-                                        _c(
-                                          "label",
+                        _c("ValidationProvider", {
+                          staticClass: "w-full mt-2",
+                          attrs: {
+                            vid: "category_id",
+                            rules: "required|integer"
+                          },
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "default",
+                                fn: function(ref) {
+                                  var errors = ref.errors
+                                  return [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "text-sm font-semibold",
+                                        attrs: { for: "name" }
+                                      },
+                                      [_vm._v("Category")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "text-xs text-red-600 font-semibold mb-1"
+                                      },
+                                      [_vm._v(" " + _vm._s(errors[0]))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "select",
+                                      {
+                                        directives: [
                                           {
-                                            staticClass:
-                                              "text-sm font-semibold",
-                                            attrs: { for: "name" }
-                                          },
-                                          [_vm._v("Category")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass:
-                                              "text-xs text-red-600 font-semibold mb-1"
-                                          },
-                                          [_vm._v(" " + _vm._s(errors[0]))]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "select",
-                                          {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: _vm.product.category_id,
-                                                expression:
-                                                  "product.category_id"
-                                              }
-                                            ],
-                                            staticClass:
-                                              "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                            class: {
-                                              "border-red-600": errors[0]
-                                            },
-                                            attrs: {
-                                              id: "unit_id",
-                                              name: "category",
-                                              type: "text",
-                                              disabled: _vm.waiting
-                                            },
-                                            on: {
-                                              change: function($event) {
-                                                var $$selectedVal = Array.prototype.filter
-                                                  .call(
-                                                    $event.target.options,
-                                                    function(o) {
-                                                      return o.selected
-                                                    }
-                                                  )
-                                                  .map(function(o) {
-                                                    var val =
-                                                      "_value" in o
-                                                        ? o._value
-                                                        : o.value
-                                                    return val
-                                                  })
-                                                _vm.$set(
-                                                  _vm.product,
-                                                  "category_id",
-                                                  $event.target.multiple
-                                                    ? $$selectedVal
-                                                    : $$selectedVal[0]
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c(
-                                              "option",
-                                              {
-                                                attrs: {
-                                                  value: "",
-                                                  disabled: ""
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.product.category_id,
+                                            expression: "product.category_id"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                        class: { "border-red-600": errors[0] },
+                                        attrs: {
+                                          id: "unit_id",
+                                          name: "category",
+                                          type: "text",
+                                          disabled: _vm.waiting
+                                        },
+                                        on: {
+                                          change: function($event) {
+                                            var $$selectedVal = Array.prototype.filter
+                                              .call(
+                                                $event.target.options,
+                                                function(o) {
+                                                  return o.selected
                                                 }
-                                              },
-                                              [_vm._v("Select category")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "1" } },
-                                              [_vm._v("cat1")]
+                                              )
+                                              .map(function(o) {
+                                                var val =
+                                                  "_value" in o
+                                                    ? o._value
+                                                    : o.value
+                                                return val
+                                              })
+                                            _vm.$set(
+                                              _vm.product,
+                                              "category_id",
+                                              $event.target.multiple
+                                                ? $$selectedVal
+                                                : $$selectedVal[0]
                                             )
-                                          ]
-                                        )
-                                      ]
-                                    }
-                                  }
-                                ],
-                                null,
-                                true
-                              )
-                            })
-                          ],
-                          1
-                        ),
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "option",
+                                          {
+                                            attrs: { value: "", disabled: "" }
+                                          },
+                                          [_vm._v("Select category")]
+                                        ),
+                                        _vm._v(" "),
+                                        _vm._l(_vm.getCategories, function(
+                                          category
+                                        ) {
+                                          return _c(
+                                            "option",
+                                            {
+                                              key: category.id,
+                                              domProps: { value: category.id }
+                                            },
+                                            [_vm._v(_vm._s(category.name))]
+                                          )
+                                        })
+                                      ],
+                                      2
+                                    )
+                                  ]
+                                }
+                              }
+                            ],
+                            null,
+                            true
+                          )
+                        }),
                         _vm._v(" "),
                         _c(
                           "div",
@@ -1231,12 +1233,27 @@ var render = function() {
                                               [_vm._v("Select unit")]
                                             ),
                                             _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "1" } },
-                                              [_vm._v("grams")]
-                                            )
-                                          ]
+                                            _vm._l(_vm.getUnits, function(
+                                              unit
+                                            ) {
+                                              return _c(
+                                                "option",
+                                                {
+                                                  key: unit.id,
+                                                  domProps: { value: unit.id }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(unit.name) +
+                                                      " (" +
+                                                      _vm._s(unit.description) +
+                                                      ")"
+                                                  )
+                                                ]
+                                              )
+                                            })
+                                          ],
+                                          2
                                         )
                                       ]
                                     }
@@ -1249,7 +1266,8 @@ var render = function() {
                           ],
                           1
                         )
-                      ]
+                      ],
+                      1
                     ),
                     _vm._v(" "),
                     _c("div", { staticClass: "mt-3 flex md:justify-start" }, [

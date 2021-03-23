@@ -1,28 +1,26 @@
-import { downloadRoles } from '../../api/roles.api';
+import { downloadUnits, patchUnit } from '../../api/unit.api';
 
 const initialState = () => ({
-    roles: []
+    units: [],
 });
 
 const state = initialState();
 
 const getters = {
-    getRoles(state) {
-        return state.roles;
-    },
+    getUnits: (state) => state.units
 }
 
 const actions = {
     reset({ commit }) {
         commit('RESET');
     },
-
-    async fetchRoles({commit}) {
+    
+    async fetchUnits({commit}) {
         try {
-            const response = await downloadRoles();
-            commit('SET_ROLES', response.data.data.roles);
+            const response = await downloadUnits();
+            commit('SET_UNITS', response.data);
         } catch ( error ) {
-            throw error;
+            throw error
         }
     }
 }
@@ -34,9 +32,9 @@ const mutations = {
             state[key] = newState[key]
         })
     },
-    
-    SET_ROLES(state, roles) {
-        state.roles = roles
+
+    SET_UNITS(state, payload) {
+        state.units = payload;
     }
 }
 
@@ -45,6 +43,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
-
+    mutations
 }

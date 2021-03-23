@@ -39,6 +39,15 @@
                 if(this.getCounties.length === 0) {
                     await this.fetchCounties();
                 }
+
+                if(this.getCategories.length === 0) {
+                    await this.fetchCategories();
+                }
+
+                if(this.getUnits.length === 0) {
+                    await this.fetchUnits();
+                }
+
             } catch ( error ) {
                 this.openNotification({
                     type: 'error',
@@ -50,7 +59,9 @@
 
         computed: {
             ...mapGetters('Roles', ['getRoles']),
+            ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Counties', ['getCounties']),
+            ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Notification', ['getNotification']),
             
             mobile() {
@@ -64,6 +75,8 @@
         },
 
         methods: {
+            ...mapActions('Categories', ['fetchCategories']),
+            ...mapActions('Units', ['fetchUnits']),
             ...mapActions('Roles', ['fetchRoles']),
             ...mapActions('Counties', ['fetchCounties']),
             ...mapActions('Notification', ['openNotification']),

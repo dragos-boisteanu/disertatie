@@ -17,7 +17,7 @@
                                 name="barcode" 
                                 type="text" 
                                 v-model="product.getProduct" 
-                                @blur="findProduct"
+                                @blur="getProduct"
                                 :disabled="waiting"   
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                 :class="{'border-red-600': errors[0]}"
@@ -54,24 +54,22 @@
                             />
                         </ValidationProvider>
                     </div>    
-                    <div class="w-full mt-2">
-                        <ValidationProvider vid="category_id" rules="required|integer" v-slot="{ errors }">
-                            <label for="name" class="text-sm font-semibold">Category</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                            <select 
-                                id="unit_id"
-                                name="category" 
-                                type="text" 
-                                v-model="product.category_id" 
-                                :disabled="waiting"   
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': errors[0]}"
-                            >
-                                <option value="" disabled>Select category</option>
-                                <option value="1">cat1</option>
-                            </select>
-                        </ValidationProvider>
-                    </div>    
+                    <ValidationProvider vid="category_id" rules="required|integer" v-slot="{ errors }" class="w-full mt-2">
+                        <label for="name" class="text-sm font-semibold">Category</label>
+                        <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                        <select 
+                            id="unit_id"
+                            name="category" 
+                            type="text" 
+                            v-model="product.category_id" 
+                            :disabled="waiting"   
+                            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                            :class="{'border-red-600': errors[0]}"
+                        >
+                            <option value="" disabled>Select category</option>
+                            <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }}</option>
+                        </select>
+                    </ValidationProvider>
                     <div class="w-full mt-2">
                         <ValidationProvider vid="price" rules="required" v-slot="{ errors }">
                             <label for="name" class="text-sm font-semibold">Price</label>
@@ -131,7 +129,7 @@
                                 :class="{'border-red-600': errors[0]}"
                             >
                                 <option value="" disabled>Select unit</option>
-                                <option value="1">grams</option>
+                                <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
                             </select>
                         </ValidationProvider>
                     </div>    
@@ -158,10 +156,16 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import ViewContainer from '../ViewContainer';
 
     export default {
+
+        computed: {
+            ...mapGetters('Categories', ['getCategories']),
+            ...mapGetters('Units', ['getUnits']),
+        },
+
         data() {
             return {
                 waiting: false,
@@ -173,13 +177,15 @@
                     vat: '',
                     weight: '',
                     unit_id: '',
-                    quantity: ''
+                    quantity: '',
+                    category_id: '',
                 }
             }
         },
 
         methods: {
             ...mapActions('Products', ['addProduct', 'getProductByBarcode']),
+            
 
             async submit() {
                 try {
@@ -200,9 +206,10 @@
 
             async getProduct() {
                 try {
-                    const response = await this.getProductByBarcode(this.product.barcode);
-                    this.product = response.data.data;
-                    console.log(response.data.data);
+                    if(this.barcode.lenth > 0) {
+                        const response = await this.getProductByBarcode(this.product.barcode);
+                        this.product = response.data.data;
+                    }
                 } catch (error) {
                     console.log(error)
                 }

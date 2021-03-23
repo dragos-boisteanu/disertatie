@@ -13,7 +13,10 @@ const getters = {
 }
 
 const actions = {
-
+    reset({ commit }) {
+        commit('RESET');
+    },
+    
     async fetchCounties({commit}) {
         try {
             const response = await downloadCounties();
@@ -34,6 +37,13 @@ const actions = {
 }
 
 const mutations = {
+    RESET(state) {
+        const newState = initialState();
+        Object.keys(newState).forEach(key => {
+            state[key] = newState[key]
+        })
+    },
+
     SET_COUNTRIES(state, countries) {
         state.counties = countries;
     },

@@ -1,15 +1,13 @@
-import { downloadRoles } from '../../api/roles.api';
+import { downloadCategories, downloadCategory, postCategory, patchCategory, deleteCategory } from '../../api/categories.api';
 
 const initialState = () => ({
-    roles: []
+    categories: []
 });
 
 const state = initialState();
 
 const getters = {
-    getRoles(state) {
-        return state.roles;
-    },
+    getCategories: (state) => state.categories 
 }
 
 const actions = {
@@ -17,10 +15,10 @@ const actions = {
         commit('RESET');
     },
 
-    async fetchRoles({commit}) {
+    async fetchCategories({commit}) {
         try {
-            const response = await downloadRoles();
-            commit('SET_ROLES', response.data.data.roles);
+            const response = await downloadCategories();
+            commit('SET_CATEGORIES', response.data);
         } catch ( error ) {
             throw error;
         }
@@ -34,9 +32,9 @@ const mutations = {
             state[key] = newState[key]
         })
     },
-    
-    SET_ROLES(state, roles) {
-        state.roles = roles
+
+    SET_CATEGORIES(state, payload) {
+        state.categories = payload;
     }
 }
 
@@ -45,6 +43,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
-
+    mutations
 }
