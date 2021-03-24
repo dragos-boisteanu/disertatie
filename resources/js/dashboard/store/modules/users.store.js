@@ -5,7 +5,7 @@ import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
     users: [],
-    nextPage: 0,
+    nextPage: 1,
 });
 
 const state = initialState();
@@ -38,7 +38,7 @@ const actions = {
                 const lastIndex = links.next.indexOf('=');
                 commit('SAVE_NEXT_PAGE', links.next.substr(lastIndex+1));
             }else {
-                commit('SAVE_NEXT_PAGE', 0);
+                commit('SAVE_NEXT_PAGE', null);
             }
 
         } catch (error) {
@@ -46,29 +46,19 @@ const actions = {
         }
     },
     
-    async fetchFilteredUsers({commit}, query) {
-        try {
-            const response = await downloadUsers(query);
-            const users = response.data.data.users;
-            const links = response.data.links;
-
-            commit('SET_FILTERED_USERS', users);
-
-            if(links.next) {
-                commit('SAVE_FILTERED_NEXT_PAGE', links.next.substr(links.next.length-1));
-            }else {
-                commit('SAVE_FILTERED_NEXT_PAGE', -1);
-            }    
-
-        } catch ( error ) {
-            throw error; 
-        }
-    },
-
     async refreshUsers({commit}) {
         try {
             const response = await downloadUsers(1);
             commit('REFRESH_USERS', response.data.data.users);
+
+            const links = response.data.links;
+
+            if(links.next) {
+                commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length-1));
+            }else {
+                commit('SAVE_NEXT_PAGE', null);
+            }    
+            
         } catch (error) {
             throw error; 
         }

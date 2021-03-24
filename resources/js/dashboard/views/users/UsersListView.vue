@@ -157,7 +157,8 @@
             ...mapGetters('Users', ['getUsers', 'getNextPage']),
 
             showMoreState() {
-                return this.getNextPage > 1 ? true : false;
+                console.log(this.getNextPage)
+                return this.getNextPage;
             }
         },
 

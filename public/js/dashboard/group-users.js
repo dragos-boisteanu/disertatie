@@ -1537,7 +1537,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Users', ['getUsers', 'getNextPage'])), {}, {
     showMoreState: function showMoreState() {
-      return this.getNextPage > 1 ? true : false;
+      console.log(this.getNextPage);
+      return this.getNextPage;
     }
   }),
   data: function data() {
