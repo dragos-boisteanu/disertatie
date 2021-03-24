@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full flex flex-col "> 
+    <div class="h-screen flex flex-col "> 
          <Notification :notification=getNotification v-if="getNotification.show"/>
          <!-- <h1>current: {{$mq}}</h1>   -->
         <div class="block" v-if="mobile">

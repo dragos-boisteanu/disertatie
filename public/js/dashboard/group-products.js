@@ -1742,7 +1742,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "mt-4 flex items-center justify-between text-xs" },
+    { staticClass: "my-4 flex items-center justify-between text-xs" },
     [
       _c(
         "div",
@@ -1750,8 +1750,7 @@ var render = function() {
           _c(
             "router-link",
             {
-              staticClass:
-                "px-2 py-1 border border-gray-400 hover:border-lightBlue-500",
+              staticClass: "px-2 py-1 border hover:border-lightBlue-500",
               class: {
                 "pointer-events-none": !_vm.canPrevious,
                 "border-gray-100": !_vm.canPrevious
@@ -1791,7 +1790,7 @@ var render = function() {
                 "router-link",
                 {
                   staticClass:
-                    "px-2 py-1 border border-gray-400 hover:border-lightBlue-500 rounded-sm",
+                    "px-2 py-1 border hover:border-lightBlue-500 rounded-sm",
                   class: { "border-lightBlue-500": page === _vm.currentPage },
                   attrs: {
                     to: {
@@ -1827,8 +1826,7 @@ var render = function() {
           _c(
             "router-link",
             {
-              staticClass:
-                "px-2 py-1 border border-gray-400 hover:border-lightBlue-500",
+              staticClass: "px-2 py-1 border hover:border-lightBlue-500",
               class: {
                 "pointer-events-none": !_vm.canNext,
                 "border-gray-100": !_vm.canNext
@@ -2093,7 +2091,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "flex-1 w-full p-4 pt-0 bg-gray-50 lg:p-4 lg:pt-0" },
+    {
+      staticClass:
+        "flex flex-col flex-1 w-full p-4 pt-0 bg-gray-50 lg:p-4 lg:pt-0"
+    },
     [
       _c(
         "h2",
@@ -3030,7 +3031,7 @@ var render = function() {
         "ul",
         {
           staticClass:
-            "w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4"
+            "h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4"
         },
         _vm._l(_vm.getProducts, function(product) {
           return _c(

@@ -1533,11 +1533,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.orderBy = 14;
     }
 
-    this.orderUsers();
+    this.order();
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Users', ['getUsers', 'getNextPage'])), {}, {
     showMoreState: function showMoreState() {
-      return this.getNextPage ? true : false;
+      return this.getNextPage > 1 ? true : false;
     }
   }),
   data: function data() {
@@ -3793,7 +3793,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "flex-1 w-full p-4 pt-0 bg-gray-50 lg:p-4 lg:pt-0" },
+    {
+      staticClass:
+        "flex flex-col flex-1 w-full p-4 pt-0 bg-gray-50 lg:p-4 lg:pt-0"
+    },
     [
       _c(
         "h2",
@@ -5671,7 +5674,7 @@ var render = function() {
         "ul",
         {
           staticClass:
-            "w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4"
+            "h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4"
         },
         _vm._l(_vm.getUsers, function(user) {
           return _c(

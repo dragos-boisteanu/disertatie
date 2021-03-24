@@ -3692,7 +3692,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var initialState = function initialState() {
   return {
     users: [],
-    nextPage: 1
+    nextPage: 0
   };
 };
 
@@ -3732,7 +3732,7 @@ var actions = {
                 lastIndex = links.next.indexOf('=');
                 commit('SAVE_NEXT_PAGE', links.next.substr(lastIndex + 1));
               } else {
-                commit('SAVE_NEXT_PAGE', null);
+                commit('SAVE_NEXT_PAGE', 0);
               }
 
               _context.next = 14;
@@ -31114,7 +31114,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "h-full flex flex-col " },
+    { staticClass: "h-screen flex flex-col " },
     [
       _vm.getNotification.show
         ? _c("Notification", { attrs: { notification: _vm.getNotification } })
