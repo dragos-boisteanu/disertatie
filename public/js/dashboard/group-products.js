@@ -1753,7 +1753,8 @@ var render = function() {
               staticClass: "px-2 py-1 border hover:border-lightBlue-500",
               class: {
                 "pointer-events-none": !_vm.canPrevious,
-                "border-gray-100": !_vm.canPrevious
+                "border-gray-200": !_vm.canPrevious,
+                "border-gray-300": _vm.canPrevious
               },
               attrs: {
                 to: {
@@ -1780,7 +1781,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "ul",
-        { staticClass: "flex items-center gap-x-1" },
+        { staticClass: "flex items-center gap-x-2" },
         _vm._l(_vm.lastPage, function(page, index) {
           return _c(
             "li",
@@ -1790,8 +1791,11 @@ var render = function() {
                 "router-link",
                 {
                   staticClass:
-                    "px-2 py-1 border hover:border-lightBlue-500 rounded-sm",
-                  class: { "border-lightBlue-500": page === _vm.currentPage },
+                    "px-2 py-1 border  hover:border-lightBlue-500 rounded-sm",
+                  class: {
+                    "border-lightBlue-500": page === _vm.currentPage,
+                    "border-gray-300": page !== _vm.currentPage
+                  },
                   attrs: {
                     to: {
                       name: _vm.route,
@@ -1829,7 +1833,8 @@ var render = function() {
               staticClass: "px-2 py-1 border hover:border-lightBlue-500",
               class: {
                 "pointer-events-none": !_vm.canNext,
-                "border-gray-100": !_vm.canNext
+                "border-gray-200": !_vm.canNext,
+                "border-gray-300": _vm.canNext
               },
               attrs: {
                 to: {

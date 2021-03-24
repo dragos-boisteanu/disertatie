@@ -1,13 +1,13 @@
 <template>
     <div class="my-4 flex items-center justify-between text-xs">
             <div>
-                 <router-link :to="{name: route, query: {page:previousPage, ...query} }" @click.prevent.native="goTo(previousPage)" class="px-2 py-1 border hover:border-lightBlue-500" :class="{'pointer-events-none': !canPrevious, 'border-gray-100': !canPrevious}">Previous</router-link>
+                 <router-link :to="{name: route, query: {page:previousPage, ...query} }" @click.prevent.native="goTo(previousPage)" class="px-2 py-1 border hover:border-lightBlue-500" :class="{'pointer-events-none': !canPrevious, 'border-gray-200': !canPrevious, 'border-gray-300': canPrevious}">Previous</router-link>
             </div>
-            <ul class="flex items-center gap-x-1">
+            <ul class="flex items-center gap-x-2">
                 <li v-for="(page, index) in lastPage" :key="index">
                     <router-link :to="{name: route, query: {page, ...query} }" @click.prevent.native="goTo(page)"  
-                        class="px-2 py-1 border hover:border-lightBlue-500 rounded-sm" 
-                        :class="{'border-lightBlue-500': page === currentPage}"
+                        class="px-2 py-1 border  hover:border-lightBlue-500 rounded-sm" 
+                        :class="{'border-lightBlue-500': page === currentPage, 'border-gray-300': page !== currentPage}"
                         
                     >
                         {{ page }}
@@ -19,7 +19,7 @@
                     :to="{name: route, query: {page:nextPage, ...query}}" 
                     @click.prevent.native="goTo(nextPage)" 
                     class="px-2 py-1 border hover:border-lightBlue-500" 
-                    :class="{'pointer-events-none': !canNext, 'border-gray-100': !canNext}"
+                    :class="{'pointer-events-none': !canNext, 'border-gray-200': !canNext, 'border-gray-300': canNext}"
                 >
                     Next
                 </router-link>
