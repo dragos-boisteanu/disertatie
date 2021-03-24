@@ -171,6 +171,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -178,6 +185,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Units', ['getUnits'])),
   data: function data() {
     return {
+      checkingBarcode: false,
+      locked: false,
       waiting: false,
       product: {
         barcode: '',
@@ -207,12 +216,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _this.addProduct(_this.product);
 
               case 4:
+                _this.$refs.observer.reset();
+
                 _this.waiting = false;
-                _context.next = 12;
+                _context.next = 13;
                 break;
 
-              case 7:
-                _context.prev = 7;
+              case 8:
+                _context.prev = 8;
                 _context.t0 = _context["catch"](0);
 
                 if (_context.t0.response.data.errors) {
@@ -222,12 +233,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.waiting = false;
                 console.log(_context.t0);
 
-              case 12:
+              case 13:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee, null, [[0, 8]]);
       }))();
     },
     getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -239,36 +250,58 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _context2.prev = 0;
 
               if (!(this.$refs.observer.errors['barcode'].length === 0)) {
-                _context2.next = 6;
+                _context2.next = 10;
                 break;
               }
 
-              _context2.next = 4;
+              this.checkingBarcode = true;
+              _context2.next = 5;
               return this.getProductByBarcode(this.product.barcode);
 
-            case 4:
+            case 5:
               response = _context2.sent;
 
               if (response.data.data) {
                 this.product = response.data.data;
+                this.locked = true;
+              } else {
+                this.resetProductData();
+                this.locked = false;
               }
 
-            case 6:
-              _context2.next = 11;
+              this.checkingBarcode = false;
+              _context2.next = 12;
               break;
 
-            case 8:
-              _context2.prev = 8;
+            case 10:
+              this.resetProductData();
+              this.locked = false;
+
+            case 12:
+              _context2.next = 17;
+              break;
+
+            case 14:
+              _context2.prev = 14;
               _context2.t0 = _context2["catch"](0);
               console.log(_context2.t0);
 
-            case 11:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, this, [[0, 8]]);
-    })), 500)
+      }, _callee2, this, [[0, 14]]);
+    })), 500),
+    resetProductData: function resetProductData() {
+      var _this2 = this;
+
+      Object.keys(this.product).forEach(function (key) {
+        if (key !== 'barcode') {
+          _this2.product[key] = '';
+        }
+      });
+    }
   }),
   components: {
     ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_1__.default
@@ -787,42 +820,96 @@ var render = function() {
                                       [_vm._v(" " + _vm._s(errors[0]))]
                                     ),
                                     _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.product.barcode,
-                                          expression: "product.barcode"
-                                        }
-                                      ],
-                                      staticClass:
-                                        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                      class: {
-                                        "border-red-600": failed,
-                                        "border-green-500": passed
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "flex gap-x-1 items-center relative"
                                       },
-                                      attrs: {
-                                        id: "barcode",
-                                        name: "barcode",
-                                        type: "text",
-                                        disabled: _vm.waiting
-                                      },
-                                      domProps: { value: _vm.product.barcode },
-                                      on: {
-                                        blur: _vm.getProduct,
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.product.barcode,
+                                              expression: "product.barcode"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          class: {
+                                            "border-red-600": failed,
+                                            "border-green-500": passed
+                                          },
+                                          attrs: {
+                                            id: "barcode",
+                                            name: "barcode",
+                                            type: "text",
+                                            disabled: _vm.waiting
+                                          },
+                                          domProps: {
+                                            value: _vm.product.barcode
+                                          },
+                                          on: {
+                                            blur: _vm.getProduct,
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.product,
+                                                "barcode",
+                                                $event.target.value
+                                              )
+                                            }
                                           }
-                                          _vm.$set(
-                                            _vm.product,
-                                            "barcode",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "svg",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value: _vm.checkingBarcode,
+                                                expression: "checkingBarcode"
+                                              }
+                                            ],
+                                            staticClass:
+                                              "absolute -right-10 top-1/4 animate-spin mr-3 h-5 w-5 text-lightBlue-600",
+                                            attrs: {
+                                              xmlns:
+                                                "http://www.w3.org/2000/svg",
+                                              fill: "none",
+                                              viewBox: "0 0 24 24"
+                                            }
+                                          },
+                                          [
+                                            _c("circle", {
+                                              staticClass: "opacity-25",
+                                              attrs: {
+                                                cx: "12",
+                                                cy: "12",
+                                                r: "10",
+                                                stroke: "currentColor",
+                                                "stroke-width": "4"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("path", {
+                                              staticClass: "opacity-75",
+                                              attrs: {
+                                                fill: "currentColor",
+                                                d:
+                                                  "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ]
+                                    )
                                   ]
                                 }
                               }
@@ -884,7 +971,7 @@ var render = function() {
                                         id: "firstName",
                                         name: "first name",
                                         type: "text",
-                                        disabled: _vm.waiting
+                                        disabled: _vm.waiting || _vm.locked
                                       },
                                       domProps: { value: _vm.product.name },
                                       on: {
@@ -961,7 +1048,7 @@ var render = function() {
                                         id: "description",
                                         name: "description",
                                         type: "text",
-                                        disabled: _vm.waiting
+                                        disabled: _vm.waiting || _vm.locked
                                       },
                                       domProps: {
                                         value: _vm.product.description
@@ -1042,7 +1129,7 @@ var render = function() {
                                           id: "unit_id",
                                           name: "category",
                                           type: "text",
-                                          disabled: _vm.waiting
+                                          disabled: _vm.waiting || _vm.locked
                                         },
                                         on: {
                                           change: function($event) {
@@ -1155,7 +1242,7 @@ var render = function() {
                                         id: "unitPrice",
                                         name: "price",
                                         type: "text",
-                                        disabled: _vm.waiting
+                                        disabled: _vm.waiting || _vm.locked
                                       },
                                       domProps: {
                                         value: _vm.product.unit_price
@@ -1234,7 +1321,7 @@ var render = function() {
                                         id: "vat",
                                         name: "vat",
                                         type: "number",
-                                        disabled: _vm.waiting
+                                        disabled: _vm.waiting || _vm.locked
                                       },
                                       domProps: { value: _vm.product.vat },
                                       on: {
@@ -1311,7 +1398,7 @@ var render = function() {
                                         id: "weight",
                                         name: "weight",
                                         type: "number",
-                                        disabled: _vm.waiting
+                                        disabled: _vm.waiting || _vm.locked
                                       },
                                       domProps: { value: _vm.product.weight },
                                       on: {
@@ -1387,7 +1474,7 @@ var render = function() {
                                           id: "unit_id",
                                           name: "weight units",
                                           type: "text",
-                                          disabled: _vm.waiting
+                                          disabled: _vm.waiting || _vm.locked
                                         },
                                         on: {
                                           change: function($event) {

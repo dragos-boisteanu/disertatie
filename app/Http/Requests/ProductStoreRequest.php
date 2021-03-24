@@ -45,4 +45,11 @@ class ProductStoreRequest extends FormRequest
             'unit_id' => 'weight unit',
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'unit_price' => str_replace(',', '.', $this->unit_price),
+        ]);
+    }
 }
