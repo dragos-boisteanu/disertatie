@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Resources\Product as ProductResource;
+use App\Http\Resources\ProductsCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
@@ -18,9 +19,13 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Product::filter($request);
+
+        $products = $query->Paginate(10);
+
+        return new ProductsCollection($products);
     }
 
     /**

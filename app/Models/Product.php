@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Request;
+use App\Filters\User\UserFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -57,5 +60,10 @@ class Product extends Model
 
     public function ingredients() {
         return $this->belongsToMany('App\Models\Ingredients');
+    }
+
+    public function scopeFilter(Builder $builder, Request $request)
+    {
+        return (new UserFilter($request))->filter($builder);
     }
 }

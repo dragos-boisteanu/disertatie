@@ -83,7 +83,7 @@ class UserController extends Controller
 
         $query->orderBy('id', 'asc');
         
-        $users = $query->with('role')->simplePaginate(5);
+        $users = $query->simplePaginate(5);
 
         return new UserCollection($users);
     }
