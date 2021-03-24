@@ -15,11 +15,18 @@ class UnitSeeder extends Seeder
     public function run()
     {
         DB::table('units')->insert([
-            'name' => 'g'
+            'name' => 'g',
+            'description' => 'grams'
         ]);
 
         DB::table('units')->insert([
-            'name' => 'ml'
+            'name' => 'ml',
+            'description' => 'milliliters'
+        ]);
+
+        DB::table('units')->insert([
+            'name' => 'L',
+            'description' => 'liters'
         ]);
     }
 }

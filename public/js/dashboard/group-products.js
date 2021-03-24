@@ -165,19 +165,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -192,8 +179,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         barcode: '',
         name: '',
         description: '',
-        unit_price: '',
-        vat: '',
+        base_price: '',
         weight: '',
         unit_id: '',
         quantity: '',
@@ -1187,7 +1173,14 @@ var render = function() {
                                               key: category.id,
                                               domProps: { value: category.id }
                                             },
-                                            [_vm._v(_vm._s(category.name))]
+                                            [
+                                              _vm._v(
+                                                _vm._s(category.name) +
+                                                  " (" +
+                                                  _vm._s(category.vat) +
+                                                  "% VAT)"
+                                              )
+                                            ]
                                           )
                                         })
                                       ],
@@ -1205,7 +1198,7 @@ var render = function() {
                         _c("ValidationProvider", {
                           staticClass: "w-full mt-2",
                           attrs: {
-                            vid: "price",
+                            vid: "base_price",
                             rules: "required|double:2,comma"
                           },
                           scopedSlots: _vm._u(
@@ -1223,7 +1216,7 @@ var render = function() {
                                         staticClass: "text-sm font-semibold",
                                         attrs: { for: "name" }
                                       },
-                                      [_vm._v("Price")]
+                                      [_vm._v("Base price")]
                                     ),
                                     _vm._v(" "),
                                     _c(
@@ -1240,8 +1233,8 @@ var render = function() {
                                         {
                                           name: "model",
                                           rawName: "v-model",
-                                          value: _vm.product.unit_price,
-                                          expression: "product.unit_price"
+                                          value: _vm.product.base_price,
+                                          expression: "product.base_price"
                                         }
                                       ],
                                       staticClass:
@@ -1251,13 +1244,13 @@ var render = function() {
                                         "border-green-500": passed
                                       },
                                       attrs: {
-                                        id: "unitPrice",
-                                        name: "price",
+                                        id: "basePrice",
+                                        name: "base_price",
                                         type: "text",
                                         disabled: _vm.waiting || _vm.locked
                                       },
                                       domProps: {
-                                        value: _vm.product.unit_price
+                                        value: _vm.product.base_price
                                       },
                                       on: {
                                         input: function($event) {
@@ -1266,84 +1259,7 @@ var render = function() {
                                           }
                                           _vm.$set(
                                             _vm.product,
-                                            "unit_price",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("ValidationProvider", {
-                          staticClass: "w-full mt-2",
-                          attrs: {
-                            vid: "vat",
-                            rules: "required|integer|max_value:99|max:2"
-                          },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  var failed = ref.failed
-                                  var passed = ref.passed
-                                  return [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("VAT ( % )")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.product.vat,
-                                          expression: "product.vat"
-                                        }
-                                      ],
-                                      staticClass:
-                                        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                      class: {
-                                        "border-red-600": failed,
-                                        "border-green-500": passed
-                                      },
-                                      attrs: {
-                                        id: "vat",
-                                        name: "vat",
-                                        type: "number",
-                                        disabled: _vm.waiting || _vm.locked
-                                      },
-                                      domProps: { value: _vm.product.vat },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.product,
-                                            "vat",
+                                            "base_price",
                                             $event.target.value
                                           )
                                         }

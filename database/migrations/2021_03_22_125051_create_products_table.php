@@ -17,13 +17,12 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->decimal('unit_price');
-            $table->double('vat');
+            $table->decimal('base_price');
             $table->string('barcode');
             $table->integer('weight');
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('category_id')->constrained();
-            // $table->foreignId('stock_id')->constrained()->nullable()->onDelete('cascade');
+            $table->foreignId('stock_id')->nullable()->constrained()->onDelete('cascade');
             $table->softDeletes();
         });
     }

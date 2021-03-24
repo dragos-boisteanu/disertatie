@@ -67,30 +67,17 @@
                             :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         >
                             <option value="" disabled>Select category</option>
-                            <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }}</option>
+                            <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }} ({{ category.vat}}% VAT)</option>
                         </select>
                     </ValidationProvider>
-                    <ValidationProvider vid="price" rules="required|double:2,comma" v-slot="{ errors, failed, passed }" class="w-full mt-2">
-                        <label for="name" class="text-sm font-semibold">Price</label>
+                    <ValidationProvider vid="base_price" rules="required|double:2,comma" v-slot="{ errors, failed, passed }" class="w-full mt-2">
+                        <label for="name" class="text-sm font-semibold">Base price</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
-                            id="unitPrice"
-                            name="price" 
+                            id="basePrice"
+                            name="base_price" 
                             type="text" 
-                            v-model="product.unit_price" 
-                            :disabled="waiting || locked"   
-                            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                        />
-                    </ValidationProvider>
-                    <ValidationProvider vid="vat" rules="required|integer|max_value:99|max:2" v-slot="{ errors, failed, passed }" class="w-full mt-2">
-                        <label for="name" class="text-sm font-semibold">VAT ( % )</label>
-                        <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                        <input 
-                            id="vat"
-                            name="vat" 
-                            type="number" 
-                            v-model="product.vat" 
+                            v-model="product.base_price" 
                             :disabled="waiting || locked"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                             :class="{'border-red-600': failed, 'border-green-500' : passed}"
@@ -169,8 +156,7 @@
                     barcode: '',
                     name:'',
                     description: '',
-                    unit_price: '',
-                    vat: '',
+                    base_price: '',
                     weight: '',
                     unit_id: '',
                     quantity: '',

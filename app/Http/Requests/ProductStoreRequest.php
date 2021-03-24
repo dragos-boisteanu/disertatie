@@ -29,8 +29,7 @@ class ProductStoreRequest extends FormRequest
             'barcode' => 'required',
             'name' => 'required',
             'description' => 'required',
-            'unit_price' => 'required',
-            'vat' => 'required',
+            'base_price' => 'required',
             'weight' => 'required',
             'category_id' => 'required',
             'unit_id' => 'required'
@@ -40,7 +39,7 @@ class ProductStoreRequest extends FormRequest
     public function attributes()
     {
         return [
-            'unit_price' => 'unit price',
+            'base_price' => 'base price',
             'category_id' => 'category',
             'unit_id' => 'weight unit',
         ];
@@ -49,7 +48,7 @@ class ProductStoreRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'unit_price' => str_replace(',', '.', $this->unit_price),
+            'base_price' => str_replace(',', '.', $this->base_price),
         ]);
     }
 }

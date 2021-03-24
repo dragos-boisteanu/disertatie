@@ -46,11 +46,14 @@ class ProductController extends Controller
                 ], 200);
             } 
             
+            $stock = Stock::create(['quantity' => 1]);
+
+            $input['stock_id'] = $stock->id;
+
             $product = Product::create($input);
 
-            Stock::create(['quantity' => 1, 'product_id' => $product->id]);
-           
             DB::commit();
+
             return response()->json([
                 'id'=>$product->id
             ]);

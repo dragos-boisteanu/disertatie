@@ -17,17 +17,27 @@ class Product extends Model
         'name',
         'description',
         'category_id',
-        'unit_price',
+        'base_price',
         'vat',
         'weight',
         'unit_id',
+        'stock_id',
     ];
 
-    public $with = ['stock:quantity'];
+    public $with = ['stock:quantity', 'category'];
 
-    public function getUnitPriceAttribute($value)
+    protected $appends = array('price');
+
+    public function getBasePriceAttribute($value)
     {
         return str_replace('.', ',', $value);
+    }
+
+    public function getPriceAttribute()
+    {
+        $price = $this->base_price + $this->base_price * ($this->category->vat / 100);
+
+        return str_replace('.', ',', $price);
     }
 
     public function category() 
@@ -37,7 +47,7 @@ class Product extends Model
 
     public function stock() 
     {
-        return $this->hasOne('App\Models\Stock');
+        return $this->belongsTo('App\Models\Stock');
     }
 
     public function unit()
