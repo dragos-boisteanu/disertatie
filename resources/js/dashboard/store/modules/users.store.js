@@ -172,8 +172,8 @@ const mutations = {
         state.nextPage = page;
     },
 
-    SORT_USERS(state, sortBy) {
-        switch(sortBy) {
+    SORT_USERS(state, orderBy) {
+        switch(orderBy) {
             case 1:
                 state.users = _orderBy(state.users, [user => user.name.toLowerCase()], ['asc']);
                 break;

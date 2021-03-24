@@ -7,9 +7,9 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductCollection;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Resources\Product as ProductResource;
-use App\Http\Resources\ProductsCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
@@ -23,9 +23,39 @@ class ProductController extends Controller
     {
         $query = Product::filter($request);
 
-        $products = $query->Paginate(10);
+        if(!$request->has('orderBy')) {
+            $orderByValue = 1;
+        } else {
+            $orderByValue = $request->orderBy;
+        }
 
-        return new ProductsCollection($products);
+      
+        switch($orderByValue) {
+            case 1:
+                $query->orderBy('name', 'asc');
+                break;
+            case 2: 
+                $query->orderBy('name', 'desc');
+                break;
+            case 3: 
+                $query->orderBy('base_price', 'asc');
+                break;
+            case 4: 
+                $query->orderBy('base_price', 'desc');
+                break;
+            case 5: 
+                $query->orderBy('quantity', 'asc');
+                break;
+            case 6: 
+                $query->orderBy('quantity', 'desc');
+                break;
+        }
+        
+        $query->orderBy('id', 'asc');;
+
+        $products = $query->Paginate(1);
+
+        return new ProductCollection($products);
     }
 
     /**

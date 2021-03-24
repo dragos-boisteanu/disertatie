@@ -64,6 +64,7 @@ const routes = [
             }
         }
     },
+   
     {
         path: `${baseUrl}/products/create`,
         name: 'AddProduct',

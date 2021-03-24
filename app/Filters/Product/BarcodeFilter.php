@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filters\User;
+namespace App\Filters\Product;
 
 class BarcodeFilter 
 {

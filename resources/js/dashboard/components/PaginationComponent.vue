@@ -1,0 +1,87 @@
+<template>
+    <div class="mt-4 flex items-center justify-between text-xs">
+            <div>
+                 <router-link :to="{name: route, query: {page:previousPage, ...query} }" @click.prevent.native="goTo(previousPage)" class="px-2 py-1 border border-gray-400 hover:border-lightBlue-500" :class="{'pointer-events-none': !canPrevious, 'border-gray-100': !canPrevious}">Previous</router-link>
+            </div>
+            <ul class="flex items-center gap-x-1">
+                <li v-for="(page, index) in lastPage" :key="index">
+                    <router-link :to="{name: route, query: {page, ...query} }" @click.prevent.native="goTo(page)"  
+                        class="px-2 py-1 border border-gray-400 hover:border-lightBlue-500 rounded-sm" 
+                        :class="{'border-lightBlue-500': page === currentPage}"
+                        
+                    >
+                        {{ page }}
+                    </router-link>  
+                </li>
+            </ul>
+            <div>
+                <router-link 
+                    :to="{name: route, query: {page:nextPage, ...query}}" 
+                    @click.prevent.native="goTo(nextPage)" 
+                    class="px-2 py-1 border border-gray-400 hover:border-lightBlue-500" 
+                    :class="{'pointer-events-none': !canNext, 'border-gray-100': !canNext}"
+                >
+                    Next
+                </router-link>
+            </div>
+        </div>
+</template>
+
+<script>
+    export default {
+        props: {
+            data: {
+               type: Object,
+               required: true,
+            },
+
+            route: {
+                type: String,
+                required: true,
+            },
+
+            query: {
+                type: Object,
+                required: true
+            }    
+        },
+
+        computed: {
+            currentPage() {
+                return this.data.current_page;
+            },
+
+            lastPage() {
+                return this.data.last_page;
+            },
+
+            canNext() {
+                return this.currentPage < this.lastPage;
+            },
+
+            canPrevious() {
+                return this.currentPage > this.firstPage
+            },
+
+            nextPage() {
+                return this.currentPage + 1;
+            },
+
+            previousPage() {
+                return this.currentPage - 1;
+            }
+        },
+
+        data() {
+            return {
+                firstPage: 1
+            }
+        },
+
+        methods: {
+            goTo(page) {
+                this.$emit('navigate', page);
+            }
+        }
+    }
+</script>

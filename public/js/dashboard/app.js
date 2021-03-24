@@ -2581,8 +2581,10 @@ __webpack_require__.r(__webpack_exports__);
 
 var END_POINT = '/products';
 
-var downloadProducts = function downloadProducts() {
-  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT));
+var downloadProducts = function downloadProducts(query) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT), {
+    params: query
+  });
 };
 
 var downloadProduct = function downloadProduct(id) {
@@ -3255,6 +3257,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _api_products_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/products.api */ "./resources/js/dashboard/api/products.api.js");
+/* harmony import */ var lodash_orderBy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/orderBy */ "./node_modules/lodash/orderBy.js");
+/* harmony import */ var lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_orderBy__WEBPACK_IMPORTED_MODULE_2__);
 function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
 
 
@@ -3265,10 +3269,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
 var initialState = function initialState() {
   return {
     products: [],
-    nextPage: 1
+    pagination: {}
   };
 };
 
@@ -3279,6 +3284,9 @@ var getters = {
   },
   getNextPage: function getNextPage(state) {
     return state.nextPage;
+  },
+  getPaginationData: function getPaginationData(state) {
+    return state.pagination;
   }
 };
 var actions = {
@@ -3286,9 +3294,9 @@ var actions = {
     var commit = _ref.commit;
     commit('RESET');
   },
-  addProduct: function addProduct(_ref2, payload) {
+  fetchProducts: function fetchProducts(_ref2, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var commit, response;
+      var commit, response, meta, paginationData;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -3296,55 +3304,97 @@ var actions = {
               commit = _ref2.commit;
               _context.prev = 1;
               _context.next = 4;
-              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.storeProduct)(payload);
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProducts)(payload);
 
             case 4:
               response = _context.sent;
-              _context.next = 10;
+              commit('SET_PRODUCT', response.data.data.products);
+              meta = response.data.meta;
+              paginationData = {
+                current_page: meta.current_page,
+                last_page: meta.last_page
+              };
+              commit('SET_PAGINATION', paginationData);
+              console.log(response);
+              _context.next = 15;
               break;
 
-            case 7:
-              _context.prev = 7;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 10:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 7]]);
+      }, _callee, null, [[1, 12]]);
     }))();
   },
-  getProductByBarcode: function getProductByBarcode(_ref3, payload) {
+  addProduct: function addProduct(_ref3, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      var response;
+      var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _objectDestructuringEmpty(_ref3);
-
+              commit = _ref3.commit;
               _context2.prev = 1;
               _context2.next = 4;
-              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProductByBarcode)(payload);
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.storeProduct)(payload);
 
             case 4:
               response = _context2.sent;
-              return _context2.abrupt("return", response);
+              _context2.next = 10;
+              break;
 
-            case 8:
-              _context2.prev = 8;
+            case 7:
+              _context2.prev = 7;
               _context2.t0 = _context2["catch"](1);
               throw _context2.t0;
 
-            case 11:
+            case 10:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 8]]);
+      }, _callee2, null, [[1, 7]]);
     }))();
+  },
+  getProductByBarcode: function getProductByBarcode(_ref4, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _objectDestructuringEmpty(_ref4);
+
+              _context3.prev = 1;
+              _context3.next = 4;
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProductByBarcode)(payload);
+
+            case 4:
+              response = _context3.sent;
+              return _context3.abrupt("return", response);
+
+            case 8:
+              _context3.prev = 8;
+              _context3.t0 = _context3["catch"](1);
+              throw _context3.t0;
+
+            case 11:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[1, 8]]);
+    }))();
+  },
+  sortProductsList: function sortProductsList(_ref5, sortBy) {
+    var commit = _ref5.commit;
+    commit('SORT_PRODUCTS', sortBy);
   }
 };
 var mutations = {
@@ -3353,6 +3403,51 @@ var mutations = {
     Object.keys(newState).forEach(function (key) {
       state[key] = newState[key];
     });
+  },
+  SET_PRODUCT: function SET_PRODUCT(state, payload) {
+    state.products = payload;
+  },
+  SET_PAGINATION: function SET_PAGINATION(state, payload) {
+    state.pagination = payload;
+  },
+  SORT_PRODUCTS: function SORT_PRODUCTS(state, orderBy) {
+    switch (orderBy) {
+      case 1:
+        state.products = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.products, [function (product) {
+          return product.name.toLowerCase();
+        }], ['asc']);
+        break;
+
+      case 2:
+        state.products = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.products, [function (product) {
+          return product.name.toLowerCase();
+        }], ['desc']);
+        break;
+
+      case 3:
+        state.products = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.products, [function (product) {
+          return parseFloat(product.base_price.replace(',', '.'));
+        }], ['asc']);
+        break;
+
+      case 4:
+        state.products = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.products, [function (product) {
+          return parseFloat(product.base_price.replace(',', '.'));
+        }], ['desc']);
+        break;
+
+      case 5:
+        state.products = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.products, [function (product) {
+          return product.quantity;
+        }], ['asc']);
+        break;
+
+      case 6:
+        state.products = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.products, [function (product) {
+          return product.quantity;
+        }], ['desc']);
+        break;
+    }
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3904,8 +3999,8 @@ var mutations = {
   SAVE_NEXT_PAGE: function SAVE_NEXT_PAGE(state, page) {
     state.nextPage = page;
   },
-  SORT_USERS: function SORT_USERS(state, sortBy) {
-    switch (sortBy) {
+  SORT_USERS: function SORT_USERS(state, orderBy) {
+    switch (orderBy) {
       case 1:
         state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
           return user.name.toLowerCase();

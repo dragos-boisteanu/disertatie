@@ -1563,7 +1563,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this.fetchUsers(query);
 
               case 5:
-                _this.orderUsers();
+                _this.order();
 
                 _this.openNotification({
                   type: 'ok',
@@ -1633,9 +1633,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     order: function order() {
-      this.orderUsers();
-    },
-    orderUsers: function orderUsers() {
       this.sortUsersList(this.orderBy);
     },
     toggleFilterState: function toggleFilterState() {

@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Http\Request;
-use App\Filters\User\UserFilter;
-use Illuminate\Database\Eloquent\Builder;
+use App\Filters\Product\ProductFilter;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -27,7 +27,7 @@ class Product extends Model
         'stock_id',
     ];
 
-    public $with = ['stock:quantity', 'category'];
+    public $with = ['unit', 'stock', 'category'];
 
     protected $appends = array('price');
 
@@ -55,7 +55,7 @@ class Product extends Model
 
     public function unit()
     {
-        return $this->hasOne('App\Models\Unit');
+        return $this->belongsTo('App\Models\Unit');
     }
 
     public function ingredients() {
@@ -64,6 +64,6 @@ class Product extends Model
 
     public function scopeFilter(Builder $builder, Request $request)
     {
-        return (new UserFilter($request))->filter($builder);
+        return (new ProductFilter($request))->filter($builder);
     }
 }

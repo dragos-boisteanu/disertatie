@@ -180,7 +180,7 @@
         
                     await this.fetchUsers(query)
 
-                    this.orderUsers();
+                    this.order();
                     
                     this.openNotification({
                         type:'ok',
@@ -213,11 +213,6 @@
             },
 
             order() {
-                this.orderUsers();
-            },
-
-            orderUsers() {
-
                 this.sortUsersList(this.orderBy);
             },
 
