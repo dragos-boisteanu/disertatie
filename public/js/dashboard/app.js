@@ -2730,7 +2730,7 @@ var deleteUser = function deleteUser(id) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ "./resources/js/dashboard/App.vue");
 /* harmony import */ var vue_mq__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-mq */ "./node_modules/vue-mq/dist/vue-mq.es.js");
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ "./resources/js/dashboard/router/index.js");
@@ -2740,14 +2740,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Breadcrumbs.vue */ "./resources/js/dashboard/components/Breadcrumbs.vue");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
-/* harmony import */ var vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vee-validate/dist/rules */ "./node_modules/vee-validate/dist/rules.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+/* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
+/* harmony import */ var _validators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./validators */ "./resources/js/dashboard/validators/index.js");
 __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -2760,55 +2754,11 @@ __webpack_require__(/*! ../bootstrap */ "./resources/js/bootstrap.js");
 
 
 
+vue__WEBPACK_IMPORTED_MODULE_7__.default.component('ValidationProvider', vee_validate__WEBPACK_IMPORTED_MODULE_8__.ValidationProvider);
+vue__WEBPACK_IMPORTED_MODULE_7__.default.component('ValidationObserver', vee_validate__WEBPACK_IMPORTED_MODULE_8__.ValidationObserver);
 
-
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.setInteractionMode)('eager');
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('required', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.required), {}, {
-  message: 'The {_field_} field is required.'
-}));
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('integer', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.integer), {}, {
-  message: 'The {_field_} must be an integer'
-}));
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('double', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.double), {}, {
-  message: 'The {_field_} must be an double with 2 decimals separated by comma'
-}));
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('digits', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.digits), {}, {
-  message: 'The {_field_} must be an integer with 2 digits'
-}));
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('email', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.email), {}, {
-  message: 'The {_field_} must be a valid email address.'
-}));
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('alpha_spaces', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.alpha_spaces), {}, {
-  message: 'The {_field_} must only contain letters.'
-}));
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('alpha_num', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.alpha_num), {}, {
-  message: 'The {_field_} must only contain letters and numbers'
-}));
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('max', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.max), {}, {
-  message: 'The {_field_} must not be greater than {length} characters.',
-  params: ['length']
-}));
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('min', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_8__.min), {}, {
-  message: 'The {_field_} must not be shorter than {length} character',
-  params: ['length']
-})); // extend('max_value', {
-//     ...max_value,
-//     message: 'The {_field_} value must not be greater than {max_value}',
-//     params: ['max_value'],
-// })
-
-(0,vee_validate__WEBPACK_IMPORTED_MODULE_7__.extend)('max_value', {
-  validate: function validate(value, _ref) {
-    var max = _ref.max;
-    return value <= max;
-  },
-  params: ['max'],
-  message: 'The {_field_} value must not be greater than {max}'
-});
-vue__WEBPACK_IMPORTED_MODULE_9__.default.component('ValidationProvider', vee_validate__WEBPACK_IMPORTED_MODULE_7__.ValidationProvider);
-vue__WEBPACK_IMPORTED_MODULE_9__.default.component('ValidationObserver', vee_validate__WEBPACK_IMPORTED_MODULE_7__.ValidationObserver);
-vue__WEBPACK_IMPORTED_MODULE_9__.default.use((vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_4___default()), _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_5__.default);
-vue__WEBPACK_IMPORTED_MODULE_9__.default.use(vue_mq__WEBPACK_IMPORTED_MODULE_1__.default, {
+vue__WEBPACK_IMPORTED_MODULE_7__.default.use((vue_2_breadcrumbs__WEBPACK_IMPORTED_MODULE_4___default()), _components_Breadcrumbs_vue__WEBPACK_IMPORTED_MODULE_5__.default);
+vue__WEBPACK_IMPORTED_MODULE_7__.default.use(vue_mq__WEBPACK_IMPORTED_MODULE_1__.default, {
   breakpoints: {
     // default breakpoints - customize this
     sm: 640,
@@ -2820,14 +2770,14 @@ vue__WEBPACK_IMPORTED_MODULE_9__.default.use(vue_mq__WEBPACK_IMPORTED_MODULE_1__
   defaultBreakpoint: 'sm' // customize this for SSR
 
 });
-vue__WEBPACK_IMPORTED_MODULE_9__.default.filter("formatDate", function (date) {
+vue__WEBPACK_IMPORTED_MODULE_7__.default.filter("formatDate", function (date) {
   if (!date) {
     return null;
   }
 
   return dayjs__WEBPACK_IMPORTED_MODULE_6___default()(date).format('DD/MM/YYYY HH:mm');
 });
-new vue__WEBPACK_IMPORTED_MODULE_9__.default({
+new vue__WEBPACK_IMPORTED_MODULE_7__.default({
   router: _router__WEBPACK_IMPORTED_MODULE_2__.default,
   store: _store__WEBPACK_IMPORTED_MODULE_3__.default,
   render: function render(h) {
@@ -4034,6 +3984,131 @@ var mutations = {
   actions: actions,
   mutations: mutations
 });
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/validators/index.js":
+/*!****************************************************!*\
+  !*** ./resources/js/dashboard/validators/index.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
+/* harmony import */ var vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vee-validate/dist/rules */ "./node_modules/vee-validate/dist/rules.js");
+/* harmony import */ var _rules_barcode_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./rules/barcode.js */ "./resources/js/dashboard/validators/rules/barcode.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.setInteractionMode)('eager');
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('required', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.required), {}, {
+  message: 'The {_field_} field is required.'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('integer', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.integer), {}, {
+  message: 'The {_field_} must be an integer'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('double', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.double), {}, {
+  message: 'The {_field_} must be an double with 2 decimals separated by comma'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('email', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.email), {}, {
+  message: 'The {_field_} must be a valid email address.'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('alpha_spaces', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.alpha_spaces), {}, {
+  message: 'The {_field_} must only contain letters.'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('alpha_num', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.alpha_num), {}, {
+  message: 'The {_field_} must only contain letters and numbers'
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('max', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.max), {}, {
+  message: 'The {_field_} must not be greater than {length} characters.',
+  params: ['length']
+}));
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('max_value', {
+  validate: function validate(value, _ref) {
+    var max = _ref.max;
+    return value <= max;
+  },
+  params: ['max'],
+  message: 'The {_field_} value must not be greater than {max}'
+});
+(0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('barcode', {
+  validate: function validate(value) {
+    return (0,_rules_barcode_js__WEBPACK_IMPORTED_MODULE_0__.validateBarcode)(value);
+  },
+  message: 'The {_field_} must be a valid barcode of EAN-13, EAN-8, UPC-A, or UPC-E type'
+});
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/validators/rules/barcode.js":
+/*!************************************************************!*\
+  !*** ./resources/js/dashboard/validators/rules/barcode.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "validateBarcode": () => (/* binding */ validateBarcode)
+/* harmony export */ });
+/* harmony import */ var barcode_validator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! barcode-validator */ "./node_modules/barcode-validator/index.js");
+/* harmony import */ var barcode_validator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(barcode_validator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var validateBarcode = function validateBarcode(value) {
+  return barcode_validator__WEBPACK_IMPORTED_MODULE_0___default()(value);
+};
+
+
+
+/***/ }),
+
+/***/ "./node_modules/barcode-validator/index.js":
+/*!*************************************************!*\
+  !*** ./node_modules/barcode-validator/index.js ***!
+  \*************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__(/*! ./src/validatebarcode */ "./node_modules/barcode-validator/src/validatebarcode.js");
+
+
+/***/ }),
+
+/***/ "./node_modules/barcode-validator/src/validatebarcode.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/barcode-validator/src/validatebarcode.js ***!
+  \***************************************************************/
+/***/ ((module) => {
+
+module.exports = barcode => {
+  const code = `${barcode}`;
+  const digits = () => /^\d{8,13}$/g.test(code);
+  const validlengths = [8, 12, 13];
+  if (!digits() || !validlengths.includes(code.length)) return false;
+
+  let checksum = 0;
+  const codelist = code.split("");
+  const checkdigit = parseInt(codelist.pop(), 10);
+  codelist.map((value, index) => {
+    const digit = parseInt(value, 10);
+    if (code.length % 2 === 1) checksum += index % 2 ? digit * 3 : digit;
+    else checksum += index % 2 ? digit : digit * 3;
+  });
+
+  let check = checksum % 10;
+  if (check !== 0) check = 10 - check;
+  if (check === checkdigit) return true;
+  return false;
+};
+
 
 /***/ }),
 

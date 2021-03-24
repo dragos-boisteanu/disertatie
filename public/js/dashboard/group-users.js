@@ -993,21 +993,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1153,7 +1138,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       this.addressState = !this.addressState;
-      console.log(this.addressState);
     }
   }),
   components: {
@@ -3917,6 +3901,8 @@ var render = function() {
                                     key: "default",
                                     fn: function(ref) {
                                       var errors = ref.errors
+                                      var failed = ref.failed
+                                      var passed = ref.passed
                                       return [
                                         _c(
                                           "label",
@@ -3949,7 +3935,8 @@ var render = function() {
                                           staticClass:
                                             "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                           class: {
-                                            "border-red-600": errors[0]
+                                            "border-red-600": failed,
+                                            "border-green-500": passed
                                           },
                                           attrs: {
                                             id: "firstName",
@@ -3994,6 +3981,8 @@ var render = function() {
                                     key: "default",
                                     fn: function(ref) {
                                       var errors = ref.errors
+                                      var failed = ref.failed
+                                      var passed = ref.passed
                                       return [
                                         _c(
                                           "label",
@@ -4026,7 +4015,8 @@ var render = function() {
                                           staticClass:
                                             "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                           class: {
-                                            "border-red-600": errors[0]
+                                            "border-red-600": failed,
+                                            "border-green-500": passed
                                           },
                                           attrs: {
                                             id: "name",
@@ -4069,6 +4059,8 @@ var render = function() {
                                     key: "default",
                                     fn: function(ref) {
                                       var errors = ref.errors
+                                      var failed = ref.failed
+                                      var passed = ref.passed
                                       return [
                                         _c(
                                           "label",
@@ -4101,7 +4093,8 @@ var render = function() {
                                           staticClass:
                                             "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                           class: {
-                                            "border-red-600": errors[0]
+                                            "border-red-600": failed,
+                                            "border-green-500": passed
                                           },
                                           attrs: {
                                             id: "birthdate",
@@ -4146,6 +4139,8 @@ var render = function() {
                                     key: "default",
                                     fn: function(ref) {
                                       var errors = ref.errors
+                                      var failed = ref.failed
+                                      var passed = ref.passed
                                       return [
                                         _c(
                                           "label",
@@ -4178,7 +4173,8 @@ var render = function() {
                                           staticClass:
                                             "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                           class: {
-                                            "border-red-600": errors[0]
+                                            "border-red-600": failed,
+                                            "border-green-500": passed
                                           },
                                           attrs: {
                                             id: "email",
@@ -4221,6 +4217,8 @@ var render = function() {
                                     key: "default",
                                     fn: function(ref) {
                                       var errors = ref.errors
+                                      var failed = ref.failed
+                                      var passed = ref.passed
                                       return [
                                         _c(
                                           "label",
@@ -4253,7 +4251,8 @@ var render = function() {
                                           staticClass:
                                             "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                           class: {
-                                            "border-red-600": errors[0]
+                                            "border-red-600": failed,
+                                            "border-green-500": passed
                                           },
                                           attrs: {
                                             id: "phoneNumber",
@@ -4298,6 +4297,8 @@ var render = function() {
                                     key: "default",
                                     fn: function(ref) {
                                       var errors = ref.errors
+                                      var failed = ref.failed
+                                      var passed = ref.passed
                                       return [
                                         _c(
                                           "label",
@@ -4332,7 +4333,8 @@ var render = function() {
                                             staticClass:
                                               "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500 capitalize",
                                             class: {
-                                              "border-red-600": errors[0]
+                                              "border-red-600": failed,
+                                              "border-green-500": passed
                                             },
                                             attrs: {
                                               id: "role",
@@ -4475,6 +4477,8 @@ var render = function() {
                                             key: "default",
                                             fn: function(ref) {
                                               var errors = ref.errors
+                                              var failed = ref.failed
+                                              var passed = ref.passed
                                               return [
                                                 _c(
                                                   "div",
@@ -4503,7 +4507,8 @@ var render = function() {
                                                   staticClass:
                                                     "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                                   class: {
-                                                    "border-red-600": errors[0]
+                                                    "border-red-600": failed,
+                                                    "border-green-500": passed
                                                   },
                                                   attrs: {
                                                     id: "addressFirstName",
@@ -4540,82 +4545,24 @@ var render = function() {
                                         true
                                       )
                                     })
-                                  : _c("ValidationProvider", {
-                                      attrs: {
-                                        vid: "data.address.first_name",
-                                        rules: "alpha_spaces|max:255"
-                                      },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var errors = ref.errors
-                                              return [
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text-xs text-red-600 font-semibold mb-1"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      " " + _vm._s(errors[0])
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("input", {
-                                                  directives: [
-                                                    {
-                                                      name: "model",
-                                                      rawName: "v-model",
-                                                      value:
-                                                        _vm.address.first_name,
-                                                      expression:
-                                                        "address.first_name"
-                                                    }
-                                                  ],
-                                                  staticClass:
-                                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                  class: {
-                                                    "border-red-600": errors[0]
-                                                  },
-                                                  attrs: {
-                                                    id: "addressFirstName",
-                                                    name: "first name",
-                                                    type: "text",
-                                                    disabled:
-                                                      _vm.waiting ||
-                                                      !_vm.addressState
-                                                  },
-                                                  domProps: {
-                                                    value:
-                                                      _vm.address.first_name
-                                                  },
-                                                  on: {
-                                                    input: function($event) {
-                                                      if (
-                                                        $event.target.composing
-                                                      ) {
-                                                        return
-                                                      }
-                                                      _vm.$set(
-                                                        _vm.address,
-                                                        "first_name",
-                                                        $event.target.value
-                                                      )
-                                                    }
-                                                  }
-                                                })
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    })
+                                  : _c("div", [
+                                      _c("div", {
+                                        staticClass:
+                                          "text-xs text-red-600 font-semibold mb-1"
+                                      }),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        staticClass:
+                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                        attrs: {
+                                          id: "addressFirstName",
+                                          name: "first name",
+                                          type: "text",
+                                          disabled:
+                                            _vm.waiting || !_vm.addressState
+                                        }
+                                      })
+                                    ])
                               ],
                               1
                             ),
@@ -4645,6 +4592,8 @@ var render = function() {
                                             key: "default",
                                             fn: function(ref) {
                                               var errors = ref.errors
+                                              var failed = ref.failed
+                                              var passed = ref.passed
                                               return [
                                                 _c(
                                                   "div",
@@ -4671,7 +4620,8 @@ var render = function() {
                                                   staticClass:
                                                     "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                                   class: {
-                                                    "border-red-600": errors[0]
+                                                    "border-red-600": failed,
+                                                    "border-green-500": passed
                                                   },
                                                   attrs: {
                                                     id: "addressName",
@@ -4707,79 +4657,45 @@ var render = function() {
                                         true
                                       )
                                     })
-                                  : _c("ValidationProvider", {
-                                      attrs: {
-                                        vid: "data.address.name",
-                                        rules: "alpha_spaces|max:255"
-                                      },
-                                      scopedSlots: _vm._u(
-                                        [
+                                  : _c("div", [
+                                      _c("div", {
+                                        staticClass:
+                                          "text-xs text-red-600 font-semibold mb-1"
+                                      }),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
                                           {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var errors = ref.errors
-                                              return [
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text-xs text-red-600 font-semibold mb-1"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      " " + _vm._s(errors[0])
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("input", {
-                                                  directives: [
-                                                    {
-                                                      name: "model",
-                                                      rawName: "v-model",
-                                                      value: _vm.address.name,
-                                                      expression: "address.name"
-                                                    }
-                                                  ],
-                                                  staticClass:
-                                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                  class: {
-                                                    "border-red-600": errors[0]
-                                                  },
-                                                  attrs: {
-                                                    id: "addressName",
-                                                    type: "text",
-                                                    name: "name",
-                                                    disabled:
-                                                      _vm.waiting ||
-                                                      !_vm.addressState
-                                                  },
-                                                  domProps: {
-                                                    value: _vm.address.name
-                                                  },
-                                                  on: {
-                                                    input: function($event) {
-                                                      if (
-                                                        $event.target.composing
-                                                      ) {
-                                                        return
-                                                      }
-                                                      _vm.$set(
-                                                        _vm.address,
-                                                        "name",
-                                                        $event.target.value
-                                                      )
-                                                    }
-                                                  }
-                                                })
-                                              ]
-                                            }
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.address.name,
+                                            expression: "address.name"
                                           }
                                         ],
-                                        null,
-                                        true
-                                      )
-                                    })
+                                        staticClass:
+                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                        attrs: {
+                                          id: "addressName",
+                                          type: "text",
+                                          name: "name",
+                                          disabled:
+                                            _vm.waiting || !_vm.addressState
+                                        },
+                                        domProps: { value: _vm.address.name },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.address,
+                                              "name",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ])
                               ],
                               1
                             ),
@@ -4809,6 +4725,8 @@ var render = function() {
                                             key: "default",
                                             fn: function(ref) {
                                               var errors = ref.errors
+                                              var failed = ref.failed
+                                              var passed = ref.passed
                                               return [
                                                 _c(
                                                   "div",
@@ -4838,7 +4756,8 @@ var render = function() {
                                                   staticClass:
                                                     "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                                   class: {
-                                                    "border-red-600": errors[0]
+                                                    "border-red-600": failed,
+                                                    "border-green-500": passed
                                                   },
                                                   attrs: {
                                                     id: "addressPhoneNumber",
@@ -4875,83 +4794,24 @@ var render = function() {
                                         true
                                       )
                                     })
-                                  : _c("ValidationProvider", {
-                                      attrs: {
-                                        vid: "data.address.phone_number",
-                                        rules: "max:255"
-                                      },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var errors = ref.errors
-                                              return [
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text-xs text-red-600 font-semibold mb-1"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      " " + _vm._s(errors[0])
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("input", {
-                                                  directives: [
-                                                    {
-                                                      name: "model",
-                                                      rawName: "v-model",
-                                                      value:
-                                                        _vm.address
-                                                          .phone_number,
-                                                      expression:
-                                                        "address.phone_number"
-                                                    }
-                                                  ],
-                                                  staticClass:
-                                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                  class: {
-                                                    "border-red-600": errors[0]
-                                                  },
-                                                  attrs: {
-                                                    id: "addressPhoneNumber",
-                                                    type: "text",
-                                                    name: "phone number",
-                                                    disabled:
-                                                      _vm.waiting ||
-                                                      !_vm.addressState
-                                                  },
-                                                  domProps: {
-                                                    value:
-                                                      _vm.address.phone_number
-                                                  },
-                                                  on: {
-                                                    input: function($event) {
-                                                      if (
-                                                        $event.target.composing
-                                                      ) {
-                                                        return
-                                                      }
-                                                      _vm.$set(
-                                                        _vm.address,
-                                                        "phone_number",
-                                                        $event.target.value
-                                                      )
-                                                    }
-                                                  }
-                                                })
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    })
+                                  : _c("div", [
+                                      _c("div", {
+                                        staticClass:
+                                          "text-xs text-red-600 font-semibold mb-1"
+                                      }),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        staticClass:
+                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                        attrs: {
+                                          id: "addressPhoneNumber",
+                                          type: "text",
+                                          name: "phone number",
+                                          disabled:
+                                            _vm.waiting || !_vm.addressState
+                                        }
+                                      })
+                                    ])
                               ],
                               1
                             ),
@@ -4981,6 +4841,8 @@ var render = function() {
                                             key: "default",
                                             fn: function(ref) {
                                               var errors = ref.errors
+                                              var failed = ref.failed
+                                              var passed = ref.passed
                                               return [
                                                 _c(
                                                   "div",
@@ -5011,8 +4873,8 @@ var render = function() {
                                                     staticClass:
                                                       "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                                     class: {
-                                                      "border-red-600":
-                                                        errors[0]
+                                                      "border-red-600": failed,
+                                                      "border-green-500": passed
                                                     },
                                                     attrs: {
                                                       id: "addressCounty",
@@ -5102,138 +4964,39 @@ var render = function() {
                                         true
                                       )
                                     })
-                                  : _c("ValidationProvider", {
-                                      attrs: {
-                                        vid: "data.address.county_id",
-                                        rules: "integer"
-                                      },
-                                      scopedSlots: _vm._u(
+                                  : _c("div", [
+                                      _c("div", {
+                                        staticClass:
+                                          "text-xs text-red-600 font-semibold mb-1"
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "select",
+                                        {
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          attrs: {
+                                            id: "addressCounty",
+                                            name: "country",
+                                            disabled:
+                                              _vm.waiting || !_vm.addressState
+                                          }
+                                        },
                                         [
-                                          {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var errors = ref.errors
-                                              return [
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text-xs text-red-600 font-semibold mb-1"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      " " + _vm._s(errors[0])
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "select",
-                                                  {
-                                                    directives: [
-                                                      {
-                                                        name: "model",
-                                                        rawName: "v-model",
-                                                        value:
-                                                          _vm.address.county_id,
-                                                        expression:
-                                                          "address.county_id"
-                                                      }
-                                                    ],
-                                                    staticClass:
-                                                      "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                    class: {
-                                                      "border-red-600":
-                                                        errors[0]
-                                                    },
-                                                    attrs: {
-                                                      id: "addressCounty",
-                                                      name: "country",
-                                                      disabled:
-                                                        _vm.waiting ||
-                                                        !_vm.addressState
-                                                    },
-                                                    on: {
-                                                      change: [
-                                                        function($event) {
-                                                          var $$selectedVal = Array.prototype.filter
-                                                            .call(
-                                                              $event.target
-                                                                .options,
-                                                              function(o) {
-                                                                return o.selected
-                                                              }
-                                                            )
-                                                            .map(function(o) {
-                                                              var val =
-                                                                "_value" in o
-                                                                  ? o._value
-                                                                  : o.value
-                                                              return val
-                                                            })
-                                                          _vm.$set(
-                                                            _vm.address,
-                                                            "county_id",
-                                                            $event.target
-                                                              .multiple
-                                                              ? $$selectedVal
-                                                              : $$selectedVal[0]
-                                                          )
-                                                        },
-                                                        _vm.getCitites
-                                                      ]
-                                                    }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "option",
-                                                      {
-                                                        attrs: {
-                                                          value: "",
-                                                          disabled: ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "Select user country"
-                                                        )
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _vm._l(
-                                                      _vm.getCounties,
-                                                      function(county) {
-                                                        return _c(
-                                                          "option",
-                                                          {
-                                                            key: county.id,
-                                                            domProps: {
-                                                              value: county.id
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              " " +
-                                                                _vm._s(
-                                                                  county.name
-                                                                ) +
-                                                                " "
-                                                            )
-                                                          ]
-                                                        )
-                                                      }
-                                                    )
-                                                  ],
-                                                  2
-                                                )
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
+                                          _c(
+                                            "option",
+                                            {
+                                              attrs: {
+                                                value: "",
+                                                disabled: "",
+                                                selected: ""
+                                              }
+                                            },
+                                            [_vm._v("Select user country")]
+                                          )
+                                        ]
                                       )
-                                    })
+                                    ])
                               ],
                               1
                             ),
@@ -5263,6 +5026,8 @@ var render = function() {
                                             key: "default",
                                             fn: function(ref) {
                                               var errors = ref.errors
+                                              var failed = ref.failed
+                                              var passed = ref.passed
                                               return [
                                                 _c(
                                                   "div",
@@ -5293,8 +5058,8 @@ var render = function() {
                                                     staticClass:
                                                       "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                                     class: {
-                                                      "border-red-600":
-                                                        errors[0]
+                                                      "border-red-600": failed,
+                                                      "border-green-500": passed
                                                     },
                                                     attrs: {
                                                       id: "addressCity",
@@ -5376,131 +5141,40 @@ var render = function() {
                                         true
                                       )
                                     })
-                                  : _c("ValidationProvider", {
-                                      attrs: {
-                                        vid: "data.address.city_id",
-                                        rules: "integer"
-                                      },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var errors = ref.errors
-                                              return [
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text-xs text-red-600 font-semibold mb-1"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      " " + _vm._s(errors[0])
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "select",
-                                                  {
-                                                    directives: [
-                                                      {
-                                                        name: "model",
-                                                        rawName: "v-model",
-                                                        value:
-                                                          _vm.address.city_id,
-                                                        expression:
-                                                          "address.city_id"
-                                                      }
-                                                    ],
-                                                    staticClass:
-                                                      "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                    class: {
-                                                      "border-red-600":
-                                                        errors[0]
-                                                    },
-                                                    attrs: {
-                                                      id: "addressCity",
-                                                      name: "city",
-                                                      disabled:
-                                                        _vm.citiesSelectState ||
-                                                        _vm.waiting ||
-                                                        !_vm.addressState
-                                                    },
-                                                    on: {
-                                                      change: function($event) {
-                                                        var $$selectedVal = Array.prototype.filter
-                                                          .call(
-                                                            $event.target
-                                                              .options,
-                                                            function(o) {
-                                                              return o.selected
-                                                            }
-                                                          )
-                                                          .map(function(o) {
-                                                            var val =
-                                                              "_value" in o
-                                                                ? o._value
-                                                                : o.value
-                                                            return val
-                                                          })
-                                                        _vm.$set(
-                                                          _vm.address,
-                                                          "city_id",
-                                                          $event.target.multiple
-                                                            ? $$selectedVal
-                                                            : $$selectedVal[0]
-                                                        )
-                                                      }
-                                                    }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "option",
-                                                      {
-                                                        attrs: {
-                                                          value: "",
-                                                          disabled: "",
-                                                          selected: ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "Select user city"
-                                                        )
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _vm._l(_vm.cities, function(
-                                                      city
-                                                    ) {
-                                                      return _c(
-                                                        "option",
-                                                        {
-                                                          key: city.id,
-                                                          domProps: {
-                                                            value: city.id
-                                                          }
-                                                        },
-                                                        [
-                                                          _vm._v(
-                                                            _vm._s(city.name)
-                                                          )
-                                                        ]
-                                                      )
-                                                    })
-                                                  ],
-                                                  2
-                                                )
-                                              ]
-                                            }
+                                  : _c("div", [
+                                      _c("div", {
+                                        staticClass:
+                                          "text-xs text-red-600 font-semibold mb-1"
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "select",
+                                        {
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          attrs: {
+                                            id: "addressCity",
+                                            name: "city",
+                                            disabled:
+                                              _vm.citiesSelectState ||
+                                              _vm.waiting ||
+                                              !_vm.addressState
                                           }
-                                        ],
-                                        null,
-                                        true
+                                        },
+                                        [
+                                          _c(
+                                            "option",
+                                            {
+                                              attrs: {
+                                                disabled: "",
+                                                selected: ""
+                                              }
+                                            },
+                                            [_vm._v("Select user city")]
+                                          )
+                                        ]
                                       )
-                                    })
+                                    ])
                               ],
                               1
                             ),
@@ -5530,6 +5204,8 @@ var render = function() {
                                             key: "default",
                                             fn: function(ref) {
                                               var errors = ref.errors
+                                              var failed = ref.failed
+                                              var passed = ref.passed
                                               return [
                                                 _c(
                                                   "div",
@@ -5558,7 +5234,8 @@ var render = function() {
                                                   staticClass:
                                                     "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                                                   class: {
-                                                    "border-red-600": errors[0]
+                                                    "border-red-600": failed,
+                                                    "border-green-500": passed
                                                   },
                                                   attrs: {
                                                     id: "addressAddress",
@@ -5594,81 +5271,24 @@ var render = function() {
                                         true
                                       )
                                     })
-                                  : _c("ValidationProvider", {
-                                      attrs: {
-                                        vid: "data.address.address",
-                                        rules: "alpha_spaces|max:255"
-                                      },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var errors = ref.errors
-                                              return [
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text-xs text-red-600 font-semibold mb-1"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      " " + _vm._s(errors[0])
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("input", {
-                                                  directives: [
-                                                    {
-                                                      name: "model",
-                                                      rawName: "v-model",
-                                                      value:
-                                                        _vm.address.address,
-                                                      expression:
-                                                        "address.address"
-                                                    }
-                                                  ],
-                                                  staticClass:
-                                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                  class: {
-                                                    "border-red-600": errors[0]
-                                                  },
-                                                  attrs: {
-                                                    id: "addressAddress",
-                                                    name: "address",
-                                                    type: "text",
-                                                    disabled:
-                                                      _vm.waiting ||
-                                                      !_vm.addressState
-                                                  },
-                                                  domProps: {
-                                                    value: _vm.address.address
-                                                  },
-                                                  on: {
-                                                    input: function($event) {
-                                                      if (
-                                                        $event.target.composing
-                                                      ) {
-                                                        return
-                                                      }
-                                                      _vm.$set(
-                                                        _vm.address,
-                                                        "address",
-                                                        $event.target.value
-                                                      )
-                                                    }
-                                                  }
-                                                })
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    })
+                                  : _c("div", [
+                                      _c("div", {
+                                        staticClass:
+                                          "text-xs text-red-600 font-semibold mb-1"
+                                      }),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        staticClass:
+                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                        attrs: {
+                                          id: "addressAddress",
+                                          name: "address",
+                                          type: "text",
+                                          disabled:
+                                            _vm.waiting || !_vm.addressState
+                                        }
+                                      })
+                                    ])
                               ],
                               1
                             )

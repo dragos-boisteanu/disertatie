@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Resources\Product as ProductResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
 {
@@ -96,8 +97,15 @@ class ProductController extends Controller
 
     public function getProductByBarcode($barcode) 
     {
-        $product = Product::where('barcode', $barcode)->with('stock')->first();
-
-        return new ProductResource($product);
+        try {
+            $product = Product::where('barcode', $barcode)->with('stock')->first();
+            if(!isset($product)) {
+                throw new ModelNotFoundException('No products for ' . $barcode . ' barcode');
+            }
+            return new ProductResource($product);
+        } catch ( ModelNotFoundException $ex) {
+            response()->json(null, 200);
+        }
+       
     }
 }

@@ -20,6 +20,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "barcode-validator": "^1.0.2",
         "dayjs": "^1.10.4",
         "lodash": "^4.17.21",
         "vee-validate": "^3.4.5",

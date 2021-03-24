@@ -4,25 +4,24 @@
             Add new product
         </template>
 
-        
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
                 <div class="flex flex-col lg:gap-x-6 lg:w-1/4">
-                    <ValidationProvider vid="barcode" rules="required|integer" v-slot="{ errors }" class="w-full">
+                    <ValidationProvider vid="barcode" rules="required|barcode" v-slot="{ errors, failed, passed }" class="w-full">
                         <label for="name" class="text-sm font-semibold">Barcode</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
                             id="barcode"
                             name="barcode" 
                             type="text" 
-                            v-model="product.getProduct" 
+                            v-model="product.barcode" 
                             @blur="getProduct"
                             :disabled="waiting"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': errors[0]}"
+                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         />
                     </ValidationProvider>
-                    <ValidationProvider vid="name" rules="required|alpha_spaces|max:255" v-slot="{ errors }" class="w-full mt-2">
+                    <ValidationProvider vid="name" rules="required|alpha_spaces|max:255" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Name</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
@@ -32,10 +31,10 @@
                             v-model="product.name" 
                             :disabled="waiting"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': errors[0]}"
+                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         />
                     </ValidationProvider>
-                    <ValidationProvider vid="description" rules="required|alpha_spaces|max:255" v-slot="{ errors }" class="w-full mt-2">
+                    <ValidationProvider vid="description" rules="required|alpha_spaces|max:255" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                             <label for="name" class="text-sm font-semibold">Description</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                             <input 
@@ -45,10 +44,10 @@
                                 v-model="product.description" 
                                 :disabled="waiting"   
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': errors[0]}"
+                               :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             />
                     </ValidationProvider>
-                    <ValidationProvider vid="category_id" rules="required|integer" v-slot="{ errors }" class="w-full mt-2">
+                    <ValidationProvider vid="category_id" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Category</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <select 
@@ -58,13 +57,13 @@
                             v-model="product.category_id" 
                             :disabled="waiting"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': errors[0]}"
+                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         >
                             <option value="" disabled>Select category</option>
                             <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }}</option>
                         </select>
                     </ValidationProvider>
-                    <ValidationProvider vid="price" rules="required|double:2,comma" v-slot="{ errors }" class="w-full mt-2">
+                    <ValidationProvider vid="price" rules="required|double:2,comma" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Price</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
@@ -74,10 +73,10 @@
                             v-model="product.unit_price" 
                             :disabled="waiting"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': errors[0]}"
+                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         />
                     </ValidationProvider>
-                    <ValidationProvider vid="data.product.vat" rules="required|integer|max_value:99|max:2" v-slot="{ errors }" class="w-full mt-2">
+                    <ValidationProvider vid="data.product.vat" rules="required|integer|max_value:99|max:2" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">VAT ( % )</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
@@ -87,10 +86,10 @@
                             v-model="product.vat" 
                             :disabled="waiting"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': errors[0]}"
+                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         />
                     </ValidationProvider>
-                    <ValidationProvider vid="data.product.weight" rules="integer" v-slot="{ errors }" class="w-full mt-2">
+                    <ValidationProvider vid="data.product.weight" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Weight</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
@@ -100,10 +99,10 @@
                             v-model="product.weight" 
                             :disabled="waiting"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': errors[0]}"
+                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         />
                     </ValidationProvider>
-                    <ValidationProvider vid="unit_id" rules="required|integer" v-slot="{ errors }" class="w-full mt-2">
+                    <ValidationProvider vid="unit_id" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Weight units</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <select 
@@ -113,7 +112,7 @@
                             v-model="product.unit_id" 
                             :disabled="waiting"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': errors[0]}"
+                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         >
                             <option value="" disabled>Select unit</option>
                             <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
@@ -145,6 +144,8 @@
     import { mapActions, mapGetters } from 'vuex';
     import ViewContainer from '../ViewContainer';
 
+    import _debounce from 'lodash/debounce';
+
     export default {
 
         computed: {
@@ -172,7 +173,6 @@
         methods: {
             ...mapActions('Products', ['addProduct', 'getProductByBarcode']),
             
-
             async submit() {
                 try {
                     this.waiting = true;
@@ -190,18 +190,18 @@
                 }
             },
 
-            async getProduct() {
+            getProduct: _debounce( async function() {
                 try {
-                    if(this.barcode.lenth > 0) {
+                    if(this.$refs.observer.errors['barcode'].length === 0) {
                         const response = await this.getProductByBarcode(this.product.barcode);
-                        this.product = response.data.data;
+                        if(response.data.data) {
+                            this.product = response.data.data;
+                        }
                     }
                 } catch (error) {
                     console.log(error)
                 }
-            }
-
-
+            }, 500),
         },
 
         components: {
