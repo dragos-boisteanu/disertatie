@@ -206,39 +206,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var payload;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
                 _this.waiting = true;
-                _context.next = 4;
-                return _this.addProduct(_this.product);
+                payload = {};
 
-              case 4:
+                if (_this.checkingBarcode) {
+                  payload.barcode = _this.product.barcode;
+                } else {
+                  Object.keys(_this.product).forEach(function (key) {
+                    payload[key] = _this.product[key];
+                  });
+                }
+
+                _context.next = 6;
+                return _this.addProduct(payload);
+
+              case 6:
                 _this.$refs.observer.reset();
 
                 _this.waiting = false;
-                _context.next = 13;
+                _context.next = 15;
                 break;
 
-              case 8:
-                _context.prev = 8;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
 
                 if (_context.t0.response.data.errors) {
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
                 }
 
                 _this.waiting = false;
-                console.log(_context.t0);
 
-              case 13:
+              case 15:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 8]]);
+        }, _callee, null, [[0, 10]]);
       }))();
     },
     getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -248,13 +259,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
+              this.checkingBarcode = true;
 
               if (!(this.$refs.observer.errors['barcode'].length === 0)) {
                 _context2.next = 10;
                 break;
               }
 
-              this.checkingBarcode = true;
               _context2.next = 5;
               return this.getProductByBarcode(this.product.barcode);
 
@@ -270,28 +281,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               }
 
               this.checkingBarcode = false;
-              _context2.next = 12;
+              _context2.next = 13;
               break;
 
             case 10:
-              this.resetProductData();
+              this.checkingBarcode = false;
               this.locked = false;
+              this.resetProductData();
 
-            case 12:
-              _context2.next = 17;
+            case 13:
+              _context2.next = 18;
               break;
 
-            case 14:
-              _context2.prev = 14;
+            case 15:
+              _context2.prev = 15;
               _context2.t0 = _context2["catch"](0);
               console.log(_context2.t0);
 
-            case 17:
+            case 18:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, this, [[0, 14]]);
+      }, _callee2, this, [[0, 15]]);
     })), 500),
     resetProductData: function resetProductData() {
       var _this2 = this;
@@ -1272,7 +1284,7 @@ var render = function() {
                         _c("ValidationProvider", {
                           staticClass: "w-full mt-2",
                           attrs: {
-                            vid: "data.product.vat",
+                            vid: "vat",
                             rules: "required|integer|max_value:99|max:2"
                           },
                           scopedSlots: _vm._u(
@@ -1348,10 +1360,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("ValidationProvider", {
                           staticClass: "w-full mt-2",
-                          attrs: {
-                            vid: "data.product.weight",
-                            rules: "required|integer"
-                          },
+                          attrs: { vid: "weight", rules: "required|integer" },
                           scopedSlots: _vm._u(
                             [
                               {

@@ -3326,25 +3326,24 @@ var actions = {
               _objectDestructuringEmpty(_ref3);
 
               _context2.prev = 1;
-              console.log(payload);
-              _context2.next = 5;
+              _context2.next = 4;
               return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProductByBarcode)(payload);
 
-            case 5:
+            case 4:
               response = _context2.sent;
               return _context2.abrupt("return", response);
 
-            case 9:
-              _context2.prev = 9;
+            case 8:
+              _context2.prev = 8;
               _context2.t0 = _context2["catch"](1);
               throw _context2.t0;
 
-            case 12:
+            case 11:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 9]]);
+      }, _callee2, null, [[1, 8]]);
     }))();
   }
 };

@@ -27,7 +27,6 @@ const actions = {
 
     async getProductByBarcode({}, payload) {
         try {
-            console.log(payload)
             const response = await downloadProductByBarcode(payload);
             return response;
         } catch ( error ) {

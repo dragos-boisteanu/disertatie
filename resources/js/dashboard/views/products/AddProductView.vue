@@ -83,7 +83,7 @@
                             :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         />
                     </ValidationProvider>
-                    <ValidationProvider vid="data.product.vat" rules="required|integer|max_value:99|max:2" v-slot="{ errors, failed, passed }" class="w-full mt-2">
+                    <ValidationProvider vid="vat" rules="required|integer|max_value:99|max:2" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">VAT ( % )</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
@@ -96,7 +96,7 @@
                             :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         />
                     </ValidationProvider>
-                    <ValidationProvider vid="data.product.weight" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
+                    <ValidationProvider vid="weight" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Weight</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
@@ -185,24 +185,31 @@
             async submit() {
                 try {
                     this.waiting = true;
-
-                    await this.addProduct(this.product);
+                    const payload = {}
+                    if(this.checkingBarcode) {
+                        payload.barcode = this.product.barcode;
+                    } else {
+                        Object.keys(this.product).forEach(key => {
+                            payload[key] = this.product[key];
+                        })
+                    }
+                    await this.addProduct(payload);
                     this.$refs.observer.reset();
                     this.waiting = false
                 } catch ( error ) {
-                   
+                    console.log(error)
                     if(error.response.data.errors) {
                         this.$refs.observer.setErrors(error.response.data.errors)
                     }  
                     this.waiting = false
-                    console.log(error)
+                    
                 }
             },
 
             getProduct: _debounce( async function() {
                 try {
+                    this.checkingBarcode = true;
                     if(this.$refs.observer.errors['barcode'].length === 0) {
-                        this.checkingBarcode = true;
                         const response = await this.getProductByBarcode(this.product.barcode);
                         if(response.data.data) {
                             this.product = response.data.data;
@@ -213,8 +220,9 @@
                         }
                         this.checkingBarcode = false;
                     } else {
-                        this.resetProductData();
+                        this.checkingBarcode = false;
                         this.locked = false;
+                        this.resetProductData();
                     }              
                 } catch (error) {
                     console.log(error)

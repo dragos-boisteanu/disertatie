@@ -25,6 +25,11 @@ class Product extends Model
 
     public $with = ['stock:quantity'];
 
+    public function getUnitPriceAttribute($value)
+    {
+        return str_replace('.', ',', $value);
+    }
+
     public function category() 
     {
         return $this->belongsTo('App\Models\Category');
