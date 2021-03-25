@@ -127,8 +127,8 @@
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
     import UsersFilter from '../../components/filter/UsersFilterComponent';
-    import CardsList from '../../components/CardsListComponent';
-    import Card from '../../components/CardComponent';
+    import CardsList from '../../components/cards/CardsListComponent';
+    import Card from '../../components/cards/CardComponent';
 
     export default {
         async beforeRouteEnter (to, from, next) {

@@ -86,8 +86,8 @@
     import Stock from '../../components/StockComponent';
     import ProductFilter from '../../components/filter/ProductFilterComponent';
     import Pagination from '../../components/PaginationComponent';
-    import CardsList from '../../components/CardsListComponent';
-    import Card from '../../components/CardComponent';
+    import CardsList from '../../components/cards/CardsListComponent';
+    import Card from '../../components/cards/CardComponent';
 
     import store from '../../store/index';
     import { mapActions, mapGetters } from 'vuex';
