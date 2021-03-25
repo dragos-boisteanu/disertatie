@@ -23,6 +23,111 @@
                 @keyup="callFilter"
             />
 
+            <input 
+                id="name" 
+                name="name" 
+                type="text"
+                class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                placeholder="Product name"
+                v-model="filterData.name"
+                @keyup="callFilter"
+            />
+
+            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+                <div class="mb-2 text-base font-semibold">
+                    Is active
+                </div>
+                <div class="flex items-center flex-wrap gap-2">
+                    <div class="flex justify-between items-center">
+                        <input 
+                            id="isActive"
+                            name="active" type="radio" 
+                            value="1" 
+                            v-model="filterData.status"
+                            class="mr-1 outline-none"
+                            @click="callFilter"
+                        />
+                        <label for="isActive" class="text-sm capitalize">Active</label>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <input 
+                            id="isInactive"
+                            name="inactive" type="radio" 
+                            value="2" 
+                            v-model="filterData.status"
+                            class="mr-1 outline-none"
+                            @click="callFilter"
+                        />
+                        <label for="isInactive" class="text-sm capitalize">Inactive</label>
+                    </div>
+                    <button 
+                        class="text-sm  border px-2 py-1 rounded border-gray-400 hover:border-lightBlue-600"
+                        @click="resetActiveFilter"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+                <div class="mb-2 text-base font-semibold">
+                    Price range
+                </div>
+                <div class="flex flex-col items-start gap-3 md:flex-row">
+                    <div class="flex items-center">
+                        <label class="text-sm font-semibold mr-3" for="priceStart">From:</label>
+                        <input 
+                            type="text" 
+                            id="priceStart" 
+                            name="priceStart" 
+                            v-model="filterData.priceStart"
+                            class="w-full  py-1 px-2 text-sm rounded-sm"
+                            @change="callFilter"
+                        />
+                    </div>
+                    <div class="flex items-center">
+                        <label class="text-sm font-semibold mr-3" for="priceEnd">To:</label>
+                        <input 
+                            type="text" 
+                            id="priceEnd" 
+                            name="priceEnd" 
+                            v-model="filterData.priceEnd"
+                            class="w-full py-1 px-2 text-sm rounded-sm"
+                            @change="callFilter"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+                <div class="mb-2 text-base font-semibold">
+                    Stock quantity range
+                </div>
+                <div class="flex flex-col items-start gap-3 md:flex-row">
+                    <div class="flex items-center">
+                        <label class="text-sm font-semibold mr-3" for="quantityStart">From:</label>
+                        <input 
+                            type="text" 
+                            id="quantityStart" 
+                            name="quantityStart" 
+                            v-model="filterData.quantityStart"
+                            class="w-full  py-1 px-2 text-sm rounded-sm"
+                            @change="callFilter"
+                        />
+                    </div>
+                    <div class="flex items-center">
+                        <label class="text-sm font-semibold mr-3" for="quantityEnd">To:</label>
+                        <input 
+                            type="text" 
+                            id="quantityEnd" 
+                            name="quantityEnd" 
+                            v-model="filterData.quantityEnd"
+                            class="w-full py-1 px-2 text-sm rounded-sm"
+                            @change="callFilter"
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
     </FilterComponent>
 </template>
@@ -31,6 +136,7 @@
     import FilterComponent from './FilterComponent';
     import { mapActions, mapGetters } from 'vuex';
     import _debounce from 'lodash/debounce';
+
 
     export default {
 
@@ -68,7 +174,7 @@
                         }
                     })
 
-                    // this.$router.replace({name:'Products', query: {...query}});
+                    this.$router.replace({name:'Products', query: {...query}});
                 
                     await this.fetchProducts(query);
 
@@ -80,6 +186,11 @@
 
             close() {
                 this.$emit('closed')
+            },
+
+            resetActiveFilter() {
+                this.filterData.status = '';
+                this.callFilter();
             }
         },
 

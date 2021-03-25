@@ -196,10 +196,10 @@
                 try {
                     this.checkingBarcode = true;
                     if(this.$refs.observer.errors['barcode'].length === 0) {
+                        this.locked = true;
                         const response = await this.getProductByBarcode(this.product.barcode);
                         if(response.data.data) {
                             this.product = response.data.data;
-                            this.locked = true;
                         } else {
                             this.resetProductData();
                             this.locked = false;
@@ -208,7 +208,6 @@
                     } else {
                         this.checkingBarcode = false;
                         this.locked = false;
-                        this.resetProductData();
                     }              
                 } catch (error) {
                     console.log(error)

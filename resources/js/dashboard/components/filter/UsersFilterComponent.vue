@@ -80,6 +80,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
                 <div class="mb-2 text-base font-semibold">
                     Has email verified
@@ -109,11 +110,12 @@
                     </div>
                 </div>
             </div>
-           <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+
+            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
                 <div class="mb-2 text-base font-semibold">
                     Joined date
                 </div>
-                <div class="flex  flex-col items-start gap-3 md:flex-row">
+                <div class="flex flex-col items-start gap-3 md:flex-row">
                     <div class="flex items-center">
                         <label class="text-sm font-semibold mr-3" for="fromDate">From:</label>
                         <input 
@@ -121,7 +123,7 @@
                             id="fromDate" 
                             name="from_date" 
                             v-model="filterData.fromDate"
-                            class="py-1 px-2 text-sm text-center border-b-2 border-lightBlue-600 rounded-sm"
+                            class="py-1 px-2 text-sm text-center rounded-sm"
                             @change="callFilter"
                         />
                     </div>
@@ -129,10 +131,10 @@
                         <label class="text-sm font-semibold mr-3" for="toDate">To:</label>
                         <input 
                             type="date" 
-                            id="fromDate" 
+                            id="toDate" 
                             name="to_date" 
                             v-model="filterData.toDate"
-                            class="py-1 px-2 text-sm text-center border-b-2 border-lightBlue-600 rounded-sm"
+                            class="py-1 px-2 text-sm text-center rounded-sm"
                             @change="callFilter"
                         />
                     </div>

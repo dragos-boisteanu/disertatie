@@ -303,6 +303,111 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -338,29 +443,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 if (_this.filterData[key].length > 0) {
                   query[key] = _this.filterData[key];
                 }
-              }); // this.$router.replace({name:'Products', query: {...query}});
-
-              _context.next = 5;
+              });
+              this.$router.replace({
+                name: 'Products',
+                query: _objectSpread({}, query)
+              });
+              _context.next = 6;
               return this.fetchProducts(query);
 
-            case 5:
-              _context.next = 10;
+            case 6:
+              _context.next = 11;
               break;
 
-            case 7:
-              _context.prev = 7;
+            case 8:
+              _context.prev = 8;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 10:
+            case 11:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 7]]);
+      }, _callee, this, [[0, 8]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
+    },
+    resetActiveFilter: function resetActiveFilter() {
+      this.filterData.status = '';
+      this.callFilter();
     }
   }),
   components: {
@@ -618,19 +730,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               this.checkingBarcode = true;
 
               if (!(this.$refs.observer.errors['barcode'].length === 0)) {
-                _context2.next = 10;
+                _context2.next = 11;
                 break;
               }
 
-              _context2.next = 5;
+              this.locked = true;
+              _context2.next = 6;
               return this.getProductByBarcode(this.product.barcode);
 
-            case 5:
+            case 6:
               response = _context2.sent;
 
               if (response.data.data) {
                 this.product = response.data.data;
-                this.locked = true;
               } else {
                 this.resetProductData();
                 this.locked = false;
@@ -640,10 +752,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _context2.next = 13;
               break;
 
-            case 10:
+            case 11:
               this.checkingBarcode = false;
               this.locked = false;
-              this.resetProductData();
 
             case 13:
               _context2.next = 18;
@@ -812,42 +923,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               if (!(_store_index__WEBPACK_IMPORTED_MODULE_8__.default.getters["Products/getProducts"].length === 0 && Object.keys(to.query).length === 0)) {
-                _context.next = 8;
+                _context.next = 7;
                 break;
               }
 
               query = {
                 page: 1
               };
-              console.log("here1");
-              _context.next = 5;
+              _context.next = 4;
               return _store_index__WEBPACK_IMPORTED_MODULE_8__.default.dispatch('Products/fetchProducts', query);
 
-            case 5:
+            case 4:
               next();
-              _context.next = 17;
+              _context.next = 14;
               break;
 
-            case 8:
+            case 7:
               if (!(Object.keys(to.query).length !== 0)) {
-                _context.next = 15;
+                _context.next = 13;
                 break;
               }
 
-              console.log('here2');
-              _context.next = 12;
+              _context.next = 10;
               return _store_index__WEBPACK_IMPORTED_MODULE_8__.default.dispatch('Products/fetchProducts', to.query);
 
-            case 12:
+            case 10:
               next();
-              _context.next = 17;
+              _context.next = 14;
               break;
 
-            case 15:
-              console.log('here3');
+            case 13:
               next();
 
-            case 17:
+            case 14:
             case "end":
               return _context.stop();
           }
@@ -873,25 +981,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                _context2.next = 3;
+
+                if (Object.keys(_this.$route.query).length > 0) {
+                  _this.$router.replace({
+                    name: 'Products',
+                    query: {}
+                  });
+                }
+
+                _context2.next = 4;
                 return _this.fetchProducts();
 
-              case 3:
+              case 4:
                 _this.orderBy = 1;
-                _context2.next = 9;
+                _context2.next = 10;
                 break;
 
-              case 6:
-                _context2.prev = 6;
+              case 7:
+                _context2.prev = 7;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 9:
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 6]]);
+        }, _callee2, null, [[0, 7]]);
       }))();
     },
     loadProducts: function loadProducts(page) {
@@ -2267,7 +2383,326 @@ var render = function() {
               _vm.$set(_vm.filterData, "barcode", $event.target.value)
             }
           }
-        })
+        }),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.filterData.name,
+              expression: "filterData.name"
+            }
+          ],
+          staticClass:
+            "mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none",
+          attrs: {
+            id: "name",
+            name: "name",
+            type: "text",
+            placeholder: "Product name"
+          },
+          domProps: { value: _vm.filterData.name },
+          on: {
+            keyup: _vm.callFilter,
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.filterData, "name", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mt-3 pb-2 border-b-2 border-lightBlue-600" },
+          [
+            _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
+              _vm._v("\n                Is active\n            ")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "flex items-center flex-wrap gap-2" }, [
+              _c("div", { staticClass: "flex justify-between items-center" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.filterData.status,
+                      expression: "filterData.status"
+                    }
+                  ],
+                  staticClass: "mr-1 outline-none",
+                  attrs: {
+                    id: "isActive",
+                    name: "active",
+                    type: "radio",
+                    value: "1"
+                  },
+                  domProps: { checked: _vm._q(_vm.filterData.status, "1") },
+                  on: {
+                    click: _vm.callFilter,
+                    change: function($event) {
+                      return _vm.$set(_vm.filterData, "status", "1")
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "text-sm capitalize",
+                    attrs: { for: "isActive" }
+                  },
+                  [_vm._v("Active")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex justify-between items-center" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.filterData.status,
+                      expression: "filterData.status"
+                    }
+                  ],
+                  staticClass: "mr-1 outline-none",
+                  attrs: {
+                    id: "isInactive",
+                    name: "inactive",
+                    type: "radio",
+                    value: "2"
+                  },
+                  domProps: { checked: _vm._q(_vm.filterData.status, "2") },
+                  on: {
+                    click: _vm.callFilter,
+                    change: function($event) {
+                      return _vm.$set(_vm.filterData, "status", "2")
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "text-sm capitalize",
+                    attrs: { for: "isInactive" }
+                  },
+                  [_vm._v("Inactive")]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "text-sm  border px-2 py-1 rounded border-gray-400 hover:border-lightBlue-600",
+                  on: { click: _vm.resetActiveFilter }
+                },
+                [_vm._v("\n                    Reset\n                ")]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mt-3 pb-2 border-b-2 border-lightBlue-600" },
+          [
+            _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
+              _vm._v("\n                Price range\n            ")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "flex flex-col items-start gap-3 md:flex-row" },
+              [
+                _c("div", { staticClass: "flex items-center" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "text-sm font-semibold mr-3",
+                      attrs: { for: "priceStart" }
+                    },
+                    [_vm._v("From:")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filterData.priceStart,
+                        expression: "filterData.priceStart"
+                      }
+                    ],
+                    staticClass: "w-full  py-1 px-2 text-sm rounded-sm",
+                    attrs: {
+                      type: "text",
+                      id: "priceStart",
+                      name: "priceStart"
+                    },
+                    domProps: { value: _vm.filterData.priceStart },
+                    on: {
+                      change: _vm.callFilter,
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.filterData,
+                          "priceStart",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex items-center" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "text-sm font-semibold mr-3",
+                      attrs: { for: "priceEnd" }
+                    },
+                    [_vm._v("To:")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filterData.priceEnd,
+                        expression: "filterData.priceEnd"
+                      }
+                    ],
+                    staticClass: "w-full py-1 px-2 text-sm rounded-sm",
+                    attrs: { type: "text", id: "priceEnd", name: "priceEnd" },
+                    domProps: { value: _vm.filterData.priceEnd },
+                    on: {
+                      change: _vm.callFilter,
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.filterData,
+                          "priceEnd",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ])
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mt-3 pb-2 border-b-2 border-lightBlue-600" },
+          [
+            _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
+              _vm._v("\n                Stock quantity range\n            ")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "flex flex-col items-start gap-3 md:flex-row" },
+              [
+                _c("div", { staticClass: "flex items-center" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "text-sm font-semibold mr-3",
+                      attrs: { for: "quantityStart" }
+                    },
+                    [_vm._v("From:")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filterData.quantityStart,
+                        expression: "filterData.quantityStart"
+                      }
+                    ],
+                    staticClass: "w-full  py-1 px-2 text-sm rounded-sm",
+                    attrs: {
+                      type: "text",
+                      id: "quantityStart",
+                      name: "quantityStart"
+                    },
+                    domProps: { value: _vm.filterData.quantityStart },
+                    on: {
+                      change: _vm.callFilter,
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.filterData,
+                          "quantityStart",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex items-center" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "text-sm font-semibold mr-3",
+                      attrs: { for: "quantityEnd" }
+                    },
+                    [_vm._v("To:")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.filterData.quantityEnd,
+                        expression: "filterData.quantityEnd"
+                      }
+                    ],
+                    staticClass: "w-full py-1 px-2 text-sm rounded-sm",
+                    attrs: {
+                      type: "text",
+                      id: "quantityEnd",
+                      name: "quantityEnd"
+                    },
+                    domProps: { value: _vm.filterData.quantityEnd },
+                    on: {
+                      change: _vm.callFilter,
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.filterData,
+                          "quantityEnd",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ])
+              ]
+            )
+          ]
+        )
       ])
     ],
     2

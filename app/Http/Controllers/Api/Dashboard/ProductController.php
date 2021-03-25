@@ -21,7 +21,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+
         $query = Product::filter($request);
+        
 
         if(!$request->has('orderBy')) {
             $orderByValue = 1;
@@ -51,7 +53,7 @@ class ProductController extends Controller
                 break;
         }
         
-        $query->orderBy('id', 'asc');;
+        $query->orderBy('products.id', 'asc');;
 
         $products = $query->Paginate(1);
 
@@ -80,13 +82,13 @@ class ProductController extends Controller
                     'message'=>'Product already exists. Stock quantity increased by 1',
                 ], 200);
             } 
-            
+         
             $stock = Stock::create(['quantity' => 1]);
 
             $input['stock_id'] = $stock->id;
 
             $product = Product::create($input);
-
+            
             DB::commit();
 
             return response()->json([

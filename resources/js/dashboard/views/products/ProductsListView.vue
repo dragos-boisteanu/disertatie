@@ -100,16 +100,13 @@
                     page: 1
                 }
 
-                console.log("here1");
                 await store.dispatch('Products/fetchProducts', query);
-                
+            
                 next();
             } else if (Object.keys(to.query).length !== 0) {
-                console.log('here2')
                 await store.dispatch('Products/fetchProducts', to.query);
                 next();
             } else {
-                console.log('here3')
                 next();
             }
         },
@@ -132,6 +129,10 @@
 
             async refreshProducsList() {
                 try {
+                    if(Object.keys(this.$route.query).length > 0) { 
+                        this.$router.replace({name:'Products', query: {}});
+                    }
+
                     await this.fetchProducts();
 
                     this.orderBy = 1;
