@@ -45,8 +45,8 @@
             </select>
         </div>
       <!-- xl:w-375px -->
-        <ul class="h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-start md:items-start md:justify-between lg:justify-start lg:gap-x-4">
-            <li v-for="user in getUsers" :key="user.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px">
+        <CardsList>
+            <Card v-for="user in getUsers" :key="user.id">
                 <router-link :to="{name: 'User', params:{id:user.id}}">
                     <div class="w-full flex justify-start items-center pb-1 border-b border-gray-100">
                         <div class="w-12 h-12 mr-4 bg-gray-500 rounded-md">
@@ -104,8 +104,8 @@
                         </div>
                     </div>
                 </router-link>
-            </li>
-      </ul>
+            </Card>
+      </CardsList>
       
       <div class="mt-5 text-center md:text-right" v-if="showMoreState">
             <button 
@@ -127,6 +127,8 @@
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
     import UsersFilter from '../../components/filter/UsersFilterComponent';
+    import CardsList from '../../components/CardsListComponent';
+    import Card from '../../components/CardComponent';
 
     export default {
         async beforeRouteEnter (to, from, next) {
@@ -226,7 +228,9 @@
             ViewContainer,
             Status,
             Role,
-            UsersFilter
+            UsersFilter,
+            CardsList,
+            Card
         }
     }
 </script>

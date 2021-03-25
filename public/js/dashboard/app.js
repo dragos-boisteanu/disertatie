@@ -31219,7 +31219,13 @@ var render = function() {
                       staticClass: "text-gray-400  hover:text-gray-50 ",
                       attrs: { to: { path: _vm.getPath(crumb) }, exact: "" }
                     },
-                    [_vm._v(_vm._s(_vm.getBreadcrumb(crumb.meta.breadcrumb)))]
+                    [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.getBreadcrumb(crumb.meta.breadcrumb)) +
+                          "\n            "
+                      )
+                    ]
                   )
                 ],
                 1

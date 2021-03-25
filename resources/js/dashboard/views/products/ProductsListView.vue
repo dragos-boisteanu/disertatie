@@ -38,9 +38,8 @@
                 <option :value="6">Quantity desc</option>
             </select> 
         </div>
-
-        <ul class="h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-start md:items-start md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4">
-            <li v-for="product in getProducts" :key="product.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px">
+        <CardsList>
+            <Card v-for="product in getProducts" :key="product.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px">
                 <a>
                     <div class="w-full flex justify-start items-center pb-2 border-b border-gray-100">
                         <div class="w-12 h-12 mr-4 bg-gray-500 rounded-md">
@@ -75,8 +74,8 @@
                         </div>
                     </div>
                 </a>
-            </li>
-        </ul>
+            </Card>
+        </CardsList>
         <Pagination :data="getPaginationData" route="Products" :query="query" @navigate="loadProducts" ></Pagination>
     </ViewContainer>
 </template>
@@ -87,6 +86,8 @@
     import Stock from '../../components/StockComponent';
     import ProductFilter from '../../components/filter/ProductFilterComponent';
     import Pagination from '../../components/PaginationComponent';
+    import CardsList from '../../components/CardsListComponent';
+    import Card from '../../components/CardComponent';
 
     import store from '../../store/index';
     import { mapActions, mapGetters } from 'vuex';
@@ -165,7 +166,9 @@
             Status,
             Stock,
             ProductFilter,
-            Pagination
+            Pagination,
+            CardsList,
+            Card
         }
     }
 </script>
