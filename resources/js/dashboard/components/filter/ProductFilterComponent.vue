@@ -71,6 +71,26 @@
 
             <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
                 <div class="mb-2 text-base font-semibold">
+                    Categories
+                </div>
+                <div class="flex items-center flex-wrap gap-2">
+                    <div class="flex justify-between items-center" v-for="category in getCategories" :key="category.id">
+                        <input 
+                            :id="category.name" 
+                            :name="category.name"
+                            :value="category.id" 
+                            type="checkbox"
+                            v-model="filterData.categories"
+                            class="mr-1 outline-none"
+                            @click="callFilter"
+                        />
+                        <label :for="category.name" class="text-sm capitalize">{{ category.name}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+                <div class="mb-2 text-base font-semibold">
                     Price range
                 </div>
                 <div class="flex flex-col items-start gap-3 md:flex-row">
@@ -140,10 +160,24 @@
 
     export default {
 
+        mounted() {
+            const routerQuery = this.$route.query;
+
+            Object.keys(routerQuery).forEach(key => {
+                if(routerQuery[key].length > 0) {
+                    if(key === 'categories') {
+                        this.filterData[key] = [];
+                        this.filterData[key].push(...routerQuery[key])
+                    } else {
+                        this.filterData[key] = routerQuery[key];
+                    }
+                }
+            })
+        },
+
         computed: {
             ...mapGetters('Categories', ['getCategories']),
         },
-
 
         data() {
             return {
@@ -152,7 +186,7 @@
                     id: '',
                     name: '',
                     status: '',
-                    category: '',
+                    categories: [],
                     priceStart: '',
                     priceEnd: '',
                     quantityStart: '',
@@ -174,10 +208,13 @@
                         }
                     })
 
-                    this.$router.replace({name:'Products', query: {...query}});
-                
                     await this.fetchProducts(query);
 
+                    if(this.$route.query['page']) {
+                        query.page = 1
+                    }
+                                       
+                    this.$router.replace({name:'Products', query: {...query}});
                   
                 } catch ( error ) {
                     console.log(error)
