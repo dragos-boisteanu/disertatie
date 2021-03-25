@@ -63,6 +63,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    cleanQuery: function cleanQuery() {
+      var _this = this;
+
+      var result = {};
+      Object.keys(this.query).forEach(function (key) {
+        if (key !== 'page') {
+          result[key] = _this.query[key];
+        }
+      });
+      return result;
+    },
     currentPage: function currentPage() {
       return this.data.current_page;
     },
@@ -274,6 +285,38 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -412,6 +455,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  mounted: function mounted() {
+    var _this = this;
+
+    var routerQuery = this.$route.query;
+    Object.keys(routerQuery).forEach(function (key) {
+      if (routerQuery[key].length > 0) {
+        if (key === 'categories') {
+          var _this$filterData$key;
+
+          _this.filterData[key] = [];
+
+          (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
+        } else {
+          _this.filterData[key] = routerQuery[key];
+        }
+      }
+    });
+  },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Categories', ['getCategories'])),
   data: function data() {
     return {
@@ -420,7 +481,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         id: '',
         name: '',
         status: '',
-        category: '',
+        categories: [],
         priceStart: '',
         priceEnd: '',
         quantityStart: '',
@@ -430,7 +491,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Products', ['fetchProducts'])), {}, {
     callFilter: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var _this = this;
+      var _this2 = this;
 
       var query;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -440,32 +501,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _context.prev = 0;
               query = {};
               Object.keys(this.filterData).forEach(function (key) {
-                if (_this.filterData[key].length > 0) {
-                  query[key] = _this.filterData[key];
+                if (_this2.filterData[key].length > 0) {
+                  query[key] = _this2.filterData[key];
                 }
               });
+              _context.next = 5;
+              return this.fetchProducts(query);
+
+            case 5:
+              if (this.$route.query['page']) {
+                query.page = 1;
+              }
+
               this.$router.replace({
                 name: 'Products',
                 query: _objectSpread({}, query)
               });
-              _context.next = 6;
-              return this.fetchProducts(query);
-
-            case 6:
-              _context.next = 11;
+              _context.next = 12;
               break;
 
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 8]]);
+      }, _callee, this, [[0, 9]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -963,10 +1028,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapGetters)('Products', ['getProducts', 'getPaginationData'])),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapGetters)('Products', ['getProducts', 'getPaginationData'])), {}, {
+    query: function query() {
+      return this.$route.query;
+    }
+  }),
   data: function data() {
     return {
-      query: {},
       showFilterState: false,
       orderBy: 1
     };
@@ -1014,33 +1082,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var query;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.prev = 0;
-                query = {
-                  page: page
-                };
-                _context3.next = 4;
-                return _this2.fetchProducts(query);
+                _context3.next = 3;
+                return _this2.fetchProducts(_this2.query);
 
-              case 4:
-                _context3.next = 9;
+              case 3:
+                _context3.next = 8;
                 break;
 
-              case 6:
-                _context3.prev = 6;
+              case 5:
+                _context3.prev = 5;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 9:
+              case 8:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 6]]);
+        }, _callee3, null, [[0, 5]]);
       }))();
     },
     toggleFilterState: function toggleFilterState() {
@@ -2005,7 +2069,7 @@ var render = function() {
                       query: Object.assign(
                         {},
                         { page: _vm.previousPage },
-                        _vm.query
+                        _vm.cleanQuery
                       )
                     }
                   },
@@ -2043,7 +2107,7 @@ var render = function() {
                   attrs: {
                     to: {
                       name: _vm.route,
-                      query: Object.assign({}, { page: page }, _vm.query)
+                      query: Object.assign({}, { page: page }, _vm.cleanQuery)
                     }
                   },
                   nativeOn: {
@@ -2087,7 +2151,7 @@ var render = function() {
                       query: Object.assign(
                         {},
                         { page: _vm.nextPage },
-                        _vm.query
+                        _vm.cleanQuery
                       )
                     }
                   },
@@ -2505,6 +2569,93 @@ var render = function() {
                 [_vm._v("\n                    Reset\n                ")]
               )
             ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mt-3 pb-2 border-b-2 border-lightBlue-600" },
+          [
+            _c("div", { staticClass: "mb-2 text-base font-semibold" }, [
+              _vm._v("\n                Categories\n            ")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "flex items-center flex-wrap gap-2" },
+              _vm._l(_vm.getCategories, function(category) {
+                return _c(
+                  "div",
+                  {
+                    key: category.id,
+                    staticClass: "flex justify-between items-center"
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filterData.categories,
+                          expression: "filterData.categories"
+                        }
+                      ],
+                      staticClass: "mr-1 outline-none",
+                      attrs: {
+                        id: category.name,
+                        name: category.name,
+                        type: "checkbox"
+                      },
+                      domProps: {
+                        value: category.id,
+                        checked: Array.isArray(_vm.filterData.categories)
+                          ? _vm._i(_vm.filterData.categories, category.id) > -1
+                          : _vm.filterData.categories
+                      },
+                      on: {
+                        click: _vm.callFilter,
+                        change: function($event) {
+                          var $$a = _vm.filterData.categories,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = category.id,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(
+                                  _vm.filterData,
+                                  "categories",
+                                  $$a.concat([$$v])
+                                )
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  _vm.filterData,
+                                  "categories",
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
+                          } else {
+                            _vm.$set(_vm.filterData, "categories", $$c)
+                          }
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "text-sm capitalize",
+                        attrs: { for: category.name }
+                      },
+                      [_vm._v(_vm._s(category.name))]
+                    )
+                  ]
+                )
+              }),
+              0
+            )
           ]
         ),
         _vm._v(" "),

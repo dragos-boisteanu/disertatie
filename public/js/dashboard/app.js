@@ -3315,21 +3315,20 @@ var actions = {
                 last_page: meta.last_page
               };
               commit('SET_PAGINATION', paginationData);
-              console.log(response);
-              _context.next = 15;
+              _context.next = 14;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 15:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 12]]);
+      }, _callee, null, [[1, 11]]);
     }))();
   },
   addProduct: function addProduct(_ref3, payload) {

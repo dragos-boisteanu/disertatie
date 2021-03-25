@@ -290,6 +290,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -312,7 +320,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     });
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Users', ['getNextPage'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])),
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])),
   data: function data() {
     return {
       filterData: {
@@ -381,6 +389,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     })), 750),
     close: function close() {
       this.$emit('closed');
+    },
+    resetVerifiedFilter: function resetVerifiedFilter() {
+      this.filterData.verified;
+      this.callFilter();
     }
   }),
   components: {
@@ -3239,7 +3251,17 @@ var render = function() {
                   },
                   [_vm._v("Not verified")]
                 )
-              ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "text-sm  border px-2 py-1 rounded border-gray-400 hover:border-lightBlue-600",
+                  on: { click: _vm.resetVerifiedFilter }
+                },
+                [_vm._v("\n                    Reset\n                ")]
+              )
             ])
           ]
         ),

@@ -70,8 +70,10 @@
                 <div class="flex items-center flex-wrap gap-2">
                     <div class="flex justify-between items-center" v-for="role in getRoles" :key="role.id">
                         <input 
-                            :id="role.name" :name="role.name" type="checkbox" 
+                            :id="role.name" 
+                            :name="role.name"
                             :value="role.id" 
+                            type="checkbox" 
                             v-model="filterData.roles"
                             class="mr-1 outline-none"
                             @click="callFilter"
@@ -108,6 +110,12 @@
                         />
                         <label for="isNotVerified" class="text-sm capitalize">Not verified</label>
                     </div>
+                    <button 
+                        class="text-sm  border px-2 py-1 rounded border-gray-400 hover:border-lightBlue-600"
+                        @click="resetVerifiedFilter"
+                    >
+                        Reset
+                    </button>
                 </div>
             </div>
 
@@ -167,7 +175,6 @@
         },
 
         computed: {
-            ...mapGetters('Users', ['getNextPage']),
             ...mapGetters('Roles', ['getRoles']),
         },
 
@@ -228,6 +235,11 @@
 
             close() {
                 this.$emit('closed')
+            },
+
+            resetVerifiedFilter() {
+                this.filterData.verified;
+                this.callFilter();
             }
         },
 

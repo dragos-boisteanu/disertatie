@@ -32,7 +32,6 @@ const actions = {
         
             commit('SET_PAGINATION', paginationData)
 
-            console.log(response)
         } catch ( error ) {
             throw error
         }
@@ -97,7 +96,8 @@ const mutations = {
                 state.products = _orderBy(state.products, [product => product.quantity], ['desc']);
                 break;
         }
-    }
+    },
+
 }
 
 export default {

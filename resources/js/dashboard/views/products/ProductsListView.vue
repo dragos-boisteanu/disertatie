@@ -101,9 +101,9 @@
                 }
 
                 await store.dispatch('Products/fetchProducts', query);
-            
                 next();
             } else if (Object.keys(to.query).length !== 0) {
+
                 await store.dispatch('Products/fetchProducts', to.query);
                 next();
             } else {
@@ -114,11 +114,14 @@
         computed: {
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Products', ['getProducts','getPaginationData']),
+
+            query() {
+                return this.$route.query
+            }
         },
 
         data() {
             return {
-                query: {},
                 showFilterState: false,
                 orderBy: 1
             }
@@ -144,10 +147,7 @@
 
             async loadProducts(page) {
                 try {
-                    const query = {
-                        page: page
-                    }
-                    await this.fetchProducts(query)
+                    await this.fetchProducts(this.query)
                 } catch ( error ) {
                     console.log(error);
                 }
