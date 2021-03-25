@@ -2273,7 +2273,7 @@ var render = function() {
       "div",
       {
         staticClass:
-          "relative h-full w-3/4 shadow-md bg-coolGray-100 md:w-2/4 lg:w-1/4"
+          "relative h-full w-3/4 shadow-md bg-coolGray-100 md:w-2/4 lg:w-1/4 xl:1/5"
       },
       [
         _c(
