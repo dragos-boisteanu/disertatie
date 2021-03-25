@@ -45,7 +45,7 @@
             </select>
         </div>
       <!-- xl:w-375px -->
-        <ul class="h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4">
+        <ul class="h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-start md:items-start md:justify-between lg:justify-start lg:gap-x-4">
             <li v-for="user in getUsers" :key="user.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px">
                 <router-link :to="{name: 'User', params:{id:user.id}}">
                     <div class="w-full flex justify-start items-center pb-1 border-b border-gray-100">

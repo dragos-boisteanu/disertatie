@@ -5675,7 +5675,7 @@ var render = function() {
         "ul",
         {
           staticClass:
-            "h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4"
+            "h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-start md:items-start md:justify-between lg:justify-start lg:gap-x-4"
         },
         _vm._l(_vm.getUsers, function(user) {
           return _c(

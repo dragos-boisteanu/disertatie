@@ -39,7 +39,7 @@
             </select> 
         </div>
 
-        <ul class="h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4">
+        <ul class="h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-start md:items-start md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4">
             <li v-for="product in getProducts" :key="product.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px">
                 <a>
                     <div class="w-full flex justify-start items-center pb-2 border-b border-gray-100">

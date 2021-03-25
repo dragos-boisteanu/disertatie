@@ -40,6 +40,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     data: {
@@ -61,6 +68,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     lastPage: function lastPage() {
       return this.data.last_page;
+    },
+    showNextAndPrevious: function showNextAndPrevious() {
+      return this.lastPage > 1;
     },
     canNext: function canNext() {
       return this.currentPage < this.lastPage;
@@ -1742,46 +1752,51 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "my-4 flex items-center justify-between text-xs" },
+    {
+      staticClass:
+        "my-4 flex items-center justify-between text-xs md:justify-end"
+    },
     [
-      _c(
-        "div",
-        [
-          _c(
-            "router-link",
-            {
-              staticClass: "px-2 py-1 border hover:border-lightBlue-500",
-              class: {
-                "pointer-events-none": !_vm.canPrevious,
-                "border-gray-200": !_vm.canPrevious,
-                "border-gray-300": _vm.canPrevious
-              },
-              attrs: {
-                to: {
-                  name: _vm.route,
-                  query: Object.assign(
-                    {},
-                    { page: _vm.previousPage },
-                    _vm.query
-                  )
-                }
-              },
-              nativeOn: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.goTo(_vm.previousPage)
-                }
-              }
-            },
-            [_vm._v("Previous")]
+      _vm.showNextAndPrevious
+        ? _c(
+            "div",
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "px-2 py-1 border hover:border-lightBlue-500",
+                  class: {
+                    "pointer-events-none": !_vm.canPrevious,
+                    "border-gray-200": !_vm.canPrevious,
+                    "border-gray-300": _vm.canPrevious
+                  },
+                  attrs: {
+                    to: {
+                      name: _vm.route,
+                      query: Object.assign(
+                        {},
+                        { page: _vm.previousPage },
+                        _vm.query
+                      )
+                    }
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.goTo(_vm.previousPage)
+                    }
+                  }
+                },
+                [_vm._v("\n                Previous\n            ")]
+              )
+            ],
+            1
           )
-        ],
-        1
-      ),
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "ul",
-        { staticClass: "flex items-center gap-x-2" },
+        { staticClass: "flex items-center gap-x-2 md:mx-3" },
         _vm._l(_vm.lastPage, function(page, index) {
           return _c(
             "li",
@@ -1824,36 +1839,42 @@ var render = function() {
         0
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        [
-          _c(
-            "router-link",
-            {
-              staticClass: "px-2 py-1 border hover:border-lightBlue-500",
-              class: {
-                "pointer-events-none": !_vm.canNext,
-                "border-gray-200": !_vm.canNext,
-                "border-gray-300": _vm.canNext
-              },
-              attrs: {
-                to: {
-                  name: _vm.route,
-                  query: Object.assign({}, { page: _vm.nextPage }, _vm.query)
-                }
-              },
-              nativeOn: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.goTo(_vm.nextPage)
-                }
-              }
-            },
-            [_vm._v("\n                Next\n            ")]
+      _vm.showNextAndPrevious
+        ? _c(
+            "div",
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "px-2 py-1 border hover:border-lightBlue-500",
+                  class: {
+                    "pointer-events-none": !_vm.canNext,
+                    "border-gray-200": !_vm.canNext,
+                    "border-gray-300": _vm.canNext
+                  },
+                  attrs: {
+                    to: {
+                      name: _vm.route,
+                      query: Object.assign(
+                        {},
+                        { page: _vm.nextPage },
+                        _vm.query
+                      )
+                    }
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.goTo(_vm.nextPage)
+                    }
+                  }
+                },
+                [_vm._v("\n                Next\n            ")]
+              )
+            ],
+            1
           )
-        ],
-        1
-      )
+        : _vm._e()
     ]
   )
 }
@@ -3036,7 +3057,7 @@ var render = function() {
         "ul",
         {
           staticClass:
-            "h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4"
+            "h-full w-full mt-3 border-t border-gray-200 md:flex md:flex-wrap md:justify-start md:items-start md:flex-wrap md:justify-between lg:justify-start lg:gap-x-4"
         },
         _vm._l(_vm.getProducts, function(product) {
           return _c(

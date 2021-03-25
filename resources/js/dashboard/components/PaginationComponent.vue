@@ -1,9 +1,16 @@
 <template>
-    <div class="my-4 flex items-center justify-between text-xs">
-            <div>
-                 <router-link :to="{name: route, query: {page:previousPage, ...query} }" @click.prevent.native="goTo(previousPage)" class="px-2 py-1 border hover:border-lightBlue-500" :class="{'pointer-events-none': !canPrevious, 'border-gray-200': !canPrevious, 'border-gray-300': canPrevious}">Previous</router-link>
+    <div class="my-4 flex items-center justify-between text-xs md:justify-end">
+            <div v-if="showNextAndPrevious">
+                <router-link 
+                    :to="{name: route, query: {page:previousPage, ...query} }" 
+                    @click.prevent.native="goTo(previousPage)" 
+                    class="px-2 py-1 border hover:border-lightBlue-500" 
+                    :class="{'pointer-events-none': !canPrevious, 'border-gray-200': !canPrevious, 'border-gray-300': canPrevious}"
+                >
+                    Previous
+                </router-link>
             </div>
-            <ul class="flex items-center gap-x-2">
+            <ul class="flex items-center gap-x-2 md:mx-3">
                 <li v-for="(page, index) in lastPage" :key="index">
                     <router-link :to="{name: route, query: {page, ...query} }" @click.prevent.native="goTo(page)"  
                         class="px-2 py-1 border  hover:border-lightBlue-500 rounded-sm" 
@@ -14,7 +21,7 @@
                     </router-link>  
                 </li>
             </ul>
-            <div>
+            <div v-if="showNextAndPrevious">
                 <router-link 
                     :to="{name: route, query: {page:nextPage, ...query}}" 
                     @click.prevent.native="goTo(nextPage)" 
@@ -53,6 +60,10 @@
 
             lastPage() {
                 return this.data.last_page;
+            },
+
+            showNextAndPrevious() {
+                return this.lastPage > 1
             },
 
             canNext() {
