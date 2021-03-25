@@ -10,25 +10,25 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "autoprefixer": "^10.1.0",
-        "axios": "^0.21",
-        "laravel-mix": "^6.0.6",
-        "postcss": "^8.2.1",
-        "postcss-import": "^12.0.1",
-        "tailwindcss": "^2.0.2",
-        "vue-loader": "^15.9.5",
-        "vue-template-compiler": "^2.6.12"
+        "autoprefixer": "10.1.0",
+        "axios": "0.21",
+        "laravel-mix": "6.0.6",
+        "postcss": "8.2.1",
+        "postcss-import": "12.0.1",
+        "tailwindcss": "2.0.2",
+        "vue-loader": "15.9.5",
+        "vue-template-compiler": "2.6.12"
     },
     "dependencies": {
-        "barcode-validator": "^1.0.2",
-        "dayjs": "^1.10.4",
-        "lodash": "^4.17.21",
-        "vee-validate": "^3.4.5",
-        "vue": "^2.6.12",
-        "vue-2-breadcrumbs": "^0.7.12",
-        "vue-mq": "^1.0.1",
-        "vue-progressbar": "^0.7.5",
-        "vue-router": "^3.5.1",
-        "vuex": "^3.6.2"
+        "barcode-validator": "1.0.2",
+        "dayjs": "1.10.4",
+        "lodash": "4.17.21",
+        "vee-validate": "3.4.5",
+        "vue": "2.6.12",
+        "vue-2-breadcrumbs": "0.7.12",
+        "vue-mq": "1.0.1",
+        "vue-progressbar": "0.7.5",
+        "vue-router": "3.5.1",
+        "vuex": "3.6.2"
     }
 }
