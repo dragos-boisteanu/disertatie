@@ -40,7 +40,7 @@
         </div>
         <CardsList>
             <Card v-for="product in getProducts" :key="product.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px">
-                <a>
+                <router-link :to="{name: 'Product', params: {id: product.id}}">
                     <div class="w-full flex justify-start items-center pb-2 border-b border-gray-100">
                         <div class="w-12 h-12 mr-4 bg-gray-500 rounded-md">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="48px" height="48px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
@@ -48,7 +48,6 @@
                         <div class="flex-1">
                             <div class="capitalize font-semibold text-base">
                                 <span class="pr-1 border-r border-gray-200">{{ product.name}}</span> 
-                               
                                 <span>{{ product.weight}}{{product.unit}}</span>
                             </div>
                             <div class="text-sm">
@@ -73,7 +72,7 @@
                             <Stock :quantity="product.quantity"></Stock>
                         </div>
                     </div>
-                </a>
+                </router-link>
             </Card>
         </CardsList>
         <Pagination :data="getPaginationData" route="Products" :query="query" @navigate="loadProducts" ></Pagination>

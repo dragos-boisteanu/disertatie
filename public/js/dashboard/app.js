@@ -2826,6 +2826,10 @@ var AddProductView = function AddProductView() {
   return __webpack_require__.e(/*! import() | group-products */ "group-products").then(__webpack_require__.bind(__webpack_require__, /*! ../views/products/AddProductView.vue */ "./resources/js/dashboard/views/products/AddProductView.vue"));
 };
 
+var ProductView = function ProductView() {
+  return __webpack_require__.e(/*! import() | group-products */ "group-products").then(__webpack_require__.bind(__webpack_require__, /*! ../views/products/ProductView.vue */ "./resources/js/dashboard/views/products/ProductView.vue"));
+};
+
 var Home = function Home() {
   return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
 };
@@ -2885,6 +2889,16 @@ var routes = [{
   meta: {
     breadcrumb: {
       label: 'Add new product',
+      parent: 'Products'
+    }
+  }
+}, {
+  path: "".concat(baseUrl, "/products/:id"),
+  name: 'Product',
+  component: ProductView,
+  meta: {
+    breadcrumb: {
+      label: 'Product',
       parent: 'Products'
     }
   }
@@ -3259,6 +3273,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _api_products_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/products.api */ "./resources/js/dashboard/api/products.api.js");
 /* harmony import */ var lodash_orderBy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/orderBy */ "./node_modules/lodash/orderBy.js");
 /* harmony import */ var lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_orderBy__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_3__);
 function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
 
 
@@ -3266,6 +3282,7 @@ function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -3331,68 +3348,113 @@ var actions = {
       }, _callee, null, [[1, 11]]);
     }))();
   },
-  addProduct: function addProduct(_ref3, payload) {
+  fetchProduct: function fetchProduct(_ref3, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      var commit, response;
+      var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              commit = _ref3.commit;
+              _objectDestructuringEmpty(_ref3);
+
               _context2.prev = 1;
               _context2.next = 4;
-              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.storeProduct)(payload);
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProduct)(payload);
 
             case 4:
               response = _context2.sent;
-              _context2.next = 10;
-              break;
+              return _context2.abrupt("return", response.data.data);
 
-            case 7:
-              _context2.prev = 7;
+            case 8:
+              _context2.prev = 8;
               _context2.t0 = _context2["catch"](1);
               throw _context2.t0;
 
-            case 10:
+            case 11:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 7]]);
+      }, _callee2, null, [[1, 8]]);
     }))();
   },
-  getProductByBarcode: function getProductByBarcode(_ref4, payload) {
+  getProduct: function getProduct(_ref4, id) {
+    var state = _ref4.state;
+
+    try {
+      var product = _.find(state.products, ['id', id]);
+
+      if (product) {
+        return product;
+      }
+
+      return this.fetchProduct(id);
+    } catch (error) {
+      throw error;
+    }
+  },
+  addProduct: function addProduct(_ref5, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      var response;
+      var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _objectDestructuringEmpty(_ref4);
-
+              commit = _ref5.commit;
               _context3.prev = 1;
               _context3.next = 4;
-              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProductByBarcode)(payload);
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.storeProduct)(payload);
 
             case 4:
               response = _context3.sent;
-              return _context3.abrupt("return", response);
+              _context3.next = 10;
+              break;
 
-            case 8:
-              _context3.prev = 8;
+            case 7:
+              _context3.prev = 7;
               _context3.t0 = _context3["catch"](1);
               throw _context3.t0;
 
-            case 11:
+            case 10:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[1, 8]]);
+      }, _callee3, null, [[1, 7]]);
     }))();
   },
-  sortProductsList: function sortProductsList(_ref5, sortBy) {
-    var commit = _ref5.commit;
+  getProductByBarcode: function getProductByBarcode(_ref6, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _objectDestructuringEmpty(_ref6);
+
+              _context4.prev = 1;
+              _context4.next = 4;
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProductByBarcode)(payload);
+
+            case 4:
+              response = _context4.sent;
+              return _context4.abrupt("return", response);
+
+            case 8:
+              _context4.prev = 8;
+              _context4.t0 = _context4["catch"](1);
+              throw _context4.t0;
+
+            case 11:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[1, 8]]);
+    }))();
+  },
+  sortProductsList: function sortProductsList(_ref7, sortBy) {
+    var commit = _ref7.commit;
     commit('SORT_PRODUCTS', sortBy);
   }
 };

@@ -1,5 +1,6 @@
 import {downloadProducts, downloadProduct, storeProduct, patchProduct, disableProductm, downloadProductByBarcode} from '../../api/products.api';
 import _orderBy from 'lodash/orderBy';
+import _find from 'lodash/find';
 
 const initialState = () => ({
     products: [],
@@ -32,6 +33,27 @@ const actions = {
         
             commit('SET_PAGINATION', paginationData)
 
+        } catch ( error ) {
+            throw error
+        }
+    },
+
+    async fetchProduct({}, payload) {
+        try {
+            const response = await downloadProduct(payload);
+            return response.data.data;
+        } catch ( error ) {
+            throw error;
+        }
+    },
+
+    getProduct({state}, id) {
+        try {
+            let product = _.find(state.products, ['id', id]);
+            if(product) {
+                return product;
+            }
+            return this.fetchProduct(id);
         } catch ( error ) {
             throw error
         }

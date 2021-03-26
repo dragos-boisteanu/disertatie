@@ -5462,7 +5462,7 @@ var render = function() {
                     "div",
                     {
                       staticClass:
-                        "flex justify-center w-full mt-2 md:justify-start"
+                        "flex justify-center w-full mt-2 lg:justify-start"
                     },
                     [
                       _c("Status", {
@@ -5476,11 +5476,11 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "font-semibold text-2xl mt-2" }, [
                     _vm._v(
-                      "\n                    " +
+                      "\n                " +
                         _vm._s(_vm.user.first_name) +
                         " " +
                         _vm._s(_vm.user.name) +
-                        "\n                "
+                        "\n            "
                     )
                   ]),
                   _vm._v(" "),

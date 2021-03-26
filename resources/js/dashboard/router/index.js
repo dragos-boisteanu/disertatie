@@ -7,7 +7,7 @@ const CreateUserView = () => import (/* webpackChunkName: "group-users" */ '../v
 
 const ProductsListView = () => import(/* webpackChunkName: "group-products" */ '../views/products/ProductsListView.vue');
 const AddProductView = () => import(/* webpackChunkName: "group-products" */ '../views/products/AddProductView.vue');
-
+const ProductView = () => import(/* webpackChunkName: "group-products" */ '../views/products/ProductView.vue');
 const Home = () => import('../views/HomeView.vue');
 
 const baseUrl = '/dashboard'
@@ -64,7 +64,6 @@ const routes = [
             }
         }
     },
-   
     {
         path: `${baseUrl}/products/create`,
         name: 'AddProduct',
@@ -73,6 +72,17 @@ const routes = [
             breadcrumb: {
                 label: 'Add new product',
                 parent: 'Products'
+            }
+        }
+    },
+    {
+        path: `${baseUrl}/products/:id`,
+        name: 'Product',
+        component: ProductView,
+        meta: {
+            breadcrumb: {
+                label: 'Product',
+                parent: 'Products',
             }
         }
     }
