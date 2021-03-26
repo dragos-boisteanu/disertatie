@@ -1,6 +1,6 @@
 <template>
     <div class="my-4 flex items-center justify-between text-xs md:justify-end">
-            <div v-if="showNextAndPrevious">
+            <div>
                 <router-link 
                     :to="{name: route, query: {page:previousPage, ...cleanQuery} }" 
                     @click.prevent.native="goTo(previousPage)" 
@@ -21,7 +21,7 @@
                     </router-link>  
                 </li>
             </ul>
-            <div v-if="showNextAndPrevious">
+            <div>
                 <router-link 
                     :to="{name: route, query: {page:nextPage, ...cleanQuery}}" 
                     @click.prevent.native="goTo(nextPage)" 

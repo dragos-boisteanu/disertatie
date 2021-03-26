@@ -2296,42 +2296,40 @@ var render = function() {
         "my-4 flex items-center justify-between text-xs md:justify-end"
     },
     [
-      _vm.showNextAndPrevious
-        ? _c(
-            "div",
-            [
-              _c(
-                "router-link",
-                {
-                  staticClass: "px-2 py-1 border hover:border-lightBlue-500",
-                  class: {
-                    "pointer-events-none": !_vm.canPrevious,
-                    "border-gray-200": !_vm.canPrevious,
-                    "border-gray-300": _vm.canPrevious
-                  },
-                  attrs: {
-                    to: {
-                      name: _vm.route,
-                      query: Object.assign(
-                        {},
-                        { page: _vm.previousPage },
-                        _vm.cleanQuery
-                      )
-                    }
-                  },
-                  nativeOn: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.goTo(_vm.previousPage)
-                    }
-                  }
-                },
-                [_vm._v("\n                Previous\n            ")]
-              )
-            ],
-            1
+      _c(
+        "div",
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "px-2 py-1 border hover:border-lightBlue-500",
+              class: {
+                "pointer-events-none": !_vm.canPrevious,
+                "border-gray-200": !_vm.canPrevious,
+                "border-gray-300": _vm.canPrevious
+              },
+              attrs: {
+                to: {
+                  name: _vm.route,
+                  query: Object.assign(
+                    {},
+                    { page: _vm.previousPage },
+                    _vm.cleanQuery
+                  )
+                }
+              },
+              nativeOn: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.goTo(_vm.previousPage)
+                }
+              }
+            },
+            [_vm._v("\n                Previous\n            ")]
           )
-        : _vm._e(),
+        ],
+        1
+      ),
       _vm._v(" "),
       _c(
         "ul",
@@ -2378,42 +2376,40 @@ var render = function() {
         0
       ),
       _vm._v(" "),
-      _vm.showNextAndPrevious
-        ? _c(
-            "div",
-            [
-              _c(
-                "router-link",
-                {
-                  staticClass: "px-2 py-1 border hover:border-lightBlue-500",
-                  class: {
-                    "pointer-events-none": !_vm.canNext,
-                    "border-gray-200": !_vm.canNext,
-                    "border-gray-300": _vm.canNext
-                  },
-                  attrs: {
-                    to: {
-                      name: _vm.route,
-                      query: Object.assign(
-                        {},
-                        { page: _vm.nextPage },
-                        _vm.cleanQuery
-                      )
-                    }
-                  },
-                  nativeOn: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.goTo(_vm.nextPage)
-                    }
-                  }
-                },
-                [_vm._v("\n                Next\n            ")]
-              )
-            ],
-            1
+      _c(
+        "div",
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "px-2 py-1 border hover:border-lightBlue-500",
+              class: {
+                "pointer-events-none": !_vm.canNext,
+                "border-gray-200": !_vm.canNext,
+                "border-gray-300": _vm.canNext
+              },
+              attrs: {
+                to: {
+                  name: _vm.route,
+                  query: Object.assign(
+                    {},
+                    { page: _vm.nextPage },
+                    _vm.cleanQuery
+                  )
+                }
+              },
+              nativeOn: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.goTo(_vm.nextPage)
+                }
+              }
+            },
+            [_vm._v("\n                Next\n            ")]
           )
-        : _vm._e()
+        ],
+        1
+      )
     ]
   )
 }
