@@ -3956,9 +3956,6 @@ var mutations = {
 
       var vm = payload.vm;
       Object.keys(payload.user).forEach(function (key) {
-        console.log('user: ', state.users[selectedUserIndex]);
-        console.log('key: ', key);
-        console.log('payload[key]: ', payload.user[key]);
         vm.$set(state.users[selectedUserIndex], key, payload.user[key]);
       });
     }

@@ -36,6 +36,7 @@ extend('alpha_num', {
   message: 'The {_field_} must only contain letters and numbers'
 });
 
+
 extend('max', {
     ...max,
     message: 'The {_field_} must not be greater than {length} characters.',

@@ -31,8 +31,7 @@ const actions = {
             const response = await downloadUsers(query);
             const users = response.data.data.users;
             const links = response.data.links;
-   
-            commit('SET_USERS',users );
+            commit('SET_USERS', users );
 
             if(links.next) {
                 const lastIndex = links.next.indexOf('=');
@@ -149,9 +148,6 @@ const mutations = {
             const selectedUserIndex = _.findIndex(state.users, ['id', payload.user.id]);
             const vm = payload.vm;
             Object.keys(payload.user).forEach(key => {
-                console.log('user: ', state.users[selectedUserIndex]);
-                console.log('key: ', key);
-                console.log('payload[key]: ', payload.user[key]);
                 vm.$set(state.users[selectedUserIndex], key, payload.user[key])
             })
         }

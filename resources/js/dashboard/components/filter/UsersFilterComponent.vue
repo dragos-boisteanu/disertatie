@@ -207,15 +207,14 @@
                             query[key] = this.filterData[key];
                         }
                     })
-
-                    query['page'] = 1;
-
-                    this.$router.replace({name:'Users', query: {...query}});
                     
                     this.reset();
-
                     await this.fetchUsers(query);
 
+                    query.page = 1;
+
+                    this.$router.replace({name:'Users', query: {...query}});
+                
                     this.openNotification({
                         type:'ok',
                         message: 'Done',
