@@ -1465,7 +1465,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length === 0 || Object.keys(to.query).length === 0)) {
+              if (!(Object.keys(to.query).length === 0)) {
                 _context.next = 9;
                 break;
               }
@@ -1478,13 +1478,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 6:
               next();
-              _context.next = 10;
+              _context.next = 12;
               break;
 
             case 9:
+              _context.next = 11;
+              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Products/fetchProducts', to.query);
+
+            case 11:
               next();
 
-            case 10:
+            case 12:
             case "end":
               return _context.stop();
           }

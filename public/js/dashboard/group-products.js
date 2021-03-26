@@ -1156,45 +1156,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var query;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(_store_index__WEBPACK_IMPORTED_MODULE_8__.default.getters["Products/getProducts"].length === 0 && Object.keys(to.query).length === 0)) {
-                _context.next = 7;
+              if (!(Object.keys(to.query).length === 0)) {
+                _context.next = 6;
                 break;
               }
 
-              query = {
+              _context.next = 3;
+              return _store_index__WEBPACK_IMPORTED_MODULE_8__.default.dispatch('Products/fetchProducts', {
                 page: 1
-              };
-              _context.next = 4;
-              return _store_index__WEBPACK_IMPORTED_MODULE_8__.default.dispatch('Products/fetchProducts', query);
+              });
 
-            case 4:
+            case 3:
               next();
-              _context.next = 14;
+              _context.next = 9;
               break;
 
-            case 7:
-              if (!(Object.keys(to.query).length !== 0)) {
-                _context.next = 13;
-                break;
-              }
-
-              _context.next = 10;
+            case 6:
+              _context.next = 8;
               return _store_index__WEBPACK_IMPORTED_MODULE_8__.default.dispatch('Products/fetchProducts', to.query);
 
-            case 10:
-              next();
-              _context.next = 14;
-              break;
-
-            case 13:
+            case 8:
               next();
 
-            case 14:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -3199,7 +3187,7 @@ var render = function() {
                       [
                         _c("ValidationProvider", {
                           staticClass: "w-full",
-                          attrs: { vid: "barcode", rules: "required|barcode" },
+                          attrs: { vid: "barcode", rules: "required" },
                           scopedSlots: _vm._u(
                             [
                               {

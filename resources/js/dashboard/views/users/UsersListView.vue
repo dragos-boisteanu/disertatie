@@ -132,15 +132,14 @@
 
     export default {
         async beforeRouteEnter (to, from, next) {
-            if(store.getters['Users/getUsers'].length === 0 || Object.keys(to.query).length === 0) {
+            if(Object.keys(to.query).length === 0) {
                 store.dispatch('Users/reset');
                 const query = to.query
                 query.page = 1;
-    
                 await store.dispatch('Users/fetchUsers', query);
-                
                 next();
             } else {
+                await store.dispatch('Products/fetchProducts', to.query);
                 next();
             }
         },

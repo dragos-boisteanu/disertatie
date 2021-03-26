@@ -93,21 +93,13 @@
 
     export default {
         async beforeRouteEnter (to, from, next) {
-            if(store.getters['Products/getProducts'].length === 0  && Object.keys(to.query).length === 0) {
-
-                const query = {
-                    page: 1
-                }
-
-                await store.dispatch('Products/fetchProducts', query);
-                next();
-            } else if (Object.keys(to.query).length !== 0) {
-
-                await store.dispatch('Products/fetchProducts', to.query);
+            if(Object.keys(to.query).length === 0) {
+                await store.dispatch('Products/fetchProducts', {page: 1});
                 next();
             } else {
+                await store.dispatch('Products/fetchProducts', to.query);
                 next();
-            }
+            } 
         },
 
         computed: {

@@ -7,7 +7,7 @@
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
                 <div class="flex flex-col lg:gap-x-6 lg:w-1/4">
-                    <ValidationProvider vid="barcode" rules="required|barcode" v-slot="{ errors, failed, passed }" class="w-full">
+                    <ValidationProvider vid="barcode" rules="required" v-slot="{ errors, failed, passed }" class="w-full">
                         <label for="name" class="text-sm font-semibold">Barcode</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <div class="flex gap-x-1 items-center relative">
