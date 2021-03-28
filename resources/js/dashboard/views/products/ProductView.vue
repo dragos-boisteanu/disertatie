@@ -100,13 +100,19 @@
         },
 
         methods: {
+            
+            updateProduct(product) {
+                console.log(product);
+            },
+
             setProduct(product) {
                 this.product = product;
             },
 
             toggleEditProductState() {
                 this.editProductState = !this.editProductState;
-            }
+            },
+
         },
 
         components: {
