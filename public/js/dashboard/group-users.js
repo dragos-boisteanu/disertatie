@@ -2687,7 +2687,7 @@ var render = function() {
       "div",
       {
         staticClass:
-          "bg-white p-4 rounded-md w-11/12 shadow-md overflow-y-auto max-h-5/6"
+          "bg-white p-4 rounded-md w-11/12 shadow-md overflow-y-auto max-h-5/6 xl:w-2/4"
       },
       [_vm._t("default")],
       2
