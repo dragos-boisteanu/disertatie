@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import _find from 'lodash/find';
+    import { mapGetters } from 'vuex'
+    import _find from 'lodash/find';
 
     export default {
         props: {
