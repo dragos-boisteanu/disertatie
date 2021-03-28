@@ -21,7 +21,7 @@
                 <div>
                     <div class="flex gap-x-2 items-center font-semibold text-2xl mt-2">
                         <h1 class="pr-2 border-r border-gray-200">{{ product.name}}</h1> 
-                        <span class="text-base">{{ product.weight}}{{product.unit}}</span>
+                        <span class="text-base">{{ product.weight}}<Unit :unit-id="product.unit_id"></Unit></span>
                     </div>
                 </div>
                 <div class="text-sm">
@@ -68,6 +68,7 @@
     import Stock from '../../components/StockComponent';
     import ProductEdit from '../../components/products/EditProductComponent';
     import Category from '../../components/products/CategoryComponent';
+    import Unit from '../../components/products/UnitComponent';
 
     import store from '../../store/index';
 
@@ -122,7 +123,8 @@
             Stock,
             Status,
             ProductEdit,
-            Category
+            Category,
+            Unit
         }
     }
 </script>
