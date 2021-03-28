@@ -112,7 +112,7 @@ const mutations = {
             const selectedProductIndex = _findIndex(state.products, ['id', payload.product.id]);
             const vm = payload.vm;
             Object.keys(payload.product).forEach(key => {
-                vm.$set(state.products[selectedProductIndex], key, payload.product[ley]);
+                vm.$set(state.products[selectedProductIndex], key, payload.product[key]);
             })
         }
     },

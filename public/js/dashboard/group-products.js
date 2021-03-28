@@ -1456,8 +1456,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_cards_CardsListComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/cards/CardsListComponent */ "./resources/js/dashboard/components/cards/CardsListComponent.vue");
 /* harmony import */ var _components_cards_CardComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/cards/CardComponent */ "./resources/js/dashboard/components/cards/CardComponent.vue");
 /* harmony import */ var _components_products_CategoryComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/products/CategoryComponent */ "./resources/js/dashboard/components/products/CategoryComponent.vue");
-/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../store/index */ "./resources/js/dashboard/store/index.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_products_UnitComponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../components/products/UnitComponent */ "./resources/js/dashboard/components/products/UnitComponent.vue");
+/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../store/index */ "./resources/js/dashboard/store/index.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -1559,6 +1560,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -1572,7 +1574,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
 
               _context.next = 3;
-              return _store_index__WEBPACK_IMPORTED_MODULE_9__.default.dispatch('Products/fetchProducts', {
+              return _store_index__WEBPACK_IMPORTED_MODULE_10__.default.dispatch('Products/fetchProducts', {
                 page: 1
               });
 
@@ -1583,7 +1585,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 6:
               _context.next = 8;
-              return _store_index__WEBPACK_IMPORTED_MODULE_9__.default.dispatch('Products/fetchProducts', to.query);
+              return _store_index__WEBPACK_IMPORTED_MODULE_10__.default.dispatch('Products/fetchProducts', to.query);
 
             case 8:
               next();
@@ -1596,7 +1598,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Products', ['getProducts', 'getPaginationData'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Products', ['getProducts', 'getPaginationData'])), {}, {
     query: function query() {
       return this.$route.query;
     }
@@ -1607,7 +1609,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       orderBy: 1
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Products', ['fetchProducts', 'sortProductsList'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapActions)('Products', ['fetchProducts', 'sortProductsList'])), {}, {
     refreshProducsList: function refreshProducsList() {
       var _this = this;
 
@@ -1690,7 +1692,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     Pagination: _components_PaginationComponent__WEBPACK_IMPORTED_MODULE_5__.default,
     CardsList: _components_cards_CardsListComponent__WEBPACK_IMPORTED_MODULE_6__.default,
     Card: _components_cards_CardComponent__WEBPACK_IMPORTED_MODULE_7__.default,
-    Category: _components_products_CategoryComponent__WEBPACK_IMPORTED_MODULE_8__.default
+    Category: _components_products_CategoryComponent__WEBPACK_IMPORTED_MODULE_8__.default,
+    Unit: _components_products_UnitComponent__WEBPACK_IMPORTED_MODULE_9__.default
   }
 });
 
@@ -5858,23 +5861,24 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("div", { staticClass: "flex-1" }, [
-                        _c(
-                          "div",
-                          { staticClass: "capitalize font-semibold text-base" },
-                          [
-                            _c(
-                              "span",
-                              { staticClass: "pr-1 border-r border-gray-200" },
-                              [_vm._v(_vm._s(product.name))]
-                            ),
-                            _vm._v(" "),
-                            _c("span", [
-                              _vm._v(
-                                _vm._s(product.weight) + _vm._s(product.unit)
-                              )
-                            ])
-                          ]
-                        ),
+                        _c("div", { staticClass: "font-semibold text-base" }, [
+                          _c(
+                            "span",
+                            { staticClass: "pr-1 border-r border-gray-200" },
+                            [_vm._v(_vm._s(product.name))]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            [
+                              _vm._v(_vm._s(product.weight)),
+                              _c("Unit", {
+                                attrs: { "unit-id": product.unit_id }
+                              })
+                            ],
+                            1
+                          )
+                        ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "text-sm" }, [
                           _vm._v(

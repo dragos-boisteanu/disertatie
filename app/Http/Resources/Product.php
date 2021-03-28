@@ -22,7 +22,6 @@ class Product extends JsonResource
             'base_price' => $this->base_price,
             'vat' => $this->category->vat,
             'weight' => $this->weight,
-            'unit' => $this->unit->name,
             'unit_id' => $this->unit_id,
             'category_id' => $this->category_id,
             'quantity' => $this->stock->quantity,

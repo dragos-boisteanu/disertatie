@@ -3508,7 +3508,7 @@ var mutations = {
 
       var vm = payload.vm;
       Object.keys(payload.product).forEach(function (key) {
-        vm.$set(state.products[selectedProductIndex], key, payload.product[ley]);
+        vm.$set(state.products[selectedProductIndex], key, payload.product[key]);
       });
     }
   },
