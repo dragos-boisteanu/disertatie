@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="text-sm">
-                    {{product.base_price}} RON / {{ product.vat }}% VAT
+                    {{product.base_price}} RON / <Vat :category-id="product.category_id"></Vat>
                 </div>
                 <div class="flex justify-center w-full mt-2 md:justify-start">
                     <Status :deleted-at="product.deleted_at"/>
@@ -69,6 +69,7 @@
     import ProductEdit from '../../components/products/EditProductComponent';
     import Category from '../../components/products/CategoryComponent';
     import Unit from '../../components/products/UnitComponent';
+    import Vat from '../../components/products/VatComponent';
 
     import store from '../../store/index';
 
@@ -124,7 +125,8 @@
             Status,
             ProductEdit,
             Category,
-            Unit
+            Unit,
+            Vat
         }
     }
 </script>

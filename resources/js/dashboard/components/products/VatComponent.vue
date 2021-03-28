@@ -1,18 +1,19 @@
 <template>
-    <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm bg-amber-600" v-if="category">
-        {{category.name}}
-    </div>
+    <span v-if="category">
+        {{ category.vat }}% VAT
+    </span>
 </template>
 
-<script>
-    import { mapGetters } from 'vuex'
+
+<script>    
     import _find from 'lodash/find';
+    import { mapGetters } from 'vuex';
 
     export default {
         props: {
             categoryId: {
-                type: Number,
-                required: true
+                type:Number,
+                required: true,
             }
         },
 
@@ -23,6 +24,6 @@
                 return _find(this.getCategories, ['id', this.categoryId]);
             }
         }
+        
     }
-
 </script>

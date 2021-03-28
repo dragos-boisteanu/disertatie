@@ -51,9 +51,8 @@
                                 <span>{{ product.weight}}<Unit :unit-id="product.unit_id"></Unit></span>
                             </div>
                             <div class="text-sm">
-                               {{product.base_price}} RON / {{ product.vat }}% VAT
+                               {{product.base_price}} RON / <Vat :category-id="product.category_id"></Vat>
                             </div>
-                           
                         </div>
                         <div>
                             <div class="text-xs font-semibold">
@@ -87,6 +86,7 @@
     import Card from '../../components/cards/CardComponent';
     import Category from '../../components/products/CategoryComponent';
     import Unit from '../../components/products/UnitComponent';
+    import Vat from '../../components/products/VatComponent';
 
     import store from '../../store/index';
     import { mapActions, mapGetters } from 'vuex';
@@ -162,7 +162,8 @@
             CardsList,
             Card,
             Category,
-            Unit
+            Unit,
+            Vat
         }
     }
 </script>
