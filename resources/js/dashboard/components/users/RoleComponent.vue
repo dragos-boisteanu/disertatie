@@ -5,7 +5,8 @@
 </template>
 
 <script>
-    import { mapGetters } from "vuex"
+    import { mapGetters } from "vuex";
+    import _find from 'lodash/find';
 
     export default {
         props: {
@@ -19,9 +20,7 @@
             ...mapGetters('Roles', ['getRoles']),
 
             role() {
-                return this.getRoles.filter(role => {
-                    return role.id === this.roleId
-                })[0];
+                return _find(this.getRoles, ['id', this.roleId]);
            }
         }
     }
