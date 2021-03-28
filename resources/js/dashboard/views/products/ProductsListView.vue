@@ -25,7 +25,6 @@
                 </button>
             </div>
         
-            <!-- ORDER BY -->
             <select  
                 @change="order"
                 v-model="orderBy"
@@ -38,6 +37,7 @@
                 <option :value="6">Quantity desc</option>
             </select> 
         </div>
+
         <CardsList>
             <Card v-for="product in getProducts" :key="product.id" class="w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px">
                 <router-link :to="{name: 'Product', params: {id: product.id}}">
@@ -66,9 +66,7 @@
                     </div>
                     <div class="mt-2">
                         <div class="flex justify-between items-center">
-                            <div class="py-1 px-2 text-xs text-white rounded-sm bg-amber-600"> 
-                                {{ product.category}} 
-                            </div> 
+                            <Category :category-id="product.category_id"></Category>
                             <Stock :quantity="product.quantity"></Stock>
                         </div>
                     </div>
@@ -87,6 +85,7 @@
     import Pagination from '../../components/PaginationComponent';
     import CardsList from '../../components/cards/CardsListComponent';
     import Card from '../../components/cards/CardComponent';
+    import Category from '../../components/products/CategoryComponent';
 
     import store from '../../store/index';
     import { mapActions, mapGetters } from 'vuex';
@@ -160,7 +159,8 @@
             ProductFilter,
             Pagination,
             CardsList,
-            Card
+            Card,
+            Category
         }
     }
 </script>

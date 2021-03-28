@@ -190,6 +190,7 @@ import { mapGetters, mapActions } from 'vuex';
                         }
                     });
 
+
                     if(counter > 0) {
                         await this.updateProduct(payload);
                         this.$emit('updated', payload.product);

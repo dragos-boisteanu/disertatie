@@ -28,10 +28,8 @@
                     {{product.base_price}} RON / {{ product.vat }}% VAT
                 </div>
                 <div class="flex justify-center w-full mt-2 md:justify-start">
-                     <Status :deleted-at="product.deleted_at"/>
-                    <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm bg-amber-600"> 
-                        {{ product.category}} 
-                    </div>  
+                    <Status :deleted-at="product.deleted_at"/>
+                    <Category :category-id="product.category_id"></Category>
                     <Stock :quantity="product.quantity"></Stock>
                 </div>
                 <button 
@@ -69,6 +67,7 @@
     import Status from '../../components/StatusComponent';
     import Stock from '../../components/StockComponent';
     import ProductEdit from '../../components/products/EditProductComponent';
+    import Category from '../../components/products/CategoryComponent';
 
     import store from '../../store/index';
 
@@ -122,7 +121,8 @@
             ViewContainer,
             Stock,
             Status,
-            ProductEdit
+            ProductEdit,
+            Category
         }
     }
 </script>
