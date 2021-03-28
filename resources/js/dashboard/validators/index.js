@@ -18,7 +18,7 @@ extend('integer', {
 
 extend('double', {
   ...double,
-  message: 'The {_field_} must be an double with 2 decimals separated by comma'
+  message: 'The {_field_} must be an double with 2 decimals separated by a dot'
 });
 
 extend('email', {

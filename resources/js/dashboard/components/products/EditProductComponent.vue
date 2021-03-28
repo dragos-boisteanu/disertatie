@@ -1,9 +1,9 @@
 <template>
     <Modal>
-         <h1 class="text-3xl my-4">
-            Edit user
+        <h1 class="text-3xl my-4">
+            Edit product #{{localProduct.id}}
         </h1>
-        <div class="p-1">
+        <div class="p-1 mb-3">
             <ValidationObserver v-slot="{ handleSubmit }" ref="observar">
                 <form @submit.prevent="handleSubmit(submit)" class="flex flex-col gap-3">
                     <ValidationProvider vid="barcode" rules="required" v-slot="{ errors, failed, passed }" class="w-full">
@@ -19,10 +19,6 @@
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                 :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             />
-                            <svg  class="absolute -right-10 top-1/4 animate-spin mr-3 h-5 w-5 text-lightBlue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
                         </div>
                     </ValidationProvider>
                     <ValidationProvider vid="name" rules="required|alpha_spaces|max:255" v-slot="{ errors, failed, passed }" class="w-full mt-2">
@@ -67,12 +63,12 @@
                             <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }} ({{ category.vat}}% VAT)</option>
                         </select>
                     </ValidationProvider>
-                    <ValidationProvider vid="base_price" rules="required|double:2,comma" v-slot="{ errors, failed, passed }" class="w-full mt-2">
+                    <ValidationProvider vid="base_price" rules="required|double:2,dot" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Base price</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
                             id="basePrice"
-                            name="base_price" 
+                            name="base price" 
                             type="text" 
                             v-model="localProduct.base_price" 
                             :disabled="waiting || locked"   
@@ -136,7 +132,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
     import Modal from '../ModalComponent'
 
     export default {
@@ -174,6 +170,7 @@ import { mapGetters } from 'vuex';
         },
 
         methods: {
+            ...mapActions('Products', ['updateProduct']),
 
             async submit() {
                 try {
@@ -183,11 +180,27 @@ import { mapGetters } from 'vuex';
                             id: this.product.id
                         }
                     }
+
+                    let counter = 0;
+
                     Object.keys(this.product).forEach(key => {
                         if(this.product[key] !== this.localProduct[key]) {
                             payload.product[key] = this.localProduct[key];
+                            counter++;
                         }
                     });
+
+                    if(counter > 0) {
+                        await this.updateProduct(payload);
+                        this.$emit('updated', payload.product);
+                        counter = 0;
+                        this.close();
+                        // notification
+                    } else {
+                        console.log('Nothing to update');
+                        // notification
+                    }
+                   
 
                     console.log(payload);
                 } catch ( error ) {

@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductPatchRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Resources\Product as ProductResource;
@@ -121,9 +122,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductPatchRequest $request, $id)
     {
-        //
+        Product::findOrFail($id)->update($request->validated());
+
+        return response()->json(null, 200);
     }
 
     /**

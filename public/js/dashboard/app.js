@@ -2596,9 +2596,7 @@ var storeProduct = function storeProduct(data) {
 };
 
 var patchProduct = function patchProduct(data) {
-  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(END_POINT, "/").concat(data.id), {
-    product: product
-  });
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(END_POINT, "/").concat(data.id), data);
 };
 
 var disableProduct = function disableProduct(id) {
@@ -3275,6 +3273,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_orderBy__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_4__);
 function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
 
 
@@ -3282,6 +3282,7 @@ function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -3378,35 +3379,20 @@ var actions = {
       }, _callee2, null, [[1, 8]]);
     }))();
   },
-  getProduct: function getProduct(_ref4, id) {
-    var state = _ref4.state;
-
-    try {
-      var product = _.find(state.products, ['id', id]);
-
-      if (product) {
-        return product;
-      }
-
-      return this.fetchProduct(id);
-    } catch (error) {
-      throw error;
-    }
-  },
-  addProduct: function addProduct(_ref5, payload) {
+  updateProduct: function updateProduct(_ref4, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      var commit, response;
+      var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              commit = _ref5.commit;
+              commit = _ref4.commit;
               _context3.prev = 1;
               _context3.next = 4;
-              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.storeProduct)(payload);
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.patchProduct)(payload.product);
 
             case 4:
-              response = _context3.sent;
+              commit('PATCH_PRODUCT', payload);
               _context3.next = 10;
               break;
 
@@ -3423,38 +3409,83 @@ var actions = {
       }, _callee3, null, [[1, 7]]);
     }))();
   },
-  getProductByBarcode: function getProductByBarcode(_ref6, payload) {
+  getProduct: function getProduct(_ref5, id) {
+    var state = _ref5.state;
+
+    try {
+      var product = _.find(state.products, ['id', id]);
+
+      if (product) {
+        return product;
+      }
+
+      return this.fetchProduct(id);
+    } catch (error) {
+      throw error;
+    }
+  },
+  addProduct: function addProduct(_ref6, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-      var response;
+      var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              _objectDestructuringEmpty(_ref6);
-
+              commit = _ref6.commit;
               _context4.prev = 1;
               _context4.next = 4;
-              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProductByBarcode)(payload);
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.storeProduct)(payload);
 
             case 4:
               response = _context4.sent;
-              return _context4.abrupt("return", response);
+              _context4.next = 10;
+              break;
 
-            case 8:
-              _context4.prev = 8;
+            case 7:
+              _context4.prev = 7;
               _context4.t0 = _context4["catch"](1);
               throw _context4.t0;
 
-            case 11:
+            case 10:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[1, 8]]);
+      }, _callee4, null, [[1, 7]]);
     }))();
   },
-  sortProductsList: function sortProductsList(_ref7, sortBy) {
-    var commit = _ref7.commit;
+  getProductByBarcode: function getProductByBarcode(_ref7, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _objectDestructuringEmpty(_ref7);
+
+              _context5.prev = 1;
+              _context5.next = 4;
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProductByBarcode)(payload);
+
+            case 4:
+              response = _context5.sent;
+              return _context5.abrupt("return", response);
+
+            case 8:
+              _context5.prev = 8;
+              _context5.t0 = _context5["catch"](1);
+              throw _context5.t0;
+
+            case 11:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 8]]);
+    }))();
+  },
+  sortProductsList: function sortProductsList(_ref8, sortBy) {
+    var commit = _ref8.commit;
     commit('SORT_PRODUCTS', sortBy);
   }
 };
@@ -3470,6 +3501,16 @@ var mutations = {
   },
   SET_PAGINATION: function SET_PAGINATION(state, payload) {
     state.pagination = payload;
+  },
+  PATCH_PRODUCT: function PATCH_PRODUCT(state, payload) {
+    if (state.products.length > 0) {
+      var selectedProductIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_4___default()(state.products, ['id', payload.product.id]);
+
+      var vm = payload.vm;
+      Object.keys(payload.product).forEach(function (key) {
+        vm.$set(state.products[selectedProductIndex], key, payload.product[ley]);
+      });
+    }
   },
   SORT_PRODUCTS: function SORT_PRODUCTS(state, orderBy) {
     switch (orderBy) {
@@ -4136,7 +4177,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   message: 'The {_field_} must be an integer'
 }));
 (0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('double', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.double), {}, {
-  message: 'The {_field_} must be an double with 2 decimals separated by comma'
+  message: 'The {_field_} must be an double with 2 decimals separated by a dot'
 }));
 (0,vee_validate__WEBPACK_IMPORTED_MODULE_1__.extend)('email', _objectSpread(_objectSpread({}, vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__.email), {}, {
   message: 'The {_field_} must be a valid email address.'
@@ -48846,9 +48887,8 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -48870,38 +48910,10 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = __webpack_modules__;
 /******/ 	
+/******/ 	// the startup function
+/******/ 	// It's empty as some runtime module handles the default behavior
+/******/ 	__webpack_require__.x = x => {};
 /************************************************************************/
-/******/ 	/* webpack/runtime/chunk loaded */
-/******/ 	(() => {
-/******/ 		var deferred = [];
-/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
-/******/ 			if(chunkIds) {
-/******/ 				priority = priority || 0;
-/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
-/******/ 				deferred[i] = [chunkIds, fn, priority];
-/******/ 				return;
-/******/ 			}
-/******/ 			var notFulfilled = Infinity;
-/******/ 			for (var i = 0; i < deferred.length; i++) {
-/******/ 				var [chunkIds, fn, priority] = deferred[i];
-/******/ 				var fulfilled = true;
-/******/ 				for (var j = 0; j < chunkIds.length; j++) {
-/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
-/******/ 						chunkIds.splice(j--, 1);
-/******/ 					} else {
-/******/ 						fulfilled = false;
-/******/ 						if(priority < notFulfilled) notFulfilled = priority;
-/******/ 					}
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferred.splice(i--, 1)
-/******/ 					result = fn();
-/******/ 				}
-/******/ 			}
-/******/ 			return result;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
@@ -49053,12 +49065,15 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 		
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		// Promise = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"/js/dashboard/app": 0,
-/******/ 			"css/app": 0
+/******/ 			"/js/dashboard/app": 0
 /******/ 		};
 /******/ 		
+/******/ 		var deferredModules = [
+/******/ 			["./resources/js/dashboard/app.js"],
+/******/ 			["./resources/css/app.css"]
+/******/ 		];
 /******/ 		__webpack_require__.f.j = (chunkId, promises) => {
 /******/ 				// JSONP chunk loading for javascript
 /******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
@@ -49070,7 +49085,9 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 					} else {
 /******/ 						if("css/app" != chunkId) {
 /******/ 							// setup Promise in chunk cache
-/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
+/******/ 							var promise = new Promise((resolve, reject) => {
+/******/ 								installedChunkData = installedChunks[chunkId] = [resolve, reject];
+/******/ 							});
 /******/ 							promises.push(installedChunkData[2] = promise);
 /******/ 		
 /******/ 							// start chunk loading
@@ -49106,14 +49123,21 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 		
 /******/ 		// no HMR manifest
 /******/ 		
-/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		var checkDeferredModules = x => {};
 /******/ 		
 /******/ 		// install a JSONP callback for chunk loading
 /******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			var [chunkIds, moreModules, runtime, executeModules] = data;
 /******/ 			// add "moreModules" to the modules object,
 /******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			var moduleId, chunkId, i = 0, resolves = [];
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					resolves.push(installedChunks[chunkId][0]);
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
 /******/ 			for(moduleId in moreModules) {
 /******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
 /******/ 					__webpack_require__.m[moduleId] = moreModules[moduleId];
@@ -49121,29 +49145,53 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 			}
 /******/ 			if(runtime) runtime(__webpack_require__);
 /******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 			while(resolves.length) {
+/******/ 				resolves.shift()();
 /******/ 			}
-/******/ 			__webpack_require__.O();
+/******/ 		
+/******/ 			// add entry modules from loaded chunk to deferred list
+/******/ 			if(executeModules) deferredModules.push.apply(deferredModules, executeModules);
+/******/ 		
+/******/ 			// run deferred modules when all chunks ready
+/******/ 			return checkDeferredModules();
 /******/ 		}
 /******/ 		
 /******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 		
+/******/ 		function checkDeferredModulesImpl() {
+/******/ 			var result;
+/******/ 			for(var i = 0; i < deferredModules.length; i++) {
+/******/ 				var deferredModule = deferredModules[i];
+/******/ 				var fulfilled = true;
+/******/ 				for(var j = 1; j < deferredModule.length; j++) {
+/******/ 					var depId = deferredModule[j];
+/******/ 					if(installedChunks[depId] !== 0) fulfilled = false;
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferredModules.splice(i--, 1);
+/******/ 					result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
+/******/ 				}
+/******/ 			}
+/******/ 			if(deferredModules.length === 0) {
+/******/ 				__webpack_require__.x();
+/******/ 				__webpack_require__.x = x => {};
+/******/ 			}
+/******/ 			return result;
+/******/ 		}
+/******/ 		var startup = __webpack_require__.x;
+/******/ 		__webpack_require__.x = () => {
+/******/ 			// reset startup function so it can be called again when more startup code is added
+/******/ 			__webpack_require__.x = startup || (x => {});
+/******/ 			return (checkDeferredModules = checkDeferredModulesImpl)();
+/******/ 		};
 /******/ 	})();
 /******/ 	
 /************************************************************************/
 /******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/dashboard/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
-/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	// run startup
+/******/ 	var __webpack_exports__ = __webpack_require__.x();
 /******/ 	
 /******/ })()
 ;

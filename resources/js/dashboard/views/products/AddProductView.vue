@@ -70,12 +70,12 @@
                             <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }} ({{ category.vat}}% VAT)</option>
                         </select>
                     </ValidationProvider>
-                    <ValidationProvider vid="base_price" rules="required|double:2,comma" v-slot="{ errors, failed, passed }" class="w-full mt-2">
+                    <ValidationProvider vid="base_price" rules="required|double:2,dot" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                         <label for="name" class="text-sm font-semibold">Base price</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <input 
                             id="basePrice"
-                            name="base_price" 
+                            name="base price" 
                             type="text" 
                             v-model="product.base_price" 
                             :disabled="waiting || locked"   

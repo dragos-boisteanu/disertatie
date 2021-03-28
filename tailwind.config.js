@@ -25,6 +25,10 @@ module.exports = {
             },
             screens: {
                 'xl': '1281px',
+            },
+            maxHeight: {
+                '3/4': '75%',
+                '5/6': '83.33333%'
             }            
         },
         colors,

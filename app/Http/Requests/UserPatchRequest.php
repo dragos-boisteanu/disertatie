@@ -29,7 +29,7 @@ class UserPatchRequest extends FormRequest
             'birthdate' => 'sometimes|date',
             'phone_number' => 'sometimes|string|unique:users,phone_number',
             'email' => 'sometimes|string|email|max:255|unique:users,email',
-            'role_id' => 'sometimes|integer',
+            'role_id' => 'sometimes|integer|exists:roles,id',
         ];
     }
 

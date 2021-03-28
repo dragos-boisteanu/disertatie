@@ -2685,7 +2685,10 @@ var render = function() {
   return _c("Backdrop", { staticClass: "flex justify-center items-center" }, [
     _c(
       "div",
-      { staticClass: "bg-white p-4 rounded-md w-11/12 shadow-md" },
+      {
+        staticClass:
+          "bg-white p-4 rounded-md w-11/12 shadow-md overflow-y-auto max-h-5/6"
+      },
       [_vm._t("default")],
       2
     )

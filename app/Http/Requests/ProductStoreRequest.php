@@ -26,13 +26,13 @@ class ProductStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'barcode' => 'required',
-            'name' => 'required',
-            'description' => 'required',
+            'barcode' => 'required|numeric|unique:products',
+            'name' => 'required|string|max:150',
+            'description' => 'required|string|max:255',
             'base_price' => 'required',
             'weight' => 'required',
-            'category_id' => 'required',
-            'unit_id' => 'required'
+            'category_id' => 'required|numeric|exists:categories,id',
+            'unit_id' => 'required|numeric|exists:units,id'
         ];
     }
 
@@ -45,10 +45,10 @@ class ProductStoreRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'base_price' => str_replace(',', '.', $this->base_price),
-        ]);
-    }
+    // protected function prepareForValidation()
+    // {
+    //     $this->merge([
+    //         'base_price' => str_replace(',', '.', $this->base_price),
+    //     ]);
+    // }
 }

@@ -103,6 +103,9 @@
             
             updateProduct(product) {
                 console.log(product);
+                Object.keys(product).forEach(key => {         
+                    this.product[key] = product[key];
+                })
             },
 
             setProduct(product) {

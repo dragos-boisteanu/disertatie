@@ -736,10 +736,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -769,45 +765,75 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     };
   },
-  methods: {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)('Products', ['updateProduct'])), {}, {
     submit: function submit() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var payload;
+        var payload, counter;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                try {
-                  payload = {
-                    vm: _this,
-                    product: {
-                      id: _this.product.id
-                    }
-                  };
-                  Object.keys(_this.product).forEach(function (key) {
-                    if (_this.product[key] !== _this.localProduct[key]) {
-                      payload.product[key] = _this.localProduct[key];
-                    }
-                  });
-                  console.log(payload);
-                } catch (error) {
-                  console.log(error);
+                _context.prev = 0;
+                payload = {
+                  vm: _this,
+                  product: {
+                    id: _this.product.id
+                  }
+                };
+                counter = 0;
+                Object.keys(_this.product).forEach(function (key) {
+                  if (_this.product[key] !== _this.localProduct[key]) {
+                    payload.product[key] = _this.localProduct[key];
+                    counter++;
+                  }
+                });
+
+                if (!(counter > 0)) {
+                  _context.next = 12;
+                  break;
                 }
 
-              case 1:
+                _context.next = 7;
+                return _this.updateProduct(payload);
+
+              case 7:
+                _this.$emit('updated', payload.product);
+
+                counter = 0;
+
+                _this.close(); // notification
+
+
+                _context.next = 13;
+                break;
+
+              case 12:
+                console.log('Nothing to update'); // notification
+
+              case 13:
+                console.log(payload);
+                _context.next = 19;
+                break;
+
+              case 16:
+                _context.prev = 16;
+                _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
+
+              case 19:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee);
+        }, _callee, null, [[0, 16]]);
       }))();
     },
     close: function close() {
       this.$emit('close');
     }
-  },
+  }),
   components: {
     Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default
   }
@@ -1293,7 +1319,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     updateProduct: function updateProduct(product) {
+      var _this = this;
+
       console.log(product);
+      Object.keys(product).forEach(function (key) {
+        _this.product[key] = product[key];
+      });
     },
     setProduct: function setProduct(product) {
       this.product = product;
@@ -2707,7 +2738,10 @@ var render = function() {
   return _c("Backdrop", { staticClass: "flex justify-center items-center" }, [
     _c(
       "div",
-      { staticClass: "bg-white p-4 rounded-md w-11/12 shadow-md" },
+      {
+        staticClass:
+          "bg-white p-4 rounded-md w-11/12 shadow-md overflow-y-auto max-h-5/6"
+      },
       [_vm._t("default")],
       2
     )
@@ -3573,12 +3607,14 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("Modal", [
     _c("h1", { staticClass: "text-3xl my-4" }, [
-      _vm._v("\n        Edit user\n    ")
+      _vm._v(
+        "\n        Edit product #" + _vm._s(_vm.localProduct.id) + "\n    "
+      )
     ]),
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "p-1" },
+      { staticClass: "p-1 mb-3" },
       [
         _c("ValidationObserver", {
           ref: "observar",
@@ -3673,41 +3709,7 @@ var render = function() {
                                             )
                                           }
                                         }
-                                      }),
-                                      _vm._v(" "),
-                                      _c(
-                                        "svg",
-                                        {
-                                          staticClass:
-                                            "absolute -right-10 top-1/4 animate-spin mr-3 h-5 w-5 text-lightBlue-600",
-                                          attrs: {
-                                            xmlns: "http://www.w3.org/2000/svg",
-                                            fill: "none",
-                                            viewBox: "0 0 24 24"
-                                          }
-                                        },
-                                        [
-                                          _c("circle", {
-                                            staticClass: "opacity-25",
-                                            attrs: {
-                                              cx: "12",
-                                              cy: "12",
-                                              r: "10",
-                                              stroke: "currentColor",
-                                              "stroke-width": "4"
-                                            }
-                                          }),
-                                          _vm._v(" "),
-                                          _c("path", {
-                                            staticClass: "opacity-75",
-                                            attrs: {
-                                              fill: "currentColor",
-                                              d:
-                                                "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                            }
-                                          })
-                                        ]
-                                      )
+                                      })
                                     ]
                                   )
                                 ]
@@ -3999,7 +4001,7 @@ var render = function() {
                         staticClass: "w-full mt-2",
                         attrs: {
                           vid: "base_price",
-                          rules: "required|double:2,comma"
+                          rules: "required|double:2,dot"
                         },
                         scopedSlots: _vm._u(
                           [
@@ -4045,7 +4047,7 @@ var render = function() {
                                     },
                                     attrs: {
                                       id: "basePrice",
-                                      name: "base_price",
+                                      name: "base price",
                                       type: "text",
                                       disabled: _vm.waiting || _vm.locked
                                     },
@@ -4856,7 +4858,7 @@ var render = function() {
                           staticClass: "w-full mt-2",
                           attrs: {
                             vid: "base_price",
-                            rules: "required|double:2,comma"
+                            rules: "required|double:2,dot"
                           },
                           scopedSlots: _vm._u(
                             [
@@ -4902,7 +4904,7 @@ var render = function() {
                                       },
                                       attrs: {
                                         id: "basePrice",
-                                        name: "base_price",
+                                        name: "base price",
                                         type: "text",
                                         disabled: _vm.waiting || _vm.locked
                                       },

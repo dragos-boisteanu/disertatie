@@ -31,16 +31,11 @@ class Product extends Model
 
     protected $appends = array('price');
 
-    public function getBasePriceAttribute($value)
-    {
-        return str_replace('.', ',', $value);
-    }
-
     public function getPriceAttribute()
     {
         $price = $this->base_price + $this->base_price * ($this->category->vat / 100);
 
-        return str_replace('.', ',', $price);
+        return $price;
     }
 
     public function category() 

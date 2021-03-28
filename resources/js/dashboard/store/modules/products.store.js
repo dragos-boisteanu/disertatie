@@ -1,6 +1,7 @@
 import {downloadProducts, downloadProduct, storeProduct, patchProduct, disableProductm, downloadProductByBarcode} from '../../api/products.api';
 import _orderBy from 'lodash/orderBy';
 import _find from 'lodash/find';
+import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
     products: [],
@@ -42,6 +43,15 @@ const actions = {
         try {
             const response = await downloadProduct(payload);
             return response.data.data;
+        } catch ( error ) {
+            throw error;
+        }
+    },
+
+    async updateProduct({commit}, payload ) {
+        try {
+            await patchProduct(payload.product)
+            commit('PATCH_PRODUCT', payload);
         } catch ( error ) {
             throw error;
         }
@@ -95,6 +105,16 @@ const mutations = {
 
     SET_PAGINATION(state, payload) {
         state.pagination = payload;
+    },
+
+    PATCH_PRODUCT(state, payload) {
+        if(state.products.length > 0 ) {
+            const selectedProductIndex = _findIndex(state.products, ['id', payload.product.id]);
+            const vm = payload.vm;
+            Object.keys(payload.product).forEach(key => {
+                vm.$set(state.products[selectedProductIndex], key, payload.product[ley]);
+            })
+        }
     },
 
     SORT_PRODUCTS(state, orderBy) {

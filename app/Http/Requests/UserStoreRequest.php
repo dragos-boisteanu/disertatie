@@ -29,13 +29,13 @@ class UserStoreRequest extends FormRequest
             'data.user.birthdate' => 'required|date',
             'data.user.phone_number' => 'required|string|unique:users,phone_number',
             'data.user.email' => 'required|string|email|max:255|unique:users,email',
-            'data.user.role_id' => 'required|integer',
+            'data.user.role_id' => 'required|integer|exists:roles,id',
             
             'data.address.first_name' => 'sometimes|required|string|max:255',
             'data.address.name' => 'sometimes|required|string|max:255',
             'data.address.phone_number' => 'sometimes|required|string',
-            'data.address.county_id' => 'sometimes|required|integer',
-            'data.address.city_id' => 'sometimes|required|integer',
+            'data.address.county_id' => 'sometimes|required|integer|exists:counties,id',
+            'data.address.city_id' => 'sometimes|required|integer|exists:cities,id',
             'data.address.address' => 'sometimes|required|string|max:255'
         ];
     }
