@@ -164,7 +164,7 @@ class UserController extends Controller
      */
     public function update(UserPatchRequest $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::withTrashed()->findOrFail($id);
 
         $user->update($request->validated());
 

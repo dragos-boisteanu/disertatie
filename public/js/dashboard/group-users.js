@@ -1267,6 +1267,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -1341,7 +1342,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee, null, [[0, 19]]);
     }))();
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Users', ['getLoggedUser'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Users', ['getLoggedUser'])), {}, {
+    canDelete: function canDelete() {
+      if (this.getLoggedUser) {
+        return this.getLoggedUser.role_id === 7 && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id;
+      }
+    },
+    canDisable: function canDisable() {
+      if (this.getLoggedUser) {
+        return (this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7) && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id;
+      }
+    }
+  }),
   data: function data() {
     return {
       editUserState: false,
@@ -1479,7 +1491,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
 //
 //
 //
@@ -19156,35 +19167,39 @@ var render = function() {
                       [_vm._v("\n                    Edit\n                ")]
                     ),
                     _vm._v(" "),
-                    _vm.user.deleted_at
-                      ? _c(
-                          "button",
-                          {
-                            staticClass:
-                              "bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none",
-                            on: { click: _vm.restore }
-                          },
-                          [
-                            _vm._v(
-                              "\n                    Restore\n                "
-                            )
-                          ]
-                        )
-                      : _c(
-                          "button",
-                          {
-                            staticClass:
-                              "bg-white border border-red-500 rounded-sm text-xs py-1 px-4 text-black mt-2 hover:border-red-400 active:shadow-inner active:outline-none",
-                            on: { click: _vm.disable }
-                          },
-                          [
-                            _vm._v(
-                              "\n                    Disable\n                "
-                            )
-                          ]
-                        ),
+                    _vm.canDisable
+                      ? _c("div", [
+                          _vm.user.deleted_at
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none",
+                                  on: { click: _vm.restore }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        Restore\n                    "
+                                  )
+                                ]
+                              )
+                            : _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "bg-white border border-red-500 rounded-sm text-xs py-1 px-4 text-black mt-2 hover:border-red-400 active:shadow-inner active:outline-none",
+                                  on: { click: _vm.disable }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        Disable\n                    "
+                                  )
+                                ]
+                              )
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
-                    _vm.getLoggedUser && _vm.getLoggedUser.role_id === 7
+                    _vm.canDelete
                       ? _c(
                           "button",
                           {

@@ -44,7 +44,6 @@
                 <option :value="14">Joined at desc</option>
             </select>
         </div>
-      <!-- xl:w-375px -->
         <CardsList>
             <Card v-for="user in getUsers" :key="user.id">
                 <router-link :to="{name: 'User', params:{id:user.id}}">

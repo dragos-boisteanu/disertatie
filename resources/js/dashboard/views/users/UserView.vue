@@ -43,23 +43,24 @@
                     >
                         Edit
                     </button>
-                     <button 
-                        v-if="user.deleted_at"
-                        @click="restore"
-                        class="bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none"
-                    >
-                        Restore
-                    </button>
+                    <div v-if="canDisable">
+                        <button 
+                            v-if="user.deleted_at"
+                            @click="restore"
+                            class="bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none"
+                        >
+                            Restore
+                        </button>
+                        <button 
+                            v-else
+                            @click="disable"
+                            class="bg-white border border-red-500 rounded-sm text-xs py-1 px-4 text-black mt-2 hover:border-red-400 active:shadow-inner active:outline-none"
+                        >
+                            Disable
+                        </button>
+                    </div>
                     <button 
-                        v-else
-                        @click="disable"
-                        class="bg-white border border-red-500 rounded-sm text-xs py-1 px-4 text-black mt-2 hover:border-red-400 active:shadow-inner active:outline-none"
-                    >
-                        Disable
-                    </button>
-
-                    <button 
-                        v-if="getLoggedUser && getLoggedUser.role_id === 7"
+                        v-if="canDelete"
                         @click="deleteUser"
                         class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
                     >
@@ -111,6 +112,18 @@
 
         computed: {
             ...mapGetters('Users', ['getLoggedUser']),
+
+            canDelete() {
+                if(this.getLoggedUser) {
+                    return this.getLoggedUser.role_id === 7 && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id
+                }
+            },
+
+            canDisable() {
+                if(this.getLoggedUser) {
+                    return (this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7) && (this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id )               
+                }
+            },
         },
         
         data() {
