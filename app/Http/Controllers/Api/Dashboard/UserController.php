@@ -15,6 +15,7 @@ use App\Http\Resources\UserCollection;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\UserPatchRequest;
 use App\Http\Requests\UserStoreRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\User as ResourcesUser;
 
 class UserController extends Controller
@@ -111,13 +112,29 @@ class UserController extends Controller
                 Address::create($addressInputData); 
             }
 
+            if($request->has('data.user.avatar')) {
+                $requestPath = $request->input('data.user.avatar');
+                $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
+                $filename = 'avatar_'.$user->id . '_' . now()->timestamp;
+                $newPath = 'public/avatars/' . $user->id . '/' . $filename . '.' . $extension;
+
+                Storage::move($requestPath, $newPath);
+
+                $user->avatar = $newPath;
+                $user->save();
+
+                Storage::delete($requestPath);
+            }
+
             event(new AccountCreated($user));
             DB::commit();
             return ['user' => ['id'=>$user->id, 'created_at'=>$user->created_at]];
            
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
-            return response()->json($ex, 500);
+            return response()->json($ex->getMessage(), 500);
+        } catch( \Exception $e) {
+            return response()->json($e->getMessage(), 500);
         }
     }
 

@@ -24,6 +24,7 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'data.user.avatar' => 'sometimes|string',
             'data.user.first_name' => 'required|string|max:255',
             'data.user.name' => 'required|string|max:255',
             'data.user.birthdate' => 'required|date',

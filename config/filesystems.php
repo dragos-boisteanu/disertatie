@@ -52,6 +52,21 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'ftp' => [
+            'driver' => 'ftp',
+            'host' => 'ftpupload.net',
+            'port' => 21,
+            'username' => 'epiz_28263972',
+            'password' => '8uowIrAxehyq',
+        
+            // Optional FTP Settings...
+            
+            // 'root' => '',
+            // 'passive' => true,
+            // 'ssl' => true,
+            // 'timeout' => 30,
+        ],
+
     ],
 
     /*

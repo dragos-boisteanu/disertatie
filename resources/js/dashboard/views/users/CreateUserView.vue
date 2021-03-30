@@ -7,13 +7,37 @@
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
                 <div class="flex flex-col lg:flex-row lg:gap-x-6 lg:w-3/5">
-                    <div class="pb-5 border-b border-gray-200 lg:border-r lg:pr-5 lg:border-b-0 lg:pb-0 lg:flex-auto">
+                    <div class="flex flex-col gap-y-3 pb-5 border-b border-gray-200 lg:border-r lg:pr-5 lg:border-b-0 lg:pb-0 lg:flex-auto">
                         <h2 class="mb-5 text-xl font-semibold">
                             Account details
                         </h2>
-                        <div>
-                            IMAGE UPLOAD
-                        </div>
+
+                        <file-pond
+                            name="image"
+                            ref="pond"
+                            label-idle="Upload user profile image..."
+                            v-bind:allow-multiple="false"
+                            accepted-file-types="image/jpeg, image/png"
+                            :server="{
+                                url: '/api/dashboard/images',
+                                process: { 
+                                    headers: {
+                                        'X-CSRF-TOKEN': csrf
+                                    },
+                                    onload: (response) =>  addAvatarPathToUser(response) 
+                                },
+                                fetch: null,
+                                revert: {
+                                    url: '/delete',
+                                    headers: {
+                                        'X-CSRF-TOKEN': csrf
+                                    },
+                                }
+                            }"
+                            :files="files"
+                            :init="handleFilePondInit"
+                        />
+
                         <ValidationProvider vid="data.user.first_name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }">
                             <label for="firstName" class="text-sm font-semibold">First name</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
@@ -27,7 +51,7 @@
                                 :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             />
                         </ValidationProvider>
-                        <ValidationProvider vid="data.user.name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="mt-2">
+                        <ValidationProvider vid="data.user.name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }">
                             <label for="name" class="text-sm font-semibold">Name</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
@@ -40,7 +64,7 @@
                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
                         </ValidationProvider>
-                        <ValidationProvider vid="data.user.birthdate" rules="required" v-slot="{ errors, failed, passed }" class="mt-2">
+                        <ValidationProvider vid="data.user.birthdate" rules="required" v-slot="{ errors, failed, passed }">
                             <label for="birthdate" class="text-sm font-semibold">Birthdate</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
@@ -53,7 +77,7 @@
                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"   
                                 />
                         </ValidationProvider>
-                        <ValidationProvider vid="data.user.email" rules="required|email|max:100" v-slot="{ errors, failed, passed }" class="mt-2">
+                        <ValidationProvider vid="data.user.email" rules="required|email|max:100" v-slot="{ errors, failed, passed }">
                             <label for="email" class="text-sm font-semibold">Email</label>
                             
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
@@ -67,7 +91,7 @@
                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"   
                                 />
                         </ValidationProvider>
-                        <ValidationProvider  vid="data.user.phone_number" rules="required" v-slot="{ errors, failed, passed }" class="mt-2">
+                        <ValidationProvider  vid="data.user.phone_number" rules="required" v-slot="{ errors, failed, passed }">
                                 <label for="phone_number" class="text-sm font-semibold">Phone number</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
@@ -225,6 +249,16 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import ViewContainer from '../ViewContainer';
+    
+    import vueFilePond from "vue-filepond";
+    import "filepond/dist/filepond.min.css";
+    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+
+    const FilePond = vueFilePond(
+        FilePondPluginFileValidateType,
+        // FilePondPluginImagePreview
+    );
 
     export default {
 
@@ -258,7 +292,10 @@
                     county_id: '',
                     city_id: '',
                     address: ''
-                }
+                },
+
+                files: [],
+                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
 
@@ -301,6 +338,8 @@
             restForm() {
                 this.$refs.observer.reset();
                 this.cities = [];
+                this.files = [];
+
                 this.user = {
                     first_name: '',
                     name: '',
@@ -309,6 +348,7 @@
                     birthdate: '',
                     role_id: 1,
                 }
+
                 this.address = {
                     state: false,
                     first_name: '',
@@ -333,6 +373,16 @@
                 }
                 this.$refs.addressForm.reset();
                 this.required = !this.required
+            },
+
+            handleFilePondInit: function () {
+                console.log("FilePond has initialized");
+
+                // FilePond instance methods are available on `this.$refs.pond`
+            },
+
+            addAvatarPathToUser(value) {
+                this.user.avatar = value;
             }
         },
 

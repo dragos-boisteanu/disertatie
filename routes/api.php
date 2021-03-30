@@ -20,6 +20,9 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('categories', 'CategoryController');
     Route::apiResource('units', 'UnitController');
     Route::get('/products/check-barcode/{barcode}', 'ProductController@getProductByBarcode');
+
+    Route::apiResource('images', 'FileController')->only('store', 'show', 'destroy');
+       
 });
 
 Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {

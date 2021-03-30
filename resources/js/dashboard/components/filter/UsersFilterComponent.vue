@@ -211,8 +211,6 @@
                     this.reset();
                     await this.fetchUsers(query);
 
-                    query.page = 1;
-
                     this.$router.replace({name:'Users', query: {...query}});
                 
                     this.openNotification({

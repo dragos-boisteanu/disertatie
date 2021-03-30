@@ -24,7 +24,7 @@ module.exports = {
                 '400px': '400px',
             },
             screens: {
-                'xl': '1281px',
+                // 'xl': '1281px',
             },
             maxHeight: {
                 '3/4': '75%',

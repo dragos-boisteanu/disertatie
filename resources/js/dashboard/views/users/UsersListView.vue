@@ -134,12 +134,10 @@
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
                 store.dispatch('Users/reset');
-                const query = to.query
-                query.page = 1;
-                await store.dispatch('Users/fetchUsers', query);
+                await store.dispatch('Users/fetchUsers');
                 next();
             } else {
-                await store.dispatch('Products/fetchProducts', to.query);
+                await store.dispatch('Users/fetchUsers', to.query);
                 next();
             }
         },
@@ -158,7 +156,6 @@
             ...mapGetters('Users', ['getUsers', 'getNextPage']),
 
             showMoreState() {
-                console.log(this.getNextPage)
                 return this.getNextPage;
             }
         },
