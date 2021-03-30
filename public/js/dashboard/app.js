@@ -1914,48 +1914,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
+              _context.next = 3;
+              return Promise.all([_this.downloadRoles(), _this.fetchCounties(), _this.fetchCategories(), _this.fetchUnits(), _this.downloadLoggedUserData()]);
 
-              if (!(_this.getRoles.length === 0)) {
-                _context.next = 4;
-                break;
-              }
-
-              _context.next = 4;
-              return _this.downloadRoles();
-
-            case 4:
-              if (!(_this.getCounties.length === 0)) {
-                _context.next = 7;
-                break;
-              }
-
-              _context.next = 7;
-              return _this.fetchCounties();
-
-            case 7:
-              if (!(_this.getCategories.length === 0)) {
-                _context.next = 10;
-                break;
-              }
-
-              _context.next = 10;
-              return _this.fetchCategories();
-
-            case 10:
-              if (!(_this.getUnits.length === 0)) {
-                _context.next = 13;
-                break;
-              }
-
-              _context.next = 13;
-              return _this.fetchUnits();
-
-            case 13:
-              _context.next = 18;
+            case 3:
+              _context.next = 8;
               break;
 
-            case 15:
-              _context.prev = 15;
+            case 5:
+              _context.prev = 5;
               _context.t0 = _context["catch"](0);
 
               _this.openNotification({
@@ -1964,12 +1931,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 show: true
               });
 
-            case 18:
+            case 8:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 15]]);
+      }, _callee, null, [[0, 5]]);
     }))();
   },
   computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Counties', ['getCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Notification', ['getNotification'])), {}, {
@@ -1980,7 +1947,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return this.$mq === 'xl' || this.$mq === 'xxl';
     }
   }),
-  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['downloadLoggedUserData'])), {}, {
     downloadRoles: function downloadRoles() {
       var _this2 = this;
 
@@ -2675,16 +2642,22 @@ var patchUnit = function patchUnit(data) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "downloadLoggedUserData": () => (/* binding */ downloadLoggedUserData),
 /* harmony export */   "downloadUsers": () => (/* binding */ downloadUsers),
 /* harmony export */   "downloadUser": () => (/* binding */ downloadUser),
 /* harmony export */   "storeUser": () => (/* binding */ storeUser),
 /* harmony export */   "patchUser": () => (/* binding */ patchUser),
 /* harmony export */   "disableUser": () => (/* binding */ disableUser),
+/* harmony export */   "restoreUser": () => (/* binding */ restoreUser),
 /* harmony export */   "deleteUser": () => (/* binding */ deleteUser)
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
 var END_POINT = '/users';
+
+var downloadLoggedUserData = function downloadLoggedUserData() {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT, "/logged-user"));
+};
 
 var downloadUsers = function downloadUsers(query) {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT), {
@@ -2710,6 +2683,10 @@ var disableUser = function disableUser(id) {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(END_POINT, "/").concat(id, "/disable"), {
     data: id
   });
+};
+
+var restoreUser = function restoreUser(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(END_POINT, "/").concat(id, "/restore"));
 };
 
 var deleteUser = function deleteUser(id) {
@@ -3766,6 +3743,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_4__);
+var _mutations;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -3794,7 +3775,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var initialState = function initialState() {
   return {
     users: [],
-    nextPage: 1
+    nextPage: 1,
+    loggedUser: null
   };
 };
 
@@ -3802,6 +3784,9 @@ var state = initialState();
 var getters = {
   getUsers: function getUsers(state) {
     return state.users;
+  },
+  getLoggedUser: function getLoggedUser(state) {
+    return state.loggedUser;
   },
   getNextPage: function getNextPage(state) {
     return state.nextPage;
@@ -3812,9 +3797,9 @@ var actions = {
     var commit = _ref.commit;
     commit('RESET');
   },
-  fetchUsers: function fetchUsers(_ref2, query) {
+  downloadLoggedUserData: function downloadLoggedUserData(_ref2) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var commit, response, users, links, lastIndex;
+      var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -3822,10 +3807,41 @@ var actions = {
               commit = _ref2.commit;
               _context.prev = 1;
               _context.next = 4;
-              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUsers)(query);
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadLoggedUserData)();
 
             case 4:
               response = _context.sent;
+              commit('SET_LOGGED_USER', response.data.data);
+              _context.next = 11;
+              break;
+
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](1);
+              throw _context.t0;
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[1, 8]]);
+    }))();
+  },
+  fetchUsers: function fetchUsers(_ref3, query) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit, response, users, links, lastIndex;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref3.commit;
+              _context2.prev = 1;
+              _context2.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUsers)(query);
+
+            case 4:
+              response = _context2.sent;
               users = response.data.data.users;
               links = response.data.links;
               commit('SET_USERS', users);
@@ -3837,64 +3853,25 @@ var actions = {
                 commit('SAVE_NEXT_PAGE', null);
               }
 
-              _context.next = 14;
+              _context2.next = 14;
               break;
 
             case 11:
-              _context.prev = 11;
-              _context.t0 = _context["catch"](1);
-              throw _context.t0;
-
-            case 14:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[1, 11]]);
-    }))();
-  },
-  refreshUsers: function refreshUsers(_ref3) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      var commit, response, links;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              commit = _ref3.commit;
-              _context2.prev = 1;
-              _context2.next = 4;
-              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUsers)(1);
-
-            case 4:
-              response = _context2.sent;
-              commit('REFRESH_USERS', response.data.data.users);
-              links = response.data.links;
-
-              if (links.next) {
-                commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length - 1));
-              } else {
-                commit('SAVE_NEXT_PAGE', null);
-              }
-
-              _context2.next = 13;
-              break;
-
-            case 10:
-              _context2.prev = 10;
+              _context2.prev = 11;
               _context2.t0 = _context2["catch"](1);
               throw _context2.t0;
 
-            case 13:
+            case 14:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 10]]);
+      }, _callee2, null, [[1, 11]]);
     }))();
   },
-  addUser: function addUser(_ref4, payload) {
+  fetchMoreUsers: function fetchMoreUsers(_ref4, query) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      var commit, response;
+      var commit, response, users, links, lastIndex;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -3902,14 +3879,21 @@ var actions = {
               commit = _ref4.commit;
               _context3.prev = 1;
               _context3.next = 4;
-              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.storeUser)(payload);
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUsers)(query);
 
             case 4:
               response = _context3.sent;
-              payload.user.id = response.data.user.id;
-              payload.user.created_at = response.data.user.created_at;
-              payload.user.deleted_at = null;
-              commit('ADD_USER', payload.user);
+              users = response.data.data.users;
+              links = response.data.links;
+              commit('ADD_USERS', users);
+
+              if (links.next) {
+                lastIndex = links.next.indexOf('=');
+                commit('SAVE_NEXT_PAGE', links.next.substr(lastIndex + 1));
+              } else {
+                commit('SAVE_NEXT_PAGE', null);
+              }
+
               _context3.next = 14;
               break;
 
@@ -3926,9 +3910,9 @@ var actions = {
       }, _callee3, null, [[1, 11]]);
     }))();
   },
-  updateUser: function updateUser(_ref5, payload) {
+  refreshUsers: function refreshUsers(_ref5) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-      var commit;
+      var commit, response, links;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
@@ -3936,105 +3920,276 @@ var actions = {
               commit = _ref5.commit;
               _context4.prev = 1;
               _context4.next = 4;
-              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.patchUser)(payload.user);
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUsers)(1);
 
             case 4:
-              commit('PATCH_USER', payload);
-              _context4.next = 10;
+              response = _context4.sent;
+              commit('REFRESH_USERS', response.data.data.users);
+              links = response.data.links;
+
+              if (links.next) {
+                commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length - 1));
+              } else {
+                commit('SAVE_NEXT_PAGE', null);
+              }
+
+              _context4.next = 13;
               break;
 
-            case 7:
-              _context4.prev = 7;
+            case 10:
+              _context4.prev = 10;
               _context4.t0 = _context4["catch"](1);
               throw _context4.t0;
 
-            case 10:
+            case 13:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[1, 7]]);
+      }, _callee4, null, [[1, 10]]);
     }))();
   },
-  fetchUser: function fetchUser(_ref6, id) {
+  addUser: function addUser(_ref6, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-      var response;
+      var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              _objectDestructuringEmpty(_ref6);
-
+              commit = _ref6.commit;
               _context5.prev = 1;
               _context5.next = 4;
-              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUser)(id);
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.storeUser)(payload);
 
             case 4:
               response = _context5.sent;
-              return _context5.abrupt("return", response.data.data);
+              payload.user.id = response.data.user.id;
+              payload.user.created_at = response.data.user.created_at;
+              payload.user.deleted_at = null;
+              commit('ADD_USER', payload.user);
+              _context5.next = 14;
+              break;
 
-            case 8:
-              _context5.prev = 8;
+            case 11:
+              _context5.prev = 11;
               _context5.t0 = _context5["catch"](1);
               throw _context5.t0;
 
-            case 11:
+            case 14:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[1, 8]]);
+      }, _callee5, null, [[1, 11]]);
     }))();
   },
-  getUser: function getUser(_ref7, id) {
-    var _this = this;
-
+  updateUser: function updateUser(_ref7, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-      var state, user;
+      var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              state = _ref7.state;
+              commit = _ref7.commit;
               _context6.prev = 1;
-              user = _.find(state.users, ['id', id]);
+              _context6.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.patchUser)(payload.user);
 
-              if (!user) {
-                _context6.next = 5;
-                break;
-              }
+            case 4:
+              commit('PATCH_USER', payload);
+              _context6.next = 10;
+              break;
 
-              return _context6.abrupt("return", user);
-
-            case 5:
-              return _context6.abrupt("return", _this.fetchUser(id));
-
-            case 8:
-              _context6.prev = 8;
+            case 7:
+              _context6.prev = 7;
               _context6.t0 = _context6["catch"](1);
               throw _context6.t0;
 
-            case 11:
+            case 10:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[1, 8]]);
+      }, _callee6, null, [[1, 7]]);
     }))();
   },
-  sortUsersList: function sortUsersList(_ref8, sortBy) {
-    var commit = _ref8.commit;
+  fetchUser: function fetchUser(_ref8, id) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _objectDestructuringEmpty(_ref8);
+
+              _context7.prev = 1;
+              _context7.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.downloadUser)(id);
+
+            case 4:
+              response = _context7.sent;
+              return _context7.abrupt("return", response.data.data);
+
+            case 8:
+              _context7.prev = 8;
+              _context7.t0 = _context7["catch"](1);
+              throw _context7.t0;
+
+            case 11:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[1, 8]]);
+    }))();
+  },
+  getUser: function getUser(_ref9, id) {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
+      var state, user;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              state = _ref9.state;
+              _context8.prev = 1;
+              user = _.find(state.users, ['id', id]);
+
+              if (!user) {
+                _context8.next = 5;
+                break;
+              }
+
+              return _context8.abrupt("return", user);
+
+            case 5:
+              return _context8.abrupt("return", _this.fetchUser(id));
+
+            case 8:
+              _context8.prev = 8;
+              _context8.t0 = _context8["catch"](1);
+              throw _context8.t0;
+
+            case 11:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8, null, [[1, 8]]);
+    }))();
+  },
+  disableUser: function disableUser(_ref10, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              commit = _ref10.commit;
+              _context9.prev = 1;
+              _context9.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.disableUser)(payload.id);
+
+            case 4:
+              response = _context9.sent;
+              payload.deleted_at = response.data.deleted_at;
+              commit('UPDATE_USER_STATUS', payload);
+              return _context9.abrupt("return", response.data);
+
+            case 10:
+              _context9.prev = 10;
+              _context9.t0 = _context9["catch"](1);
+              throw _context9.t0;
+
+            case 13:
+            case "end":
+              return _context9.stop();
+          }
+        }
+      }, _callee9, null, [[1, 10]]);
+    }))();
+  },
+  restoreUser: function restoreUser(_ref11, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
+        while (1) {
+          switch (_context10.prev = _context10.next) {
+            case 0:
+              commit = _ref11.commit;
+              _context10.prev = 1;
+              _context10.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.restoreUser)(payload.id);
+
+            case 4:
+              response = _context10.sent;
+              payload.deleted_at = response.data.deleted_at;
+              commit('UPDATE_USER_STATUS', payload);
+              return _context10.abrupt("return", response.data);
+
+            case 10:
+              _context10.prev = 10;
+              _context10.t0 = _context10["catch"](1);
+              throw _context10.t0;
+
+            case 13:
+            case "end":
+              return _context10.stop();
+          }
+        }
+      }, _callee10, null, [[1, 10]]);
+    }))();
+  },
+  deleteUser: function deleteUser(_ref12, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
+        while (1) {
+          switch (_context11.prev = _context11.next) {
+            case 0:
+              commit = _ref12.commit;
+              _context11.prev = 1;
+              _context11.next = 4;
+              return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.deleteUser)(payload);
+
+            case 4:
+              response = _context11.sent;
+              commit('REMOVE_USER');
+              return _context11.abrupt("return", response.message);
+
+            case 9:
+              _context11.prev = 9;
+              _context11.t0 = _context11["catch"](1);
+              throw _context11.t0;
+
+            case 12:
+            case "end":
+              return _context11.stop();
+          }
+        }
+      }, _callee11, null, [[1, 9]]);
+    }))();
+  },
+  sortUsersList: function sortUsersList(_ref13, sortBy) {
+    var commit = _ref13.commit;
     commit('SORT_USERS', sortBy);
   }
 };
-var mutations = {
+var mutations = (_mutations = {
   RESET: function RESET(state) {
     var newState = initialState();
     Object.keys(newState).forEach(function (key) {
       state[key] = newState[key];
     });
   },
+  SET_LOGGED_USER: function SET_LOGGED_USER(state, payload) {
+    state.loggedUser = payload;
+  },
   SET_USERS: function SET_USERS(state, users) {
+    state.users = users;
+  },
+  ADD_USERS: function ADD_USERS(state, users) {
     var _state$users;
 
     (_state$users = state.users).push.apply(_state$users, _toConsumableArray(users));
@@ -4063,81 +4218,93 @@ var mutations = {
       });
     }
   },
-  SAVE_NEXT_PAGE: function SAVE_NEXT_PAGE(state, page) {
-    state.nextPage = page;
-  },
-  SORT_USERS: function SORT_USERS(state, orderBy) {
-    switch (orderBy) {
-      case 1:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-          return user.name.toLowerCase();
-        }], ['asc']);
-        break;
+  UPDATE_USER_STATUS: function UPDATE_USER_STATUS(state, payload) {
+    if (state.users.length > 0) {
+      var selectedUserIndex = _.findIndex(state.users, ['id', payload.id]);
 
-      case 2:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-          return user.name.toLowerCase();
-        }], ['desc']);
-        break;
-
-      case 3:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-          return user.first_name.toLowerCase();
-        }], ['asc']);
-        break;
-
-      case 4:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-          return user.first_name.toLowerCase();
-        }], ['desc']);
-        break;
-
-      case 5:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-          return user.email.toLowerCase();
-        }], ['asc']);
-        break;
-
-      case 6:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-          return user.email.toLowerCase();
-        }], ['desc']);
-        break;
-
-      case 7:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['desc']);
-        break;
-
-      case 8:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['asc']);
-        break;
-
-      case 9:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['orders'], ['desc']);
-        break;
-
-      case 10:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['orders'], ['asc']);
-        break;
-
-      case 11:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['reservations'], ['desc']);
-        break;
-
-      case 12:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['reservations'], ['asc']);
-        break;
-
-      case 13:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['asc']);
-        break;
-
-      case 14:
-        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['desc']);
-        break;
+      var vm = payload.vm;
+      vm.$set(state.users[selectedUserIndex], 'deleted_at', payload.deleted_at);
     }
   }
-};
+}, _defineProperty(_mutations, "REMOVE_USER", function REMOVE_USER(state, payload) {
+  if (state.users.length > 0) {
+    var selectedUserIndex = _.findIndex(state.users, ['id', payload]);
+
+    state.users.slice(selectedUserIndex, 1);
+  }
+}), _defineProperty(_mutations, "SAVE_NEXT_PAGE", function SAVE_NEXT_PAGE(state, page) {
+  state.nextPage = page;
+}), _defineProperty(_mutations, "SORT_USERS", function SORT_USERS(state, orderBy) {
+  switch (orderBy) {
+    case 1:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+        return user.name.toLowerCase();
+      }], ['asc']);
+      break;
+
+    case 2:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+        return user.name.toLowerCase();
+      }], ['desc']);
+      break;
+
+    case 3:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+        return user.first_name.toLowerCase();
+      }], ['asc']);
+      break;
+
+    case 4:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+        return user.first_name.toLowerCase();
+      }], ['desc']);
+      break;
+
+    case 5:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+        return user.email.toLowerCase();
+      }], ['asc']);
+      break;
+
+    case 6:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+        return user.email.toLowerCase();
+      }], ['desc']);
+      break;
+
+    case 7:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['desc']);
+      break;
+
+    case 8:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['asc']);
+      break;
+
+    case 9:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['orders'], ['desc']);
+      break;
+
+    case 10:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['orders'], ['asc']);
+      break;
+
+    case 11:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['reservations'], ['desc']);
+      break;
+
+    case 12:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['reservations'], ['asc']);
+      break;
+
+    case 13:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['asc']);
+      break;
+
+    case 14:
+      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['desc']);
+      break;
+  }
+}), _mutations);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   namespaced: true,
   state: state,

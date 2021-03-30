@@ -165,7 +165,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['deletedAt'],
   computed: {
     status: function status() {
-      return this.deletedAt === null ? 'Active' : 'Removed';
+      return this.deletedAt === null ? 'Active' : 'Disabled';
     },
     statusClass: function statusClass() {
       return {

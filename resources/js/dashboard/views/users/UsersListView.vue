@@ -134,7 +134,6 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
-                store.dispatch('Users/reset');
                 await store.dispatch('Users/fetchUsers');
                 next();
             } else {
@@ -169,7 +168,7 @@
         },
 
         methods: { 
-            ...mapActions('Users', ['refreshUsers', 'fetchUsers', 'sortUsersList']),
+            ...mapActions('Users', ['refreshUsers', 'fetchMoreUsers', 'sortUsersList']),
             ...mapActions('Notification', ['openNotification']),
 
             async loadMoreUsers() {
@@ -178,7 +177,7 @@
                     query.page = this.getNextPage,
                     query.orderBy = this.orderBy
         
-                    await this.fetchUsers(query)
+                    await this.fetchMoreUsers(query)
 
                     this.order();
                     

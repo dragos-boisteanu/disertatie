@@ -36,14 +36,38 @@
                         {{ user.created_at | formatDate }}
                     </span>
                 </div>
-                <button 
-                    @click="toggleEditUserState"
-                    class="bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner"
-                >
-                    Edit
-                </button>
+                <div class="flex items-center gap-x-2">   
+                     <button 
+                        @click="toggleEditUserState"
+                        class="bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner active:outline-none"
+                    >
+                        Edit
+                    </button>
+                     <button 
+                        v-if="user.deleted_at"
+                        @click="restore"
+                        class="bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none"
+                    >
+                        Restore
+                    </button>
+                    <button 
+                        v-else
+                        @click="disable"
+                        class="bg-white border border-red-500 rounded-sm text-xs py-1 px-4 text-black mt-2 hover:border-red-400 active:shadow-inner active:outline-none"
+                    >
+                        Disable
+                    </button>
+
+                    <button 
+                        v-if="getLoggedUser && getLoggedUser.role_id === 7"
+                        @click="deleteUser"
+                        class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
+                    >
+                        Delete
+                    </button>
+                </div>
+               
             </div>
-            
         </div>
         <div>
             Shifts
@@ -64,6 +88,7 @@
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
     import EditUser from '../../components/users/EditUserComponent';
+    import { mapActions, mapGetters } from 'vuex';
 
     export default {
         async beforeRouteEnter(to, from, next) {
@@ -84,6 +109,9 @@
             }
         },
 
+        computed: {
+            ...mapGetters('Users', ['getLoggedUser']),
+        },
         
         data() {
             return {
@@ -93,10 +121,44 @@
         },
 
         methods: {
+            ...mapActions('Users', ['disableUser', 'restoreUser']),
+
             updateUser(patchedUser) {
                 Object.keys(patchedUser).forEach(key => {         
                     this.user[key] = patchedUser[key];
                 })
+            },
+
+            async disable(){
+                try {
+                    const payload = {
+                        vm: this,
+                        id: this.user.id
+                    }
+
+                    const response = await this.disableUser(payload);
+                    this.user.deleted_at = response.deleted_at;
+                } catch ( error ) {
+                    console.log(error);
+                }
+            },
+
+            async restore() {
+                try {
+                    const payload = {
+                        vm: this,
+                        id: this.user.id
+                    }
+
+                    const response = await this.restoreUser(payload);
+                    this.user.deleted_at = response.deleted_at;
+                } catch ( error ) {
+                    console.log(error);
+                }
+            },
+
+            deleteUser() {
+
             },
 
             toggleEditUserState() {

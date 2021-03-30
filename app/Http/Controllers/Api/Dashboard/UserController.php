@@ -17,6 +17,7 @@ use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\UserPatchRequest;
 use App\Http\Requests\UserStoreRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\User as UserResource;
 use App\Http\Resources\User as ResourcesUser;
 
 class UserController extends Controller
@@ -85,7 +86,7 @@ class UserController extends Controller
 
         $query->orderBy('id', 'asc');
         
-        $users = $query->simplePaginate(10);
+        $users = $query->withTrashed()->simplePaginate(10);
 
         return new UserCollection($users);
     }
@@ -149,7 +150,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::withTrashed()->findOrFail($id);
 
         return new ResourcesUser($user);
     }
@@ -175,6 +176,29 @@ class UserController extends Controller
         return response()->json(null, 200);
     }
 
+
+    public function disable($id) 
+    {
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        $user->refresh();
+
+        return response()->json(['message'=>'User account disabled', 'deleted_at'=>$user->deleted_at ], 200);
+    }
+
+    public function restore($id) 
+    {
+        $user = User::withTrashed()->findOrFail($id);
+
+        $user->restore();
+
+        $user->refresh();
+
+        return response()->json(['message'=>'User account restored', 'deleted_at'=>$user->deleted_at], 200);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -183,6 +207,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::withTrashed()->findOrFail($id)->forceDelete();
+
+        return response()->json(['message'=>'User account deleted'], 200);
+
+    }
+
+    public function getLoggedUser(Request $request) {
+        return new UserResource($request->user());
     }
 }

@@ -32,22 +32,15 @@
     export default {
         async mounted() {
             try {
-                if(this.getRoles.length === 0) {
-                    await this.downloadRoles();
-                }
-
-                if(this.getCounties.length === 0) {
-                    await this.fetchCounties();
-                }
-
-                if(this.getCategories.length === 0) {
-                    await this.fetchCategories();
-                }
-
-                if(this.getUnits.length === 0) {
-                    await this.fetchUnits();
-                }
-
+                
+                await Promise.all([
+                    this.downloadRoles(),
+                    this.fetchCounties(),
+                    this.fetchCategories(),
+                    this.fetchUnits(),
+                    this.downloadLoggedUserData()
+                ]);
+   
             } catch ( error ) {
                 this.openNotification({
                     type: 'error',
@@ -80,7 +73,8 @@
             ...mapActions('Roles', ['fetchRoles']),
             ...mapActions('Counties', ['fetchCounties']),
             ...mapActions('Notification', ['openNotification']),
-
+            ...mapActions('Users', ['downloadLoggedUserData']),
+            
             async downloadRoles() {
                 try {
                     await this.fetchRoles();

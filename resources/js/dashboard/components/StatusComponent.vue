@@ -13,7 +13,7 @@
 
         computed: {
             status(){
-                return this.deletedAt === null ? 'Active' : 'Removed'
+                return this.deletedAt === null ? 'Active' : 'Disabled'
             },
 
             statusClass() {

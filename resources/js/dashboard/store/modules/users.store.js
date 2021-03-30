@@ -1,4 +1,4 @@
-import { downloadUsers, downloadUser, storeUser, patchUser,  disableUser, deleteUser } from '../../api/users.api';
+import {downloadLoggedUserData, downloadUsers, downloadUser, storeUser, patchUser,  disableUser, restoreUser, deleteUser } from '../../api/users.api';
 import _orderBy from 'lodash/orderBy';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
@@ -6,6 +6,7 @@ import _findIndex from 'lodash/findIndex';
 const initialState = () => ({
     users: [],
     nextPage: 1,
+    loggedUser: null,
 });
 
 const state = initialState();
@@ -13,6 +14,10 @@ const state = initialState();
 const getters = {
     getUsers (state) {
         return state.users; 
+    },
+
+    getLoggedUser(state) {
+        return state.loggedUser;
     },
 
     getNextPage(state) {
@@ -24,6 +29,16 @@ const getters = {
 const actions = {
     reset({ commit }) {
         commit('RESET');
+    },
+
+
+    async downloadLoggedUserData({commit}) {
+        try {
+            const response = await downloadLoggedUserData();
+            commit('SET_LOGGED_USER', response.data.data);
+        } catch (error) {
+            throw error
+        } 
     },
 
     async fetchUsers({commit}, query) {
@@ -42,6 +57,27 @@ const actions = {
 
         } catch (error) {
             throw error; 
+        }
+    },
+
+    async fetchMoreUsers({commit}, query) {
+        try {
+            const response = await downloadUsers(query);
+
+            const users = response.data.data.users;
+            const links = response.data.links;
+
+            commit('ADD_USERS', users );
+
+            if(links.next) {
+                const lastIndex = links.next.indexOf('=');
+                commit('SAVE_NEXT_PAGE', links.next.substr(lastIndex+1));
+            }else {
+                commit('SAVE_NEXT_PAGE', null);
+            }
+            
+        } catch ( error ) {
+            throw error;
         }
     },
     
@@ -106,6 +142,37 @@ const actions = {
         }
     },
 
+    async disableUser({commit}, payload) {
+        try {
+            const response = await disableUser(payload.id);
+            payload.deleted_at = response.data.deleted_at;
+            commit('UPDATE_USER_STATUS', payload);
+            return response.data;
+        } catch ( error ) {
+            throw error
+        }
+    },
+
+    async restoreUser({commit}, payload) {
+        try {
+            const response = await restoreUser(payload.id);
+            payload.deleted_at = response.data.deleted_at;
+            commit('UPDATE_USER_STATUS', payload);
+            return response.data;
+        } catch ( error ) {
+            throw error
+        }
+    },
+
+    async deleteUser({commit}, payload) {
+        try {
+            const response = await deleteUser(payload);
+            commit('REMOVE_USER');
+            return response.message;
+        } catch ( error ) {
+            throw error
+        }
+    },
 
     sortUsersList({commit}, sortBy) {
        commit('SORT_USERS', sortBy);
@@ -121,7 +188,15 @@ const mutations = {
         })
     },
 
+    SET_LOGGED_USER(state, payload) {
+        state.loggedUser = payload;
+    },
+
     SET_USERS(state, users) {
+        state.users = users;
+    },
+
+    ADD_USERS(state, users) {
         state.users.push(...users);
     },
 
@@ -152,6 +227,21 @@ const mutations = {
             })
         }
         
+    },
+
+    UPDATE_USER_STATUS(state, payload) {
+        if(state.users.length > 0) {
+            const selectedUserIndex = _.findIndex(state.users, ['id', payload.id]);
+            const vm = payload.vm;
+            vm.$set(state.users[selectedUserIndex], 'deleted_at', payload.deleted_at);
+        }
+    },
+
+    REMOVE_USER(state, payload) {
+        if(state.users.length > 0) {
+            const selectedUserIndex = _.findIndex(state.users, ['id', payload]);
+            state.users.slice(selectedUserIndex, 1);
+        }
     },
 
     SAVE_NEXT_PAGE(state, page) {

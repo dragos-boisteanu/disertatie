@@ -13,12 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefix'=>'dashboard'], function() {   
+Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefix'=>'dashboard'], function() {  
+    
+    Route::get('users/logged-user', 'UserController@getLoggedUser');
+     
     Route::apiResource('users', 'UserController');
     Route::apiResource('roles', 'RoleController');
     Route::apiResource('products', 'ProductController');
     Route::apiResource('categories', 'CategoryController');
     Route::apiResource('units', 'UnitController');
+
+    Route::delete('users/{id}/disable', 'UserController@disable');
+    Route::post('users/{id}/restore', 'UserController@restore');
+
     Route::get('/products/check-barcode/{barcode}', 'ProductController@getProductByBarcode');
 
     Route::apiResource('images', 'FileController')->only('store', 'show', 'destroy');
