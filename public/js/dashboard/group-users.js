@@ -1146,6 +1146,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
     }
   }),
   components: {
+    FilePond: FilePond,
     ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_1__.default
   }
 });
@@ -1176,6 +1177,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -1372,6 +1374,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -18943,35 +18946,37 @@ var render = function() {
                 "w-full pb-2 mb-2 flex flex-col justify-center items-center border-b border-gray-100 md:flex-row md:justify-start"
             },
             [
-              _c(
-                "div",
-                { staticClass: "w-32 h-32 bg-gray-500 rounded-md md:mr-4" },
-                [
-                  _c(
-                    "svg",
-                    {
-                      attrs: {
-                        xmlns: "http://www.w3.org/2000/svg",
-                        viewBox: "0 0 24 24",
-                        fill: "white",
-                        width: "128px",
-                        height: "128px"
-                      }
-                    },
-                    [
-                      _c("path", {
-                        attrs: { d: "M0 0h24v24H0z", fill: "none" }
-                      }),
-                      _c("path", {
+              _c("div", { staticClass: "w-32 h-32 rounded-md md:mr-4" }, [
+                _vm.user.avatar
+                  ? _c("img", {
+                      staticClass: "w-full h-full rounded-md",
+                      attrs: { src: _vm.user.avatar }
+                    })
+                  : _c(
+                      "svg",
+                      {
+                        staticClass: "bg-gray-500",
                         attrs: {
-                          d:
-                            "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                          xmlns: "http://www.w3.org/2000/svg",
+                          viewBox: "0 0 24 24",
+                          fill: "white",
+                          width: "128px",
+                          height: "128px"
                         }
-                      })
-                    ]
-                  )
-                ]
-              ),
+                      },
+                      [
+                        _c("path", {
+                          attrs: { d: "M0 0h24v24H0z", fill: "none" }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                          }
+                        })
+                      ]
+                    )
+              ]),
               _vm._v(" "),
               _c(
                 "div",
@@ -19225,37 +19230,37 @@ var render = function() {
                         "w-full flex justify-start items-center pb-1 border-b border-gray-100"
                     },
                     [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "w-12 h-12 mr-4 bg-gray-500 rounded-md"
-                        },
-                        [
-                          _c(
-                            "svg",
-                            {
-                              attrs: {
-                                xmlns: "http://www.w3.org/2000/svg",
-                                viewBox: "0 0 24 24",
-                                fill: "white",
-                                width: "48px",
-                                height: "48px"
-                              }
-                            },
-                            [
-                              _c("path", {
-                                attrs: { d: "M0 0h24v24H0z", fill: "none" }
-                              }),
-                              _c("path", {
+                      _c("div", { staticClass: "w-12 h-12 mr-4 rounded-md" }, [
+                        user.avatar
+                          ? _c("img", {
+                              staticClass: "w-full h-full rounded-md",
+                              attrs: { src: user.avatar }
+                            })
+                          : _c(
+                              "svg",
+                              {
+                                staticClass: "bg-gray-500",
                                 attrs: {
-                                  d:
-                                    "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                                  xmlns: "http://www.w3.org/2000/svg",
+                                  viewBox: "0 0 24 24",
+                                  fill: "white",
+                                  width: "48px",
+                                  height: "48px"
                                 }
-                              })
-                            ]
-                          )
-                        ]
-                      ),
+                              },
+                              [
+                                _c("path", {
+                                  attrs: { d: "M0 0h24v24H0z", fill: "none" }
+                                }),
+                                _c("path", {
+                                  attrs: {
+                                    d:
+                                      "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                                  }
+                                })
+                              ]
+                            )
+                      ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "flex-1" }, [
                         _c("div", { staticClass: "capitalize font-semibold" }, [

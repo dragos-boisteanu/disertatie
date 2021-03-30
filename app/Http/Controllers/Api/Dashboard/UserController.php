@@ -116,11 +116,12 @@ class UserController extends Controller
                 $requestPath = $request->input('data.user.avatar');
                 $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
                 $filename = 'avatar_'.$user->id . '_' . now()->timestamp;
-                $newPath = 'public/avatars/' . $user->id . '/' . $filename . '.' . $extension;
+                $newPath = '/public/avatars/' . $user->id . '/' . $filename . '.' . $extension;
 
                 Storage::move($requestPath, $newPath);
 
-                $user->avatar = $newPath;
+                $dbPath = '/storage/avatars/'. $user->id . '/' . $filename . '.' . $extension;
+                $user->avatar = $dbPath;
                 $user->save();
 
                 Storage::delete($requestPath);

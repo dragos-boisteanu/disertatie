@@ -387,6 +387,7 @@
         },
 
         components: {
+            FilePond,
             ViewContainer
         }
     }
