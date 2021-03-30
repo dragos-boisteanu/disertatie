@@ -24,7 +24,7 @@ class FileStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'required|file|mimes:jpeg,png|max:2048'
+            'image' => 'required|file|mimes:jpeg,png'
         ];
     }
 }

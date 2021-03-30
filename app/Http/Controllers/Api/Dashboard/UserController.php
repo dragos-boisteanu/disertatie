@@ -7,6 +7,7 @@ use App\Models\Address;
 use Illuminate\Support\Str;
 use App\Events\EmailUpdated;
 use Illuminate\Http\Request;
+use Intervention\Image\Image;
 use App\Events\AccountCreated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -113,6 +114,7 @@ class UserController extends Controller
             }
 
             if($request->has('data.user.avatar')) {
+
                 $requestPath = $request->input('data.user.avatar');
                 $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
                 $filename = 'avatar_'.$user->id . '_' . now()->timestamp;

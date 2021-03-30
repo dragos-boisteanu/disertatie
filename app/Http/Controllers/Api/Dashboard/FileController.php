@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use App\Http\Requests\FileStoreRequest;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,7 +14,18 @@ class FileController extends Controller
     public function store(FileStoreRequest $request) 
     {
         if($request->hasFile('image')) {
-            $path = $request->file('image')->store('temp');
+            $file = $request->file('image');
+            if($file->extension() === 'jpg' || $file->extension() === 'png') {
+                $img = Image::make($file)->resize(128,128)->encode('jpg', 100);
+
+                if(Storage::put('temp/'.$file->hashName(), $img)) {
+                    $path = 'temp/'.$file->hashName();
+                };
+               
+            } else {
+                $path = $request->file('image')->store('temp');
+            }   
+            
             return $path;
         }
     }
