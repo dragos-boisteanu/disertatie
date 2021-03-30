@@ -16,7 +16,7 @@ class FileController extends Controller
         if($request->hasFile('image')) {
             $file = $request->file('image');
             if($file->extension() === 'jpg' || $file->extension() === 'png') {
-                $img = Image::make($file)->resize(128,128)->encode('jpg', 100);
+                $img = Image::make($file)->resize(256,256)->encode('jpg', 100);
 
                 if(Storage::put('temp/'.$file->hashName(), $img)) {
                     $path = 'temp/'.$file->hashName();

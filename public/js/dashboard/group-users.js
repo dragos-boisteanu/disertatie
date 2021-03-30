@@ -988,8 +988,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5___default()) // FilePondPluginImagePreview
-);
+var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Counties', ['getCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Roles', ['getRoles'])), {}, {
     citiesSelectState: function citiesSelectState() {
@@ -17564,7 +17563,7 @@ var render = function() {
                                 name: "image",
                                 "label-idle": "Upload user profile image...",
                                 "allow-multiple": false,
-                                "accepted-file-types": "image/jpeg, image/png",
+                                "accepted-file-types": "image/jpeg",
                                 server: {
                                   url: "/api/dashboard/images",
                                   process: {
@@ -18949,7 +18948,7 @@ var render = function() {
               _c("div", { staticClass: "w-32 h-32 rounded-md md:mr-4" }, [
                 _vm.user.avatar
                   ? _c("img", {
-                      staticClass: "w-full h-full rounded-md",
+                      staticClass: "w-full h-full rounded-md object-cover",
                       attrs: { src: _vm.user.avatar }
                     })
                   : _c(

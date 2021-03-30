@@ -17,7 +17,7 @@
                             ref="pond"
                             label-idle="Upload user profile image..."
                             v-bind:allow-multiple="false"
-                            accepted-file-types="image/jpeg, image/png"
+                            accepted-file-types="image/jpeg"
                             :server="{
                                 url: '/api/dashboard/images',
                                 process: { 
@@ -257,7 +257,6 @@
 
     const FilePond = vueFilePond(
         FilePondPluginFileValidateType,
-        // FilePondPluginImagePreview
     );
 
     export default {
