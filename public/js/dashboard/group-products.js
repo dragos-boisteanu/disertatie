@@ -1304,6 +1304,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_products_UnitComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/products/UnitComponent */ "./resources/js/dashboard/components/products/UnitComponent.vue");
 /* harmony import */ var _components_products_VatComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/products/VatComponent */ "./resources/js/dashboard/components/products/VatComponent.vue");
 /* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../store/index */ "./resources/js/dashboard/store/index.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1374,6 +1381,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -1450,13 +1483,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee, null, [[0, 19]]);
     }))();
   },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapGetters)('Users', ['getLoggedUser'])), {}, {
+    canDelete: function canDelete() {
+      if (this.getLoggedUser) {
+        return this.getLoggedUser.role_id === 7;
+      }
+    },
+    canDisable: function canDisable() {
+      if (this.getLoggedUser) {
+        return this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7;
+      }
+    }
+  }),
   data: function data() {
     return {
       editProductState: false,
       product: null
     };
   },
-  methods: {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Products', ['disableProduct', 'restoreProduct', 'deleteProduct'])), {}, {
     updateProduct: function updateProduct(product) {
       var _this = this;
 
@@ -1470,8 +1515,113 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     toggleEditProductState: function toggleEditProductState() {
       this.editProductState = !this.editProductState;
+    },
+    disable: function disable() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var payload, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                payload = {
+                  vm: _this2,
+                  id: _this2.product.id
+                };
+                _context2.next = 4;
+                return _this2.disableProduct(payload);
+
+              case 4:
+                response = _context2.sent;
+                _this2.product.deleted_at = response.deleted_at;
+                _context2.next = 11;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 8]]);
+      }))();
+    },
+    restore: function restore() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var payload, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                payload = {
+                  vm: _this3,
+                  id: _this3.product.id
+                };
+                _context3.next = 4;
+                return _this3.restoreProduct(payload);
+
+              case 4:
+                response = _context3.sent;
+                _this3.product.deleted_at = response.deleted_at;
+                _context3.next = 11;
+                break;
+
+              case 8:
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](0);
+                console.log(_context3.t0);
+
+              case 11:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 8]]);
+      }))();
+    },
+    callDeleteUser: function callDeleteUser() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                _context4.next = 3;
+                return _this4.deleteProduct(_this4.product.id);
+
+              case 3:
+                _this4.$router.push({
+                  name: 'Products'
+                });
+
+                _context4.next = 9;
+                break;
+
+              case 6:
+                _context4.prev = 6;
+                _context4.t0 = _context4["catch"](0);
+                console.log(_context4.t0);
+
+              case 9:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 6]]);
+      }))();
     }
-  },
+  }),
   components: {
     ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_1__.default,
     Stock: _components_StockComponent__WEBPACK_IMPORTED_MODULE_3__.default,
@@ -5797,15 +5947,65 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner",
-                      on: { click: _vm.toggleEditProductState }
-                    },
-                    [_vm._v("\n                Edit\n            ")]
-                  )
+                  _c("div", { staticClass: "flex items-center gap-x-2" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner active:outline-none",
+                        on: { click: _vm.toggleEditProductState }
+                      },
+                      [_vm._v("\n                    Edit\n                ")]
+                    ),
+                    _vm._v(" "),
+                    _vm.canDisable
+                      ? _c("div", [
+                          _vm.product.deleted_at
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none",
+                                  on: { click: _vm.restore }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        Restore\n                    "
+                                  )
+                                ]
+                              )
+                            : _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "bg-white border border-red-500 rounded-sm text-xs py-1 px-4 text-black mt-2 hover:border-red-400 active:shadow-inner active:outline-none",
+                                  on: { click: _vm.disable }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        Disable\n                    "
+                                  )
+                                ]
+                              )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.canDelete
+                      ? _c(
+                          "button",
+                          {
+                            staticClass:
+                              "bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none",
+                            on: { click: _vm.callDeleteUser }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Delete\n                "
+                            )
+                          ]
+                        )
+                      : _vm._e()
+                  ])
                 ]
               )
             ]
@@ -5970,11 +6170,7 @@ var render = function() {
         _vm._l(_vm.getProducts, function(product) {
           return _c(
             "Card",
-            {
-              key: product.id,
-              staticClass:
-                "w-full p-2 mt-4 rounded text-sm shadow-sm  hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px"
-            },
+            { key: product.id },
             [
               _c(
                 "router-link",

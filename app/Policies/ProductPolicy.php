@@ -56,9 +56,9 @@ class ProductPolicy
      * @param  \App\Models\Product  $product
      * @return mixed
      */
-    public function update(User $user, Product $product)
+    public function update(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 5) {
+        if( $user->role_id === 6 || $user->role_id === 7) {
             Response::allow();
         }
 
@@ -72,7 +72,7 @@ class ProductPolicy
      * @param  \App\Models\Product  $product
      * @return mixed
      */
-    public function delete(User $user, Product $product)
+    public function delete(User $user)
     {
         if( $user->role_id === 6 || $user->role_id === 7) {
             Response::allow();
@@ -88,7 +88,7 @@ class ProductPolicy
      * @param  \App\Models\Product  $product
      * @return mixed
      */
-    public function restore(User $user, Product $product)
+    public function restore(User $user)
     {
         if( $user->role_id === 6 || $user->role_id === 7) {
             Response::allow();
@@ -104,9 +104,9 @@ class ProductPolicy
      * @param  \App\Models\Product  $product
      * @return mixed
      */
-    public function forceDelete(User $user, Product $product)
+    public function forceDelete(User $user)
     {
-        if( $user->role_id === 7 && $user->id != $product->id) {
+        if( $user->role_id === 7) {
             Response::allow();
         }
 

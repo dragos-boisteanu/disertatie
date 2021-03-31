@@ -1,10 +1,11 @@
-import {downloadProducts, downloadProduct, storeProduct, patchProduct, disableProductm, downloadProductByBarcode} from '../../api/products.api';
+import {downloadProducts, downloadProduct, storeProduct, patchProduct, disableProduct, restoreProduct, deleteProduct, downloadProductByBarcode} from '../../api/products.api';
 import _orderBy from 'lodash/orderBy';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
     products: [],
+    orderedProducts: [],
     pagination: {},
 });
 
@@ -86,6 +87,38 @@ const actions = {
         }
     },
 
+    async disableProduct({commit}, payload) {
+        try {
+            const response = await disableProduct(payload.id);
+            commit('UPDATE_PRODUCT_STATUS', payload);
+            return response.data;
+        } catch ( error ) {
+            throw error
+        }
+    },
+
+    async restoreProduct({commit}, payload) {
+        try {   
+            const response = await restoreProduct(payload.id);
+            payload.deleted_at = response.data.deleted_at;
+            commit('UPDATE_PRODUCT_STATUS', payload);
+            return response.data;
+
+        } catch ( error ) {
+            throw error;
+        }
+    },
+
+    async deleteProduct({commit}, payload) {
+        try {
+            const response = await deleteProduct(payload);
+            commit('DELETE_PRODUCT', payload);
+            return response.message;
+        } catch ( error ) {
+            throw error;
+        }
+    },
+
     sortProductsList({commit}, sortBy) {
         commit('SORT_PRODUCTS', sortBy);
     }
@@ -114,6 +147,21 @@ const mutations = {
             Object.keys(payload.product).forEach(key => {
                 vm.$set(state.products[selectedProductIndex], key, payload.product[key]);
             })
+        }
+    },
+
+    UPDATE_PRODUCT_STATUS(state, payload) {
+        if(state.products.length > 0) {
+            const selectedProductIndex = _findIndex(state.products, ['id', payload.id]);
+            const vm = payload.vm;
+            vm.$set(state.products[selectedProductIndex], 'updated_at', payload.deleted_at);
+        }
+    },
+
+    DELETE_PRODUCT(state, payload) {
+        if(state.products.length > 0) {
+            const selectedProductIndex = _findIndex(state.products, ['id', payload]);
+            state.products.splice(selectedProductIndex, 1);
         }
     },
 

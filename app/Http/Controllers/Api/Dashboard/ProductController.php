@@ -23,7 +23,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
 
-        $query = Product::filter($request);
+        $query = Product::withTrashed()->filter($request);
         
 
         if(!$request->has('orderBy')) {
@@ -69,6 +69,9 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {   
+
+        $request->user()->can('create', Product::class);
+
         $input = $request->validated();
 
         try {
@@ -110,7 +113,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::withTrashed()->findOrFail($id);
 
         return new ProductResource($product);
     }
@@ -124,9 +127,37 @@ class ProductController extends Controller
      */
     public function update(ProductPatchRequest $request, $id)
     {
-        Product::findOrFail($id)->update($request->validated());
+        $request->user()->can('update');
+
+        Product::withTrashed()->findOrFail($id)->update($request->validated());
 
         return response()->json(null, 200);
+    }
+
+    public function disable(Request $request, $id) 
+    {
+        $request->user()->can('delete', Product::class);
+
+        $product = Product::findOrFail($id);
+
+        $product->delete();
+
+        $product->refresh();
+
+        return response()->json(['message'=>'Product disabled', 'deleted_at'=>$product->deleted_at ], 200);
+    }
+
+    public function restore(Request $request, $id) 
+    {
+        $request->user()->can('restore', Product::class);
+
+        $product = Product::withTrashed()->findOrFail($id);
+
+        $product->restore();
+
+        $product->refresh();
+
+        return response()->json(['message'=>'Product restored', 'deleted_at'=>$product->deleted_at ], 200);
     }
 
     /**
@@ -135,21 +166,28 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $request->user()->can('forceDelete', Product::class);
+
+        $product = Product::withTrashed()->findOrFail($id);
+
+        $product->forceDelete();
+
+        return response()->json(['message'=>'Product ' . $product->name . ' deleted'], 200);
     }
+
 
     public function getProductByBarcode($barcode) 
     {
         try {
-            $product = Product::where('barcode', $barcode)->with('stock')->first();
+            $product = Product::withTrashed()->where('barcode', $barcode)->with('stock')->first();
             if(!isset($product)) {
                 throw new ModelNotFoundException('No products for ' . $barcode . ' barcode');
             }
             return new ProductResource($product);
         } catch ( ModelNotFoundException $ex) {
-            response()->json(null, 200);
+            response()->json(['message' => $ex->getMessage()], 200);
         }
        
     }

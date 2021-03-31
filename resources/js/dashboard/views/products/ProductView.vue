@@ -32,12 +32,37 @@
                     <Category :category-id="product.category_id"></Category>
                     <Stock :quantity="product.quantity"></Stock>
                 </div>
-                <button 
-                    @click="toggleEditProductState"
-                    class="bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner"
-                >
-                    Edit
-                </button>
+                <div class="flex items-center gap-x-2">   
+                     <button 
+                        @click="toggleEditProductState"
+                        class="bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner active:outline-none"
+                    >
+                        Edit
+                    </button>
+                    <div v-if="canDisable">
+                        <button 
+                            v-if="product.deleted_at"
+                            @click="restore"
+                            class="bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none"
+                        >
+                            Restore
+                        </button>
+                        <button 
+                            v-else
+                            @click="disable"
+                            class="bg-white border border-red-500 rounded-sm text-xs py-1 px-4 text-black mt-2 hover:border-red-400 active:shadow-inner active:outline-none"
+                        >
+                            Disable
+                        </button>
+                    </div>
+                    <button 
+                        v-if="canDelete"
+                        @click="callDeleteUser"
+                        class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
+                    >
+                        Delete
+                    </button>
+                </div>
             </div>
         </div> 
         <div class="text-sm mb-2 pb-2 border-b border-gray-100">
@@ -72,6 +97,7 @@
     import Vat from '../../components/products/VatComponent';
 
     import store from '../../store/index';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
 
@@ -93,6 +119,22 @@
             }
         },
 
+        computed: {
+             ...mapGetters('Users', ['getLoggedUser']),
+
+            canDelete() {
+                if(this.getLoggedUser) {
+                    return this.getLoggedUser.role_id === 7
+                }
+            },
+
+            canDisable() {
+                if(this.getLoggedUser) {
+                    return this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7              
+                }
+            },
+        },
+
         data() {
             return {
                 editProductState: false,
@@ -101,6 +143,8 @@
         },
 
         methods: {
+
+            ...mapActions('Products', ['disableProduct', 'restoreProduct', 'deleteProduct']),
             
             updateProduct(product) {
                 console.log(product);
@@ -115,6 +159,44 @@
 
             toggleEditProductState() {
                 this.editProductState = !this.editProductState;
+            },
+
+            async disable() {
+                try {
+                    const payload = {
+                        vm: this,
+                        id: this.product.id
+                    }
+
+                    const response = await this.disableProduct(payload);
+                    this.product.deleted_at = response.deleted_at;
+                } catch ( error ) {
+                    console.log(error);
+                }
+            },
+
+            async restore() {
+                try {
+                    const payload = {
+                        vm: this,
+                        id: this.product.id
+                    }
+
+                    const response = await this.restoreProduct(payload);
+                    this.product.deleted_at = response.deleted_at;
+                } catch ( error ) {
+                    console.log(error);
+                }
+            },
+
+            async callDeleteUser() {
+                try {
+                    await this.deleteProduct(this.product.id);
+                    this.$router.push({name: 'Products'});
+
+                } catch ( error ) {
+                    console.log(error)
+                }
             },
 
         },

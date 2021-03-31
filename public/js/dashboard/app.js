@@ -2542,6 +2542,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "storeProduct": () => (/* binding */ storeProduct),
 /* harmony export */   "patchProduct": () => (/* binding */ patchProduct),
 /* harmony export */   "disableProduct": () => (/* binding */ disableProduct),
+/* harmony export */   "restoreProduct": () => (/* binding */ restoreProduct),
+/* harmony export */   "deleteProduct": () => (/* binding */ deleteProduct),
 /* harmony export */   "downloadProductByBarcode": () => (/* binding */ downloadProductByBarcode)
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
@@ -2567,7 +2569,17 @@ var patchProduct = function patchProduct(data) {
 };
 
 var disableProduct = function disableProduct(id) {
-  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(END_POINT, "/disable"), {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(END_POINT, "/").concat(id, "/disable"), {
+    data: id
+  });
+};
+
+var restoreProduct = function restoreProduct(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(END_POINT, "/").concat(id, "/restore"));
+};
+
+var deleteProduct = function deleteProduct(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(END_POINT, "/").concat(id), {
     data: id
   });
 };
@@ -3268,6 +3280,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var initialState = function initialState() {
   return {
     products: [],
+    orderedProducts: [],
     pagination: {}
   };
 };
@@ -3461,8 +3474,99 @@ var actions = {
       }, _callee5, null, [[1, 8]]);
     }))();
   },
-  sortProductsList: function sortProductsList(_ref8, sortBy) {
-    var commit = _ref8.commit;
+  disableProduct: function disableProduct(_ref8, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              commit = _ref8.commit;
+              _context6.prev = 1;
+              _context6.next = 4;
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.disableProduct)(payload.id);
+
+            case 4:
+              response = _context6.sent;
+              commit('UPDATE_PRODUCT_STATUS', payload);
+              return _context6.abrupt("return", response.data);
+
+            case 9:
+              _context6.prev = 9;
+              _context6.t0 = _context6["catch"](1);
+              throw _context6.t0;
+
+            case 12:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[1, 9]]);
+    }))();
+  },
+  restoreProduct: function restoreProduct(_ref9, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              commit = _ref9.commit;
+              _context7.prev = 1;
+              _context7.next = 4;
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.restoreProduct)(payload.id);
+
+            case 4:
+              response = _context7.sent;
+              payload.deleted_at = response.data.deleted_at;
+              commit('UPDATE_PRODUCT_STATUS', payload);
+              return _context7.abrupt("return", response.data);
+
+            case 10:
+              _context7.prev = 10;
+              _context7.t0 = _context7["catch"](1);
+              throw _context7.t0;
+
+            case 13:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[1, 10]]);
+    }))();
+  },
+  deleteProduct: function deleteProduct(_ref10, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              commit = _ref10.commit;
+              _context8.prev = 1;
+              _context8.next = 4;
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.deleteProduct)(payload);
+
+            case 4:
+              response = _context8.sent;
+              commit('DELETE_PRODUCT', payload);
+              return _context8.abrupt("return", response.message);
+
+            case 9:
+              _context8.prev = 9;
+              _context8.t0 = _context8["catch"](1);
+              throw _context8.t0;
+
+            case 12:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8, null, [[1, 9]]);
+    }))();
+  },
+  sortProductsList: function sortProductsList(_ref11, sortBy) {
+    var commit = _ref11.commit;
     commit('SORT_PRODUCTS', sortBy);
   }
 };
@@ -3487,6 +3591,21 @@ var mutations = {
       Object.keys(payload.product).forEach(function (key) {
         vm.$set(state.products[selectedProductIndex], key, payload.product[key]);
       });
+    }
+  },
+  UPDATE_PRODUCT_STATUS: function UPDATE_PRODUCT_STATUS(state, payload) {
+    if (state.products.length > 0) {
+      var selectedProductIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_4___default()(state.products, ['id', payload.id]);
+
+      var vm = payload.vm;
+      vm.$set(state.products[selectedProductIndex], 'updated_at', payload.deleted_at);
+    }
+  },
+  DELETE_PRODUCT: function DELETE_PRODUCT(state, payload) {
+    if (state.products.length > 0) {
+      var selectedProductIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_4___default()(state.products, ['id', payload]);
+
+      state.products.splice(selectedProductIndex, 1);
     }
   },
   SORT_PRODUCTS: function SORT_PRODUCTS(state, orderBy) {
