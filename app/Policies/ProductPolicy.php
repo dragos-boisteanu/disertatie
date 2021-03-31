@@ -58,7 +58,7 @@ class ProductPolicy
      */
     public function update(User $user, Product $product)
     {
-        if( $user->role_id !== 1 || $user->role_id !== 5) {
+        if( $user->role_id === 6 || $user->role_id === 5) {
             Response::allow();
         }
 
