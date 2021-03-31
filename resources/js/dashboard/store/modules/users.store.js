@@ -167,7 +167,7 @@ const actions = {
     async deleteUser({commit}, payload) {
         try {
             const response = await deleteUser(payload);
-            commit('REMOVE_USER');
+            commit('DELETE_USER', payload);
             return response.message;
         } catch ( error ) {
             throw error
@@ -214,10 +214,6 @@ const mutations = {
         state.users.unshift(user);
     },
     
-    REMOVE_USER(state, index) {
-        state.users.splice(index, 1);
-    },
-
     PATCH_USER(state, payload) {
         if(state.users.length > 0) {
             const selectedUserIndex = _.findIndex(state.users, ['id', payload.user.id]);
@@ -237,7 +233,7 @@ const mutations = {
         }
     },
 
-    REMOVE_USER(state, payload) {
+    DELETE_USER(state, payload) {
         if(state.users.length > 0) {
             const selectedUserIndex = _.findIndex(state.users, ['id', payload]);
             state.users.slice(selectedUserIndex, 1);

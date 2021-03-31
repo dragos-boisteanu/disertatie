@@ -14,7 +14,7 @@ const patchUser = (user) => httpClient.patch(`${END_POINT}/${user.id}`, user);
 const disableUser = (id) => httpClient.delete(`${END_POINT}/${id}/disable`, {data: id});
 const restoreUser = (id) => httpClient.post(`${END_POINT}/${id}/restore`);
 
-const deleteUser = (id) => httpClient.delete(`${END_POINT}/${id}/delete`, {data: id});
+const deleteUser = (id) => httpClient.delete(`${END_POINT}/${id}`, {data: id});
 
 export {
     downloadLoggedUserData,

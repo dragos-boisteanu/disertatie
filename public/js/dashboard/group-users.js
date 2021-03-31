@@ -1365,7 +1365,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       user: null
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('Users', ['disableUser', 'restoreUser'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('Users', ['disableUser', 'restoreUser', 'deleteUser'])), {}, {
     updateUser: function updateUser(patchedUser) {
       var _this = this;
 
@@ -1445,7 +1445,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, null, [[0, 8]]);
       }))();
     },
-    deleteUser: function deleteUser() {},
+    callDeleteUser: function callDeleteUser() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                _context4.next = 3;
+                return _this4.deleteUser(_this4.user.id);
+
+              case 3:
+                _this4.$router.push({
+                  name: 'Users'
+                });
+
+                _context4.next = 9;
+                break;
+
+              case 6:
+                _context4.prev = 6;
+                _context4.t0 = _context4["catch"](0);
+                console.log(_context4.t0);
+
+              case 9:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 6]]);
+      }))();
+    },
     toggleEditUserState: function toggleEditUserState() {
       this.editUserState = !this.editUserState;
     },
@@ -19218,7 +19250,7 @@ var render = function() {
                           {
                             staticClass:
                               "bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none",
-                            on: { click: _vm.deleteUser }
+                            on: { click: _vm.callDeleteUser }
                           },
                           [
                             _vm._v(

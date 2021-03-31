@@ -2690,7 +2690,7 @@ var restoreUser = function restoreUser(id) {
 };
 
 var deleteUser = function deleteUser(id) {
-  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(END_POINT, "/").concat(id, "/delete"), {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(END_POINT, "/").concat(id), {
     data: id
   });
 };
@@ -3743,10 +3743,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_4__);
-var _mutations;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -4155,7 +4151,7 @@ var actions = {
 
             case 4:
               response = _context11.sent;
-              commit('REMOVE_USER');
+              commit('DELETE_USER', payload);
               return _context11.abrupt("return", response.message);
 
             case 9:
@@ -4176,7 +4172,7 @@ var actions = {
     commit('SORT_USERS', sortBy);
   }
 };
-var mutations = (_mutations = {
+var mutations = {
   RESET: function RESET(state) {
     var newState = initialState();
     Object.keys(newState).forEach(function (key) {
@@ -4205,9 +4201,6 @@ var mutations = (_mutations = {
   ADD_USER: function ADD_USER(state, user) {
     state.users.unshift(user);
   },
-  REMOVE_USER: function REMOVE_USER(state, index) {
-    state.users.splice(index, 1);
-  },
   PATCH_USER: function PATCH_USER(state, payload) {
     if (state.users.length > 0) {
       var selectedUserIndex = _.findIndex(state.users, ['id', payload.user.id]);
@@ -4225,86 +4218,89 @@ var mutations = (_mutations = {
       var vm = payload.vm;
       vm.$set(state.users[selectedUserIndex], 'deleted_at', payload.deleted_at);
     }
+  },
+  DELETE_USER: function DELETE_USER(state, payload) {
+    if (state.users.length > 0) {
+      var selectedUserIndex = _.findIndex(state.users, ['id', payload]);
+
+      state.users.slice(selectedUserIndex, 1);
+    }
+  },
+  SAVE_NEXT_PAGE: function SAVE_NEXT_PAGE(state, page) {
+    state.nextPage = page;
+  },
+  SORT_USERS: function SORT_USERS(state, orderBy) {
+    switch (orderBy) {
+      case 1:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+          return user.name.toLowerCase();
+        }], ['asc']);
+        break;
+
+      case 2:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+          return user.name.toLowerCase();
+        }], ['desc']);
+        break;
+
+      case 3:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+          return user.first_name.toLowerCase();
+        }], ['asc']);
+        break;
+
+      case 4:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+          return user.first_name.toLowerCase();
+        }], ['desc']);
+        break;
+
+      case 5:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+          return user.email.toLowerCase();
+        }], ['asc']);
+        break;
+
+      case 6:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
+          return user.email.toLowerCase();
+        }], ['desc']);
+        break;
+
+      case 7:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['desc']);
+        break;
+
+      case 8:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['asc']);
+        break;
+
+      case 9:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['orders'], ['desc']);
+        break;
+
+      case 10:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['orders'], ['asc']);
+        break;
+
+      case 11:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['reservations'], ['desc']);
+        break;
+
+      case 12:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['reservations'], ['asc']);
+        break;
+
+      case 13:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['asc']);
+        break;
+
+      case 14:
+        state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['desc']);
+        break;
+    }
   }
-}, _defineProperty(_mutations, "REMOVE_USER", function REMOVE_USER(state, payload) {
-  if (state.users.length > 0) {
-    var selectedUserIndex = _.findIndex(state.users, ['id', payload]);
-
-    state.users.slice(selectedUserIndex, 1);
-  }
-}), _defineProperty(_mutations, "SAVE_NEXT_PAGE", function SAVE_NEXT_PAGE(state, page) {
-  state.nextPage = page;
-}), _defineProperty(_mutations, "SORT_USERS", function SORT_USERS(state, orderBy) {
-  switch (orderBy) {
-    case 1:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-        return user.name.toLowerCase();
-      }], ['asc']);
-      break;
-
-    case 2:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-        return user.name.toLowerCase();
-      }], ['desc']);
-      break;
-
-    case 3:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-        return user.first_name.toLowerCase();
-      }], ['asc']);
-      break;
-
-    case 4:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-        return user.first_name.toLowerCase();
-      }], ['desc']);
-      break;
-
-    case 5:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-        return user.email.toLowerCase();
-      }], ['asc']);
-      break;
-
-    case 6:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, [function (user) {
-        return user.email.toLowerCase();
-      }], ['desc']);
-      break;
-
-    case 7:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['desc']);
-      break;
-
-    case 8:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['role_id'], ['asc']);
-      break;
-
-    case 9:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['orders'], ['desc']);
-      break;
-
-    case 10:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['orders'], ['asc']);
-      break;
-
-    case 11:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['reservations'], ['desc']);
-      break;
-
-    case 12:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['reservations'], ['asc']);
-      break;
-
-    case 13:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['asc']);
-      break;
-
-    case 14:
-      state.users = lodash_orderBy__WEBPACK_IMPORTED_MODULE_2___default()(state.users, ['created_at'], ['desc']);
-      break;
-  }
-}), _mutations);
+};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   namespaced: true,
   state: state,

@@ -61,7 +61,7 @@
                     </div>
                     <button 
                         v-if="canDelete"
-                        @click="deleteUser"
+                        @click="callDeleteUser"
                         class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
                     >
                         Delete
@@ -134,7 +134,7 @@
         },
 
         methods: {
-            ...mapActions('Users', ['disableUser', 'restoreUser']),
+            ...mapActions('Users', ['disableUser', 'restoreUser', 'deleteUser']),
 
             updateUser(patchedUser) {
                 Object.keys(patchedUser).forEach(key => {         
@@ -170,8 +170,14 @@
                 }
             },
 
-            deleteUser() {
+            async callDeleteUser() {
+                try {
+                    await this.deleteUser(this.user.id);
+                    this.$router.push({name: 'Users'});
 
+                } catch ( error ) {
+                    console.log(error)
+                }
             },
 
             toggleEditUserState() {
