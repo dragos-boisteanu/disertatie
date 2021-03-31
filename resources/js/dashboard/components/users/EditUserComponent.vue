@@ -81,7 +81,7 @@
                             />
                         </div>
                     </ValidationProvider>
-                    <ValidationProvider vid="role_id" rules="required|integer" v-slot="{ errors }">
+                    <ValidationProvider vid="role_id" rules="required|integer" v-slot="{ errors }" v-if="canChangeRole">
                         <div>
                             <label for="role" class="text-sm font-semibold">Role</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
@@ -149,6 +149,12 @@
 
         computed: {
            ...mapGetters('Roles', ['getRoles']),
+           ...mapGetters('Users', ['getLoggedUser']),
+
+           canChangeRole() {
+                //  TO DO: hide roles list if the auth user's role is 6 and the local user role is 6 or 7
+               return [6,7].includes(this.getLoggedUser.role_id)
+           }
             
         },
 

@@ -100,6 +100,8 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
          
+        $request->user()->can('create');
+        
         $userInputData = $request->input('data.user');
         $userInputData['password'] = Hash::make(Str::random(8));
 
@@ -166,6 +168,8 @@ class UserController extends Controller
     {
         $user = User::withTrashed()->findOrFail($id);
 
+        $request->user()->can('update', $user);
+
         $user->update($request->validated());
 
         if($request->has('email')) {
@@ -177,9 +181,11 @@ class UserController extends Controller
     }
 
 
-    public function disable($id) 
+    public function disable(Request $request, $id) 
     {
         $user = User::findOrFail($id);
+
+        $request->user()->can('delete', $user);
 
         $user->delete();
 
@@ -188,9 +194,11 @@ class UserController extends Controller
         return response()->json(['message'=>'User account disabled', 'deleted_at'=>$user->deleted_at ], 200);
     }
 
-    public function restore($id) 
+    public function restore(Request $request, $id) 
     {
         $user = User::withTrashed()->findOrFail($id);
+
+        $request->user()->can('restore', $user);
 
         $user->restore();
 
@@ -205,9 +213,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        User::withTrashed()->findOrFail($id)->forceDelete();
+        $user = User::withTrashed()->findOrFail($id);
+
+        $request->user()->can('forceDelete', $user);
+
+        $user->forceDelete();
 
         return response()->json(['message'=>'User account deleted'], 200);
 

@@ -570,7 +570,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       localUser: {}
     };
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Roles', ['getRoles'])),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Users', ['getLoggedUser'])), {}, {
+    canChangeRole: function canChangeRole() {
+      //  TO DO: hide roles list if the auth user's role is 6 and the local user role is 6 or 7
+      return [6, 7].includes(this.getLoggedUser.role_id);
+    }
+  }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)('Users', ['updateUser'])), {}, {
     submit: function submit() {
       var _this = this;
@@ -16366,7 +16371,7 @@ var render = function() {
     "li",
     {
       staticClass:
-        "w-full p-2 mt-4 rounded text-sm shadow-sm hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-375px 2xl:w-400px"
+        "w-full p-2 mt-4 rounded text-sm shadow-sm hover:shadow-md bg-white md:w-49 lg:w-350px xl:w-80"
     },
     [_vm._t("default")],
     2
@@ -17346,100 +17351,108 @@ var render = function() {
                         )
                       }),
                       _vm._v(" "),
-                      _c("ValidationProvider", {
-                        attrs: { vid: "role_id", rules: "required|integer" },
-                        scopedSlots: _vm._u(
-                          [
-                            {
-                              key: "default",
-                              fn: function(ref) {
-                                var errors = ref.errors
-                                return [
-                                  _c("div", [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "role" }
-                                      },
-                                      [_vm._v("Role")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "select",
-                                      {
-                                        directives: [
+                      _vm.canChangeRole
+                        ? _c("ValidationProvider", {
+                            attrs: {
+                              vid: "role_id",
+                              rules: "required|integer"
+                            },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "default",
+                                  fn: function(ref) {
+                                    var errors = ref.errors
+                                    return [
+                                      _c("div", [
+                                        _c(
+                                          "label",
                                           {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.localUser.role_id,
-                                            expression: "localUser.role_id"
-                                          }
-                                        ],
-                                        staticClass:
-                                          "w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                        class: { "border-red-600": errors[0] },
-                                        attrs: {
-                                          id: "role",
-                                          name: "role",
-                                          disabled: _vm.waiting
-                                        },
-                                        on: {
-                                          change: function($event) {
-                                            var $$selectedVal = Array.prototype.filter
-                                              .call(
-                                                $event.target.options,
-                                                function(o) {
-                                                  return o.selected
-                                                }
-                                              )
-                                              .map(function(o) {
-                                                var val =
-                                                  "_value" in o
-                                                    ? o._value
-                                                    : o.value
-                                                return val
-                                              })
-                                            _vm.$set(
-                                              _vm.localUser,
-                                              "role_id",
-                                              $event.target.multiple
-                                                ? $$selectedVal
-                                                : $$selectedVal[0]
-                                            )
-                                          }
-                                        }
-                                      },
-                                      _vm._l(_vm.getRoles, function(role) {
-                                        return _c(
-                                          "option",
-                                          {
-                                            key: role.id,
-                                            domProps: { value: role.id }
+                                            staticClass:
+                                              "text-sm font-semibold",
+                                            attrs: { for: "role" }
                                           },
-                                          [_vm._v(_vm._s(role.name))]
+                                          [_vm._v("Role")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs text-red-600 font-semibold mb-1"
+                                          },
+                                          [_vm._v(" " + _vm._s(errors[0]))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "select",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value: _vm.localUser.role_id,
+                                                expression: "localUser.role_id"
+                                              }
+                                            ],
+                                            staticClass:
+                                              "w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                            class: {
+                                              "border-red-600": errors[0]
+                                            },
+                                            attrs: {
+                                              id: "role",
+                                              name: "role",
+                                              disabled: _vm.waiting
+                                            },
+                                            on: {
+                                              change: function($event) {
+                                                var $$selectedVal = Array.prototype.filter
+                                                  .call(
+                                                    $event.target.options,
+                                                    function(o) {
+                                                      return o.selected
+                                                    }
+                                                  )
+                                                  .map(function(o) {
+                                                    var val =
+                                                      "_value" in o
+                                                        ? o._value
+                                                        : o.value
+                                                    return val
+                                                  })
+                                                _vm.$set(
+                                                  _vm.localUser,
+                                                  "role_id",
+                                                  $event.target.multiple
+                                                    ? $$selectedVal
+                                                    : $$selectedVal[0]
+                                                )
+                                              }
+                                            }
+                                          },
+                                          _vm._l(_vm.getRoles, function(role) {
+                                            return _c(
+                                              "option",
+                                              {
+                                                key: role.id,
+                                                domProps: { value: role.id }
+                                              },
+                                              [_vm._v(_vm._s(role.name))]
+                                            )
+                                          }),
+                                          0
                                         )
-                                      }),
-                                      0
-                                    )
-                                  ])
-                                ]
-                              }
-                            }
-                          ],
-                          null,
-                          true
-                        )
-                      }),
+                                      ])
+                                    ]
+                                  }
+                                }
+                              ],
+                              null,
+                              true
+                            )
+                          })
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "div",
