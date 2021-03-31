@@ -94,8 +94,18 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
-                await store.dispatch('Products/fetchProducts', {page: 1});
-                next();
+                if(store.getters['Products/getProducts'].length > 0) {
+                    if(store.getters['Products/getFilteredState']) {
+                        await store.dispatch('Products/fetchProducts', {page: 1});
+                        store.dispatch('Products/setFilteredState', false);
+                        next();
+                    }else {
+                        next();
+                    }
+                }else {
+                    await store.dispatch('Products/fetchProducts', {page: 1});
+                    next();
+                }        
             } else {
                 await store.dispatch('Products/fetchProducts', to.query);
                 next();
@@ -119,7 +129,7 @@
         },
 
         methods: {
-            ...mapActions('Products', ['fetchProducts', 'sortProductsList']),
+            ...mapActions('Products', ['fetchProducts', 'sortProductsList', 'setFilteredState']),
 
             async refreshProducsList() {
                 try {
@@ -128,6 +138,7 @@
                     }
 
                     await this.fetchProducts();
+                    this.setFilteredState(false);
 
                     this.orderBy = 1;
 

@@ -196,7 +196,7 @@
         },
 
         methods: {
-            ...mapActions('Products', ['fetchProducts']),
+            ...mapActions('Products', ['fetchProducts', 'setFilteredState']),
 
             callFilter: _debounce( async function() {
                 try {
@@ -209,6 +209,7 @@
                     })
 
                     await this.fetchProducts(query);
+                    this.setFilteredState(true);
 
                     if(this.$route.query['page']) {
                         query.page = 1

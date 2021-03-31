@@ -7,6 +7,7 @@ const initialState = () => ({
     products: [],
     orderedProducts: [],
     pagination: {},
+    filtered: false,
 });
 
 const state = initialState();
@@ -15,11 +16,16 @@ const getters = {
     getProducts: (state) => state.products,
     getNextPage: (state) => state.nextPage,
     getPaginationData: (state) => state.pagination,
+    getFilteredState: (state) => state.filtered,
 }
 
 const actions = {
     reset({ commit }) {
         commit('RESET');
+    },
+
+    setFilteredState({commit}, payload) {
+        commit('SET_FILTERED_STATE', payload);
     },
     
     async fetchProducts({commit}, payload) {
@@ -130,6 +136,10 @@ const mutations = {
         Object.keys(newState).forEach(key => {
             state[key] = newState[key]
         })
+    },
+
+    SET_FILTERED_STATE(state, payload) {
+        state.filtered = payload;
     },
 
     SET_PRODUCT(state, payload) {

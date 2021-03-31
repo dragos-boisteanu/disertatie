@@ -520,7 +520,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Products', ['fetchProducts'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Products', ['fetchProducts', 'setFilteredState'])), {}, {
     callFilter: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var _this2 = this;
 
@@ -540,6 +540,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               return this.fetchProducts(query);
 
             case 5:
+              this.setFilteredState(true);
+
               if (this.$route.query['page']) {
                 query.page = 1;
               }
@@ -548,20 +550,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 name: 'Products',
                 query: _objectSpread({}, query)
               });
-              _context.next = 12;
+              _context.next = 13;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 10:
+              _context.prev = 10;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 12:
+            case 13:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 9]]);
+      }, _callee, this, [[0, 10]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -1770,28 +1772,59 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               if (!(Object.keys(to.query).length === 0)) {
-                _context.next = 6;
+                _context.next = 17;
                 break;
               }
 
-              _context.next = 3;
+              if (!(_store_index__WEBPACK_IMPORTED_MODULE_11__.default.getters["Products/getProducts"].length > 0)) {
+                _context.next = 12;
+                break;
+              }
+
+              if (!_store_index__WEBPACK_IMPORTED_MODULE_11__.default.getters["Products/getFilteredState"]) {
+                _context.next = 9;
+                break;
+              }
+
+              _context.next = 5;
               return _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/fetchProducts', {
                 page: 1
               });
 
-            case 3:
+            case 5:
+              _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/setFilteredState', false);
               next();
-              _context.next = 9;
+              _context.next = 10;
               break;
 
-            case 6:
-              _context.next = 8;
-              return _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/fetchProducts', to.query);
-
-            case 8:
+            case 9:
               next();
 
-            case 9:
+            case 10:
+              _context.next = 15;
+              break;
+
+            case 12:
+              _context.next = 14;
+              return _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/fetchProducts', {
+                page: 1
+              });
+
+            case 14:
+              next();
+
+            case 15:
+              _context.next = 20;
+              break;
+
+            case 17:
+              _context.next = 19;
+              return _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/fetchProducts', to.query);
+
+            case 19:
+              next();
+
+            case 20:
             case "end":
               return _context.stop();
           }
@@ -1810,7 +1843,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       orderBy: 1
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapActions)('Products', ['fetchProducts', 'sortProductsList'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapActions)('Products', ['fetchProducts', 'sortProductsList', 'setFilteredState'])), {}, {
     refreshProducsList: function refreshProducsList() {
       var _this = this;
 
@@ -1832,21 +1865,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this.fetchProducts();
 
               case 4:
+                _this.setFilteredState(false);
+
                 _this.orderBy = 1;
-                _context2.next = 10;
+                _context2.next = 11;
                 break;
 
-              case 7:
-                _context2.prev = 7;
+              case 8:
+                _context2.prev = 8;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 10:
+              case 11:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 7]]);
+        }, _callee2, null, [[0, 8]]);
       }))();
     },
     loadProducts: function loadProducts(page) {

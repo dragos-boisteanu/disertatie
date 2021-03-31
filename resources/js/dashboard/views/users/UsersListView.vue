@@ -134,7 +134,7 @@
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
                 if(store.getters['Users/getUsers'].length > 0) {
-                     if(store.getters['Users/getFilteredState']) {
+                    if(store.getters['Users/getFilteredState']) {
                         await store.dispatch('Users/fetchUsers');  
                         store.dispatch('Users/setFilteredState', false);
                         next();

@@ -3281,7 +3281,8 @@ var initialState = function initialState() {
   return {
     products: [],
     orderedProducts: [],
-    pagination: {}
+    pagination: {},
+    filtered: false
   };
 };
 
@@ -3295,6 +3296,9 @@ var getters = {
   },
   getPaginationData: function getPaginationData(state) {
     return state.pagination;
+  },
+  getFilteredState: function getFilteredState(state) {
+    return state.filtered;
   }
 };
 var actions = {
@@ -3302,14 +3306,18 @@ var actions = {
     var commit = _ref.commit;
     commit('RESET');
   },
-  fetchProducts: function fetchProducts(_ref2, payload) {
+  setFilteredState: function setFilteredState(_ref2, payload) {
+    var commit = _ref2.commit;
+    commit('SET_FILTERED_STATE', payload);
+  },
+  fetchProducts: function fetchProducts(_ref3, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var commit, response, meta, paginationData;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              commit = _ref2.commit;
+              commit = _ref3.commit;
               _context.prev = 1;
               _context.next = 4;
               return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProducts)(payload);
@@ -3339,14 +3347,14 @@ var actions = {
       }, _callee, null, [[1, 11]]);
     }))();
   },
-  fetchProduct: function fetchProduct(_ref3, payload) {
+  fetchProduct: function fetchProduct(_ref4, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
       var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _objectDestructuringEmpty(_ref3);
+              _objectDestructuringEmpty(_ref4);
 
               _context2.prev = 1;
               _context2.next = 4;
@@ -3369,14 +3377,14 @@ var actions = {
       }, _callee2, null, [[1, 8]]);
     }))();
   },
-  updateProduct: function updateProduct(_ref4, payload) {
+  updateProduct: function updateProduct(_ref5, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              commit = _ref4.commit;
+              commit = _ref5.commit;
               _context3.prev = 1;
               _context3.next = 4;
               return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.patchProduct)(payload.product);
@@ -3399,8 +3407,8 @@ var actions = {
       }, _callee3, null, [[1, 7]]);
     }))();
   },
-  getProduct: function getProduct(_ref5, id) {
-    var state = _ref5.state;
+  getProduct: function getProduct(_ref6, id) {
+    var state = _ref6.state;
 
     try {
       var product = _.find(state.products, ['id', id]);
@@ -3414,14 +3422,14 @@ var actions = {
       throw error;
     }
   },
-  addProduct: function addProduct(_ref6, payload) {
+  addProduct: function addProduct(_ref7, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
       var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              commit = _ref6.commit;
+              commit = _ref7.commit;
               _context4.prev = 1;
               _context4.next = 4;
               return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.storeProduct)(payload);
@@ -3444,14 +3452,14 @@ var actions = {
       }, _callee4, null, [[1, 7]]);
     }))();
   },
-  getProductByBarcode: function getProductByBarcode(_ref7, payload) {
+  getProductByBarcode: function getProductByBarcode(_ref8, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
       var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              _objectDestructuringEmpty(_ref7);
+              _objectDestructuringEmpty(_ref8);
 
               _context5.prev = 1;
               _context5.next = 4;
@@ -3474,14 +3482,14 @@ var actions = {
       }, _callee5, null, [[1, 8]]);
     }))();
   },
-  disableProduct: function disableProduct(_ref8, payload) {
+  disableProduct: function disableProduct(_ref9, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
       var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              commit = _ref8.commit;
+              commit = _ref9.commit;
               _context6.prev = 1;
               _context6.next = 4;
               return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.disableProduct)(payload.id);
@@ -3504,14 +3512,14 @@ var actions = {
       }, _callee6, null, [[1, 9]]);
     }))();
   },
-  restoreProduct: function restoreProduct(_ref9, payload) {
+  restoreProduct: function restoreProduct(_ref10, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
       var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
-              commit = _ref9.commit;
+              commit = _ref10.commit;
               _context7.prev = 1;
               _context7.next = 4;
               return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.restoreProduct)(payload.id);
@@ -3535,14 +3543,14 @@ var actions = {
       }, _callee7, null, [[1, 10]]);
     }))();
   },
-  deleteProduct: function deleteProduct(_ref10, payload) {
+  deleteProduct: function deleteProduct(_ref11, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
       var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
         while (1) {
           switch (_context8.prev = _context8.next) {
             case 0:
-              commit = _ref10.commit;
+              commit = _ref11.commit;
               _context8.prev = 1;
               _context8.next = 4;
               return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.deleteProduct)(payload);
@@ -3565,8 +3573,8 @@ var actions = {
       }, _callee8, null, [[1, 9]]);
     }))();
   },
-  sortProductsList: function sortProductsList(_ref11, sortBy) {
-    var commit = _ref11.commit;
+  sortProductsList: function sortProductsList(_ref12, sortBy) {
+    var commit = _ref12.commit;
     commit('SORT_PRODUCTS', sortBy);
   }
 };
@@ -3576,6 +3584,9 @@ var mutations = {
     Object.keys(newState).forEach(function (key) {
       state[key] = newState[key];
     });
+  },
+  SET_FILTERED_STATE: function SET_FILTERED_STATE(state, payload) {
+    state.filtered = payload;
   },
   SET_PRODUCT: function SET_PRODUCT(state, payload) {
     state.products = payload;
