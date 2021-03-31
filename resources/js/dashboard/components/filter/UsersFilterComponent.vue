@@ -195,7 +195,7 @@
         },
 
         methods: {
-            ...mapActions('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset']),
+            ...mapActions('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset', 'setFilteredState']),
             ...mapActions('Notification', ['openNotification']),
 
             callFilter: _debounce( async function() {
@@ -211,6 +211,7 @@
                     this.reset();
                     await this.fetchUsers(query);
 
+                    this.setFilteredState(true);
                     this.$router.replace({name:'Users', query: {...query}});
                 
                     this.openNotification({

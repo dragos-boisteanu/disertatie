@@ -133,8 +133,19 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
-                await store.dispatch('Users/fetchUsers');
-                next();
+                if(store.getters['Users/getUsers'].length > 0) {
+                     if(store.getters['Users/getFilteredState']) {
+                        await store.dispatch('Users/fetchUsers');  
+                        store.dispatch('Users/setFilteredState', false);
+                        next();
+                    }else {
+                        next();
+                    }
+                }else {
+                    await store.dispatch('Users/fetchUsers');
+                    next();
+                }
+               
             } else {
                 await store.dispatch('Users/fetchUsers', to.query);
                 next();
@@ -163,11 +174,12 @@
             return {
                 showFilterState: false,
                 orderBy: 0,
+                users: null
             }
         },
 
         methods: { 
-            ...mapActions('Users', ['refreshUsers', 'fetchMoreUsers', 'sortUsersList']),
+            ...mapActions('Users', ['refreshUsers', 'fetchMoreUsers', 'sortUsersList', 'setFilteredState']),
             ...mapActions('Notification', ['openNotification']),
 
             async loadMoreUsers() {
@@ -197,6 +209,8 @@
                     }
 
                     await this.refreshUsers();
+
+                    this.setFilteredState(false);
 
                     this.orderBy = 14;
                     

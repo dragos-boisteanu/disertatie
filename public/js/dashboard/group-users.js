@@ -336,7 +336,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset', 'setFilteredState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
     callFilter: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var _this2 = this;
 
@@ -357,6 +357,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               return this.fetchUsers(query);
 
             case 6:
+              this.setFilteredState(true);
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
@@ -366,11 +367,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 message: 'Done',
                 show: true
               });
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 10:
-              _context.prev = 10;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](0);
               this.openNotification({
                 type: 'err',
@@ -379,12 +380,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               });
               console.log(_context.t0);
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 10]]);
+      }, _callee, this, [[0, 11]]);
     })), 750),
     close: function close() {
       this.$emit('closed');
@@ -1664,26 +1665,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               if (!(Object.keys(to.query).length === 0)) {
-                _context.next = 6;
+                _context.next = 17;
                 break;
               }
 
-              _context.next = 3;
+              if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length > 0)) {
+                _context.next = 12;
+                break;
+              }
+
+              if (!_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getFilteredState"]) {
+                _context.next = 9;
+                break;
+              }
+
+              _context.next = 5;
               return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers');
 
-            case 3:
+            case 5:
+              _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/setFilteredState', false);
               next();
-              _context.next = 9;
+              _context.next = 10;
               break;
 
-            case 6:
-              _context.next = 8;
-              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', to.query);
-
-            case 8:
+            case 9:
               next();
 
-            case 9:
+            case 10:
+              _context.next = 15;
+              break;
+
+            case 12:
+              _context.next = 14;
+              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers');
+
+            case 14:
+              next();
+
+            case 15:
+              _context.next = 20;
+              break;
+
+            case 17:
+              _context.next = 19;
+              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', to.query);
+
+            case 19:
+              next();
+
+            case 20:
             case "end":
               return _context.stop();
           }
@@ -1708,10 +1738,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       showFilterState: false,
-      orderBy: 0
+      orderBy: 0,
+      users: null
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Users', ['refreshUsers', 'fetchMoreUsers', 'sortUsersList'])), (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Notification', ['openNotification'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Users', ['refreshUsers', 'fetchMoreUsers', 'sortUsersList', 'setFilteredState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Notification', ['openNotification'])), {}, {
     loadMoreUsers: function loadMoreUsers() {
       var _this = this;
 
@@ -1773,6 +1804,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this2.refreshUsers();
 
               case 4:
+                _this2.setFilteredState(false);
+
                 _this2.orderBy = 14;
 
                 _this2.openNotification({
@@ -1781,20 +1814,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   show: true
                 });
 
-                _context3.next = 11;
+                _context3.next = 12;
                 break;
 
-              case 8:
-                _context3.prev = 8;
+              case 9:
+                _context3.prev = 9;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 11:
+              case 12:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 8]]);
+        }, _callee3, null, [[0, 9]]);
       }))();
     },
     order: function order() {

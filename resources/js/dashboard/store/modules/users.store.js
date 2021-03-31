@@ -7,6 +7,7 @@ const initialState = () => ({
     users: [],
     nextPage: 1,
     loggedUser: null,
+    filtered: false,
 });
 
 const state = initialState();
@@ -23,6 +24,10 @@ const getters = {
     getNextPage(state) {
         return state.nextPage;
     },
+
+    getFilteredState(state) {
+        return state.filtered;
+    }
    
 }
 
@@ -31,6 +36,9 @@ const actions = {
         commit('RESET');
     },
 
+    setFilteredState({commit}, payload) {
+        commit('SET_FILTERED_STATE', payload);
+    },
 
     async downloadLoggedUserData({commit}) {
         try {
@@ -188,6 +196,10 @@ const mutations = {
         })
     },
 
+    SET_FILTERED_STATE(state, payload) {
+        state.filtered = payload;
+    },
+
     SET_LOGGED_USER(state, payload) {
         state.loggedUser = payload;
     },
@@ -198,11 +210,6 @@ const mutations = {
 
     ADD_USERS(state, users) {
         state.users.push(...users);
-    },
-
-    SET_FILTERED_USERS(state, users) {
-        state.users.slice(0, state.users.length);
-        state.users = users;
     },
 
     REFRESH_USERS(state, users) {
