@@ -592,6 +592,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -735,6 +743,48 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
         revert: true
       });
       this.localUser.avatar = this.user.avatar;
+    },
+    removeAvatar: function removeAvatar() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+
+                _this3.$Progress.start();
+
+                _this3.$refs.pond.removeFile({
+                  revert: true
+                });
+
+                delete _this3.localUser.avatar;
+                _context3.next = 6;
+                return _this3.submit();
+
+              case 6:
+                _this3.$Progress.finish();
+
+                _context3.next = 13;
+                break;
+
+              case 9:
+                _context3.prev = 9;
+                _context3.t0 = _context3["catch"](0);
+
+                _this3.$Progress.fail();
+
+                console.log(_context3.t0); // notification
+
+              case 13:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 9]]);
+      }))();
     },
     close: function close() {
       this.$emit('close');
@@ -17196,7 +17246,25 @@ var render = function() {
               }
             },
             [_vm._v("\n                Clear avatar\n            ")]
-          )
+          ),
+          _vm._v(" "),
+          this.user.avatar
+            ? _c(
+                "button",
+                {
+                  staticClass:
+                    "ml-4 border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+                  attrs: { disabled: _vm.waitForFileUpload },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.removeAvatar($event)
+                    }
+                  }
+                },
+                [_vm._v("\n                Remove avatar\n            ")]
+              )
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("ValidationObserver", {

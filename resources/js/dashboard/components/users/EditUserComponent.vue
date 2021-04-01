@@ -39,6 +39,14 @@
                 >
                     Clear avatar
                 </button>
+                <button 
+                    v-if="this.user.avatar"
+                    :disabled="waitForFileUpload"
+                    class="ml-4 border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
+                    @click.prevent="removeAvatar"
+                >
+                    Remove avatar
+                </button>
             </div>
 
             <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
@@ -273,6 +281,24 @@
             clearAvatar() {
                 this.$refs.pond.removeFile({revert: true});
                 this.localUser.avatar = this.user.avatar
+            },
+
+            async removeAvatar() {
+                try {
+                    this.$Progress.start();
+                    this.$refs.pond.removeFile({revert: true});
+                    delete this.localUser.avatar;
+
+                    await this.submit();
+
+                      this.$Progress.finish();
+                } catch ( error ) {
+                      this.$Progress.fail();
+                    console.log(error)
+                    // notification
+                }
+                
+               
             },
 
             close() {
