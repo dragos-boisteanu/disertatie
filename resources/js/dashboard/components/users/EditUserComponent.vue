@@ -163,7 +163,8 @@
 
             async submit() {
                 try {
-                    console.log('here');
+                    this.$Progress.start()
+
                     this.waiting = true;
                     const payload = {
                         vm: this,
@@ -191,9 +192,12 @@
                         console.log('Change soemthing before updating the user data.');
                     }
 
+                    this.$Progress.finish()
+
                     this.waiting = false;
 
                 } catch ( error ) {
+                    this.$Progress.fail();
                     if(error.response.data.errors) {
                         this.$refs.observer.setErrors(error.response.data.errors)
                         console.log(this.$refs.observer.errors)

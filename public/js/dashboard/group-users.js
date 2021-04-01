@@ -386,7 +386,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.$emit('closed');
     },
     resetVerifiedFilter: function resetVerifiedFilter() {
-      this.filterData.verified;
+      this.filterData.verified = '';
       this.callFilter();
     }
   }),
@@ -583,7 +583,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                console.log('here');
+
+                _this.$Progress.start();
+
                 _this.waiting = true;
                 payload = {
                   vm: _this,
@@ -622,13 +624,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log('Change soemthing before updating the user data.');
 
               case 15:
+                _this.$Progress.finish();
+
                 _this.waiting = false;
-                _context.next = 23;
+                _context.next = 25;
                 break;
 
-              case 18:
-                _context.prev = 18;
+              case 19:
+                _context.prev = 19;
                 _context.t0 = _context["catch"](0);
+
+                _this.$Progress.fail();
 
                 if (_context.t0.response.data.errors) {
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
@@ -639,12 +645,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.waiting = false;
                 console.log(_context.t0); // notification
 
-              case 23:
+              case 25:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 18]]);
+        }, _callee, null, [[0, 19]]);
       }))();
     },
     close: function close() {

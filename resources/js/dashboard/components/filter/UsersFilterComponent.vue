@@ -235,7 +235,7 @@
             },
 
             resetVerifiedFilter() {
-                this.filterData.verified;
+                this.filterData.verified = '';
                 this.callFilter();
             }
         },
