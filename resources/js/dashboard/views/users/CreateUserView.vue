@@ -34,9 +34,19 @@
                                 }
                             }"
                             :files="files"
-                            :init="handleFilePondInit"
                             :onaddfilestart="waitForFiletoUpload"
+                            :onprocessfileabort="stopWaitingForFileToUpload"
                         />
+
+                        <div class="text-right">
+                            <button 
+                                :disabled="waitForFileUpload"
+                                class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
+                                @click.prevent="clearAvatar"
+                            >
+                                Clear avatar
+                            </button>
+                        </div>
 
                         <ValidationProvider vid="data.user.first_name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }">
                             <label for="firstName" class="text-sm font-semibold">First name</label>
@@ -294,7 +304,7 @@
                     address: ''
                 },
 
-                files: [],
+                files: null,
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
@@ -382,14 +392,12 @@
                 this.required = !this.required
             },
 
-            handleFilePondInit: function () {
-                console.log("FilePond has initialized");
-
-                // FilePond instance methods are available on `this.$refs.pond`
-            },
-
             waitForFiletoUpload() {
                 this.waitForFileUpload = true;
+            },
+
+            stopWaitingForFileToUpload() {
+                this.waitForFileUpload = false;
             },
 
             addAvatarPathToUser(value) {
@@ -397,6 +405,11 @@
                 this.waitForFileUpload = false,
 
                 console.log(this.user.avatar)
+            },
+
+            clearAvatar() {
+                this.$refs.pond.removeFile({revert: true});
+                delete this.user.avatar;
             }
         },
 

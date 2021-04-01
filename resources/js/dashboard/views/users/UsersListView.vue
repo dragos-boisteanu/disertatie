@@ -133,18 +133,20 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
-                if(store.getters['Users/getUsers'].length > 0) {
-                    if(store.getters['Users/getFilteredState']) {
-                        await store.dispatch('Users/fetchUsers');  
-                        store.dispatch('Users/setFilteredState', false);
-                        next();
-                    }else {
-                        next();
-                    }
-                }else {
-                    await store.dispatch('Users/fetchUsers');
+                // if(store.getters['Users/getUsers'].length > 0) {
+                //     if(store.getters['Users/getFilteredState']) {
+                //         await store.dispatch('Users/fetchUsers');  
+                //         store.dispatch('Users/setFilteredState', false);
+                //         next();
+                //     }else {
+                //         next();
+                //     }
+                // }else {
+                //     await store.dispatch('Users/fetchUsers');
+                //     next();
+                // }
+                 await store.dispatch('Users/fetchUsers');
                     next();
-                }
                
             } else {
                 await store.dispatch('Users/fetchUsers', to.query);

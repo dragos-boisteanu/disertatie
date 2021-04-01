@@ -1055,6 +1055,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1091,7 +1101,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
         city_id: '',
         address: ''
       },
-      files: [],
+      files: null,
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
@@ -1219,15 +1229,21 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
       this.$refs.addressForm.reset();
       this.required = !this.required;
     },
-    handleFilePondInit: function handleFilePondInit() {
-      console.log("FilePond has initialized"); // FilePond instance methods are available on `this.$refs.pond`
-    },
     waitForFiletoUpload: function waitForFiletoUpload() {
       this.waitForFileUpload = true;
+    },
+    stopWaitingForFileToUpload: function stopWaitingForFileToUpload() {
+      this.waitForFileUpload = false;
     },
     addAvatarPathToUser: function addAvatarPathToUser(value) {
       this.user.avatar = value;
       this.waitForFileUpload = false, console.log(this.user.avatar);
+    },
+    clearAvatar: function clearAvatar() {
+      this.$refs.pond.removeFile({
+        revert: true
+      });
+      delete this.user.avatar;
     }
   }),
   components: {
@@ -1771,55 +1787,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               if (!(Object.keys(to.query).length === 0)) {
-                _context.next = 17;
+                _context.next = 6;
                 break;
               }
 
-              if (!(_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getUsers"].length > 0)) {
-                _context.next = 12;
-                break;
-              }
-
-              if (!_store_index__WEBPACK_IMPORTED_MODULE_1__.default.getters["Users/getFilteredState"]) {
-                _context.next = 9;
-                break;
-              }
-
-              _context.next = 5;
+              _context.next = 3;
               return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers');
 
-            case 5:
-              _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/setFilteredState', false);
+            case 3:
               next();
-              _context.next = 10;
+              _context.next = 9;
               break;
 
-            case 9:
-              next();
-
-            case 10:
-              _context.next = 15;
-              break;
-
-            case 12:
-              _context.next = 14;
-              return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers');
-
-            case 14:
-              next();
-
-            case 15:
-              _context.next = 20;
-              break;
-
-            case 17:
-              _context.next = 19;
+            case 6:
+              _context.next = 8;
               return _store_index__WEBPACK_IMPORTED_MODULE_1__.default.dispatch('Users/fetchUsers', to.query);
 
-            case 19:
+            case 8:
               next();
 
-            case 20:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -17928,10 +17915,33 @@ var render = function() {
                                   }
                                 },
                                 files: _vm.files,
-                                init: _vm.handleFilePondInit,
-                                onaddfilestart: _vm.waitForFiletoUpload
+                                onaddfilestart: _vm.waitForFiletoUpload,
+                                onprocessfileabort:
+                                  _vm.stopWaitingForFileToUpload
                               }
                             }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "text-right" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+                                  attrs: { disabled: _vm.waitForFileUpload },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clearAvatar($event)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Clear avatar\n                        "
+                                  )
+                                ]
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("ValidationProvider", {
                               attrs: {
