@@ -121,8 +121,10 @@ const actions = {
 
     async updateUser({commit}, payload) {
         try {
-            await patchUser(payload.user);
+            const response = await patchUser(payload.user);
+            payload.user.avatar = response.data.avatar;
             commit('PATCH_USER', payload);
+            return response;
         } catch (  error ) {
             throw error
         }

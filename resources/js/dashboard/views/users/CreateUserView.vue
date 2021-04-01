@@ -26,7 +26,6 @@
                                     },
                                     onload: (response) =>  addAvatarPathToUser(response) ,
                                 },
-                                fetch: null,
                                 revert: {
                                     url: '/delete',
                                     headers: {

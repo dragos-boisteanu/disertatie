@@ -32,7 +32,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 
     Route::get('/products/check-barcode/{barcode}', 'ProductController@getProductByBarcode');
 
-    Route::apiResource('images', 'FileController')->only('store', 'show', 'destroy');
+    Route::apiResource('images', 'FileController')->only('store', 'destroy');
        
 });
 

@@ -24,6 +24,7 @@ class UserPatchRequest extends FormRequest
     public function rules()
     {
         return [
+            'avater' => 'sometimes|stirng',
             'first_name' => 'sometimes|required|string|max:255',
             'name' => 'sometimes|string|max:255',
             'birthdate' => 'sometimes|date',

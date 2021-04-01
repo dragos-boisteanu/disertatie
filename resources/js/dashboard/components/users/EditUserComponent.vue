@@ -4,6 +4,32 @@
             Edit user
         </h1>
         <div class="p-1">
+
+            <file-pond
+                name="image"
+                ref="pond"
+                label-idle="Upload new profile image..."
+                v-bind:allow-multiple="false"
+                accepted-file-types="image/jpeg"
+                :server="{
+                    url: '/api/dashboard/images',
+                    process: { 
+                        headers: {
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        onload: (response) =>  addAvatarPathToUser(response) ,
+                    },
+                    revert: {
+                        url: '/delete',
+                        headers: {
+                            'X-CSRF-TOKEN': csrf
+                        },
+                    }
+                }"
+                :files="files"
+                :onaddfilestart="waitForFiletoUpload"
+            />
+
             <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
                 <form @submit.prevent="handleSubmit(submit)" class="flex flex-col gap-3">
                     <ValidationProvider vid="first_name" rules="required|alpha_spaces|max:255" v-slot="{ errors }">
@@ -100,7 +126,7 @@
                     <div class="w-full flex justify-end items-center mt-4">
                         <button 
                             type="submit"
-                            :disabled="waiting"  
+                            :disabled="waiting || waitForFileUpload"  
                             class="flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none"
                         >
                             <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -127,6 +153,15 @@
     import Modal from '../ModalComponent';
     import {mapActions, mapGetters} from 'vuex'
 
+    import vueFilePond from "vue-filepond";
+    import "filepond/dist/filepond.min.css";
+    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+
+    const FilePond = vueFilePond(
+        FilePondPluginFileValidateType,
+    );
+
     export default {
 
         props: {
@@ -135,15 +170,18 @@
             }
         },
         
-        mounted() {
+        async mounted() {
             Object.assign(this.localUser, this.user);
         },
 
 
         data() {
             return { 
+                waitForFileUpload: false,
                 waiting: false,
-                localUser: {}
+                localUser: {},
+                files: [],
+                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
 
@@ -183,7 +221,8 @@
                     })
 
                     if(counter > 0) {
-                        await this.updateUser(payload);
+                        const response = await this.updateUser(payload);
+                        payload.user.avatar = response.data.avatar;
                         this.$emit('updated', payload.user);
                         counter = 0;
                         this.close();
@@ -208,13 +247,22 @@
                 }
             },
 
+            waitForFiletoUpload() {
+                this.waitForFileUpload = true;
+            },
+            addAvatarPathToUser(value) {
+                this.localUser.avatar = value;
+                this.waitForFileUpload = false;
+            },
+
             close() {
                 this.$emit('close');
             }
         },
 
         components: {
-            Modal
+            Modal,
+            FilePond
         }
     }
 </script>

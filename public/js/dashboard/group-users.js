@@ -411,19 +411,51 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ModalComponent */ "./resources/js/dashboard/components/ModalComponent.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var filepond_dist_filepond_min_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! filepond/dist/filepond.min.css */ "./node_modules/filepond/dist/filepond.min.css");
+/* harmony import */ var filepond_plugin_image_preview_dist_filepond_plugin_image_preview_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -551,6 +583,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 
+
+
+
+
+var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     user: {
@@ -558,107 +595,136 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
-    Object.assign(this.localUser, this.user);
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              Object.assign(_this.localUser, _this.user);
+
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   data: function data() {
     return {
+      waitForFileUpload: false,
       waiting: false,
-      localUser: {}
+      localUser: {},
+      files: [],
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Users', ['getLoggedUser'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Users', ['getLoggedUser'])), {}, {
     canChangeRole: function canChangeRole() {
       //  TO DO: hide roles list if the auth user's role is 6 and the local user role is 6 or 7
       return [6, 7].includes(this.getLoggedUser.role_id);
     }
   }),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)('Users', ['updateUser'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('Users', ['updateUser'])), {}, {
     submit: function submit() {
-      var _this = this;
+      var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var payload, counter;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var payload, counter, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _context.prev = 0;
+                _context2.prev = 0;
 
-                _this.$Progress.start();
+                _this2.$Progress.start();
 
-                _this.waiting = true;
+                _this2.waiting = true;
                 payload = {
-                  vm: _this,
+                  vm: _this2,
                   user: {
-                    id: _this.user.id
+                    id: _this2.user.id
                   }
                 };
                 counter = 0;
-                Object.keys(_this.user).forEach(function (key) {
-                  if (_this.localUser[key] != _this.user[key]) {
-                    payload.user[key] = _this.localUser[key];
+                Object.keys(_this2.user).forEach(function (key) {
+                  if (_this2.localUser[key] != _this2.user[key]) {
+                    payload.user[key] = _this2.localUser[key];
                     counter++;
                   }
                 });
 
                 if (!(counter > 0)) {
-                  _context.next = 14;
+                  _context2.next = 16;
                   break;
                 }
 
-                _context.next = 9;
-                return _this.updateUser(payload);
+                _context2.next = 9;
+                return _this2.updateUser(payload);
 
               case 9:
-                _this.$emit('updated', payload.user);
+                response = _context2.sent;
+                payload.user.avatar = response.data.avatar;
+
+                _this2.$emit('updated', payload.user);
 
                 counter = 0;
 
-                _this.close(); // notification
+                _this2.close(); // notification
 
 
-                _context.next = 15;
+                _context2.next = 17;
                 break;
 
-              case 14:
+              case 16:
                 console.log('Change soemthing before updating the user data.');
 
-              case 15:
-                _this.$Progress.finish();
+              case 17:
+                _this2.$Progress.finish();
 
-                _this.waiting = false;
-                _context.next = 25;
+                _this2.waiting = false;
+                _context2.next = 27;
                 break;
 
-              case 19:
-                _context.prev = 19;
-                _context.t0 = _context["catch"](0);
+              case 21:
+                _context2.prev = 21;
+                _context2.t0 = _context2["catch"](0);
 
-                _this.$Progress.fail();
+                _this2.$Progress.fail();
 
-                if (_context.t0.response.data.errors) {
-                  _this.$refs.observer.setErrors(_context.t0.response.data.errors);
+                if (_context2.t0.response.data.errors) {
+                  _this2.$refs.observer.setErrors(_context2.t0.response.data.errors);
 
-                  console.log(_this.$refs.observer.errors);
+                  console.log(_this2.$refs.observer.errors);
                 }
 
-                _this.waiting = false;
-                console.log(_context.t0); // notification
+                _this2.waiting = false;
+                console.log(_context2.t0); // notification
 
-              case 25:
+              case 27:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, null, [[0, 19]]);
+        }, _callee2, null, [[0, 21]]);
       }))();
+    },
+    waitForFiletoUpload: function waitForFiletoUpload() {
+      this.waitForFileUpload = true;
+    },
+    addAvatarPathToUser: function addAvatarPathToUser(value) {
+      this.localUser.avatar = value;
+      this.waitForFileUpload = false;
     },
     close: function close() {
       this.$emit('close');
     }
   }),
   components: {
-    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default
+    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default,
+    FilePond: FilePond
   }
 });
 
@@ -741,7 +807,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
 //
 //
 //
@@ -17081,6 +17146,35 @@ var render = function() {
       "div",
       { staticClass: "p-1" },
       [
+        _c("file-pond", {
+          ref: "pond",
+          attrs: {
+            name: "image",
+            "label-idle": "Upload new profile image...",
+            "allow-multiple": false,
+            "accepted-file-types": "image/jpeg",
+            server: {
+              url: "/api/dashboard/images",
+              process: {
+                headers: {
+                  "X-CSRF-TOKEN": _vm.csrf
+                },
+                onload: function(response) {
+                  return _vm.addAvatarPathToUser(response)
+                }
+              },
+              revert: {
+                url: "/delete",
+                headers: {
+                  "X-CSRF-TOKEN": _vm.csrf
+                }
+              }
+            },
+            files: _vm.files,
+            onaddfilestart: _vm.waitForFiletoUpload
+          }
+        }),
+        _vm._v(" "),
         _c("ValidationObserver", {
           ref: "observer",
           scopedSlots: _vm._u([
@@ -17584,7 +17678,10 @@ var render = function() {
                             {
                               staticClass:
                                 "flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none",
-                              attrs: { type: "submit", disabled: _vm.waiting }
+                              attrs: {
+                                type: "submit",
+                                disabled: _vm.waiting || _vm.waitForFileUpload
+                              }
                             },
                             [
                               _vm.waiting
@@ -17823,7 +17920,6 @@ var render = function() {
                                       return _vm.addAvatarPathToUser(response)
                                     }
                                   },
-                                  fetch: null,
                                   revert: {
                                     url: "/delete",
                                     headers: {

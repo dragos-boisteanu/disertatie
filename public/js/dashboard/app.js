@@ -4180,7 +4180,7 @@ var actions = {
   },
   updateUser: function updateUser(_ref8, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-      var commit;
+      var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
@@ -4191,21 +4191,22 @@ var actions = {
               return (0,_api_users_api__WEBPACK_IMPORTED_MODULE_1__.patchUser)(payload.user);
 
             case 4:
+              response = _context6.sent;
+              payload.user.avatar = response.data.avatar;
               commit('PATCH_USER', payload);
-              _context6.next = 10;
-              break;
+              return _context6.abrupt("return", response);
 
-            case 7:
-              _context6.prev = 7;
+            case 10:
+              _context6.prev = 10;
               _context6.t0 = _context6["catch"](1);
               throw _context6.t0;
 
-            case 10:
+            case 13:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[1, 7]]);
+      }, _callee6, null, [[1, 10]]);
     }))();
   },
   fetchUser: function fetchUser(_ref9, id) {
