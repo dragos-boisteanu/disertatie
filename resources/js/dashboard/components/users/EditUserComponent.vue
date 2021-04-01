@@ -28,7 +28,18 @@
                 }"
                 :files="files"
                 :onaddfilestart="waitForFiletoUpload"
+                :onprocessfileabort="stopWaitingForFileToUpload"
             />
+
+            <div class="text-right mt-6">
+                <button 
+                    :disabled="waitForFileUpload"
+                    class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
+                    @click.prevent="clearAvatar"
+                >
+                    Clear avatar
+                </button>
+            </div>
 
             <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
                 <form @submit.prevent="handleSubmit(submit)" class="flex flex-col gap-3">
@@ -239,7 +250,6 @@
                     this.$Progress.fail();
                     if(error.response.data.errors) {
                         this.$refs.observer.setErrors(error.response.data.errors)
-                        console.log(this.$refs.observer.errors)
                     } 
                     this.waiting = false;
                     console.log(error);
@@ -250,9 +260,19 @@
             waitForFiletoUpload() {
                 this.waitForFileUpload = true;
             },
+
             addAvatarPathToUser(value) {
                 this.localUser.avatar = value;
                 this.waitForFileUpload = false;
+            },
+
+            stopWaitingForFileToUpload() {
+                this.waitForFileUpload = false;
+            },
+
+            clearAvatar() {
+                this.$refs.pond.removeFile({revert: true});
+                this.localUser.avatar = this.user.avatar
             },
 
             close() {

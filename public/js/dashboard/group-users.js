@@ -581,6 +581,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -696,8 +707,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
 
                 if (_context2.t0.response.data.errors) {
                   _this2.$refs.observer.setErrors(_context2.t0.response.data.errors);
-
-                  console.log(_this2.$refs.observer.errors);
                 }
 
                 _this2.waiting = false;
@@ -717,6 +726,15 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
     addAvatarPathToUser: function addAvatarPathToUser(value) {
       this.localUser.avatar = value;
       this.waitForFileUpload = false;
+    },
+    stopWaitingForFileToUpload: function stopWaitingForFileToUpload() {
+      this.waitForFileUpload = false;
+    },
+    clearAvatar: function clearAvatar() {
+      this.$refs.pond.removeFile({
+        revert: true
+      });
+      this.localUser.avatar = this.user.avatar;
     },
     close: function close() {
       this.$emit('close');
@@ -1237,7 +1255,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
     },
     addAvatarPathToUser: function addAvatarPathToUser(value) {
       this.user.avatar = value;
-      this.waitForFileUpload = false, console.log(this.user.avatar);
+      this.waitForFileUpload = false;
     },
     clearAvatar: function clearAvatar() {
       this.$refs.pond.removeFile({
@@ -17158,9 +17176,28 @@ var render = function() {
               }
             },
             files: _vm.files,
-            onaddfilestart: _vm.waitForFiletoUpload
+            onaddfilestart: _vm.waitForFiletoUpload,
+            onprocessfileabort: _vm.stopWaitingForFileToUpload
           }
         }),
+        _vm._v(" "),
+        _c("div", { staticClass: "text-right mt-6" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+              attrs: { disabled: _vm.waitForFileUpload },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.clearAvatar($event)
+                }
+              }
+            },
+            [_vm._v("\n                Clear avatar\n            ")]
+          )
+        ]),
         _vm._v(" "),
         _c("ValidationObserver", {
           ref: "observer",

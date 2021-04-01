@@ -402,9 +402,7 @@
 
             addAvatarPathToUser(value) {
                 this.user.avatar = value;
-                this.waitForFileUpload = false,
-
-                console.log(this.user.avatar)
+                this.waitForFileUpload = false;
             },
 
             clearAvatar() {
