@@ -15,9 +15,11 @@ import Breadcrumbs from './components/Breadcrumbs.vue';
 import dayjs from 'dayjs';
 
 import { ValidationProvider } from 'vee-validate';
-import {ValidationObserver } from 'vee-validate'
+import { ValidationObserver } from 'vee-validate'
+
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+
 import './validators';
 
 Vue.use(VueBreadcrumbs, Breadcrumbs);
@@ -39,6 +41,31 @@ Vue.filter("formatDate", date => {
   }
   return dayjs(date).format('DD/MM/YYYY HH:mm');
 })
+
+
+import VueProgressBar from 'vue-progressbar'
+
+const options = {
+  color: '#119b13',
+  failedColor: '#ce0810',
+  thickness: '4px',
+  transition: {
+    speed: '0.2s',
+    opacity: '0.7s',
+    termination: 300
+  },
+  autoRevert: true,
+  location: 'top',
+  inverse: false
+}
+
+
+Vue.use(VueProgressBar, options)
+
+
+
+
+
 
 new Vue({
     router,

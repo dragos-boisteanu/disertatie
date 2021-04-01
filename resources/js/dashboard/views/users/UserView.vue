@@ -144,6 +144,7 @@
 
             async disable(){
                 try {
+                    this.$Progress.start()
                     const payload = {
                         vm: this,
                         id: this.user.id
@@ -151,13 +152,16 @@
 
                     const response = await this.disableUser(payload);
                     this.user.deleted_at = response.deleted_at;
+                    this.$Progress.finish()
                 } catch ( error ) {
+                    this.$Progress.failed()
                     console.log(error);
                 }
             },
 
             async restore() {
                 try {
+                    this.$Progress.start()
                     const payload = {
                         vm: this,
                         id: this.user.id
@@ -165,17 +169,23 @@
 
                     const response = await this.restoreUser(payload);
                     this.user.deleted_at = response.deleted_at;
+
+                    this.$Progress.finish()
                 } catch ( error ) {
+                    this.$Progress.failed()
                     console.log(error);
                 }
             },
 
             async callDeleteUser() {
                 try {
+                    this.$Progress.start()
                     await this.deleteUser(this.user.id);
                     this.$router.push({name: 'Users'});
 
+                    this.$Progress.finish()
                 } catch ( error ) {
+                    this.$Progress.failed()
                     console.log(error)
                 }
             },

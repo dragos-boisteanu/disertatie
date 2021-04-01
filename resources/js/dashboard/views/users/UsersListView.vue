@@ -184,6 +184,8 @@
 
             async loadMoreUsers() {
                 try {
+                    this.$Progress.start()
+
                     const query = this.$route.query;
                     query.page = this.getNextPage,
                     query.orderBy = this.orderBy
@@ -192,18 +194,21 @@
 
                     this.order();
                     
-                    this.openNotification({
-                        type:'ok',
-                        message: 'Done',
-                        show: true
-                    })
+                    this.$Progress.finish()
+                    // this.openNotification({
+                    //     type:'ok',
+                    //     message: 'Done',
+                    //     show: true
+                    // })
                 } catch ( error ) {
+                    this.$Progress.fail()
                     console.log(error)
                 }
             },
 
             async refreshUsersList() {
                 try {
+                    this.$Progress.start()
                     if(Object.keys(this.$route.query).length > 0) { 
                         this.$router.replace({name:'Users', query: {}});
                     }
@@ -214,12 +219,14 @@
 
                     this.orderBy = 14;
                     
-                    this.openNotification({
-                        type:'ok',
-                        message: 'Refresh complete',
-                        show: true
-                    })
+                    this.$Progress.finish()
+                    // this.openNotification({
+                    //     type:'ok',
+                    //     message: 'Refresh complete',
+                    //     show: true
+                    // })
                 } catch ( error ) {
+                    this.$Progress.fail()
                     console.log(error);
                 }
             },

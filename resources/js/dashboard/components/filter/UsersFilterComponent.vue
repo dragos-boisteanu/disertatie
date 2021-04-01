@@ -195,10 +195,18 @@
         },
 
         methods: {
-            ...mapActions('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset', 'setFilteredState']),
+            ...mapActions('Users', ['fetchFilteredUsers', 'fetchUsers', 'setFilteredState']),
             ...mapActions('Notification', ['openNotification']),
 
-            callFilter: _debounce( async function() {
+
+            callFilter() {
+                this.$Progress.start()            
+
+                this.debouncedFilter();
+                
+            },
+
+            debouncedFilter: _debounce( async function() {
                 try {
                     const query = {}
 
@@ -208,28 +216,19 @@
                         }
                     })
                     
-                    this.reset();
                     await this.fetchUsers(query);
 
                     this.setFilteredState(true);
+                    
                     this.$router.replace({name:'Users', query: {...query}});
+            
+                    this.$Progress.finish()
                 
-                    this.openNotification({
-                        type:'ok',
-                        message: 'Done',
-                        show: true
-                    })
-                  
                 } catch ( error ) {
-                    this.openNotification({
-                        type:'err',
-                        message: error,
-                        show: true
-
-                    })
+                    this.$Progress.fail()
                     console.log(error)
                 }
-            }, 750),
+            }, 500),
 
             close() {
                 this.$emit('closed')

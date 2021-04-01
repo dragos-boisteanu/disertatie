@@ -336,8 +336,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['fetchFilteredUsers', 'fetchUsers', 'reset', 'setFilteredState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
-    callFilter: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['fetchFilteredUsers', 'fetchUsers', 'setFilteredState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
+    callFilter: function callFilter() {
+      this.$Progress.start();
+      this.debouncedFilter();
+    },
+    debouncedFilter: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var _this2 = this;
 
       var query;
@@ -352,41 +356,32 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                   query[key] = _this2.filterData[key];
                 }
               });
-              this.reset();
-              _context.next = 6;
+              _context.next = 5;
               return this.fetchUsers(query);
 
-            case 6:
+            case 5:
               this.setFilteredState(true);
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
               });
-              this.openNotification({
-                type: 'ok',
-                message: 'Done',
-                show: true
-              });
-              _context.next = 15;
+              this.$Progress.finish();
+              _context.next = 14;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 10:
+              _context.prev = 10;
               _context.t0 = _context["catch"](0);
-              this.openNotification({
-                type: 'err',
-                message: _context.t0,
-                show: true
-              });
+              this.$Progress.fail();
               console.log(_context.t0);
 
-            case 15:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 11]]);
-    })), 750),
+      }, _callee, this, [[0, 10]]);
+    })), 500),
     close: function close() {
       this.$emit('closed');
     },
@@ -1384,30 +1379,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
+
+                _this2.$Progress.start();
+
                 payload = {
                   vm: _this2,
                   id: _this2.user.id
                 };
-                _context2.next = 4;
+                _context2.next = 5;
                 return _this2.disableUser(payload);
 
-              case 4:
+              case 5:
                 response = _context2.sent;
                 _this2.user.deleted_at = response.deleted_at;
-                _context2.next = 11;
+
+                _this2.$Progress.finish();
+
+                _context2.next = 14;
                 break;
 
-              case 8:
-                _context2.prev = 8;
+              case 10:
+                _context2.prev = 10;
                 _context2.t0 = _context2["catch"](0);
+
+                _this2.$Progress.failed();
+
                 console.log(_context2.t0);
 
-              case 11:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee2, null, [[0, 10]]);
       }))();
     },
     restore: function restore() {
@@ -1420,30 +1424,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.prev = 0;
+
+                _this3.$Progress.start();
+
                 payload = {
                   vm: _this3,
                   id: _this3.user.id
                 };
-                _context3.next = 4;
+                _context3.next = 5;
                 return _this3.restoreUser(payload);
 
-              case 4:
+              case 5:
                 response = _context3.sent;
                 _this3.user.deleted_at = response.deleted_at;
-                _context3.next = 11;
+
+                _this3.$Progress.finish();
+
+                _context3.next = 14;
                 break;
 
-              case 8:
-                _context3.prev = 8;
+              case 10:
+                _context3.prev = 10;
                 _context3.t0 = _context3["catch"](0);
+
+                _this3.$Progress.failed();
+
                 console.log(_context3.t0);
 
-              case 11:
+              case 14:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 8]]);
+        }, _callee3, null, [[0, 10]]);
       }))();
     },
     callDeleteUser: function callDeleteUser() {
@@ -1455,28 +1468,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.prev = 0;
-                _context4.next = 3;
+
+                _this4.$Progress.start();
+
+                _context4.next = 4;
                 return _this4.deleteUser(_this4.user.id);
 
-              case 3:
+              case 4:
                 _this4.$router.push({
                   name: 'Users'
                 });
 
-                _context4.next = 9;
+                _this4.$Progress.finish();
+
+                _context4.next = 12;
                 break;
 
-              case 6:
-                _context4.prev = 6;
+              case 8:
+                _context4.prev = 8;
                 _context4.t0 = _context4["catch"](0);
+
+                _this4.$Progress.failed();
+
                 console.log(_context4.t0);
 
-              case 9:
+              case 12:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, null, [[0, 6]]);
+        }, _callee4, null, [[0, 8]]);
       }))();
     },
     toggleEditUserState: function toggleEditUserState() {
@@ -1753,34 +1774,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
+
+                _this.$Progress.start();
+
                 query = _this.$route.query;
                 query.page = _this.getNextPage, query.orderBy = _this.orderBy;
-                _context2.next = 5;
+                _context2.next = 6;
                 return _this.fetchMoreUsers(query);
 
-              case 5:
+              case 6:
                 _this.order();
 
-                _this.openNotification({
-                  type: 'ok',
-                  message: 'Done',
-                  show: true
-                });
+                _this.$Progress.finish(); // this.openNotification({
+                //     type:'ok',
+                //     message: 'Done',
+                //     show: true
+                // })
 
-                _context2.next = 12;
+
+                _context2.next = 14;
                 break;
 
-              case 9:
-                _context2.prev = 9;
+              case 10:
+                _context2.prev = 10;
                 _context2.t0 = _context2["catch"](0);
+
+                _this.$Progress.fail();
+
                 console.log(_context2.t0);
 
-              case 12:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 9]]);
+        }, _callee2, null, [[0, 10]]);
       }))();
     },
     refreshUsersList: function refreshUsersList() {
@@ -1793,6 +1821,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context3.prev = 0;
 
+                _this2.$Progress.start();
+
                 if (Object.keys(_this2.$route.query).length > 0) {
                   _this2.$router.replace({
                     name: 'Users',
@@ -1800,34 +1830,38 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 }
 
-                _context3.next = 4;
+                _context3.next = 5;
                 return _this2.refreshUsers();
 
-              case 4:
+              case 5:
                 _this2.setFilteredState(false);
 
                 _this2.orderBy = 14;
 
-                _this2.openNotification({
-                  type: 'ok',
-                  message: 'Refresh complete',
-                  show: true
-                });
+                _this2.$Progress.finish(); // this.openNotification({
+                //     type:'ok',
+                //     message: 'Refresh complete',
+                //     show: true
+                // })
 
-                _context3.next = 12;
+
+                _context3.next = 14;
                 break;
 
-              case 9:
-                _context3.prev = 9;
+              case 10:
+                _context3.prev = 10;
                 _context3.t0 = _context3["catch"](0);
+
+                _this2.$Progress.fail();
+
                 console.log(_context3.t0);
 
-              case 12:
+              case 14:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 9]]);
+        }, _callee3, null, [[0, 10]]);
       }))();
     },
     order: function order() {

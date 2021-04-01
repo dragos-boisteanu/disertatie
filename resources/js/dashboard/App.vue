@@ -1,6 +1,7 @@
 <template>
-    <div class="h-screen flex flex-col "> 
-         <Notification :notification=getNotification v-if="getNotification.show"/>
+    <div class="h-screen flex flex-col"> 
+        <vue-progress-bar></vue-progress-bar>
+        <Notification :notification=getNotification v-if="getNotification.show"/>
          <!-- <h1>current: {{$mq}}</h1>   -->
         <div class="block" v-if="mobile">
             <Header/>
@@ -21,6 +22,7 @@
             </div>
         </div>
     </div>
+    
 </template>
 <script>
     import { mapActions, mapGetters } from 'vuex';
@@ -30,6 +32,29 @@
     import Notification from './components/NotificationComponenet';
 
     export default {
+
+        async created() {            
+            try {
+                this.$Progress.start()
+                
+                this.$router.beforeEach((to, from, next) => {
+                    this.$Progress.start()
+                    next();
+                })
+
+                this.$router.afterEach((to, from) => {
+                    this.$Progress.finish()
+                })
+            } catch ( error ) {
+                this.$Progress.fail()
+                this.openNotification({
+                    type: 'error',
+                    message: 'Something went wrong !',
+                    show: true
+                });
+            }
+        },
+
         async mounted() {
             try {
                 
@@ -40,8 +65,11 @@
                     this.fetchUnits(),
                     this.downloadLoggedUserData()
                 ]);
-   
+
+                this.$Progress.finish()
+
             } catch ( error ) {
+                this.$Progress.fail()
                 this.openNotification({
                     type: 'error',
                     message: 'Something went wrong. Refresh the page !',
@@ -64,7 +92,6 @@
             desktop() {
                 return this.$mq === 'xl' || this.$mq === 'xxl';
             }
-
         },
 
         methods: {
