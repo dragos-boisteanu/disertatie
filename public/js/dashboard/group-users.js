@@ -989,6 +989,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -1004,6 +1005,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
   }),
   data: function data() {
     return {
+      waitForFileUpload: false,
       waiting: false,
       counties: [],
       cities: [],
@@ -1039,6 +1041,9 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
+
+                _this.$Progress.start();
+
                 _this.waiting = true;
                 payload = {
                   user: _this.user
@@ -1048,19 +1053,24 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                   payload.address = _this.address;
                 }
 
-                _context.next = 6;
+                _context.next = 7;
                 return _this.addUser(payload);
 
-              case 6:
+              case 7:
                 _this.restForm();
 
                 _this.waiting = false;
-                _context.next = 15;
+
+                _this.$Progress.finish();
+
+                _context.next = 18;
                 break;
 
-              case 10:
-                _context.prev = 10;
+              case 12:
+                _context.prev = 12;
                 _context.t0 = _context["catch"](0);
+
+                _this.$Progress.fail();
 
                 if (_context.t0.response.data.errors) {
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
@@ -1069,12 +1079,12 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                 console.log(_context.t0);
                 _this.waiting = false;
 
-              case 15:
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 10]]);
+        }, _callee, null, [[0, 12]]);
       }))();
     },
     getCitites: function getCitites() {
@@ -1147,8 +1157,12 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
     handleFilePondInit: function handleFilePondInit() {
       console.log("FilePond has initialized"); // FilePond instance methods are available on `this.$refs.pond`
     },
+    waitForFiletoUpload: function waitForFiletoUpload() {
+      this.waitForFileUpload = true;
+    },
     addAvatarPathToUser: function addAvatarPathToUser(value) {
       this.user.avatar = value;
+      this.waitForFileUpload = false, console.log(this.user.avatar);
     }
   }),
   components: {
@@ -17817,7 +17831,8 @@ var render = function() {
                                   }
                                 },
                                 files: _vm.files,
-                                init: _vm.handleFilePondInit
+                                init: _vm.handleFilePondInit,
+                                onaddfilestart: _vm.waitForFiletoUpload
                               }
                             }),
                             _vm._v(" "),
@@ -19076,7 +19091,10 @@ var render = function() {
                         {
                           staticClass:
                             "inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none",
-                          attrs: { type: "submit", disabled: _vm.waiting }
+                          attrs: {
+                            type: "submit",
+                            disabled: _vm.waiting || _vm.waitForFileUpload
+                          }
                         },
                         [
                           _vm.waiting

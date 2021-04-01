@@ -24,7 +24,7 @@
                                     headers: {
                                         'X-CSRF-TOKEN': csrf
                                     },
-                                    onload: (response) =>  addAvatarPathToUser(response) 
+                                    onload: (response) =>  addAvatarPathToUser(response) ,
                                 },
                                 fetch: null,
                                 revert: {
@@ -36,6 +36,7 @@
                             }"
                             :files="files"
                             :init="handleFilePondInit"
+                            :onaddfilestart="waitForFiletoUpload"
                         />
 
                         <ValidationProvider vid="data.user.first_name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }">
@@ -229,7 +230,7 @@
                 <div class="mt-3 flex md:justify-start">
                     <button 
                         type="submit"
-                        :disabled="waiting"  
+                        :disabled="waiting || waitForFileUpload"  
                         class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
                     >
                         <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -272,6 +273,7 @@
 
         data() {
             return {
+                waitForFileUpload: false,
                 waiting: false,
                 counties: [],
                 cities: [],
@@ -304,6 +306,8 @@
 
             async submit() {
                 try {
+                    this.$Progress.start()
+
                     this.waiting = true;
                     const payload = {
                         user: this.user
@@ -316,7 +320,11 @@
                     await this.addUser(payload);
                     this.restForm();
                     this.waiting = false;
+
+                    this.$Progress.finish()
+
                 } catch ( error ) {  
+                    this.$Progress.fail()
                     if(error.response.data.errors) {
                         this.$refs.observer.setErrors(error.response.data.errors)
                     }  
@@ -336,6 +344,7 @@
 
             restForm() {
                 this.$refs.observer.reset();
+
                 this.cities = [];
                 this.files = [];
 
@@ -380,8 +389,15 @@
                 // FilePond instance methods are available on `this.$refs.pond`
             },
 
+            waitForFiletoUpload() {
+                this.waitForFileUpload = true;
+            },
+
             addAvatarPathToUser(value) {
                 this.user.avatar = value;
+                this.waitForFileUpload = false,
+
+                console.log(this.user.avatar)
             }
         },
 
