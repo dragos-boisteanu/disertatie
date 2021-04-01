@@ -243,7 +243,7 @@ const mutations = {
     DELETE_USER(state, payload) {
         if(state.users.length > 0) {
             const selectedUserIndex = _.findIndex(state.users, ['id', payload]);
-            state.users.slice(selectedUserIndex, 1);
+            state.users.splice(selectedUserIndex, 1);
         }
     },
 

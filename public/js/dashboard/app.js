@@ -4421,7 +4421,7 @@ var mutations = {
     if (state.users.length > 0) {
       var selectedUserIndex = _.findIndex(state.users, ['id', payload]);
 
-      state.users.slice(selectedUserIndex, 1);
+      state.users.splice(selectedUserIndex, 1);
     }
   },
   SAVE_NEXT_PAGE: function SAVE_NEXT_PAGE(state, page) {

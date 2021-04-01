@@ -1779,8 +1779,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       showFilterState: false,
-      orderBy: 0,
-      users: null
+      orderBy: 0
     };
   },
   methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Users', ['refreshUsers', 'fetchMoreUsers', 'sortUsersList', 'setFilteredState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Notification', ['openNotification'])), {}, {
@@ -17680,14 +17679,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass:
-        "py-1 px-2 ml-2 text-xs text-white rounded-sm bg-lightBlue-600"
-    },
-    [_vm._v("\n    " + _vm._s(_vm.role.name) + "\n")]
-  )
+  return _vm.role
+    ? _c(
+        "div",
+        {
+          staticClass:
+            "py-1 px-2 ml-2 text-xs text-white rounded-sm bg-lightBlue-600"
+        },
+        [_vm._v("\n    " + _vm._s(_vm.role.name) + "\n")]
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

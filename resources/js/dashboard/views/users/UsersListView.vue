@@ -173,8 +173,7 @@
         data() {
             return {
                 showFilterState: false,
-                orderBy: 0,
-                users: null
+                orderBy: 0
             }
         },
 
