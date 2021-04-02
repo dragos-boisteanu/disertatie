@@ -1185,7 +1185,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 
@@ -18598,7 +18597,7 @@ var render = function() {
                 _c(
                   "form",
                   {
-                    staticClass: "flex flex-col",
+                    staticClass: "flex flex-col lg:gap-x-6 lg:w-1/4",
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
@@ -18659,689 +18658,662 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "flex flex-col lg:gap-x-6 lg:w-1/4" },
-                      [
-                        _c("ValidationProvider", {
-                          staticClass: "w-full",
-                          attrs: { vid: "barcode", rules: "required" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  var failed = ref.failed
-                                  var passed = ref.passed
-                                  return [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
+                    _c("ValidationProvider", {
+                      staticClass: "w-full",
+                      attrs: { vid: "barcode", rules: "required" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var errors = ref.errors
+                              var failed = ref.failed
+                              var passed = ref.passed
+                              return [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "text-sm font-semibold",
+                                    attrs: { for: "name" }
+                                  },
+                                  [_vm._v("Barcode")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-xs text-red-600 font-semibold mb-1"
+                                  },
+                                  [_vm._v(" " + _vm._s(errors[0]))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "flex gap-x-1 items-center relative"
+                                  },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.product.barcode,
+                                          expression: "product.barcode"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                      class: {
+                                        "border-red-600": failed,
+                                        "border-green-500": passed
                                       },
-                                      [_vm._v("Barcode")]
-                                    ),
+                                      attrs: {
+                                        id: "barcode",
+                                        name: "barcode",
+                                        type: "text",
+                                        disabled: _vm.waiting
+                                      },
+                                      domProps: { value: _vm.product.barcode },
+                                      on: {
+                                        blur: _vm.getProduct,
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.product,
+                                            "barcode",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    }),
                                     _vm._v(" "),
                                     _c(
-                                      "div",
+                                      "svg",
                                       {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.checkingBarcode,
+                                            expression: "checkingBarcode"
+                                          }
+                                        ],
                                         staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "flex gap-x-1 items-center relative"
+                                          "absolute -right-10 top-1/4 animate-spin mr-3 h-5 w-5 text-lightBlue-600",
+                                        attrs: {
+                                          xmlns: "http://www.w3.org/2000/svg",
+                                          fill: "none",
+                                          viewBox: "0 0 24 24"
+                                        }
                                       },
                                       [
-                                        _c("input", {
-                                          directives: [
-                                            {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value: _vm.product.barcode,
-                                              expression: "product.barcode"
-                                            }
-                                          ],
-                                          staticClass:
-                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                          class: {
-                                            "border-red-600": failed,
-                                            "border-green-500": passed
-                                          },
+                                        _c("circle", {
+                                          staticClass: "opacity-25",
                                           attrs: {
-                                            id: "barcode",
-                                            name: "barcode",
-                                            type: "text",
-                                            disabled: _vm.waiting
-                                          },
-                                          domProps: {
-                                            value: _vm.product.barcode
-                                          },
-                                          on: {
-                                            blur: _vm.getProduct,
-                                            input: function($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.$set(
-                                                _vm.product,
-                                                "barcode",
-                                                $event.target.value
-                                              )
-                                            }
+                                            cx: "12",
+                                            cy: "12",
+                                            r: "10",
+                                            stroke: "currentColor",
+                                            "stroke-width": "4"
                                           }
                                         }),
                                         _vm._v(" "),
-                                        _c(
-                                          "svg",
-                                          {
-                                            directives: [
-                                              {
-                                                name: "show",
-                                                rawName: "v-show",
-                                                value: _vm.checkingBarcode,
-                                                expression: "checkingBarcode"
-                                              }
-                                            ],
-                                            staticClass:
-                                              "absolute -right-10 top-1/4 animate-spin mr-3 h-5 w-5 text-lightBlue-600",
-                                            attrs: {
-                                              xmlns:
-                                                "http://www.w3.org/2000/svg",
-                                              fill: "none",
-                                              viewBox: "0 0 24 24"
-                                            }
-                                          },
-                                          [
-                                            _c("circle", {
-                                              staticClass: "opacity-25",
-                                              attrs: {
-                                                cx: "12",
-                                                cy: "12",
-                                                r: "10",
-                                                stroke: "currentColor",
-                                                "stroke-width": "4"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("path", {
-                                              staticClass: "opacity-75",
-                                              attrs: {
-                                                fill: "currentColor",
-                                                d:
-                                                  "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                              }
-                                            })
-                                          ]
-                                        )
+                                        _c("path", {
+                                          staticClass: "opacity-75",
+                                          attrs: {
+                                            fill: "currentColor",
+                                            d:
+                                              "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                          }
+                                        })
                                       ]
                                     )
                                   ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("ValidationProvider", {
-                          staticClass: "w-full mt-2",
-                          attrs: {
-                            vid: "name",
-                            rules: "required|alpha_spaces|max:255"
-                          },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  var failed = ref.failed
-                                  var passed = ref.passed
-                                  return [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("Name")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.product.name,
-                                          expression: "product.name"
-                                        }
-                                      ],
-                                      staticClass:
-                                        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                      class: {
-                                        "border-red-600": failed,
-                                        "border-green-500": passed
-                                      },
-                                      attrs: {
-                                        id: "firstName",
-                                        name: "first name",
-                                        type: "text",
-                                        disabled: _vm.waiting || _vm.locked
-                                      },
-                                      domProps: { value: _vm.product.name },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.product,
-                                            "name",
-                                            $event.target.value
-                                          )
-                                        }
+                                )
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c("ValidationProvider", {
+                      staticClass: "w-full mt-2",
+                      attrs: {
+                        vid: "name",
+                        rules: "required|alpha_spaces|max:255"
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var errors = ref.errors
+                              var failed = ref.failed
+                              var passed = ref.passed
+                              return [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "text-sm font-semibold",
+                                    attrs: { for: "name" }
+                                  },
+                                  [_vm._v("Name")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-xs text-red-600 font-semibold mb-1"
+                                  },
+                                  [_vm._v(" " + _vm._s(errors[0]))]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.product.name,
+                                      expression: "product.name"
+                                    }
+                                  ],
+                                  staticClass:
+                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                  class: {
+                                    "border-red-600": failed,
+                                    "border-green-500": passed
+                                  },
+                                  attrs: {
+                                    id: "firstName",
+                                    name: "first name",
+                                    type: "text",
+                                    disabled: _vm.waiting || _vm.locked
+                                  },
+                                  domProps: { value: _vm.product.name },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
                                       }
-                                    })
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("ValidationProvider", {
-                          staticClass: "w-full mt-2",
-                          attrs: {
-                            vid: "description",
-                            rules: "required|alpha_spaces|max:255"
-                          },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  var failed = ref.failed
-                                  var passed = ref.passed
-                                  return [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("Description")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.product.description,
-                                          expression: "product.description"
-                                        }
-                                      ],
-                                      staticClass:
-                                        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                      class: {
-                                        "border-red-600": failed,
-                                        "border-green-500": passed
-                                      },
-                                      attrs: {
-                                        id: "description",
-                                        name: "description",
-                                        type: "text",
-                                        disabled: _vm.waiting || _vm.locked
-                                      },
-                                      domProps: {
-                                        value: _vm.product.description
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.product,
-                                            "description",
-                                            $event.target.value
-                                          )
-                                        }
+                                      _vm.$set(
+                                        _vm.product,
+                                        "name",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c("ValidationProvider", {
+                      staticClass: "w-full mt-2",
+                      attrs: {
+                        vid: "description",
+                        rules: "required|alpha_spaces|max:255"
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var errors = ref.errors
+                              var failed = ref.failed
+                              var passed = ref.passed
+                              return [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "text-sm font-semibold",
+                                    attrs: { for: "name" }
+                                  },
+                                  [_vm._v("Description")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-xs text-red-600 font-semibold mb-1"
+                                  },
+                                  [_vm._v(" " + _vm._s(errors[0]))]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.product.description,
+                                      expression: "product.description"
+                                    }
+                                  ],
+                                  staticClass:
+                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                  class: {
+                                    "border-red-600": failed,
+                                    "border-green-500": passed
+                                  },
+                                  attrs: {
+                                    id: "description",
+                                    name: "description",
+                                    type: "text",
+                                    disabled: _vm.waiting || _vm.locked
+                                  },
+                                  domProps: { value: _vm.product.description },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
                                       }
-                                    })
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("ValidationProvider", {
-                          staticClass: "w-full mt-2",
-                          attrs: {
-                            vid: "category_id",
-                            rules: "required|integer"
-                          },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  var failed = ref.failed
-                                  var passed = ref.passed
-                                  return [
-                                    _c(
-                                      "label",
+                                      _vm.$set(
+                                        _vm.product,
+                                        "description",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c("ValidationProvider", {
+                      staticClass: "w-full mt-2",
+                      attrs: { vid: "category_id", rules: "required|integer" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var errors = ref.errors
+                              var failed = ref.failed
+                              var passed = ref.passed
+                              return [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "text-sm font-semibold",
+                                    attrs: { for: "name" }
+                                  },
+                                  [_vm._v("Category")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-xs text-red-600 font-semibold mb-1"
+                                  },
+                                  [_vm._v(" " + _vm._s(errors[0]))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
                                       {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("Category")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "select",
-                                      {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.product.category_id,
-                                            expression: "product.category_id"
-                                          }
-                                        ],
-                                        staticClass:
-                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                        class: {
-                                          "border-red-600": failed,
-                                          "border-green-500": passed
-                                        },
-                                        attrs: {
-                                          id: "unit_id",
-                                          name: "category",
-                                          type: "text",
-                                          disabled: _vm.waiting || _vm.locked
-                                        },
-                                        on: {
-                                          change: function($event) {
-                                            var $$selectedVal = Array.prototype.filter
-                                              .call(
-                                                $event.target.options,
-                                                function(o) {
-                                                  return o.selected
-                                                }
-                                              )
-                                              .map(function(o) {
-                                                var val =
-                                                  "_value" in o
-                                                    ? o._value
-                                                    : o.value
-                                                return val
-                                              })
-                                            _vm.$set(
-                                              _vm.product,
-                                              "category_id",
-                                              $event.target.multiple
-                                                ? $$selectedVal
-                                                : $$selectedVal[0]
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "option",
-                                          {
-                                            attrs: { value: "", disabled: "" }
-                                          },
-                                          [_vm._v("Select category")]
-                                        ),
-                                        _vm._v(" "),
-                                        _vm._l(_vm.getCategories, function(
-                                          category
-                                        ) {
-                                          return _c(
-                                            "option",
-                                            {
-                                              key: category.id,
-                                              domProps: { value: category.id }
-                                            },
-                                            [
-                                              _vm._v(
-                                                _vm._s(category.name) +
-                                                  " (" +
-                                                  _vm._s(category.vat) +
-                                                  "% VAT)"
-                                              )
-                                            ]
-                                          )
-                                        })
-                                      ],
-                                      2
-                                    )
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("ValidationProvider", {
-                          staticClass: "w-full mt-2",
-                          attrs: {
-                            vid: "base_price",
-                            rules: "required|double:2,dot"
-                          },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  var failed = ref.failed
-                                  var passed = ref.passed
-                                  return [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("Base price")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.product.base_price,
-                                          expression: "product.base_price"
-                                        }
-                                      ],
-                                      staticClass:
-                                        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                      class: {
-                                        "border-red-600": failed,
-                                        "border-green-500": passed
-                                      },
-                                      attrs: {
-                                        id: "basePrice",
-                                        name: "base price",
-                                        type: "text",
-                                        disabled: _vm.waiting || _vm.locked
-                                      },
-                                      domProps: {
-                                        value: _vm.product.base_price
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.product,
-                                            "base_price",
-                                            $event.target.value
-                                          )
-                                        }
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.product.category_id,
+                                        expression: "product.category_id"
                                       }
-                                    })
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("ValidationProvider", {
-                          staticClass: "w-full mt-2",
-                          attrs: { vid: "weight", rules: "required|integer" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  var failed = ref.failed
-                                  var passed = ref.passed
-                                  return [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("Weight")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.product.weight,
-                                          expression: "product.weight"
-                                        }
-                                      ],
-                                      staticClass:
-                                        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                      class: {
-                                        "border-red-600": failed,
-                                        "border-green-500": passed
-                                      },
-                                      attrs: {
-                                        id: "weight",
-                                        name: "weight",
-                                        type: "number",
-                                        disabled: _vm.waiting || _vm.locked
-                                      },
-                                      domProps: { value: _vm.product.weight },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.product,
-                                            "weight",
-                                            $event.target.value
-                                          )
-                                        }
+                                    ],
+                                    staticClass:
+                                      "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                    class: {
+                                      "border-red-600": failed,
+                                      "border-green-500": passed
+                                    },
+                                    attrs: {
+                                      id: "unit_id",
+                                      name: "category",
+                                      type: "text",
+                                      disabled: _vm.waiting || _vm.locked
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          _vm.product,
+                                          "category_id",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
                                       }
-                                    })
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("ValidationProvider", {
-                          staticClass: "w-full mt-2",
-                          attrs: { vid: "unit_id", rules: "required|integer" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(ref) {
-                                  var errors = ref.errors
-                                  var failed = ref.failed
-                                  var passed = ref.passed
-                                  return [
+                                    }
+                                  },
+                                  [
                                     _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("Weight units")]
+                                      "option",
+                                      { attrs: { value: "", disabled: "" } },
+                                      [_vm._v("Select category")]
                                     ),
                                     _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "text-xs text-red-600 font-semibold mb-1"
-                                      },
-                                      [_vm._v(" " + _vm._s(errors[0]))]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "select",
-                                      {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.product.unit_id,
-                                            expression: "product.unit_id"
-                                          }
-                                        ],
-                                        staticClass:
-                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                        class: {
-                                          "border-red-600": failed,
-                                          "border-green-500": passed
+                                    _vm._l(_vm.getCategories, function(
+                                      category
+                                    ) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: category.id,
+                                          domProps: { value: category.id }
                                         },
-                                        attrs: {
-                                          id: "unit_id",
-                                          name: "weight units",
-                                          type: "text",
-                                          disabled: _vm.waiting || _vm.locked
-                                        },
-                                        on: {
-                                          change: function($event) {
-                                            var $$selectedVal = Array.prototype.filter
-                                              .call(
-                                                $event.target.options,
-                                                function(o) {
-                                                  return o.selected
-                                                }
-                                              )
-                                              .map(function(o) {
-                                                var val =
-                                                  "_value" in o
-                                                    ? o._value
-                                                    : o.value
-                                                return val
-                                              })
-                                            _vm.$set(
-                                              _vm.product,
-                                              "unit_id",
-                                              $event.target.multiple
-                                                ? $$selectedVal
-                                                : $$selectedVal[0]
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "option",
-                                          {
-                                            attrs: { value: "", disabled: "" }
-                                          },
-                                          [_vm._v("Select unit")]
-                                        ),
-                                        _vm._v(" "),
-                                        _vm._l(_vm.getUnits, function(unit) {
-                                          return _c(
-                                            "option",
-                                            {
-                                              key: unit.id,
-                                              domProps: { value: unit.id }
-                                            },
-                                            [
-                                              _vm._v(
-                                                _vm._s(unit.name) +
-                                                  " (" +
-                                                  _vm._s(unit.description) +
-                                                  ")"
-                                              )
-                                            ]
+                                        [
+                                          _vm._v(
+                                            _vm._s(category.name) +
+                                              " (" +
+                                              _vm._s(category.vat) +
+                                              "% VAT)"
                                           )
-                                        })
-                                      ],
-                                      2
-                                    )
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        })
-                      ],
-                      1
-                    ),
+                                        ]
+                                      )
+                                    })
+                                  ],
+                                  2
+                                )
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c("ValidationProvider", {
+                      staticClass: "w-full mt-2",
+                      attrs: {
+                        vid: "base_price",
+                        rules: "required|double:2,dot"
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var errors = ref.errors
+                              var failed = ref.failed
+                              var passed = ref.passed
+                              return [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "text-sm font-semibold",
+                                    attrs: { for: "name" }
+                                  },
+                                  [_vm._v("Base price")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-xs text-red-600 font-semibold mb-1"
+                                  },
+                                  [_vm._v(" " + _vm._s(errors[0]))]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.product.base_price,
+                                      expression: "product.base_price"
+                                    }
+                                  ],
+                                  staticClass:
+                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                  class: {
+                                    "border-red-600": failed,
+                                    "border-green-500": passed
+                                  },
+                                  attrs: {
+                                    id: "basePrice",
+                                    name: "base price",
+                                    type: "text",
+                                    disabled: _vm.waiting || _vm.locked
+                                  },
+                                  domProps: { value: _vm.product.base_price },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.product,
+                                        "base_price",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c("ValidationProvider", {
+                      staticClass: "w-full mt-2",
+                      attrs: { vid: "weight", rules: "required|integer" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var errors = ref.errors
+                              var failed = ref.failed
+                              var passed = ref.passed
+                              return [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "text-sm font-semibold",
+                                    attrs: { for: "name" }
+                                  },
+                                  [_vm._v("Weight")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-xs text-red-600 font-semibold mb-1"
+                                  },
+                                  [_vm._v(" " + _vm._s(errors[0]))]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.product.weight,
+                                      expression: "product.weight"
+                                    }
+                                  ],
+                                  staticClass:
+                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                  class: {
+                                    "border-red-600": failed,
+                                    "border-green-500": passed
+                                  },
+                                  attrs: {
+                                    id: "weight",
+                                    name: "weight",
+                                    type: "number",
+                                    disabled: _vm.waiting || _vm.locked
+                                  },
+                                  domProps: { value: _vm.product.weight },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.product,
+                                        "weight",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c("ValidationProvider", {
+                      staticClass: "w-full mt-2",
+                      attrs: { vid: "unit_id", rules: "required|integer" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var errors = ref.errors
+                              var failed = ref.failed
+                              var passed = ref.passed
+                              return [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "text-sm font-semibold",
+                                    attrs: { for: "name" }
+                                  },
+                                  [_vm._v("Weight units")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "text-xs text-red-600 font-semibold mb-1"
+                                  },
+                                  [_vm._v(" " + _vm._s(errors[0]))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.product.unit_id,
+                                        expression: "product.unit_id"
+                                      }
+                                    ],
+                                    staticClass:
+                                      "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                    class: {
+                                      "border-red-600": failed,
+                                      "border-green-500": passed
+                                    },
+                                    attrs: {
+                                      id: "unit_id",
+                                      name: "weight units",
+                                      type: "text",
+                                      disabled: _vm.waiting || _vm.locked
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          _vm.product,
+                                          "unit_id",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "", disabled: "" } },
+                                      [_vm._v("Select unit")]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm._l(_vm.getUnits, function(unit) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: unit.id,
+                                          domProps: { value: unit.id }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(unit.name) +
+                                              " (" +
+                                              _vm._s(unit.description) +
+                                              ")"
+                                          )
+                                        ]
+                                      )
+                                    })
+                                  ],
+                                  2
+                                )
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    }),
                     _vm._v(" "),
                     _c("div", { staticClass: "mt-3 flex md:justify-start" }, [
                       _c(
@@ -19468,6 +19440,7 @@ var render = function() {
                   : _c(
                       "svg",
                       {
+                        staticClass: "bg-gray-500",
                         attrs: {
                           xmlns: "http://www.w3.org/2000/svg",
                           viewBox: "0 0 24 24",
@@ -19810,6 +19783,7 @@ var render = function() {
                           : _c(
                               "svg",
                               {
+                                staticClass: "bg-gray-500",
                                 attrs: {
                                   xmlns: "http://www.w3.org/2000/svg",
                                   viewBox: "0 0 24 24",
