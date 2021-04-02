@@ -171,11 +171,12 @@ class ProductController extends Controller
                 $product->save();
 
                 return response()->json(['image'=> $product->image], 200);
+                
             } else {
                 Storage::deleteDirectory('/public/products_images' . $product->id);
                 $product->image = null;
-                $product->save();
 
+                $product->save();
             }
         }
 

@@ -907,7 +907,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
 
               case 7:
                 response = _context.sent;
-                payload.product.image = response.image;
+                payload.product.image = response.data.image;
 
                 _this.$emit('updated', payload.product);
 
@@ -1695,7 +1695,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     updateProduct: function updateProduct(product) {
       var _this = this;
 
-      console.log(product);
       Object.keys(product).forEach(function (key) {
         _this.product[key] = product[key];
       });

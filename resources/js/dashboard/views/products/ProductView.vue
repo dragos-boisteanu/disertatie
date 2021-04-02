@@ -148,7 +148,6 @@
             ...mapActions('Products', ['disableProduct', 'restoreProduct', 'deleteProduct']),
             
             updateProduct(product) {
-                console.log(product);
                 Object.keys(product).forEach(key => {         
                     this.product[key] = product[key];
                 })

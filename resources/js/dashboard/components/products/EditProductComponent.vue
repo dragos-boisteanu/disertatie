@@ -251,7 +251,7 @@
 
                     if(counter > 0) {
                         const response = await this.updateProduct(payload);
-                        payload.product.image = response.image;
+                        payload.product.image = response.data.image;
                         this.$emit('updated', payload.product);
                         counter = 0;
                         this.close();
