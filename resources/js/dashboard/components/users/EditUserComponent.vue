@@ -287,11 +287,12 @@
                 try {
                     this.$Progress.start();
                     this.$refs.pond.removeFile({revert: true});
-                    delete this.localUser.avatar;
+                    this.localUser.avatar = 'clear';
 
                     await this.submit();
+                    delete this.localUser.avatar;
 
-                      this.$Progress.finish();
+                    this.$Progress.finish();
                 } catch ( error ) {
                       this.$Progress.fail();
                     console.log(error)

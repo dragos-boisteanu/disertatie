@@ -171,38 +171,44 @@ class UserController extends Controller
 
         $user->update($request->validated());
         
-        if($request->has('avatar')) {
-
-            $requestPath = $request->input('avatar');
-            $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
-
-            Storage::deleteDirectory('/public/avatars/' . $user->id );
-
-            $filename = 'avatar_'.$user->id . '_' . now()->timestamp;
-            $newPath = '/public/avatars/' . $user->id . '/' . $filename . '.' . $extension;
-
-            Storage::move($requestPath, $newPath);
-
-            $dbPath = '/storage/avatars/'. $user->id . '/' . $filename . '.' . $extension;
-
-            $user->avatar = $dbPath;
-
-            Storage::delete($requestPath);
-        }
-
         if($request->has('email')) {
             $user->email_verified_at = null;  
             event( new Registered($user));
         }
 
-        $user->save();
-
         if($request->has('avatar')) {
-            return response()->json(['avatar'=> $user->avatar], 200);
+
+            if($request->avatar !== 'clear') {
+                $requestPath = $request->avatar;
+                $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
+    
+                Storage::deleteDirectory('/public/avatars/' . $user->id );
+    
+                $filename = 'avatar_'.$user->id . '_' . now()->timestamp;
+                $newPath = '/public/avatars/' . $user->id . '/' . $filename . '.' . $extension;
+    
+                Storage::move($requestPath, $newPath);
+    
+                $dbPath = '/storage/avatars/'. $user->id . '/' . $filename . '.' . $extension;
+    
+                $user->avatar = $dbPath;
+    
+                Storage::delete($requestPath);
+
+                $user->save();
+
+                return response()->json(['avatar'=> $user->avatar], 200);
+            } else {
+                Storage::deleteDirectory('/public/avatars/' . $user->id );
+            
+                $user->avatar = null;
+            }
+            
         }
 
-        return response()->json(null, 200);
-        
+        $user->save();
+
+        return response()->json(null, 200);    
        
     }
 

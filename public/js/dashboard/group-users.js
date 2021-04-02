@@ -760,30 +760,32 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                   revert: true
                 });
 
-                delete _this3.localUser.avatar;
+                _this3.localUser.avatar = 'clear';
                 _context3.next = 6;
                 return _this3.submit();
 
               case 6:
+                delete _this3.localUser.avatar;
+
                 _this3.$Progress.finish();
 
-                _context3.next = 13;
+                _context3.next = 14;
                 break;
 
-              case 9:
-                _context3.prev = 9;
+              case 10:
+                _context3.prev = 10;
                 _context3.t0 = _context3["catch"](0);
 
                 _this3.$Progress.fail();
 
                 console.log(_context3.t0); // notification
 
-              case 13:
+              case 14:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 9]]);
+        }, _callee3, null, [[0, 10]]);
       }))();
     },
     close: function close() {
