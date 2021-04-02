@@ -24,6 +24,7 @@ class ProductPatchRequest extends FormRequest
     public function rules()
     {
         return [
+            'image' => 'sometimes|string',
             'barcode' => 'sometimes|numeric|unique:products',
             'name' => 'sometimes|string|max:150',
             'description' => 'sometimes|string|max:255',

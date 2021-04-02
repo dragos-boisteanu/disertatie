@@ -7,8 +7,9 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductPatchRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductCollection;
+use App\Http\Requests\ProductPatchRequest;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Resources\Product as ProductResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -92,6 +93,21 @@ class ProductController extends Controller
             $input['stock_id'] = $stock->id;
 
             $product = Product::create($input);
+
+            if($request->has('image')) {
+                $requestPath = $request->image;
+                $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
+                $filename = 'image_' . $product->id . '_' . now()->timestamp;
+                $newPath = '/public/products_images/' . $product->id . '/' . $filename . '.' . $extension;
+
+                Storage::move($requestPath, $newPath);
+
+                $dbPath = '/storage/products_images/' . $product->id . '/' . $filename . '.' . $extension;
+                $product->image = $dbPath;
+                $product->save();
+
+                Storage::delete($requestPath);
+            }
             
             DB::commit();
 
