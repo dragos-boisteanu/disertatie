@@ -637,8 +637,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ModalComponent */ "./resources/js/dashboard/components/ModalComponent.vue");
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var filepond_dist_filepond_min_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! filepond/dist/filepond.min.css */ "./node_modules/filepond/dist/filepond.min.css");
+/* harmony import */ var filepond_plugin_image_preview_dist_filepond_plugin_image_preview_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -784,8 +790,58 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
+
+
+
+
+var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_5___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     product: {
@@ -796,7 +852,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     Object.assign(this.localProduct, this.product);
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Units', ['getUnits'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('Units', ['getUnits'])),
   data: function data() {
     return {
       locked: false,
@@ -810,15 +866,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         unit_id: '',
         quantity: '',
         category_id: ''
-      }
+      },
+      waitForFileUpload: false,
+      files: [],
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)('Products', ['updateProduct'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('Products', ['updateProduct'])), {}, {
     submit: function submit() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var payload, counter;
+        var payload, counter, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -839,7 +898,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 });
 
                 if (!(counter > 0)) {
-                  _context.next = 12;
+                  _context.next = 14;
                   break;
                 }
 
@@ -847,6 +906,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _this.updateProduct(payload);
 
               case 7:
+                response = _context.sent;
+                payload.product.image = response.image;
+
                 _this.$emit('updated', payload.product);
 
                 counter = 0;
@@ -854,28 +916,88 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.close(); // notification
 
 
-                _context.next = 13;
+                _context.next = 15;
                 break;
 
-              case 12:
+              case 14:
                 console.log('Nothing to update'); // notification
 
-              case 13:
+              case 15:
                 console.log(payload);
-                _context.next = 19;
+                _context.next = 21;
                 break;
 
-              case 16:
-                _context.prev = 16;
+              case 18:
+                _context.prev = 18;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
-              case 19:
+              case 21:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 16]]);
+        }, _callee, null, [[0, 18]]);
+      }))();
+    },
+    waitForFiletoUpload: function waitForFiletoUpload() {
+      this.waitForFileUpload = true;
+    },
+    addImagePathToProduct: function addImagePathToProduct(value) {
+      this.localProduct.image = value;
+      this.waitForFileUpload = false;
+    },
+    stopWaitingForFileToUpload: function stopWaitingForFileToUpload() {
+      this.waitForFileUpload = false;
+    },
+    clearImage: function clearImage() {
+      this.$refs.pond.removeFile({
+        revert: true
+      });
+      this.localProduct.image = this.product.image;
+    },
+    removeImage: function removeImage() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+
+                _this2.$Progress.start();
+
+                _this2.$refs.pond.removeFile({
+                  revert: false
+                });
+
+                _this2.localProduct.image = 'clear';
+                _context2.next = 6;
+                return _this2.submit();
+
+              case 6:
+                delete _this2.localProduct.image;
+
+                _this2.$Progress.finish();
+
+                _context2.next = 14;
+                break;
+
+              case 10:
+                _context2.prev = 10;
+                _context2.t0 = _context2["catch"](0);
+
+                _this2.$Progress.fail();
+
+                console.log(_context2.t0); // notification
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 10]]);
       }))();
     },
     close: function close() {
@@ -883,7 +1005,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   components: {
-    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default
+    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default,
+    FilePond: FilePond
   }
 });
 
@@ -17725,6 +17848,72 @@ var render = function() {
       "div",
       { staticClass: "p-1 mb-3" },
       [
+        _c("file-pond", {
+          ref: "pond",
+          attrs: {
+            name: "image",
+            "label-idle": "Upload product image image...",
+            "allow-multiple": false,
+            "accepted-file-types": "image/jpeg",
+            server: {
+              url: "/api/dashboard/images",
+              process: {
+                headers: {
+                  "X-CSRF-TOKEN": _vm.csrf
+                },
+                onload: function(response) {
+                  return _vm.addImagePathToProduct(response)
+                }
+              },
+              revert: {
+                url: "/delete",
+                headers: {
+                  "X-CSRF-TOKEN": _vm.csrf
+                }
+              }
+            },
+            files: _vm.files,
+            onaddfilestart: _vm.waitForFiletoUpload,
+            onprocessfileabort: _vm.stopWaitingForFileToUpload
+          }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "text-right mt-6" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+              attrs: { disabled: _vm.waitForFileUpload },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.clearImage($event)
+                }
+              }
+            },
+            [_vm._v("\n                Clear image\n            ")]
+          ),
+          _vm._v(" "),
+          this.product.image
+            ? _c(
+                "button",
+                {
+                  staticClass:
+                    "ml-4 border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+                  attrs: { disabled: _vm.waitForFileUpload },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.removeImage($event)
+                    }
+                  }
+                },
+                [_vm._v("\n                Remove image\n            ")]
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
         _c("ValidationObserver", {
           ref: "observar",
           scopedSlots: _vm._u([
@@ -18388,7 +18577,10 @@ var render = function() {
                             {
                               staticClass:
                                 "flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none",
-                              attrs: { type: "submit", disabled: _vm.waiting }
+                              attrs: {
+                                type: "submit",
+                                disabled: _vm.waiting || _vm.waitForFileUpload
+                              }
                             },
                             [
                               _vm.waiting

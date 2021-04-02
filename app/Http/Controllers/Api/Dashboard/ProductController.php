@@ -145,7 +145,39 @@ class ProductController extends Controller
     {
         $request->user()->can('update');
 
-        Product::withTrashed()->findOrFail($id)->update($request->validated());
+        $product = Product::withTrashed()->findOrFail($id);
+
+        $product->update($request->validated());
+
+        if($request->has('image')) {
+
+            if($request->image !== 'clear') {
+                $requestPath = $request->image;
+                $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
+
+                Storage::deleteDirectory('/public/products_images' . $product->id);
+
+                $filename = 'image_' . $product->id . '_' . now()->timestamp;
+                $newPath = '/public/products_images/' . $product->id . '/' . $filename . '.' . $extension;
+
+                Storage::move($requestPath, $newPath);
+
+                $dbPath = '/storage/products_images/' . $product->id . '/' .$filename . '.' . $extension;
+                
+                $product->image = $dbPath;
+
+                Storage::delete($requestPath);
+
+                $product->save();
+
+                return response()->json(['image'=> $product->image], 200);
+            } else {
+                Storage::deleteDirectory('/public/products_images' . $product->id);
+                $product->image = null;
+                $product->save();
+
+            }
+        }
 
         return response()->json(null, 200);
     }

@@ -57,8 +57,10 @@ const actions = {
 
     async updateProduct({commit}, payload ) {
         try {
-            await patchProduct(payload.product)
+            const response = await patchProduct(payload.product)
+            payload.product.image = response.data.image
             commit('PATCH_PRODUCT', payload);
+            return response;
         } catch ( error ) {
             throw error;
         }

@@ -3440,7 +3440,7 @@ var actions = {
   },
   updateProduct: function updateProduct(_ref5, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      var commit;
+      var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -3451,21 +3451,22 @@ var actions = {
               return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.patchProduct)(payload.product);
 
             case 4:
+              response = _context3.sent;
+              payload.product.image = response.data.image;
               commit('PATCH_PRODUCT', payload);
-              _context3.next = 10;
-              break;
+              return _context3.abrupt("return", response);
 
-            case 7:
-              _context3.prev = 7;
+            case 10:
+              _context3.prev = 10;
               _context3.t0 = _context3["catch"](1);
               throw _context3.t0;
 
-            case 10:
+            case 13:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[1, 7]]);
+      }, _callee3, null, [[1, 10]]);
     }))();
   },
   getProduct: function getProduct(_ref6, id) {
