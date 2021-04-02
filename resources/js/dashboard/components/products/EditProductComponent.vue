@@ -4,6 +4,51 @@
             Edit product #{{localProduct.id}}
         </h1>
         <div class="p-1 mb-3">
+
+            <file-pond
+                name="image"
+                ref="pond"
+                label-idle="Upload product image image..."
+                v-bind:allow-multiple="false"
+                accepted-file-types="image/jpeg"
+                :server="{
+                    url: '/api/dashboard/images',
+                    process: { 
+                        headers: {
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        onload: (response) =>  addImagePathToProduct(response) ,
+                    },
+                    revert: {
+                        url: '/delete',
+                        headers: {
+                            'X-CSRF-TOKEN': csrf
+                        },
+                    }
+                }"
+                :files="files"
+                :onaddfilestart="waitForFiletoUpload"
+                :onprocessfileabort="stopWaitingForFileToUpload"
+            />
+
+            <div class="text-right mt-6">
+                <button 
+                    :disabled="waitForFileUpload"
+                    class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
+                    @click.prevent="clearImage"
+                >
+                    Clear image
+                </button>
+                <button 
+                    v-if="this.product.image"
+                    :disabled="waitForFileUpload"
+                    class="ml-4 border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
+                    @click.prevent="removeImage"
+                >
+                    Remove image
+                </button>
+            </div>
+
             <ValidationObserver v-slot="{ handleSubmit }" ref="observar">
                 <form @submit.prevent="handleSubmit(submit)" class="flex flex-col gap-3">
                     <ValidationProvider vid="barcode" rules="required" v-slot="{ errors, failed, passed }" class="w-full">
@@ -108,7 +153,7 @@
                     <div class="w-full flex justify-end items-center mt-4">
                         <button 
                             type="submit"
-                            :disabled="waiting"  
+                            :disabled="waiting || waitForFileUpload"  
                             class="flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none"
                         >
                             <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -132,8 +177,17 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import Modal from '../ModalComponent'
+
+    import vueFilePond from "vue-filepond";
+    import "filepond/dist/filepond.min.css";
+    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+
+    const FilePond = vueFilePond(
+        FilePondPluginFileValidateType,
+    );
 
     export default {
         props: {
@@ -165,7 +219,11 @@ import { mapGetters, mapActions } from 'vuex';
                     unit_id: '',
                     quantity: '',
                     category_id: '',
-                }
+                },
+                
+                waitForFileUpload: false,
+                files: [],
+                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
 
@@ -192,7 +250,8 @@ import { mapGetters, mapActions } from 'vuex';
 
 
                     if(counter > 0) {
-                        await this.updateProduct(payload);
+                        const response = await this.updateProduct(payload);
+                        payload.product.image = response.image;
                         this.$emit('updated', payload.product);
                         counter = 0;
                         this.close();
@@ -209,6 +268,42 @@ import { mapGetters, mapActions } from 'vuex';
                 }
             },
 
+            waitForFiletoUpload() {
+                this.waitForFileUpload = true;
+            },
+
+            addImagePathToProduct(value) {
+                this.localProduct.image = value;
+                this.waitForFileUpload = false;
+            },
+
+            stopWaitingForFileToUpload() {
+                this.waitForFileUpload = false;
+            },
+
+            clearImage() {
+                this.$refs.pond.removeFile({revert: true});
+                this.localProduct.image = this.product.image
+            },
+
+            async removeImage() {
+                try {
+                    this.$Progress.start();
+                    this.$refs.pond.removeFile({revert: false});
+
+                    this.localProduct.image = 'clear';
+
+                    await this.submit();
+
+                    delete this.localProduct.image;
+                    this.$Progress.finish();
+                } catch ( error ) {
+                    this.$Progress.fail();
+                    console.log(error)
+                    // notification
+                }               
+            },
+
 
             close() {
                 this.$emit('close');
@@ -217,6 +312,7 @@ import { mapGetters, mapActions } from 'vuex';
 
         components: {
             Modal,
+            FilePond
         }
     }
 </script>
