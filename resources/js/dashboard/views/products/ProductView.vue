@@ -163,6 +163,8 @@
 
             async disable() {
                 try {
+                    this.$Progress.start();
+
                     const payload = {
                         vm: this,
                         id: this.product.id
@@ -170,13 +172,20 @@
 
                     const response = await this.disableProduct(payload);
                     this.product.deleted_at = response.deleted_at;
+
+                    this.$Progress.finish();
+
                 } catch ( error ) {
+                    this.$Progress.fail()
+
                     console.log(error);
                 }
             },
 
             async restore() {
                 try {
+                    this.$Progress.start()
+
                     const payload = {
                         vm: this,
                         id: this.product.id
@@ -184,17 +193,26 @@
 
                     const response = await this.restoreProduct(payload);
                     this.product.deleted_at = response.deleted_at;
+
+                    this.$Progress.finish();
+
                 } catch ( error ) {
+                    this.$Progress.fail();
                     console.log(error);
                 }
             },
 
             async callDeleteUser() {
                 try {
+                    this.$Progress.start();
+
                     await this.deleteProduct(this.product.id);
                     this.$router.push({name: 'Products'});
 
+                    this.$Progress.finish();
+
                 } catch ( error ) {
+                    this.$Progress.fail();
                     console.log(error)
                 }
             },
