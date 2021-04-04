@@ -4,7 +4,7 @@
             Categories
         </template>
 
-        <div class="w-full lg:w-1/2 lg:flex">
+        <div class="w-full xl:w-3/4 2xl:w-1/2 lg:flex">
             <ul class="px-2 overflow-y-scroll w-full max-h-80 lg:max-h-96 lg:flex-1">
                 <li 
                     v-for="(category, index) in getCategories" :key="category.id"
@@ -12,8 +12,9 @@
                 >
                     <div 
                         @click="selectCategory(category.id)"
-                        class="cursor-pointer">
+                        class="cursor-pointer flex items-center gap-x-2">
                         <span>{{ index + 1 }}.</span>
+                        <span class="rounded w-4 h-4" :style="{background: category.color}"></span>
                         <span>{{ category.name }}</span>
                         <span>{{ category.vat }} %</span>
                     </div>
@@ -31,22 +32,36 @@
                                 Categories
                             </h2> 
 
+                            <ValidationProvider vid="name" rules="alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
+                                <label for="name" class="text-sm font-semibold">Nane</label>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <input 
+                                    id="name"
+                                    name="name" 
+                                    type="text" 
+                                    v-model="category.name" 
+                                    :disabled="waiting"   
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                />
+                            </ValidationProvider> 
+                            
                             <div class="w-full flex-1 flex items-center gap-x-4">
-                                <ValidationProvider vid="" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
-                                    <label for="name" class="text-sm font-semibold">Nane</label>
+                                <ValidationProvider vid="vat" rules="" v-slot="{ errors, failed, passed }" class="w-full">
+                                    <label for="vat" class="text-sm font-semibold">VAT</label>
                                     <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                     <input 
-                                        id="name"
-                                        name="name" 
-                                        type="text" 
-                                        v-model="category.name" 
+                                        id="vat"
+                                        name="vat" 
+                                        type="number" 
+                                        v-model="category.vat" 
                                         :disabled="waiting"   
                                         class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                         :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                     />
-                                </ValidationProvider> 
+                                </ValidationProvider>
 
-                                <ValidationProvider vid="" rules="required" v-slot="{ errors }" class="flex-grow-0 flex-shrink">
+                                <ValidationProvider vid="color" rules="" v-slot="{  errors, failed, passed }" class="flex-grow-0 flex-shrink">
                                     <label for="vat" class="text-sm font-semibold">Color</label>
                                     <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                     <input 
@@ -56,25 +71,10 @@
                                         v-model="category.color"
                                         :disabled="waiting" 
                                         class="p-1 rounded border order-gray-300 outline-none"   
+                                        :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                         />
                                 </ValidationProvider>
                             </div>
-                            
-
-                            <ValidationProvider vid="" rules="required" v-slot="{ errors, failed, passed }" class="w-full">
-                                <label for="vat" class="text-sm font-semibold">VAT</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="vat"
-                                    name="vat" 
-                                    type="number" 
-                                    v-model="category.vat" 
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-
                             <div>
                                 <button 
                                     v-if="categorySelected"
@@ -144,7 +144,8 @@
                 this.categorySelected = false;
                 this.category = {
                     name: '',
-                    vat: ''
+                    vat: '',
+                    color:'',
                 }
             },
 
@@ -157,15 +158,19 @@
                         const originalCategory = _find(this.getCategories, ['id', this.category.id]);
 
                         const payload = {
-                            id: originalCategory.id,
                             vm: this,
+                            category: {
+                                id: originalCategory.id
+                            }
                         }
+
+                        console.log(payload)
 
                         let counter = 0;
 
                         Object.keys(originalCategory).forEach(key => {
                             if(originalCategory[key] !== this.category[key]) {
-                                payload[key] = this.category[key];
+                                payload.category[key] = this.category[key];
                                 counter++;
                             }
                         })
@@ -186,13 +191,13 @@
                     this.$Progress.finish();
 
                 } catch ( error ) {
+
                     this.$Progress.fail();
                     this.waiting = false;
+
                     if(error.response.data.errors) {
                         this.$refs.observer.setErrors(error.response.data.errors)
                     }  
-                    
-                    console.log(error)
                     // notificaiton
                 }
             },

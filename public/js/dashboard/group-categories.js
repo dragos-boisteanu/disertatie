@@ -164,7 +164,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.categorySelected = false;
       this.category = {
         name: '',
-        vat: ''
+        vat: '',
+        color: ''
       };
     },
     submit: function submit() {
@@ -182,47 +183,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.$Progress.start();
 
                 if (!_this.categorySelected) {
-                  _context.next = 16;
+                  _context.next = 17;
                   break;
                 }
 
                 originalCategory = lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(_this.getCategories, ['id', _this.category.id]);
                 payload = {
-                  id: originalCategory.id,
-                  vm: _this
+                  vm: _this,
+                  category: {
+                    id: originalCategory.id
+                  }
                 };
+                console.log(payload);
                 counter = 0;
                 Object.keys(originalCategory).forEach(function (key) {
                   if (originalCategory[key] !== _this.category[key]) {
-                    payload[key] = _this.category[key];
+                    payload.category[key] = _this.category[key];
                     counter++;
                   }
                 });
 
                 if (!(counter > 0)) {
-                  _context.next = 13;
+                  _context.next = 14;
                   break;
                 }
 
-                _context.next = 11;
+                _context.next = 12;
                 return _this.patchCategory(payload);
 
-              case 11:
-                _context.next = 14;
+              case 12:
+                _context.next = 15;
                 break;
-
-              case 13:
-                console.log('nothing to update'); // notification
 
               case 14:
-                _context.next = 18;
+                console.log('nothing to update'); // notification
+
+              case 15:
+                _context.next = 19;
                 break;
 
-              case 16:
-                _context.next = 18;
+              case 17:
+                _context.next = 19;
                 return _this.postCategory(_this.category);
 
-              case 18:
+              case 19:
                 _this.waiting = false;
 
                 _this.$Progress.finish();
@@ -230,8 +234,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _context.next = 28;
                 break;
 
-              case 22:
-                _context.prev = 22;
+              case 23:
+                _context.prev = 23;
                 _context.t0 = _context["catch"](0);
 
                 _this.$Progress.fail();
@@ -240,16 +244,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
                 if (_context.t0.response.data.errors) {
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
-                }
+                } // notificaiton
 
-                console.log(_context.t0); // notificaiton
 
               case 28:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 22]]);
+        }, _callee, null, [[0, 23]]);
       }))();
     },
     removeCategory: function removeCategory(id) {
@@ -488,7 +491,7 @@ var render = function() {
         _vm._v("\n        Categories\n    ")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "w-full lg:w-1/2 lg:flex" }, [
+      _c("div", { staticClass: "w-full xl:w-3/4 2xl:w-1/2 lg:flex" }, [
         _c(
           "ul",
           {
@@ -507,7 +510,7 @@ var render = function() {
                 _c(
                   "div",
                   {
-                    staticClass: "cursor-pointer",
+                    staticClass: "cursor-pointer flex items-center gap-x-2",
                     on: {
                       click: function($event) {
                         return _vm.selectCategory(category.id)
@@ -516,6 +519,11 @@ var render = function() {
                   },
                   [
                     _c("span", [_vm._v(_vm._s(index + 1) + ".")]),
+                    _vm._v(" "),
+                    _c("span", {
+                      staticClass: "rounded w-4 h-4",
+                      style: { background: category.color }
+                    }),
                     _vm._v(" "),
                     _c("span", [_vm._v(_vm._s(category.name))]),
                     _vm._v(" "),
@@ -583,6 +591,86 @@ var render = function() {
                                 ]
                               ),
                               _vm._v(" "),
+                              _c("ValidationProvider", {
+                                staticClass: "flex-grow flex-shrink-0",
+                                attrs: {
+                                  vid: "name",
+                                  rules: "alpha_spaces|max:50"
+                                },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "default",
+                                      fn: function(ref) {
+                                        var errors = ref.errors
+                                        var failed = ref.failed
+                                        var passed = ref.passed
+                                        return [
+                                          _c(
+                                            "label",
+                                            {
+                                              staticClass:
+                                                "text-sm font-semibold",
+                                              attrs: { for: "name" }
+                                            },
+                                            [_vm._v("Nane")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "text-xs text-red-600 font-semibold mb-1"
+                                            },
+                                            [_vm._v(" " + _vm._s(errors[0]))]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("input", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value: _vm.category.name,
+                                                expression: "category.name"
+                                              }
+                                            ],
+                                            staticClass:
+                                              "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                            class: {
+                                              "border-red-600": failed,
+                                              "border-green-500": passed
+                                            },
+                                            attrs: {
+                                              id: "name",
+                                              name: "name",
+                                              type: "text",
+                                              disabled: _vm.waiting
+                                            },
+                                            domProps: {
+                                              value: _vm.category.name
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.category,
+                                                  "name",
+                                                  $event.target.value
+                                                )
+                                              }
+                                            }
+                                          })
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                )
+                              }),
+                              _vm._v(" "),
                               _c(
                                 "div",
                                 {
@@ -591,11 +679,8 @@ var render = function() {
                                 },
                                 [
                                   _c("ValidationProvider", {
-                                    staticClass: "flex-grow flex-shrink-0",
-                                    attrs: {
-                                      vid: "",
-                                      rules: "required|alpha_spaces|max:50"
-                                    },
+                                    staticClass: "w-full",
+                                    attrs: { vid: "vat", rules: "" },
                                     scopedSlots: _vm._u(
                                       [
                                         {
@@ -610,9 +695,9 @@ var render = function() {
                                                 {
                                                   staticClass:
                                                     "text-sm font-semibold",
-                                                  attrs: { for: "name" }
+                                                  attrs: { for: "vat" }
                                                 },
-                                                [_vm._v("Nane")]
+                                                [_vm._v("VAT")]
                                               ),
                                               _vm._v(" "),
                                               _c(
@@ -633,8 +718,8 @@ var render = function() {
                                                   {
                                                     name: "model",
                                                     rawName: "v-model",
-                                                    value: _vm.category.name,
-                                                    expression: "category.name"
+                                                    value: _vm.category.vat,
+                                                    expression: "category.vat"
                                                   }
                                                 ],
                                                 staticClass:
@@ -644,13 +729,13 @@ var render = function() {
                                                   "border-green-500": passed
                                                 },
                                                 attrs: {
-                                                  id: "name",
-                                                  name: "name",
-                                                  type: "text",
+                                                  id: "vat",
+                                                  name: "vat",
+                                                  type: "number",
                                                   disabled: _vm.waiting
                                                 },
                                                 domProps: {
-                                                  value: _vm.category.name
+                                                  value: _vm.category.vat
                                                 },
                                                 on: {
                                                   input: function($event) {
@@ -661,7 +746,7 @@ var render = function() {
                                                     }
                                                     _vm.$set(
                                                       _vm.category,
-                                                      "name",
+                                                      "vat",
                                                       $event.target.value
                                                     )
                                                   }
@@ -678,13 +763,15 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("ValidationProvider", {
                                     staticClass: "flex-grow-0 flex-shrink",
-                                    attrs: { vid: "", rules: "required" },
+                                    attrs: { vid: "color", rules: "" },
                                     scopedSlots: _vm._u(
                                       [
                                         {
                                           key: "default",
                                           fn: function(ref) {
                                             var errors = ref.errors
+                                            var failed = ref.failed
+                                            var passed = ref.passed
                                             return [
                                               _c(
                                                 "label",
@@ -720,6 +807,10 @@ var render = function() {
                                                 ],
                                                 staticClass:
                                                   "p-1 rounded border order-gray-300 outline-none",
+                                                class: {
+                                                  "border-red-600": failed,
+                                                  "border-green-500": passed
+                                                },
                                                 attrs: {
                                                   id: "color",
                                                   name: "color",
@@ -755,83 +846,6 @@ var render = function() {
                                 ],
                                 1
                               ),
-                              _vm._v(" "),
-                              _c("ValidationProvider", {
-                                staticClass: "w-full",
-                                attrs: { vid: "", rules: "required" },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "default",
-                                      fn: function(ref) {
-                                        var errors = ref.errors
-                                        var failed = ref.failed
-                                        var passed = ref.passed
-                                        return [
-                                          _c(
-                                            "label",
-                                            {
-                                              staticClass:
-                                                "text-sm font-semibold",
-                                              attrs: { for: "vat" }
-                                            },
-                                            [_vm._v("VAT")]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass:
-                                                "text-xs text-red-600 font-semibold mb-1"
-                                            },
-                                            [_vm._v(" " + _vm._s(errors[0]))]
-                                          ),
-                                          _vm._v(" "),
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: _vm.category.vat,
-                                                expression: "category.vat"
-                                              }
-                                            ],
-                                            staticClass:
-                                              "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                            class: {
-                                              "border-red-600": failed,
-                                              "border-green-500": passed
-                                            },
-                                            attrs: {
-                                              id: "vat",
-                                              name: "vat",
-                                              type: "number",
-                                              disabled: _vm.waiting
-                                            },
-                                            domProps: {
-                                              value: _vm.category.vat
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
-                                                }
-                                                _vm.$set(
-                                                  _vm.category,
-                                                  "vat",
-                                                  $event.target.value
-                                                )
-                                              }
-                                            }
-                                          })
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                )
-                              }),
                               _vm._v(" "),
                               _c("div", [
                                 _vm.categorySelected

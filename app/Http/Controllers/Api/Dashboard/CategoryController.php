@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryStoreRequest;
+use App\Http\Requests\CategoryUpdateRequest;
 
 class CategoryController extends Controller
 {
@@ -25,9 +27,13 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryStoreRequest $request)
     {
-        //
+        $request->user()->can('create', Category::class);
+
+        $category = Category::create($request->validated());
+
+        return $category->id;
     }
 
     /**
@@ -48,9 +54,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryUpdateRequest $request, $id)
     {
-        //
+        $request->user()->can('update', Category::class);
+
+        Category::findOrFail($id)->update($request->validated());
+
+        return response()->json(['message' => 'Category updated'], 200);
     }
 
     /**
@@ -59,8 +69,14 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $request->user()->can('forceDelete', Category::class);
+
+        $category = Category::findOrFail($id);
+        
+        $category->delete();
+
+        return response()->json(['message'=>'Category ' . $category->name . ' was deleted'], 200);
     }
 }

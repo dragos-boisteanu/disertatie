@@ -17832,8 +17832,8 @@ var render = function() {
     ? _c(
         "div",
         {
-          staticClass:
-            "py-1 px-2 text-xs ml-2 text-white rounded-sm bg-amber-600"
+          staticClass: "py-1 px-2 text-xs ml-2 text-white rounded-sm",
+          style: { background: _vm.category.color }
         },
         [_vm._v("\n    " + _vm._s(_vm.category.name) + "\n")]
       )

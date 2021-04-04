@@ -14,7 +14,7 @@ class AddNameColumnToIngredientsTable extends Migration
     public function up()
     {
         Schema::table('ingredients', function (Blueprint $table) {
-            $table->string('name')->after('id');
+            $table->string('name')->unique()->after('id');
         });
     }
 

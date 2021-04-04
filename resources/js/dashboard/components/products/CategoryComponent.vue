@@ -1,5 +1,5 @@
 <template>
-    <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm bg-amber-600" v-if="category">
+    <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="category" :style="{background: category.color}">
         {{category.name}}
     </div>
 </template>

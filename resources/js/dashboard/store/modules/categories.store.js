@@ -28,7 +28,7 @@ const actions = {
     async postCategory({commit}, payload) {
         try {
             const response = await postCategory(payload);
-            payload.id = response.data.data.id;
+            payload.id = response.data.id;
             commit('ADD_CATEGORY', payload);
         } catch ( error ) {
             throw error
@@ -75,8 +75,8 @@ const mutations = {
         const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
         const vm = payload.vm;
 
-        Object.keys(payload.categories).forEach(key => {
-            vm.$set(state.categories[categoryIndex], key, payload.categories[key]);
+        Object.keys(payload.category).forEach(key => {
+            vm.$set(state.categories[categoryIndex], key, payload.category[key]);
         });
     },
 

@@ -2488,15 +2488,11 @@ var downloadCategories = function downloadCategories() {
 };
 
 var postCategory = function postCategory(category) {
-  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(BASE_URL), {
-    category: category
-  });
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(BASE_URL), category);
 };
 
 var patchCategory = function patchCategory(category) {
-  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(BASE_URL, "/").concat(category.id), {
-    category: category
-  });
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(BASE_URL, "/").concat(category.id), category);
 };
 
 var deleteCategory = function deleteCategory(id) {
@@ -3095,7 +3091,7 @@ var actions = {
 
             case 4:
               response = _context2.sent;
-              payload.id = response.data.data.id;
+              payload.id = response.data.id;
               commit('ADD_CATEGORY', payload);
               _context2.next = 12;
               break;
@@ -3192,8 +3188,8 @@ var mutations = {
     var categoryIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.categories, ['id', payload.category.id]);
 
     var vm = payload.vm;
-    Object.keys(payload.categories).forEach(function (key) {
-      vm.$set(state.categories[categoryIndex], key, payload.categories[key]);
+    Object.keys(payload.category).forEach(function (key) {
+      vm.$set(state.categories[categoryIndex], key, payload.category[key]);
     });
   },
   DELETE_CATEGORY: function DELETE_CATEGORY(state, payload) {
