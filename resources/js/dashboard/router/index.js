@@ -11,6 +11,8 @@ const ProductView = () => import(/* webpackChunkName: "group-products" */ '../vi
 
 const CategoriesView = () => import(/* webpackChunkName: "group-categories" */ '../views/categories/CategoriesView.vue');
 
+const IngredientsView = () => import(/* webpackChunkName: "group-ingredients" */ '../views/ingredients/IngredientsView.vue');
+
 const Home = () => import('../views/HomeView.vue');
 
 
@@ -58,8 +60,6 @@ const routes = [
             }
         }
     },
-
-
     {   
         path: `${baseUrl}/categories`,
         name: 'Categories',
@@ -71,7 +71,17 @@ const routes = [
             }
         }
     },
-
+    {   
+        path: `${baseUrl}/ingredients`,
+        name: 'Ingredients',
+        component: IngredientsView,
+        meta: {
+            breadcrumb: {
+                label: 'Ingredients',
+                parent: 'Dashboard'
+            }
+        }
+    },
     {
         path: `${baseUrl}/products`,
         name: 'Products',

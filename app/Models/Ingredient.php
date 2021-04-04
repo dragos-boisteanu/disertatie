@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ingredient extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     public $timestamps = false;
 
@@ -18,14 +18,16 @@ class Ingredient extends Model
         'unit_id',
     ];
 
+    public $with = ['unit', 'stock'];
+
     public function unit() 
     {
-        return $this->hasOne('App\Models\Unit');
+        return $this->belongsTo('App\Models\Unit');
     }
 
-    public function stock()
+    public function stock() 
     {
-        return $this->hasOne('App\Models\Stock');
+        return $this->belongsTo('App\Models\Stock');
     }
 
     public function products() 

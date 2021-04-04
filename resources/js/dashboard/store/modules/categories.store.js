@@ -37,8 +37,7 @@ const actions = {
 
     async patchCategory({commit}, payload) {
         try {
-            const category = payload.category;
-            await patchCategory(category);
+            await patchCategory(payload.category);
             commit('PATCH_CATEGORY', payload);
         } catch ( error){
             throw error;

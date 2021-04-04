@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Models\Stock;
+use App\Models\Ingredient;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\IngredientCollection;
+use App\Http\Requests\IngredientStoreRequest;
 
 class IngredientController extends Controller
 {
@@ -14,7 +18,9 @@ class IngredientController extends Controller
      */
     public function index()
     {
-        //
+        $ingredients = Ingredient::all();
+
+        return new IngredientCollection($ingredients);
     }
 
     /**
@@ -23,9 +29,20 @@ class IngredientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(IngredientStoreRequest $request)
     {
-        //
+        $request->user()->can('create', Ingredient::class);
+
+        $stock = Stock::create([
+            'quantity' => 1,
+        ]);
+
+        $input = $request->validated();
+        $input['stock_id'] = $stock->id;
+
+        $ingredient = Ingredient::create($input);
+
+        return $ingredient->id;
     }
 
     /**
@@ -57,8 +74,18 @@ class IngredientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $request->user()->can('delete', Ingredient::class);
+
+        try {
+            $ingredient = Ingredient::findOrFail($id);
+        
+            $ingredient->delete();
+    
+            return response()->json(['message'=>'Ingredient ' . $ingredient->name . ' was deleted'], 200);
+        } catch(\Illuminate\Database\QueryException $e) {
+            return response()->json(['message'=>'Ingredient ( ' .  $ingredient->name . ' ) in use by a product'], 500);
+        }        
     }
 }

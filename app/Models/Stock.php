@@ -20,4 +20,10 @@ class Stock extends Model
     {
         return $this->hasOne('App\Models\Product');
     }
+
+    public function ingredient() 
+    {
+        return $this->hasOne('App\Models\Ingredient');
+    }
+
 }

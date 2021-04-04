@@ -53,7 +53,8 @@ class Product extends Model
         return $this->belongsTo('App\Models\Unit');
     }
 
-    public function ingredients() {
+    public function ingredients() 
+    {
         return $this->belongsToMany('App\Models\Ingredients');
     }
 

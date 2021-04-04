@@ -2563,6 +2563,46 @@ var httpClient = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/api/ingreditents.api.js":
+/*!********************************************************!*\
+  !*** ./resources/js/dashboard/api/ingreditents.api.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "downloadIngredients": () => (/* binding */ downloadIngredients),
+/* harmony export */   "postIngredient": () => (/* binding */ postIngredient),
+/* harmony export */   "patchIngredient": () => (/* binding */ patchIngredient),
+/* harmony export */   "deleteIngredient": () => (/* binding */ deleteIngredient)
+/* harmony export */ });
+/* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
+
+var BASE_URL = '/ingredients';
+
+var downloadIngredients = function downloadIngredients() {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
+};
+
+var postIngredient = function postIngredient(ingredient) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(BASE_URL), ingredient);
+};
+
+var patchIngredient = function patchIngredient(ingredient) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(BASE_URL, "/").concat(ingredient.id), categingredientory);
+};
+
+var deleteIngredient = function deleteIngredient(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(BASE_URL, "/").concat(id), {
+    data: id
+  });
+};
+
+
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/api/products.api.js":
 /*!****************************************************!*\
   !*** ./resources/js/dashboard/api/products.api.js ***!
@@ -2873,6 +2913,10 @@ var CategoriesView = function CategoriesView() {
   return __webpack_require__.e(/*! import() | group-categories */ "group-categories").then(__webpack_require__.bind(__webpack_require__, /*! ../views/categories/CategoriesView.vue */ "./resources/js/dashboard/views/categories/CategoriesView.vue"));
 };
 
+var IngredientsView = function IngredientsView() {
+  return __webpack_require__.e(/*! import() | group-ingredients */ "group-ingredients").then(__webpack_require__.bind(__webpack_require__, /*! ../views/ingredients/IngredientsView.vue */ "./resources/js/dashboard/views/ingredients/IngredientsView.vue"));
+};
+
 var Home = function Home() {
   return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
 };
@@ -2923,6 +2967,16 @@ var routes = [{
     breadcrumb: {
       label: 'Categories',
       parent: 'Dashhboard'
+    }
+  }
+}, {
+  path: "".concat(baseUrl, "/ingredients"),
+  name: 'Ingredients',
+  component: IngredientsView,
+  meta: {
+    breadcrumb: {
+      label: 'Ingredients',
+      parent: 'Dashboard'
     }
   }
 }, {
@@ -3111,33 +3165,32 @@ var actions = {
   },
   patchCategory: function patchCategory(_ref4, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      var commit, category;
+      var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               commit = _ref4.commit;
               _context3.prev = 1;
-              category = payload.category;
-              _context3.next = 5;
-              return (0,_api_categories_api__WEBPACK_IMPORTED_MODULE_1__.patchCategory)(category);
+              _context3.next = 4;
+              return (0,_api_categories_api__WEBPACK_IMPORTED_MODULE_1__.patchCategory)(payload.category);
 
-            case 5:
+            case 4:
               commit('PATCH_CATEGORY', payload);
-              _context3.next = 11;
+              _context3.next = 10;
               break;
 
-            case 8:
-              _context3.prev = 8;
+            case 7:
+              _context3.prev = 7;
               _context3.t0 = _context3["catch"](1);
               throw _context3.t0;
 
-            case 11:
+            case 10:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[1, 8]]);
+      }, _callee3, null, [[1, 7]]);
     }))();
   },
   deleteCategory: function deleteCategory(_ref5, payload) {
@@ -3355,6 +3408,209 @@ requireModule.keys().forEach(function (filename) {
   modules[moduleName] = requireModule(filename)["default"] || requireModule(filename);
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modules);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/store/modules/ingredients.store.js":
+/*!*******************************************************************!*\
+  !*** ./resources/js/dashboard/store/modules/ingredients.store.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _api_ingreditents_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/ingreditents.api.js */ "./resources/js/dashboard/api/ingreditents.api.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
+var initialState = function initialState() {
+  return {
+    ingredients: []
+  };
+};
+
+var state = initialState();
+var getters = {
+  getIngredients: function getIngredients(state) {
+    return state.ingredients;
+  }
+};
+var actions = {
+  reset: function reset(_ref) {
+    var commit = _ref.commit;
+    commit('RESET');
+  },
+  downloadIngredients: function downloadIngredients(_ref2) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref2.commit;
+              _context.prev = 1;
+              _context.next = 4;
+              return (0,_api_ingreditents_api_js__WEBPACK_IMPORTED_MODULE_1__.downloadIngredients)();
+
+            case 4:
+              response = _context.sent;
+              commit('SET_INGREDIENTS', response.data.data.ingredients);
+              _context.next = 11;
+              break;
+
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](1);
+              throw _context.t0;
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[1, 8]]);
+    }))();
+  },
+  postIngredient: function postIngredient(_ref3, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref3.commit;
+              _context2.prev = 1;
+              _context2.next = 4;
+              return (0,_api_ingreditents_api_js__WEBPACK_IMPORTED_MODULE_1__.postIngredient)(payload);
+
+            case 4:
+              response = _context2.sent;
+              payload.id = response.data;
+              commit('ADD_INGREDIENT', payload);
+              _context2.next = 12;
+              break;
+
+            case 9:
+              _context2.prev = 9;
+              _context2.t0 = _context2["catch"](1);
+              throw _context2.t0;
+
+            case 12:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 9]]);
+    }))();
+  },
+  patchIngredient: function patchIngredient(_ref4, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              commit = _ref4.commit;
+              _context3.prev = 1;
+              _context3.next = 4;
+              return (0,_api_ingreditents_api_js__WEBPACK_IMPORTED_MODULE_1__.patchIngredient)(payload.ingredient);
+
+            case 4:
+              commit('PATCH_INGREDIENT', payload);
+              _context3.next = 10;
+              break;
+
+            case 7:
+              _context3.prev = 7;
+              _context3.t0 = _context3["catch"](1);
+              throw _context3.t0;
+
+            case 10:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[1, 7]]);
+    }))();
+  },
+  deleteIngredient: function deleteIngredient(_ref5, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              commit = _ref5.commit;
+              _context4.prev = 1;
+              _context4.next = 4;
+              return (0,_api_ingreditents_api_js__WEBPACK_IMPORTED_MODULE_1__.deleteIngredient)(payload);
+
+            case 4:
+              commit('REMOVE_INGREDIENT', payload);
+              _context4.next = 10;
+              break;
+
+            case 7:
+              _context4.prev = 7;
+              _context4.t0 = _context4["catch"](1);
+              throw _context4.t0;
+
+            case 10:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[1, 7]]);
+    }))();
+  }
+};
+var mutations = {
+  RESET: function RESET(state) {
+    var newState = initialState();
+    Object.keys(newState).forEach(function (key) {
+      state[key] = newState[key];
+    });
+  },
+  SET_INGREDIENTS: function SET_INGREDIENTS(state, payload) {
+    state.ingredients = payload;
+  },
+  ADD_INGREDIENT: function ADD_INGREDIENT(state, payload) {
+    state.ingredients.push(payload);
+  },
+  PATCH_INGREDIENT: function PATCH_INGREDIENT(state, payload) {
+    var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.ingredients, ['id', payload.ingredient.id]);
+
+    var vm = this;
+    Object.keys(payload.ingredient).forEach(function (key) {
+      vm.$set(state.ingredients[ingredientIndex], key, payload.categoy[key]);
+    });
+  },
+  REMOVE_INGREDIENT: function REMOVE_INGREDIENT(state, payload) {
+    var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.ingredients, ['id', payload]);
+
+    state.ingredients.splice(ingredientIndex, 1);
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
 
 /***/ }),
 
@@ -49340,6 +49596,7 @@ var index = {
 var map = {
 	"./categories.store.js": "./resources/js/dashboard/store/modules/categories.store.js",
 	"./counties.store.js": "./resources/js/dashboard/store/modules/counties.store.js",
+	"./ingredients.store.js": "./resources/js/dashboard/store/modules/ingredients.store.js",
 	"./notification.store.js": "./resources/js/dashboard/store/modules/notification.store.js",
 	"./products.store.js": "./resources/js/dashboard/store/modules/products.store.js",
 	"./roles.store.js": "./resources/js/dashboard/store/modules/roles.store.js",
@@ -49475,7 +49732,7 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
+/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"group-ingredients":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
