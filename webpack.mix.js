@@ -18,3 +18,4 @@ mix.js('resources/js/dashboard/app.js', 'public/js/dashboard')
         require('tailwindcss'),
         require('autoprefixer'),
 ]).vue().version();
+

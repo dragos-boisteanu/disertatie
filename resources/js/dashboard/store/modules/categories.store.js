@@ -1,4 +1,5 @@
-import { downloadCategories, downloadCategory, postCategory, patchCategory, deleteCategory } from '../../api/categories.api';
+import { downloadCategories, postCategory, patchCategory, deleteCategory } from '../../api/categories.api';
+import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
     categories: []
@@ -22,6 +23,35 @@ const actions = {
         } catch ( error ) {
             throw error;
         }
+    },
+
+    async postCategory({commit}, payload) {
+        try {
+            const response = await postCategory(payload);
+            payload.id = response.data.data.id;
+            commit('ADD_CATEGORY', payload);
+        } catch ( error ) {
+            throw error
+        }
+    },
+
+    async patchCategory({commit}, payload) {
+        try {
+            const category = payload.category;
+            await patchCategory(category);
+            commit('PATCH_CATEGORY', payload);
+        } catch ( error){
+            throw error;
+        }
+    },
+
+    async deleteCategory({commit}, payload) {
+        try {
+            await deleteCategory(payload);
+            commit('DELETE_CATEGORY', payload);
+        } catch ( error ) {
+            throw error
+        }
     }
 }
 
@@ -35,7 +65,26 @@ const mutations = {
 
     SET_CATEGORIES(state, payload) {
         state.categories = payload;
+    },
+
+    ADD_CATEGORY(state, payload) {
+        state.categories.push(payload);
+    },
+
+    PATCH_CATEGORY(state, payload) {
+        const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
+        const vm = payload.vm;
+
+        Object.keys(payload.categories).forEach(key => {
+            vm.$set(state.categories[categoryIndex], key, payload.categories[key]);
+        });
+    },
+
+    DELETE_CATEGORY(state, payload) {
+        const categoryIndex = _findIndex(state.categories, ['id', payload]);
+        state.categories.splice(categoryIndex, 1);
     }
+
 }
 
 export default {

@@ -1,6 +1,5 @@
 import {downloadProducts, downloadProduct, storeProduct, patchProduct, disableProduct, restoreProduct, deleteProduct, downloadProductByBarcode} from '../../api/products.api';
 import _orderBy from 'lodash/orderBy';
-import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({

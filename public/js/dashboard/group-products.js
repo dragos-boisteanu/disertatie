@@ -18758,7 +18758,7 @@ var render = function() {
     "div",
     {
       staticClass:
-        "flex flex-col flex-1 w-full p-4 pt-0 bg-gray-50 lg:p-4 lg:pt-0"
+        "flex flex-col items-stretch justify-items-start flex-1 w-full p-4 pt-0 bg-gray-50 lg:p-4 lg:pt-0"
     },
     [
       _c(

@@ -8,7 +8,12 @@ const CreateUserView = () => import (/* webpackChunkName: "group-users" */ '../v
 const ProductsListView = () => import(/* webpackChunkName: "group-products" */ '../views/products/ProductsListView.vue');
 const AddProductView = () => import(/* webpackChunkName: "group-products" */ '../views/products/AddProductView.vue');
 const ProductView = () => import(/* webpackChunkName: "group-products" */ '../views/products/ProductView.vue');
+
+const CategoriesView = () => import(/* webpackChunkName: "group-categories" */ '../views/categories/CategoriesView.vue');
+
 const Home = () => import('../views/HomeView.vue');
+
+
 
 const baseUrl = '/dashboard'
 const routes = [
@@ -53,6 +58,20 @@ const routes = [
             }
         }
     },
+
+
+    {   
+        path: `${baseUrl}/categories`,
+        name: 'Categories',
+        component: CategoriesView,
+        meta: {
+            breadcrumb: {
+                label: 'Categories',
+                parent: 'Dashhboard'
+            }
+        }
+    },
+
     {
         path: `${baseUrl}/products`,
         name: 'Products',
