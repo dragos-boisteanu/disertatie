@@ -28,8 +28,8 @@ class ProductPatchRequest extends FormRequest
             'barcode' => 'sometimes|numeric|unique:products',
             'name' => 'sometimes|string|max:150',
             'description' => 'sometimes|string|max:255',
-            'base_price' => 'sometimes',
-            'weight' => 'sometimes',
+            'base_price' => 'sometimes|numeric',
+            'weight' => 'sometimes|numeric',
             'category_id' => 'sometimes|numeric|exists:categories,id',
             'unit_id' => 'sometimes|numeric|exists:units,id'
         ];

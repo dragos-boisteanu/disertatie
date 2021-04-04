@@ -71,12 +71,17 @@ class CategoryController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $request->user()->can('forceDelete', Category::class);
-
-        $category = Category::findOrFail($id);
         
-        $category->delete();
-
-        return response()->json(['message'=>'Category ' . $category->name . ' was deleted'], 200);
+        $request->user()->can('forceDelete', Category::class);
+        try {
+            $category = Category::findOrFail($id);
+        
+            $category->delete();
+    
+            return response()->json(['message'=>'Category ' . $category->name . ' was deleted'], 200);
+        } catch(\Illuminate\Database\QueryException $e) {
+            return response()->json(['message'=>'Remove or copy category\'s ( ' .  $category->name . ' ) items before deleting'], 500);
+        }
+       
     }
 }

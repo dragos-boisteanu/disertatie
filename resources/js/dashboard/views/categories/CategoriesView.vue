@@ -4,8 +4,8 @@
             Categories
         </template>
 
-        <div class="w-full xl:w-3/4 2xl:w-1/2 lg:flex">
-            <ul class="px-2 overflow-y-scroll w-full max-h-80 lg:max-h-96 lg:flex-1">
+        <div class="w-full md:flex xl:w-3/4 2xl:w-1/2 ">
+            <ul class="px-2 overflow-y-scroll w-full max-h-80 md:flex-1 md:max-h-96 ">
                 <li 
                     v-for="(category, index) in getCategories" :key="category.id"
                     class="flex items-center justify-between border rounded-sm py-1 px-2 my-3"
@@ -24,10 +24,10 @@
                 </li>
             </ul>
 
-            <div class="mt-5 lg:flex-1 lg:mt-0">
+            <div class="mt-5 md:flex-1 md:mt-0">
                 <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
                     <form @submit.prevent="handleSubmit(submit)" class="flex flex-col w-full">
-                        <div class="flex flex-col items-stretch justify-items-start gap-y-3 pt-5 border-t border-gray-200 lg:border-l lg:pl-5 lg:border-t-0 lg:pt-0 lg:flex-auto">
+                        <div class="flex flex-col items-stretch justify-items-start gap-y-3 pt-5 border-t border-gray-200 md:border-l md:pl-5 md:border-t-0 md:pt-0 md:flex-auto">
                             <h2 class="mb-5 text-xl font-semibold">
                                 Categories
                             </h2> 

@@ -498,12 +498,12 @@ var render = function() {
         _vm._v("\n        Categories\n    ")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "w-full xl:w-3/4 2xl:w-1/2 lg:flex" }, [
+      _c("div", { staticClass: "w-full md:flex xl:w-3/4 2xl:w-1/2 " }, [
         _c(
           "ul",
           {
             staticClass:
-              "px-2 overflow-y-scroll w-full max-h-80 lg:max-h-96 lg:flex-1"
+              "px-2 overflow-y-scroll w-full max-h-80 md:flex-1 md:max-h-96 "
           },
           _vm._l(_vm.getCategories, function(category, index) {
             return _c(
@@ -559,7 +559,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { staticClass: "mt-5 lg:flex-1 lg:mt-0" },
+          { staticClass: "mt-5 md:flex-1 md:mt-0" },
           [
             _c("ValidationObserver", {
               ref: "observer",
@@ -585,7 +585,7 @@ var render = function() {
                             "div",
                             {
                               staticClass:
-                                "flex flex-col items-stretch justify-items-start gap-y-3 pt-5 border-t border-gray-200 lg:border-l lg:pl-5 lg:border-t-0 lg:pt-0 lg:flex-auto"
+                                "flex flex-col items-stretch justify-items-start gap-y-3 pt-5 border-t border-gray-200 md:border-l md:pl-5 md:border-t-0 md:pt-0 md:flex-auto"
                             },
                             [
                               _c(

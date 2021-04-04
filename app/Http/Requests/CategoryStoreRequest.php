@@ -25,7 +25,7 @@ class CategoryStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:50',
-            'vat' => 'required|integer',
+            'vat' => 'required|numeric',
             'color' => 'required|string'
         ];
     }

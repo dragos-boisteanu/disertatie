@@ -25,7 +25,7 @@ class CategoryUpdateRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:50',
-            'vat' => 'sometimes|integer',
+            'vat' => 'sometimes|numeric',
             'color' => 'sometimes|string'
         ];
     }

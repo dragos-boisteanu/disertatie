@@ -30,8 +30,8 @@ class ProductStoreRequest extends FormRequest
             'barcode' => 'required|numeric|unique:products',
             'name' => 'required|string|max:150',
             'description' => 'required|string|max:255',
-            'base_price' => 'required',
-            'weight' => 'required',
+            'base_price' => 'required|numeric',
+            'weight' => 'required|numeric',
             'category_id' => 'required|numeric|exists:categories,id',
             'unit_id' => 'required|numeric|exists:units,id'
         ];
