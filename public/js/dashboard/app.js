@@ -3091,7 +3091,7 @@ var actions = {
 
             case 4:
               response = _context2.sent;
-              payload.id = response.data.id;
+              payload.id = response.data;
               commit('ADD_CATEGORY', payload);
               _context2.next = 12;
               break;

@@ -162,11 +162,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     clearSelection: function clearSelection() {
       this.categorySelected = false;
-      this.category = {
-        name: '',
-        vat: '',
-        color: ''
-      };
+      this.resetForm();
     },
     submit: function submit() {
       var _this = this;
@@ -219,7 +215,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 console.log('nothing to update'); // notification
 
               case 15:
-                _context.next = 19;
+                _context.next = 20;
                 break;
 
               case 17:
@@ -227,15 +223,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _this.postCategory(_this.category);
 
               case 19:
+                _this.resetForm();
+
+              case 20:
                 _this.waiting = false;
 
                 _this.$Progress.finish();
 
-                _context.next = 28;
+                _context.next = 29;
                 break;
 
-              case 23:
-                _context.prev = 23;
+              case 24:
+                _context.prev = 24;
                 _context.t0 = _context["catch"](0);
 
                 _this.$Progress.fail();
@@ -247,12 +246,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 } // notificaiton
 
 
-              case 28:
+              case 29:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 23]]);
+        }, _callee, null, [[0, 24]]);
       }))();
     },
     removeCategory: function removeCategory(id) {
@@ -291,6 +290,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }, _callee2, null, [[0, 7]]);
       }))();
+    },
+    resetForm: function resetForm() {
+      this.$refs.observer.reset();
+      this.category = {
+        name: '',
+        vat: '',
+        color: ''
+      };
     }
   }),
   components: {
@@ -595,7 +602,7 @@ var render = function() {
                                 staticClass: "flex-grow flex-shrink-0",
                                 attrs: {
                                   vid: "name",
-                                  rules: "alpha_spaces|max:50"
+                                  rules: "required|alpha_spaces|max:50"
                                 },
                                 scopedSlots: _vm._u(
                                   [
@@ -680,7 +687,10 @@ var render = function() {
                                 [
                                   _c("ValidationProvider", {
                                     staticClass: "w-full",
-                                    attrs: { vid: "vat", rules: "" },
+                                    attrs: {
+                                      vid: "vat",
+                                      rules: "required|integer"
+                                    },
                                     scopedSlots: _vm._u(
                                       [
                                         {
@@ -763,7 +773,7 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("ValidationProvider", {
                                     staticClass: "flex-grow-0 flex-shrink",
-                                    attrs: { vid: "color", rules: "" },
+                                    attrs: { vid: "color", rules: "required" },
                                     scopedSlots: _vm._u(
                                       [
                                         {

@@ -32,7 +32,7 @@
                                 Categories
                             </h2> 
 
-                            <ValidationProvider vid="name" rules="alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
+                            <ValidationProvider vid="name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
                                 <label for="name" class="text-sm font-semibold">Nane</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
@@ -47,7 +47,7 @@
                             </ValidationProvider> 
                             
                             <div class="w-full flex-1 flex items-center gap-x-4">
-                                <ValidationProvider vid="vat" rules="" v-slot="{ errors, failed, passed }" class="w-full">
+                                <ValidationProvider vid="vat" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full">
                                     <label for="vat" class="text-sm font-semibold">VAT</label>
                                     <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                     <input 
@@ -61,7 +61,7 @@
                                     />
                                 </ValidationProvider>
 
-                                <ValidationProvider vid="color" rules="" v-slot="{  errors, failed, passed }" class="flex-grow-0 flex-shrink">
+                                <ValidationProvider vid="color" rules="required" v-slot="{  errors, failed, passed }" class="flex-grow-0 flex-shrink">
                                     <label for="vat" class="text-sm font-semibold">Color</label>
                                     <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                     <input 
@@ -142,11 +142,7 @@
 
             clearSelection() {
                 this.categorySelected = false;
-                this.category = {
-                    name: '',
-                    vat: '',
-                    color:'',
-                }
+                this.resetForm();
             },
 
             async submit() {
@@ -185,6 +181,8 @@
 
                     } else {
                         await this.postCategory(this.category);
+                        
+                        this.resetForm();
                     }
 
                     this.waiting = false;
@@ -212,6 +210,15 @@
                 } catch ( error ) {
                     this.$Progress.fail();
                     console.log(error)
+                }
+            },
+
+            resetForm() {
+                this.$refs.observer.reset();
+                this.category = {
+                    name: '',
+                    vat: '',
+                    color:'',
                 }
             }
         },
