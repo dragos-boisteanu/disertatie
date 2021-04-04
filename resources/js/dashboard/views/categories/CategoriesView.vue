@@ -29,7 +29,7 @@
                     <form @submit.prevent="handleSubmit(submit)" class="flex flex-col w-full">
                         <div class="flex flex-col items-stretch justify-items-start gap-y-3 pt-5 border-t border-gray-200 md:border-l md:pl-5 md:border-t-0 md:pt-0 md:flex-auto">
                             <h2 class="mb-5 text-xl font-semibold">
-                                Categories
+                                Category
                             </h2> 
 
                             <ValidationProvider vid="name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">

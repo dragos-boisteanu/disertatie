@@ -593,7 +593,7 @@ var render = function() {
                                 { staticClass: "mb-5 text-xl font-semibold" },
                                 [
                                   _vm._v(
-                                    "\n                            Categories\n                        "
+                                    "\n                            Category\n                        "
                                   )
                                 ]
                               ),
