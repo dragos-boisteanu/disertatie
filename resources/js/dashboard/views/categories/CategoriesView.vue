@@ -47,7 +47,7 @@
                             </ValidationProvider> 
                             
                             <div class="w-full flex-1 flex items-center gap-x-4">
-                                <ValidationProvider vid="vat" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full">
+                                <ValidationProvider vid="vat" rules="required|double:2,dot" v-slot="{ errors, failed, passed }" class="w-full">
                                     <label for="vat" class="text-sm font-semibold">VAT</label>
                                     <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                     <input 

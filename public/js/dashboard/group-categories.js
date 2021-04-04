@@ -689,7 +689,7 @@ var render = function() {
                                     staticClass: "w-full",
                                     attrs: {
                                       vid: "vat",
-                                      rules: "required|integer"
+                                      rules: "required|double:2,dot"
                                     },
                                     scopedSlots: _vm._u(
                                       [
