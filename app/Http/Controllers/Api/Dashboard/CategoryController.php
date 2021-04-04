@@ -73,6 +73,7 @@ class CategoryController extends Controller
     {
         
         $request->user()->can('forceDelete', Category::class);
+        
         try {
             $category = Category::findOrFail($id);
         
