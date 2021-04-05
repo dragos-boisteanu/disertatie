@@ -187,8 +187,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         id: '',
         name: '',
         quantity: '',
-        unit_id: '',
-        unit_name: ''
+        unit: {
+          id: '',
+          name: ''
+        }
       }
     };
   },
@@ -207,8 +209,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         id: '',
         name: '',
         quantity: '',
-        unit_id: '',
-        unit_name: ''
+        unit: {
+          id: '',
+          name: ''
+        }
       };
     },
     submit: function submit() {
@@ -570,7 +574,7 @@ var render = function() {
                       _vm._v(
                         _vm._s(ingredient.quantity) +
                           " " +
-                          _vm._s(ingredient.unitName)
+                          _vm._s(ingredient.unit.name)
                       )
                     ])
                   ]
@@ -854,9 +858,9 @@ var render = function() {
                                                       name: "model",
                                                       rawName: "v-model",
                                                       value:
-                                                        _vm.ingredient.unit_id,
+                                                        _vm.ingredient.unit,
                                                       expression:
-                                                        "ingredient.unit_id"
+                                                        "ingredient.unit"
                                                     }
                                                   ],
                                                   staticClass:
@@ -889,7 +893,7 @@ var render = function() {
                                                         })
                                                       _vm.$set(
                                                         _vm.ingredient,
-                                                        "unit_id",
+                                                        "unit",
                                                         $event.target.multiple
                                                           ? $$selectedVal
                                                           : $$selectedVal[0]
@@ -917,7 +921,7 @@ var render = function() {
                                                       {
                                                         key: unit.id,
                                                         domProps: {
-                                                          value: unit.id
+                                                          value: unit
                                                         }
                                                       },
                                                       [

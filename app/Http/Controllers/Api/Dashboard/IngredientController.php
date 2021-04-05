@@ -35,11 +35,12 @@ class IngredientController extends Controller
         $request->user()->can('create', Ingredient::class);
 
         $stock = Stock::create([
-            'quantity' => 1,
+            'quantity' => $request->quantity,
         ]);
 
         $input = $request->validated();
         $input['stock_id'] = $stock->id;
+        $input['unit_id'] = $input['unit']['id'];
 
         $ingredient = Ingredient::create($input);
 

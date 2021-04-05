@@ -15,7 +15,7 @@
                         class="cursor-pointer flex items-center gap-x-2">
                         <span>{{ index + 1 }}.</span>
                         <span>{{ ingredient.name }}</span>
-                        <span>{{ ingredient.quantity }} {{ ingredient.unitName }}</span>
+                        <span>{{ ingredient.quantity }} {{ ingredient.unit.name }}</span>
                     </div>
                     <div>
                         <button @click="removeIngredient(ingredient.id)"> X</button>
@@ -67,13 +67,13 @@
                                         id="unit_id"
                                         name="weight units" 
                                         type="text" 
-                                        v-model="ingredient.unit_id" 
+                                        v-model="ingredient.unit" 
                                         :disabled="waiting"   
                                         class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                         :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                     >
                                         <option value="" disabled>Select unit</option>
-                                        <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
+                                        <option :value="unit" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
                                     </select>
 
                                 </ValidationProvider>
@@ -141,8 +141,10 @@
                     id: '',
                     name: '',
                     quantity: '',
-                    unit_id: '',
-                    unit_name: '',
+                    unit: {
+                        id: '',
+                        name: '',
+                    }
                 }
             }
         },
@@ -166,8 +168,10 @@
                     id: '',
                     name: '',
                     quantity: '',
-                    unit_id: '',
-                    unit_name: '',
+                    unit: {
+                        id: '',
+                        name: '',
+                    }
                 }
             },
 
@@ -183,7 +187,7 @@
                         const payload = {
                             vm: this,
                             ingredient: {
-                                id: this.ingredient.id
+                                id: this.ingredient.id,
                             }
                         }
 

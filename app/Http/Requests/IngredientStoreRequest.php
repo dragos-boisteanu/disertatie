@@ -26,7 +26,7 @@ class IngredientStoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'quantity' => 'required|numeric',
-            'unit_id' => 'required|numeric|exists:units,id'
+            'unit.id' => 'required|numeric|exists:units,id'
         ];
     }
 }
