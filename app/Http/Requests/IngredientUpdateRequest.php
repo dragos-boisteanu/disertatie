@@ -26,7 +26,7 @@ class IngredientUpdateRequest extends FormRequest
         return [
             'name' => 'sometimes|string|max:50',
             'quantity' => 'sometimes|numeric',
-            'unit.id' => 'sometimes|numeric|exits:units,id'
+            'unit.id' => 'sometimes|numeric|exists:units,id'
         ];
     }
 }

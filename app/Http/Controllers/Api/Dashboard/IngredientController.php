@@ -59,8 +59,10 @@ class IngredientController extends Controller
         $request->user()->can('update', Ingredient::class);
 
         $ingredient = Ingredient::findOrFail($id);
+        $input = $request->validated();
+        $input['unit_id'] = $input['unit']['id'];
 
-        $ingredient->update($request->validated());
+        $ingredient->update($input);
 
         if($request->has('quantity')) {
             $ingredient->stock->quantity = $request->quantity;
