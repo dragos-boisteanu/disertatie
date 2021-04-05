@@ -192,10 +192,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Ingredients', ['postIngredient', 'deleteIngredient'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Ingredients', ['postIngredient', 'patchIngredient', 'deleteIngredient'])), {}, {
     selectIngredient: function selectIngredient(id) {
       this.ingredientSelected = true;
-      this.ingredient = lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.getIngredients, ['id', id]);
+      this.ingredient = Object.assign(this.ingredient, lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.getIngredients, ['id', id]));
     },
     clearSelection: function clearSelection() {
       this.ingredientSelected = false;
@@ -215,6 +215,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var originalIngredient, payload, counter;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -224,46 +225,78 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$Progress.start();
 
                 if (!_this.ingredientSelected) {
-                  _context2.next = 5;
+                  _context2.next = 15;
                   break;
                 }
 
-                _context2.next = 8;
+                originalIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(_this.getIngredients, ['id', _this.ingredient.id]);
+                payload = {
+                  vm: _this,
+                  ingredient: {
+                    id: _this.ingredient.id
+                  }
+                };
+                counter = 0;
+                Object.keys(originalIngredient).forEach(function (key) {
+                  if (originalIngredient[key] !== _this.ingredient[key]) {
+                    payload.ingredient[key] = _this.ingredient[key];
+                    counter++;
+                  }
+                });
+
+                if (!(counter > 0)) {
+                  _context2.next = 12;
+                  break;
+                }
+
+                _context2.next = 10;
+                return _this.patchIngredient(payload);
+
+              case 10:
+                _context2.next = 13;
                 break;
 
-              case 5:
-                _context2.next = 7;
+              case 12:
+                console.log('nothing to update');
+
+              case 13:
+                _context2.next = 18;
+                break;
+
+              case 15:
+                _context2.next = 17;
                 return _this.postIngredient(_this.ingredient);
 
-              case 7:
+              case 17:
                 _this.resetForm();
 
-              case 8:
+              case 18:
                 _this.waiting = false;
 
                 _this.$Progress.finish();
 
-                _context2.next = 17;
+                _context2.next = 28;
                 break;
 
-              case 12:
-                _context2.prev = 12;
+              case 22:
+                _context2.prev = 22;
                 _context2.t0 = _context2["catch"](0);
 
                 _this.$Progress.fail();
 
                 _this.waiting = false;
+                console.log(_context2.t0);
 
                 if (_context2.t0.response.data.errors) {
                   _this.$refs.observer.setErrors(_context2.t0.response.data.errors);
                 }
 
-              case 17:
+              case 28:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 12]]);
+        }, _callee2, null, [[0, 22]]);
       }))();
     },
     removeIngredient: function removeIngredient(id) {

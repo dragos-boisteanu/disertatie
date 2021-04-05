@@ -2590,7 +2590,7 @@ var postIngredient = function postIngredient(ingredient) {
 };
 
 var patchIngredient = function patchIngredient(ingredient) {
-  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(BASE_URL, "/").concat(ingredient.id), categingredientory);
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(BASE_URL, "/").concat(ingredient.id), ingredient);
 };
 
 var deleteIngredient = function deleteIngredient(id) {
@@ -3593,9 +3593,9 @@ var mutations = {
   PATCH_INGREDIENT: function PATCH_INGREDIENT(state, payload) {
     var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.ingredients, ['id', payload.ingredient.id]);
 
-    var vm = this;
+    var vm = payload.vm;
     Object.keys(payload.ingredient).forEach(function (key) {
-      vm.$set(state.ingredients[ingredientIndex], key, payload.categoy[key]);
+      vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key]);
     });
   },
   REMOVE_INGREDIENT: function REMOVE_INGREDIENT(state, payload) {

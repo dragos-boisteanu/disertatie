@@ -33,7 +33,7 @@ class IngredientPolicy
      * @param  \App\Models\Ingredient  $ingredient
      * @return mixed
      */
-    public function update(User $user, Ingredient $ingredient)
+    public function update(User $user)
     {
         if( $user->role_id === 6 || $user->role_id === 7) {
             Response::allow();
@@ -49,7 +49,7 @@ class IngredientPolicy
      * @param  \App\Models\Ingredient  $ingredient
      * @return mixed
      */
-    public function forceDelete(User $user, Ingredient $ingredient)
+    public function forceDelete(User $user)
     {
         if( $user->role_id === 6 || $user->role_id === 7) {
             Response::allow();

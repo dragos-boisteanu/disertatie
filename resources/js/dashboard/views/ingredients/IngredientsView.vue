@@ -148,11 +148,11 @@
         },
 
         methods: {
-            ...mapActions('Ingredients', ['postIngredient', 'deleteIngredient']),
+            ...mapActions('Ingredients', ['postIngredient', 'patchIngredient', 'deleteIngredient']),
 
             selectIngredient(id) {
                 this.ingredientSelected = true;
-                this.ingredient = _find(this.getIngredients, ['id', id]);
+                this.ingredient = Object.assign(this.ingredient, _find(this.getIngredients, ['id', id]));
             },
 
             clearSelection() {
@@ -178,6 +178,31 @@
           
                     if(this.ingredientSelected) {
 
+                        const originalIngredient = _find(this.getIngredients, ['id', this.ingredient.id]);
+
+                        const payload = {
+                            vm: this,
+                            ingredient: {
+                                id: this.ingredient.id
+                            }
+                        }
+
+                        let counter = 0;
+
+                        Object.keys(originalIngredient).forEach(key => {
+                            if(originalIngredient[key] !== this.ingredient[key]) {
+                                payload.ingredient[key] = this.ingredient[key];
+                                counter++;
+                            }
+                        });
+
+                        if(counter > 0 ) {
+                            await this.patchIngredient(payload);
+
+                        } else {
+                            console.log('nothing to update')
+                        }
+                        
                     } else {
                         await this.postIngredient(this.ingredient);
                         this.resetForm();
@@ -189,7 +214,8 @@
                 } catch ( error ) {
                     this.$Progress.fail();
                     this.waiting = false;
-
+                    console.log(error);
+                    
                     if(error.response.data.errors) {
                         this.$refs.observer.setErrors(error.response.data.errors)
                     }  

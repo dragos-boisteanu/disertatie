@@ -74,10 +74,10 @@ const mutations = {
 
     PATCH_INGREDIENT(state, payload) {
         const ingredientIndex = _findIndex(state.ingredients, ['id', payload.ingredient.id]);
-        const vm = this;
+        const vm = payload.vm;
 
         Object.keys(payload.ingredient).forEach(key => {
-            vm.$set(state.ingredients[ingredientIndex], key, payload.categoy[key] );
+            vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key] );
         });
     },
 

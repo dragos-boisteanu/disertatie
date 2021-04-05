@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\IngredientCollection;
 use App\Http\Requests\IngredientStoreRequest;
+use App\Http\Requests\IngredientUpdateRequest;
 
 class IngredientController extends Controller
 {
@@ -46,26 +47,26 @@ class IngredientController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(IngredientUpdateRequest $request, $id)
     {
-        //
+        $request->user()->can('update', Ingredient::class);
+
+        $ingredient = Ingredient::findOrFail($id);
+
+        $ingredient->update($request->validated());
+
+        if($request->has('quantity')) {
+            $ingredient->stock->quantity = $request->quantity;
+            $ingredient->stock->save();
+        }
+
+        return response()->json(['message' => 'Ingredient updated'], 200);
     }
 
     /**
