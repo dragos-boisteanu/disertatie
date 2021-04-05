@@ -1114,16 +1114,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _ViewContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ViewContainer */ "./resources/js/dashboard/views/ViewContainer.vue");
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
-/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var filepond_dist_filepond_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! filepond/dist/filepond.min.css */ "./node_modules/filepond/dist/filepond.min.css");
-/* harmony import */ var filepond_plugin_image_preview_dist_filepond_plugin_image_preview_min_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css");
-/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
-/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/filter */ "./node_modules/lodash/filter.js");
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var filepond_dist_filepond_min_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! filepond/dist/filepond.min.css */ "./node_modules/filepond/dist/filepond.min.css");
+/* harmony import */ var filepond_plugin_image_preview_dist_filepond_plugin_image_preview_min_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_9__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1308,6 +1314,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1315,14 +1360,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_3___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_6___default()));
+
+
+
+var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_9___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapGetters)('Units', ['getUnits'])),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Ingredients', ['getIngredients'])),
   data: function data() {
     return {
       checkingBarcode: false,
       locked: false,
       waiting: false,
+      ingredientInput: '',
+      foundIngredients: [],
       product: {
         barcode: '',
         name: '',
@@ -1331,14 +1381,16 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_3___default()((filepond_plu
         weight: '',
         unit_id: '',
         quantity: '',
-        category_id: ''
+        category_id: '',
+        hasIngredients: false,
+        ingredients: []
       },
       waitForFileUpload: false,
       files: null,
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_7__.mapActions)('Products', ['addProduct', 'getProductByBarcode'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Products', ['addProduct', 'getProductByBarcode'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -1441,11 +1493,40 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_3___default()((filepond_plu
         }
       }, _callee2, this, [[0, 15]]);
     })), 500),
-    resetProductData: function resetProductData() {// Object.keys(this.product).forEach(key => {
-      //     if(key !== 'barcode') {
-      //         this.product[key] = '';
-      //     }
-      // })
+    fetchIngredients: function fetchIngredients() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+
+                if (!(_this2.getIngredients.length === 0)) {
+                  _context3.next = 4;
+                  break;
+                }
+
+                _context3.next = 4;
+                return _this2.downloadIngredients();
+
+              case 4:
+                _context3.next = 9;
+                break;
+
+              case 6:
+                _context3.prev = 6;
+                _context3.t0 = _context3["catch"](0);
+                console.log(_context3.t0);
+
+              case 9:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 6]]);
+      }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {
       this.waitForFileUpload = true;
@@ -1462,6 +1543,32 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_3___default()((filepond_plu
         revert: true
       });
       delete this.product.image;
+    },
+    findIngredient: function findIngredient() {
+      var _this3 = this;
+
+      if (this.ingredientInput.length > 0) {
+        var lastSpaceIndex = this.ingredientInput.lastIndexOf(" ");
+        this.foundIngredients = lodash_filter__WEBPACK_IMPORTED_MODULE_4___default()(this.getIngredients, function (ingredient) {
+          return new RegExp('^' + "".concat(_this3.ingredientInput.substring(lastSpaceIndex + 1)), 'i').test(ingredient.name);
+        });
+      } else {
+        this.foundIngredients = [];
+      }
+    },
+    selectIngredient: function selectIngredient(id) {
+      var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_3___default()(this.foundIngredients, ['id', id]);
+
+      var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
+      selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+      this.product.ingredients.push(selectedIngredient);
+      this.ingredientInput = '';
+      this.foundIngredients = [];
+    },
+    removeIngredient: function removeIngredient(id) {
+      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_5___default()(this.product.ingredients, ['id', id]);
+
+      this.product.ingredients.splice(ingredientIndex, 1);
     }
   }),
   components: {
@@ -15049,6 +15156,37 @@ module.exports = function (cssWithMappingToString) {
 
 /***/ }),
 
+/***/ "./node_modules/lodash/_baseFilter.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_baseFilter.js ***!
+  \********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var baseEach = __webpack_require__(/*! ./_baseEach */ "./node_modules/lodash/_baseEach.js");
+
+/**
+ * The base implementation of `_.filter` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} predicate The function invoked per iteration.
+ * @returns {Array} Returns the new filtered array.
+ */
+function baseFilter(collection, predicate) {
+  var result = [];
+  baseEach(collection, function(value, index, collection) {
+    if (predicate(value, index, collection)) {
+      result.push(value);
+    }
+  });
+  return result;
+}
+
+module.exports = baseFilter;
+
+
+/***/ }),
+
 /***/ "./node_modules/lodash/debounce.js":
 /*!*****************************************!*\
   !*** ./node_modules/lodash/debounce.js ***!
@@ -15246,6 +15384,68 @@ function debounce(func, wait, options) {
 }
 
 module.exports = debounce;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/filter.js":
+/*!***************************************!*\
+  !*** ./node_modules/lodash/filter.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var arrayFilter = __webpack_require__(/*! ./_arrayFilter */ "./node_modules/lodash/_arrayFilter.js"),
+    baseFilter = __webpack_require__(/*! ./_baseFilter */ "./node_modules/lodash/_baseFilter.js"),
+    baseIteratee = __webpack_require__(/*! ./_baseIteratee */ "./node_modules/lodash/_baseIteratee.js"),
+    isArray = __webpack_require__(/*! ./isArray */ "./node_modules/lodash/isArray.js");
+
+/**
+ * Iterates over elements of `collection`, returning an array of all elements
+ * `predicate` returns truthy for. The predicate is invoked with three
+ * arguments: (value, index|key, collection).
+ *
+ * **Note:** Unlike `_.remove`, this method returns a new array.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [predicate=_.identity] The function invoked per iteration.
+ * @returns {Array} Returns the new filtered array.
+ * @see _.reject
+ * @example
+ *
+ * var users = [
+ *   { 'user': 'barney', 'age': 36, 'active': true },
+ *   { 'user': 'fred',   'age': 40, 'active': false }
+ * ];
+ *
+ * _.filter(users, function(o) { return !o.active; });
+ * // => objects for ['fred']
+ *
+ * // The `_.matches` iteratee shorthand.
+ * _.filter(users, { 'age': 36, 'active': true });
+ * // => objects for ['barney']
+ *
+ * // The `_.matchesProperty` iteratee shorthand.
+ * _.filter(users, ['active', false]);
+ * // => objects for ['fred']
+ *
+ * // The `_.property` iteratee shorthand.
+ * _.filter(users, 'active');
+ * // => objects for ['barney']
+ *
+ * // Combining several predicates using `_.overEvery` or `_.overSome`.
+ * _.filter(users, _.overSome([{ 'age': 36 }, ['age', 40]]));
+ * // => objects for ['fred', 'barney']
+ */
+function filter(collection, predicate) {
+  var func = isArray(collection) ? arrayFilter : baseFilter;
+  return func(collection, baseIteratee(predicate, 3));
+}
+
+module.exports = filter;
 
 
 /***/ }),
@@ -18814,7 +19014,7 @@ var render = function() {
                 _c(
                   "form",
                   {
-                    staticClass: "flex flex-col lg:gap-x-6 lg:w-1/4",
+                    staticClass: "flex flex-col lg:gap-x-6 md:w-2/5 2xl:w-1/4",
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
@@ -19532,62 +19732,257 @@ var render = function() {
                       )
                     }),
                     _vm._v(" "),
-                    _c("div", { staticClass: "mt-3 flex md:justify-start" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none",
-                          attrs: {
-                            type: "submit",
-                            disabled: _vm.waiting || _vm.waitForFileUpload
+                    _c("div", { staticClass: "w-full mt-4" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.product.hasIngredients,
+                            expression: "product.hasIngredients"
                           }
+                        ],
+                        attrs: { type: "checkbox", id: "hasIngredients" },
+                        domProps: {
+                          checked: Array.isArray(_vm.product.hasIngredients)
+                            ? _vm._i(_vm.product.hasIngredients, null) > -1
+                            : _vm.product.hasIngredients
                         },
-                        [
-                          _vm.waiting
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$a = _vm.product.hasIngredients,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.product,
+                                      "hasIngredients",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.product,
+                                      "hasIngredients",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.product, "hasIngredients", $$c)
+                              }
+                            },
+                            _vm.fetchIngredients
+                          ]
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: "hasIngredients" } }, [
+                        _vm._v("Has ingredients")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm.product.hasIngredients
+                      ? _c("span", { staticClass: "w-full mt-2" }, [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "text-sm font-semibold",
+                              attrs: { for: "name" }
+                            },
+                            [_vm._v("Ingredients")]
+                          ),
+                          _vm._v(" "),
+                          _vm.product.ingredients.length > 0
                             ? _c(
-                                "svg",
+                                "ul",
                                 {
-                                  staticClass:
-                                    "animate-spin mr-3 h-5 w-5 text-white",
-                                  attrs: {
-                                    xmlns: "http://www.w3.org/2000/svg",
-                                    fill: "none",
-                                    viewBox: "0 0 24 24"
-                                  }
+                                  staticClass: "flex items-center gap-x-2 my-1"
                                 },
-                                [
-                                  _c("circle", {
-                                    staticClass: "opacity-25",
-                                    attrs: {
-                                      cx: "12",
-                                      cy: "12",
-                                      r: "10",
-                                      stroke: "currentColor",
-                                      "stroke-width": "4"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("path", {
-                                    staticClass: "opacity-75",
-                                    attrs: {
-                                      fill: "currentColor",
-                                      d:
-                                        "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                    }
-                                  })
-                                ]
+                                _vm._l(_vm.product.ingredients, function(
+                                  ingredient
+                                ) {
+                                  return _c(
+                                    "li",
+                                    {
+                                      key: ingredient.id,
+                                      staticClass:
+                                        "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.removeIngredient(
+                                            ingredient.id
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("span", [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(ingredient.quantity) +
+                                            _vm._s(ingredient.unit.name)
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("span", [
+                                        _vm._v(_vm._s(ingredient.name))
+                                      ])
+                                    ]
+                                  )
+                                }),
+                                0
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _c("span", [
-                            _vm._v(
-                              "\n                        Submit\n                    "
-                            )
-                          ])
-                        ]
-                      )
-                    ])
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "relative flex items-center gap-x-3 bg-white w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                            },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.ingredientInput,
+                                    expression: "ingredientInput"
+                                  }
+                                ],
+                                staticClass: "outline-none h-full",
+                                attrs: { type: "text", name: "ingredients" },
+                                domProps: { value: _vm.ingredientInput },
+                                on: {
+                                  keyup: _vm.findIngredient,
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.ingredientInput = $event.target.value
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm.foundIngredients.length > 0
+                                ? _c(
+                                    "ul",
+                                    {
+                                      staticClass:
+                                        "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
+                                    },
+                                    _vm._l(_vm.foundIngredients, function(
+                                      ingredient,
+                                      index
+                                    ) {
+                                      return _c(
+                                        "li",
+                                        {
+                                          key: ingredient.id,
+                                          staticClass:
+                                            "p-1 flex items-center gap-x-3 cursor-pointer hover:bg-gray-50",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.selectIngredient(
+                                                ingredient.id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("div", [
+                                            _vm._v(
+                                              "\n                                " +
+                                                _vm._s(index + 1) +
+                                                "\n                            "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", [
+                                            _vm._v(
+                                              "\n                                " +
+                                                _vm._s(ingredient.name) +
+                                                "\n                            "
+                                            )
+                                          ])
+                                        ]
+                                      )
+                                    }),
+                                    0
+                                  )
+                                : _vm._e()
+                            ]
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "mt-3 mb-36 flex md:justify-start" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none",
+                            attrs: {
+                              type: "submit",
+                              disabled: _vm.waiting || _vm.waitForFileUpload
+                            }
+                          },
+                          [
+                            _vm.waiting
+                              ? _c(
+                                  "svg",
+                                  {
+                                    staticClass:
+                                      "animate-spin mr-3 h-5 w-5 text-white",
+                                    attrs: {
+                                      xmlns: "http://www.w3.org/2000/svg",
+                                      fill: "none",
+                                      viewBox: "0 0 24 24"
+                                    }
+                                  },
+                                  [
+                                    _c("circle", {
+                                      staticClass: "opacity-25",
+                                      attrs: {
+                                        cx: "12",
+                                        cy: "12",
+                                        r: "10",
+                                        stroke: "currentColor",
+                                        "stroke-width": "4"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      staticClass: "opacity-75",
+                                      attrs: {
+                                        fill: "currentColor",
+                                        d:
+                                          "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                      }
+                                    })
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("span", [
+                              _vm._v(
+                                "\n                        Submit\n                    "
+                              )
+                            ])
+                          ]
+                        )
+                      ]
+                    )
                   ],
                   1
                 )

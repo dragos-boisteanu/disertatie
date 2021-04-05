@@ -5,7 +5,7 @@
         </template>
 
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-            <form @submit.prevent="handleSubmit(submit)" class="flex flex-col lg:gap-x-6 lg:w-1/4">
+            <form @submit.prevent="handleSubmit(submit)" class="flex flex-col lg:gap-x-6 md:w-2/5 2xl:w-1/4">
             
                 <file-pond
                     name="image"
@@ -19,7 +19,7 @@
                             headers: {
                                 'X-CSRF-TOKEN': csrf
                             },
-                            onload: (response) =>  addImagePathToProduct(response) ,
+                            onload: (response) =>  addImagePathToProduct(response),
                         },
                         revert: {
                             url: '/delete',
@@ -149,7 +149,46 @@
                     </select>
                 </ValidationProvider>
 
-                <div class="mt-3 flex md:justify-start">
+                <div class="w-full mt-4">
+                    <input type="checkbox" id="hasIngredients" v-model="product.hasIngredients" @change="fetchIngredients"/>
+                    <label for="hasIngredients" >Has ingredients</label>
+                </div>
+
+                <span class="w-full mt-2" v-if="product.hasIngredients">
+                    <label for="name" class="text-sm font-semibold">Ingredients</label>
+                    <!-- <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div> -->
+                    <ul v-if="product.ingredients.length > 0"
+                        class="flex items-center gap-x-2 my-1"
+                    >
+                        <li v-for="ingredient in product.ingredients" :key="ingredient.id"
+                            class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
+                            @click="removeIngredient(ingredient.id)"
+                        > 
+                            <span>  {{ ingredient.quantity}}{{ ingredient.unit.name}}</span>
+                            <span>{{ingredient.name}}</span>
+                        </li>
+                    </ul>
+                    <div class="relative flex items-center gap-x-3 bg-white w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
+                        
+                        <input type="text" name="ingredients" class="outline-none h-full" v-model="ingredientInput" @keyup="findIngredient"/>
+
+                        <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
+                            <li v-for="(ingredient, index) in foundIngredients" :key="ingredient.id"
+                                @click="selectIngredient(ingredient.id)"
+                                class="p-1 flex items-center gap-x-3 cursor-pointer hover:bg-gray-50"    
+                            >
+                                <div>
+                                    {{index+1}}
+                                </div>
+                                <div>
+                                    {{ingredient.name}}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </span>
+
+                <div class="mt-3 mb-36 flex md:justify-start">
                     <button 
                         type="submit"
                         :disabled="waiting || waitForFileUpload"  
@@ -175,6 +214,9 @@
     import ViewContainer from '../ViewContainer';
 
     import _debounce from 'lodash/debounce';
+    import _find from 'lodash/find';
+    import _filter from 'lodash/filter';
+    import _findIndex from 'lodash/findIndex';
 
     import vueFilePond from "vue-filepond";
     import "filepond/dist/filepond.min.css";
@@ -190,6 +232,7 @@
         computed: {
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
+            ...mapGetters('Ingredients', ['getIngredients']),
         },
 
         data() {
@@ -197,6 +240,10 @@
                 checkingBarcode: false,
                 locked: false,
                 waiting: false,
+
+                ingredientInput: '',
+                foundIngredients: [],
+
                 product: {
                     barcode: '',
                     name:'',
@@ -206,6 +253,8 @@
                     unit_id: '',
                     quantity: '',
                     category_id: '',
+                    hasIngredients: false,
+                    ingredients: []
                 },
 
                 waitForFileUpload: false,
@@ -216,6 +265,7 @@
 
         methods: {
             ...mapActions('Products', ['addProduct', 'getProductByBarcode']),
+            ...mapActions('Ingredients', ['downloadIngredients']),
             
             async submit() {
                 try {
@@ -263,12 +313,14 @@
                 }
             }, 500),
 
-            resetProductData() {
-                // Object.keys(this.product).forEach(key => {
-                //     if(key !== 'barcode') {
-                //         this.product[key] = '';
-                //     }
-                // })
+            async fetchIngredients() {
+                try {
+                    if(this.getIngredients.length === 0) {
+                        await this.downloadIngredients();
+                    }
+                } catch ( error ) {
+                    console.log(error)
+                }
             },
 
             waitForFiletoUpload() {
@@ -287,7 +339,35 @@
             clearImage() {
                 this.$refs.pond.removeFile({revert: true});
                 delete this.product.image;
+            },
+
+            findIngredient(){
+                if(this.ingredientInput.length > 0) {
+                    const lastSpaceIndex = this.ingredientInput.lastIndexOf(" ");
+                    this.foundIngredients = _filter(this.getIngredients, ingredient =>  (new RegExp ('^' + `${this.ingredientInput.substring(lastSpaceIndex +1 )}`, 'i').test( ingredient.name )));
+                }else {
+                    this.foundIngredients = [];
+                }
+            },
+
+            selectIngredient(id) {
+                const selectedIngredient = _find(this.foundIngredients, ['id', id]);
+                const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
+                
+                selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+
+                this.product.ingredients.push(selectedIngredient);
+                this.ingredientInput = '';
+
+                this.foundIngredients = [];
+            },
+
+            removeIngredient(id) {
+                const ingredientIndex = _findIndex(this.product.ingredients, ['id', id]);
+                this.product.ingredients.splice(ingredientIndex, 1);
             }
+
+
         },
 
         components: {
