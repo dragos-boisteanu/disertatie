@@ -215,6 +215,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     selectIngredient: function selectIngredient(id) {
       this.ingredientSelected = true;
       this.ingredient = Object.assign(this.ingredient, lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.getIngredients, ['id', id]));
+      this.ingredient.addQuantity = '';
+      this.$refs.observer.reset();
     },
     clearSelection: function clearSelection() {
       this.ingredientSelected = false;
@@ -246,7 +248,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$Progress.start();
 
                 if (!_this.ingredientSelected) {
-                  _context2.next = 15;
+                  _context2.next = 16;
                   break;
                 }
 
@@ -258,7 +260,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 };
                 counter = 0;
-                Object.keys(originalIngredient).forEach(function (key) {
+                Object.keys(_this.ingredient).forEach(function (key) {
                   if (originalIngredient[key] !== _this.ingredient[key]) {
                     payload.ingredient[key] = _this.ingredient[key];
                     counter++;
@@ -266,7 +268,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
                 if (!(counter > 0)) {
-                  _context2.next = 12;
+                  _context2.next = 13;
                   break;
                 }
 
@@ -274,33 +276,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this.patchIngredient(payload);
 
               case 10:
-                _context2.next = 13;
+                _this.ingredient.quantity += parseInt(payload.ingredient.addQuantity);
+                _context2.next = 14;
                 break;
-
-              case 12:
-                console.log('nothing to update');
 
               case 13:
-                _context2.next = 18;
+                console.log('nothing to update');
+
+              case 14:
+                _context2.next = 19;
                 break;
 
-              case 15:
-                _context2.next = 17;
+              case 16:
+                _context2.next = 18;
                 return _this.postIngredient(_this.ingredient);
 
-              case 17:
+              case 18:
                 _this.resetForm();
 
-              case 18:
+              case 19:
                 _this.waiting = false;
 
                 _this.$Progress.finish();
 
-                _context2.next = 28;
+                _context2.next = 29;
                 break;
 
-              case 22:
-                _context2.prev = 22;
+              case 23:
+                _context2.prev = 23;
                 _context2.t0 = _context2["catch"](0);
 
                 _this.$Progress.fail();
@@ -312,12 +315,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this.$refs.observer.setErrors(_context2.t0.response.data.errors);
                 }
 
-              case 28:
+              case 29:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 22]]);
+        }, _callee2, null, [[0, 23]]);
       }))();
     },
     removeIngredient: function removeIngredient(id) {
@@ -986,7 +989,9 @@ var render = function() {
                                                     id: "unit_id",
                                                     name: "weight units",
                                                     type: "text",
-                                                    disabled: _vm.waiting
+                                                    disabled:
+                                                      _vm.waiting ||
+                                                      _vm.ingredientSelected
                                                   },
                                                   on: {
                                                     change: function($event) {

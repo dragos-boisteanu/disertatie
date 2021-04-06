@@ -77,7 +77,13 @@ const mutations = {
         const vm = payload.vm;
 
         Object.keys(payload.ingredient).forEach(key => {
-            vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key] );
+            if(key === 'addQuantity') {
+                vm.$set(state.ingredients[ingredientIndex], 'quantity', parseInt(payload.ingredient['addQuantity']) + state.ingredients[ingredientIndex].quantity );
+                // delete state.ingredients[ingredientIndex].addQuantity
+            } else {
+                vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key] );
+            }
+            
         });
     },
 

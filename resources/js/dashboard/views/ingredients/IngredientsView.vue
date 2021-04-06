@@ -82,7 +82,7 @@
                                         name="weight units" 
                                         type="text" 
                                         v-model="ingredient.unit" 
-                                        :disabled="waiting"   
+                                        :disabled="waiting || ingredientSelected"   
                                         class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                         :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                     >
@@ -147,6 +147,7 @@
         computed: {
             ...mapGetters('Ingredients', ['getIngredients']),
             ...mapGetters('Units', ['getUnits']),
+
         },
 
         data() {
@@ -172,6 +173,8 @@
             selectIngredient(id) {
                 this.ingredientSelected = true;
                 this.ingredient = Object.assign(this.ingredient, _find(this.getIngredients, ['id', id]));
+                this.ingredient.addQuantity = '';
+                this.$refs.observer.reset();
             },
 
             clearSelection() {
@@ -209,7 +212,7 @@
 
                         let counter = 0;
 
-                        Object.keys(originalIngredient).forEach(key => {
+                        Object.keys(this.ingredient).forEach(key => {
                             if(originalIngredient[key] !== this.ingredient[key]) {
                                 payload.ingredient[key] = this.ingredient[key];
                                 counter++;
@@ -218,7 +221,7 @@
 
                         if(counter > 0 ) {
                             await this.patchIngredient(payload);
-
+                            this.ingredient.quantity += parseInt(payload.ingredient.addQuantity); 
                         } else {
                             console.log('nothing to update')
                         }
