@@ -78,21 +78,26 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
-            $product = Product::where('barcode', $input['barcode'])->with('stock')->first();
-
-            if(isset($product)) {;
-                $product->stock->increment('quantity');
-                DB::commit();
-                return response()->json([
-                    'message'=>'Product already exists. Stock quantity increased by 1',
-                ], 200);
-            } 
-         
-            $stock = Stock::create(['quantity' => 1]);
-
-            $input['stock_id'] = $stock->id;
+            // $product = Product::where('barcode', $input['barcode'])->with('stock')->first();
 
             $product = Product::create($input);
+
+            if($request->has('hasIngredients')) {
+                foreach($input['ingredients'] as $ingredient) {
+                    $product->ingredients()->attach($ingredient['id'], ['quantity' => $ingredient['quantity']]);
+                }
+            } else {
+                // if(isset($product)) {
+                //     $product->stock->increment('quantity');
+                //     DB::commit();
+                //     return response()->json([
+                //         'message'=>'Product already exists. Stock quantity increased by 1',
+                //     ], 200);
+                // }
+                $stock = Stock::create(['quantity' => 1]);
+                $input['stock_id'] = $stock->id;
+            }
+         
 
             if($request->has('image')) {
                 $requestPath = $request->image;

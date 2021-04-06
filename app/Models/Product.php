@@ -25,6 +25,7 @@ class Product extends Model
         'weight',
         'unit_id',
         'stock_id',
+        'has_ingredients',
     ];
 
     public $with = ['unit', 'stock', 'category'];
@@ -55,7 +56,7 @@ class Product extends Model
 
     public function ingredients() 
     {
-        return $this->belongsToMany('App\Models\Ingredients');
+        return $this->belongsToMany('App\Models\Ingredient');
     }
 
     public function scopeFilter(Builder $builder, Request $request)

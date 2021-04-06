@@ -1350,9 +1350,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 
 
@@ -1412,18 +1409,23 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
                   });
                 }
 
-                _context.next = 6;
+                if (!payload.hasIngredients) {
+                  delete payload.ingredients;
+                  delete payload.hasIngredients;
+                }
+
+                _context.next = 7;
                 return _this.addProduct(payload);
 
-              case 6:
+              case 7:
                 _this.$refs.observer.reset();
 
                 _this.waiting = false;
-                _context.next = 15;
+                _context.next = 16;
                 break;
 
-              case 10:
-                _context.prev = 10;
+              case 11:
+                _context.prev = 11;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
@@ -1433,12 +1435,12 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
 
                 _this.waiting = false;
 
-              case 15:
+              case 16:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 10]]);
+        }, _callee, null, [[0, 11]]);
       }))();
     },
     getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -1465,7 +1467,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
               if (response.data.data) {
                 this.product = response.data.data;
               } else {
-                this.resetProductData();
+                // this.resetProductData();
                 this.locked = false;
               }
 
@@ -1516,20 +1518,22 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
                 return _this2.downloadIngredients();
 
               case 5:
-                _context3.next = 10;
+                _this2.toggleIngredients();
+
+                _context3.next = 11;
                 break;
 
-              case 7:
-                _context3.prev = 7;
+              case 8:
+                _context3.prev = 8;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 10:
+              case 11:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 7]]);
+        }, _callee3, null, [[0, 8]]);
       }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {
@@ -1547,6 +1551,10 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
         revert: true
       });
       delete this.product.image;
+    },
+    toggleIngredients: function toggleIngredients() {
+      this.product.hasIngredients = !this.product.hasIngredients;
+      this.product.ingredients = [];
     },
     findIngredient: function findIngredient() {
       var _this3 = this;
@@ -19738,53 +19746,8 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "w-full mt-4" }, [
                       _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.product.hasIngredients,
-                            expression: "product.hasIngredients"
-                          }
-                        ],
                         attrs: { type: "checkbox", id: "hasIngredients" },
-                        domProps: {
-                          checked: Array.isArray(_vm.product.hasIngredients)
-                            ? _vm._i(_vm.product.hasIngredients, null) > -1
-                            : _vm.product.hasIngredients
-                        },
-                        on: {
-                          change: [
-                            function($event) {
-                              var $$a = _vm.product.hasIngredients,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      _vm.product,
-                                      "hasIngredients",
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      _vm.product,
-                                      "hasIngredients",
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
-                                }
-                              } else {
-                                _vm.$set(_vm.product, "hasIngredients", $$c)
-                              }
-                            },
-                            _vm.fetchIngredients
-                          ]
-                        }
+                        on: { change: _vm.fetchIngredients }
                       }),
                       _vm._v(" "),
                       _c("label", { attrs: { for: "hasIngredients" } }, [
@@ -19836,7 +19799,9 @@ var render = function() {
                                       ]),
                                       _vm._v(" "),
                                       _c("span", [
-                                        _vm._v(_vm._s(ingredient.name))
+                                        _vm._v(
+                                          " " + _vm._s(ingredient.name) + " "
+                                        )
                                       ])
                                     ]
                                   )
@@ -19883,15 +19848,14 @@ var render = function() {
                                         "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
                                     },
                                     _vm._l(_vm.foundIngredients, function(
-                                      ingredient,
-                                      index
+                                      ingredient
                                     ) {
                                       return _c(
                                         "li",
                                         {
                                           key: ingredient.id,
                                           staticClass:
-                                            "p-1 flex items-center gap-x-3 cursor-pointer hover:bg-gray-50",
+                                            "p-1 cursor-pointer hover:bg-gray-50",
                                           on: {
                                             click: function($event) {
                                               return _vm.selectIngredient(
@@ -19901,14 +19865,6 @@ var render = function() {
                                           }
                                         },
                                         [
-                                          _c("div", [
-                                            _vm._v(
-                                              " \n                                " +
-                                                _vm._s(index + 1) +
-                                                "\n                            "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
                                           _c("div", [
                                             _vm._v(
                                               "\n                                " +

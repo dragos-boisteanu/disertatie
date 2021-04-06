@@ -150,7 +150,7 @@
                 </ValidationProvider>
 
                 <div class="w-full mt-4">
-                    <input type="checkbox" id="hasIngredients" v-model="product.hasIngredients" @change="fetchIngredients"/>
+                    <input type="checkbox" id="hasIngredients" @change="fetchIngredients"/>
                     <label for="hasIngredients" >Has ingredients</label>
                 </div>
 
@@ -165,7 +165,7 @@
                             @click="removeIngredient(ingredient.id)"
                         > 
                             <span>  {{ ingredient.quantity}}{{ ingredient.unit.name}}</span>
-                            <span>{{ingredient.name}}</span>
+                            <span> {{ingredient.name}} </span>
                         </li>
                     </ul>
                     <div class="relative flex items-center gap-x-3 bg-white w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
@@ -173,13 +173,10 @@
                         <input type="text" name="ingredients" class="outline-none h-full" v-model="ingredientInput" @keyup="findIngredient"/>
 
                         <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
-                            <li v-for="(ingredient, index) in foundIngredients" :key="ingredient.id"
+                            <li v-for="ingredient in foundIngredients" :key="ingredient.id"
                                 @click="selectIngredient(ingredient.id)"
-                                class="p-1 flex items-center gap-x-3 cursor-pointer hover:bg-gray-50"    
+                                class="p-1 cursor-pointer hover:bg-gray-50"    
                             >
-                                <div> 
-                                    {{index+1}}
-                                </div> 
                                 <div>
                                     {{ingredient.name}}
                                 </div>
@@ -271,6 +268,7 @@
                 try {
                     this.waiting = true;
                     const payload = {}
+
                     if(this.checkingBarcode) {
                         payload.barcode = this.product.barcode;
                     } else {
@@ -278,7 +276,14 @@
                             payload[key] = this.product[key];
                         })
                     }
+
+                    if(!payload.hasIngredients) {
+                        delete payload.ingredients;
+                        delete payload.hasIngredients;
+                    }
+                
                     await this.addProduct(payload);
+
                     this.$refs.observer.reset();
                     this.waiting = false
                 } catch ( error ) {
@@ -300,7 +305,7 @@
                         if(response.data.data) {
                             this.product = response.data.data;
                         } else {
-                            this.resetProductData();
+                            // this.resetProductData();
                             this.locked = false;
                         }
                         this.checkingBarcode = false;
@@ -321,6 +326,7 @@
                     if(this.getIngredients.length === 0) {
                         await this.downloadIngredients();
                     }
+                    this.toggleIngredients()
                 } catch ( error ) {
                     console.log(error)
                 }
@@ -342,6 +348,13 @@
             clearImage() {
                 this.$refs.pond.removeFile({revert: true});
                 delete this.product.image;
+            },
+
+            toggleIngredients() {
+                this.product.hasIngredients = !this.product.hasIngredients;
+
+                this.product.ingredients = [];
+
             },
 
             findIngredient(){
