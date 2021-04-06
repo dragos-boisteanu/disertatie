@@ -138,7 +138,7 @@
                     <select 
                         id="unit_id"
                         name="weight units" 
-                        type="text" 
+                        type="text"    
                         v-model="product.unit_id" 
                         :disabled="waiting || locked"   
                         class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
@@ -169,7 +169,7 @@
                         </li>
                     </ul>
                     <div class="relative flex items-center gap-x-3 bg-white w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
-                        
+
                         <input type="text" name="ingredients" class="outline-none h-full" v-model="ingredientInput" @keyup="findIngredient"/>
 
                         <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
@@ -177,9 +177,9 @@
                                 @click="selectIngredient(ingredient.id)"
                                 class="p-1 flex items-center gap-x-3 cursor-pointer hover:bg-gray-50"    
                             >
-                                <div>
+                                <div> 
                                     {{index+1}}
-                                </div>
+                                </div> 
                                 <div>
                                     {{ingredient.name}}
                                 </div>
@@ -315,6 +315,9 @@
 
             async fetchIngredients() {
                 try {
+                    if(this.hasIngredients) {
+                        this.product.ingredients = [];
+                    }
                     if(this.getIngredients.length === 0) {
                         await this.downloadIngredients();
                     }

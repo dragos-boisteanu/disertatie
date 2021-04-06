@@ -2976,7 +2976,7 @@ var routes = [{
   meta: {
     breadcrumb: {
       label: 'Ingredients',
-      parent: 'Dashboard'
+      parent: 'Dashhboard'
     }
   }
 }, {
@@ -3145,7 +3145,7 @@ var actions = {
 
             case 4:
               response = _context2.sent;
-              payload.id = response.data;
+              payload.id = response.data.data.id;
               commit('ADD_CATEGORY', payload);
               _context2.next = 12;
               break;
@@ -3165,32 +3165,32 @@ var actions = {
   },
   patchCategory: function patchCategory(_ref4, payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      var commit;
+      var commit, category;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               commit = _ref4.commit;
               _context3.prev = 1;
-              _context3.next = 4;
-              return (0,_api_categories_api__WEBPACK_IMPORTED_MODULE_1__.patchCategory)(payload.category);
+              category = payload.category;
+              _context3.next = 5;
+              return (0,_api_categories_api__WEBPACK_IMPORTED_MODULE_1__.patchCategory)(category);
 
-            case 4:
+            case 5:
               commit('PATCH_CATEGORY', payload);
-              _context3.next = 10;
-              break;
+              return _context3.abrupt("return", category);
 
-            case 7:
-              _context3.prev = 7;
+            case 9:
+              _context3.prev = 9;
               _context3.t0 = _context3["catch"](1);
               throw _context3.t0;
 
-            case 10:
+            case 12:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[1, 7]]);
+      }, _callee3, null, [[1, 9]]);
     }))();
   },
   deleteCategory: function deleteCategory(_ref5, payload) {

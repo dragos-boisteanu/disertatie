@@ -230,12 +230,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
                 _this.$Progress.finish();
 
-                _context.next = 29;
+                _context.next = 30;
                 break;
 
               case 24:
                 _context.prev = 24;
                 _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
 
                 _this.$Progress.fail();
 
@@ -246,7 +247,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 } // notificaiton
 
 
-              case 29:
+              case 30:
               case "end":
                 return _context.stop();
             }

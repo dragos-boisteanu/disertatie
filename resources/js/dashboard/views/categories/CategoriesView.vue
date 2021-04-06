@@ -190,6 +190,8 @@
 
                 } catch ( error ) {
 
+                    console.log(error)
+
                     this.$Progress.fail();
                     this.waiting = false;
 

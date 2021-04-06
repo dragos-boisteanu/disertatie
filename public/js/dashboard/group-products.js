@@ -1503,29 +1503,33 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
               case 0:
                 _context3.prev = 0;
 
+                if (_this2.hasIngredients) {
+                  _this2.product.ingredients = [];
+                }
+
                 if (!(_this2.getIngredients.length === 0)) {
-                  _context3.next = 4;
+                  _context3.next = 5;
                   break;
                 }
 
-                _context3.next = 4;
+                _context3.next = 5;
                 return _this2.downloadIngredients();
 
-              case 4:
-                _context3.next = 9;
+              case 5:
+                _context3.next = 10;
                 break;
 
-              case 6:
-                _context3.prev = 6;
+              case 7:
+                _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 9:
+              case 10:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 6]]);
+        }, _callee3, null, [[0, 7]]);
       }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {
@@ -19899,7 +19903,7 @@ var render = function() {
                                         [
                                           _c("div", [
                                             _vm._v(
-                                              "\n                                " +
+                                              " \n                                " +
                                                 _vm._s(index + 1) +
                                                 "\n                            "
                                             )

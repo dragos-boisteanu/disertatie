@@ -47,13 +47,27 @@
                             
                             <div class="w-full flex-1 flex items-center gap-x-4">
                                 <ValidationProvider vid="vat" rules="required|integer" v-slot="{ errors, failed, passed }" class="flex-1">
-                                    <label for="vat" class="text-sm font-semibold">Quantity</label>
+                                    <label for="vat" class="text-sm font-semibold">Current cuantity</label>
                                     <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                     <input 
                                         id="vat"
                                         name="vat" 
                                         type="number" 
                                         v-model="ingredient.quantity" 
+                                        :disabled="waiting || ingredientSelected"   
+                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                        :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                    />
+                                </ValidationProvider>
+
+                                <ValidationProvider vid="vat" rules="required|integer" v-slot="{ errors, failed, passed }" class="flex-1" v-if="ingredientSelected">
+                                    <label for="vat" class="text-sm font-semibold">Add quantity</label>
+                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                    <input 
+                                        id="vat"
+                                        name="vat" 
+                                        type="number" 
+                                        v-model="ingredient.addQuantity" 
                                         :disabled="waiting"   
                                         class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                         :class="{'border-red-600': failed, 'border-green-500' : passed}"
@@ -77,6 +91,8 @@
                                     </select>
 
                                 </ValidationProvider>
+
+
                             </div>
                             <div>
                                 <button 
@@ -141,6 +157,7 @@
                     id: '',
                     name: '',
                     quantity: '',
+                    addQuantity: '',
                     unit: {
                         id: '',
                         name: '',
@@ -179,7 +196,6 @@
                 try {
                     this.$Progress.start();
 
-          
                     if(this.ingredientSelected) {
 
                         const originalIngredient = _find(this.getIngredients, ['id', this.ingredient.id]);

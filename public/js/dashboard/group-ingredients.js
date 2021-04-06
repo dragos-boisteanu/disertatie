@@ -143,6 +143,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -187,6 +203,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         id: '',
         name: '',
         quantity: '',
+        addQuantity: '',
         unit: {
           id: '',
           name: ''
@@ -749,7 +766,7 @@ var render = function() {
                                                     "text-sm font-semibold",
                                                   attrs: { for: "vat" }
                                                 },
-                                                [_vm._v("Quantity")]
+                                                [_vm._v("Current cuantity")]
                                               ),
                                               _vm._v(" "),
                                               _c(
@@ -786,7 +803,9 @@ var render = function() {
                                                   id: "vat",
                                                   name: "vat",
                                                   type: "number",
-                                                  disabled: _vm.waiting
+                                                  disabled:
+                                                    _vm.waiting ||
+                                                    _vm.ingredientSelected
                                                 },
                                                 domProps: {
                                                   value: _vm.ingredient.quantity
@@ -814,6 +833,100 @@ var render = function() {
                                       true
                                     )
                                   }),
+                                  _vm._v(" "),
+                                  _vm.ingredientSelected
+                                    ? _c("ValidationProvider", {
+                                        staticClass: "flex-1",
+                                        attrs: {
+                                          vid: "vat",
+                                          rules: "required|integer"
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function(ref) {
+                                                var errors = ref.errors
+                                                var failed = ref.failed
+                                                var passed = ref.passed
+                                                return [
+                                                  _c(
+                                                    "label",
+                                                    {
+                                                      staticClass:
+                                                        "text-sm font-semibold",
+                                                      attrs: { for: "vat" }
+                                                    },
+                                                    [_vm._v("Add quantity")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "text-xs text-red-600 font-semibold mb-1"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        " " + _vm._s(errors[0])
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("input", {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value:
+                                                          _vm.ingredient
+                                                            .addQuantity,
+                                                        expression:
+                                                          "ingredient.addQuantity"
+                                                      }
+                                                    ],
+                                                    staticClass:
+                                                      "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                                    class: {
+                                                      "border-red-600": failed,
+                                                      "border-green-500": passed
+                                                    },
+                                                    attrs: {
+                                                      id: "vat",
+                                                      name: "vat",
+                                                      type: "number",
+                                                      disabled: _vm.waiting
+                                                    },
+                                                    domProps: {
+                                                      value:
+                                                        _vm.ingredient
+                                                          .addQuantity
+                                                    },
+                                                    on: {
+                                                      input: function($event) {
+                                                        if (
+                                                          $event.target
+                                                            .composing
+                                                        ) {
+                                                          return
+                                                        }
+                                                        _vm.$set(
+                                                          _vm.ingredient,
+                                                          "addQuantity",
+                                                          $event.target.value
+                                                        )
+                                                      }
+                                                    }
+                                                  })
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          null,
+                                          true
+                                        )
+                                      })
+                                    : _vm._e(),
                                   _vm._v(" "),
                                   _c("ValidationProvider", {
                                     staticClass: "flex-1",

@@ -11,6 +11,8 @@ const mix = require('laravel-mix');
  |
  */
 
+ mix.disableNotifications();
+
 mix.js('resources/js/dashboard/app.js', 'public/js/dashboard')
     .js('resources/js/client/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
