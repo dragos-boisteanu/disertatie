@@ -75,6 +75,12 @@ class ProductController extends Controller
 
         $input = $request->validated();
 
+        if($request->has('hasIngredients')) {
+            $input['has_ingredients'] = true;
+        } else {
+            $input['has_ingredients'] = false;
+        }
+
         try {
             DB::beginTransaction();
 

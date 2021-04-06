@@ -25,7 +25,9 @@ class Product extends JsonResource
             'weight' => $this->weight,
             'unit_id' => $this->unit_id,
             'category_id' => $this->category_id,
-            'quantity' => $this->stock->quantity,
+            'quantity' => $this->quantity,
+            'hasIngredients' => $this->has_ingredients,
+            'ingredients' => $this->ingredients,
             'deleted_at' => $this->deleted_at
         ];
     }

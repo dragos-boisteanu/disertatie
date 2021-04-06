@@ -1350,6 +1350,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -1466,6 +1468,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
 
               if (response.data.data) {
                 this.product = response.data.data;
+                console.log(this.product);
               } else {
                 // this.resetProductData();
                 this.locked = false;
@@ -1505,7 +1508,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
               case 0:
                 _context3.prev = 0;
 
-                if (_this2.hasIngredients) {
+                if (_this2.product.hasIngredients) {
                   _this2.product.ingredients = [];
                 }
 
@@ -1518,22 +1521,20 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
                 return _this2.downloadIngredients();
 
               case 5:
-                _this2.toggleIngredients();
-
-                _context3.next = 11;
+                _context3.next = 10;
                 break;
 
-              case 8:
-                _context3.prev = 8;
+              case 7:
+                _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 11:
+              case 10:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 8]]);
+        }, _callee3, null, [[0, 7]]);
       }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {
@@ -1554,7 +1555,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
     },
     toggleIngredients: function toggleIngredients() {
       this.product.hasIngredients = !this.product.hasIngredients;
-      this.product.ingredients = [];
     },
     findIngredient: function findIngredient() {
       var _this3 = this;
@@ -19042,6 +19042,7 @@ var render = function() {
                         "label-idle": "Upload product image...",
                         "allow-multiple": false,
                         "accepted-file-types": "image/jpeg",
+                        disabled: _vm.waiting || _vm.locked,
                         server: {
                           url: "/api/dashboard/images",
                           process: {
@@ -19746,8 +19747,57 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "w-full mt-4" }, [
                       _c("input", {
-                        attrs: { type: "checkbox", id: "hasIngredients" },
-                        on: { change: _vm.fetchIngredients }
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.product.hasIngredients,
+                            expression: "product.hasIngredients"
+                          }
+                        ],
+                        attrs: {
+                          type: "checkbox",
+                          id: "hasIngredients",
+                          disabled: _vm.waiting || _vm.locked
+                        },
+                        domProps: {
+                          checked: Array.isArray(_vm.product.hasIngredients)
+                            ? _vm._i(_vm.product.hasIngredients, null) > -1
+                            : _vm.product.hasIngredients
+                        },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$a = _vm.product.hasIngredients,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.product,
+                                      "hasIngredients",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.product,
+                                      "hasIngredients",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.product, "hasIngredients", $$c)
+                              }
+                            },
+                            _vm.fetchIngredients
+                          ]
+                        }
                       }),
                       _vm._v(" "),
                       _c("label", { attrs: { for: "hasIngredients" } }, [
@@ -19781,6 +19831,10 @@ var render = function() {
                                       key: ingredient.id,
                                       staticClass:
                                         "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
+                                      class: {
+                                        "disabled pointer-events-none bg-gray-100":
+                                          _vm.waiting || _vm.locked
+                                      },
                                       on: {
                                         click: function($event) {
                                           return _vm.removeIngredient(
@@ -19814,7 +19868,7 @@ var render = function() {
                             "div",
                             {
                               staticClass:
-                                "relative flex items-center gap-x-3 bg-white w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
                             },
                             [
                               _c("input", {
@@ -19826,8 +19880,13 @@ var render = function() {
                                     expression: "ingredientInput"
                                   }
                                 ],
-                                staticClass: "outline-none h-full",
-                                attrs: { type: "text", name: "ingredients" },
+                                staticClass:
+                                  "outline-none  p-2 h-full w-full rounded",
+                                attrs: {
+                                  type: "text",
+                                  name: "ingredients",
+                                  disabled: _vm.waiting || _vm.locked
+                                },
                                 domProps: { value: _vm.ingredientInput },
                                 on: {
                                   keyup: _vm.findIngredient,
@@ -19894,7 +19953,10 @@ var render = function() {
                               "inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none",
                             attrs: {
                               type: "submit",
-                              disabled: _vm.waiting || _vm.waitForFileUpload
+                              disabled:
+                                _vm.waiting ||
+                                _vm.waitForFileUpload ||
+                                _vm.locked
                             }
                           },
                           [

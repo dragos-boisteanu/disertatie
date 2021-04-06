@@ -30,13 +30,35 @@ class Product extends Model
 
     public $with = ['unit', 'stock', 'category'];
 
-    protected $appends = array('price');
+    protected $appends = array('price', 'quantity');
 
     public function getPriceAttribute()
     {
         $price = $this->base_price + $this->base_price * ($this->category->vat / 100);
 
         return $price;
+    }
+
+    public function getQuantityAttribute() 
+    {
+        if($this->has_ingredients) {
+            $todalQuantityofIngredientsInStock = 0;
+            $totalQuantityOfNeededIngredients = 0;
+
+            $ingredients = $this->ingredients;
+            foreach($ingredients as $ingredient) {
+                $todalQuantityofIngredientsInStock += $ingredient->stock->quantity;
+                $totalQuantityOfNeededIngredients += $ingredient->pivot->quantity;
+            }
+
+            $quantity = floor($todalQuantityofIngredientsInStock / $totalQuantityOfNeededIngredients);
+
+
+        } else {
+            $quantity = $this->stock->quantity;
+        }
+
+        return $quantity;
     }
 
     public function category() 
@@ -56,7 +78,7 @@ class Product extends Model
 
     public function ingredients() 
     {
-        return $this->belongsToMany('App\Models\Ingredient');
+        return $this->belongsToMany('App\Models\Ingredient')->withPivot('quantity');
     }
 
     public function scopeFilter(Builder $builder, Request $request)

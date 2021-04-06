@@ -13,6 +13,7 @@
                     label-idle="Upload product image..."
                     v-bind:allow-multiple="false"
                     accepted-file-types="image/jpeg"
+                    :disabled="waiting || locked" 
                     :server="{
                         url: '/api/dashboard/images',
                         process: { 
@@ -150,7 +151,7 @@
                 </ValidationProvider>
 
                 <div class="w-full mt-4">
-                    <input type="checkbox" id="hasIngredients" @change="fetchIngredients"/>
+                    <input type="checkbox" id="hasIngredients" @change="fetchIngredients" v-model="product.hasIngredients" :disabled="waiting || locked"/>
                     <label for="hasIngredients" >Has ingredients</label>
                 </div>
 
@@ -162,15 +163,16 @@
                     >
                         <li v-for="ingredient in product.ingredients" :key="ingredient.id"
                             class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
+                            :class="{'disabled pointer-events-none bg-gray-100': waiting || locked}"
                             @click="removeIngredient(ingredient.id)"
                         > 
                             <span>  {{ ingredient.quantity}}{{ ingredient.unit.name}}</span>
                             <span> {{ingredient.name}} </span>
                         </li>
                     </ul>
-                    <div class="relative flex items-center gap-x-3 bg-white w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
+                    <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
 
-                        <input type="text" name="ingredients" class="outline-none h-full" v-model="ingredientInput" @keyup="findIngredient"/>
+                        <input type="text" name="ingredients" class="outline-none  p-2 h-full w-full rounded" v-model="ingredientInput" @keyup="findIngredient" :disabled="waiting || locked" />
 
                         <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
                             <li v-for="ingredient in foundIngredients" :key="ingredient.id"
@@ -188,7 +190,7 @@
                 <div class="mt-3 mb-36 flex md:justify-start">
                     <button 
                         type="submit"
-                        :disabled="waiting || waitForFileUpload"  
+                        :disabled="waiting || waitForFileUpload || locked"  
                         class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
                     >
                         <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -304,6 +306,7 @@
                         const response = await this.getProductByBarcode(this.product.barcode);
                         if(response.data.data) {
                             this.product = response.data.data;
+                            console.log(this.product)
                         } else {
                             // this.resetProductData();
                             this.locked = false;
@@ -320,13 +323,13 @@
 
             async fetchIngredients() {
                 try {
-                    if(this.hasIngredients) {
+                    if(this.product.hasIngredients) {
                         this.product.ingredients = [];
                     }
                     if(this.getIngredients.length === 0) {
                         await this.downloadIngredients();
                     }
-                    this.toggleIngredients()
+                    // this.toggleIngredients()
                 } catch ( error ) {
                     console.log(error)
                 }
@@ -353,7 +356,7 @@
             toggleIngredients() {
                 this.product.hasIngredients = !this.product.hasIngredients;
 
-                this.product.ingredients = [];
+                
 
             },
 
