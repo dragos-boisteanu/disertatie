@@ -155,6 +155,8 @@ const mutations = {
         if(state.products.length > 0 ) {
             const selectedProductIndex = _findIndex(state.products, ['id', payload.product.id]);
             const vm = payload.vm;
+
+            // TO DO: update stock quantity for products that require ingredients
             Object.keys(payload.product).forEach(key => {
                 vm.$set(state.products[selectedProductIndex], key, payload.product[key]);
             })

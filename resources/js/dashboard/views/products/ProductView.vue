@@ -70,15 +70,18 @@
             <h2 class="font-bold text-lg my-2">Descriere</h2>
             {{product.description}}
         </div>
-        <div>
+        <div v-if="product.hasIngredients">
             <h2 class="font-bold text-lg my-2">Ingredients</h2>
             <ul>
-                <li class="flex items-center gap-x-2">
+                <li 
+                    v-for="ingredient in product.ingredients" :key="ingredient.id"
+                    class="flex items-center gap-x-2"
+                >
                     <div class="font-semibold text-sm">
-                        Nume:
+                        {{ingredient.name}}
                     </div>
                     <div class="text-xs">
-                        23g
+                       {{ingredient.quantity}} {{ingredient.unit.name}}
                     </div>
                 </li>
             </ul>

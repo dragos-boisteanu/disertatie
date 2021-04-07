@@ -937,12 +937,11 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                 payload = {
                   vm: _this,
                   product: {
-                    id: _this.localProduct.id,
-                    hasIngredients: _this.localProduct.hasIngredients
+                    id: _this.localProduct.id
                   }
                 };
                 counter = 0;
-                Object.keys(_this.product).forEach(function (key) {
+                Object.keys(_this.localProduct).forEach(function (key) {
                   if (key === 'ingredients') {
                     console.log('product ingredients: ', _this.product[key].length);
                     console.log('local product ingredients: ', _this.localProduct[key].length);
@@ -1692,6 +1691,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -20518,23 +20520,46 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _c("div", [
-            _c("h2", { staticClass: "font-bold text-lg my-2" }, [
-              _vm._v("Ingredients")
-            ]),
-            _vm._v(" "),
-            _c("ul", [
-              _c("li", { staticClass: "flex items-center gap-x-2" }, [
-                _c("div", { staticClass: "font-semibold text-sm" }, [
-                  _vm._v("\n                    Nume:\n                ")
+          _vm.product.hasIngredients
+            ? _c("div", [
+                _c("h2", { staticClass: "font-bold text-lg my-2" }, [
+                  _vm._v("Ingredients")
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "text-xs" }, [
-                  _vm._v("\n                    23g\n                ")
-                ])
+                _c(
+                  "ul",
+                  _vm._l(_vm.product.ingredients, function(ingredient) {
+                    return _c(
+                      "li",
+                      {
+                        key: ingredient.id,
+                        staticClass: "flex items-center gap-x-2"
+                      },
+                      [
+                        _c("div", { staticClass: "font-semibold text-sm" }, [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(ingredient.name) +
+                              "\n                "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "text-xs" }, [
+                          _vm._v(
+                            "\n                   " +
+                              _vm._s(ingredient.quantity) +
+                              " " +
+                              _vm._s(ingredient.unit.name) +
+                              "\n                "
+                          )
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
               ])
-            ])
-          ])
+            : _vm._e()
         ],
         2
       )

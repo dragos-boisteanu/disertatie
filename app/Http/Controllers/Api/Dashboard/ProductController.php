@@ -182,31 +182,33 @@ class ProductController extends Controller
             }
         }
 
-        if($request->hasIngredients) {
+        if($request->has('hasIngredients')) {
+            if($request->hasIngregiends) {
 
-            $product->has_ingredients = true;
+                $product->has_ingredients = true;
 
-            if($request->has('ingredients')) {
-                $ingredientsArray = array();
-                
-                foreach ($request->ingredients as $ingredient) {
-                    $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
+                if($request->has('ingredients')) {
+                    $ingredientsArray = array();
+                    
+                    foreach ($request->ingredients as $ingredient) {
+                        $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
+                    }
+             
+                    $product->ingredients()->sync($ingredientsArray);
                 }
-         
-                $product->ingredients()->sync($ingredientsArray);
+    
+                if($product->stock_id) {
+                    $product->stock_id = null;
+                    $product->stock()->delete();
+                }
+            } else {
+                $product->has_ingredients = false;
+                $product->ingredients()->detach();
+                $stock = Stock::create([
+                    'quantity'=>0,
+                ]);
+                $product->stock_id = $stock->id;
             }
-
-            if($product->stock_id) {
-                $product->stock_id = null;
-                $product->stock()->delete();
-            }
-        }else {
-            $product->has_ingredients = false;
-            $product->ingredients()->detach();
-            $stock = Stock::create([
-                'quantity'=>0,
-            ]);
-            $product->stock_id = $stock->id;
         }
 
         $product->save();

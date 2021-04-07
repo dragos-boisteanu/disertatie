@@ -287,13 +287,13 @@
                         vm: this,
                         product: {
                             id: this.localProduct.id,
-                            hasIngredients: this.localProduct.hasIngredients
+                           
                         }
                     }
 
                     let counter = 0;
 
-                    Object.keys(this.product).forEach(key => {
+                    Object.keys(this.localProduct).forEach(key => {
                         
                         if(key === 'ingredients') {
                             console.log('product ingredients: ', this.product[key].length);

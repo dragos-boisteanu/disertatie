@@ -4034,7 +4034,8 @@ var mutations = {
     if (state.products.length > 0) {
       var selectedProductIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_3___default()(state.products, ['id', payload.product.id]);
 
-      var vm = payload.vm;
+      var vm = payload.vm; // TO DO: update stock quantity for products that require ingredients
+
       Object.keys(payload.product).forEach(function (key) {
         vm.$set(state.products[selectedProductIndex], key, payload.product[key]);
       });
