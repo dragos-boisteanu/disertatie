@@ -200,7 +200,7 @@ class ProductController extends Controller
                     $product->ingredients()->sync($ingredientsArray);
                     $product->save();
                     $product->refresh();
-                    
+
                     $quantityArray = array();
                     
                     $ingredients = $product->ingredients;
@@ -229,6 +229,7 @@ class ProductController extends Controller
                     'quantity'=>0,
                 ]);
                 $product->stock_id = $stock->id;
+                $quantity = 0;
             }
         }
 
