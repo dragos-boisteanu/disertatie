@@ -31,7 +31,12 @@ class ProductPatchRequest extends FormRequest
             'base_price' => 'sometimes|numeric',
             'weight' => 'sometimes|numeric',
             'category_id' => 'sometimes|numeric|exists:categories,id',
-            'unit_id' => 'sometimes|numeric|exists:units,id'
+            'unit_id' => 'sometimes|numeric|exists:units,id',
+            'hasIngredients' => 'required|boolean',
+            'ingredients'=> 'required_with:hasIngredients|array',
+            'ingregients.*.id' => 'required_with:ingregients|numeric',
+            'ingredients.*.quantity' => 'required_with:ingregients|numeric',
+            'ingredients.*.unit.id' => 'required_with:ingregients|numeric'
         ];
     }
 

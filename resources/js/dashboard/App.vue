@@ -63,7 +63,8 @@
                     this.fetchCounties(),
                     this.fetchCategories(),
                     this.fetchUnits(),
-                    this.downloadLoggedUserData()
+                    this.downloadLoggedUserData(),
+                    this.downloadIngredients()
                 ]);
 
                 this.$Progress.finish()
@@ -83,6 +84,7 @@
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Counties', ['getCounties']),
             ...mapGetters('Categories', ['getCategories']),
+            ...mapGetters('Ingredients', ['getIngredients']),
             ...mapGetters('Notification', ['getNotification']),
             
             mobile() {
@@ -101,6 +103,7 @@
             ...mapActions('Counties', ['fetchCounties']),
             ...mapActions('Notification', ['openNotification']),
             ...mapActions('Users', ['downloadLoggedUserData']),
+            ...mapActions('Ingredients', ['downloadIngredients']),
             
             async downloadRoles() {
                 try {

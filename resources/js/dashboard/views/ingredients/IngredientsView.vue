@@ -91,9 +91,8 @@
                                     </select>
 
                                 </ValidationProvider>
-
-
                             </div>
+                            
                             <div>
                                 <button 
                                     v-if="ingredientSelected"

@@ -93,13 +93,6 @@ class ProductController extends Controller
                     $product->ingredients()->attach($ingredient['id'], ['quantity' => $ingredient['quantity']]);
                 }
             } else {
-                // if(isset($product)) {
-                //     $product->stock->increment('quantity');
-                //     DB::commit();
-                //     return response()->json([
-                //         'message'=>'Product already exists. Stock quantity increased by 1',
-                //     ], 200);
-                // }
                 $stock = Stock::create(['quantity' => 1]);
                 $input['stock_id'] = $stock->id;
             }
@@ -186,10 +179,24 @@ class ProductController extends Controller
             } else {
                 Storage::deleteDirectory('/public/products_images' . $product->id);
                 $product->image = null;
-
-                $product->save();
             }
         }
+
+        
+        if($request->has('ingredients')) {
+            $ingredientsArray = array();
+
+            foreach ($request->ingredients as $ingredient) {
+
+                //collect all inserted record IDs
+                $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
+            
+            }
+     
+            $product->ingredients()->sync($ingredientsArray);
+        }
+
+        $product->save();
 
         return response()->json(null, 200);
     }

@@ -151,11 +151,11 @@
                 </ValidationProvider>
 
                 <div class="w-full mt-4">
-                    <input type="checkbox" id="hasIngredients" @change="fetchIngredients" v-model="product.hasIngredients" :disabled="waiting || locked"/>
+                    <input type="checkbox" id="hasIngredients" @change="clearIngredients" v-model="product.hasIngredients" :disabled="waiting || locked"/>
                     <label for="hasIngredients" >Has ingredients</label>
                 </div>
 
-                <span class="w-full mt-2" v-if="product.hasIngredients">
+                <div class="w-full mt-2" v-if="product.hasIngredients">
                     <label for="name" class="text-sm font-semibold">Ingredients</label>
                     <!-- <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div> -->
                     <ul v-if="product.ingredients.length > 0"
@@ -185,7 +185,7 @@
                             </li>
                         </ul>
                     </div>
-                </span>
+                </div>
 
                 <div class="mt-3 mb-36 flex md:justify-start">
                     <button 
@@ -321,18 +321,10 @@
                 }
             }, 500),
 
-            async fetchIngredients() {
-                try {
-                    if(this.product.hasIngredients) {
-                        this.product.ingredients = [];
-                    }
-                    if(this.getIngredients.length === 0) {
-                        await this.downloadIngredients();
-                    }
-                    // this.toggleIngredients()
-                } catch ( error ) {
-                    console.log(error)
-                }
+            clearIngredients() {
+                if(this.product.hasIngredients) {
+                    this.product.ingredients = [];
+                }                
             },
 
             waitForFiletoUpload() {
@@ -355,9 +347,6 @@
 
             toggleIngredients() {
                 this.product.hasIngredients = !this.product.hasIngredients;
-
-                
-
             },
 
             findIngredient(){

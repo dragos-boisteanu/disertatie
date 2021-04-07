@@ -1955,7 +1955,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return Promise.all([_this2.downloadRoles(), _this2.fetchCounties(), _this2.fetchCategories(), _this2.fetchUnits(), _this2.downloadLoggedUserData()]);
+              return Promise.all([_this2.downloadRoles(), _this2.fetchCounties(), _this2.fetchCategories(), _this2.fetchUnits(), _this2.downloadLoggedUserData(), _this2.downloadIngredients()]);
 
             case 3:
               _this2.$Progress.finish();
@@ -1983,7 +1983,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee2, null, [[0, 6]]);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Counties', ['getCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Notification', ['getNotification'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Counties', ['getCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Notification', ['getNotification'])), {}, {
     mobile: function mobile() {
       return this.$mq === 'sm' || this.$mq === 'md' || this.$mq === 'lg';
     },
@@ -1991,7 +1991,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return this.$mq === 'xl' || this.$mq === 'xxl';
     }
   }),
-  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['downloadLoggedUserData'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['downloadLoggedUserData'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
     downloadRoles: function downloadRoles() {
       var _this3 = this;
 
