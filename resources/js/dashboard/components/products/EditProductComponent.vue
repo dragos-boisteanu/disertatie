@@ -287,7 +287,7 @@
                         vm: this,
                         product: {
                             id: this.localProduct.id,
-                           
+                            hasIngredients: this.localProduct.hasIngredients
                         }
                     }
 
@@ -296,9 +296,6 @@
                     Object.keys(this.localProduct).forEach(key => {
                         
                         if(key === 'ingredients') {
-                            console.log('product ingredients: ', this.product[key].length);
-                            console.log('local product ingredients: ', this.localProduct[key].length);
-
                             if(this.localProduct[key].length !== this.product[key].length ) {
                                 payload.product[key] = this.localProduct[key];
                                 counter++;
@@ -312,8 +309,16 @@
 
                     if(counter > 0) {
                         const response = await this.updateProduct(payload);
-                        payload.product.image = response.data.image;
+                        if(response.data.image) {
+                            payload.product.image = response.data.image;
+                        }
+
+                        if(response.data.quantity) {
+                            payload.product.quantity = response.data.quantity;
+                        }
+                        
                         this.$emit('updated', payload.product);
+
                         counter = 0;
                         this.close();
                         // notification

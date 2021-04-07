@@ -183,9 +183,12 @@ class ProductController extends Controller
         }
 
         if($request->has('hasIngredients')) {
-            if($request->hasIngregiends) {
+            if($request->hasIngredients) {
 
-                $product->has_ingredients = true;
+                // if(!$product->has_ingredients) {
+                    $product->has_ingredients = true;
+                // }
+               
 
                 if($request->has('ingredients')) {
                     $ingredientsArray = array();
@@ -195,6 +198,24 @@ class ProductController extends Controller
                     }
              
                     $product->ingredients()->sync($ingredientsArray);
+                    $product->save();
+                    $product->refresh();
+                    
+                    $quantityArray = array();
+                    
+                    $ingredients = $product->ingredients;
+
+                    foreach($ingredients as $ingredient) {
+                        $howManyProductsCanBeMadeFromThisIngredient = floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
+                        if($howManyProductsCanBeMadeFromThisIngredient === 0) {
+                            $quantity = 0;
+                            
+                        }else {
+                            array_push($quantityArray, $howManyProductsCanBeMadeFromThisIngredient);
+                        }
+                    }
+
+                    $quantity = min($quantityArray);
                 }
     
                 if($product->stock_id) {
@@ -212,6 +233,10 @@ class ProductController extends Controller
         }
 
         $product->save();
+
+        if(isset($quantity)) {
+            return response()->json(['message'=>'Product updated', 'quantity' => $quantity], 200);
+        }
 
         return response()->json(['message'=>'Product updated'], 200);
     }

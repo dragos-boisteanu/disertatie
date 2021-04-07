@@ -42,8 +42,6 @@ class Product extends Model
     public function getQuantityAttribute() 
     {
         if($this->has_ingredients) {
-            $todalQuantityofIngredientsInStock = 0;
-            $totalQuantityOfNeededIngredients = 0;
 
             $ingredients = $this->ingredients;
 

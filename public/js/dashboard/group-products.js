@@ -937,15 +937,13 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                 payload = {
                   vm: _this,
                   product: {
-                    id: _this.localProduct.id
+                    id: _this.localProduct.id,
+                    hasIngredients: _this.localProduct.hasIngredients
                   }
                 };
                 counter = 0;
                 Object.keys(_this.localProduct).forEach(function (key) {
                   if (key === 'ingredients') {
-                    console.log('product ingredients: ', _this.product[key].length);
-                    console.log('local product ingredients: ', _this.localProduct[key].length);
-
                     if (_this.localProduct[key].length !== _this.product[key].length) {
                       payload.product[key] = _this.localProduct[key];
                       counter++;
@@ -957,7 +955,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                 });
 
                 if (!(counter > 0)) {
-                  _context.next = 14;
+                  _context.next = 15;
                   break;
                 }
 
@@ -966,7 +964,14 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
 
               case 7:
                 response = _context.sent;
-                payload.product.image = response.data.image;
+
+                if (response.data.image) {
+                  payload.product.image = response.data.image;
+                }
+
+                if (response.data.quantity) {
+                  payload.product.quantity = response.data.quantity;
+                }
 
                 _this.$emit('updated', payload.product);
 
@@ -975,27 +980,27 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                 _this.close(); // notification
 
 
-                _context.next = 15;
+                _context.next = 16;
                 break;
-
-              case 14:
-                console.log('Nothing to update'); // notification
 
               case 15:
-                _context.next = 20;
+                console.log('Nothing to update'); // notification
+
+              case 16:
+                _context.next = 21;
                 break;
 
-              case 17:
-                _context.prev = 17;
+              case 18:
+                _context.prev = 18;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
-              case 20:
+              case 21:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 17]]);
+        }, _callee, null, [[0, 18]]);
       }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {

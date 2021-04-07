@@ -32,7 +32,7 @@ class ProductPatchRequest extends FormRequest
             'weight' => 'sometimes|numeric',
             'category_id' => 'sometimes|numeric|exists:categories,id',
             'unit_id' => 'sometimes|numeric|exists:units,id',
-            'hasIngredients' => 'sometiemes|boolean',
+            'hasIngredients' => 'required|boolean',
             'ingredients'=> 'required_if:hasIngredients,1|array',
             'ingregients.*.id' => 'required_with:ingregients|numeric',
             'ingredients.*.quantity' => 'required_with:ingregients|numeric',
