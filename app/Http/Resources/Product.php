@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\IngredientCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Product extends JsonResource
@@ -27,7 +28,8 @@ class Product extends JsonResource
             'category_id' => $this->category_id,
             'quantity' => $this->quantity,
             'hasIngredients' => $this->has_ingredients,
-            'ingredients' => $this->ingredients,
+            'ingredients' => new IngredientCollection($this->whenLoaded('ingredients')),
+            // 'ingredients' => $this->ingredients,
             'deleted_at' => $this->deleted_at
         ];
     }

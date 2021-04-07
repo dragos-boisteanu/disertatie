@@ -34,7 +34,7 @@
                     :onprocessfileabort="stopWaitingForFileToUpload"
                 />
 
-                <div class="text-right mt-3">
+                <div class="text-right mt-3" v-if="!(waiting || locked)">
                     <button 
                         :disabled="waitForFileUpload"
                         class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
@@ -304,7 +304,7 @@
                     if(this.$refs.observer.errors['barcode'].length === 0) {
                         this.locked = true;
                         const response = await this.getProductByBarcode(this.product.barcode);
-                        if(response.data.data) {
+                        if(response.data) {
                             this.product = response.data.data;
                             console.log(this.product)
                         } else {

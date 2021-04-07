@@ -21,7 +21,7 @@ const actions = {
         try {
             const response = await downloadIngredients();
 
-            commit('SET_INGREDIENTS', response.data.data.ingredients);
+            commit('SET_INGREDIENTS', response.data);
         } catch ( error ) {
             throw error;
         }
@@ -79,7 +79,6 @@ const mutations = {
         Object.keys(payload.ingredient).forEach(key => {
             if(key === 'addQuantity') {
                 vm.$set(state.ingredients[ingredientIndex], 'quantity', parseInt(payload.ingredient['addQuantity']) + state.ingredients[ingredientIndex].quantity );
-                // delete state.ingredients[ingredientIndex].addQuantity
             } else {
                 vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key] );
             }

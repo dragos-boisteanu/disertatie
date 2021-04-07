@@ -1466,7 +1466,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
             case 6:
               response = _context2.sent;
 
-              if (response.data.data) {
+              if (response.data) {
                 this.product = response.data.data;
                 console.log(this.product);
               } else {
@@ -19066,27 +19066,29 @@ var render = function() {
                       }
                     }),
                     _vm._v(" "),
-                    _c("div", { staticClass: "text-right mt-3" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
-                          attrs: { disabled: _vm.waitForFileUpload },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.clearImage($event)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    Clear image\n                "
+                    !(_vm.waiting || _vm.locked)
+                      ? _c("div", { staticClass: "text-right mt-3" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+                              attrs: { disabled: _vm.waitForFileUpload },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.clearImage($event)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                    Clear image\n                "
+                              )
+                            ]
                           )
-                        ]
-                      )
-                    ]),
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("ValidationProvider", {
                       staticClass: "w-full",

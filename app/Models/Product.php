@@ -53,7 +53,6 @@ class Product extends Model
 
             $quantity = floor($todalQuantityofIngredientsInStock / $totalQuantityOfNeededIngredients);
 
-
         } else {
             $quantity = $this->stock->quantity;
         }

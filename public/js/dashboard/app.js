@@ -3467,7 +3467,7 @@ var actions = {
 
             case 4:
               response = _context.sent;
-              commit('SET_INGREDIENTS', response.data.data.ingredients);
+              commit('SET_INGREDIENTS', response.data);
               _context.next = 11;
               break;
 
@@ -3596,7 +3596,7 @@ var mutations = {
     var vm = payload.vm;
     Object.keys(payload.ingredient).forEach(function (key) {
       if (key === 'addQuantity') {
-        vm.$set(state.ingredients[ingredientIndex], 'quantity', parseInt(payload.ingredient['addQuantity']) + state.ingredients[ingredientIndex].quantity); // delete state.ingredients[ingredientIndex].addQuantity
+        vm.$set(state.ingredients[ingredientIndex], 'quantity', parseInt(payload.ingredient['addQuantity']) + state.ingredients[ingredientIndex].quantity);
       } else {
         vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key]);
       }

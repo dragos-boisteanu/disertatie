@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class IngredientCollection extends ResourceCollection
 {
+    public static $wrap = null;
     /**
      * Transform the resource collection into an array.
      *
@@ -14,8 +15,7 @@ class IngredientCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return [
-            'ingredients' => $this->collection,
-        ];
+        return $this->collection;
+       
     }
 }
