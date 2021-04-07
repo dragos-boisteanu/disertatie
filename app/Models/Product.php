@@ -46,16 +46,20 @@ class Product extends Model
             $totalQuantityOfNeededIngredients = 0;
 
             $ingredients = $this->ingredients;
+
+            $quantityArray = array();
+            
             foreach($ingredients as $ingredient) {
-                $todalQuantityofIngredientsInStock += $ingredient->stock->quantity;
-                $totalQuantityOfNeededIngredients += $ingredient->pivot->quantity;
+                $howManyProductsCanBeMadeFromThisIngredient =  floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
+                if($howManyProductsCanBeMadeFromThisIngredient === 0) {
+                    $quantity = 0;
+                    return $quantity;
+                }else {
+                    array_push($quantityArray, $howManyProductsCanBeMadeFromThisIngredient);
+                }
             }
 
-            if($totalQuantityOfNeededIngredients > 0) {
-                $quantity = floor($todalQuantityofIngredientsInStock / $totalQuantityOfNeededIngredients);
-            } else {
-                $quantity = 0;
-            }
+            $quantity = min($quantityArray);
         } else {
             $quantity = $this->stock->quantity;
         }

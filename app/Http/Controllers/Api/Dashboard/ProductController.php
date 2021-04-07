@@ -190,10 +190,7 @@ class ProductController extends Controller
                 $ingredientsArray = array();
                 
                 foreach ($request->ingredients as $ingredient) {
-    
-                    //collect all inserted record IDs
                     $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
-                
                 }
          
                 $product->ingredients()->sync($ingredientsArray);
