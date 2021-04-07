@@ -32,6 +32,6 @@ class Ingredient extends Model
 
     public function products() 
     {
-        return $this->belongsToMany('App\Models\Product');
+        return $this->belongsToMany('App\Models\Product')->withPivot('quantity');
     }
 }

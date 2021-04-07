@@ -790,9 +790,10 @@ var render = function() {
                                                     name: "model",
                                                     rawName: "v-model",
                                                     value:
-                                                      _vm.ingredient.quantity,
+                                                      _vm.ingredient
+                                                        .stockQuantity,
                                                     expression:
-                                                      "ingredient.quantity"
+                                                      "ingredient.stockQuantity"
                                                   }
                                                 ],
                                                 staticClass:
@@ -810,7 +811,8 @@ var render = function() {
                                                     _vm.ingredientSelected
                                                 },
                                                 domProps: {
-                                                  value: _vm.ingredient.quantity
+                                                  value:
+                                                    _vm.ingredient.stockQuantity
                                                 },
                                                 on: {
                                                   input: function($event) {
@@ -821,7 +823,7 @@ var render = function() {
                                                     }
                                                     _vm.$set(
                                                       _vm.ingredient,
-                                                      "quantity",
+                                                      "stockQuantity",
                                                       $event.target.value
                                                     )
                                                   }

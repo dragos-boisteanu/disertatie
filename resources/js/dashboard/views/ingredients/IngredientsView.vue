@@ -53,7 +53,7 @@
                                         id="vat"
                                         name="vat" 
                                         type="number" 
-                                        v-model="ingredient.quantity" 
+                                        v-model="ingredient.stockQuantity" 
                                         :disabled="waiting || ingredientSelected"   
                                         class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                         :class="{'border-red-600': failed, 'border-green-500' : passed}"

@@ -182,23 +182,39 @@ class ProductController extends Controller
             }
         }
 
-        
-        if($request->has('ingredients')) {
-            $ingredientsArray = array();
+        if($request->hasIngredients) {
 
-            foreach ($request->ingredients as $ingredient) {
+            $product->has_ingredients = true;
 
-                //collect all inserted record IDs
-                $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
-            
+            if($request->has('ingredients')) {
+                $ingredientsArray = array();
+                
+                foreach ($request->ingredients as $ingredient) {
+    
+                    //collect all inserted record IDs
+                    $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
+                
+                }
+         
+                $product->ingredients()->sync($ingredientsArray);
             }
-     
-            $product->ingredients()->sync($ingredientsArray);
+
+            if($product->stock_id) {
+                $product->stock_id = null;
+                $product->stock()->delete();
+            }
+        }else {
+            $product->has_ingredients = false;
+            $product->ingredients()->detach();
+            $stock = Stock::create([
+                'quantity'=>0,
+            ]);
+            $product->stock_id = $stock->id;
         }
 
         $product->save();
 
-        return response()->json(null, 200);
+        return response()->json(['message'=>'Product updated'], 200);
     }
 
     public function disable(Request $request, $id) 

@@ -28,7 +28,7 @@ class Product extends Model
         'has_ingredients',
     ];
 
-    public $with = ['unit', 'stock', 'category'];
+    public $with = ['unit', 'stock', 'category', 'ingredients'];
 
     protected $appends = array('price', 'quantity');
 
@@ -51,8 +51,11 @@ class Product extends Model
                 $totalQuantityOfNeededIngredients += $ingredient->pivot->quantity;
             }
 
-            $quantity = floor($todalQuantityofIngredientsInStock / $totalQuantityOfNeededIngredients);
-
+            if($totalQuantityOfNeededIngredients > 0) {
+                $quantity = floor($todalQuantityofIngredientsInStock / $totalQuantityOfNeededIngredients);
+            } else {
+                $quantity = 0;
+            }
         } else {
             $quantity = $this->stock->quantity;
         }
