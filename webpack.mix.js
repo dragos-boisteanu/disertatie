@@ -9,9 +9,24 @@ const mix = require('laravel-mix');
  | for your Laravel applications. By default, we are compiling the CSS
  | file for the application as well as bundling up all the JS files.
  |
- */
+*/
 
- mix.disableNotifications();
+mix.webpackConfig({
+    module: {
+      rules: [
+        {
+          test: /\.(postcss)$/,
+          use: [
+            'vue-style-loader',
+            { loader: 'css-loader', options: { importLoaders: 1 } },
+            'postcss-loader'
+          ]
+        }
+      ],
+    },
+})
+
+mix.disableNotifications();
 
 mix.js('resources/js/dashboard/app.js', 'public/js/dashboard')
     .js('resources/js/client/app.js', 'public/js')

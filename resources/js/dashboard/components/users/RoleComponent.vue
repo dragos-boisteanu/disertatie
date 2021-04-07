@@ -1,5 +1,5 @@
 <template>
-    <div class="py-1 px-2 ml-2 text-xs text-white rounded-sm bg-lightBlue-600" v-if="role">
+    <div class="py-1 px-2 text-center text-xs text-white rounded-sm bg-lightBlue-600" v-if="role">
         {{role.name}}
     </div>
 </template>

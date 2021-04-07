@@ -800,50 +800,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_0__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: {
-    roleId: {
-      type: Number,
-      required: true
-    }
-  },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)('Roles', ['getRoles'])), {}, {
-    role: function role() {
-      return lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(this.getRoles, ['id', this.roleId]);
-    }
-  })
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/views/users/CreateUserView.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/views/users/CreateUserView.vue?vue&type=script&lang=js& ***!
@@ -2041,7 +1997,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/*!\n * FilePondPluginImagePreview 4.6.6\n * Licensed under MIT, https://opensource.org/licenses/MIT/\n * Please visit https://pqina.nl/filepond/ for details.\n */\n\n/* eslint-disable */\n.filepond--image-preview-markup{position:absolute;left:0;top:0}.filepond--image-preview-wrapper{z-index:2}.filepond--image-preview-overlay{display:block;position:absolute;left:0;top:0;width:100%;min-height:5rem;max-height:7rem;margin:0;opacity:0;z-index:2;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.filepond--image-preview-overlay svg{width:100%;height:auto;color:inherit;max-height:inherit}.filepond--image-preview-overlay-idle{mix-blend-mode:multiply;color:rgba(40,40,40,.85)}.filepond--image-preview-overlay-success{mix-blend-mode:normal;color:#369763}.filepond--image-preview-overlay-failure{mix-blend-mode:normal;color:#c44e47}@supports (-webkit-marquee-repetition:infinite) and ((-o-object-fit: fill) or (object-fit: fill)){.filepond--image-preview-overlay-idle{mix-blend-mode:normal}}.filepond--image-preview-wrapper{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:absolute;left:0;top:0;right:0;height:100%;margin:0;border-radius:.45em;overflow:hidden;background:rgba(0,0,0,.01)}.filepond--image-preview{position:absolute;left:0;top:0;z-index:1;display:flex;align-items:center;height:100%;width:100%;pointer-events:none;background:#222;will-change:transform,opacity}.filepond--image-clip{position:relative;overflow:hidden;margin:0 auto}.filepond--image-clip[data-transparency-indicator=grid] canvas,.filepond--image-clip[data-transparency-indicator=grid] img{background-color:#fff;background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg' fill='%23eee'%3E%3Cpath d='M0 0h50v50H0M50 50h50v50H50'/%3E%3C/svg%3E\");background-size:1.25em 1.25em}.filepond--image-bitmap,.filepond--image-vector{position:absolute;left:0;top:0;will-change:transform}.filepond--root[data-style-panel-layout~=integrated] .filepond--image-preview-wrapper{border-radius:0}.filepond--root[data-style-panel-layout~=integrated] .filepond--image-preview{height:100%;display:flex;justify-content:center;align-items:center}.filepond--root[data-style-panel-layout~=circle] .filepond--image-preview-wrapper{border-radius:99999rem}.filepond--root[data-style-panel-layout~=circle] .filepond--image-preview-overlay{top:auto;bottom:0;-webkit-transform:scaleY(-1);transform:scaleY(-1)}.filepond--root[data-style-panel-layout~=circle] .filepond--file .filepond--file-action-button[data-align*=bottom]:not([data-align*=center]){margin-bottom:.325em}.filepond--root[data-style-panel-layout~=circle] .filepond--file [data-align*=left]{left:calc(50% - 3em)}.filepond--root[data-style-panel-layout~=circle] .filepond--file [data-align*=right]{right:calc(50% - 3em)}.filepond--root[data-style-panel-layout~=circle] .filepond--progress-indicator[data-align*=bottom][data-align*=left],.filepond--root[data-style-panel-layout~=circle] .filepond--progress-indicator[data-align*=bottom][data-align*=right]{margin-bottom:.5125em}.filepond--root[data-style-panel-layout~=circle] .filepond--progress-indicator[data-align*=bottom][data-align*=center]{margin-top:0;margin-bottom:.1875em;margin-left:.1875em}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/*!\n * FilePondPluginImagePreview 4.6.6\n * Licensed under MIT, https://opensource.org/licenses/MIT/\n * Please visit https://pqina.nl/filepond/ for details.\n */\n\n/* eslint-disable */\n\n.filepond--image-preview-markup{\n  position:absolute;\n  left:0;\n  top:0\n}\n\n.filepond--image-preview-wrapper{\n  z-index:2\n}\n\n.filepond--image-preview-overlay{\n  display:block;\n  position:absolute;\n  left:0;\n  top:0;\n  width:100%;\n  min-height:5rem;\n  max-height:7rem;\n  margin:0;\n  opacity:0;\n  z-index:2;\n  pointer-events:none;\n  -webkit-user-select:none;\n  -moz-user-select:none;\n  -ms-user-select:none;\n  user-select:none\n}\n\n.filepond--image-preview-overlay svg{\n  width:100%;\n  height:auto;\n  color:inherit;\n  max-height:inherit\n}\n\n.filepond--image-preview-overlay-idle{\n  mix-blend-mode:multiply;\n  color:rgba(40,40,40,.85)\n}\n\n.filepond--image-preview-overlay-success{\n  mix-blend-mode:normal;\n  color:#369763\n}\n\n.filepond--image-preview-overlay-failure{\n  mix-blend-mode:normal;\n  color:#c44e47\n}\n\n@supports (-webkit-marquee-repetition:infinite) and ((-o-object-fit: fill) or (object-fit: fill)){\n  .filepond--image-preview-overlay-idle{\n    mix-blend-mode:normal\n  }\n}\n\n.filepond--image-preview-wrapper{\n  -webkit-user-select:none;\n  -moz-user-select:none;\n  -ms-user-select:none;\n  user-select:none;\n  position:absolute;\n  left:0;\n  top:0;\n  right:0;\n  height:100%;\n  margin:0;\n  border-radius:.45em;\n  overflow:hidden;\n  background:rgba(0,0,0,.01)\n}\n\n.filepond--image-preview{\n  position:absolute;\n  left:0;\n  top:0;\n  z-index:1;\n  display:flex;\n  align-items:center;\n  height:100%;\n  width:100%;\n  pointer-events:none;\n  background:#222;\n  will-change:transform,opacity\n}\n\n.filepond--image-clip{\n  position:relative;\n  overflow:hidden;\n  margin:0 auto\n}\n\n.filepond--image-clip[data-transparency-indicator=grid] canvas,.filepond--image-clip[data-transparency-indicator=grid] img{\n  background-color:#fff;\n  background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg' fill='%23eee'%3E%3Cpath d='M0 0h50v50H0M50 50h50v50H50'/%3E%3C/svg%3E\");\n  background-size:1.25em 1.25em\n}\n\n.filepond--image-bitmap,.filepond--image-vector{\n  position:absolute;\n  left:0;\n  top:0;\n  will-change:transform\n}\n\n.filepond--root[data-style-panel-layout~=integrated] .filepond--image-preview-wrapper{\n  border-radius:0\n}\n\n.filepond--root[data-style-panel-layout~=integrated] .filepond--image-preview{\n  height:100%;\n  display:flex;\n  justify-content:center;\n  align-items:center\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--image-preview-wrapper{\n  border-radius:99999rem\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--image-preview-overlay{\n  top:auto;\n  bottom:0;\n  -webkit-transform:scaleY(-1);\n  transform:scaleY(-1)\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--file .filepond--file-action-button[data-align*=bottom]:not([data-align*=center]){\n  margin-bottom:.325em\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--file [data-align*=left]{\n  left:calc(50% - 3em)\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--file [data-align*=right]{\n  right:calc(50% - 3em)\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--progress-indicator[data-align*=bottom][data-align*=left],.filepond--root[data-style-panel-layout~=circle] .filepond--progress-indicator[data-align*=bottom][data-align*=right]{\n  margin-bottom:.5125em\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--progress-indicator[data-align*=bottom][data-align*=center]{\n  margin-top:0;\n  margin-bottom:.1875em;\n  margin-left:.1875em\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2065,86 +2021,10 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/*!\n * FilePond 4.26.0\n * Licensed under MIT, https://opensource.org/licenses/MIT/\n * Please visit https://pqina.nl/filepond/ for details.\n */\n\n/* eslint-disable */\n.filepond--assistant{position:absolute;overflow:hidden;height:1px;width:1px;padding:0;border:0;clip:rect(1px,1px,1px,1px);-webkit-clip-path:inset(50%);clip-path:inset(50%);white-space:nowrap}.filepond--browser.filepond--browser{position:absolute;margin:0;padding:0;left:1em;top:1.75em;width:calc(100% - 2em);opacity:0;font-size:0}.filepond--data{position:absolute;width:0;height:0;padding:0;margin:0;border:none;visibility:hidden;pointer-events:none;contain:strict}.filepond--drip{position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;opacity:.1;pointer-events:none;border-radius:.5em;background:rgba(0,0,0,.01)}.filepond--drip-blob{-webkit-transform-origin:center center;transform-origin:center center;width:8em;height:8em;margin-left:-4em;margin-top:-4em;background:#292625;border-radius:50%}.filepond--drip-blob,.filepond--drop-label{position:absolute;top:0;left:0;will-change:transform,opacity}.filepond--drop-label{right:0;margin:0;color:#4f4f4f;display:flex;justify-content:center;align-items:center;height:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.filepond--drop-label.filepond--drop-label label{display:block;margin:0;padding:.5em}.filepond--drop-label label{cursor:default;font-size:.875em;font-weight:400;text-align:center;line-height:1.5}.filepond--label-action{text-decoration:underline;-webkit-text-decoration-skip:ink;text-decoration-skip-ink:auto;-webkit-text-decoration-color:#a7a4a4;text-decoration-color:#a7a4a4;cursor:pointer}.filepond--root[data-disabled] .filepond--drop-label label{opacity:.5}.filepond--file-action-button.filepond--file-action-button{font-size:1em;width:1.625em;height:1.625em;font-family:inherit;line-height:inherit;margin:0;padding:0;border:none;outline:none;will-change:transform,opacity}.filepond--file-action-button.filepond--file-action-button span{position:absolute;overflow:hidden;height:1px;width:1px;padding:0;border:0;clip:rect(1px,1px,1px,1px);-webkit-clip-path:inset(50%);clip-path:inset(50%);white-space:nowrap}.filepond--file-action-button.filepond--file-action-button svg{width:100%;height:100%}.filepond--file-action-button.filepond--file-action-button:after{position:absolute;left:-.75em;right:-.75em;top:-.75em;bottom:-.75em;content:\"\"}.filepond--file-action-button{cursor:auto;color:#fff;border-radius:50%;background-color:rgba(0,0,0,.5);background-image:none;box-shadow:0 0 0 0 hsla(0,0%,100%,0);transition:box-shadow .25s ease-in}.filepond--file-action-button:focus,.filepond--file-action-button:hover{box-shadow:0 0 0 .125em hsla(0,0%,100%,.9)}.filepond--file-action-button[disabled]{color:hsla(0,0%,100%,.5);background-color:rgba(0,0,0,.25)}.filepond--file-action-button[hidden]{display:none}.filepond--action-edit-item.filepond--action-edit-item{width:2em;height:2em;padding:.1875em}.filepond--action-edit-item.filepond--action-edit-item[data-align*=center]{margin-left:-.1875em}.filepond--action-edit-item.filepond--action-edit-item[data-align*=bottom]{margin-bottom:-.1875em}.filepond--action-edit-item-alt{border:none;line-height:inherit;background:transparent;font-family:inherit;color:inherit;outline:none;padding:0;margin:0 0 0 .25em;pointer-events:all;position:absolute}.filepond--action-edit-item-alt svg{width:1.3125em;height:1.3125em}.filepond--action-edit-item-alt span{font-size:0;opacity:0}.filepond--file-info{position:static;display:flex;flex-direction:column;align-items:flex-start;flex:1;margin:0 .5em 0 0;min-width:0;will-change:transform,opacity;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.filepond--file-info *{margin:0}.filepond--file-info .filepond--file-info-main{font-size:.75em;line-height:1.2;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;width:100%}.filepond--file-info .filepond--file-info-sub{font-size:.625em;opacity:.5;transition:opacity .25s ease-in-out;white-space:nowrap}.filepond--file-info .filepond--file-info-sub:empty{display:none}.filepond--file-status{position:static;display:flex;flex-direction:column;align-items:flex-end;flex-grow:0;flex-shrink:0;margin:0;min-width:2.25em;text-align:right;will-change:transform,opacity;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.filepond--file-status *{margin:0;white-space:nowrap}.filepond--file-status .filepond--file-status-main{font-size:.75em;line-height:1.2}.filepond--file-status .filepond--file-status-sub{font-size:.625em;opacity:.5;transition:opacity .25s ease-in-out}.filepond--file-wrapper.filepond--file-wrapper{border:none;margin:0;padding:0;min-width:0;height:100%}.filepond--file-wrapper.filepond--file-wrapper>legend{position:absolute;overflow:hidden;height:1px;width:1px;padding:0;border:0;clip:rect(1px,1px,1px,1px);-webkit-clip-path:inset(50%);clip-path:inset(50%);white-space:nowrap}.filepond--file{position:static;display:flex;height:100%;align-items:flex-start;padding:.5625em;color:#fff;border-radius:.5em}.filepond--file .filepond--file-status{margin-left:auto;margin-right:2.25em}.filepond--file .filepond--processing-complete-indicator{pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:3}.filepond--file .filepond--file-action-button,.filepond--file .filepond--processing-complete-indicator,.filepond--file .filepond--progress-indicator{position:absolute}.filepond--file [data-align*=left]{left:.5625em}.filepond--file [data-align*=right]{right:.5625em}.filepond--file [data-align*=center]{left:calc(50% - .8125em)}.filepond--file [data-align*=bottom]{bottom:1.125em}.filepond--file [data-align=center]{top:calc(50% - .8125em)}.filepond--file .filepond--progress-indicator{margin-top:.1875em}.filepond--file .filepond--progress-indicator[data-align*=right]{margin-right:.1875em}.filepond--file .filepond--progress-indicator[data-align*=left]{margin-left:.1875em}[data-filepond-item-state*=error] .filepond--file-info,[data-filepond-item-state*=invalid] .filepond--file-info,[data-filepond-item-state=cancelled] .filepond--file-info{margin-right:2.25em}[data-filepond-item-state~=processing] .filepond--file-status-sub{opacity:0}[data-filepond-item-state~=processing] .filepond--action-abort-item-processing~.filepond--file-status .filepond--file-status-sub{opacity:.5}[data-filepond-item-state=processing-error] .filepond--file-status-sub{opacity:0}[data-filepond-item-state=processing-error] .filepond--action-retry-item-processing~.filepond--file-status .filepond--file-status-sub{opacity:.5}[data-filepond-item-state=processing-complete] .filepond--action-revert-item-processing svg{-webkit-animation:fall .5s linear .125s both;animation:fall .5s linear .125s both}[data-filepond-item-state=processing-complete] .filepond--file-status-sub{opacity:.5}[data-filepond-item-state=processing-complete] .filepond--file-info-sub,[data-filepond-item-state=processing-complete] .filepond--processing-complete-indicator:not([style*=hidden])~.filepond--file-status .filepond--file-status-sub{opacity:0}[data-filepond-item-state=processing-complete] .filepond--action-revert-item-processing~.filepond--file-info .filepond--file-info-sub{opacity:.5}[data-filepond-item-state*=error] .filepond--file-wrapper,[data-filepond-item-state*=error] .filepond--panel,[data-filepond-item-state*=invalid] .filepond--file-wrapper,[data-filepond-item-state*=invalid] .filepond--panel{-webkit-animation:shake .65s linear both;animation:shake .65s linear both}[data-filepond-item-state*=busy] .filepond--progress-indicator svg{-webkit-animation:spin 1s linear infinite;animation:spin 1s linear infinite}@-webkit-keyframes spin{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}@keyframes spin{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}@-webkit-keyframes shake{10%,90%{-webkit-transform:translateX(-.0625em);transform:translateX(-.0625em)}20%,80%{-webkit-transform:translateX(.125em);transform:translateX(.125em)}30%,50%,70%{-webkit-transform:translateX(-.25em);transform:translateX(-.25em)}40%,60%{-webkit-transform:translateX(.25em);transform:translateX(.25em)}}@keyframes shake{10%,90%{-webkit-transform:translateX(-.0625em);transform:translateX(-.0625em)}20%,80%{-webkit-transform:translateX(.125em);transform:translateX(.125em)}30%,50%,70%{-webkit-transform:translateX(-.25em);transform:translateX(-.25em)}40%,60%{-webkit-transform:translateX(.25em);transform:translateX(.25em)}}@-webkit-keyframes fall{0%{opacity:0;-webkit-transform:scale(.5);transform:scale(.5);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}70%{opacity:1;-webkit-transform:scale(1.1);transform:scale(1.1);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}to{-webkit-transform:scale(1);transform:scale(1);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}@keyframes fall{0%{opacity:0;-webkit-transform:scale(.5);transform:scale(.5);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}70%{opacity:1;-webkit-transform:scale(1.1);transform:scale(1.1);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}to{-webkit-transform:scale(1);transform:scale(1);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}.filepond--hopper[data-hopper-state=drag-over]>*{pointer-events:none}.filepond--hopper[data-hopper-state=drag-over]:after{content:\"\";position:absolute;left:0;top:0;right:0;bottom:0;z-index:100}.filepond--progress-indicator{z-index:103}.filepond--file-action-button{z-index:102}.filepond--file-status{z-index:101}.filepond--file-info{z-index:100}.filepond--item{position:absolute;top:0;left:0;right:0;z-index:1;padding:0;margin:.25em;will-change:transform,opacity}.filepond--item>.filepond--panel{z-index:-1}.filepond--item>.filepond--panel .filepond--panel-bottom{box-shadow:0 .0625em .125em -.0625em rgba(0,0,0,.25)}.filepond--item>.filepond--file-wrapper,.filepond--item>.filepond--panel{transition:opacity .15s ease-out}.filepond--item[data-drag-state]{cursor:-webkit-grab;cursor:grab}.filepond--item[data-drag-state]>.filepond--panel{transition:box-shadow .125s ease-in-out;box-shadow:0 0 0 transparent}.filepond--item[data-drag-state=drag]{cursor:-webkit-grabbing;cursor:grabbing}.filepond--item[data-drag-state=drag]>.filepond--panel{box-shadow:0 .125em .3125em rgba(0,0,0,.325)}.filepond--item[data-drag-state]:not([data-drag-state=idle]){z-index:2}.filepond--item-panel{background-color:#64605e}[data-filepond-item-state=processing-complete] .filepond--item-panel{background-color:#369763}[data-filepond-item-state*=error] .filepond--item-panel,[data-filepond-item-state*=invalid] .filepond--item-panel{background-color:#c44e47}.filepond--item-panel{border-radius:.5em;transition:background-color .25s}.filepond--list-scroller{position:absolute;top:0;left:0;right:0;margin:0;will-change:transform}.filepond--list-scroller[data-state=overflow]{overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch;-webkit-mask:linear-gradient(180deg,#000 calc(100% - .5em),transparent);mask:linear-gradient(180deg,#000 calc(100% - .5em),transparent)}.filepond--list-scroller[data-state=overflow] .filepond--list{bottom:0;right:0}.filepond--list-scroller::-webkit-scrollbar{background:transparent}.filepond--list-scroller::-webkit-scrollbar:vertical{width:1em}.filepond--list-scroller::-webkit-scrollbar:horizontal{height:0}.filepond--list-scroller::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.3);border-radius:99999px;border:.3125em solid transparent;background-clip:content-box}.filepond--list.filepond--list{position:absolute;top:0;margin:0;padding:0;list-style-type:none;will-change:transform}.filepond--list{left:.75em;right:.75em}.filepond--root[data-style-panel-layout~=integrated]{width:100%;height:100%;max-width:none;margin:0}.filepond--root[data-style-panel-layout~=circle] .filepond--panel-root,.filepond--root[data-style-panel-layout~=integrated] .filepond--panel-root{border-radius:0}.filepond--root[data-style-panel-layout~=circle] .filepond--panel-root>*,.filepond--root[data-style-panel-layout~=integrated] .filepond--panel-root>*{display:none}.filepond--root[data-style-panel-layout~=circle] .filepond--drop-label,.filepond--root[data-style-panel-layout~=integrated] .filepond--drop-label{bottom:0;height:auto;display:flex;justify-content:center;align-items:center;z-index:7}.filepond--root[data-style-panel-layout~=circle] .filepond--item-panel,.filepond--root[data-style-panel-layout~=integrated] .filepond--item-panel{display:none}.filepond--root[data-style-panel-layout~=compact] .filepond--list-scroller,.filepond--root[data-style-panel-layout~=integrated] .filepond--list-scroller{overflow:hidden;height:100%;margin-top:0;margin-bottom:0}.filepond--root[data-style-panel-layout~=compact] .filepond--list,.filepond--root[data-style-panel-layout~=integrated] .filepond--list{left:0;right:0;height:100%}.filepond--root[data-style-panel-layout~=compact] .filepond--item,.filepond--root[data-style-panel-layout~=integrated] .filepond--item{margin:0}.filepond--root[data-style-panel-layout~=compact] .filepond--file-wrapper,.filepond--root[data-style-panel-layout~=integrated] .filepond--file-wrapper{height:100%}.filepond--root[data-style-panel-layout~=compact] .filepond--drop-label,.filepond--root[data-style-panel-layout~=integrated] .filepond--drop-label{z-index:7}.filepond--root[data-style-panel-layout~=circle]{border-radius:99999rem;overflow:hidden}.filepond--root[data-style-panel-layout~=circle]>.filepond--panel{border-radius:inherit}.filepond--root[data-style-panel-layout~=circle] .filepond--file-info,.filepond--root[data-style-panel-layout~=circle] .filepond--file-status,.filepond--root[data-style-panel-layout~=circle]>.filepond--panel>*{display:none}.filepond--root[data-style-panel-layout~=circle] .filepond--action-edit-item{opacity:1!important;visibility:visible!important}@media not all and (-webkit-min-device-pixel-ratio:0), not all and (min-resolution:0.001dpcm){@supports (-webkit-appearance:none) and (stroke-color:transparent){.filepond--root[data-style-panel-layout~=circle]{will-change:transform}}}.filepond--panel-root{border-radius:.5em;background-color:#f1f0ef}.filepond--panel{position:absolute;left:0;top:0;right:0;margin:0;height:100%!important;pointer-events:none}.filepond-panel:not([data-scalable=false]){height:auto!important}.filepond--panel[data-scalable=false]>div{display:none}.filepond--panel[data-scalable=true]{-webkit-transform-style:preserve-3d;transform-style:preserve-3d;background-color:transparent!important;border:none!important}.filepond--panel-bottom,.filepond--panel-center,.filepond--panel-top{position:absolute;left:0;top:0;right:0;margin:0;padding:0}.filepond--panel-bottom,.filepond--panel-top{height:.5em}.filepond--panel-top{border-bottom-left-radius:0!important;border-bottom-right-radius:0!important;border-bottom:none!important}.filepond--panel-top:after{content:\"\";position:absolute;height:2px;left:0;right:0;bottom:-1px;background-color:inherit}.filepond--panel-bottom,.filepond--panel-center{will-change:transform;-webkit-backface-visibility:hidden;backface-visibility:hidden;-webkit-transform-origin:left top;transform-origin:left top;-webkit-transform:translate3d(0,.5em,0);transform:translate3d(0,.5em,0)}.filepond--panel-bottom{border-top-left-radius:0!important;border-top-right-radius:0!important;border-top:none!important}.filepond--panel-bottom:before{content:\"\";position:absolute;height:2px;left:0;right:0;top:-1px;background-color:inherit}.filepond--panel-center{height:100px!important;border-top:none!important;border-bottom:none!important;border-radius:0!important}.filepond--panel-center:not([style]){visibility:hidden}.filepond--progress-indicator{position:static;width:1.25em;height:1.25em;color:#fff;margin:0;pointer-events:none;will-change:transform,opacity}.filepond--progress-indicator svg{width:100%;height:100%;vertical-align:top;transform-box:fill-box}.filepond--progress-indicator path{fill:none;stroke:currentColor}.filepond--list-scroller{z-index:6}.filepond--drop-label{z-index:5}.filepond--drip{z-index:3}.filepond--root>.filepond--panel{z-index:2}.filepond--browser{z-index:1}.filepond--root{box-sizing:border-box;position:relative;margin-bottom:1em;font-size:1rem;line-height:normal;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;font-weight:450;text-align:left;text-rendering:optimizeLegibility;direction:ltr;contain:layout style size}.filepond--root *{box-sizing:inherit;line-height:inherit}.filepond--root :not(text){font-size:inherit}.filepond--root[data-disabled]{pointer-events:none}.filepond--root[data-disabled] .filepond--list-scroller{pointer-events:all}.filepond--root[data-disabled] .filepond--list{pointer-events:none}.filepond--root .filepond--drop-label{min-height:4.75em}.filepond--root .filepond--list-scroller{margin-top:1em;margin-bottom:1em}.filepond--root .filepond--credits{position:absolute;right:0;opacity:.175;line-height:.85;font-size:11px;color:inherit;text-decoration:none;z-index:3;bottom:-14px}.filepond--root .filepond--credits[style]{top:0;bottom:auto;margin-top:14px}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/*!\n * FilePond 4.26.0\n * Licensed under MIT, https://opensource.org/licenses/MIT/\n * Please visit https://pqina.nl/filepond/ for details.\n */\n\n/* eslint-disable */\n\n.filepond--assistant{\n  position:absolute;\n  overflow:hidden;\n  height:1px;\n  width:1px;\n  padding:0;\n  border:0;\n  clip:rect(1px,1px,1px,1px);\n  -webkit-clip-path:inset(50%);\n  clip-path:inset(50%);\n  white-space:nowrap\n}\n\n.filepond--browser.filepond--browser{\n  position:absolute;\n  margin:0;\n  padding:0;\n  left:1em;\n  top:1.75em;\n  width:calc(100% - 2em);\n  opacity:0;\n  font-size:0\n}\n\n.filepond--data{\n  position:absolute;\n  width:0;\n  height:0;\n  padding:0;\n  margin:0;\n  border:none;\n  visibility:hidden;\n  pointer-events:none;\n  contain:strict\n}\n\n.filepond--drip{\n  position:absolute;\n  top:0;\n  left:0;\n  right:0;\n  bottom:0;\n  overflow:hidden;\n  opacity:.1;\n  pointer-events:none;\n  border-radius:.5em;\n  background:rgba(0,0,0,.01)\n}\n\n.filepond--drip-blob{\n  -webkit-transform-origin:center center;\n  transform-origin:center center;\n  width:8em;\n  height:8em;\n  margin-left:-4em;\n  margin-top:-4em;\n  background:#292625;\n  border-radius:50%\n}\n\n.filepond--drip-blob,.filepond--drop-label{\n  position:absolute;\n  top:0;\n  left:0;\n  will-change:transform,opacity\n}\n\n.filepond--drop-label{\n  right:0;\n  margin:0;\n  color:#4f4f4f;\n  display:flex;\n  justify-content:center;\n  align-items:center;\n  height:0;\n  -webkit-user-select:none;\n  -moz-user-select:none;\n  -ms-user-select:none;\n  user-select:none\n}\n\n.filepond--drop-label.filepond--drop-label label{\n  display:block;\n  margin:0;\n  padding:.5em\n}\n\n.filepond--drop-label label{\n  cursor:default;\n  font-size:.875em;\n  font-weight:400;\n  text-align:center;\n  line-height:1.5\n}\n\n.filepond--label-action{\n  text-decoration:underline;\n  -webkit-text-decoration-skip:ink;\n  text-decoration-skip-ink:auto;\n  -webkit-text-decoration-color:#a7a4a4;\n  text-decoration-color:#a7a4a4;\n  cursor:pointer\n}\n\n.filepond--root[data-disabled] .filepond--drop-label label{\n  opacity:.5\n}\n\n.filepond--file-action-button.filepond--file-action-button{\n  font-size:1em;\n  width:1.625em;\n  height:1.625em;\n  font-family:inherit;\n  line-height:inherit;\n  margin:0;\n  padding:0;\n  border:none;\n  outline:none;\n  will-change:transform,opacity\n}\n\n.filepond--file-action-button.filepond--file-action-button span{\n  position:absolute;\n  overflow:hidden;\n  height:1px;\n  width:1px;\n  padding:0;\n  border:0;\n  clip:rect(1px,1px,1px,1px);\n  -webkit-clip-path:inset(50%);\n  clip-path:inset(50%);\n  white-space:nowrap\n}\n\n.filepond--file-action-button.filepond--file-action-button svg{\n  width:100%;\n  height:100%\n}\n\n.filepond--file-action-button.filepond--file-action-button:after{\n  position:absolute;\n  left:-.75em;\n  right:-.75em;\n  top:-.75em;\n  bottom:-.75em;\n  content:\"\"\n}\n\n.filepond--file-action-button{\n  cursor:auto;\n  color:#fff;\n  border-radius:50%;\n  background-color:rgba(0,0,0,.5);\n  background-image:none;\n  box-shadow:0 0 0 0 hsla(0,0%,100%,0);\n  transition:box-shadow .25s ease-in\n}\n\n.filepond--file-action-button:focus,.filepond--file-action-button:hover{\n  box-shadow:0 0 0 .125em hsla(0,0%,100%,.9)\n}\n\n.filepond--file-action-button[disabled]{\n  color:hsla(0,0%,100%,.5);\n  background-color:rgba(0,0,0,.25)\n}\n\n.filepond--file-action-button[hidden]{\n  display:none\n}\n\n.filepond--action-edit-item.filepond--action-edit-item{\n  width:2em;\n  height:2em;\n  padding:.1875em\n}\n\n.filepond--action-edit-item.filepond--action-edit-item[data-align*=center]{\n  margin-left:-.1875em\n}\n\n.filepond--action-edit-item.filepond--action-edit-item[data-align*=bottom]{\n  margin-bottom:-.1875em\n}\n\n.filepond--action-edit-item-alt{\n  border:none;\n  line-height:inherit;\n  background:transparent;\n  font-family:inherit;\n  color:inherit;\n  outline:none;\n  padding:0;\n  margin:0 0 0 .25em;\n  pointer-events:all;\n  position:absolute\n}\n\n.filepond--action-edit-item-alt svg{\n  width:1.3125em;\n  height:1.3125em\n}\n\n.filepond--action-edit-item-alt span{\n  font-size:0;\n  opacity:0\n}\n\n.filepond--file-info{\n  position:static;\n  display:flex;\n  flex-direction:column;\n  align-items:flex-start;\n  flex:1;\n  margin:0 .5em 0 0;\n  min-width:0;\n  will-change:transform,opacity;\n  pointer-events:none;\n  -webkit-user-select:none;\n  -moz-user-select:none;\n  -ms-user-select:none;\n  user-select:none\n}\n\n.filepond--file-info *{\n  margin:0\n}\n\n.filepond--file-info .filepond--file-info-main{\n  font-size:.75em;\n  line-height:1.2;\n  text-overflow:ellipsis;\n  overflow:hidden;\n  white-space:nowrap;\n  width:100%\n}\n\n.filepond--file-info .filepond--file-info-sub{\n  font-size:.625em;\n  opacity:.5;\n  transition:opacity .25s ease-in-out;\n  white-space:nowrap\n}\n\n.filepond--file-info .filepond--file-info-sub:empty{\n  display:none\n}\n\n.filepond--file-status{\n  position:static;\n  display:flex;\n  flex-direction:column;\n  align-items:flex-end;\n  flex-grow:0;\n  flex-shrink:0;\n  margin:0;\n  min-width:2.25em;\n  text-align:right;\n  will-change:transform,opacity;\n  pointer-events:none;\n  -webkit-user-select:none;\n  -moz-user-select:none;\n  -ms-user-select:none;\n  user-select:none\n}\n\n.filepond--file-status *{\n  margin:0;\n  white-space:nowrap\n}\n\n.filepond--file-status .filepond--file-status-main{\n  font-size:.75em;\n  line-height:1.2\n}\n\n.filepond--file-status .filepond--file-status-sub{\n  font-size:.625em;\n  opacity:.5;\n  transition:opacity .25s ease-in-out\n}\n\n.filepond--file-wrapper.filepond--file-wrapper{\n  border:none;\n  margin:0;\n  padding:0;\n  min-width:0;\n  height:100%\n}\n\n.filepond--file-wrapper.filepond--file-wrapper>legend{\n  position:absolute;\n  overflow:hidden;\n  height:1px;\n  width:1px;\n  padding:0;\n  border:0;\n  clip:rect(1px,1px,1px,1px);\n  -webkit-clip-path:inset(50%);\n  clip-path:inset(50%);\n  white-space:nowrap\n}\n\n.filepond--file{\n  position:static;\n  display:flex;\n  height:100%;\n  align-items:flex-start;\n  padding:.5625em;\n  color:#fff;\n  border-radius:.5em\n}\n\n.filepond--file .filepond--file-status{\n  margin-left:auto;\n  margin-right:2.25em\n}\n\n.filepond--file .filepond--processing-complete-indicator{\n  pointer-events:none;\n  -webkit-user-select:none;\n  -moz-user-select:none;\n  -ms-user-select:none;\n  user-select:none;\n  z-index:3\n}\n\n.filepond--file .filepond--file-action-button,.filepond--file .filepond--processing-complete-indicator,.filepond--file .filepond--progress-indicator{\n  position:absolute\n}\n\n.filepond--file [data-align*=left]{\n  left:.5625em\n}\n\n.filepond--file [data-align*=right]{\n  right:.5625em\n}\n\n.filepond--file [data-align*=center]{\n  left:calc(50% - .8125em)\n}\n\n.filepond--file [data-align*=bottom]{\n  bottom:1.125em\n}\n\n.filepond--file [data-align=center]{\n  top:calc(50% - .8125em)\n}\n\n.filepond--file .filepond--progress-indicator{\n  margin-top:.1875em\n}\n\n.filepond--file .filepond--progress-indicator[data-align*=right]{\n  margin-right:.1875em\n}\n\n.filepond--file .filepond--progress-indicator[data-align*=left]{\n  margin-left:.1875em\n}\n\n[data-filepond-item-state*=error] .filepond--file-info,[data-filepond-item-state*=invalid] .filepond--file-info,[data-filepond-item-state=cancelled] .filepond--file-info{\n  margin-right:2.25em\n}\n\n[data-filepond-item-state~=processing] .filepond--file-status-sub{\n  opacity:0\n}\n\n[data-filepond-item-state~=processing] .filepond--action-abort-item-processing~.filepond--file-status .filepond--file-status-sub{\n  opacity:.5\n}\n\n[data-filepond-item-state=processing-error] .filepond--file-status-sub{\n  opacity:0\n}\n\n[data-filepond-item-state=processing-error] .filepond--action-retry-item-processing~.filepond--file-status .filepond--file-status-sub{\n  opacity:.5\n}\n\n[data-filepond-item-state=processing-complete] .filepond--action-revert-item-processing svg{\n  -webkit-animation:fall .5s linear .125s both;\n  animation:fall .5s linear .125s both\n}\n\n[data-filepond-item-state=processing-complete] .filepond--file-status-sub{\n  opacity:.5\n}\n\n[data-filepond-item-state=processing-complete] .filepond--file-info-sub,[data-filepond-item-state=processing-complete] .filepond--processing-complete-indicator:not([style*=hidden])~.filepond--file-status .filepond--file-status-sub{\n  opacity:0\n}\n\n[data-filepond-item-state=processing-complete] .filepond--action-revert-item-processing~.filepond--file-info .filepond--file-info-sub{\n  opacity:.5\n}\n\n[data-filepond-item-state*=error] .filepond--file-wrapper,[data-filepond-item-state*=error] .filepond--panel,[data-filepond-item-state*=invalid] .filepond--file-wrapper,[data-filepond-item-state*=invalid] .filepond--panel{\n  -webkit-animation:shake .65s linear both;\n  animation:shake .65s linear both\n}\n\n[data-filepond-item-state*=busy] .filepond--progress-indicator svg{\n  -webkit-animation:spin 1s linear infinite;\n  animation:spin 1s linear infinite\n}\n\n@-webkit-keyframes spin{\n  0%{\n    -webkit-transform:rotate(0deg);\n    transform:rotate(0deg)\n  }\n\n  to{\n    -webkit-transform:rotate(1turn);\n    transform:rotate(1turn)\n  }\n}\n\n@keyframes spin{\n  0%{\n    -webkit-transform:rotate(0deg);\n    transform:rotate(0deg)\n  }\n\n  to{\n    -webkit-transform:rotate(1turn);\n    transform:rotate(1turn)\n  }\n}\n\n@-webkit-keyframes shake{\n  10%,90%{\n    -webkit-transform:translateX(-.0625em);\n    transform:translateX(-.0625em)\n  }\n\n  20%,80%{\n    -webkit-transform:translateX(.125em);\n    transform:translateX(.125em)\n  }\n\n  30%,50%,70%{\n    -webkit-transform:translateX(-.25em);\n    transform:translateX(-.25em)\n  }\n\n  40%,60%{\n    -webkit-transform:translateX(.25em);\n    transform:translateX(.25em)\n  }\n}\n\n@keyframes shake{\n  10%,90%{\n    -webkit-transform:translateX(-.0625em);\n    transform:translateX(-.0625em)\n  }\n\n  20%,80%{\n    -webkit-transform:translateX(.125em);\n    transform:translateX(.125em)\n  }\n\n  30%,50%,70%{\n    -webkit-transform:translateX(-.25em);\n    transform:translateX(-.25em)\n  }\n\n  40%,60%{\n    -webkit-transform:translateX(.25em);\n    transform:translateX(.25em)\n  }\n}\n\n@-webkit-keyframes fall{\n  0%{\n    opacity:0;\n    -webkit-transform:scale(.5);\n    transform:scale(.5);\n    -webkit-animation-timing-function:ease-out;\n    animation-timing-function:ease-out\n  }\n\n  70%{\n    opacity:1;\n    -webkit-transform:scale(1.1);\n    transform:scale(1.1);\n    -webkit-animation-timing-function:ease-in-out;\n    animation-timing-function:ease-in-out\n  }\n\n  to{\n    -webkit-transform:scale(1);\n    transform:scale(1);\n    -webkit-animation-timing-function:ease-out;\n    animation-timing-function:ease-out\n  }\n}\n\n@keyframes fall{\n  0%{\n    opacity:0;\n    -webkit-transform:scale(.5);\n    transform:scale(.5);\n    -webkit-animation-timing-function:ease-out;\n    animation-timing-function:ease-out\n  }\n\n  70%{\n    opacity:1;\n    -webkit-transform:scale(1.1);\n    transform:scale(1.1);\n    -webkit-animation-timing-function:ease-in-out;\n    animation-timing-function:ease-in-out\n  }\n\n  to{\n    -webkit-transform:scale(1);\n    transform:scale(1);\n    -webkit-animation-timing-function:ease-out;\n    animation-timing-function:ease-out\n  }\n}\n\n.filepond--hopper[data-hopper-state=drag-over]>*{\n  pointer-events:none\n}\n\n.filepond--hopper[data-hopper-state=drag-over]:after{\n  content:\"\";\n  position:absolute;\n  left:0;\n  top:0;\n  right:0;\n  bottom:0;\n  z-index:100\n}\n\n.filepond--progress-indicator{\n  z-index:103\n}\n\n.filepond--file-action-button{\n  z-index:102\n}\n\n.filepond--file-status{\n  z-index:101\n}\n\n.filepond--file-info{\n  z-index:100\n}\n\n.filepond--item{\n  position:absolute;\n  top:0;\n  left:0;\n  right:0;\n  z-index:1;\n  padding:0;\n  margin:.25em;\n  will-change:transform,opacity\n}\n\n.filepond--item>.filepond--panel{\n  z-index:-1\n}\n\n.filepond--item>.filepond--panel .filepond--panel-bottom{\n  box-shadow:0 .0625em .125em -.0625em rgba(0,0,0,.25)\n}\n\n.filepond--item>.filepond--file-wrapper,.filepond--item>.filepond--panel{\n  transition:opacity .15s ease-out\n}\n\n.filepond--item[data-drag-state]{\n  cursor:-webkit-grab;\n  cursor:grab\n}\n\n.filepond--item[data-drag-state]>.filepond--panel{\n  transition:box-shadow .125s ease-in-out;\n  box-shadow:0 0 0 transparent\n}\n\n.filepond--item[data-drag-state=drag]{\n  cursor:-webkit-grabbing;\n  cursor:grabbing\n}\n\n.filepond--item[data-drag-state=drag]>.filepond--panel{\n  box-shadow:0 .125em .3125em rgba(0,0,0,.325)\n}\n\n.filepond--item[data-drag-state]:not([data-drag-state=idle]){\n  z-index:2\n}\n\n.filepond--item-panel{\n  background-color:#64605e\n}\n\n[data-filepond-item-state=processing-complete] .filepond--item-panel{\n  background-color:#369763\n}\n\n[data-filepond-item-state*=error] .filepond--item-panel,[data-filepond-item-state*=invalid] .filepond--item-panel{\n  background-color:#c44e47\n}\n\n.filepond--item-panel{\n  border-radius:.5em;\n  transition:background-color .25s\n}\n\n.filepond--list-scroller{\n  position:absolute;\n  top:0;\n  left:0;\n  right:0;\n  margin:0;\n  will-change:transform\n}\n\n.filepond--list-scroller[data-state=overflow]{\n  overflow-y:scroll;\n  overflow-x:hidden;\n  -webkit-overflow-scrolling:touch;\n  -webkit-mask:linear-gradient(180deg,#000 calc(100% - .5em),transparent);\n  mask:linear-gradient(180deg,#000 calc(100% - .5em),transparent)\n}\n\n.filepond--list-scroller[data-state=overflow] .filepond--list{\n  bottom:0;\n  right:0\n}\n\n.filepond--list-scroller::-webkit-scrollbar{\n  background:transparent\n}\n\n.filepond--list-scroller::-webkit-scrollbar:vertical{\n  width:1em\n}\n\n.filepond--list-scroller::-webkit-scrollbar:horizontal{\n  height:0\n}\n\n.filepond--list-scroller::-webkit-scrollbar-thumb{\n  background-color:rgba(0,0,0,.3);\n  border-radius:99999px;\n  border:.3125em solid transparent;\n  background-clip:content-box\n}\n\n.filepond--list.filepond--list{\n  position:absolute;\n  top:0;\n  margin:0;\n  padding:0;\n  list-style-type:none;\n  will-change:transform\n}\n\n.filepond--list{\n  left:.75em;\n  right:.75em\n}\n\n.filepond--root[data-style-panel-layout~=integrated]{\n  width:100%;\n  height:100%;\n  max-width:none;\n  margin:0\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--panel-root,.filepond--root[data-style-panel-layout~=integrated] .filepond--panel-root{\n  border-radius:0\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--panel-root>*,.filepond--root[data-style-panel-layout~=integrated] .filepond--panel-root>*{\n  display:none\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--drop-label,.filepond--root[data-style-panel-layout~=integrated] .filepond--drop-label{\n  bottom:0;\n  height:auto;\n  display:flex;\n  justify-content:center;\n  align-items:center;\n  z-index:7\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--item-panel,.filepond--root[data-style-panel-layout~=integrated] .filepond--item-panel{\n  display:none\n}\n\n.filepond--root[data-style-panel-layout~=compact] .filepond--list-scroller,.filepond--root[data-style-panel-layout~=integrated] .filepond--list-scroller{\n  overflow:hidden;\n  height:100%;\n  margin-top:0;\n  margin-bottom:0\n}\n\n.filepond--root[data-style-panel-layout~=compact] .filepond--list,.filepond--root[data-style-panel-layout~=integrated] .filepond--list{\n  left:0;\n  right:0;\n  height:100%\n}\n\n.filepond--root[data-style-panel-layout~=compact] .filepond--item,.filepond--root[data-style-panel-layout~=integrated] .filepond--item{\n  margin:0\n}\n\n.filepond--root[data-style-panel-layout~=compact] .filepond--file-wrapper,.filepond--root[data-style-panel-layout~=integrated] .filepond--file-wrapper{\n  height:100%\n}\n\n.filepond--root[data-style-panel-layout~=compact] .filepond--drop-label,.filepond--root[data-style-panel-layout~=integrated] .filepond--drop-label{\n  z-index:7\n}\n\n.filepond--root[data-style-panel-layout~=circle]{\n  border-radius:99999rem;\n  overflow:hidden\n}\n\n.filepond--root[data-style-panel-layout~=circle]>.filepond--panel{\n  border-radius:inherit\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--file-info,.filepond--root[data-style-panel-layout~=circle] .filepond--file-status,.filepond--root[data-style-panel-layout~=circle]>.filepond--panel>*{\n  display:none\n}\n\n.filepond--root[data-style-panel-layout~=circle] .filepond--action-edit-item{\n  opacity:1!important;\n  visibility:visible!important\n}\n\n@media not all and (-webkit-min-device-pixel-ratio:0), not all and (min-resolution:0.001dpcm){\n  @supports (-webkit-appearance:none) and (stroke-color:transparent){\n    .filepond--root[data-style-panel-layout~=circle]{\n      will-change:transform\n    }\n  }\n}\n\n.filepond--panel-root{\n  border-radius:.5em;\n  background-color:#f1f0ef\n}\n\n.filepond--panel{\n  position:absolute;\n  left:0;\n  top:0;\n  right:0;\n  margin:0;\n  height:100%!important;\n  pointer-events:none\n}\n\n.filepond-panel:not([data-scalable=false]){\n  height:auto!important\n}\n\n.filepond--panel[data-scalable=false]>div{\n  display:none\n}\n\n.filepond--panel[data-scalable=true]{\n  -webkit-transform-style:preserve-3d;\n  transform-style:preserve-3d;\n  background-color:transparent!important;\n  border:none!important\n}\n\n.filepond--panel-bottom,.filepond--panel-center,.filepond--panel-top{\n  position:absolute;\n  left:0;\n  top:0;\n  right:0;\n  margin:0;\n  padding:0\n}\n\n.filepond--panel-bottom,.filepond--panel-top{\n  height:.5em\n}\n\n.filepond--panel-top{\n  border-bottom-left-radius:0!important;\n  border-bottom-right-radius:0!important;\n  border-bottom:none!important\n}\n\n.filepond--panel-top:after{\n  content:\"\";\n  position:absolute;\n  height:2px;\n  left:0;\n  right:0;\n  bottom:-1px;\n  background-color:inherit\n}\n\n.filepond--panel-bottom,.filepond--panel-center{\n  will-change:transform;\n  -webkit-backface-visibility:hidden;\n  backface-visibility:hidden;\n  -webkit-transform-origin:left top;\n  transform-origin:left top;\n  -webkit-transform:translate3d(0,.5em,0);\n  transform:translate3d(0,.5em,0)\n}\n\n.filepond--panel-bottom{\n  border-top-left-radius:0!important;\n  border-top-right-radius:0!important;\n  border-top:none!important\n}\n\n.filepond--panel-bottom:before{\n  content:\"\";\n  position:absolute;\n  height:2px;\n  left:0;\n  right:0;\n  top:-1px;\n  background-color:inherit\n}\n\n.filepond--panel-center{\n  height:100px!important;\n  border-top:none!important;\n  border-bottom:none!important;\n  border-radius:0!important\n}\n\n.filepond--panel-center:not([style]){\n  visibility:hidden\n}\n\n.filepond--progress-indicator{\n  position:static;\n  width:1.25em;\n  height:1.25em;\n  color:#fff;\n  margin:0;\n  pointer-events:none;\n  will-change:transform,opacity\n}\n\n.filepond--progress-indicator svg{\n  width:100%;\n  height:100%;\n  vertical-align:top;\n  transform-box:fill-box\n}\n\n.filepond--progress-indicator path{\n  fill:none;\n  stroke:currentColor\n}\n\n.filepond--list-scroller{\n  z-index:6\n}\n\n.filepond--drop-label{\n  z-index:5\n}\n\n.filepond--drip{\n  z-index:3\n}\n\n.filepond--root>.filepond--panel{\n  z-index:2\n}\n\n.filepond--browser{\n  z-index:1\n}\n\n.filepond--root{\n  box-sizing:border-box;\n  position:relative;\n  margin-bottom:1em;\n  font-size:1rem;\n  line-height:normal;\n  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;\n  font-weight:450;\n  text-align:left;\n  text-rendering:optimizeLegibility;\n  direction:ltr;\n  contain:layout style size\n}\n\n.filepond--root *{\n  box-sizing:inherit;\n  line-height:inherit\n}\n\n.filepond--root :not(text){\n  font-size:inherit\n}\n\n.filepond--root[data-disabled]{\n  pointer-events:none\n}\n\n.filepond--root[data-disabled] .filepond--list-scroller{\n  pointer-events:all\n}\n\n.filepond--root[data-disabled] .filepond--list{\n  pointer-events:none\n}\n\n.filepond--root .filepond--drop-label{\n  min-height:4.75em\n}\n\n.filepond--root .filepond--list-scroller{\n  margin-top:1em;\n  margin-bottom:1em\n}\n\n.filepond--root .filepond--credits{\n  position:absolute;\n  right:0;\n  opacity:.175;\n  line-height:.85;\n  font-size:11px;\n  color:inherit;\n  text-decoration:none;\n  z-index:3;\n  bottom:-14px\n}\n\n.filepond--root .filepond--credits[style]{\n  top:0;\n  bottom:auto;\n  margin-top:14px\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/dist/runtime/api.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
-  \*****************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-// eslint-disable-next-line func-names
-module.exports = function (cssWithMappingToString) {
-  var list = []; // return the list of modules as css string
-
-  list.toString = function toString() {
-    return this.map(function (item) {
-      var content = cssWithMappingToString(item);
-
-      if (item[2]) {
-        return "@media ".concat(item[2], " {").concat(content, "}");
-      }
-
-      return content;
-    }).join("");
-  }; // import a list of modules into the list
-  // eslint-disable-next-line func-names
-
-
-  list.i = function (modules, mediaQuery, dedupe) {
-    if (typeof modules === "string") {
-      // eslint-disable-next-line no-param-reassign
-      modules = [[null, modules, ""]];
-    }
-
-    var alreadyImportedModules = {};
-
-    if (dedupe) {
-      for (var i = 0; i < this.length; i++) {
-        // eslint-disable-next-line prefer-destructuring
-        var id = this[i][0];
-
-        if (id != null) {
-          alreadyImportedModules[id] = true;
-        }
-      }
-    }
-
-    for (var _i = 0; _i < modules.length; _i++) {
-      var item = [].concat(modules[_i]);
-
-      if (dedupe && alreadyImportedModules[item[0]]) {
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-
-      if (mediaQuery) {
-        if (!item[2]) {
-          item[2] = mediaQuery;
-        } else {
-          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
-        }
-      }
-
-      list.push(item);
-    }
-  };
-
-  return list;
-};
 
 /***/ }),
 
@@ -15217,285 +15097,6 @@ var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMP
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
-  \****************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-var isOldIE = function isOldIE() {
-  var memo;
-  return function memorize() {
-    if (typeof memo === 'undefined') {
-      // Test for IE <= 9 as proposed by Browserhacks
-      // @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
-      // Tests for existence of standard globals is to allow style-loader
-      // to operate correctly into non-standard environments
-      // @see https://github.com/webpack-contrib/style-loader/issues/177
-      memo = Boolean(window && document && document.all && !window.atob);
-    }
-
-    return memo;
-  };
-}();
-
-var getTarget = function getTarget() {
-  var memo = {};
-  return function memorize(target) {
-    if (typeof memo[target] === 'undefined') {
-      var styleTarget = document.querySelector(target); // Special case to return head of iframe instead of iframe itself
-
-      if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
-        try {
-          // This will throw an exception if access to iframe is blocked
-          // due to cross-origin restrictions
-          styleTarget = styleTarget.contentDocument.head;
-        } catch (e) {
-          // istanbul ignore next
-          styleTarget = null;
-        }
-      }
-
-      memo[target] = styleTarget;
-    }
-
-    return memo[target];
-  };
-}();
-
-var stylesInDom = [];
-
-function getIndexByIdentifier(identifier) {
-  var result = -1;
-
-  for (var i = 0; i < stylesInDom.length; i++) {
-    if (stylesInDom[i].identifier === identifier) {
-      result = i;
-      break;
-    }
-  }
-
-  return result;
-}
-
-function modulesToDom(list, options) {
-  var idCountMap = {};
-  var identifiers = [];
-
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i];
-    var id = options.base ? item[0] + options.base : item[0];
-    var count = idCountMap[id] || 0;
-    var identifier = "".concat(id, " ").concat(count);
-    idCountMap[id] = count + 1;
-    var index = getIndexByIdentifier(identifier);
-    var obj = {
-      css: item[1],
-      media: item[2],
-      sourceMap: item[3]
-    };
-
-    if (index !== -1) {
-      stylesInDom[index].references++;
-      stylesInDom[index].updater(obj);
-    } else {
-      stylesInDom.push({
-        identifier: identifier,
-        updater: addStyle(obj, options),
-        references: 1
-      });
-    }
-
-    identifiers.push(identifier);
-  }
-
-  return identifiers;
-}
-
-function insertStyleElement(options) {
-  var style = document.createElement('style');
-  var attributes = options.attributes || {};
-
-  if (typeof attributes.nonce === 'undefined') {
-    var nonce =  true ? __webpack_require__.nc : 0;
-
-    if (nonce) {
-      attributes.nonce = nonce;
-    }
-  }
-
-  Object.keys(attributes).forEach(function (key) {
-    style.setAttribute(key, attributes[key]);
-  });
-
-  if (typeof options.insert === 'function') {
-    options.insert(style);
-  } else {
-    var target = getTarget(options.insert || 'head');
-
-    if (!target) {
-      throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
-    }
-
-    target.appendChild(style);
-  }
-
-  return style;
-}
-
-function removeStyleElement(style) {
-  // istanbul ignore if
-  if (style.parentNode === null) {
-    return false;
-  }
-
-  style.parentNode.removeChild(style);
-}
-/* istanbul ignore next  */
-
-
-var replaceText = function replaceText() {
-  var textStore = [];
-  return function replace(index, replacement) {
-    textStore[index] = replacement;
-    return textStore.filter(Boolean).join('\n');
-  };
-}();
-
-function applyToSingletonTag(style, index, remove, obj) {
-  var css = remove ? '' : obj.media ? "@media ".concat(obj.media, " {").concat(obj.css, "}") : obj.css; // For old IE
-
-  /* istanbul ignore if  */
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = replaceText(index, css);
-  } else {
-    var cssNode = document.createTextNode(css);
-    var childNodes = style.childNodes;
-
-    if (childNodes[index]) {
-      style.removeChild(childNodes[index]);
-    }
-
-    if (childNodes.length) {
-      style.insertBefore(cssNode, childNodes[index]);
-    } else {
-      style.appendChild(cssNode);
-    }
-  }
-}
-
-function applyToTag(style, options, obj) {
-  var css = obj.css;
-  var media = obj.media;
-  var sourceMap = obj.sourceMap;
-
-  if (media) {
-    style.setAttribute('media', media);
-  } else {
-    style.removeAttribute('media');
-  }
-
-  if (sourceMap && typeof btoa !== 'undefined') {
-    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
-  } // For old IE
-
-  /* istanbul ignore if  */
-
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    while (style.firstChild) {
-      style.removeChild(style.firstChild);
-    }
-
-    style.appendChild(document.createTextNode(css));
-  }
-}
-
-var singleton = null;
-var singletonCounter = 0;
-
-function addStyle(obj, options) {
-  var style;
-  var update;
-  var remove;
-
-  if (options.singleton) {
-    var styleIndex = singletonCounter++;
-    style = singleton || (singleton = insertStyleElement(options));
-    update = applyToSingletonTag.bind(null, style, styleIndex, false);
-    remove = applyToSingletonTag.bind(null, style, styleIndex, true);
-  } else {
-    style = insertStyleElement(options);
-    update = applyToTag.bind(null, style, options);
-
-    remove = function remove() {
-      removeStyleElement(style);
-    };
-  }
-
-  update(obj);
-  return function updateStyle(newObj) {
-    if (newObj) {
-      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap) {
-        return;
-      }
-
-      update(obj = newObj);
-    } else {
-      remove();
-    }
-  };
-}
-
-module.exports = function (list, options) {
-  options = options || {}; // Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-  // tags it will allow on a page
-
-  if (!options.singleton && typeof options.singleton !== 'boolean') {
-    options.singleton = isOldIE();
-  }
-
-  list = list || [];
-  var lastIdentifiers = modulesToDom(list, options);
-  return function update(newList) {
-    newList = newList || [];
-
-    if (Object.prototype.toString.call(newList) !== '[object Array]') {
-      return;
-    }
-
-    for (var i = 0; i < lastIdentifiers.length; i++) {
-      var identifier = lastIdentifiers[i];
-      var index = getIndexByIdentifier(identifier);
-      stylesInDom[index].references--;
-    }
-
-    var newLastIdentifiers = modulesToDom(newList, options);
-
-    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
-      var _identifier = lastIdentifiers[_i];
-
-      var _index = getIndexByIdentifier(_identifier);
-
-      if (stylesInDom[_index].references === 0) {
-        stylesInDom[_index].updater();
-
-        stylesInDom.splice(_index, 1);
-      }
-    }
-
-    lastIdentifiers = newLastIdentifiers;
-  };
-};
-
-/***/ }),
-
 /***/ "./node_modules/vue-filepond/dist/vue-filepond.js":
 /*!********************************************************!*\
   !*** ./node_modules/vue-filepond/dist/vue-filepond.js ***!
@@ -15983,45 +15584,6 @@ component.options.__file = "resources/js/dashboard/components/users/EditUserComp
 
 /***/ }),
 
-/***/ "./resources/js/dashboard/components/users/RoleComponent.vue":
-/*!*******************************************************************!*\
-  !*** ./resources/js/dashboard/components/users/RoleComponent.vue ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _RoleComponent_vue_vue_type_template_id_bb9f15c0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RoleComponent.vue?vue&type=template&id=bb9f15c0& */ "./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=template&id=bb9f15c0&");
-/* harmony import */ var _RoleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RoleComponent.vue?vue&type=script&lang=js& */ "./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
-  _RoleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _RoleComponent_vue_vue_type_template_id_bb9f15c0___WEBPACK_IMPORTED_MODULE_0__.render,
-  _RoleComponent_vue_vue_type_template_id_bb9f15c0___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/dashboard/components/users/RoleComponent.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
 /***/ "./resources/js/dashboard/views/ViewContainer.vue":
 /*!********************************************************!*\
   !*** ./resources/js/dashboard/views/ViewContainer.vue ***!
@@ -16256,22 +15818,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************!*\
-  !*** ./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RoleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RoleComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RoleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
-
-/***/ }),
-
 /***/ "./resources/js/dashboard/views/users/CreateUserView.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************!*\
   !*** ./resources/js/dashboard/views/users/CreateUserView.vue?vue&type=script&lang=js& ***!
@@ -16439,23 +15985,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=template&id=bb9f15c0&":
-/*!**************************************************************************************************!*\
-  !*** ./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=template&id=bb9f15c0& ***!
-  \**************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RoleComponent_vue_vue_type_template_id_bb9f15c0___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RoleComponent_vue_vue_type_template_id_bb9f15c0___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RoleComponent_vue_vue_type_template_id_bb9f15c0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RoleComponent.vue?vue&type=template&id=bb9f15c0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=template&id=bb9f15c0&");
-
-
-/***/ }),
-
 /***/ "./resources/js/dashboard/views/ViewContainer.vue?vue&type=template&id=3d770bd2&":
 /*!***************************************************************************************!*\
   !*** ./resources/js/dashboard/views/ViewContainer.vue?vue&type=template&id=3d770bd2& ***!
@@ -16611,7 +16140,7 @@ var render = function() {
     "li",
     {
       staticClass:
-        "w-full p-2 mt-4 rounded text-sm shadow-sm hover:shadow-md bg-white md:w-49 lg:w-350px  2xl:w-80"
+        "w-full p-2 mt-4 rounded text-sm shadow-sm hover:shadow-md bg-white md:w-49 lg:w-80 2xl:w-96"
     },
     [_vm._t("default")],
     2
@@ -17846,40 +17375,6 @@ var render = function() {
       1
     )
   ])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=template&id=bb9f15c0&":
-/*!*****************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/users/RoleComponent.vue?vue&type=template&id=bb9f15c0& ***!
-  \*****************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm.role
-    ? _c(
-        "div",
-        {
-          staticClass:
-            "py-1 px-2 ml-2 text-xs text-white rounded-sm bg-lightBlue-600"
-        },
-        [_vm._v("\n    " + _vm._s(_vm.role.name) + "\n")]
-      )
-    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

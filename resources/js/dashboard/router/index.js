@@ -60,30 +60,7 @@ const routes = [
         }
     },
 
-
-    {   
-        path: `${baseUrl}/categories`,
-        name: 'Categories',
-        component: CategoriesView,
-        meta: {
-            breadcrumb: {
-                label: 'Categories',
-                parent: 'Dashhboard'
-            }
-        }
-    },
-
-    {   
-        path: `${baseUrl}/ingredients`,
-        name: 'Ingredients',
-        component: IngredientsView,
-        meta: {
-            breadcrumb: {
-                label: 'Ingredients',
-                parent: 'Dashhboard'
-            }
-        }
-    },
+    
 
     {
         path: `${baseUrl}/products`,
@@ -107,6 +84,43 @@ const routes = [
             }
         }
     },
+
+    {   
+        path: `${baseUrl}/categories`,
+        name: 'Categories',
+        component: CategoriesView,
+        meta: {
+            breadcrumb: {
+                label: 'Categories',
+                parent: 'Products'
+            }
+        }
+    },
+
+    {   
+        path: `${baseUrl}/ingredients`,
+        name: 'Ingredients',
+        component: IngredientsView,
+        meta: {
+            breadcrumb: {
+                label: 'Ingredients',
+                parent: 'Products'
+            }
+        }
+    },
+
+     // {
+    //     path: `${baseUrl}/stocks`,
+    //     name: 'Stocks',
+    //     component: null,
+    //     meta: {
+    //         breadcrumb: {
+    //             label: 'Stocks',
+    //             parent: 'Products'
+    //         }
+    //     }
+    // },
+
     {
         path: `${baseUrl}/products/:id`,
         name: 'Product',
