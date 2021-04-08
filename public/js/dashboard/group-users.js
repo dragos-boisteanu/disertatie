@@ -1147,7 +1147,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 
@@ -17529,14 +17528,14 @@ var render = function() {
                       "div",
                       {
                         staticClass:
-                          "flex flex-col lg:flex-row lg:items-start lg:gap-x-6 lg:w-10/12"
+                          "flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-full 2xl:w-3/4"
                       },
                       [
                         _c(
                           "div",
                           {
                             staticClass:
-                              "flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 border-b border-gray-200 lg:border-r lg:pr-5 lg:border-b-0 lg:flex-1"
+                              "flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
                           },
                           [
                             _c(
