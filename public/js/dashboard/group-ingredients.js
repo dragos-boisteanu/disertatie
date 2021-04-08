@@ -169,7 +169,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(_store__WEBPACK_IMPORTED_MODULE_3__.default.getters["Ingredients/getIngredients"].lenght > 0)) {
+              if (!(_store__WEBPACK_IMPORTED_MODULE_3__.default.getters["Ingredients/getIngredients"].length > 0)) {
                 _context.next = 4;
                 break;
               }
@@ -560,7 +560,7 @@ var render = function() {
         _vm._v("\n        Ingredients\n    ")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "w-full md:flex xl:w-3/4 2xl:w-1/2 " }, [
+      _c("div", { staticClass: "w-full md:flex xl:w-3/4 2xl:w-1/2" }, [
         _c(
           "ul",
           {

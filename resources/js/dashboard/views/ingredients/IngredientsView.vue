@@ -4,7 +4,7 @@
             Ingredients
         </template>
 
-        <div class="w-full md:flex xl:w-3/4 2xl:w-1/2 ">
+        <div class="w-full md:flex xl:w-3/4 2xl:w-1/2">
             <ul class="px-2 overflow-y-scroll w-full max-h-80 md:flex-1 md:max-h-96 ">
                 <li 
                     v-for="(ingredient, index) in getIngredients" :key="ingredient.id"
@@ -135,7 +135,7 @@
     export default {
 
         async beforeRouteEnter (to, from, next) {
-            if(store.getters['Ingredients/getIngredients'].lenght > 0) {
+            if(store.getters['Ingredients/getIngredients'].length > 0) {
                 next();
             } else {
                 await store.dispatch('Ingredients/downloadIngredients');
