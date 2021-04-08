@@ -1618,10 +1618,19 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
 
               if (response.data) {
                 this.product = response.data.data;
-                console.log(this.product);
               } else {
-                // this.resetProductData();
-                this.locked = false;
+                this.product = {
+                  barcode: this.product.barcode,
+                  name: '',
+                  description: '',
+                  base_price: '',
+                  weight: '',
+                  unit_id: '',
+                  quantity: '',
+                  category_id: '',
+                  hasIngredients: false,
+                  ingredients: []
+                }, this.locked = false;
               }
 
               this.checkingBarcode = false;
@@ -19050,31 +19059,31 @@ var render = function() {
                               }
                             }),
                             _vm._v(" "),
-                            !(_vm.waiting || _vm.locked)
-                              ? _c("div", { staticClass: "text-right mt-3" }, [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
-                                      attrs: {
-                                        disabled: _vm.waitForFileUpload
-                                      },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.clearImage($event)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                            Clear image\n                        "
-                                      )
-                                    ]
+                            _c("div", { staticClass: "text-right mt-3" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+                                  attrs: {
+                                    disabled:
+                                      _vm.waitForFileUpload ||
+                                      !(_vm.waiting || _vm.locked)
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.clearImage($event)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Clear image\n                        "
                                   )
-                                ])
-                              : _vm._e(),
+                                ]
+                              )
+                            ]),
                             _vm._v(" "),
                             _c(
                               "div",
@@ -19118,7 +19127,7 @@ var render = function() {
                                               "div",
                                               {
                                                 staticClass:
-                                                  "flex gap-x-1 items-center relative"
+                                                  "flex gap-x-3 items-center relative flex-1"
                                               },
                                               [
                                                 _c("input", {
@@ -19178,7 +19187,7 @@ var render = function() {
                                                       }
                                                     ],
                                                     staticClass:
-                                                      "absolute -right-10 top-1/4 animate-spin mr-3 h-5 w-5 text-lightBlue-600",
+                                                      "animate-spin mr-3 h-5 w-5 text-lightBlue-600",
                                                     attrs: {
                                                       xmlns:
                                                         "http://www.w3.org/2000/svg",
