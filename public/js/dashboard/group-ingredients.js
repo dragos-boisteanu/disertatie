@@ -201,7 +201,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       ingredient: {
         id: '',
         name: '',
-        quantity: '',
+        stockQuantity: '',
         addQuantity: '',
         unit: {
           id: '',
@@ -247,7 +247,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$Progress.start();
 
                 if (!_this.ingredientSelected) {
-                  _context2.next = 16;
+                  _context2.next = 18;
                   break;
                 }
 
@@ -265,44 +265,46 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     counter++;
                   }
                 });
+                console.log(_this.ingredient);
+                console.log(payload);
 
                 if (!(counter > 0)) {
-                  _context2.next = 13;
+                  _context2.next = 15;
                   break;
                 }
 
-                _context2.next = 10;
+                _context2.next = 12;
                 return _this.patchIngredient(payload);
 
-              case 10:
-                _this.ingredient.quantity += parseInt(payload.ingredient.addQuantity);
-                _context2.next = 14;
+              case 12:
+                _this.ingredient.stockQuantity += parseInt(payload.ingredient.addQuantity);
+                _context2.next = 16;
                 break;
 
-              case 13:
+              case 15:
                 console.log('nothing to update');
 
-              case 14:
-                _context2.next = 19;
+              case 16:
+                _context2.next = 21;
                 break;
 
-              case 16:
-                _context2.next = 18;
+              case 18:
+                _context2.next = 20;
                 return _this.postIngredient(_this.ingredient);
 
-              case 18:
+              case 20:
                 _this.resetForm();
 
-              case 19:
+              case 21:
                 _this.waiting = false;
 
                 _this.$Progress.finish();
 
-                _context2.next = 29;
+                _context2.next = 31;
                 break;
 
-              case 23:
-                _context2.prev = 23;
+              case 25:
+                _context2.prev = 25;
                 _context2.t0 = _context2["catch"](0);
 
                 _this.$Progress.fail();
@@ -314,12 +316,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this.$refs.observer.setErrors(_context2.t0.response.data.errors);
                 }
 
-              case 29:
+              case 31:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 23]]);
+        }, _callee2, null, [[0, 25]]);
       }))();
     },
     removeIngredient: function removeIngredient(id) {
@@ -591,7 +593,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("span", [
                       _vm._v(
-                        _vm._s(ingredient.quantity) +
+                        _vm._s(ingredient.stockQuantity) +
                           " " +
                           _vm._s(ingredient.unit.name)
                       )
@@ -712,7 +714,9 @@ var render = function() {
                                               id: "name",
                                               name: "name",
                                               type: "text",
-                                              disabled: _vm.waiting
+                                              disabled:
+                                                _vm.waiting ||
+                                                _vm.ingredientSelected
                                             },
                                             domProps: {
                                               value: _vm.ingredient.name

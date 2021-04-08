@@ -15,7 +15,7 @@
                         class="cursor-pointer flex items-center gap-x-2">
                         <span>{{ index + 1 }}.</span>
                         <span>{{ ingredient.name }}</span>
-                        <span>{{ ingredient.quantity }} {{ ingredient.unit.name }}</span>
+                        <span>{{ ingredient.stockQuantity }} {{ ingredient.unit.name }}</span>
                     </div>
                     <div>
                         <button @click="removeIngredient(ingredient.id)"> X</button>
@@ -39,7 +39,7 @@
                                     name="name" 
                                     type="text" 
                                     v-model="ingredient.name" 
-                                    :disabled="waiting"   
+                                    :disabled="waiting || ingredientSelected"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
@@ -156,7 +156,7 @@
                 ingredient: {
                     id: '',
                     name: '',
-                    quantity: '',
+                    stockQuantity: '',
                     addQuantity: '',
                     unit: {
                         id: '',
@@ -218,9 +218,12 @@
                             }
                         });
 
+                        console.log(this.ingredient)
+                        console.log(payload)
+
                         if(counter > 0 ) {
                             await this.patchIngredient(payload);
-                            this.ingredient.quantity += parseInt(payload.ingredient.addQuantity); 
+                            this.ingredient.stockQuantity += parseInt(payload.ingredient.addQuantity); 
                         } else {
                             console.log('nothing to update')
                         }
