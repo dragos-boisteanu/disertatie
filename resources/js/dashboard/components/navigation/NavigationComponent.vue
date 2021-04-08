@@ -38,7 +38,7 @@
                     <router-link :to="{name: 'Users'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Users List</router-link>
                 </li>
                 <li class="text-sm text-gray-300 hover:text-white">
-                    <router-link :to="{name: 'CreateUser'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Create User</router-link>
+                    <router-link :to="{name: 'CreateUser'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Create User Profile</router-link>
                 </li>
             </ul>
         </div>

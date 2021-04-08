@@ -165,8 +165,6 @@
                         </ValidationProvider>
                     </div>
 
-
-
                     <div class="mt-5 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 border-b border-gray-200 lg:mt-0 lg:border-r lg:pr-5 lg:border-b-0 lg:flex-1">
                         <h2 class="mb-5 text-xl font-semibold">
                             <input id="addressToggle" type="checkbox" v-model="required" @click="toggleAddressState"> 

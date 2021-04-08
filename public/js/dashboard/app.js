@@ -33493,7 +33493,7 @@ var render = function() {
                     "block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20",
                   attrs: { to: { name: "CreateUser" }, exact: "" }
                 },
-                [_vm._v("Create User")]
+                [_vm._v("Create User Profile")]
               )
             ],
             1
