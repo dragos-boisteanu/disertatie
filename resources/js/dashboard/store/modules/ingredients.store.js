@@ -31,6 +31,7 @@ const actions = {
         try {
             const response = await postIngredient(payload);
             payload.id = response.data;
+            payload.stockQuantity = 0;
             commit('ADD_INGREDIENT', payload);
         } catch ( error ) {
             throw error;
@@ -77,12 +78,7 @@ const mutations = {
         const vm = payload.vm;
 
         Object.keys(payload.ingredient).forEach(key => {
-            if(key === 'addQuantity') {
-                vm.$set(state.ingredients[ingredientIndex], 'stockQuantity', parseInt(payload.ingredient['addQuantity']) + state.ingredients[ingredientIndex].stockQuantity );
-            } else {
-                vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key] );
-            }
-            
+            vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key] );
         });
     },
 

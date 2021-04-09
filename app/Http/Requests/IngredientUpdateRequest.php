@@ -25,8 +25,6 @@ class IngredientUpdateRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:50',
-            'stockQuantity' => 'sometimes|numeric',
-            'addQuantity' => 'sometimes|numeric',
             'unit.id' => 'sometimes|numeric|exists:units,id',
         ];
     }

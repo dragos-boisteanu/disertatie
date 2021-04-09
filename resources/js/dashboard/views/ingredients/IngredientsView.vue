@@ -33,50 +33,33 @@
                             Ingredient
                         </h2> 
 
-                        <ValidationProvider vid="name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
-                            <label for="name" class="text-sm font-semibold">Nane</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                            <input 
-                                id="name"
-                                name="name" 
-                                type="text" 
-                                v-model="ingredient.name" 
-                                :disabled="waiting || ingredientSelected"   
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                            />
-                        </ValidationProvider> 
+                        
                         
                         <div class="w-full flex-1 flex items-center gap-x-4">
-                            <ValidationProvider vid="quantity" rules="required|integer" v-slot="{ errors, failed, passed }" class="flex-1">
-                                <label for="vat" class="text-sm font-semibold">Quantity</label>
+                            <ValidationProvider 
+                                vid="name" rules="required|alpha_spaces|max:50" 
+                                v-slot="{ errors, failed, passed }" 
+                                class="flex-grow flex-1"
+                            >
+                                <label for="name" class="text-sm font-semibold">Nane</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
-                                    id="quantity"
-                                    name="quantity" 
-                                    type="number" 
-                                    v-model="ingredient.stockQuantity" 
-                                    :disabled="waiting || ingredientSelected"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-
-                            <ValidationProvider vid="vat" rules="required|integer" v-slot="{ errors, failed, passed }" class="flex-1" v-if="ingredientSelected">
-                                <label for="vat" class="text-sm font-semibold">Add quantity</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="vat"
-                                    name="vat" 
-                                    type="number" 
-                                    v-model="ingredient.addQuantity" 
+                                    id="name"
+                                    name="name" 
+                                    type="text" 
+                                    v-model="ingredient.name" 
                                     :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
-                            </ValidationProvider>
+                            </ValidationProvider> 
 
-                            <ValidationProvider vid="unit_id" rules="required" v-slot="{  errors, failed, passed }" class="flex-1">
+                            <ValidationProvider 
+                                vid="unit_id" 
+                                rules="required" 
+                                v-slot="{  errors, failed, passed }" 
+                                class="flex-0"
+                            >
                                 <label for="vat" class="text-sm font-semibold">Unit</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
@@ -84,7 +67,7 @@
                                     name="weight units" 
                                     type="text" 
                                     v-model="ingredient.unit" 
-                                    :disabled="waiting || ingredientSelected"   
+                                    :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 >
@@ -146,6 +129,10 @@
             ...mapGetters('Ingredients', ['getIngredients']),
             ...mapGetters('Units', ['getUnits']),
 
+            canEdit() {
+                return true;
+            }
+
         },
 
         data() {
@@ -155,8 +142,6 @@
                 ingredient: {
                     id: '',
                     name: '',
-                    stockQuantity: '',
-                    addQuantity: '',
                     unit: {
                         id: '',
                         name: '',
@@ -171,7 +156,6 @@
             selectIngredient(id) {
                 this.ingredientSelected = true;
                 this.ingredient = Object.assign(this.ingredient, _find(this.getIngredients, ['id', id]));
-                this.ingredient.addQuantity = '';
                 this.$refs.observer.reset();
             },
 
@@ -185,7 +169,6 @@
                 this.ingredient = {
                     id: '',
                     name: '',
-                    quantity: '',
                     unit: {
                         id: '',
                         name: '',
@@ -217,12 +200,8 @@
                             }
                         });
 
-                        console.log(this.ingredient)
-                        console.log(payload)
-
                         if(counter > 0 ) {
                             await this.patchIngredient(payload);
-                            this.ingredient.stockQuantity += parseInt(payload.ingredient.addQuantity); 
                         } else {
                             console.log('nothing to update')
                         }

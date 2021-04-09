@@ -140,23 +140,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -192,7 +175,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Units', ['getUnits'])),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Units', ['getUnits'])), {}, {
+    canEdit: function canEdit() {
+      return true;
+    }
+  }),
   data: function data() {
     return {
       waiting: false,
@@ -200,8 +187,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       ingredient: {
         id: '',
         name: '',
-        stockQuantity: '',
-        addQuantity: '',
         unit: {
           id: '',
           name: ''
@@ -213,7 +198,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     selectIngredient: function selectIngredient(id) {
       this.ingredientSelected = true;
       this.ingredient = Object.assign(this.ingredient, lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.getIngredients, ['id', id]));
-      this.ingredient.addQuantity = '';
       this.$refs.observer.reset();
     },
     clearSelection: function clearSelection() {
@@ -225,7 +209,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.ingredient = {
         id: '',
         name: '',
-        quantity: '',
         unit: {
           id: '',
           name: ''
@@ -246,7 +229,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$Progress.start();
 
                 if (!_this.ingredientSelected) {
-                  _context2.next = 18;
+                  _context2.next = 15;
                   break;
                 }
 
@@ -264,46 +247,43 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     counter++;
                   }
                 });
-                console.log(_this.ingredient);
-                console.log(payload);
 
                 if (!(counter > 0)) {
-                  _context2.next = 15;
+                  _context2.next = 12;
                   break;
                 }
 
-                _context2.next = 12;
+                _context2.next = 10;
                 return _this.patchIngredient(payload);
 
+              case 10:
+                _context2.next = 13;
+                break;
+
               case 12:
-                _this.ingredient.stockQuantity += parseInt(payload.ingredient.addQuantity);
-                _context2.next = 16;
+                console.log('nothing to update');
+
+              case 13:
+                _context2.next = 18;
                 break;
 
               case 15:
-                console.log('nothing to update');
-
-              case 16:
-                _context2.next = 21;
-                break;
-
-              case 18:
-                _context2.next = 20;
+                _context2.next = 17;
                 return _this.postIngredient(_this.ingredient);
 
-              case 20:
+              case 17:
                 _this.resetForm();
 
-              case 21:
+              case 18:
                 _this.waiting = false;
 
                 _this.$Progress.finish();
 
-                _context2.next = 31;
+                _context2.next = 28;
                 break;
 
-              case 25:
-                _context2.prev = 25;
+              case 22:
+                _context2.prev = 22;
                 _context2.t0 = _context2["catch"](0);
 
                 _this.$Progress.fail();
@@ -315,12 +295,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this.$refs.observer.setErrors(_context2.t0.response.data.errors);
                 }
 
-              case 31:
+              case 28:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 25]]);
+        }, _callee2, null, [[0, 22]]);
       }))();
     },
     removeIngredient: function removeIngredient(id) {
@@ -670,88 +650,6 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c("ValidationProvider", {
-                              staticClass: "flex-grow flex-shrink-0",
-                              attrs: {
-                                vid: "name",
-                                rules: "required|alpha_spaces|max:50"
-                              },
-                              scopedSlots: _vm._u(
-                                [
-                                  {
-                                    key: "default",
-                                    fn: function(ref) {
-                                      var errors = ref.errors
-                                      var failed = ref.failed
-                                      var passed = ref.passed
-                                      return [
-                                        _c(
-                                          "label",
-                                          {
-                                            staticClass:
-                                              "text-sm font-semibold",
-                                            attrs: { for: "name" }
-                                          },
-                                          [_vm._v("Nane")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass:
-                                              "text-xs text-red-600 font-semibold mb-1"
-                                          },
-                                          [_vm._v(" " + _vm._s(errors[0]))]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("input", {
-                                          directives: [
-                                            {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value: _vm.ingredient.name,
-                                              expression: "ingredient.name"
-                                            }
-                                          ],
-                                          staticClass:
-                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                          class: {
-                                            "border-red-600": failed,
-                                            "border-green-500": passed
-                                          },
-                                          attrs: {
-                                            id: "name",
-                                            name: "name",
-                                            type: "text",
-                                            disabled:
-                                              _vm.waiting ||
-                                              _vm.ingredientSelected
-                                          },
-                                          domProps: {
-                                            value: _vm.ingredient.name
-                                          },
-                                          on: {
-                                            input: function($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.$set(
-                                                _vm.ingredient,
-                                                "name",
-                                                $event.target.value
-                                              )
-                                            }
-                                          }
-                                        })
-                                      ]
-                                    }
-                                  }
-                                ],
-                                null,
-                                true
-                              )
-                            }),
-                            _vm._v(" "),
                             _c(
                               "div",
                               {
@@ -760,10 +658,10 @@ var render = function() {
                               },
                               [
                                 _c("ValidationProvider", {
-                                  staticClass: "flex-1",
+                                  staticClass: "flex-grow flex-1",
                                   attrs: {
-                                    vid: "quantity",
-                                    rules: "required|integer"
+                                    vid: "name",
+                                    rules: "required|alpha_spaces|max:50"
                                   },
                                   scopedSlots: _vm._u(
                                     [
@@ -779,9 +677,9 @@ var render = function() {
                                               {
                                                 staticClass:
                                                   "text-sm font-semibold",
-                                                attrs: { for: "vat" }
+                                                attrs: { for: "name" }
                                               },
-                                              [_vm._v("Quantity")]
+                                              [_vm._v("Nane")]
                                             ),
                                             _vm._v(" "),
                                             _c(
@@ -798,11 +696,8 @@ var render = function() {
                                                 {
                                                   name: "model",
                                                   rawName: "v-model",
-                                                  value:
-                                                    _vm.ingredient
-                                                      .stockQuantity,
-                                                  expression:
-                                                    "ingredient.stockQuantity"
+                                                  value: _vm.ingredient.name,
+                                                  expression: "ingredient.name"
                                                 }
                                               ],
                                               staticClass:
@@ -812,16 +707,13 @@ var render = function() {
                                                 "border-green-500": passed
                                               },
                                               attrs: {
-                                                id: "quantity",
-                                                name: "quantity",
-                                                type: "number",
-                                                disabled:
-                                                  _vm.waiting ||
-                                                  _vm.ingredientSelected
+                                                id: "name",
+                                                name: "name",
+                                                type: "text",
+                                                disabled: _vm.waiting
                                               },
                                               domProps: {
-                                                value:
-                                                  _vm.ingredient.stockQuantity
+                                                value: _vm.ingredient.name
                                               },
                                               on: {
                                                 input: function($event) {
@@ -830,7 +722,7 @@ var render = function() {
                                                   }
                                                   _vm.$set(
                                                     _vm.ingredient,
-                                                    "stockQuantity",
+                                                    "name",
                                                     $event.target.value
                                                   )
                                                 }
@@ -845,100 +737,8 @@ var render = function() {
                                   )
                                 }),
                                 _vm._v(" "),
-                                _vm.ingredientSelected
-                                  ? _c("ValidationProvider", {
-                                      staticClass: "flex-1",
-                                      attrs: {
-                                        vid: "vat",
-                                        rules: "required|integer"
-                                      },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var errors = ref.errors
-                                              var failed = ref.failed
-                                              var passed = ref.passed
-                                              return [
-                                                _c(
-                                                  "label",
-                                                  {
-                                                    staticClass:
-                                                      "text-sm font-semibold",
-                                                    attrs: { for: "vat" }
-                                                  },
-                                                  [_vm._v("Add quantity")]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text-xs text-red-600 font-semibold mb-1"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      " " + _vm._s(errors[0])
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("input", {
-                                                  directives: [
-                                                    {
-                                                      name: "model",
-                                                      rawName: "v-model",
-                                                      value:
-                                                        _vm.ingredient
-                                                          .addQuantity,
-                                                      expression:
-                                                        "ingredient.addQuantity"
-                                                    }
-                                                  ],
-                                                  staticClass:
-                                                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                  class: {
-                                                    "border-red-600": failed,
-                                                    "border-green-500": passed
-                                                  },
-                                                  attrs: {
-                                                    id: "vat",
-                                                    name: "vat",
-                                                    type: "number",
-                                                    disabled: _vm.waiting
-                                                  },
-                                                  domProps: {
-                                                    value:
-                                                      _vm.ingredient.addQuantity
-                                                  },
-                                                  on: {
-                                                    input: function($event) {
-                                                      if (
-                                                        $event.target.composing
-                                                      ) {
-                                                        return
-                                                      }
-                                                      _vm.$set(
-                                                        _vm.ingredient,
-                                                        "addQuantity",
-                                                        $event.target.value
-                                                      )
-                                                    }
-                                                  }
-                                                })
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    })
-                                  : _vm._e(),
-                                _vm._v(" "),
                                 _c("ValidationProvider", {
-                                  staticClass: "flex-1",
+                                  staticClass: "flex-0",
                                   attrs: { vid: "unit_id", rules: "required" },
                                   scopedSlots: _vm._u(
                                     [
@@ -990,9 +790,7 @@ var render = function() {
                                                   id: "unit_id",
                                                   name: "weight units",
                                                   type: "text",
-                                                  disabled:
-                                                    _vm.waiting ||
-                                                    _vm.ingredientSelected
+                                                  disabled: _vm.waiting
                                                 },
                                                 on: {
                                                   change: function($event) {
@@ -1145,8 +943,7 @@ var render = function() {
                                 ]
                               )
                             ])
-                          ],
-                          1
+                          ]
                         )
                       ]
                     }

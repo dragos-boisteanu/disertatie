@@ -35,10 +35,11 @@ class IngredientController extends Controller
         $request->user()->can('create', Ingredient::class);
 
         $stock = Stock::create([
-            'quantity' => $request->quantity,
+            'quantity' => 0,
         ]);
 
         $input = $request->validated();
+
         $input['stock_id'] = $stock->id;
         $input['unit_id'] = $input['unit']['id'];
 
@@ -66,16 +67,6 @@ class IngredientController extends Controller
         }
        
         $ingredient->update($input);
-
-        if($request->has('quantity')) {
-            $ingredient->stock->quantity = $request->quantity;
-            $ingredient->stock->save();
-        }
-
-        if($request->has('addQuantity')) {
-            $ingredient->stock->quantity += $request->addQuantity;
-            $ingredient->stock->save();
-        }
 
         return response()->json(['message' => 'Ingredient updated'], 200);
     }

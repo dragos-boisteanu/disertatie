@@ -3573,21 +3573,22 @@ var actions = {
             case 4:
               response = _context2.sent;
               payload.id = response.data;
+              payload.stockQuantity = 0;
               commit('ADD_INGREDIENT', payload);
-              _context2.next = 12;
+              _context2.next = 13;
               break;
 
-            case 9:
-              _context2.prev = 9;
+            case 10:
+              _context2.prev = 10;
               _context2.t0 = _context2["catch"](1);
               throw _context2.t0;
 
-            case 12:
+            case 13:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 9]]);
+      }, _callee2, null, [[1, 10]]);
     }))();
   },
   patchIngredient: function patchIngredient(_ref4, payload) {
@@ -3669,11 +3670,7 @@ var mutations = {
 
     var vm = payload.vm;
     Object.keys(payload.ingredient).forEach(function (key) {
-      if (key === 'addQuantity') {
-        vm.$set(state.ingredients[ingredientIndex], 'stockQuantity', parseInt(payload.ingredient['addQuantity']) + state.ingredients[ingredientIndex].stockQuantity);
-      } else {
-        vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key]);
-      }
+      vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key]);
     });
   },
   REMOVE_INGREDIENT: function REMOVE_INGREDIENT(state, payload) {
