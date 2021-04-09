@@ -145,9 +145,8 @@
                 //     await store.dispatch('Users/fetchUsers');
                 //     next();
                 // }
-                 await store.dispatch('Users/fetchUsers');
-                    next();
-               
+                await store.dispatch('Users/fetchUsers');
+                next();
             } else {
                 await store.dispatch('Users/fetchUsers', to.query);
                 next();

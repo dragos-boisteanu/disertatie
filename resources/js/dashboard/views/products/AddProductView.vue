@@ -331,6 +331,19 @@
                 
                     await this.addProduct(payload);
 
+                    this.product = {
+                        barcode: '',
+                        name:'',
+                        description: '',
+                        base_price: '',
+                        weight: '',
+                        unit_id: '',
+                        quantity: '',
+                        category_id: '',
+                        hasIngredients: false,
+                        ingredients: []
+                    },
+
                     this.$refs.observer.reset();
                     this.waiting = false
                 } catch ( error ) {
@@ -352,18 +365,18 @@
                         if(response.data) {
                             this.product = response.data.data;
                         } else {
-                            this.product = {
-                                barcode: this.product.barcode,
-                                name:'',
-                                description: '',
-                                base_price: '',
-                                weight: '',
-                                unit_id: '',
-                                quantity: '',
-                                category_id: '',
-                                hasIngredients: false,
-                                ingredients: []
-                            },
+                            // this.product = {
+                            //     barcode: this.product.barcode,
+                            //     name:'',
+                            //     description: '',
+                            //     base_price: '',
+                            //     weight: '',
+                            //     unit_id: '',
+                            //     quantity: '',
+                            //     category_id: '',
+                            //     hasIngredients: false,
+                            //     ingredients: []
+                            // },
                             this.locked = false;
                         }
                         this.checkingBarcode = false;

@@ -95,22 +95,52 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
-                if(store.getters['Products/getProducts'].length > 0) {
-                    if(store.getters['Products/getFilteredState']) {
-                        await store.dispatch('Products/fetchProducts', {page: 1});
-                        store.dispatch('Products/setFilteredState', false);
-                        next();
-                    }else {
-                        next();
-                    }
-                }else {
-                    await store.dispatch('Products/fetchProducts', {page: 1});
-                    next();
-                }        
+                // if(store.getters['Users/getUsers'].length > 0) {
+                //     if(store.getters['Users/getFilteredState']) {
+                //         await store.dispatch('Users/fetchUsers');  
+                //         store.dispatch('Users/setFilteredState', false);
+                //         next();
+                //     }else {
+                //         next();
+                //     }
+                // }else {
+                //     await store.dispatch('Users/fetchUsers');
+                //     next(); 
+                // }
+                await store.dispatch('Products/fetchProducts', {page:1});
+                next();
             } else {
                 await store.dispatch('Products/fetchProducts', to.query);
                 next();
-            } 
+            }
+
+            // if(Object.keys(to.query).length === 0) {
+            //     if(store.getters['Products/getProducts'].length > 0) {
+            //         if(store.getters['Products/getFilteredState']) {
+            //             await store.dispatch('Products/fetchProducts', {page: 1});
+            //             store.dispatch('Products/setFilteredState', false);
+            //             next();
+            //         }else {
+            //             next();
+            //         }
+            //     }else {
+            //         await store.dispatch('Products/fetchProducts', {page: 1});
+            //         next();
+            //     }        
+            // } else {
+            //     await store.dispatch('Products/fetchProducts', to.query);
+            //     next();
+            // } 
+        },
+
+        mounted() {
+            if(this.$route.query.orderBy) {
+                this.orderBy = this.$route.query.orderBy;
+            } else {
+                this.orderBy = 1;
+            }
+
+            this.order()
         },
 
         computed: {
@@ -148,7 +178,7 @@
                 }
             },
 
-            async loadProducts(page) {
+            async loadProducts() {
                 try {
                     await this.fetchProducts(this.query)
                 } catch ( error ) {

@@ -84,8 +84,6 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
-            // $product = Product::where('barcode', $input['barcode'])->with('stock')->first();
-
             $product = Product::create($input);
 
             if($request->has('hasIngredients')) {
@@ -94,7 +92,9 @@ class ProductController extends Controller
                 }
             } else {
                 $stock = Stock::create(['quantity' => 1]);
-                $input['stock_id'] = $stock->id;
+                $product->stock_id = $stock->id;
+                $product->save();
+            
             }
          
 

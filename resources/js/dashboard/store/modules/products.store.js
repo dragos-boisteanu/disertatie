@@ -27,9 +27,9 @@ const actions = {
         commit('SET_FILTERED_STATE', payload);
     },
     
-    async fetchProducts({commit}, payload) {
+    async fetchProducts({commit}, query) {
         try {
-            const response = await downloadProducts(payload);
+            const response = await downloadProducts(query);
             commit('SET_PRODUCT', response.data.data.products);
 
             const meta = response.data.meta;

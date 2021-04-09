@@ -3851,7 +3851,7 @@ var actions = {
     var commit = _ref2.commit;
     commit('SET_FILTERED_STATE', payload);
   },
-  fetchProducts: function fetchProducts(_ref3, payload) {
+  fetchProducts: function fetchProducts(_ref3, query) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var commit, response, meta, paginationData;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -3861,7 +3861,7 @@ var actions = {
               commit = _ref3.commit;
               _context.prev = 1;
               _context.next = 4;
-              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProducts)(payload);
+              return (0,_api_products_api__WEBPACK_IMPORTED_MODULE_1__.downloadProducts)(query);
 
             case 4:
               response = _context.sent;

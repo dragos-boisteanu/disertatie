@@ -1570,8 +1570,18 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
                 return _this.addProduct(payload);
 
               case 7:
-                _this.$refs.observer.reset();
-
+                _this.product = {
+                  barcode: '',
+                  name: '',
+                  description: '',
+                  base_price: '',
+                  weight: '',
+                  unit_id: '',
+                  quantity: '',
+                  category_id: '',
+                  hasIngredients: false,
+                  ingredients: []
+                }, _this.$refs.observer.reset();
                 _this.waiting = false;
                 _context.next = 16;
                 break;
@@ -1619,18 +1629,19 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
               if (response.data) {
                 this.product = response.data.data;
               } else {
-                this.product = {
-                  barcode: this.product.barcode,
-                  name: '',
-                  description: '',
-                  base_price: '',
-                  weight: '',
-                  unit_id: '',
-                  quantity: '',
-                  category_id: '',
-                  hasIngredients: false,
-                  ingredients: []
-                }, this.locked = false;
+                // this.product = {
+                //     barcode: this.product.barcode,
+                //     name:'',
+                //     description: '',
+                //     base_price: '',
+                //     weight: '',
+                //     unit_id: '',
+                //     quantity: '',
+                //     category_id: '',
+                //     hasIngredients: false,
+                //     ingredients: []
+                // },
+                this.locked = false;
               }
 
               this.checkingBarcode = false;
@@ -2233,65 +2244,43 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               if (!(Object.keys(to.query).length === 0)) {
-                _context.next = 17;
+                _context.next = 6;
                 break;
               }
 
-              if (!(_store_index__WEBPACK_IMPORTED_MODULE_11__.default.getters["Products/getProducts"].length > 0)) {
-                _context.next = 12;
-                break;
-              }
-
-              if (!_store_index__WEBPACK_IMPORTED_MODULE_11__.default.getters["Products/getFilteredState"]) {
-                _context.next = 9;
-                break;
-              }
-
-              _context.next = 5;
+              _context.next = 3;
               return _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/fetchProducts', {
                 page: 1
               });
 
-            case 5:
-              _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/setFilteredState', false);
+            case 3:
               next();
-              _context.next = 10;
+              _context.next = 9;
               break;
 
-            case 9:
-              next();
-
-            case 10:
-              _context.next = 15;
-              break;
-
-            case 12:
-              _context.next = 14;
-              return _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/fetchProducts', {
-                page: 1
-              });
-
-            case 14:
-              next();
-
-            case 15:
-              _context.next = 20;
-              break;
-
-            case 17:
-              _context.next = 19;
+            case 6:
+              _context.next = 8;
               return _store_index__WEBPACK_IMPORTED_MODULE_11__.default.dispatch('Products/fetchProducts', to.query);
 
-            case 19:
+            case 8:
               next();
 
-            case 20:
+            case 9:
             case "end":
               return _context.stop();
           }
         }
       }, _callee);
     }))();
+  },
+  mounted: function mounted() {
+    if (this.$route.query.orderBy) {
+      this.orderBy = this.$route.query.orderBy;
+    } else {
+      this.orderBy = 1;
+    }
+
+    this.order();
   },
   computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Products', ['getProducts', 'getPaginationData'])), {}, {
     query: function query() {
@@ -2345,7 +2334,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, null, [[0, 8]]);
       }))();
     },
-    loadProducts: function loadProducts(page) {
+    loadProducts: function loadProducts() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
