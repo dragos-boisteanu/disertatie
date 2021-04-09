@@ -4,101 +4,100 @@
             Categories
         </template>
 
-        <div class="w-full md:flex xl:w-3/4 2xl:w-1/2 ">
-            <ul class="px-2 overflow-y-scroll w-full max-h-80 md:flex-1 md:max-h-96 ">
-                <li 
-                    v-for="(category, index) in getCategories" :key="category.id"
-                    class="flex items-center justify-between border rounded-sm py-1 px-2 my-3"
-                >
-                    <div 
-                        @click="selectCategory(category.id)"
-                        class="cursor-pointer flex items-center gap-x-2">
-                        <span>{{ index + 1 }}.</span>
-                        <span class="rounded w-4 h-4" :style="{background: category.color}"></span>
-                        <span>{{ category.name }}</span>
-                        <span>{{ category.vat }} %</span>
-                    </div>
-                    <div>
-                        <button @click="removeCategory(category.id)"> X</button>
-                    </div>
-                </li>
-            </ul>
+        <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2 ">
+            <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
+                <ul class="px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
+                    <li 
+                        v-for="(category, index) in getCategories" :key="category.id"
+                        class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
+                    >
+                        <div 
+                            @click="selectCategory(category.id)"
+                            class="cursor-pointer flex items-center gap-x-2">
+                            <span>{{ index + 1 }}.</span>
+                            <span class="rounded w-4 h-4" :style="{background: category.color}"></span>
+                            <span>{{ category.name }}</span>
+                            <span>{{ category.vat }} %</span>
+                        </div>
+                        <div>
+                            <button @click="removeCategory(category.id)"> X</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
-            <div class="mt-5 md:flex-1 md:mt-0">
+            <div class="mt-4 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 md:mt-0 lg:flex-1">
                 <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-                    <form @submit.prevent="handleSubmit(submit)" class="flex flex-col w-full">
-                        <div class="flex flex-col items-stretch justify-items-start gap-y-3 pt-5 border-t border-gray-200 md:border-l md:pl-5 md:border-t-0 md:pt-0 md:flex-auto">
-                            <h2 class="mb-5 text-xl font-semibold">
-                                Category
-                            </h2> 
+                    <form @submit.prevent="handleSubmit(submit)" class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
+                        <h2 class="mb-5 text-xl font-semibold">
+                            Category
+                        </h2> 
 
-                            <ValidationProvider vid="name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
-                                <label for="name" class="text-sm font-semibold">Nane</label>
+                        <ValidationProvider vid="name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
+                            <label for="name" class="text-sm font-semibold">Nane</label>
+                            <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                            <input 
+                                id="name"
+                                name="name" 
+                                type="text" 
+                                v-model="category.name" 
+                                :disabled="waiting"   
+                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                            />
+                        </ValidationProvider> 
+                        
+                        <div class="w-full flex-1 flex items-center gap-x-4">
+                            <ValidationProvider vid="vat" rules="required|double:2,dot" v-slot="{ errors, failed, passed }" class="w-full">
+                                <label for="vat" class="text-sm font-semibold">VAT</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
-                                    id="name"
-                                    name="name" 
-                                    type="text" 
-                                    v-model="category.name" 
+                                    id="vat"
+                                    name="vat" 
+                                    type="number" 
+                                    v-model="category.vat" 
                                     :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
-                            </ValidationProvider> 
-                            
-                            <div class="w-full flex-1 flex items-center gap-x-4">
-                                <ValidationProvider vid="vat" rules="required|double:2,dot" v-slot="{ errors, failed, passed }" class="w-full">
-                                    <label for="vat" class="text-sm font-semibold">VAT</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <input 
-                                        id="vat"
-                                        name="vat" 
-                                        type="number" 
-                                        v-model="category.vat" 
-                                        :disabled="waiting"   
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                        :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                    />
-                                </ValidationProvider>
+                            </ValidationProvider>
 
-                                <ValidationProvider vid="color" rules="required" v-slot="{  errors, failed, passed }" class="flex-grow-0 flex-shrink">
-                                    <label for="vat" class="text-sm font-semibold">Color</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <input 
-                                        id="color" 
-                                        name="color"
-                                        type="color"
-                                        v-model="category.color"
-                                        :disabled="waiting" 
-                                        class="p-1 rounded border order-gray-300 outline-none"   
-                                        :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                        />
-                                </ValidationProvider>
-                            </div>
-                            <div>
-                                <button 
-                                    v-if="categorySelected"
-                                    @click.prevent="clearSelection"
-                                    class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
-                                >                       
-                                    Clear selection
-                                </button>
-                                <button 
-                                    type="submit"
-                                    :disabled="waiting"  
-                                    class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
-                                >
-                                    <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    <span>
-                                        Submit
-                                    </span>
-                                </button>
-                            </div>
-                            
-                        </div>                     
+                            <ValidationProvider vid="color" rules="required" v-slot="{  errors, failed, passed }" class="flex-grow-0 flex-shrink">
+                                <label for="vat" class="text-sm font-semibold">Color</label>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <input 
+                                    id="color" 
+                                    name="color"
+                                    type="color"
+                                    v-model="category.color"
+                                    :disabled="waiting" 
+                                    class="p-1 rounded border order-gray-300 outline-none"   
+                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                    />
+                            </ValidationProvider>
+                        </div>
+                        <div>
+                            <button 
+                                v-if="categorySelected"
+                                @click.prevent="clearSelection"
+                                class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
+                            >                       
+                                Clear selection
+                            </button>
+                            <button 
+                                type="submit"
+                                :disabled="waiting"  
+                                class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                            >
+                                <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>
+                                    Submit
+                                </span>
+                            </button>
+                        </div>                   
                         
                     </form>
                 </ValidationObserver>

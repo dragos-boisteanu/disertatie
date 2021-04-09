@@ -28,7 +28,7 @@ const actions = {
     async postCategory({commit}, payload) {
         try {
             const response = await postCategory(payload);
-            payload.id = response.data.data.id;
+            payload.id = response.data.id;
             commit('ADD_CATEGORY', payload);
         } catch ( error ) {
             throw error
