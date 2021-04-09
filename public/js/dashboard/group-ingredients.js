@@ -157,7 +157,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 
@@ -560,428 +559,341 @@ var render = function() {
         _vm._v("\n        Ingredients\n    ")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "w-full md:flex xl:w-3/4 2xl:w-1/2" }, [
-        _c(
-          "ul",
-          {
-            staticClass:
-              "px-2 overflow-y-scroll w-full max-h-80 md:flex-1 md:max-h-96 "
-          },
-          _vm._l(_vm.getIngredients, function(ingredient, index) {
-            return _c(
-              "li",
-              {
-                key: ingredient.id,
-                staticClass:
-                  "flex items-center justify-between border rounded-sm py-1 px-2 my-3"
-              },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass: "cursor-pointer flex items-center gap-x-2",
-                    on: {
-                      click: function($event) {
-                        return _vm.selectIngredient(ingredient.id)
-                      }
-                    }
-                  },
-                  [
-                    _c("span", [_vm._v(_vm._s(index + 1) + ".")]),
-                    _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(ingredient.name))]),
-                    _vm._v(" "),
-                    _c("span", [
-                      _vm._v(
-                        _vm._s(ingredient.stockQuantity) +
-                          " " +
-                          _vm._s(ingredient.unit.name)
-                      )
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", [
-                  _c(
-                    "button",
-                    {
-                      on: {
-                        click: function($event) {
-                          return _vm.removeIngredient(ingredient.id)
-                        }
-                      }
-                    },
-                    [_vm._v(" X")]
-                  )
-                ])
-              ]
-            )
-          }),
-          0
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "mt-5 md:flex-1 md:mt-0" },
-          [
-            _c("ValidationObserver", {
-              ref: "observer",
-              scopedSlots: _vm._u([
+      _c(
+        "div",
+        { staticClass: "w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2 " },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "flex flex-col bg-white shadow rounded-sm p-5 md:flex-1"
+            },
+            [
+              _c(
+                "ul",
                 {
-                  key: "default",
-                  fn: function(ref) {
-                    var handleSubmit = ref.handleSubmit
-                    return [
+                  staticClass:
+                    "px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 "
+                },
+                _vm._l(_vm.getIngredients, function(ingredient, index) {
+                  return _c(
+                    "li",
+                    {
+                      key: ingredient.id,
+                      staticClass:
+                        "flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
+                    },
+                    [
                       _c(
-                        "form",
+                        "div",
                         {
-                          staticClass: "flex flex-col w-full",
+                          staticClass:
+                            "cursor-pointer flex items-center gap-x-2",
                           on: {
-                            submit: function($event) {
-                              $event.preventDefault()
-                              return handleSubmit(_vm.submit)
+                            click: function($event) {
+                              return _vm.selectIngredient(ingredient.id)
                             }
                           }
                         },
                         [
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "flex flex-col items-stretch justify-items-start gap-y-3 pt-5 border-t border-gray-200 md:border-l md:pl-5 md:border-t-0 md:pt-0 md:flex-auto"
-                            },
-                            [
-                              _c(
-                                "h2",
-                                { staticClass: "mb-5 text-xl font-semibold" },
-                                [
-                                  _vm._v(
-                                    "\n                            Ingredient\n                        "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("ValidationProvider", {
-                                staticClass: "flex-grow flex-shrink-0",
-                                attrs: {
-                                  vid: "name",
-                                  rules: "required|alpha_spaces|max:50"
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "default",
-                                      fn: function(ref) {
-                                        var errors = ref.errors
-                                        var failed = ref.failed
-                                        var passed = ref.passed
-                                        return [
-                                          _c(
-                                            "label",
-                                            {
-                                              staticClass:
-                                                "text-sm font-semibold",
-                                              attrs: { for: "name" }
-                                            },
-                                            [_vm._v("Nane")]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass:
-                                                "text-xs text-red-600 font-semibold mb-1"
-                                            },
-                                            [_vm._v(" " + _vm._s(errors[0]))]
-                                          ),
-                                          _vm._v(" "),
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: _vm.ingredient.name,
-                                                expression: "ingredient.name"
-                                              }
-                                            ],
-                                            staticClass:
-                                              "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                            class: {
-                                              "border-red-600": failed,
-                                              "border-green-500": passed
-                                            },
-                                            attrs: {
-                                              id: "name",
-                                              name: "name",
-                                              type: "text",
-                                              disabled:
-                                                _vm.waiting ||
-                                                _vm.ingredientSelected
-                                            },
-                                            domProps: {
-                                              value: _vm.ingredient.name
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
-                                                }
-                                                _vm.$set(
-                                                  _vm.ingredient,
-                                                  "name",
-                                                  $event.target.value
-                                                )
-                                              }
-                                            }
-                                          })
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
+                          _c("span", [_vm._v(_vm._s(index + 1) + ".")]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v(_vm._s(ingredient.name))]),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(
+                              _vm._s(ingredient.stockQuantity) +
+                                " " +
+                                _vm._s(ingredient.unit.name)
+                            )
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c(
+                          "button",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.removeIngredient(ingredient.id)
+                              }
+                            }
+                          },
+                          [_vm._v(" X")]
+                        )
+                      ])
+                    ]
+                  )
+                }),
+                0
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "mt-4 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 md:mt-0 md:flex-1 lg:flex-1"
+            },
+            [
+              _c("ValidationObserver", {
+                ref: "observer",
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var handleSubmit = ref.handleSubmit
+                      return [
+                        _c(
+                          "form",
+                          {
+                            staticClass:
+                              "flex flex-col items-stretch justify-items-start gap-y-3 md:pt-0 md:flex-auto",
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return handleSubmit(_vm.submit)
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "h2",
+                              { staticClass: "mb-5 text-xl font-semibold" },
+                              [
+                                _vm._v(
+                                  "\n                        Ingredient\n                    "
                                 )
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "w-full flex-1 flex items-center gap-x-4"
-                                },
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("ValidationProvider", {
+                              staticClass: "flex-grow flex-shrink-0",
+                              attrs: {
+                                vid: "name",
+                                rules: "required|alpha_spaces|max:50"
+                              },
+                              scopedSlots: _vm._u(
                                 [
-                                  _c("ValidationProvider", {
-                                    staticClass: "flex-1",
-                                    attrs: {
-                                      vid: "vat",
-                                      rules: "required|integer"
-                                    },
-                                    scopedSlots: _vm._u(
-                                      [
-                                        {
-                                          key: "default",
-                                          fn: function(ref) {
-                                            var errors = ref.errors
-                                            var failed = ref.failed
-                                            var passed = ref.passed
-                                            return [
-                                              _c(
-                                                "label",
-                                                {
-                                                  staticClass:
-                                                    "text-sm font-semibold",
-                                                  attrs: { for: "vat" }
-                                                },
-                                                [_vm._v("Current cuantity")]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "div",
-                                                {
-                                                  staticClass:
-                                                    "text-xs text-red-600 font-semibold mb-1"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    " " + _vm._s(errors[0])
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("input", {
-                                                directives: [
-                                                  {
-                                                    name: "model",
-                                                    rawName: "v-model",
-                                                    value:
-                                                      _vm.ingredient
-                                                        .stockQuantity,
-                                                    expression:
-                                                      "ingredient.stockQuantity"
-                                                  }
-                                                ],
-                                                staticClass:
-                                                  "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                class: {
-                                                  "border-red-600": failed,
-                                                  "border-green-500": passed
-                                                },
-                                                attrs: {
-                                                  id: "vat",
-                                                  name: "vat",
-                                                  type: "number",
-                                                  disabled:
-                                                    _vm.waiting ||
-                                                    _vm.ingredientSelected
-                                                },
-                                                domProps: {
-                                                  value:
-                                                    _vm.ingredient.stockQuantity
-                                                },
-                                                on: {
-                                                  input: function($event) {
-                                                    if (
-                                                      $event.target.composing
-                                                    ) {
-                                                      return
-                                                    }
-                                                    _vm.$set(
-                                                      _vm.ingredient,
-                                                      "stockQuantity",
-                                                      $event.target.value
-                                                    )
-                                                  }
-                                                }
-                                              })
-                                            ]
-                                          }
-                                        }
-                                      ],
-                                      null,
-                                      true
-                                    )
-                                  }),
-                                  _vm._v(" "),
-                                  _vm.ingredientSelected
-                                    ? _c("ValidationProvider", {
-                                        staticClass: "flex-1",
-                                        attrs: {
-                                          vid: "vat",
-                                          rules: "required|integer"
-                                        },
-                                        scopedSlots: _vm._u(
-                                          [
+                                  {
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var errors = ref.errors
+                                      var failed = ref.failed
+                                      var passed = ref.passed
+                                      return [
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass:
+                                              "text-sm font-semibold",
+                                            attrs: { for: "name" }
+                                          },
+                                          [_vm._v("Nane")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "text-xs text-red-600 font-semibold mb-1"
+                                          },
+                                          [_vm._v(" " + _vm._s(errors[0]))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
                                             {
-                                              key: "default",
-                                              fn: function(ref) {
-                                                var errors = ref.errors
-                                                var failed = ref.failed
-                                                var passed = ref.passed
-                                                return [
-                                                  _c(
-                                                    "label",
-                                                    {
-                                                      staticClass:
-                                                        "text-sm font-semibold",
-                                                      attrs: { for: "vat" }
-                                                    },
-                                                    [_vm._v("Add quantity")]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      staticClass:
-                                                        "text-xs text-red-600 font-semibold mb-1"
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        " " + _vm._s(errors[0])
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c("input", {
-                                                    directives: [
-                                                      {
-                                                        name: "model",
-                                                        rawName: "v-model",
-                                                        value:
-                                                          _vm.ingredient
-                                                            .addQuantity,
-                                                        expression:
-                                                          "ingredient.addQuantity"
-                                                      }
-                                                    ],
-                                                    staticClass:
-                                                      "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                                                    class: {
-                                                      "border-red-600": failed,
-                                                      "border-green-500": passed
-                                                    },
-                                                    attrs: {
-                                                      id: "vat",
-                                                      name: "vat",
-                                                      type: "number",
-                                                      disabled: _vm.waiting
-                                                    },
-                                                    domProps: {
-                                                      value:
-                                                        _vm.ingredient
-                                                          .addQuantity
-                                                    },
-                                                    on: {
-                                                      input: function($event) {
-                                                        if (
-                                                          $event.target
-                                                            .composing
-                                                        ) {
-                                                          return
-                                                        }
-                                                        _vm.$set(
-                                                          _vm.ingredient,
-                                                          "addQuantity",
-                                                          $event.target.value
-                                                        )
-                                                      }
-                                                    }
-                                                  })
-                                                ]
-                                              }
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.ingredient.name,
+                                              expression: "ingredient.name"
                                             }
                                           ],
-                                          null,
-                                          true
-                                        )
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _c("ValidationProvider", {
-                                    staticClass: "flex-1",
-                                    attrs: { vid: "color", rules: "required" },
-                                    scopedSlots: _vm._u(
-                                      [
-                                        {
-                                          key: "default",
-                                          fn: function(ref) {
-                                            var errors = ref.errors
-                                            var failed = ref.failed
-                                            var passed = ref.passed
-                                            return [
-                                              _c(
-                                                "label",
+                                          staticClass:
+                                            "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                          class: {
+                                            "border-red-600": failed,
+                                            "border-green-500": passed
+                                          },
+                                          attrs: {
+                                            id: "name",
+                                            name: "name",
+                                            type: "text",
+                                            disabled:
+                                              _vm.waiting ||
+                                              _vm.ingredientSelected
+                                          },
+                                          domProps: {
+                                            value: _vm.ingredient.name
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.ingredient,
+                                                "name",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full flex-1 flex items-center gap-x-4"
+                              },
+                              [
+                                _c("ValidationProvider", {
+                                  staticClass: "flex-1",
+                                  attrs: {
+                                    vid: "quantity",
+                                    rules: "required|integer"
+                                  },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "default",
+                                        fn: function(ref) {
+                                          var errors = ref.errors
+                                          var failed = ref.failed
+                                          var passed = ref.passed
+                                          return [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "text-sm font-semibold",
+                                                attrs: { for: "vat" }
+                                              },
+                                              [_vm._v("Quantity")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "text-xs text-red-600 font-semibold mb-1"
+                                              },
+                                              [_vm._v(" " + _vm._s(errors[0]))]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("input", {
+                                              directives: [
                                                 {
-                                                  staticClass:
-                                                    "text-sm font-semibold",
-                                                  attrs: { for: "vat" }
-                                                },
-                                                [_vm._v("Unit")]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "div",
-                                                {
-                                                  staticClass:
-                                                    "text-xs text-red-600 font-semibold mb-1"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    " " + _vm._s(errors[0])
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value:
+                                                    _vm.ingredient
+                                                      .stockQuantity,
+                                                  expression:
+                                                    "ingredient.stockQuantity"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                              class: {
+                                                "border-red-600": failed,
+                                                "border-green-500": passed
+                                              },
+                                              attrs: {
+                                                id: "quantity",
+                                                name: "quantity",
+                                                type: "number",
+                                                disabled:
+                                                  _vm.waiting ||
+                                                  _vm.ingredientSelected
+                                              },
+                                              domProps: {
+                                                value:
+                                                  _vm.ingredient.stockQuantity
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.ingredient,
+                                                    "stockQuantity",
+                                                    $event.target.value
                                                   )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "select",
-                                                {
+                                                }
+                                              }
+                                            })
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    true
+                                  )
+                                }),
+                                _vm._v(" "),
+                                _vm.ingredientSelected
+                                  ? _c("ValidationProvider", {
+                                      staticClass: "flex-1",
+                                      attrs: {
+                                        vid: "vat",
+                                        rules: "required|integer"
+                                      },
+                                      scopedSlots: _vm._u(
+                                        [
+                                          {
+                                            key: "default",
+                                            fn: function(ref) {
+                                              var errors = ref.errors
+                                              var failed = ref.failed
+                                              var passed = ref.passed
+                                              return [
+                                                _c(
+                                                  "label",
+                                                  {
+                                                    staticClass:
+                                                      "text-sm font-semibold",
+                                                    attrs: { for: "vat" }
+                                                  },
+                                                  [_vm._v("Add quantity")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "text-xs text-red-600 font-semibold mb-1"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      " " + _vm._s(errors[0])
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c("input", {
                                                   directives: [
                                                     {
                                                       name: "model",
                                                       rawName: "v-model",
                                                       value:
-                                                        _vm.ingredient.unit,
+                                                        _vm.ingredient
+                                                          .addQuantity,
                                                       expression:
-                                                        "ingredient.unit"
+                                                        "ingredient.addQuantity"
                                                     }
                                                   ],
                                                   staticClass:
@@ -991,181 +903,261 @@ var render = function() {
                                                     "border-green-500": passed
                                                   },
                                                   attrs: {
-                                                    id: "unit_id",
-                                                    name: "weight units",
-                                                    type: "text",
-                                                    disabled:
-                                                      _vm.waiting ||
-                                                      _vm.ingredientSelected
+                                                    id: "vat",
+                                                    name: "vat",
+                                                    type: "number",
+                                                    disabled: _vm.waiting
+                                                  },
+                                                  domProps: {
+                                                    value:
+                                                      _vm.ingredient.addQuantity
                                                   },
                                                   on: {
-                                                    change: function($event) {
-                                                      var $$selectedVal = Array.prototype.filter
-                                                        .call(
-                                                          $event.target.options,
-                                                          function(o) {
-                                                            return o.selected
-                                                          }
-                                                        )
-                                                        .map(function(o) {
-                                                          var val =
-                                                            "_value" in o
-                                                              ? o._value
-                                                              : o.value
-                                                          return val
-                                                        })
+                                                    input: function($event) {
+                                                      if (
+                                                        $event.target.composing
+                                                      ) {
+                                                        return
+                                                      }
                                                       _vm.$set(
                                                         _vm.ingredient,
-                                                        "unit",
-                                                        $event.target.multiple
-                                                          ? $$selectedVal
-                                                          : $$selectedVal[0]
+                                                        "addQuantity",
+                                                        $event.target.value
                                                       )
                                                     }
                                                   }
-                                                },
-                                                [
-                                                  _c(
-                                                    "option",
-                                                    {
-                                                      attrs: {
-                                                        value: "",
-                                                        disabled: ""
-                                                      }
-                                                    },
-                                                    [_vm._v("Select unit")]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _vm._l(_vm.getUnits, function(
-                                                    unit
-                                                  ) {
-                                                    return _c(
-                                                      "option",
-                                                      {
-                                                        key: unit.id,
-                                                        domProps: {
-                                                          value: unit
-                                                        }
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          _vm._s(unit.name) +
-                                                            " (" +
-                                                            _vm._s(
-                                                              unit.description
-                                                            ) +
-                                                            ")"
-                                                        )
-                                                      ]
-                                                    )
-                                                  })
-                                                ],
-                                                2
-                                              )
-                                            ]
+                                                })
+                                              ]
+                                            }
                                           }
-                                        }
-                                      ],
-                                      null,
-                                      true
-                                    )
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("div", [
-                                _vm.ingredientSelected
-                                  ? _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          " mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto",
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.clearSelection($event)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "                       \n                                Clear selection\n                            "
-                                        )
-                                      ]
-                                    )
+                                        ],
+                                        null,
+                                        true
+                                      )
+                                    })
                                   : _vm._e(),
                                 _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none",
-                                    attrs: {
-                                      type: "submit",
-                                      disabled: _vm.waiting
-                                    }
-                                  },
-                                  [
-                                    _vm.waiting
-                                      ? _c(
-                                          "svg",
-                                          {
-                                            staticClass:
-                                              "animate-spin mr-3 h-5 w-5 text-white",
-                                            attrs: {
-                                              xmlns:
-                                                "http://www.w3.org/2000/svg",
-                                              fill: "none",
-                                              viewBox: "0 0 24 24"
-                                            }
-                                          },
-                                          [
-                                            _c("circle", {
-                                              staticClass: "opacity-25",
-                                              attrs: {
-                                                cx: "12",
-                                                cy: "12",
-                                                r: "10",
-                                                stroke: "currentColor",
-                                                "stroke-width": "4"
-                                              }
-                                            }),
+                                _c("ValidationProvider", {
+                                  staticClass: "flex-1",
+                                  attrs: { vid: "unit_id", rules: "required" },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "default",
+                                        fn: function(ref) {
+                                          var errors = ref.errors
+                                          var failed = ref.failed
+                                          var passed = ref.passed
+                                          return [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "text-sm font-semibold",
+                                                attrs: { for: "vat" }
+                                              },
+                                              [_vm._v("Unit")]
+                                            ),
                                             _vm._v(" "),
-                                            _c("path", {
-                                              staticClass: "opacity-75",
-                                              attrs: {
-                                                fill: "currentColor",
-                                                d:
-                                                  "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                              }
-                                            })
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "text-xs text-red-600 font-semibold mb-1"
+                                              },
+                                              [_vm._v(" " + _vm._s(errors[0]))]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "select",
+                                              {
+                                                directives: [
+                                                  {
+                                                    name: "model",
+                                                    rawName: "v-model",
+                                                    value: _vm.ingredient.unit,
+                                                    expression:
+                                                      "ingredient.unit"
+                                                  }
+                                                ],
+                                                staticClass:
+                                                  "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                                class: {
+                                                  "border-red-600": failed,
+                                                  "border-green-500": passed
+                                                },
+                                                attrs: {
+                                                  id: "unit_id",
+                                                  name: "weight units",
+                                                  type: "text",
+                                                  disabled:
+                                                    _vm.waiting ||
+                                                    _vm.ingredientSelected
+                                                },
+                                                on: {
+                                                  change: function($event) {
+                                                    var $$selectedVal = Array.prototype.filter
+                                                      .call(
+                                                        $event.target.options,
+                                                        function(o) {
+                                                          return o.selected
+                                                        }
+                                                      )
+                                                      .map(function(o) {
+                                                        var val =
+                                                          "_value" in o
+                                                            ? o._value
+                                                            : o.value
+                                                        return val
+                                                      })
+                                                    _vm.$set(
+                                                      _vm.ingredient,
+                                                      "unit",
+                                                      $event.target.multiple
+                                                        ? $$selectedVal
+                                                        : $$selectedVal[0]
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "option",
+                                                  {
+                                                    attrs: {
+                                                      value: "",
+                                                      disabled: ""
+                                                    }
+                                                  },
+                                                  [_vm._v("Select unit")]
+                                                ),
+                                                _vm._v(" "),
+                                                _vm._l(_vm.getUnits, function(
+                                                  unit
+                                                ) {
+                                                  return _c(
+                                                    "option",
+                                                    {
+                                                      key: unit.id,
+                                                      domProps: { value: unit }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(unit.name) +
+                                                          " (" +
+                                                          _vm._s(
+                                                            unit.description
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
+                                                  )
+                                                })
+                                              ],
+                                              2
+                                            )
                                           ]
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _c("span", [
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    true
+                                  )
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("div", [
+                              _vm.ingredientSelected
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        " mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto",
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.clearSelection($event)
+                                        }
+                                      }
+                                    },
+                                    [
                                       _vm._v(
-                                        "\n                                    Submit\n                                "
+                                        "                       \n                            Clear selection\n                        "
                                       )
-                                    ])
-                                  ]
-                                )
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      )
-                    ]
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none",
+                                  attrs: {
+                                    type: "submit",
+                                    disabled: _vm.waiting
+                                  }
+                                },
+                                [
+                                  _vm.waiting
+                                    ? _c(
+                                        "svg",
+                                        {
+                                          staticClass:
+                                            "animate-spin mr-3 h-5 w-5 text-white",
+                                          attrs: {
+                                            xmlns: "http://www.w3.org/2000/svg",
+                                            fill: "none",
+                                            viewBox: "0 0 24 24"
+                                          }
+                                        },
+                                        [
+                                          _c("circle", {
+                                            staticClass: "opacity-25",
+                                            attrs: {
+                                              cx: "12",
+                                              cy: "12",
+                                              r: "10",
+                                              stroke: "currentColor",
+                                              "stroke-width": "4"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("path", {
+                                            staticClass: "opacity-75",
+                                            attrs: {
+                                              fill: "currentColor",
+                                              d:
+                                                "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                            }
+                                          })
+                                        ]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c("span", [
+                                    _vm._v(
+                                      "\n                                Submit\n                            "
+                                    )
+                                  ])
+                                ]
+                              )
+                            ])
+                          ],
+                          1
+                        )
+                      ]
+                    }
                   }
-                }
-              ])
-            })
-          ],
-          1
-        )
-      ])
+                ])
+              })
+            ],
+            1
+          )
+        ]
+      )
     ],
     2
   )
