@@ -67,7 +67,6 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import NavigationLink from './NavigationLinkComponent';
     
     import Role from '../users/RoleComponent';
 
@@ -85,7 +84,6 @@
         },
 
         components: {
-            NavigationLink,
             Role
         }
     }

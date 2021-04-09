@@ -9,7 +9,7 @@
             <Breadcrumbs/>
         </div>
         <div class="flex flex-1">
-            <div class="lg:flex-none lg:w-64" v-if="desktop">
+            <div class="lg:flex-none lg:w-56 2xl:w-64" v-if="desktop">
                 <Navigation/>
             </div>
             <div class="flex flex-col w-full">
