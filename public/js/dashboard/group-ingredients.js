@@ -138,8 +138,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 
 
@@ -175,9 +173,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Units', ['getUnits'])), {}, {
-    canEdit: function canEdit() {
-      return true;
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Users', ['getLoggedUser'])), {}, {
+    canNotCreate: function canNotCreate() {
+      return this.getLoggedUser.role_id !== 6 && this.getLoggedUser.role_id !== 7;
+    },
+    disabled: function disabled() {
+      console.log(this.canNotCreate);
+      return this.waiting || this.canNotCreate;
     }
   }),
   data: function data() {
@@ -710,7 +712,7 @@ var render = function() {
                                                 id: "name",
                                                 name: "name",
                                                 type: "text",
-                                                disabled: _vm.waiting
+                                                disabled: _vm.disabled
                                               },
                                               domProps: {
                                                 value: _vm.ingredient.name
@@ -790,7 +792,7 @@ var render = function() {
                                                   id: "unit_id",
                                                   name: "weight units",
                                                   type: "text",
-                                                  disabled: _vm.waiting
+                                                  disabled: _vm.disabled
                                                 },
                                                 on: {
                                                   change: function($event) {
@@ -895,7 +897,7 @@ var render = function() {
                                     "inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none",
                                   attrs: {
                                     type: "submit",
-                                    disabled: _vm.waiting
+                                    disabled: _vm.disabled
                                   }
                                 },
                                 [

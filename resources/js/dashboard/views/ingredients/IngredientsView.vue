@@ -33,8 +33,6 @@
                             Ingredient
                         </h2> 
 
-                        
-                        
                         <div class="w-full flex-1 flex items-center gap-x-4">
                             <ValidationProvider 
                                 vid="name" rules="required|alpha_spaces|max:50" 
@@ -48,7 +46,7 @@
                                     name="name" 
                                     type="text" 
                                     v-model="ingredient.name" 
-                                    :disabled="waiting"   
+                                    :disabled="disabled"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
@@ -67,7 +65,7 @@
                                     name="weight units" 
                                     type="text" 
                                     v-model="ingredient.unit" 
-                                    :disabled="waiting"   
+                                    :disabled="disabled"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 >
@@ -88,7 +86,7 @@
                             </button>
                             <button 
                                 type="submit"
-                                :disabled="waiting"  
+                                :disabled="disabled"  
                                 class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
                             >
                                 <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -128,9 +126,15 @@
         computed: {
             ...mapGetters('Ingredients', ['getIngredients']),
             ...mapGetters('Units', ['getUnits']),
+            ...mapGetters('Users',['getLoggedUser']),
 
-            canEdit() {
-                return true;
+            canNotCreate() {
+                return this.getLoggedUser.role_id !== 6 && this.getLoggedUser.role_id !== 7
+            },
+
+            disabled() {
+                console.log(this.canNotCreate)
+                return this.waiting || this.canNotCreate
             }
 
         },
