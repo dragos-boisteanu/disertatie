@@ -92,7 +92,6 @@
     }
 </script>
 
-
 <style scoped>
     .router-link-active,
     .router-link-exact-active {

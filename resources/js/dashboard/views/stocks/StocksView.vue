@@ -5,18 +5,17 @@
         </template>
 
         <div class="w-full border-b pb-4 flex items-center gap-x-2">
-            <div class="border-r pr-2">
+            <router-link :to="{name: 'ProuductsStock'}" class="text-center pb-1 mr-4 border-b-2 border-opacity-0 " exact>
                 Products
-            </div>
-            <div>
+            </router-link>
+            <router-link :to="{name: 'IngredientsStock'}" class="text-center pb-1 border-b-2 border-opacity-0 border-trasnparent" exact>
                 Ingredients
-            </div>
+            </router-link>
         </div>
 
         <div class="w-full mt-2 md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/4 ">
-            <ProductsStockComponent></ProductsStockComponent>
+            <router-view></router-view>
         </div>
-
 
     </ViewContainer>
 </template>
@@ -39,5 +38,12 @@
             ProductsStockComponent
         }
     }
-
 </script>
+
+
+<style scoped>
+    .router-link-active,
+    .router-link-exact-active {
+        @apply border-b-2 border-lightBlue-600 ;
+    }
+</style>

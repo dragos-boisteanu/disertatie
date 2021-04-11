@@ -184,12 +184,9 @@ class ProductController extends Controller
 
         if($request->has('hasIngredients')) {
             if($request->hasIngredients) {
-
-                // if(!$product->has_ingredients) {
-                    $product->has_ingredients = true;
-                // }
-               
-
+                                
+                $product->has_ingredients = true;
+                
                 if($request->has('ingredients')) {
                     $ingredientsArray = array();
                     

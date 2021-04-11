@@ -13,7 +13,10 @@ const CategoriesView = () => import(/* webpackChunkName: "group-categories" */ '
 
 const IngredientsView = () => import(/* webpackChunkName: "group-ingredients" */ '../views/ingredients/IngredientsView.vue')
 
-const Stocks = () => import(/* webpackChunkName: "group-stocks" */ '../views/stocks/StocksView.vue')
+const Stocks = () => import(/* webpackChunkName: "group-stocks" */ '../views/stocks/StocksView.vue');
+const ProuductsStock = () => import( /* webpackChunkName: "group-stocks" */ '../components/stocks/ProductsStockComponent.vue');
+const IngredientsStock = () => import (/* webpackChunkName: "group-stocks" */ '../components/stocks/IngredientsStockComponent.vue');
+
 const Home = () => import('../views/HomeView.vue');
 
 
@@ -114,6 +117,18 @@ const routes = [
         path: `${baseUrl}/stocks`,
         name: 'Stocks',
         component: Stocks,
+        children: [
+            {
+                name: 'ProuductsStock',
+                path: 'products',
+                component: ProuductsStock
+            },
+            {
+                name: 'IngredientsStock',
+                path: 'ingredients',
+                component: IngredientsStock
+            }
+        ],
         meta: {
             breadcrumb: {
                 label: 'Stocks',

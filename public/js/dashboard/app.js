@@ -2987,6 +2987,14 @@ var Stocks = function Stocks() {
   return __webpack_require__.e(/*! import() | group-stocks */ "group-stocks").then(__webpack_require__.bind(__webpack_require__, /*! ../views/stocks/StocksView.vue */ "./resources/js/dashboard/views/stocks/StocksView.vue"));
 };
 
+var ProuductsStock = function ProuductsStock() {
+  return __webpack_require__.e(/*! import() | group-stocks */ "group-stocks").then(__webpack_require__.bind(__webpack_require__, /*! ../components/stocks/ProductsStockComponent.vue */ "./resources/js/dashboard/components/stocks/ProductsStockComponent.vue"));
+};
+
+var IngredientsStock = function IngredientsStock() {
+  return __webpack_require__.e(/*! import() | group-stocks */ "group-stocks").then(__webpack_require__.bind(__webpack_require__, /*! ../components/stocks/IngredientsStockComponent.vue */ "./resources/js/dashboard/components/stocks/IngredientsStockComponent.vue"));
+};
+
 var Home = function Home() {
   return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
 };
@@ -3073,6 +3081,15 @@ var routes = [{
   path: "".concat(baseUrl, "/stocks"),
   name: 'Stocks',
   component: Stocks,
+  children: [{
+    name: 'ProuductsStock',
+    path: 'products',
+    component: ProuductsStock
+  }, {
+    name: 'IngredientsStock',
+    path: 'ingredients',
+    component: IngredientsStock
+  }],
   meta: {
     breadcrumb: {
       label: 'Stocks',

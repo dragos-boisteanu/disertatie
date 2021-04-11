@@ -2,8 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\Stock;
 use App\Models\User;
+use App\Models\Stock;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class StockPolicy
@@ -51,9 +52,13 @@ class StockPolicy
      * @param  \App\Models\Stock  $stock
      * @return mixed
      */
-    public function update(User $user, Stock $stock)
+    public function update(User $user)
     {
-        //
+        if(in_array($user->role_id, [2,3,4,6,7])) {
+            Response::allow();
+        }
+
+        Response::deny('You are not authorized to perform this action.');
     }
 
     /**
