@@ -12,6 +12,8 @@ const ProductView = () => import(/* webpackChunkName: "group-products" */ '../vi
 const CategoriesView = () => import(/* webpackChunkName: "group-categories" */ '../views/categories/CategoriesView.vue');
 
 const IngredientsView = () => import(/* webpackChunkName: "group-ingredients" */ '../views/ingredients/IngredientsView.vue')
+
+const Stocks = () => import(/* webpackChunkName: "group-stocks" */ '../views/stocks/StocksView.vue')
 const Home = () => import('../views/HomeView.vue');
 
 
@@ -60,8 +62,6 @@ const routes = [
         }
     },
 
-    
-
     {
         path: `${baseUrl}/products`,
         name: 'Products',
@@ -73,6 +73,7 @@ const routes = [
             }
         }
     },
+    
     {
         path: `${baseUrl}/products/create`,
         name: 'AddProduct',
@@ -109,17 +110,17 @@ const routes = [
         }
     },
 
-     // {
-    //     path: `${baseUrl}/stocks`,
-    //     name: 'Stocks',
-    //     component: null,
-    //     meta: {
-    //         breadcrumb: {
-    //             label: 'Stocks',
-    //             parent: 'Products'
-    //         }
-    //     }
-    // },
+    {
+        path: `${baseUrl}/stocks`,
+        name: 'Stocks',
+        component: Stocks,
+        meta: {
+            breadcrumb: {
+                label: 'Stocks',
+                parent: 'Products'
+            }
+        }
+    },
 
     {
         path: `${baseUrl}/products/:id`,

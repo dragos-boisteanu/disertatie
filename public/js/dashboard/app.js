@@ -2399,6 +2399,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2980,6 +2983,10 @@ var IngredientsView = function IngredientsView() {
   return __webpack_require__.e(/*! import() | group-ingredients */ "group-ingredients").then(__webpack_require__.bind(__webpack_require__, /*! ../views/ingredients/IngredientsView.vue */ "./resources/js/dashboard/views/ingredients/IngredientsView.vue"));
 };
 
+var Stocks = function Stocks() {
+  return __webpack_require__.e(/*! import() | group-stocks */ "group-stocks").then(__webpack_require__.bind(__webpack_require__, /*! ../views/stocks/StocksView.vue */ "./resources/js/dashboard/views/stocks/StocksView.vue"));
+};
+
 var Home = function Home() {
   return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
 };
@@ -3062,18 +3069,17 @@ var routes = [{
       parent: 'Products'
     }
   }
-}, // {
-//     path: `${baseUrl}/stocks`,
-//     name: 'Stocks',
-//     component: null,
-//     meta: {
-//         breadcrumb: {
-//             label: 'Stocks',
-//             parent: 'Products'
-//         }
-//     }
-// },
-{
+}, {
+  path: "".concat(baseUrl, "/stocks"),
+  name: 'Stocks',
+  component: Stocks,
+  meta: {
+    breadcrumb: {
+      label: 'Stocks',
+      parent: 'Products'
+    }
+  }
+}, {
   path: "".concat(baseUrl, "/products/:id"),
   name: 'Product',
   component: ProductView,
@@ -33436,7 +33442,7 @@ var render = function() {
                 {
                   staticClass:
                     "block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20",
-                  attrs: { to: { name: "AddProduct" } }
+                  attrs: { to: { name: "AddProduct" }, exact: "" }
                 },
                 [_vm._v("Add product")]
               )
@@ -33455,8 +33461,28 @@ var render = function() {
                 "router-link",
                 {
                   staticClass:
-                    "block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20 ",
-                  attrs: { to: { name: "Ingredients" } }
+                    "block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20",
+                  attrs: { to: { name: "Categories" }, exact: "" }
+                },
+                [_vm._v("Categories")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass:
+                "text-sm text-gray-300 hover:text-white tracking-wide"
+            },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20",
+                  attrs: { to: { name: "Ingredients" }, exact: "" }
                 },
                 [_vm._v("Ingredients")]
               )
@@ -33476,9 +33502,9 @@ var render = function() {
                 {
                   staticClass:
                     "block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20",
-                  attrs: { to: { name: "Categories" } }
+                  attrs: { to: { name: "Stocks" }, exact: "" }
                 },
-                [_vm._v("Categories")]
+                [_vm._v("Stocks")]
               )
             ],
             1
@@ -50436,7 +50462,7 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"group-ingredients":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
+/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"group-ingredients":1,"group-stocks":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

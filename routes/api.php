@@ -23,11 +23,11 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('categories', 'CategoryController');
     Route::apiResource('units', 'UnitController');
     Route::apiResource('ingredients', 'IngredientController');
+    Route::apiResource('stocks', 'StocksController')->only('show', 'update');
 
     Route::delete('users/{id}/disable', 'UserController@disable');
     Route::post('users/{id}/restore', 'UserController@restore');
 
-    
     Route::delete('products/{id}/disable', 'ProductController@disable');
     Route::post('products/{id}/restore', 'ProductController@restore');
 
