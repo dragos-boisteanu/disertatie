@@ -80,7 +80,7 @@
                             <button 
                                 v-if="ingredientSelected"
                                 @click.prevent="clearSelection"
-                                class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
+                                class="mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
                             >                       
                                 Clear selection
                             </button>

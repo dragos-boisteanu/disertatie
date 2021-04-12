@@ -874,7 +874,7 @@ var render = function() {
                                     "button",
                                     {
                                       staticClass:
-                                        " mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto",
+                                        "mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto",
                                       on: {
                                         click: function($event) {
                                           $event.preventDefault()

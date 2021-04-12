@@ -3,8 +3,10 @@
         <ValidationObserver ref="observer">
             <form class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
                 <ValidationProvider 
-                    vid="barcode" rules="required" 
+                    vid="barcode" 
+                    rules="required" 
                     v-slot="{ errors, failed, passed }" 
+                    mode="lazy"
                     class="w-full"
                 >
                     <label for="name" class="text-sm font-semibold">Barcode</label>
@@ -34,7 +36,7 @@
                 <span>{{product.name}}</span> <span>{{product.weight}}</span> <span>{{product.unit}}</span>
             </h2>
 
-            <ValidationObserver v-slot="{ handleSubmit }">
+            <ValidationObserver v-slot="{ handleSubmit }" ref="updateForm">
                 <form @submit.prevent="handleSubmit(submit)">
                     <div class="flex gap-2">
                         <div class="flex-1">
@@ -66,12 +68,12 @@
                                     v-model="newQuantity"
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                    :disabled="waiting"
+                                    :disabled="waiting || canNotUpdate"
                                 />
                             </div>
                         </ValidationProvider> 
                     </div>
-                    <div class="mt-5 flex md:justify-start">
+                    <div v-if="!canNotUpdate" class="mt-5 flex gap-x-4 md:justify-start">
                         <button 
                             type="submit"
                             :disabled="waiting"  
@@ -86,9 +88,28 @@
                                 Update
                             </span>
                         </button>
+                        <button 
+                            @click.prevent="clear"
+                            class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
+                        >                       
+                            Clear
+                        </button>
                     </div>
                 </form>
             </ValidationObserver>
+
+            <div v-if="hasIngredients" class="mt-4">
+                <h3 class="font-semibold text-lg my-2">
+                    Ingredients
+                </h3>
+                <ul>
+                    <li v-for="ingredient in product.ingredients" :key="ingredient.id">
+                        <span>{{ ingredient.name}}</span> <span>{{ingredient.quantity}}</span> <span>{{ingredient.unit.name}}</span> 
+                        <router-link :to="{name: 'IngredientsStock', params: {id: ingredient.id}}" class="ml-5 text-sm text-lightBlue-600 hover:underline hover:text-lightBlue-400">View</router-link>
+                    </li>
+                </ul>
+            </div>
+           
         </div>
     </div>
 </template>
@@ -111,6 +132,15 @@
 
         computed: {
             ...mapGetters('Units', ['getUnits']),
+
+            canNotUpdate() {
+                return this.product.hasIngredients === 1
+                
+            },
+
+            hasIngredients() {
+                return this.product.hasIngredients === 1 && this.product.ingredients.length > 0;
+            }
         },
 
         data() {
@@ -176,6 +206,12 @@
                 } catch ( error ) {
                     console.log(error)
                 }
+            },
+
+            clear() {
+                this.$refs.observer.reset();
+                this.product = null;
+                this.barcode = '';
             }
         },
 

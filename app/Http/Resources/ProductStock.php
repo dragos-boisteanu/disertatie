@@ -20,7 +20,8 @@ class ProductStock extends JsonResource
             'unit' => $this->unit->name,
             'weight' => $this->weight,
             'quantity' => $this->quantity,
-            'hasIngredients' => $this->has_ingredients
+            'hasIngredients' => $this->has_ingredients,
+            'ingredients' => new IngredientCollection($this->whenLoaded('ingredients')),
         ];
     }
 }
