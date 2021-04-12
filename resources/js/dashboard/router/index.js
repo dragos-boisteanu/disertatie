@@ -121,12 +121,12 @@ const routes = [
             {
                 name: 'ProuductsStock',
                 path: 'products/:barcode?',
-                component: ProuductsStock
+                component: ProuductsStock,
             },
             {
                 name: 'IngredientsStock',
                 path: 'ingredients/:id?',
-                component: IngredientsStock
+                component: IngredientsStock,
             }
         ],
         meta: {

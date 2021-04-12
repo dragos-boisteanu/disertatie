@@ -73,8 +73,9 @@
                             </div>
                         </ValidationProvider> 
                     </div>
-                    <div v-if="!canNotUpdate" class="mt-5 flex gap-x-4 md:justify-start">
-                        <button 
+                    <div class="mt-5 flex gap-x-4 md:justify-start">
+                        <button
+                            v-if="!canNotUpdate"  
                             type="submit"
                             :disabled="waiting"  
                             class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
@@ -194,7 +195,6 @@
                             }
                         }
                         const response = await updateStock(payload);
-                        console.log(response.data);
                         this.product.quantity = parseInt(response.data.quantity);
                         this.newQuantity = 0;
                         this.$Progress.finish();
