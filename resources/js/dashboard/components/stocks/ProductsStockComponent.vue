@@ -5,8 +5,7 @@
                 <ValidationProvider 
                     vid="barcode" 
                     rules="required" 
-                    v-slot="{ errors, failed, passed }" 
-                    mode="lazy"
+                    v-slot="{ errors, failed, passed }"
                     class="w-full"
                 >
                     <label for="name" class="text-sm font-semibold">Barcode</label>
@@ -20,7 +19,7 @@
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                             :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             :disabled="waiting"
-                            @blur="findProduct"
+                            @change="findProduct"
                         />
                         <svg  v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-lightBlue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -58,7 +57,7 @@
                             v-slot="{ errors, failed, passed }" 
                             class="flex-1"
                         >
-                            <label for="newQuantity" class="text-sm font-semibold">New quantity</label>
+                            <label for="newQuantity" class="text-sm font-semibold">Quantity</label>
                             <div class="text-xs text-red-600 font-semibold mb-1" v-show="errors"> {{ errors[0] }}</div>
                             <div class="flex gap-x-3 items-center relative flex-1">
                                 <input 
@@ -110,8 +109,15 @@
                     </li>
                 </ul>
             </div>
-           
         </div>
+        <button 
+            v-if="product"
+            @click="findProduct"
+            class="mt-4 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
+        >                       
+            Refresh
+        </button>
+
     </div>
 </template>
 
@@ -162,8 +168,10 @@
                     if(this.barcode.length > 0) {
                         this.$Progress.start();
                         this.waiting = true;
+                        
                         const response = await downloadProduct(this.barcode);
                         this.product = response.data.data;
+                        
                         this.waiting = false;
                         this.$Progress.finish();
                     }                   

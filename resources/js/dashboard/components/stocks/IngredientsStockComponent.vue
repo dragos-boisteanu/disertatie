@@ -1,7 +1,7 @@
 <template>
     <div class="w-full">
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer" >
-            <form @submit.prevent="handleSubmit(search)" class="flex flex-col gap-y-4 bg-white shadow rounded-sm p-5 md:flex-row md:items-center md:flex-1 gap-x-4 w-full lg:w-1/2 2xl:w-full">
+            <form @submit.prevent="handleSubmit(findIngredient)" class="flex flex-col gap-y-4 bg-white shadow rounded-sm p-5 md:flex-row md:items-center md:flex-1 gap-x-4 w-full lg:w-1/2 2xl:w-full">
                 <ValidationProvider 
                     vid="id" rules="integer" 
                     v-slot="{ errors, failed, passed }" 
@@ -45,7 +45,7 @@
 
                 <button 
                     type="submit"
-                    :disabled="waiting"  
+                    :disabled="waiting"
                     class="inline-flex items-center justify-center mt-7 px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
                 >
                     <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -102,7 +102,7 @@
                             v-slot="{ errors, failed, passed }" 
                             class="flex-1"
                         >
-                            <label for="name" class="text-sm font-semibold">New quantity</label>
+                            <label for="name" class="text-sm font-semibold">Quantity</label>
                             <div class="text-xs text-red-600 font-semibold mb-1" v-show="errors"> {{ errors[0] }}</div>
                             <div class="flex gap-x-3 items-center relative flex-1">
                                 <input 
@@ -117,7 +117,7 @@
                             </div>
                         </ValidationProvider> 
                     </div>
-                    <div class="mt-5 flex md:justify-start">
+                    <div class="mt-5 flex gap-x-4 md:justify-start">
                         <button 
                             type="submit"
                             :disabled="waiting"  
@@ -133,6 +133,7 @@
                             </span>
                         </button>
                         <button 
+                            v-if="ingredient"
                             @click.prevent="clear"
                             class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
                         >                       
@@ -142,20 +143,27 @@
                 </form>
             </ValidationObserver>
         </div>
+
+        <button 
+            @click="findIngredient"
+            class="mt-4 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
+        >                       
+            Refresh
+        </button>
     </div>
     
 </template>
 
 <script>
-    import { downloadIngredientById, downloadIngredientByName } from '../../api/stocks.api';
+    import { downloadIngredientById, downloadIngredientByName, updateStock } from '../../api/stocks.api';
     import _debounce from 'lodash/debounce'
 
     export default {
 
-        mounted() {
+        async mounted() {
             if(this.$route.params.id) {
                 this.filter.id = this.$route.params.id;
-                this.findIngredient();
+                await this.findIngredient();
             }
         },
 
@@ -177,13 +185,13 @@
         },
 
         methods: {
-            findIngredient: _debounce(async function() {
+            async findIngredient() {
                 try {
                     this.$Progress.start();
 
                     let response = null;
 
-                    if(this.filter.id.length > 0) {
+                    if(this.filter.id) {
                         response = await downloadIngredientById(this.filter.id);
                     }
 
@@ -193,15 +201,28 @@
 
                     this.$Progress.finish();
                 } catch ( error ) {
+                   
                     this.$Progress.fail();
                     console.log(error);
                 }
-            }, 250),
+            },
 
             async submit() {
                 try {
                     if(this.newQuantity !== 0) {
                         this.$Progress.start();
+
+                        const payload = {
+                            id: this.ingredient.id,
+                            data: {
+                                type: 'ingredient',
+                                newQuantity: this.newQuantity
+                            }
+                        }
+
+                        const response = await updateStock(payload);
+                        this.ingredient.quantity = parseInt(response.data.quantity);
+                        this.newQuantity = 0;
 
                         this.$Progress.finish();
                     }                    
