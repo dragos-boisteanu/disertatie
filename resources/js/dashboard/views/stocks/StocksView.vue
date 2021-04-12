@@ -4,11 +4,11 @@
             Stocks
         </template>
 
-        <div class="w-full border-b pb-4 flex items-center gap-x-2">
-            <router-link :to="{name: 'ProuductsStock'}" class="text-center pb-1 mr-4 border-b-2 border-opacity-0 " exact>
+        <div class="w-full border-b pb-2 flex items-center gap-x-2">
+            <router-link :to="{name: 'ProuductsStock'}" class="text-center pb-1 mr-4 border-b-2 border-opacity-0 " >
                 Products
             </router-link>
-            <router-link :to="{name: 'IngredientsStock'}" class="text-center pb-1 border-b-2 border-opacity-0 border-trasnparent" exact>
+            <router-link :to="{name: 'IngredientsStock'}" class="text-center pb-1 border-b-2 border-opacity-0 border-trasnparent">
                 Ingredients
             </router-link>
         </div>

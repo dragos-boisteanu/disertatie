@@ -28,16 +28,15 @@
                 </ValidationProvider>
             </form>
         </ValidationObserver>
+
         <div v-if="product" class="mt-4 flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
             <h2 class="text-xl font-semibold my-2">
-                <span>{{product.name}}</span> <span>{{product.weight}}</span> <Unit :unit-id="product.unit_id"></Unit>
+                <span>{{product.name}}</span> <span>{{product.weight}}</span> <span>{{product.unit}}</span>
             </h2>
 
             <ValidationObserver v-slot="{ handleSubmit }">
                 <form @submit.prevent="handleSubmit(submit)">
                     <div class="flex gap-2">
-
-                   
                         <div class="flex-1">
                             <label for="name" class="text-sm font-semibold">Stock quantity</label>
                             <div class="mb-1"></div>
@@ -97,12 +96,18 @@
 <script>
     import _debounce from 'lodash/debounce';
     import { mapActions, mapGetters } from 'vuex';
-    import { updateStock } from '../../api/stocks.api';
-
+    import { updateStock, downloadProduct } from '../../api/stocks.api';
 
     import Unit from '../products/UnitComponent';
 
     export default {
+
+        mounted() {
+            if(this.$route.params.barcode) {
+                this.barcode = this.$route.params.barcode;
+                this.findProduct();
+            }
+        },
 
         computed: {
             ...mapGetters('Units', ['getUnits']),
@@ -119,20 +124,30 @@
         }, 
         
         methods: {
-            ...mapActions('Products', ['getProductByBarcode']),
+            ...mapActions('Notification', ['openNotification']),
 
             findProduct: _debounce(async function() {
-                console.log('here');
                 try {
                     if(this.barcode.length > 0) {
+                        this.$Progress.start();
                         this.waitingForProduct = true;
-                        const response = await this.getProductByBarcode(this.barcode);
+                        const response = await downloadProduct(this.barcode);
                         this.product = response.data.data;
                         this.waitingForProduct = false;
-                        console.log(this.product)
-                    }
-                   
+                        this.$Progress.finish();
+                    }                   
                 } catch ( error ) {
+                    if(error.response) {
+                        if(error.response.status == '404') {
+                            this.openNotification({
+                                type: 'err',
+                                message: error.response.data.message,
+                                show: true
+                            });
+                        }
+                    }
+                    this.waitingForProduct = false;
+                    this.$Progress.fail();
                     console.log(error)
                 }
             }, 500),
@@ -140,6 +155,7 @@
             async submit() {
                 try {
                     if(this.newQuantity !== 0) {
+                        this.$Progress.start();
                         const payload = {
                             id: this.product.id,
                             data: {
@@ -151,7 +167,9 @@
                         console.log(response.data);
                         this.product.quantity = parseInt(response.data.quantity);
                         this.newQuantity = 0;
+                        this.$Progress.finish();
                     } else {
+                        this.$Progress.fail()
                         console.log('Quantity must not be 0');
                     }
                     
@@ -164,7 +182,6 @@
         components: {
             Unit
         }
-
 
     }
 </script>

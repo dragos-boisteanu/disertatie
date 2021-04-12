@@ -120,12 +120,12 @@ const routes = [
         children: [
             {
                 name: 'ProuductsStock',
-                path: 'products',
+                path: 'products/:barcode?',
                 component: ProuductsStock
             },
             {
                 name: 'IngredientsStock',
-                path: 'ingredients',
+                path: 'ingredients/:id?',
                 component: IngredientsStock
             }
         ],

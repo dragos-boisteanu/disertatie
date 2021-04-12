@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Models\Ingredient;
 use App\Models\Product;
+use App\Models\Ingredient;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductStock;
+use App\Http\Resources\IngredientStock;
 
 class StockController extends Controller
 {
@@ -48,4 +50,24 @@ class StockController extends Controller
         
         return response()->json(['message'=>'Stock updated', 'quantity'=>$quantity], 200);
     }
+
+    public function getProductStockDetailsByBarcode($barcode) 
+    {
+        $product = Product::withTrashed()->where('barcode', $barcode)->first();
+
+        if(isset($product)) {
+            return new ProductStock($product);
+        }
+
+        return response()->json(['message'=>'No product found with this barcode'], 404);
+
+    }
+
+    public function getIngredientStockDetailsById($id)
+    {
+        $ingredient = Ingredient::where('barcode', $id)->first();
+
+        return new IngredientStock($ingredient);
+    }
+
 }

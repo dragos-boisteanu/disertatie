@@ -1,7 +1,7 @@
 <template>
-    <div class="h-screen flex flex-col"> 
+    <div class="h-screen flex flex-col" v-if="loaded"> 
         <vue-progress-bar></vue-progress-bar>
-        <Notification :notification=getNotification v-if="getNotification.show"/>
+        <Notification :notification="getNotification" v-if="getNotification.show"/>
          <!-- <h1>current: {{$mq}}</h1>   -->
         <div class="block" v-if="mobile">
             <Header/>
@@ -21,6 +21,9 @@
                 <router-view></router-view>
             </div>
         </div>
+    </div>
+    <div v-else>
+        Loading...
     </div>
     
 </template>
@@ -69,6 +72,8 @@
 
                 this.$Progress.finish()
 
+                this.loaded = true;
+
             } catch ( error ) {
                 this.$Progress.fail()
                 this.openNotification({
@@ -93,6 +98,12 @@
 
             desktop() {
                 return this.$mq === 'xl' || this.$mq === 'xxl';
+            }
+        },
+
+        data() {
+            return{
+                loaded: false
             }
         },
 

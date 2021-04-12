@@ -1901,6 +1901,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1960,11 +1963,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 3:
               _this2.$Progress.finish();
 
-              _context2.next = 10;
+              _this2.loaded = true;
+              _context2.next = 11;
               break;
 
-            case 6:
-              _context2.prev = 6;
+            case 7:
+              _context2.prev = 7;
               _context2.t0 = _context2["catch"](0);
 
               _this2.$Progress.fail();
@@ -1975,12 +1979,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 show: true
               });
 
-            case 10:
+            case 11:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 6]]);
+      }, _callee2, null, [[0, 7]]);
     }))();
   },
   computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Counties', ['getCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Notification', ['getNotification'])), {}, {
@@ -1991,6 +1995,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return this.$mq === 'xl' || this.$mq === 'xxl';
     }
   }),
+  data: function data() {
+    return {
+      loaded: false
+    };
+  },
   methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['downloadLoggedUserData'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
     downloadRoles: function downloadRoles() {
       var _this3 = this;
@@ -2066,13 +2075,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       required: true
     }
   },
-  data: function data() {
-    return {
-      timerId: 0,
-      classType: this
-    };
-  },
-  created: function created() {
+  mounted: function mounted() {
     var _this = this;
 
     if (this.notification.show) {
@@ -2080,6 +2083,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.closeNotification();
       }, this.notification.activeTime);
     }
+  },
+  data: function data() {
+    return {
+      timerId: 0,
+      classType: this
+    };
   },
   destroyed: function destroyed() {
     clearTimeout(this.timerId);
@@ -2639,6 +2648,8 @@ var httpClient = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "downloadIngredients": () => (/* binding */ downloadIngredients),
+/* harmony export */   "downloadIngredientById": () => (/* binding */ downloadIngredientById),
+/* harmony export */   "downloadIngredientByName": () => (/* binding */ downloadIngredientByName),
 /* harmony export */   "postIngredient": () => (/* binding */ postIngredient),
 /* harmony export */   "patchIngredient": () => (/* binding */ patchIngredient),
 /* harmony export */   "deleteIngredient": () => (/* binding */ deleteIngredient)
@@ -2649,6 +2660,14 @@ var BASE_URL = '/ingredients';
 
 var downloadIngredients = function downloadIngredients() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
+};
+
+var downloadIngredientById = function downloadIngredientById(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL, "/").concat(id));
+};
+
+var downloadIngredientByName = function downloadIngredientByName(name) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL, "/").concat(name));
 };
 
 var postIngredient = function postIngredient(ingredient) {
@@ -3083,11 +3102,11 @@ var routes = [{
   component: Stocks,
   children: [{
     name: 'ProuductsStock',
-    path: 'products',
+    path: 'products/:barcode?',
     component: ProuductsStock
   }, {
     name: 'IngredientsStock',
-    path: 'ingredients',
+    path: 'ingredients/:id?',
     component: IngredientsStock
   }],
   meta: {
@@ -3728,7 +3747,7 @@ var initialState = function initialState() {
     notification: {
       type: '',
       message: '',
-      activeTime: 2000,
+      activeTime: 4000,
       show: false
     }
   };
@@ -32436,67 +32455,71 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "h-screen flex flex-col" },
-    [
-      _c("vue-progress-bar"),
-      _vm._v(" "),
-      _vm.getNotification.show
-        ? _c("Notification", { attrs: { notification: _vm.getNotification } })
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.mobile
-        ? _c(
-            "div",
-            { staticClass: "block" },
-            [
-              _c("Header"),
-              _vm._v(" "),
-              _c("UtilityBar"),
-              _vm._v(" "),
-              _c("Breadcrumbs")
-            ],
-            1
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "flex flex-1" }, [
-        _vm.desktop
-          ? _c(
-              "div",
-              { staticClass: "lg:flex-none lg:w-56 2xl:w-64" },
-              [_c("Navigation")],
-              1
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "flex flex-col w-full" },
-          [
+  return _vm.loaded
+    ? _c(
+        "div",
+        { staticClass: "h-screen flex flex-col" },
+        [
+          _c("vue-progress-bar"),
+          _vm._v(" "),
+          _vm.getNotification.show
+            ? _c("Notification", {
+                attrs: { notification: _vm.getNotification }
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.mobile
+            ? _c(
+                "div",
+                { staticClass: "block" },
+                [
+                  _c("Header"),
+                  _vm._v(" "),
+                  _c("UtilityBar"),
+                  _vm._v(" "),
+                  _c("Breadcrumbs")
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex flex-1" }, [
             _vm.desktop
               ? _c(
                   "div",
-                  [
-                    _c("Header"),
-                    _vm._v(" "),
-                    _c("UtilityBar"),
-                    _vm._v(" "),
-                    _c("Breadcrumbs")
-                  ],
+                  { staticClass: "lg:flex-none lg:w-56 2xl:w-64" },
+                  [_c("Navigation")],
                   1
                 )
               : _vm._e(),
             _vm._v(" "),
-            _c("router-view")
-          ],
-          1
-        )
-      ])
-    ],
-    1
-  )
+            _c(
+              "div",
+              { staticClass: "flex flex-col w-full" },
+              [
+                _vm.desktop
+                  ? _c(
+                      "div",
+                      [
+                        _c("Header"),
+                        _vm._v(" "),
+                        _c("UtilityBar"),
+                        _vm._v(" "),
+                        _c("Breadcrumbs")
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("router-view")
+              ],
+              1
+            )
+          ])
+        ],
+        1
+      )
+    : _c("div", [_vm._v("\n    Loading...\n")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -32621,7 +32644,7 @@ var render = function() {
     "div",
     {
       staticClass:
-        "fixed px-2 py-1 bottom-8 left-1/2 transform -translate-x-1/2 rounded-3xl text-center shadow-sm z-20",
+        "fixed px-2 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-40 lg:bottom-auto",
       class: _vm.type,
       staticStyle: { "min-width": "100px" }
     },

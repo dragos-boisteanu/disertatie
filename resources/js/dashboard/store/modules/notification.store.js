@@ -2,7 +2,7 @@ const initialState = () => ({
     notification: {
         type: '',
         message: '',
-        activeTime: 2000,
+        activeTime: 4000,
         show: false,
     }
 });
