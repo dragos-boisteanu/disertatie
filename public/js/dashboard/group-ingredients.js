@@ -138,6 +138,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -937,11 +940,17 @@ var render = function() {
                                       )
                                     : _vm._e(),
                                   _vm._v(" "),
-                                  _c("span", [
-                                    _vm._v(
-                                      "\n                                Submit\n                            "
-                                    )
-                                  ])
+                                  _vm.ingredientSelected
+                                    ? _c("span", [
+                                        _vm._v(
+                                          "\n                                Update\n                            "
+                                        )
+                                      ])
+                                    : _c("span", [
+                                        _vm._v(
+                                          "\n                                Submit\n                            "
+                                        )
+                                      ])
                                 ]
                               )
                             ])
