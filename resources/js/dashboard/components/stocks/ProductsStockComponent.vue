@@ -22,7 +22,7 @@
                             :disabled="waiting"
                             @blur="findProduct"
                         />
-                        <svg  v-if="waitingForProduct" class="animate-spin mr-3 h-5 w-5 text-lightBlue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg  v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-lightBlue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -161,10 +161,10 @@
                 try {
                     if(this.barcode.length > 0) {
                         this.$Progress.start();
-                        this.waitingForProduct = true;
+                        this.waiting = true;
                         const response = await downloadProduct(this.barcode);
                         this.product = response.data.data;
-                        this.waitingForProduct = false;
+                        this.waiting = false;
                         this.$Progress.finish();
                     }                   
                 } catch ( error ) {
@@ -177,15 +177,16 @@
                             });
                         }
                     }
-                    this.waitingForProduct = false;
+                    this.waiting = false;
                     this.$Progress.fail();
                     console.log(error)
                 }
-            }, 500),
+            }, 250),
 
             async submit() {
                 try {
                     if(this.newQuantity !== 0) {
+                        this.waiting = true;
                         this.$Progress.start();
                         const payload = {
                             id: this.product.id,
@@ -197,9 +198,11 @@
                         const response = await updateStock(payload);
                         this.product.quantity = parseInt(response.data.quantity);
                         this.newQuantity = 0;
+                        this.waiting = false;
                         this.$Progress.finish();
                     } else {
-                        this.$Progress.fail()
+                        this.waiting = false;
+                        this.$Progress.fail();
                         console.log('Quantity must not be 0');
                     }
                     
