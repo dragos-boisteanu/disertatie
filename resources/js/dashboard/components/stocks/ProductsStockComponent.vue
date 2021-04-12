@@ -40,7 +40,7 @@
                 <form @submit.prevent="handleSubmit(submit)">
                     <div class="flex gap-2">
                         <div class="flex-1">
-                            <label for="name" class="text-sm font-semibold">Stock quantity</label>
+                            <label for="quantity" class="text-sm font-semibold">Stock quantity</label>
                             <div class="mb-1"></div>
                             <div class="flex gap-x-3 items-center relative flex-1">
                                 <input 
@@ -58,7 +58,7 @@
                             v-slot="{ errors, failed, passed }" 
                             class="flex-1"
                         >
-                            <label for="name" class="text-sm font-semibold">New quantity</label>
+                            <label for="newQuantity" class="text-sm font-semibold">New quantity</label>
                             <div class="text-xs text-red-600 font-semibold mb-1" v-show="errors"> {{ errors[0] }}</div>
                             <div class="flex gap-x-3 items-center relative flex-1">
                                 <input 
@@ -186,8 +186,9 @@
             async submit() {
                 try {
                     if(this.newQuantity !== 0) {
-                        this.waiting = true;
                         this.$Progress.start();
+                        this.waiting = true;
+                       
                         const payload = {
                             id: this.product.id,
                             data: {
@@ -195,9 +196,11 @@
                                 newQuantity: this.newQuantity
                             }
                         }
+
                         const response = await updateStock(payload);
                         this.product.quantity = parseInt(response.data.quantity);
                         this.newQuantity = 0;
+
                         this.waiting = false;
                         this.$Progress.finish();
                     } else {
@@ -215,6 +218,10 @@
                 this.$refs.observer.reset();
                 this.product = null;
                 this.barcode = '';
+
+                if(this.$route.params.barcode) {
+                    this.$router.replace({name: 'ProuductsStock'})
+                }
             }
         },
 

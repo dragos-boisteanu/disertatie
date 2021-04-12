@@ -65,9 +65,13 @@ class StockController extends Controller
 
     public function getIngredientStockDetailsById($id)
     {
-        $ingredient = Ingredient::where('barcode', $id)->first();
+        $ingredient = Ingredient::where('id', $id)->first();
 
-        return new IngredientStock($ingredient);
+        if(isset($ingredient)) {
+            return new IngredientStock($ingredient); 
+        }
+
+        return response()->json(['message' => 'No ingredient found with this id'], 404);
     }
 
 }

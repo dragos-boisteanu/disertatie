@@ -18,7 +18,7 @@ class IngredientStock extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'quantity' => $this->stock->quantity,
-            'unit' => $this->unit->name
+            'unit' => $this->unit->name . ' (' . $this->unit->description . ')',
         ];
     }
 }

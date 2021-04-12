@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <ValidationObserver v-slot="{ handleSubmit }" >
+        <ValidationObserver v-slot="{ handleSubmit }" ref="observer" >
             <form @submit.prevent="handleSubmit(search)" class="flex flex-col gap-y-4 bg-white shadow rounded-sm p-5 md:flex-row md:items-center md:flex-1 gap-x-4 w-full lg:w-1/2 2xl:w-full">
                 <ValidationProvider 
                     vid="id" rules="integer" 
@@ -63,13 +63,12 @@
 
         <div v-if="ingredient" class="mt-4 flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
             <h2 class="text-xl font-semibold my-2">
-                <span>{{ingredient.name}}</span> <span>{{ ingredient.unit.name}} ({{ ingredient.unit.description }})</span>
+                <span>{{ingredient.name}}</span>
             </h2>
 
             <ValidationObserver v-slot="{ handleSubmit }">
                 <form @submit.prevent="handleSubmit(submit)">
                     <div class="flex gap-2">
-
                         <div class="flex-1">
                             <label for="name" class="text-sm font-semibold">Stock quantity</label>
                             <div class="mb-1"></div>
@@ -78,7 +77,21 @@
                                     id="quantity"
                                     name="quantity" 
                                     type="text"   
-                                    v-model="ingredient.stockQuantity"
+                                    v-model="ingredient.quantity"
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                    :disabled="true"
+                                />
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <label for="unit" class="text-sm font-semibold">Unit</label>
+                            <div class="mb-1"></div>
+                            <div class="flex gap-x-3 items-center relative flex-1">
+                                <input 
+                                    id="unit"
+                                    name="unit" 
+                                    type="text"   
+                                    v-model="ingredient.unit"
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :disabled="true"
                                 />
@@ -119,6 +132,12 @@
                                 Update
                             </span>
                         </button>
+                        <button 
+                            @click.prevent="clear"
+                            class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
+                        >                       
+                            Clear
+                        </button>
                     </div>
                 </form>
             </ValidationObserver>
@@ -128,9 +147,18 @@
 </template>
 
 <script>
-    import { downloadIngredientById, downloadIngredientByName } from '../../api/ingreditents.api';
+    import { downloadIngredientById, downloadIngredientByName } from '../../api/stocks.api';
+    import _debounce from 'lodash/debounce'
 
     export default {
+
+        mounted() {
+            if(this.$route.params.id) {
+                this.filter.id = this.$route.params.id;
+                this.findIngredient();
+            }
+        },
+
         data() {
             return {
                 waiting: false,
@@ -149,7 +177,7 @@
         },
 
         methods: {
-            async search() {
+            findIngredient: _debounce(async function() {
                 try {
                     this.$Progress.start();
 
@@ -159,19 +187,40 @@
                         response = await downloadIngredientById(this.filter.id);
                     }
 
-                    if(this.filter.name.length > 0) {
-                        response = await downloadIngredientByName(this.filter.name);
-                    }
-
                     if(response) {
-                        this.ingredient = response.data;
+                        this.ingredient = response.data.data;
                     }
 
                     this.$Progress.finish();
+                } catch ( error ) {
+                    this.$Progress.fail();
+                    console.log(error);
+                }
+            }, 250),
 
+            async submit() {
+                try {
+                    if(this.newQuantity !== 0) {
+                        this.$Progress.start();
+
+                        this.$Progress.finish();
+                    }                    
                 } catch ( error ) {
                     this.$Progress.fail();
                     console.log(error)
+                }
+            },
+
+            clear() {
+                this.$refs.observer.reset();
+                this.ingredient = null;
+                this.filter = {
+                    id: '',
+                    name: ''
+                };
+
+                if(this.$route.params.id) {
+                    this.$router.replace({name: 'IngredientsStock'})
                 }
             }
         }

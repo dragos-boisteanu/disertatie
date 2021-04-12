@@ -26,8 +26,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('stocks', 'StockController')->only('show', 'update');
 
     Route::group(['prefix'=>'stocks'], function() {
-        Route::get('product/{barcode}', 'StockController@getProductStockDetailsByBarcode');
-        Route::get('ingredient/{id}', 'StockController@getIngredientStockDetailsById');
+        Route::get('products/{barcode}', 'StockController@getProductStockDetailsByBarcode');
+        Route::get('ingredients/{id}', 'StockController@getIngredientStockDetailsById');
     });
 
     Route::delete('users/{id}/disable', 'UserController@disable');
