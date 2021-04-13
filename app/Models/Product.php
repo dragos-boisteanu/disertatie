@@ -85,6 +85,11 @@ class Product extends Model
         return $this->belongsToMany('App\Models\Ingredient')->withPivot('quantity');
     }
 
+    public function discounts() 
+    {
+        return $this->belongsToMany('App\Models\Discount');
+    }
+
     public function scopeFilter(Builder $builder, Request $request)
     {
         return (new ProductFilter($request))->filter($builder);

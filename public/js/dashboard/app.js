@@ -2415,6 +2415,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3018,6 +3029,10 @@ var IngredientsStock = function IngredientsStock() {
   return __webpack_require__.e(/*! import() | group-stocks */ "group-stocks").then(__webpack_require__.bind(__webpack_require__, /*! ../components/stocks/IngredientsStockComponent.vue */ "./resources/js/dashboard/components/stocks/IngredientsStockComponent.vue"));
 };
 
+var Discounts = function Discounts() {
+  return __webpack_require__.e(/*! import() | group-discounts */ "group-discounts").then(__webpack_require__.bind(__webpack_require__, /*! ../views/discounts/DiscountsView.vue */ "./resources/js/dashboard/views/discounts/DiscountsView.vue"));
+};
+
 var Home = function Home() {
   return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
 };
@@ -3127,6 +3142,16 @@ var routes = [{
     breadcrumb: {
       label: 'Product',
       parent: 'Products'
+    }
+  }
+}, {
+  path: "".concat(baseUrl, "/discounts"),
+  name: 'Discounts',
+  component: Discounts,
+  meta: {
+    breadcrumb: {
+      label: 'Discounts',
+      parent: 'Dashboard'
     }
   }
 }];
@@ -33554,6 +33579,38 @@ var render = function() {
             1
           )
         ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "pt-2" }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "text-sm text-coolGray-400 font-bold px-5 tracking-wider"
+          },
+          [_vm._v("\n            Discounts\n        ")]
+        ),
+        _vm._v(" "),
+        _c("ul", { staticClass: "mt-1" }, [
+          _c(
+            "li",
+            {
+              staticClass: "text-sm text-gray-300 hover:text-white tracking-wid"
+            },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20",
+                  attrs: { to: { name: "Discounts" }, exact: "" }
+                },
+                [_vm._v("Discounts list")]
+              )
+            ],
+            1
+          )
+        ])
       ])
     ]
   )
@@ -50506,7 +50563,7 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"group-ingredients":1,"group-stocks":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
+/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"group-ingredients":1,"group-stocks":1,"group-discounts":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

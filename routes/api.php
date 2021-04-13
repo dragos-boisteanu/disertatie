@@ -18,12 +18,13 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::get('users/logged-user', 'UserController@getLoggedUser');
      
     Route::apiResource('users', 'UserController');
-    Route::apiResource('roles', 'RoleController');
+    Route::apiResource('roles', 'RoleController')->only('index', 'store', 'update', 'destroy');;
     Route::apiResource('products', 'ProductController');
-    Route::apiResource('categories', 'CategoryController');
-    Route::apiResource('units', 'UnitController');
-    Route::apiResource('ingredients', 'IngredientController');
-    Route::apiResource('stocks', 'StockController')->only('show', 'update');
+    Route::apiResource('categories', 'CategoryController')->only('index', 'store', 'update', 'destroy');;
+    Route::apiResource('units', 'UnitController')->only('index', 'store', 'update', 'destroy');;
+    Route::apiResource('ingredients', 'IngredientController')->only('index', 'store', 'update', 'destroy');
+    Route::apiResource('stocks', 'StockController')->only('update');
+    Route::apiResource('discounts', 'DiscountController')->only('index', 'store', 'update', 'destroy');
 
     Route::group(['prefix'=>'stocks'], function() {
         Route::get('products/{barcode}', 'StockController@getProductStockDetailsByBarcode');
