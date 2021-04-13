@@ -4,7 +4,7 @@
             <form class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
                 <ValidationProvider 
                     vid="barcode" 
-                    rules="required|barcode"
+                    rules="required"
                     v-slot="{ errors, failed, passed }"
                     mode="aggressive"
                     class="w-full"
