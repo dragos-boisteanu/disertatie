@@ -16,9 +16,8 @@ class CreateDiscountsTable extends Migration
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->decimal('percent');
-            $table->dateTime('starts_at');
-            $table->dateTime('ends_at');
+            $table->decimal('value');
+            $table->foreignId('user_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
         });

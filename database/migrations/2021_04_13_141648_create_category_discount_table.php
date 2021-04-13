@@ -14,8 +14,12 @@ class CreateCategoryDiscountTable extends Migration
     public function up()
     {
         Schema::create('category_discount', function (Blueprint $table) {
-           $table->foreignId('category_id');
-           $table->foreignId('discount_id');
+            $table->primary(['category_id','discount_id']);
+            $table->foreignId('category_id')->constrained();
+            $table->foreignId('discount_id')->constrained();
+
+            $table->dateTime('starts_at');
+            $table->dateTime('ends_at');
         });
     }
 

@@ -2624,6 +2624,58 @@ var downloadCities = function downloadCities(id) {
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/api/discounts.api.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/dashboard/api/discounts.api.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "downloadDiscounts": () => (/* binding */ downloadDiscounts),
+/* harmony export */   "postDiscount": () => (/* binding */ postDiscount),
+/* harmony export */   "patchDiscount": () => (/* binding */ patchDiscount),
+/* harmony export */   "deleteDiscount": () => (/* binding */ deleteDiscount),
+/* harmony export */   "disableDiscount": () => (/* binding */ disableDiscount),
+/* harmony export */   "restoreDiscount": () => (/* binding */ restoreDiscount)
+/* harmony export */ });
+/* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
+
+var BASE_URL = '/discounts';
+
+var downloadDiscounts = function downloadDiscounts() {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
+};
+
+var postDiscount = function postDiscount(payload) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(BASE_URL), payload);
+};
+
+var patchDiscount = function patchDiscount(payload) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(BASE_URL, "/").concat(payload.id), payload);
+};
+
+var deleteDiscount = function deleteDiscount(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(BASE_URL, "/").concat(id), {
+    data: id
+  });
+};
+
+var disableDiscount = function disableDiscount(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(BASE_URL, "/").concat(id, "/disable"), {
+    data: id
+  });
+};
+
+var restoreDiscount = function restoreDiscount(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(BASE_URL, "/").concat(id, "/restore"));
+};
+
+
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/api/httpClient.js":
 /*!**************************************************!*\
   !*** ./resources/js/dashboard/api/httpClient.js ***!
@@ -3526,6 +3578,98 @@ var mutations = {
   getters: getters,
   actions: actions,
   mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/store/modules/discounts.store.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/dashboard/store/modules/discounts.store.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _api_discounts_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/discounts.api */ "./resources/js/dashboard/api/discounts.api.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+var initialState = function initialState() {
+  return {
+    discounts: null
+  };
+};
+
+var state = initialState();
+var getters = {
+  getDiscounts: function getDiscounts(state) {
+    return state.discounts;
+  }
+};
+var actions = {
+  reset: function reset(_ref) {
+    var commit = _ref.commit;
+    commit('RESET');
+  },
+  downloadDiscounts: function downloadDiscounts(_ref2) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref2.commit;
+              _context.prev = 1;
+              _context.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.downloadDiscounts)();
+
+            case 4:
+              response = _context.sent;
+              commit('SET_DISCOUNTS', response.data.data);
+              _context.next = 11;
+              break;
+
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](1);
+              throw _context.t0;
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[1, 8]]);
+    }))();
+  }
+};
+var muttations = {
+  RESET: function RESET(state) {
+    var newState = initialState();
+    Object.keys(newState).forEach(function (key) {
+      state[key] = newState[key];
+    });
+  },
+  SET_DISCOUNTS: function SET_DISCOUNTS(state, payload) {
+    state.discounts = payload;
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  muttations: muttations
 });
 
 /***/ }),
@@ -50427,6 +50571,7 @@ var index = {
 var map = {
 	"./categories.store.js": "./resources/js/dashboard/store/modules/categories.store.js",
 	"./counties.store.js": "./resources/js/dashboard/store/modules/counties.store.js",
+	"./discounts.store.js": "./resources/js/dashboard/store/modules/discounts.store.js",
 	"./ingredients.store.js": "./resources/js/dashboard/store/modules/ingredients.store.js",
 	"./notification.store.js": "./resources/js/dashboard/store/modules/notification.store.js",
 	"./products.store.js": "./resources/js/dashboard/store/modules/products.store.js",
