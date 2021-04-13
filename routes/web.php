@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 
 Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->where('any', '.*')
-    ->middleware(['verified', 'auth', 'dashboard.access'])->name('dashboard');
-
+    ->middleware(['auth', 'dashboard.access'])->name('dashboard');
+    // verified
 
 require __DIR__.'/auth.php';

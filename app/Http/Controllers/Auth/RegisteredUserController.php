@@ -53,7 +53,7 @@ class RegisteredUserController extends Controller
             'birthdate' => $request->birthdate
         ]);
 
-        event(new Registered($user));
+        // event(new Registered($user));
 
         return redirect(RouteServiceProvider::HOME);
     }
