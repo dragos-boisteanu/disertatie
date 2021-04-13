@@ -4,8 +4,9 @@
             <form class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
                 <ValidationProvider 
                     vid="barcode" 
-                    rules="required"
+                    rules="required|barcode"
                     v-slot="{ errors, failed, passed }"
+                    mode="aggressive"
                     class="w-full"
                 >
                     <label for="name" class="text-sm font-semibold">Barcode</label>
@@ -166,7 +167,7 @@
             findProduct: _debounce(async function() {
                 try {
                     console.log(this.$refs.observer.errors)
-                    if(this.barcode.length > 0) {
+                    if(this.$refs.observer.errors.barcode.length === 0) {
                         this.$Progress.start();
                         this.waiting = true;
                         
