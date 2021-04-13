@@ -34,10 +34,10 @@
                             :onaddfilestart="waitForFiletoUpload"
                             :onprocessfileabort="stopWaitingForFileToUpload"
                         />
-
+<!-- :disabled="waitForFileUpload || !(waiting || locked)" -->
                         <div class="text-right mt-3">
                             <button 
-                                :disabled="waitForFileUpload || !(waiting || locked)"
+                                
                                 class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
                                 @click.prevent="clearImage"
                             >
@@ -409,6 +409,7 @@
             },
 
             clearImage() {
+                console.log('here')
                 this.$refs.pond.removeFile({revert: true});
                 delete this.product.image;
             },

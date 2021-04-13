@@ -1,6 +1,6 @@
 import httpClient from './httpClient';
 
-const BASE_URL = '/ingredients'
+const BASE_URL = 'dashboard/ingredients'
 
 const downloadIngredients = () => httpClient.get(`${BASE_URL}`);
 const downloadIngredientById = (id) => httpClient.get(`${BASE_URL}/${id}`);

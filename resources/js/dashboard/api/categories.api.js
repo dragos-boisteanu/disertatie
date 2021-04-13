@@ -1,6 +1,6 @@
 import httpClient from './httpClient';
 
-const BASE_URL = '/categories'
+const BASE_URL = 'dashboard/categories'
 
 const downloadCategories = () => httpClient.get(`${BASE_URL}`);
 const postCategory = (category) => httpClient.post(`${BASE_URL}`,  category);

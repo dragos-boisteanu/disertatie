@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
 
         <!-- Scripts -->
-        <script src="{{ mix('js/dashboard/app.js') }}" defer></script>
+        <script src="{{ asset(mix('js/dashboard/app.js')) }}" defer></script>
     </head>
     <body class="antialiased h-screen">
         <noscript>
