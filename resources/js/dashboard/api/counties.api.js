@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BASE_URL = 'client';
+const BASE_URL = 'http://disertatie.test/api/client';
 
 const downloadCounties = () => {
     return axios.get(`${BASE_URL}/counties`);

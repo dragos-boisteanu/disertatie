@@ -1684,7 +1684,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
       this.waitForFileUpload = false;
     },
     clearImage: function clearImage() {
-      console.log('here');
       this.$refs.pond.removeFile({
         revert: true
       });
@@ -18980,7 +18979,7 @@ var render = function() {
     "ViewContainer",
     [
       _c("template", { slot: "header" }, [
-        _vm._v("\n            Add new product\n        ")
+        _vm._v("\n        Add new product\n    ")
       ]),
       _vm._v(" "),
       _c("ValidationObserver", {
@@ -19055,6 +19054,11 @@ var render = function() {
                                 {
                                   staticClass:
                                     "border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+                                  attrs: {
+                                    disabled:
+                                      _vm.waitForFileUpload ||
+                                      !(_vm.waiting || _vm.locked)
+                                  },
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
@@ -19064,7 +19068,7 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n                                Clear image\n                            "
+                                    "\n                            Clear image\n                        "
                                   )
                                 ]
                               )
@@ -20029,11 +20033,11 @@ var render = function() {
                                                   [
                                                     _c("div", [
                                                       _vm._v(
-                                                        "\n                                            " +
+                                                        "\n                                        " +
                                                           _vm._s(
                                                             ingredient.name
                                                           ) +
-                                                          "\n                                        "
+                                                          "\n                                    "
                                                       )
                                                     ])
                                                   ]
@@ -20104,7 +20108,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("span", [
                             _vm._v(
-                              "\n                            Submit\n                        "
+                              "\n                        Submit\n                    "
                             )
                           ])
                         ]

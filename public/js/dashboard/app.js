@@ -2560,7 +2560,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var BASE_URL = 'dashboard/categories';
+var BASE_URL = '/categories';
 
 var downloadCategories = function downloadCategories() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
@@ -2599,7 +2599,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
-var BASE_URL = 'client';
+var BASE_URL = 'http://disertatie.test/api/client';
 
 var downloadCounties = function downloadCounties() {
   return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(BASE_URL, "/counties"));
@@ -2628,7 +2628,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 var httpClient = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
-  baseURL: 'http://disertatie.test/api/',
+  baseURL: 'http://disertatie.test/api/dashboard',
   timeout: 60000,
   // indicates, 1000ms ie. 1 second
   withCredentials: true,
@@ -2660,7 +2660,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var BASE_URL = 'dashboard/ingredients';
+var BASE_URL = '/ingredients';
 
 var downloadIngredients = function downloadIngredients() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
@@ -2712,7 +2712,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var END_POINT = 'dashboard/products';
+var END_POINT = '/products';
 
 var downloadProducts = function downloadProducts(query) {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT), {
@@ -2769,7 +2769,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var END_POINT = 'dashboard/roles';
+var END_POINT = '/roles';
 
 var downloadRoles = function downloadRoles() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT));
@@ -2793,7 +2793,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var BASE_URL = 'dashboard/units';
+var BASE_URL = '/units';
 
 var downloadUnits = function downloadUnits() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
@@ -2829,7 +2829,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var END_POINT = 'dashboard/users';
+var END_POINT = '/users';
 
 var downloadLoggedUserData = function downloadLoggedUserData() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT, "/logged-user"));
