@@ -5,6 +5,7 @@
                 <ValidationProvider 
                     vid="id" rules="integer" 
                     v-slot="{ errors, failed, passed }" 
+                    
                     class="flex-1"
                 >
                     <label for="name" class="text-sm font-semibold">Id</label>
@@ -145,6 +146,7 @@
         </div>
 
         <button 
+            v-if="ingredient"
             @click="findIngredient"
             class="mt-4 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
         >                       
@@ -157,6 +159,7 @@
 <script>
     import { downloadIngredientById, downloadIngredientByName, updateStock } from '../../api/stocks.api';
     import _debounce from 'lodash/debounce'
+import { mapActions } from 'vuex';
 
     export default {
 
@@ -185,6 +188,8 @@
         },
 
         methods: {
+            ...mapActions('Notification', ['openNotification']),
+
             async findIngredient() {
                 try {
                     this.$Progress.start();
@@ -225,6 +230,20 @@
                         this.newQuantity = 0;
 
                         this.$Progress.finish();
+
+                        this.openNotification({
+                            type: 'ok',
+                            message: response.data.message,
+                            show: true
+                        });
+                    } else {
+                        this.waiting = false;
+                        this.$Progress.fail();
+                        this.openNotification({
+                            type: 'info',
+                            message: 'Quantity must be less or greater than 0',
+                            show: true
+                        });
                     }                    
                 } catch ( error ) {
                     this.$Progress.fail();

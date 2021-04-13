@@ -4,7 +4,7 @@
             <form class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
                 <ValidationProvider 
                     vid="barcode" 
-                    rules="required" 
+                    rules="required"
                     v-slot="{ errors, failed, passed }"
                     class="w-full"
                 >
@@ -19,7 +19,7 @@
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                             :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             :disabled="waiting"
-                            @change="findProduct"
+                            @input="findProduct"
                         />
                         <svg  v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-lightBlue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -165,6 +165,7 @@
 
             findProduct: _debounce(async function() {
                 try {
+                    console.log(this.$refs.observer.errors)
                     if(this.barcode.length > 0) {
                         this.$Progress.start();
                         this.waiting = true;
@@ -174,7 +175,9 @@
                         
                         this.waiting = false;
                         this.$Progress.finish();
-                    }                   
+
+                    }
+                             
                 } catch ( error ) {
                     if(error.response) {
                         if(error.response.status == '404') {
@@ -188,6 +191,7 @@
                     this.waiting = false;
                     this.$Progress.fail();
                     console.log(error)
+                    this.product = null;
                 }
             }, 250),
 
@@ -211,10 +215,20 @@
 
                         this.waiting = false;
                         this.$Progress.finish();
+
+                        this.openNotification({
+                            type: 'ok',
+                            message: response.data.message,
+                            show: true
+                        });
                     } else {
                         this.waiting = false;
                         this.$Progress.fail();
-                        console.log('Quantity must not be 0');
+                        this.openNotification({
+                            type: 'info',
+                            message: 'Quantity must be less or greater than 0',
+                            show: true
+                        });
                     }
                     
                 } catch ( error ) {

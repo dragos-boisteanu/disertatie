@@ -2105,6 +2105,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         case 'err':
           type = 'bg-red-600';
           break;
+
+        case 'info':
+          type = 'bg-blue-800';
+          break;
       }
 
       return type;
@@ -32644,7 +32648,7 @@ var render = function() {
     "div",
     {
       staticClass:
-        "fixed px-2 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-40 lg:bottom-auto",
+        "fixed px-4 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-40 lg:bottom-auto",
       class: _vm.type,
       staticStyle: { "min-width": "100px" }
     },
