@@ -138,6 +138,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -509,6 +519,20 @@ var render = function() {
                 "flex flex-col bg-white shadow rounded-sm p-5 md:flex-1"
             },
             [
+              _c("div", { staticClass: "w-full flex items-center gap-x-4" }, [
+                _c("input", {
+                  staticClass:
+                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                  attrs: {
+                    name: "search",
+                    id: "search",
+                    placeholder: "Search category by name"
+                  }
+                }),
+                _vm._v(" "),
+                _c("button", [_vm._v("Serach")])
+              ]),
+              _vm._v(" "),
               _c(
                 "ul",
                 {
