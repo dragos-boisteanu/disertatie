@@ -2285,8 +2285,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     } else {
       this.orderBy = 1;
     }
-
-    this.order();
   },
   computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Products', ['getProducts', 'getPaginationData'])), {}, {
     query: function query() {
@@ -2310,6 +2308,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context2.prev = 0;
 
+                _this.$Progress.start();
+
                 if (Object.keys(_this.$route.query).length > 0) {
                   _this.$router.replace({
                     name: 'Products',
@@ -2317,27 +2317,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 }
 
-                _context2.next = 4;
+                _context2.next = 5;
                 return _this.fetchProducts();
 
-              case 4:
+              case 5:
                 _this.setFilteredState(false);
 
                 _this.orderBy = 1;
-                _context2.next = 11;
+
+                _this.$Progress.fisnih();
+
+                _context2.next = 14;
                 break;
 
-              case 8:
-                _context2.prev = 8;
+              case 10:
+                _context2.prev = 10;
                 _context2.t0 = _context2["catch"](0);
+
+                _this.$Progress.fail();
+
                 console.log(_context2.t0);
 
-              case 11:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee2, null, [[0, 10]]);
       }))();
     },
     loadProducts: function loadProducts() {
@@ -2349,31 +2355,81 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.prev = 0;
-                _context3.next = 3;
+
+                _this2.$Progress.start();
+
+                _context3.next = 4;
                 return _this2.fetchProducts(_this2.query);
 
-              case 3:
-                _context3.next = 8;
+              case 4:
+                _this2.$Progress.finish();
+
+                _context3.next = 11;
                 break;
 
-              case 5:
-                _context3.prev = 5;
+              case 7:
+                _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
+
+                _this2.$Progress.fail();
+
                 console.log(_context3.t0);
 
-              case 8:
+              case 11:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 5]]);
+        }, _callee3, null, [[0, 7]]);
       }))();
     },
     toggleFilterState: function toggleFilterState() {
       this.showFilterState = !this.showFilterState;
     },
     order: function order() {
-      this.sortProductsList(this.orderBy);
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var query;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+
+                _this3.$Progress.start();
+
+                query = Object.assign({}, _this3.$route.query);
+                query.orderBy = _this3.orderBy;
+                _context4.next = 6;
+                return _this3.fetchProducts(query);
+
+              case 6:
+                _this3.$router.replace({
+                  name: 'Products',
+                  query: query
+                });
+
+                _this3.$Progress.finish();
+
+                _context4.next = 14;
+                break;
+
+              case 10:
+                _context4.prev = 10;
+                _context4.t0 = _context4["catch"](0);
+
+                _this3.$Progress.fail();
+
+                console.log(_context4.t0);
+
+              case 14:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 10]]);
+      }))();
     }
   }),
   components: {
