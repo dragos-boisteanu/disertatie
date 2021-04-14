@@ -67,7 +67,8 @@
                     this.fetchCategories(),
                     this.fetchUnits(),
                     this.downloadLoggedUserData(),
-                    this.downloadIngredients()
+                    this.downloadIngredients(),
+                    this.downloadDiscounts()
                 ]);
 
                 this.$Progress.finish()
@@ -85,11 +86,6 @@
         },
 
         computed: {
-            ...mapGetters('Roles', ['getRoles']),
-            ...mapGetters('Units', ['getUnits']),
-            ...mapGetters('Counties', ['getCounties']),
-            ...mapGetters('Categories', ['getCategories']),
-            ...mapGetters('Ingredients', ['getIngredients']),
             ...mapGetters('Notification', ['getNotification']),
             
             mobile() {
@@ -115,6 +111,7 @@
             ...mapActions('Notification', ['openNotification']),
             ...mapActions('Users', ['downloadLoggedUserData']),
             ...mapActions('Ingredients', ['downloadIngredients']),
+            ...mapActions('Discounts', ['downloadDiscounts']),
             
             async downloadRoles() {
                 try {

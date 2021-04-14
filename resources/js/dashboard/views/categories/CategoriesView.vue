@@ -114,6 +114,7 @@
 
 
     export default {
+        
 
         computed: {
             ...mapGetters('Categories', ['getCategories']),

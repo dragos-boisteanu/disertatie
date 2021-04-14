@@ -18,17 +18,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store */ "./resources/js/dashboard/store/index.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
 //
@@ -146,36 +146,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              if (!(_store__WEBPACK_IMPORTED_MODULE_3__.default.getters["Ingredients/getIngredients"].length > 0)) {
-                _context.next = 4;
-                break;
-              }
-
-              next();
-              _context.next = 7;
-              break;
-
-            case 4:
-              _context.next = 6;
-              return _store__WEBPACK_IMPORTED_MODULE_3__.default.dispatch('Ingredients/downloadIngredients');
-
-            case 6:
-              next();
-
-            case 7:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
-  },
+  // async beforeRouteEnter (to, from, next) {
+  //     if(store.getters['Ingredients/getIngredients'].length > 0) {
+  //         next();
+  //     } else {
+  //         await store.dispatch('Ingredients/downloadIngredients');
+  //         next();
+  //     }
+  // },
   computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Users', ['getLoggedUser'])), {}, {
     canNotCreate: function canNotCreate() {
       return this.getLoggedUser.role_id !== 6 && this.getLoggedUser.role_id !== 7;
@@ -223,18 +201,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     submit: function submit() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var originalIngredient, payload, counter;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context.prev = _context.next) {
               case 0:
-                _context2.prev = 0;
+                _context.prev = 0;
 
                 _this.$Progress.start();
 
                 if (!_this.ingredientSelected) {
-                  _context2.next = 15;
+                  _context.next = 15;
                   break;
                 }
 
@@ -254,26 +232,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
                 if (!(counter > 0)) {
-                  _context2.next = 12;
+                  _context.next = 12;
                   break;
                 }
 
-                _context2.next = 10;
+                _context.next = 10;
                 return _this.patchIngredient(payload);
 
               case 10:
-                _context2.next = 13;
+                _context.next = 13;
                 break;
 
               case 12:
                 console.log('nothing to update');
 
               case 13:
-                _context2.next = 18;
+                _context.next = 18;
                 break;
 
               case 15:
-                _context2.next = 17;
+                _context.next = 17;
                 return _this.postIngredient(_this.ingredient);
 
               case 17:
@@ -284,65 +262,65 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$Progress.finish();
 
-                _context2.next = 28;
+                _context.next = 28;
                 break;
 
               case 22:
-                _context2.prev = 22;
-                _context2.t0 = _context2["catch"](0);
+                _context.prev = 22;
+                _context.t0 = _context["catch"](0);
 
                 _this.$Progress.fail();
 
                 _this.waiting = false;
-                console.log(_context2.t0);
+                console.log(_context.t0);
 
-                if (_context2.t0.response.data.errors) {
-                  _this.$refs.observer.setErrors(_context2.t0.response.data.errors);
+                if (_context.t0.response.data.errors) {
+                  _this.$refs.observer.setErrors(_context.t0.response.data.errors);
                 }
 
               case 28:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
           }
-        }, _callee2, null, [[0, 22]]);
+        }, _callee, null, [[0, 22]]);
       }))();
     },
     removeIngredient: function removeIngredient(id) {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _context3.prev = 0;
+                _context2.prev = 0;
 
                 _this2.$Progress.start();
 
-                _context3.next = 4;
+                _context2.next = 4;
                 return _this2.deleteIngredient(id);
 
               case 4:
                 _this2.$Progress.finish();
 
-                _context3.next = 11;
+                _context2.next = 11;
                 break;
 
               case 7:
-                _context3.prev = 7;
-                _context3.t0 = _context3["catch"](0);
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
 
                 _this2.$Progress.fail();
 
-                console.log(_context3.t0);
+                console.log(_context2.t0);
 
               case 11:
               case "end":
-                return _context3.stop();
+                return _context2.stop();
             }
           }
-        }, _callee3, null, [[0, 7]]);
+        }, _callee2, null, [[0, 7]]);
       }))();
     }
   }),

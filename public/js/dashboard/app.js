@@ -1958,7 +1958,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return Promise.all([_this2.downloadRoles(), _this2.fetchCounties(), _this2.fetchCategories(), _this2.fetchUnits(), _this2.downloadLoggedUserData(), _this2.downloadIngredients()]);
+              return Promise.all([_this2.downloadRoles(), _this2.fetchCounties(), _this2.fetchCategories(), _this2.fetchUnits(), _this2.downloadLoggedUserData(), _this2.downloadIngredients(), _this2.downloadDiscounts()]);
 
             case 3:
               _this2.$Progress.finish();
@@ -1987,7 +1987,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee2, null, [[0, 7]]);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Counties', ['getCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Notification', ['getNotification'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Notification', ['getNotification'])), {}, {
     mobile: function mobile() {
       return this.$mq === 'sm' || this.$mq === 'md' || this.$mq === 'lg';
     },
@@ -2000,7 +2000,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loaded: false
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['downloadLoggedUserData'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['downloadLoggedUserData'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Ingredients', ['downloadIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Discounts', ['downloadDiscounts'])), {}, {
     downloadRoles: function downloadRoles() {
       var _this3 = this;
 
@@ -3596,11 +3596,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _api_discounts_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/discounts.api */ "./resources/js/dashboard/api/discounts.api.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -3635,25 +3638,180 @@ var actions = {
 
             case 4:
               response = _context.sent;
-              commit('SET_DISCOUNTS', response.data.data);
-              _context.next = 11;
+              console.log(response.data.data.discounts);
+              commit('SET_DISCOUNTS', response.data.data.discounts);
+              _context.next = 12;
               break;
 
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 8]]);
+      }, _callee, null, [[1, 9]]);
+    }))();
+  },
+  postDiscount: function postDiscount(_ref3, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref3.commit;
+              _context2.prev = 1;
+              _context2.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.postDiscount)(payload);
+
+            case 4:
+              response = _context2.sent;
+              payload.id = response.data;
+              commit('ADD_DISCOUNT', payload);
+              _context2.next = 12;
+              break;
+
+            case 9:
+              _context2.prev = 9;
+              _context2.t0 = _context2["catch"](1);
+              throw _context2.t0;
+
+            case 12:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 9]]);
+    }))();
+  },
+  patchDiscount: function patchDiscount(_ref4, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              commit = _ref4.commit;
+              _context3.prev = 1;
+              _context3.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.patchDiscount)(payload.discount);
+
+            case 4:
+              commit('PATCH_DISCOUNT', payload);
+              _context3.next = 10;
+              break;
+
+            case 7:
+              _context3.prev = 7;
+              _context3.t0 = _context3["catch"](1);
+              throw _context3.t0;
+
+            case 10:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[1, 7]]);
+    }))();
+  },
+  disableDiscount: function disableDiscount(_ref5, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              commit = _ref5.commit;
+              _context4.prev = 1;
+              _context4.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.disableDiscount)(payload.id);
+
+            case 4:
+              response = _context4.sent;
+              payload.deleted_at = response.data.deleted_at;
+              commit('DISABLE_DISCOUNT', payload);
+              _context4.next = 12;
+              break;
+
+            case 9:
+              _context4.prev = 9;
+              _context4.t0 = _context4["catch"](1);
+              throw _context4.t0;
+
+            case 12:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[1, 9]]);
+    }))();
+  },
+  deleteDiscount: function deleteDiscount(_ref6, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              commit = _ref6.commit;
+              _context5.prev = 1;
+              _context5.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.deleteDiscount)(payload.id);
+
+            case 4:
+              commit('DELETE_DISCOUNT', payload);
+              _context5.next = 10;
+              break;
+
+            case 7:
+              _context5.prev = 7;
+              _context5.t0 = _context5["catch"](1);
+              throw _context5.t0;
+
+            case 10:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 7]]);
+    }))();
+  },
+  restoreDiscount: function restoreDiscount(_ref7, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              commit = _ref7.commit;
+              _context6.prev = 1;
+              _context6.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.restoreDiscount)(payload.id);
+
+            case 4:
+              commit('RESTORE_DISCOUNT', payload);
+              _context6.next = 10;
+              break;
+
+            case 7:
+              _context6.prev = 7;
+              _context6.t0 = _context6["catch"](1);
+              throw _context6.t0;
+
+            case 10:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[1, 7]]);
     }))();
   }
 };
-var muttations = {
+var mutations = {
   RESET: function RESET(state) {
     var newState = initialState();
     Object.keys(newState).forEach(function (key) {
@@ -3662,6 +3820,41 @@ var muttations = {
   },
   SET_DISCOUNTS: function SET_DISCOUNTS(state, payload) {
     state.discounts = payload;
+  },
+  ADD_DISCOUNT: function ADD_DISCOUNT(state, payload) {
+    state.discounts.push(payload);
+  },
+  PATCH_DISCOUNT: function PATCH_DISCOUNT(state, payload) {
+    var vm = payload.vm;
+    var discount = payload.discount;
+
+    var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', discount.id]);
+
+    Object.keys(discount).forEach(function (key) {
+      vm.$set(state.discounts[discountIndex], key, discount[key]);
+    });
+  },
+  DISABLE_DISCOUNT: function DISABLE_DISCOUNT(state, payload) {
+    var vm = payload.vm;
+    var discountId = payload.id;
+    var deletedAt = payload.deleted_at;
+
+    var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', discountId]);
+
+    vm.$set(state.discounts[discountIndex], 'deleted_at', deletedAt);
+  },
+  DELETE_DISCOUNT: function DELETE_DISCOUNT(state, payload) {
+    var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', payload.id]);
+
+    state.discounts.splice(discountIndex, 1);
+  },
+  RESTORE_DISCOUNT: function RESTORE_DISCOUNT(state, payload) {
+    var vm = payload.vm;
+    var discountId = payload.id;
+
+    var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', discountId]);
+
+    vm.$set(state.discounts[discountId], 'deleted_at', null);
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3669,7 +3862,7 @@ var muttations = {
   state: state,
   getters: getters,
   actions: actions,
-  muttations: muttations
+  mutations: mutations
 });
 
 /***/ }),
@@ -33732,7 +33925,7 @@ var render = function() {
             staticClass:
               "text-sm text-coolGray-400 font-bold px-5 tracking-wider"
           },
-          [_vm._v("\n            Discounts\n        ")]
+          [_vm._v("\n            DISCOUNTS\n        ")]
         ),
         _vm._v(" "),
         _c("ul", { staticClass: "mt-1" }, [

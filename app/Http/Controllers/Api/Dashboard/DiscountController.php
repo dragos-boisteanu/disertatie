@@ -16,7 +16,7 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discounts = Discount::withTrashed()->all();
+        $discounts = Discount::withTrashed()->get();
 
         return new DiscountCollection($discounts);
     }
@@ -30,6 +30,8 @@ class DiscountController extends Controller
     public function store(Request $request)
     {
         $request->user()->can('create', Discount::class);
+
+        return $request->all();
     }
 
     /**

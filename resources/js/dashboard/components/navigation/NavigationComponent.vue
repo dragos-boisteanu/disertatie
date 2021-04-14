@@ -67,7 +67,7 @@
 
         <div class="pt-2">
             <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
-                Discounts
+                DISCOUNTS
             </div>
             <ul class="mt-1">
                 <li class="text-sm text-gray-300 hover:text-white tracking-wid">
