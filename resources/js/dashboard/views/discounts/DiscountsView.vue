@@ -231,7 +231,6 @@ import { mapActions, mapGetters } from 'vuex';
                         this.resetForm();
                     }
 
-
                     this.$Progress.finish();
                 } catch( error) {
                     this.$Progress.fail();
@@ -251,7 +250,6 @@ import { mapActions, mapGetters } from 'vuex';
                     await this.disableDiscount(payload);
 
                     this.discount = Object.assign({}, _find(this.getDiscounts, ['id', payload.id]));
-                    console.log(this.discount)
                     this.$Progress.finish();
 
                     this.openNotification({

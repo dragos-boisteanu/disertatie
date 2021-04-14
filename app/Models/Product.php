@@ -48,7 +48,7 @@ class Product extends Model
             $quantityArray = array();
             
             foreach($ingredients as $ingredient) {
-                $howManyProductsCanBeMadeFromThisIngredient =  floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
+                $howManyProductsCanBeMadeFromThisIngredient = floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
                 if($howManyProductsCanBeMadeFromThisIngredient === 0) {
                     $quantity = 0;
                     return $quantity;

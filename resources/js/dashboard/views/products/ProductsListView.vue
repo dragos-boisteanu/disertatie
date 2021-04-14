@@ -23,6 +23,12 @@
                 >
                     Refresh
                 </button>
+                <router-link
+                    :to="{name: 'AddProduct'}" 
+                    class="block w-full py-1 px-2 mt-2 text-center  text-base text-white bg-orange-600 rounded-sm active:shadow-inner active:bg-orange-500 md:w-auto md:mt-0" 
+                >
+                    Add product
+                </router-link>
             </div>
         
             <select  

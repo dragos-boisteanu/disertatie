@@ -22,6 +22,12 @@
                     @click="refreshUsersList">
                     Refresh
                 </button>
+                <router-link
+                    :to="{name: 'CreateUser'}" 
+                    class="block w-full py-1 px-2 mt-2 text-center text-base text-white bg-orange-600 rounded-sm active:shadow-inner active:bg-orange-500 md:w-auto md:mt-0" 
+                >
+                    Add user
+                </router-link>
             </div>
         
             <select  

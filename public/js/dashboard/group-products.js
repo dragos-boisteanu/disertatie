@@ -2224,6 +2224,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -20461,8 +20467,19 @@ var render = function() {
                   on: { click: _vm.refreshProducsList }
                 },
                 [_vm._v("\n                Refresh\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "block w-full py-1 px-2 mt-2 text-center  text-base text-white bg-orange-600 rounded-sm active:shadow-inner active:bg-orange-500 md:w-auto md:mt-0",
+                  attrs: { to: { name: "AddProduct" } }
+                },
+                [_vm._v("\n                Add product\n            ")]
               )
-            ]
+            ],
+            1
           ),
           _vm._v(" "),
           _c(
