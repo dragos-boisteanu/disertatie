@@ -308,7 +308,7 @@
                     });
 
                     if(counter > 0) {
-                        this.$Progressstart();
+                        this.$Progress.start();
 
                         const response = await this.updateProduct(payload);
                         if(response.data.image) {
@@ -322,7 +322,8 @@
                         this.$emit('updated', payload.product);
 
                         counter = 0;
-                        this.$Progress.fisnih();
+                        
+                        this.$Progress.finish();
                         this.close();
 
                         this.openNotification({

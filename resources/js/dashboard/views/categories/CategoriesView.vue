@@ -143,6 +143,7 @@
 
         methods: {
             ...mapActions('Categories', ['postCategory', 'patchCategory', 'deleteCategory']),
+            ...mapActions('Notification', ['openNotification']),
         
             selectCategory(id) {
                 this.category = Object.assign(this.category, _find(this.getCategories, ['id', id]));
@@ -169,8 +170,6 @@
                             }
                         }
 
-                        console.log(payload)
-
                         let counter = 0;
 
                         Object.keys(originalCategory).forEach(key => {
@@ -183,15 +182,30 @@
                         if(counter > 0) {
                             await this.patchCategory(payload);
 
+                            this.openNotification({
+                                type: 'ok',
+                                show: true,
+                                message: 'Category updated'
+                            })
+
                         } else {
-                            console.log('nothing to update')
-                            // notification
+                            this.openNotification({
+                                type: 'info',
+                                show: true,
+                                message: 'Nothing to update'
+                            })
                         }
 
                     } else {
                         await this.postCategory(this.category);
                         
                         this.resetForm();
+
+                        this.openNotification({
+                            type: 'ok',
+                            show: true,
+                            message: 'Category added'
+                        })
                     }
 
                     this.waiting = false;
@@ -218,6 +232,11 @@
                     await this.deleteCategory(id);
 
                     this.$Progress.finish();
+                    this.openNotification({
+                        type: 'ok',
+                        show: true,
+                        message: 'Category deleted'
+                    })
                 } catch ( error ) {
                     this.$Progress.fail();
                     console.log(error)

@@ -954,7 +954,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                   break;
                 }
 
-                _this.$Progressstart();
+                _this.$Progress.start();
 
                 _context.next = 8;
                 return _this.updateProduct(payload);
@@ -974,7 +974,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
 
                 counter = 0;
 
-                _this.$Progress.fisnih();
+                _this.$Progress.finish();
 
                 _this.close();
 

@@ -164,7 +164,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Categories', ['postCategory', 'patchCategory', 'deleteCategory'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Categories', ['postCategory', 'patchCategory', 'deleteCategory'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
     selectCategory: function selectCategory(id) {
       this.category = Object.assign(this.category, lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.getCategories, ['id', id]));
       this.categorySelected = true;
@@ -199,7 +199,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     id: originalCategory.id
                   }
                 };
-                console.log(payload);
                 counter = 0;
                 Object.keys(originalCategory).forEach(function (key) {
                   if (originalCategory[key] !== _this.category[key]) {
@@ -213,18 +212,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   break;
                 }
 
-                _context.next = 12;
+                _context.next = 11;
                 return _this.patchCategory(payload);
 
-              case 12:
+              case 11:
+                _this.openNotification({
+                  type: 'ok',
+                  show: true,
+                  message: 'Category updated'
+                });
+
                 _context.next = 15;
                 break;
 
               case 14:
-                console.log('nothing to update'); // notification
+                _this.openNotification({
+                  type: 'info',
+                  show: true,
+                  message: 'Nothing to update'
+                });
 
               case 15:
-                _context.next = 20;
+                _context.next = 21;
                 break;
 
               case 17:
@@ -234,16 +243,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 19:
                 _this.resetForm();
 
-              case 20:
+                _this.openNotification({
+                  type: 'ok',
+                  show: true,
+                  message: 'Category added'
+                });
+
+              case 21:
                 _this.waiting = false;
 
                 _this.$Progress.finish();
 
-                _context.next = 30;
+                _context.next = 31;
                 break;
 
-              case 24:
-                _context.prev = 24;
+              case 25:
+                _context.prev = 25;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
@@ -256,12 +271,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 } // notificaiton
 
 
-              case 30:
+              case 31:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 24]]);
+        }, _callee, null, [[0, 25]]);
       }))();
     },
     removeCategory: function removeCategory(id) {
@@ -282,23 +297,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 4:
                 _this2.$Progress.finish();
 
-                _context2.next = 11;
+                _this2.openNotification({
+                  type: 'ok',
+                  show: true,
+                  message: 'Category deleted'
+                });
+
+                _context2.next = 12;
                 break;
 
-              case 7:
-                _context2.prev = 7;
+              case 8:
+                _context2.prev = 8;
                 _context2.t0 = _context2["catch"](0);
 
                 _this2.$Progress.fail();
 
                 console.log(_context2.t0);
 
-              case 11:
+              case 12:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 7]]);
+        }, _callee2, null, [[0, 8]]);
       }))();
     },
     resetForm: function resetForm() {
