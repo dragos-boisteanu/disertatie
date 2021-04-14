@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\DiscountStoreRequest;
-use App\Http\Resources\DiscountCollection;
+use Carbon\Carbon;
 use App\Models\Discount;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\DiscountCollection;
+use App\Http\Requests\DiscountStoreRequest;
 
 class DiscountController extends Controller
 {
@@ -60,14 +61,18 @@ class DiscountController extends Controller
     public function destroy(Request $request, $id)
     {
         $request->user()->can('forceDelete', Discount::class);
+
+        Discount::withTrashed()->findOrFail($id)->forceDelete();
+
+        return response()->json(null, 200);
     }
 
     public function disable(Request $request, $id)
     {
         $request->user()->can('delete', Discount::class);
 
-        Discount::findOrFail($id)->delete();
-        return response()->json(null, 200);
+        Discount::withTrashed()->findOrFail($id)->delete();
+        return response()->json(['deletedAt' => Carbon::now()], 200);
     }
 
     public function restore(Request $request, $id)

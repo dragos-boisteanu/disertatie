@@ -22,7 +22,6 @@ const actions = {
     async downloadDiscounts({commit}) {
         try {
             const response = await downloadDiscounts();
-            console.log(response.data.data.discounts)
             commit('SET_DISCOUNTS', response.data.data.discounts)
         } catch (error) {
             throw error;
@@ -51,17 +50,17 @@ const actions = {
     async disableDiscount({commit}, payload) {
         try {
             const response = await disableDiscount(payload.id);
-            payload.deleted_at = response.data.deleted_at;
+            payload.deletedAt = response.data.deletedAt;
             commit('DISABLE_DISCOUNT', payload);
         } catch ( error ) {
             throw error;
         }
     },
 
-    async deleteDiscount({commit}, payload) {
+    async deleteDiscount({commit}, id) {
         try {
-            await deleteDiscount(payload.id);
-            commit('DELETE_DISCOUNT', payload);
+            await deleteDiscount(id);
+            commit('DELETE_DISCOUNT', id);
         } catch (error) {
             throw error
         }

@@ -3638,22 +3638,21 @@ var actions = {
 
             case 4:
               response = _context.sent;
-              console.log(response.data.data.discounts);
               commit('SET_DISCOUNTS', response.data.data.discounts);
-              _context.next = 12;
+              _context.next = 11;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 8:
+              _context.prev = 8;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 12:
+            case 11:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 9]]);
+      }, _callee, null, [[1, 8]]);
     }))();
   },
   postDiscount: function postDiscount(_ref3, payload) {
@@ -3732,7 +3731,7 @@ var actions = {
 
             case 4:
               response = _context4.sent;
-              payload.deleted_at = response.data.deleted_at;
+              payload.deletedAt = response.data.deletedAt;
               commit('DISABLE_DISCOUNT', payload);
               _context4.next = 12;
               break;
@@ -3750,7 +3749,7 @@ var actions = {
       }, _callee4, null, [[1, 9]]);
     }))();
   },
-  deleteDiscount: function deleteDiscount(_ref6, payload) {
+  deleteDiscount: function deleteDiscount(_ref6, id) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
@@ -3760,10 +3759,10 @@ var actions = {
               commit = _ref6.commit;
               _context5.prev = 1;
               _context5.next = 4;
-              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.deleteDiscount)(payload.id);
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.deleteDiscount)(id);
 
             case 4:
-              commit('DELETE_DISCOUNT', payload);
+              commit('DELETE_DISCOUNT', id);
               _context5.next = 10;
               break;
 
