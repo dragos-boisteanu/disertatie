@@ -491,17 +491,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     var routerQuery = this.$route.query;
     Object.keys(routerQuery).forEach(function (key) {
-      if (routerQuery[key].length > 0) {
-        if (key === 'categories') {
-          var _this$filterData$key;
+      if (key === 'categories') {
+        var _this$filterData$key;
 
-          _this.filterData[key] = [];
+        _this.filterData[key] = [];
 
-          (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
-        } else {
-          _this.filterData[key] = routerQuery[key];
-        }
+        (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
       }
+
+      _this.filterData[key] = routerQuery[key];
     });
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Categories', ['getCategories'])),
@@ -516,7 +514,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         priceStart: '',
         priceEnd: '',
         quantityStart: '',
-        quantityEnd: ''
+        quantityEnd: '',
+        orderBy: ''
       }
     };
   },
@@ -532,20 +531,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               _context.prev = 0;
               query = {};
               Object.keys(this.filterData).forEach(function (key) {
-                if (_this2.filterData[key].length > 0) {
+                if (_this2.filterData[key] !== '') {
                   query[key] = _this2.filterData[key];
                 }
               });
-              _context.next = 5;
+              query.page = 1;
+              _context.next = 6;
               return this.fetchProducts(query);
 
-            case 5:
+            case 6:
               this.setFilteredState(true);
-
-              if (this.$route.query['page']) {
-                query.page = 1;
-              }
-
               this.$router.replace({
                 name: 'Products',
                 query: _objectSpread({}, query)

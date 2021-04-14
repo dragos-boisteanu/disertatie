@@ -307,8 +307,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     var routerQuery = this.$route.query;
     Object.keys(routerQuery).forEach(function (key) {
-      console.log(routerQuery[key]);
-
       if (key === 'roles') {
         var _this$filterData$key;
 
@@ -319,7 +317,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       _this.filterData[key] = routerQuery[key];
     });
-    console.log(this.filterData);
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])),
   data: function data() {
@@ -359,32 +356,31 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 }
               });
               query.page = 1;
-              console.log(query);
-              _context.next = 7;
+              _context.next = 6;
               return this.fetchUsers(query);
 
-            case 7:
+            case 6:
               this.setFilteredState(true);
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
               });
               this.$Progress.finish();
-              _context.next = 16;
+              _context.next = 15;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](0);
               this.$Progress.fail();
               console.log(_context.t0);
 
-            case 16:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 12]]);
+      }, _callee, this, [[0, 11]]);
     })), 500),
     close: function close() {
       this.$emit('closed');

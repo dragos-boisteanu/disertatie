@@ -164,17 +164,13 @@
             const routerQuery = this.$route.query;
 
             Object.keys(routerQuery).forEach(key => {
-                console.log(routerQuery[key]);
                 if(key === 'roles') {
                     this.filterData[key] = [];
                     this.filterData[key].push(...routerQuery[key])
                 } 
                  
                 this.filterData[key] = routerQuery[key];
-                
             })
-
-            console.log(this.filterData);
         },
 
         computed: {
@@ -220,8 +216,6 @@
                     })
 
                     query.page = 1;
-                    
-                    console.log(query)
                     
                     await this.fetchUsers(query);
 

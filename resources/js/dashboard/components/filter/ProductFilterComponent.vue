@@ -164,14 +164,12 @@
             const routerQuery = this.$route.query;
 
             Object.keys(routerQuery).forEach(key => {
-                if(routerQuery[key].length > 0) {
-                    if(key === 'categories') {
-                        this.filterData[key] = [];
-                        this.filterData[key].push(...routerQuery[key])
-                    } else {
-                        this.filterData[key] = routerQuery[key];
-                    }
-                }
+                if(key === 'categories') {
+                    this.filterData[key] = [];
+                    this.filterData[key].push(...routerQuery[key])
+                } 
+                 
+                this.filterData[key] = routerQuery[key];
             })
         },
 
@@ -190,7 +188,8 @@
                     priceStart: '',
                     priceEnd: '',
                     quantityStart: '',
-                    quantityEnd:''
+                    quantityEnd:'',
+                    orderBy: ''
                 }
             }
         },
@@ -203,17 +202,16 @@
                     const query = {}
 
                     Object.keys(this.filterData).forEach(key => {
-                        if(this.filterData[key].length > 0) {
+                        if(this.filterData[key] !== '' ) {
                             query[key] = this.filterData[key];
                         }
                     })
 
-                    await this.fetchProducts(query);
-                    this.setFilteredState(true);
+                    query.page = 1;
 
-                    if(this.$route.query['page']) {
-                        query.page = 1
-                    }
+                    await this.fetchProducts(query);
+
+                    this.setFilteredState(true);
                                        
                     this.$router.replace({name:'Products', query: {...query}});
                   
