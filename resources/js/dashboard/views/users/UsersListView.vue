@@ -139,18 +139,6 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
-                // if(store.getters['Users/getUsers'].length > 0) {
-                //     if(store.getters['Users/getFilteredState']) {
-                //         await store.dispatch('Users/fetchUsers');  
-                //         store.dispatch('Users/setFilteredState', false);
-                //         next();
-                //     }else {
-                //         next();
-                //     }
-                // }else {
-                //     await store.dispatch('Users/fetchUsers');
-                //     next();
-                // }
                 await store.dispatch('Users/fetchUsers');
                 next();
             } else {
@@ -166,7 +154,7 @@
                 this.orderBy = 14;
             }
 
-            this.order()
+            this.sortUsersList(this.orderBy);
         },
 
         computed: {
@@ -185,7 +173,7 @@
         },
 
         methods: { 
-            ...mapActions('Users', ['refreshUsers', 'fetchMoreUsers', 'sortUsersList', 'setFilteredState']),
+            ...mapActions('Users', ['fetchUsers', 'refreshUsers', 'fetchMoreUsers', 'sortUsersList', 'setFilteredState']),
             ...mapActions('Notification', ['openNotification']),
 
             async loadMoreUsers() {
@@ -197,15 +185,8 @@
                     query.orderBy = this.orderBy
         
                     await this.fetchMoreUsers(query)
-
-                    this.order();
                     
                     this.$Progress.finish()
-                    // this.openNotification({
-                    //     type:'ok',
-                    //     message: 'Done',
-                    //     show: true
-                    // })
                 } catch ( error ) {
                     this.$Progress.fail()
                     console.log(error)
@@ -215,6 +196,7 @@
             async refreshUsersList() {
                 try {
                     this.$Progress.start()
+
                     if(Object.keys(this.$route.query).length > 0) { 
                         this.$router.replace({name:'Users', query: {}});
                     }
@@ -226,19 +208,32 @@
                     this.orderBy = 14;
                     
                     this.$Progress.finish()
-                    // this.openNotification({
-                    //     type:'ok',
-                    //     message: 'Refresh complete',
-                    //     show: true
-                    // })
+                    this.openNotification({
+                        type:'ok',
+                        message: 'Users list refresed',
+                        show: true
+                    })
                 } catch ( error ) {
                     this.$Progress.fail()
                     console.log(error);
                 }
             },
 
-            order() {
-                this.sortUsersList(this.orderBy);
+            async order() {
+                try {
+                    this.$Progress.start()
+
+                    const query = {
+                        orderBy: this.orderBy
+                    }
+                    
+                    await this.fetchUsers(query)
+
+                    this.$Progress.finish()
+                } catch ( error ) {
+                    this.$Progress.fail();
+                    console.log(error);
+                }
             },
 
             toggleFilterState() {
