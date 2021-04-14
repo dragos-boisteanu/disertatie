@@ -309,8 +309,8 @@
 
         methods: {
             ...mapActions('Products', ['addProduct', 'getProductByBarcode']),
-            ...mapActions('Ingredients', ['downloadIngredients']),
-            
+            ...mapActions('Notification', ['openNotification']),
+
             async submit() {
                 try {
                     this.waiting = true;
@@ -427,15 +427,24 @@
             },
 
             selectIngredient(id) {
-                const selectedIngredient = _find(this.foundIngredients, ['id', id]);
-                const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-                
-                selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+                const productIngredient = _find(this.product.ingredients, ['id', id]);
 
-                this.product.ingredients.push(selectedIngredient);
-                this.ingredientInput = '';
+                if(productIngredient) {
+                    this.openNotification({
+                        type: 'info',
+                        show: true,
+                        message: 'The product already has this ingredient'
+                    })
+                }else {
+                    const selectedIngredient = _find(this.foundIngredients, ['id', id]);
+                    const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
+                    
+                    selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+                    this.product.ingredients.push(selectedIngredient);
+                    this.ingredientInput = '';
 
-                this.foundIngredients = [];
+                    this.foundIngredients = [];
+                }
             },
 
             removeIngredient(id) {

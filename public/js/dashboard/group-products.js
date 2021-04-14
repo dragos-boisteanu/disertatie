@@ -918,7 +918,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Products', ['updateProduct'])), (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Products', ['updateProduct'])), (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Notification', ['openNotification'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -950,14 +950,16 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                 });
 
                 if (!(counter > 0)) {
-                  _context.next = 15;
+                  _context.next = 18;
                   break;
                 }
 
-                _context.next = 7;
+                _this.$Progressstart();
+
+                _context.next = 8;
                 return _this.updateProduct(payload);
 
-              case 7:
+              case 8:
                 response = _context.sent;
 
                 if (response.data.image) {
@@ -972,30 +974,41 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
 
                 counter = 0;
 
-                _this.close(); // notification
+                _this.$Progress.fisnih();
 
+                _this.close();
 
-                _context.next = 16;
-                break;
+                _this.openNotification({
+                  type: 'ok',
+                  show: true,
+                  message: 'Product updated'
+                });
 
-              case 15:
-                console.log('Nothing to update'); // notification
-
-              case 16:
-                _context.next = 21;
+                _context.next = 19;
                 break;
 
               case 18:
-                _context.prev = 18;
+                _this.openNotification({
+                  type: 'info',
+                  show: true,
+                  message: 'Nothing to update'
+                });
+
+              case 19:
+                _context.next = 24;
+                break;
+
+              case 21:
+                _context.prev = 21;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
-              case 21:
+              case 24:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 18]]);
+        }, _callee, null, [[0, 21]]);
       }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {
@@ -1084,7 +1097,11 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
       var localProductIngredients = lodash_find__WEBPACK_IMPORTED_MODULE_6___default()(this.localProduct.ingredients, ['id', id]);
 
       if (localProductIngredients) {
-        console.log('ingredient already exists');
+        this.openNotification({
+          type: 'info',
+          show: true,
+          message: 'The product already has this ingredient'
+        });
       } else {
         var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
         selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
@@ -1534,7 +1551,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Products', ['addProduct', 'getProductByBarcode'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Products', ['addProduct', 'getProductByBarcode'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Notification', ['openNotification'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -1700,13 +1717,23 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
       }
     },
     selectIngredient: function selectIngredient(id) {
-      var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_3___default()(this.foundIngredients, ['id', id]);
+      var productIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_3___default()(this.product.ingredients, ['id', id]);
 
-      var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-      selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-      this.product.ingredients.push(selectedIngredient);
-      this.ingredientInput = '';
-      this.foundIngredients = [];
+      if (productIngredient) {
+        this.openNotification({
+          type: 'info',
+          show: true,
+          message: 'The product already has this ingredient'
+        });
+      } else {
+        var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_3___default()(this.foundIngredients, ['id', id]);
+
+        var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
+        selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+        this.product.ingredients.push(selectedIngredient);
+        this.ingredientInput = '';
+        this.foundIngredients = [];
+      }
     },
     removeIngredient: function removeIngredient(id) {
       var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_5___default()(this.product.ingredients, ['id', id]);

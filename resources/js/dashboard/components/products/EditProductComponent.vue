@@ -278,7 +278,7 @@
 
         methods: {
             ...mapActions('Products', ['updateProduct']),
-            ...mapActions('Ingredients', ['downloadIngredients']),
+            ...mapActions('Notification', ['openNotification']),
 
 
             async submit() {
@@ -308,6 +308,8 @@
                     });
 
                     if(counter > 0) {
+                        this.$Progressstart();
+
                         const response = await this.updateProduct(payload);
                         if(response.data.image) {
                             payload.product.image = response.data.image;
@@ -320,11 +322,20 @@
                         this.$emit('updated', payload.product);
 
                         counter = 0;
+                        this.$Progress.fisnih();
                         this.close();
-                        // notification
+
+                        this.openNotification({
+                            type: 'ok',
+                            show: true,
+                            message: 'Product updated'
+                        })
                     } else {
-                        console.log('Nothing to update');
-                        // notification
+                        this.openNotification({
+                            type: 'info',
+                            show: true,
+                            message: 'Nothing to update'
+                        })
                     }
                 } catch ( error ) {
                     console.log(error);
@@ -391,7 +402,11 @@
                 const localProductIngredients = _find(this.localProduct.ingredients, ['id', id]);
 
                 if(localProductIngredients) {
-                    console.log('ingredient already exists');
+                    this.openNotification({
+                        type: 'info',
+                        show: true,
+                        message: 'The product already has this ingredient'
+                    })
                 } else {
                     const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
                 
