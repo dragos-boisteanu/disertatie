@@ -3696,25 +3696,26 @@ var actions = {
             case 0:
               commit = _ref4.commit;
               _context3.prev = 1;
-              _context3.next = 4;
+              console.log(payload.discount);
+              _context3.next = 5;
               return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.patchDiscount)(payload.discount);
 
-            case 4:
+            case 5:
               commit('PATCH_DISCOUNT', payload);
-              _context3.next = 10;
+              _context3.next = 11;
               break;
 
-            case 7:
-              _context3.prev = 7;
+            case 8:
+              _context3.prev = 8;
               _context3.t0 = _context3["catch"](1);
               throw _context3.t0;
 
-            case 10:
+            case 11:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[1, 7]]);
+      }, _callee3, null, [[1, 8]]);
     }))();
   },
   disableDiscount: function disableDiscount(_ref5, payload) {

@@ -210,6 +210,7 @@ import { mapActions, mapGetters } from 'vuex';
                         });
 
                         if(counter > 0) {
+                            payload.discount.id = this.discount.id;
                             await this.patchDiscount(payload);
 
                             this.openNotification({

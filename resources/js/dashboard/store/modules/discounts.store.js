@@ -40,6 +40,7 @@ const actions = {
 
     async patchDiscount({commit}, payload) {
         try {
+            console.log(payload.discount)
             await patchDiscount(payload.discount);
             commit('PATCH_DISCOUNT', payload);
         } catch ( error ) {

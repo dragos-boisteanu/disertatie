@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DiscountCollection;
 use App\Http\Requests\DiscountStoreRequest;
+use App\Http\Requests\DiscountUpdateRequest;
 
 class DiscountController extends Controller
 {
@@ -47,9 +48,15 @@ class DiscountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DiscountUpdateRequest $request, $id)
     {
         $request->user()->can('update', Discount::class);
+
+        $discount = Discount::withTrashed()->findOrFail($id);
+
+        $discount->update($request->validated());
+
+        return response()->json(null, 200);
     }
 
     /**
