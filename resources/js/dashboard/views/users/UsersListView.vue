@@ -223,11 +223,13 @@
                 try {
                     this.$Progress.start()
 
-                    const query = {
-                        orderBy: this.orderBy
-                    }
+                    const query = Object.assign({}, this.$route.query);
+                 
+                    query.orderBy = this.orderBy;
                     
                     await this.fetchUsers(query)
+
+                    this.$router.replace({name:'Users', query});
 
                     this.$Progress.finish()
                 } catch ( error ) {

@@ -307,18 +307,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     var routerQuery = this.$route.query;
     Object.keys(routerQuery).forEach(function (key) {
-      if (routerQuery[key].length > 0) {
-        if (key === 'roles') {
-          var _this$filterData$key;
+      console.log(routerQuery[key]);
 
-          _this.filterData[key] = [];
+      if (key === 'roles') {
+        var _this$filterData$key;
 
-          (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
-        } else {
-          _this.filterData[key] = routerQuery[key];
-        }
+        _this.filterData[key] = [];
+
+        (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
       }
+
+      _this.filterData[key] = routerQuery[key];
     });
+    console.log(this.filterData);
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])),
   data: function data() {
@@ -332,7 +333,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         phoneNumber: '',
         verified: '',
         fromDate: '',
-        toDate: ''
+        toDate: '',
+        orderBy: ''
       }
     };
   },
@@ -352,35 +354,37 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               _context.prev = 0;
               query = {};
               Object.keys(this.filterData).forEach(function (key) {
-                if (_this2.filterData[key].length > 0) {
+                if (_this2.filterData[key] !== '') {
                   query[key] = _this2.filterData[key];
                 }
               });
-              _context.next = 5;
+              query.page = 1;
+              console.log(query);
+              _context.next = 7;
               return this.fetchUsers(query);
 
-            case 5:
+            case 7:
               this.setFilteredState(true);
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
               });
               this.$Progress.finish();
-              _context.next = 14;
+              _context.next = 16;
               break;
 
-            case 10:
-              _context.prev = 10;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](0);
               this.$Progress.fail();
               console.log(_context.t0);
 
-            case 14:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 10]]);
+      }, _callee, this, [[0, 12]]);
     })), 500),
     close: function close() {
       this.$emit('closed');
@@ -2028,32 +2032,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this3.$Progress.start();
 
-                query = {
-                  orderBy: _this3.orderBy
-                };
-                _context4.next = 5;
+                query = Object.assign({}, _this3.$route.query);
+                query.orderBy = _this3.orderBy;
+                _context4.next = 6;
                 return _this3.fetchUsers(query);
 
-              case 5:
+              case 6:
+                _this3.$router.replace({
+                  name: 'Users',
+                  query: query
+                });
+
                 _this3.$Progress.finish();
 
-                _context4.next = 12;
+                _context4.next = 14;
                 break;
 
-              case 8:
-                _context4.prev = 8;
+              case 10:
+                _context4.prev = 10;
                 _context4.t0 = _context4["catch"](0);
 
                 _this3.$Progress.fail();
 
                 console.log(_context4.t0);
 
-              case 12:
+              case 14:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, null, [[0, 8]]);
+        }, _callee4, null, [[0, 10]]);
       }))();
     },
     toggleFilterState: function toggleFilterState() {
