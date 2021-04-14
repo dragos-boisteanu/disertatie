@@ -24,20 +24,9 @@ class DiscountUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => ['required'],
-            'percent' => ['required', 'numeric'],
-            'starts_at' => ['required', 'date'],
-            'ends_at' => ['required', 'date'],
-            'user_id' => ['required', 'numeric', 'exists:users, id'],
+            'code' => ['sometimes'],
+            'value' => ['sometimes', 'numeric'],
         ];
     }
 
-    public function attributes()
-    {
-        return [
-            'starts_at' => 'starts at',
-            'ends_at' => 'ends at',
-            'user_id' => 'created by',
-        ];
-    }
 }

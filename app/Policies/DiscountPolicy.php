@@ -35,7 +35,7 @@ class DiscountPolicy
      * @param  \App\Models\Discount  $discount
      * @return mixed
      */
-    public function update(User $user, Discount $discount)
+    public function update(User $user)
     {
         if( $user->role_id === 6 || $user->role_id === 7) {
             Response::allow();
@@ -51,7 +51,7 @@ class DiscountPolicy
      * @param  \App\Models\Discount  $discount
      * @return mixed
      */
-    public function delete(User $user, Discount $discount)
+    public function delete(User $user)
     {
         if( $user->role_id === 7) {
             Response::allow();
@@ -67,7 +67,7 @@ class DiscountPolicy
      * @param  \App\Models\Discount  $discount
      * @return mixed
      */
-    public function restore(User $user, Discount $discount)
+    public function restore(User $user)
     {
         if( $user->role_id === 7) {
             Response::allow();
@@ -83,7 +83,7 @@ class DiscountPolicy
      * @param  \App\Models\Discount  $discount
      * @return mixed
      */
-    public function forceDelete(User $user, Discount $discount)
+    public function forceDelete(User $user)
     {
         if( $user->role_id === 7 ) {
             Response::allow();

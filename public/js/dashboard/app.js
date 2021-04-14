@@ -3837,11 +3837,11 @@ var mutations = {
   DISABLE_DISCOUNT: function DISABLE_DISCOUNT(state, payload) {
     var vm = payload.vm;
     var discountId = payload.id;
-    var deletedAt = payload.deleted_at;
+    var deletedAt = payload.deletedAt;
 
     var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', discountId]);
 
-    vm.$set(state.discounts[discountIndex], 'deleted_at', deletedAt);
+    vm.$set(state.discounts[discountIndex], 'deletedAt', deletedAt);
   },
   DELETE_DISCOUNT: function DELETE_DISCOUNT(state, payload) {
     var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', payload.id]);
@@ -3854,7 +3854,7 @@ var mutations = {
 
     var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', discountId]);
 
-    vm.$set(state.discounts[discountId], 'deleted_at', null);
+    vm.$set(state.discounts[discountIndex], 'deletedAt', null);
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -33010,7 +33010,7 @@ var render = function() {
     "div",
     {
       staticClass:
-        "fixed px-4 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-40 lg:bottom-auto",
+        "fixed px-4 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-36 lg:bottom-auto",
       class: _vm.type,
       staticStyle: { "min-width": "100px" }
     },

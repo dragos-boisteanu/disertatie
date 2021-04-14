@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed px-4 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-40 lg:bottom-auto" style="min-width: 100px" v-bind:class="type">
+    <div class="fixed px-4 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-36 lg:bottom-auto" style="min-width: 100px" v-bind:class="type">
         <span class="text-sm text-white">
             {{ notification.message}}
         </span>

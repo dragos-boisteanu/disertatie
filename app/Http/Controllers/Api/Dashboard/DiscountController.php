@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DiscountStoreRequest;
 use App\Http\Resources\DiscountCollection;
 use App\Models\Discount;
 use Illuminate\Http\Request;
@@ -27,24 +28,17 @@ class DiscountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DiscountStoreRequest $request)
     {
         $request->user()->can('create', Discount::class);
 
-        return $request->all();
-    }
+        $input = $request->validated();
+        $input['user_id'] = $request->user()->id;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $discount = Discount::create($input);
 
+        return $discount->id;
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -71,11 +65,18 @@ class DiscountController extends Controller
     public function disable(Request $request, $id)
     {
         $request->user()->can('delete', Discount::class);
+
+        Discount::findOrFail($id)->delete();
+        return response()->json(null, 200);
     }
 
     public function restore(Request $request, $id)
     {
         $request->user()->can('restore', Discount::class);
+
+        Discount::withTrashed()->findOrFail($id)->restore();
+
+        return response()->json(null, 200);
     }
 
 }

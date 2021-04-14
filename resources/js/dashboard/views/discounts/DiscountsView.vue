@@ -17,20 +17,23 @@
                             <span>{{ index + 1 }}.</span>
                             <span>{{ discount.code }}</span>
                             <span>{{ discount.value }} %</span>
+                            
                         </div>
                         <div>
-                            <button @click="removeDiscount(discount.id)">X</button>
+                            <button @click="removeDiscount(discount.id)" v-if="discount.deletedAt === null">X</button>
+                            <span v-else>
+                                DISABLED
+                            </span>
                         </div>
                     </li>
                 </ul>
             </div>
-      
 
             <div class="mt-4 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 md:mt-0 lg:flex-1">
                 <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
                     <form @submit.prevent="handleSubmit(submit)" class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
                         <h2 class="mb-5 text-xl font-semibold">
-                            Category
+                            Discount
                         </h2> 
 
                         <div class="w-full flex-1 flex items-center gap-x-4">
@@ -46,7 +49,7 @@
                                     id="name"
                                     name="name" 
                                     type="text" 
-                                    v-model="discount.name" 
+                                    v-model="discount.code" 
                                     :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
@@ -80,6 +83,20 @@
                                 class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
                             >                       
                                 Clear selection
+                            </button>
+                            <button 
+                                v-if="discount.deletedAt"
+                                @click.prevent="callRestoreDiscount"
+                                :disabled="waiting"  
+                                class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                            >
+                                <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>
+                                    Restore
+                                </span>
                             </button>
                             <button 
                                 type="submit"
@@ -120,8 +137,9 @@ import { mapActions, mapGetters } from 'vuex';
                 waiting: false,
                 discountSelected: false,
                 discount: {
-                    name: '',
-                    value: '',              
+                    code: '',
+                    value: '',
+                    deletedAt: ''              
                 },
             }
         },
@@ -144,7 +162,7 @@ import { mapActions, mapGetters } from 'vuex';
 
             resetForm() {
                 this.$refs.observer.reset();
-                this.discount=  {
+                this.discount = {
                     name: '',
                     value: '',              
                 }
@@ -205,6 +223,7 @@ import { mapActions, mapGetters } from 'vuex';
                 try {
                     this.$Progress.start();
 
+                        console.log(this)
                     const payload = {
                         id,
                         vm: this
@@ -223,6 +242,29 @@ import { mapActions, mapGetters } from 'vuex';
                     this.$Progress.fail();
 
                     console.log(error);
+                }
+            },
+
+            async callRestoreDiscount() {
+                try {
+                    this.$Progress.start();
+
+                    const payload = {
+                        id: this.discount.id,
+                        vm: this
+                    }
+
+                    await this.restoreDiscount(payload);
+
+                    this.$Progress.finish();
+                    this.openNotification({
+                        type: 'ok',
+                        show: true,
+                        message: 'Discount restored'
+                    })
+                } catch (error) {
+                    this.$Progress.fail();
+                    console.log(error)
                 }
             }
         },

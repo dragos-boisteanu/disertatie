@@ -13,6 +13,12 @@ class Discount extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'code',
+        'value',
+        'user_id'
+    ];
+
     public function user() 
     {
         return $this->belongsTo('App\Models\User');

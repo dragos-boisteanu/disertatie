@@ -106,10 +106,10 @@ const mutations = {
     DISABLE_DISCOUNT(state, payload) {
         const vm = payload.vm;
         const discountId = payload.id;
-        const deletedAt = payload.deleted_at;
+        const deletedAt = payload.deletedAt;
         const discountIndex = _findIndex(state.discounts, ['id', discountId]);
 
-        vm.$set(state.discounts[discountIndex], 'deleted_at', deletedAt);
+        vm.$set(state.discounts[discountIndex], 'deletedAt', deletedAt);
     },
 
     DELETE_DISCOUNT(state, payload) {
@@ -122,7 +122,7 @@ const mutations = {
         const discountId = payload.id;
         const discountIndex = _findIndex(state.discounts, ['id', discountId]);
 
-        vm.$set(state.discounts[discountId], 'deleted_at', null);
+        vm.$set(state.discounts[discountIndex], 'deletedAt', null);
     }
 }
 

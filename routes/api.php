@@ -25,19 +25,30 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('ingredients', 'IngredientController')->only('index', 'store', 'update', 'destroy');
     Route::apiResource('stocks', 'StockController')->only('update');
     Route::apiResource('discounts', 'DiscountController')->only('index', 'store', 'update', 'destroy');
+   
+    Route::group(['prefix'=>'users'], function() {
+        Route::delete('{id}/disable', 'UserController@disable');
+        Route::post('{id}/restore', 'UserController@restore');
+    });
+
+  
+    Route::group(['prefix'=>'products'], function() {
+        Route::delete('{id}/disable', 'ProductController@disable');
+        Route::post('{id}/restore', 'ProductController@restore');
+        
+        Route::get('/check-barcode/{barcode}', 'ProductController@getProductByBarcode');
+    });
 
     Route::group(['prefix'=>'stocks'], function() {
         Route::get('products/{barcode}', 'StockController@getProductStockDetailsByBarcode');
         Route::get('ingredients/{id}', 'StockController@getIngredientStockDetailsById');
     });
 
-    Route::delete('users/{id}/disable', 'UserController@disable');
-    Route::post('users/{id}/restore', 'UserController@restore');
+    Route::group(['prefix'=>'discounts'], function() {
+        Route::delete('{id}/disable', 'DiscountController@disable');
+        Route::post('{id}/restore', 'DiscountController@restore');
+    });
 
-    Route::delete('products/{id}/disable', 'ProductController@disable');
-    Route::post('products/{id}/restore', 'ProductController@restore');
-
-    Route::get('/products/check-barcode/{barcode}', 'ProductController@getProductByBarcode');
 
     Route::apiResource('images', 'FileController')->only('store', 'destroy');
        
