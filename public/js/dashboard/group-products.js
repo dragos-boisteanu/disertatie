@@ -1108,8 +1108,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
         this.localProduct.ingredients.push(selectedIngredient);
         this.ingredientInput = '';
         this.foundIngredients = [];
-        console.log(this.product.ingredients);
-        console.log(this.localProduct.ingredients);
       }
     },
     removeIngredient: function removeIngredient(id) {
@@ -1562,6 +1560,9 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
+
+                _this.$Progress.start();
+
                 _this.waiting = true;
                 payload = {};
 
@@ -1578,10 +1579,10 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
                   delete payload.hasIngredients;
                 }
 
-                _context.next = 7;
+                _context.next = 8;
                 return _this.addProduct(payload);
 
-              case 7:
+              case 8:
                 _this.product = {
                   barcode: '',
                   name: '',
@@ -1595,13 +1596,23 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
                   ingredients: []
                 }, _this.$refs.observer.reset();
                 _this.waiting = false;
-                _context.next = 16;
+
+                _this.$Progress.finish();
+
+                _this.openNotification({
+                  type: 'ok',
+                  show: true,
+                  message: 'Product added'
+                });
+
+                _context.next = 19;
                 break;
 
-              case 11:
-                _context.prev = 11;
+              case 14:
+                _context.prev = 14;
                 _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
+
+                _this.$Progress.fail();
 
                 if (_context.t0.response.data.errors) {
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
@@ -1609,12 +1620,12 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
 
                 _this.waiting = false;
 
-              case 16:
+              case 19:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 11]]);
+        }, _callee, null, [[0, 14]]);
       }))();
     },
     getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {

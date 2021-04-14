@@ -416,9 +416,6 @@
 
                     this.ingredientInput = '';
                     this.foundIngredients = [];
-
-                    console.log(this.product.ingredients)
-                    console.log(this.localProduct.ingredients)
                 }
             },
 

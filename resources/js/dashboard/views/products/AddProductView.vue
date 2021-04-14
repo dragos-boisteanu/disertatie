@@ -313,7 +313,9 @@
 
             async submit() {
                 try {
+                    this.$Progress.start()
                     this.waiting = true;
+
                     const payload = {}
 
                     if(this.checkingBarcode) {
@@ -345,14 +347,21 @@
                     },
 
                     this.$refs.observer.reset();
-                    this.waiting = false
+                    this.waiting = false;
+                    this.$Progress.finish();
+
+                    this.openNotification({
+                        type: 'ok',
+                        show: true,
+                        message: 'Product added'
+                    })
                 } catch ( error ) {
-                    console.log(error)
+                    this.$Progress.fail();
+
                     if(error.response.data.errors) {
                         this.$refs.observer.setErrors(error.response.data.errors)
                     }  
                     this.waiting = false
-                    
                 }
             },
 
