@@ -3320,21 +3320,20 @@ var actions = {
             case 4:
               response = _context.sent;
               commit('SET_CATEGORIES', response.data);
-              console.log(response.data);
-              _context.next = 12;
+              _context.next = 11;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 8:
+              _context.prev = 8;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 12:
+            case 11:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 9]]);
+      }, _callee, null, [[1, 8]]);
     }))();
   },
   postCategory: function postCategory(_ref3, payload) {

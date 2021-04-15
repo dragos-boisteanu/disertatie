@@ -21,7 +21,6 @@ const actions = {
         try {
             const response = await downloadCategories();
             commit('SET_CATEGORIES', response.data);
-            console.log(response.data);
         } catch ( error ) {
             throw error;
         }
