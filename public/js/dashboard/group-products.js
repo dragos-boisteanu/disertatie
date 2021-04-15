@@ -1970,7 +1970,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
     removeDiscount: function removeDiscount(id) {
       var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_6___default()(this.product.discounts, ['id', id]);
 
-      this.products.splice(discountIndex, 1);
+      this.product.discounts.splice(discountIndex, 1);
     },
     openAddDiscountModal: function openAddDiscountModal() {
       this.showAddDiscountModal = true;

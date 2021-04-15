@@ -503,7 +503,7 @@
             removeDiscount(id) {
                 const discountIndex = _findIndex(this.product.discounts, ['id', id]);
 
-                this.products.splice(discountIndex, 1);
+                this.product.discounts.splice(discountIndex, 1);
             },
 
             openAddDiscountModal() {
