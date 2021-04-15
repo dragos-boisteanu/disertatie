@@ -2564,6 +2564,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "searchCategory": () => (/* binding */ searchCategory),
 /* harmony export */   "downloadCategories": () => (/* binding */ downloadCategories),
 /* harmony export */   "postCategory": () => (/* binding */ postCategory),
 /* harmony export */   "patchCategory": () => (/* binding */ patchCategory),
@@ -2572,6 +2573,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
 var BASE_URL = '/categories';
+
+var searchCategory = function searchCategory(catagoryName) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL, "/").concat(catagoryName));
+};
 
 var downloadCategories = function downloadCategories() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
@@ -3315,20 +3320,21 @@ var actions = {
             case 4:
               response = _context.sent;
               commit('SET_CATEGORIES', response.data);
-              _context.next = 11;
+              console.log(response.data);
+              _context.next = 12;
               break;
 
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](1);
               throw _context.t0;
 
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 8]]);
+      }, _callee, null, [[1, 9]]);
     }))();
   },
   postCategory: function postCategory(_ref3, payload) {
@@ -3424,11 +3430,39 @@ var actions = {
     }))();
   },
   searchCategory: function searchCategory(_ref6, categoryName) {
-    var state = _ref6.state;
-    var regex = new RegExp("".concat(categoryName, "+"), 'i');
-    return lodash_filter__WEBPACK_IMPORTED_MODULE_3___default()(state.categories, function (category) {
-      return regex.test(category.name);
-    });
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              commit = _ref6.commit;
+              _context5.prev = 1;
+              _context5.next = 4;
+              return (0,_api_categories_api__WEBPACK_IMPORTED_MODULE_1__.searchCategory)(categoryName);
+
+            case 4:
+              response = _context5.sent;
+
+              if (response.status === 200) {
+                commit('SET_CATEGORIES', response.data.categories);
+              }
+
+              _context5.next = 11;
+              break;
+
+            case 8:
+              _context5.prev = 8;
+              _context5.t0 = _context5["catch"](1);
+              throw _context5.t0;
+
+            case 11:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 8]]);
+    }))();
   }
 };
 var mutations = {

@@ -26,11 +26,14 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('stocks', 'StockController')->only('update');
     Route::apiResource('discounts', 'DiscountController')->only('index', 'store', 'update', 'destroy');
    
+    Route::group(['prefix'=>'categories'], function() {
+        Route::get('/{catagoryName}', 'CategoryController@search');
+    });
+
     Route::group(['prefix'=>'users'], function() {
         Route::delete('{id}/disable', 'UserController@disable');
         Route::post('{id}/restore', 'UserController@restore');
     });
-
   
     Route::group(['prefix'=>'products'], function() {
         Route::delete('{id}/disable', 'ProductController@disable');

@@ -1,4 +1,4 @@
-import { downloadCategories, postCategory, patchCategory, deleteCategory } from '../../api/categories.api';
+import { searchCategory, downloadCategories, postCategory, patchCategory, deleteCategory } from '../../api/categories.api';
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
 
@@ -21,6 +21,7 @@ const actions = {
         try {
             const response = await downloadCategories();
             commit('SET_CATEGORIES', response.data);
+            console.log(response.data);
         } catch ( error ) {
             throw error;
         }
@@ -56,9 +57,17 @@ const actions = {
         }
     },
 
-    searchCategory({state}, categoryName) {
-        const regex = new RegExp(`${categoryName}+`, 'i')
-        return _filter(state.categories, (category) => regex.test(category.name))
+    async searchCategory({commit}, categoryName) {
+        // const regex = new RegExp(`${categoryName}+`, 'i')
+        // return _filter(state.categories, (category) => regex.test(category.name))
+        try {
+            const response = await searchCategory(categoryName);
+            if(response.status === 200) {
+                commit('SET_CATEGORIES', response.data.categories);
+            }
+        } catch ( error ) {
+            throw error;
+        }
     }
 }
 
