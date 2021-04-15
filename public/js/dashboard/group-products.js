@@ -262,8 +262,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ModalComponent */ "./resources/js/dashboard/components/ModalComponent.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ModalComponent */ "./resources/js/dashboard/components/ModalComponent.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -356,6 +358,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -363,9 +369,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     productId: {
       type: Number,
       required: false
+    },
+    productDiscounts: {
+      type: Array,
+      required: false
     }
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)('Discounts', ['getDiscounts'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Discounts', ['getDiscounts'])), {}, {
+    listDiscounts: function listDiscounts() {
+      var _this = this;
+
+      this.getDiscounts.forEach(function (discount) {
+        var foundDiscount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(_this.productDiscounts, ['id', discount.id]);
+
+        if (foundDiscount) {
+          discount.exists = true;
+        }
+      });
+      var discounts = this.getDiscounts.filter(function (discount) {
+        return discount.deletedAt === null;
+      });
+      return discounts;
+    }
+  }),
   mouted: function mouted() {
     if (productId) {// call server and ask for product
       // bring product in
@@ -389,15 +415,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     submit: function submit() {
-      console.log(this.discount);
-      this.$emit('discountAdded', this.discount);
+      if (this.discount.toDate > this.discount.fromDate) {
+        this.$emit('discountAdded', this.discount);
+      } else {
+        console.log('to date must be greader than from date');
+      }
     },
     close: function close() {
       this.$emit('close');
     }
   },
   components: {
-    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_0__.default
+    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default
   }
 });
 
@@ -1937,6 +1966,11 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
     addDiscount: function addDiscount(discount) {
       this.product.discounts.unshift(discount);
       this.closeAddDiscountModal();
+    },
+    removeDiscount: function removeDiscount(id) {
+      var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_6___default()(this.product.discounts, ['id', id]);
+
+      this.products.splice(discountIndex, 1);
     },
     openAddDiscountModal: function openAddDiscountModal() {
       this.showAddDiscountModal = true;
@@ -17624,11 +17658,11 @@ var render = function() {
                                     [
                                       _c(
                                         "option",
-                                        { attrs: { value: "0", disabled: "" } },
+                                        { attrs: { value: "", disabled: "" } },
                                         [_vm._v("Select discount")]
                                       ),
                                       _vm._v(" "),
-                                      _vm._l(_vm.getDiscounts, function(
+                                      _vm._l(_vm.listDiscounts, function(
                                         discount,
                                         index
                                       ) {
@@ -17637,7 +17671,10 @@ var render = function() {
                                           {
                                             key: discount.id,
                                             staticClass:
-                                              "flex items-center gap-x-3",
+                                              "flex items-center gap-x-3 disabled:bg-gray-100",
+                                            attrs: {
+                                              disabled: discount.exists
+                                            },
                                             domProps: { value: discount }
                                           },
                                           [
@@ -17736,7 +17773,8 @@ var render = function() {
                                         attrs: {
                                           type: "date",
                                           id: "fromDate",
-                                          name: "fromDate"
+                                          name: "fromDate",
+                                          max: _vm.discount.toDate
                                         },
                                         domProps: {
                                           value: _vm.discount.fromDate
@@ -17811,7 +17849,8 @@ var render = function() {
                                         attrs: {
                                           type: "date",
                                           id: "toDate",
-                                          name: "toDate"
+                                          name: "toDate",
+                                          min: _vm.discount.fromDate
                                         },
                                         domProps: {
                                           value: _vm.discount.toDate
@@ -19640,6 +19679,7 @@ var render = function() {
     [
       _vm.showAddDiscountModal
         ? _c("AddDiscountComponent", {
+            attrs: { "product-discounts": _vm.product.discounts },
             on: {
               discountAdded: _vm.addDiscount,
               close: _vm.closeAddDiscountModal

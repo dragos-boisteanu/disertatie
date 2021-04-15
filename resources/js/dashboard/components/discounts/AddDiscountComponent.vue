@@ -17,12 +17,13 @@
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                             :class="{'border-red-600': failed, 'border-green-500' : passed}"
                         >
-                            <option value="0" disabled>Select discount</option>
+                            <option value="" disabled>Select discount</option>
                             <option 
-                                v-for="(discount, index) in getDiscounts" 
+                                v-for="(discount, index) in listDiscounts" 
                                 :key="discount.id"
                                 :value="discount"
-                                class="flex items-center gap-x-3"
+                                class="flex items-center gap-x-3 disabled:bg-gray-100"
+                                :disabled="discount.exists"
                             >
                                 <span>
                                     {{index+1}}
@@ -47,6 +48,7 @@
                                 id="fromDate" 
                                 name="fromDate" 
                                 v-model="discount.fromDate"
+                                :max="discount.toDate"
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                 :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             />
@@ -59,6 +61,7 @@
                                 id="toDate" 
                                 name="toDate" 
                                 v-model="discount.toDate"
+                                :min="discount.fromDate"
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                 :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             />
@@ -85,7 +88,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
+    import _find from 'lodash/find';
+
     import Modal from '../ModalComponent';
 
     export default {
@@ -94,11 +99,29 @@ import { mapGetters } from 'vuex';
             productId: {
                 type: Number,
                 required: false
+            },
+
+            productDiscounts: {
+                type: Array,
+                required: false
             }
         },
 
         computed: {
             ...mapGetters('Discounts', ['getDiscounts']),
+
+            listDiscounts() {
+                this.getDiscounts.forEach(discount => {
+                    const foundDiscount = _find(this.productDiscounts, ['id', discount.id]);
+                    if(foundDiscount) {
+                        discount.exists = true;
+                    }
+                })
+
+                const discounts = this.getDiscounts.filter(discount => discount.deletedAt === null)
+
+                return discounts;
+            }
         },
 
         mouted() {
@@ -120,7 +143,6 @@ import { mapGetters } from 'vuex';
 
                 discount: {
                     id: '0',
-
                     fromDate: '',
                     toDate: ''
                 }
@@ -129,8 +151,12 @@ import { mapGetters } from 'vuex';
 
         methods: {
             submit() {
-                console.log(this.discount)
-                this.$emit('discountAdded', this.discount);
+                if(this.discount.toDate > this.discount.fromDate) {
+                    this.$emit('discountAdded', this.discount);
+                } else {
+                    console.log('to date must be greader than from date')
+                }
+                
             },
 
             close() {

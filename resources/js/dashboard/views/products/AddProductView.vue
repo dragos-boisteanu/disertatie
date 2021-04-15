@@ -1,7 +1,7 @@
 <template>
     <ViewContainer>
 
-        <AddDiscountComponent v-if="showAddDiscountModal" @discountAdded="addDiscount" @close="closeAddDiscountModal"></AddDiscountComponent>
+        <AddDiscountComponent v-if="showAddDiscountModal" :product-discounts="product.discounts" @discountAdded="addDiscount" @close="closeAddDiscountModal"></AddDiscountComponent>
 
         <template slot="header">
             Add new product
@@ -498,6 +498,12 @@
             addDiscount(discount) {
                 this.product.discounts.unshift(discount);
                 this.closeAddDiscountModal();
+            },
+
+            removeDiscount(id) {
+                const discountIndex = _findIndex(this.product.discounts, ['id', id]);
+
+                this.products.splice(discountIndex, 1);
             },
 
             openAddDiscountModal() {
