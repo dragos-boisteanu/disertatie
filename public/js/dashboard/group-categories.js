@@ -148,23 +148,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Categories', ['getCategories'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Categories', ['getCategories'])), {}, {
+    showResetSearch: function showResetSearch() {
+      return this.searchInput.length > 0;
+    }
+  }),
+  mounted: function mounted() {
+    this.categories = this.getCategories;
+  },
   data: function data() {
     return {
       waiting: false,
       categorySelected: false,
+      categories: [],
       category: {
         name: '',
         vat: '',
         color: ''
-      }
+      },
+      searchInput: ''
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Categories', ['postCategory', 'patchCategory', 'deleteCategory'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Categories', ['postCategory', 'patchCategory', 'deleteCategory', 'searchCategory'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
     selectCategory: function selectCategory(id) {
       this.category = Object.assign(this.category, lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.getCategories, ['id', id]));
       this.categorySelected = true;
@@ -320,6 +332,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
           }
         }, _callee2, null, [[0, 8]]);
+      }))();
+    },
+    search: function search() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!(_this3.searchInput.length > 1)) {
+                  _context3.next = 6;
+                  break;
+                }
+
+                _context3.next = 3;
+                return _this3.searchCategory(_this3.searchInput);
+
+              case 3:
+                _this3.categories = _context3.sent;
+                _context3.next = 7;
+                break;
+
+              case 6:
+                _this3.categories = _this3.getCategories;
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     },
     resetForm: function resetForm() {
@@ -540,27 +584,60 @@ var render = function() {
                 "flex flex-col bg-white shadow rounded-sm p-5 md:flex-1"
             },
             [
-              _c("div", { staticClass: "w-full flex items-center gap-x-4" }, [
-                _c("input", {
+              _c(
+                "div",
+                {
                   staticClass:
-                    "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                  attrs: {
-                    name: "search",
-                    id: "search",
-                    placeholder: "Search category by name"
-                  }
-                }),
-                _vm._v(" "),
-                _c("button", [_vm._v("Serach")])
-              ]),
+                    "w-full mb-2 pb-2 border-b flex items-center gap-x-2"
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "flex items-center w-full px-2 text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.searchInput,
+                            expression: "searchInput"
+                          }
+                        ],
+                        staticClass: "flex-1 outline-none py-2",
+                        attrs: {
+                          name: "search",
+                          id: "search",
+                          placeholder: "Search category by name"
+                        },
+                        domProps: { value: _vm.searchInput },
+                        on: {
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.searchInput = $event.target.value
+                            },
+                            _vm.search
+                          ]
+                        }
+                      })
+                    ]
+                  )
+                ]
+              ),
               _vm._v(" "),
               _c(
                 "ul",
                 {
                   staticClass:
-                    "px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 "
+                    "px-2 mt-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 "
                 },
-                _vm._l(_vm.getCategories, function(category, index) {
+                _vm._l(_vm.categories, function(category, index) {
                   return _c(
                     "li",
                     {

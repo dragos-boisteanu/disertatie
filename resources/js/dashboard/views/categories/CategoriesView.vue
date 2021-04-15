@@ -6,19 +6,22 @@
 
         <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2 ">
             <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-                <div class="w-full flex items-center gap-x-4">
-                    <input 
-                        name="search" 
-                        id="search"
-                        placeholder="Search category by name"
-                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"                    
-                    >
-                    <button>Serach</button>
+                <div class="w-full mb-2 pb-2 border-b flex items-center gap-x-2">
+                    <div class="flex items-center w-full px-2 text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
+                        <input 
+                            name="search" 
+                            id="search"
+                            placeholder="Search category by name"
+                            class="flex-1 outline-none py-2"
+                            v-model="searchInput"
+                            @input="search"
+                        >
+                    </div>
                 </div>
                 
-                <ul class="px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
+                <ul class="px-2 mt-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
                     <li 
-                        v-for="(category, index) in getCategories" :key="category.id"
+                        v-for="(category, index) in categories" :key="category.id"
                         class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
                     >
                         <div 
@@ -127,22 +130,32 @@
         
         computed: {
             ...mapGetters('Categories', ['getCategories']),
+            showResetSearch() {
+                return this.searchInput.length > 0;
+            }
         },
+
+        mounted() {
+            this.categories = this.getCategories;
+        },
+
 
         data() {
             return {
                 waiting: false,
                 categorySelected: false,
+                categories: [],
                 category: {
                     name: '',
                     vat: '',     
                     color: '',               
                 },
+                searchInput: ''
             }
         },
 
         methods: {
-            ...mapActions('Categories', ['postCategory', 'patchCategory', 'deleteCategory']),
+            ...mapActions('Categories', ['postCategory', 'patchCategory', 'deleteCategory', 'searchCategory']),
             ...mapActions('Notification', ['openNotification']),
         
             selectCategory(id) {
@@ -243,6 +256,15 @@
                 }
             },
 
+            async search() {
+                if(this.searchInput.length > 1) {
+                    this.categories = await this.searchCategory(this.searchInput);
+                } else {
+                    this.categories = this.getCategories;
+                }
+               
+            },
+
             resetForm() {
                 this.$refs.observer.reset();
                 this.category = {
@@ -250,7 +272,7 @@
                     vat: '',
                     color:'',
                 }
-            }
+            },
         },
 
         components: {
