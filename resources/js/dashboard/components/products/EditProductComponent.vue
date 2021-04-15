@@ -3,8 +3,8 @@
         <h1 class="text-3xl my-4">
             Edit product #{{localProduct.id}}
         </h1>
-        <div class="p-1 mb-3">
 
+        <div class="p-1 mb-3">
             <file-pond
                 name="image"
                 ref="pond"
@@ -97,8 +97,7 @@
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <select 
                             id="unit_id"
-                            name="category" 
-                            type="text" 
+                            name="category"
                             v-model="localProduct.category_id" 
                             :disabled="waiting || locked"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    

@@ -1,5 +1,8 @@
 <template>
     <ViewContainer>
+
+        <AddDiscountComponent v-if="showAddDiscountModal" @discountAdded="addDiscount" @close="closeAddDiscountModal"></AddDiscountComponent>
+
         <template slot="header">
             Add new product
         </template>
@@ -194,41 +197,66 @@
                         </div>
 
                         <div class="w-full">
-                            <input type="checkbox" id="hasIngredients" @change="clearIngredients" v-model="product.hasIngredients" :disabled="waiting || locked"/>
-                            <label for="hasIngredients" >Has ingredients</label>
-                        </div>
-
-                        <div class="w-full" v-if="product.hasIngredients">
-                            <label for="name" class="text-sm font-semibold">Ingredients</label>
-                            <!-- <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div> -->
-                            <ul v-if="product.ingredients.length > 0"
-                                class="flex items-center gap-x-2 my-1"
+                            <ul v-if="product.discounts.length > 0"
+                                class="mb-2 flex items-center gap-x-2 my-1"
                             >
-                                <li v-for="ingredient in product.ingredients" :key="ingredient.id"
+                                <li v-for="discount in product.discounts" :key="discount.id"
                                     class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
                                     :class="{'disabled pointer-events-none bg-gray-100': waiting || locked}"
-                                    @click="removeIngredient(ingredient.id)"
+                                    @click="removeDiscount(discount.id)"
                                 > 
-                                    <span>  {{ ingredient.quantity}}{{ ingredient.unit.name}}</span>
-                                    <span> {{ingredient.name}} </span>
+                                    <span>  {{ discount.code}}</span>
+                                    <span> {{ discount.value }}% </span>
                                 </li>
                             </ul>
-                            <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
 
-                                <input type="text" name="ingredients" class="outline-none  p-2 h-full w-full rounded" v-model="ingredientInput" @keyup="findIngredient" :disabled="waiting || locked" />
-
-                                <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
-                                    <li v-for="ingredient in foundIngredients" :key="ingredient.id"
-                                        @click="selectIngredient(ingredient.id)"
-                                        class="p-1 cursor-pointer hover:bg-gray-50"    
-                                    >
-                                        <div>
-                                            {{ingredient.name}}
-                                        </div>
-                                    </li>
-                                </ul>
+                            <div>
+                                <button
+                                    class="px-2 py-1 border rounded-sm text-sm rounded-sm hover:border-gray-600 active:shadow-inner disabled:pointer-events-none"
+                                    @click.prevent="openAddDiscountModal"   
+                                >
+                                    Add discount
+                                </button>
                             </div>
                         </div>
+
+                        <div>
+                            <div class="w-full">
+                                <input type="checkbox" id="hasIngredients" @change="clearIngredients" v-model="product.hasIngredients" :disabled="waiting || locked"/>
+                                <label for="hasIngredients" >Has ingredients</label>
+                            </div>
+
+                            <div class="w-full" v-if="product.hasIngredients">
+                                <label for="name" class="text-sm font-semibold">Ingredients</label>
+                                <ul v-if="product.ingredients.length > 0"
+                                    class="flex items-center gap-x-2 my-1"
+                                >
+                                    <li v-for="ingredient in product.ingredients" :key="ingredient.id"
+                                        class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
+                                        :class="{'disabled pointer-events-none bg-gray-100': waiting || locked}"
+                                        @click="removeIngredient(ingredient.id)"
+                                    > 
+                                        <span>  {{ ingredient.quantity}}{{ ingredient.unit.name}}</span>
+                                        <span> {{ingredient.name}} </span>
+                                    </li>
+                                </ul>
+                                <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
+
+                                    <input type="text" name="ingredients" class="outline-none  p-2 h-full w-full rounded" v-model="ingredientInput" @keyup="findIngredient" :disabled="waiting || locked" />
+
+                                    <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
+                                        <li v-for="ingredient in foundIngredients" :key="ingredient.id"
+                                            @click="selectIngredient(ingredient.id)"
+                                            class="p-1 cursor-pointer hover:bg-gray-50"    
+                                        >
+                                            <div>
+                                                {{ingredient.name}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div> 
                     </div>
                 </div>
             
@@ -255,7 +283,9 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
+
     import ViewContainer from '../ViewContainer';
+    import AddDiscountComponent from '../../components/discounts/AddDiscountComponent';
 
     import _debounce from 'lodash/debounce';
     import _find from 'lodash/find';
@@ -298,12 +328,15 @@
                     quantity: '',
                     category_id: '',
                     hasIngredients: false,
-                    ingredients: []
+                    ingredients: [],
+                    discounts: []
                 },
 
                 waitForFileUpload: false,
                 files: null,
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+
+                showAddDiscountModal: false,
             }
         },
 
@@ -459,13 +492,26 @@
             removeIngredient(id) {
                 const ingredientIndex = _findIndex(this.product.ingredients, ['id', id]);
                 this.product.ingredients.splice(ingredientIndex, 1);
-            }
+            },
 
 
+            addDiscount(discount) {
+                this.product.discounts.unshift(discount);
+                this.closeAddDiscountModal();
+            },
+
+            openAddDiscountModal() {
+                this.showAddDiscountModal = true;
+            },
+
+            closeAddDiscountModal() {
+                this.showAddDiscountModal = false;
+            },
         },
 
         components: {
             ViewContainer,
+            AddDiscountComponent,
             FilePond
         }
     }
