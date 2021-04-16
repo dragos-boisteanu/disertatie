@@ -3,8 +3,8 @@
         <h1 class="text-3xl my-4">
             Edit product #{{localProduct.id}}
         </h1>
-        <div class="p-1 mb-3">
 
+        <div class="p-1 mb-3">
             <file-pond
                 name="image"
                 ref="pond"
@@ -97,8 +97,7 @@
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                         <select 
                             id="unit_id"
-                            name="category" 
-                            type="text" 
+                            name="category"
                             v-model="localProduct.category_id" 
                             :disabled="waiting || locked"   
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
@@ -278,7 +277,7 @@
 
         methods: {
             ...mapActions('Products', ['updateProduct']),
-            ...mapActions('Ingredients', ['downloadIngredients']),
+            ...mapActions('Notification', ['openNotification']),
 
 
             async submit() {
@@ -308,6 +307,8 @@
                     });
 
                     if(counter > 0) {
+                        this.$Progress.start();
+
                         const response = await this.updateProduct(payload);
                         if(response.data.image) {
                             payload.product.image = response.data.image;
@@ -320,11 +321,21 @@
                         this.$emit('updated', payload.product);
 
                         counter = 0;
+                        
+                        this.$Progress.finish();
                         this.close();
-                        // notification
+
+                        this.openNotification({
+                            type: 'ok',
+                            show: true,
+                            message: 'Product updated'
+                        })
                     } else {
-                        console.log('Nothing to update');
-                        // notification
+                        this.openNotification({
+                            type: 'info',
+                            show: true,
+                            message: 'Nothing to update'
+                        })
                     }
                 } catch ( error ) {
                     console.log(error);
@@ -391,7 +402,11 @@
                 const localProductIngredients = _find(this.localProduct.ingredients, ['id', id]);
 
                 if(localProductIngredients) {
-                    console.log('ingredient already exists');
+                    this.openNotification({
+                        type: 'info',
+                        show: true,
+                        message: 'The product already has this ingredient'
+                    })
                 } else {
                     const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
                 
@@ -401,9 +416,6 @@
 
                     this.ingredientInput = '';
                     this.foundIngredients = [];
-
-                    console.log(this.product.ingredients)
-                    console.log(this.localProduct.ingredients)
                 }
             },
 

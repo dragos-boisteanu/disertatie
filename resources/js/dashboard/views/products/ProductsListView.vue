@@ -23,6 +23,12 @@
                 >
                     Refresh
                 </button>
+                <router-link
+                    :to="{name: 'AddProduct'}" 
+                    class="block w-full py-1 px-2 mt-2 text-center  text-base text-white bg-orange-600 rounded-sm active:shadow-inner active:bg-orange-500 md:w-auto md:mt-0" 
+                >
+                    Add product
+                </router-link>
             </div>
         
             <select  
@@ -95,42 +101,12 @@
     export default {
         async beforeRouteEnter (to, from, next) {
             if(Object.keys(to.query).length === 0) {
-                // if(store.getters['Users/getUsers'].length > 0) {
-                //     if(store.getters['Users/getFilteredState']) {
-                //         await store.dispatch('Users/fetchUsers');  
-                //         store.dispatch('Users/setFilteredState', false);
-                //         next();
-                //     }else {
-                //         next();
-                //     }
-                // }else {
-                //     await store.dispatch('Users/fetchUsers');
-                //     next(); 
-                // }
                 await store.dispatch('Products/fetchProducts', {page:1});
                 next();
             } else {
                 await store.dispatch('Products/fetchProducts', to.query);
                 next();
             }
-
-            // if(Object.keys(to.query).length === 0) {
-            //     if(store.getters['Products/getProducts'].length > 0) {
-            //         if(store.getters['Products/getFilteredState']) {
-            //             await store.dispatch('Products/fetchProducts', {page: 1});
-            //             store.dispatch('Products/setFilteredState', false);
-            //             next();
-            //         }else {
-            //             next();
-            //         }
-            //     }else {
-            //         await store.dispatch('Products/fetchProducts', {page: 1});
-            //         next();
-            //     }        
-            // } else {
-            //     await store.dispatch('Products/fetchProducts', to.query);
-            //     next();
-            // } 
         },
 
         mounted() {
@@ -139,8 +115,6 @@
             } else {
                 this.orderBy = 1;
             }
-
-            this.order()
         },
 
         computed: {
@@ -164,24 +138,35 @@
 
             async refreshProducsList() {
                 try {
+                    this.$Progress.start();
+
                     if(Object.keys(this.$route.query).length > 0) { 
                         this.$router.replace({name:'Products', query: {}});
                     }
 
                     await this.fetchProducts();
+
                     this.setFilteredState(false);
 
                     this.orderBy = 1;
 
+                    this.$Progress.fisnih();
+
                 } catch ( error) {
+                    this.$Progress.fail();
                     console.log(error)
                 }
             },
 
             async loadProducts() {
                 try {
-                    await this.fetchProducts(this.query)
+                    this.$Progress.start();
+
+                    await this.fetchProducts(this.query);
+
+                    this.$Progress.finish();
                 } catch ( error ) {
+                    this.$Progress.fail();
                     console.log(error);
                 }
             },
@@ -190,8 +175,24 @@
                 this.showFilterState = !this.showFilterState;
             },
 
-            order() {
-                this.sortProductsList(this.orderBy);    
+            async order() {
+                try {
+                    this.$Progress.start();
+
+                    const query = Object.assign({}, this.$route.query);
+                 
+                    query.orderBy = this.orderBy;
+
+                    await this.fetchProducts(query);
+
+                    this.$router.replace({name:'Products', query});
+
+                    this.$Progress.finish();
+
+                }  catch ( error ) {
+                    this.$Progress.fail();
+                    console.log(error)
+                }
             }
         },
 

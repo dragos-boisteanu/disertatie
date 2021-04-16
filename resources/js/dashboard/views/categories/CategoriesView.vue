@@ -1,12 +1,35 @@
 <template>
      <ViewContainer>
         <template slot="header">
-            Categories
+            <div class="flex items-center justify-between md:justify-start gap-x-4">
+                <span>
+                    Categories
+                </span> 
+                <button 
+                    @click="refresh" 
+                    class="p-1 bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                </button>
+            </div>
         </template>
 
         <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2 ">
             <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-                <ul class="px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
+                <div class="w-full mb-2 pb-2 border-b flex items-center gap-x-2">
+                    <div class="flex items-center w-full px-2 text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
+                        <input 
+                            name="search" 
+                            id="search"
+                            placeholder="Search category by name"
+                            class="flex-1 outline-none py-2"
+                            v-model="searchInput"
+                            @input="search"
+                        >
+                    </div>
+                </div>
+                
+                <ul class="px-2 mt-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
                     <li 
                         v-for="(category, index) in getCategories" :key="category.id"
                         class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
@@ -80,7 +103,7 @@
                             <button 
                                 v-if="categorySelected"
                                 @click.prevent="clearSelection"
-                                class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
+                                class="mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
                             >                       
                                 Clear selection
                             </button>
@@ -111,12 +134,16 @@
     import { mapGetters, mapActions } from 'vuex';
     import ViewContainer from '../ViewContainer';
     import _find from 'lodash/find';
+    import _debounce from 'lodash/debounce'
 
 
     export default {
-
+        
         computed: {
             ...mapGetters('Categories', ['getCategories']),
+            showResetSearch() {
+                return this.searchInput.length > 0;
+            }
         },
 
         data() {
@@ -128,11 +155,13 @@
                     vat: '',     
                     color: '',               
                 },
+                searchInput: ''
             }
         },
 
         methods: {
-            ...mapActions('Categories', ['postCategory', 'patchCategory', 'deleteCategory']),
+            ...mapActions('Categories', ['searchCategory', 'fetchCategories', 'postCategory', 'patchCategory', 'deleteCategory']),
+            ...mapActions('Notification', ['openNotification']),
         
             selectCategory(id) {
                 this.category = Object.assign(this.category, _find(this.getCategories, ['id', id]));
@@ -159,8 +188,6 @@
                             }
                         }
 
-                        console.log(payload)
-
                         let counter = 0;
 
                         Object.keys(originalCategory).forEach(key => {
@@ -173,15 +200,30 @@
                         if(counter > 0) {
                             await this.patchCategory(payload);
 
+                            this.openNotification({
+                                type: 'ok',
+                                show: true,
+                                message: 'Category updated'
+                            })
+
                         } else {
-                            console.log('nothing to update')
-                            // notification
+                            this.openNotification({
+                                type: 'info',
+                                show: true,
+                                message: 'Nothing to update'
+                            })
                         }
 
                     } else {
                         await this.postCategory(this.category);
                         
                         this.resetForm();
+
+                        this.openNotification({
+                            type: 'ok',
+                            show: true,
+                            message: 'Category added'
+                        })
                     }
 
                     this.waiting = false;
@@ -208,11 +250,52 @@
                     await this.deleteCategory(id);
 
                     this.$Progress.finish();
+                    this.openNotification({
+                        type: 'ok',
+                        show: true,
+                        message: 'Category deleted'
+                    })
                 } catch ( error ) {
                     this.$Progress.fail();
                     console.log(error)
                 }
             },
+
+            async refresh() {
+                try {
+                    this.$Progress.start();
+
+                    await this.fetchCategories();
+                    
+                    this.$Progress.finish();
+                } catch ( error ) {
+                    this.$Progress.fail();
+                    console.log(error)
+                }
+            },
+
+            search: _debounce( async function() {
+                // if(this.searchInput.length > 1) {
+                //     this.categories = await this.searchCategory(this.searchInput);
+                // } else {
+                //     this.categories = this.getCategories;
+                // }
+                try {
+                    this.$Progress.start();
+
+                    if(this.searchInput.length > 0) {
+                         await this.searchCategory(this.searchInput);
+                    } else {
+                        await this.fetchCategories();
+                    }
+                    
+                    this.$Progress.finish();
+                } catch ( error ) {
+                    this.$Progress.fail();
+                    console.log(error)
+                }
+               
+            }, 250),
 
             resetForm() {
                 this.$refs.observer.reset();
@@ -221,7 +304,7 @@
                     vat: '',
                     color:'',
                 }
-            }
+            },
         },
 
         components: {

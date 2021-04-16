@@ -251,6 +251,187 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ModalComponent */ "./resources/js/dashboard/components/ModalComponent.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    productId: {
+      type: Number,
+      required: false
+    },
+    productDiscounts: {
+      type: Array,
+      required: false
+    }
+  },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Discounts', ['getDiscounts'])), {}, {
+    listDiscounts: function listDiscounts() {
+      var _this = this;
+
+      this.getDiscounts.forEach(function (discount) {
+        var foundDiscount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(_this.productDiscounts, ['id', discount.id]);
+
+        if (foundDiscount) {
+          discount.exists = true;
+        }
+      });
+      var discounts = this.getDiscounts.filter(function (discount) {
+        return discount.deletedAt === null;
+      });
+      return discounts;
+    }
+  }),
+  mouted: function mouted() {
+    if (productId) {// call server and ask for product
+      // bring product in
+      // check if the discount that is being added alredy exists or not
+      // if not, check to see if it's start date is greater than the most recent endDate of
+      // already present discounts
+    }
+  },
+  data: function data() {
+    return {
+      product: {
+        id: '',
+        discounts: []
+      },
+      discount: {
+        id: '0',
+        fromDate: '',
+        toDate: ''
+      }
+    };
+  },
+  methods: {
+    submit: function submit() {
+      if (this.discount.toDate > this.discount.fromDate) {
+        this.$emit('discountAdded', this.discount);
+      } else {
+        console.log('to date must be greader than from date');
+      }
+    },
+    close: function close() {
+      this.$emit('close');
+    }
+  },
+  components: {
+    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/filter/FilterComponent.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/filter/FilterComponent.vue?vue&type=script&lang=js& ***!
@@ -491,17 +672,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     var routerQuery = this.$route.query;
     Object.keys(routerQuery).forEach(function (key) {
-      if (routerQuery[key].length > 0) {
-        if (key === 'categories') {
-          var _this$filterData$key;
+      if (key === 'categories') {
+        var _this$filterData$key;
 
-          _this.filterData[key] = [];
+        _this.filterData[key] = [];
 
-          (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
-        } else {
-          _this.filterData[key] = routerQuery[key];
-        }
+        (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
       }
+
+      _this.filterData[key] = routerQuery[key];
     });
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Categories', ['getCategories'])),
@@ -516,7 +695,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         priceStart: '',
         priceEnd: '',
         quantityStart: '',
-        quantityEnd: ''
+        quantityEnd: '',
+        orderBy: ''
       }
     };
   },
@@ -532,20 +712,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               _context.prev = 0;
               query = {};
               Object.keys(this.filterData).forEach(function (key) {
-                if (_this2.filterData[key].length > 0) {
+                if (_this2.filterData[key] !== '') {
                   query[key] = _this2.filterData[key];
                 }
               });
-              _context.next = 5;
+              query.page = 1;
+              _context.next = 6;
               return this.fetchProducts(query);
 
-            case 5:
+            case 6:
               this.setFilteredState(true);
-
-              if (this.$route.query['page']) {
-                query.page = 1;
-              }
-
               this.$router.replace({
                 name: 'Products',
                 query: _objectSpread({}, query)
@@ -878,7 +1054,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 
@@ -923,7 +1098,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Products', ['updateProduct'])), (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Products', ['updateProduct'])), (0,vuex__WEBPACK_IMPORTED_MODULE_9__.mapActions)('Notification', ['openNotification'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -955,14 +1130,16 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
                 });
 
                 if (!(counter > 0)) {
-                  _context.next = 15;
+                  _context.next = 18;
                   break;
                 }
 
-                _context.next = 7;
+                _this.$Progress.start();
+
+                _context.next = 8;
                 return _this.updateProduct(payload);
 
-              case 7:
+              case 8:
                 response = _context.sent;
 
                 if (response.data.image) {
@@ -977,30 +1154,41 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
 
                 counter = 0;
 
-                _this.close(); // notification
+                _this.$Progress.finish();
 
+                _this.close();
 
-                _context.next = 16;
-                break;
+                _this.openNotification({
+                  type: 'ok',
+                  show: true,
+                  message: 'Product updated'
+                });
 
-              case 15:
-                console.log('Nothing to update'); // notification
-
-              case 16:
-                _context.next = 21;
+                _context.next = 19;
                 break;
 
               case 18:
-                _context.prev = 18;
+                _this.openNotification({
+                  type: 'info',
+                  show: true,
+                  message: 'Nothing to update'
+                });
+
+              case 19:
+                _context.next = 24;
+                break;
+
+              case 21:
+                _context.prev = 21;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
-              case 21:
+              case 24:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 18]]);
+        }, _callee, null, [[0, 21]]);
       }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {
@@ -1089,15 +1277,17 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()((filepond_plu
       var localProductIngredients = lodash_find__WEBPACK_IMPORTED_MODULE_6___default()(this.localProduct.ingredients, ['id', id]);
 
       if (localProductIngredients) {
-        console.log('ingredient already exists');
+        this.openNotification({
+          type: 'info',
+          show: true,
+          message: 'The product already has this ingredient'
+        });
       } else {
         var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
         selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
         this.localProduct.ingredients.push(selectedIngredient);
         this.ingredientInput = '';
         this.foundIngredients = [];
-        console.log(this.product.ingredients);
-        console.log(this.localProduct.ingredients);
       }
     },
     removeIngredient: function removeIngredient(id) {
@@ -1219,22 +1409,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _ViewContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ViewContainer */ "./resources/js/dashboard/views/ViewContainer.vue");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/filter */ "./node_modules/lodash/filter.js");
-/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
-/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
-/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var filepond_dist_filepond_min_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! filepond/dist/filepond.min.css */ "./node_modules/filepond/dist/filepond.min.css");
-/* harmony import */ var filepond_plugin_image_preview_dist_filepond_plugin_image_preview_min_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css");
-/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
-/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _components_discounts_AddDiscountComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/discounts/AddDiscountComponent */ "./resources/js/dashboard/components/discounts/AddDiscountComponent.vue");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash/filter */ "./node_modules/lodash/filter.js");
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var filepond_dist_filepond_min_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! filepond/dist/filepond.min.css */ "./node_modules/filepond/dist/filepond.min.css");
+/* harmony import */ var filepond_plugin_image_preview_dist_filepond_plugin_image_preview_min_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_10__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1502,6 +1693,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1512,9 +1731,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_9___default()));
+
+var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_10___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Ingredients', ['getIngredients'])),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Ingredients', ['getIngredients'])),
   data: function data() {
     return {
       checkingBarcode: false,
@@ -1532,14 +1752,16 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
         quantity: '',
         category_id: '',
         hasIngredients: false,
-        ingredients: []
+        ingredients: [],
+        discounts: []
       },
       waitForFileUpload: false,
       files: null,
-      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      showAddDiscountModal: false
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Products', ['addProduct', 'getProductByBarcode'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapActions)('Products', ['addProduct', 'getProductByBarcode'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapActions)('Notification', ['openNotification'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -1550,6 +1772,9 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
+
+                _this.$Progress.start();
+
                 _this.waiting = true;
                 payload = {};
 
@@ -1566,10 +1791,10 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
                   delete payload.hasIngredients;
                 }
 
-                _context.next = 7;
+                _context.next = 8;
                 return _this.addProduct(payload);
 
-              case 7:
+              case 8:
                 _this.product = {
                   barcode: '',
                   name: '',
@@ -1583,13 +1808,23 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
                   ingredients: []
                 }, _this.$refs.observer.reset();
                 _this.waiting = false;
-                _context.next = 16;
+
+                _this.$Progress.finish();
+
+                _this.openNotification({
+                  type: 'ok',
+                  show: true,
+                  message: 'Product added'
+                });
+
+                _context.next = 19;
                 break;
 
-              case 11:
-                _context.prev = 11;
+              case 14:
+                _context.prev = 14;
                 _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
+
+                _this.$Progress.fail();
 
                 if (_context.t0.response.data.errors) {
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
@@ -1597,15 +1832,15 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
 
                 _this.waiting = false;
 
-              case 16:
+              case 19:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 11]]);
+        }, _callee, null, [[0, 14]]);
       }))();
     },
-    getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+    getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
       var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
@@ -1684,7 +1919,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
       this.waitForFileUpload = false;
     },
     clearImage: function clearImage() {
-      console.log('here');
       this.$refs.pond.removeFile({
         revert: true
       });
@@ -1698,7 +1932,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
 
       if (this.ingredientInput.length > 0) {
         var lastSpaceIndex = this.ingredientInput.lastIndexOf(" ");
-        this.foundIngredients = lodash_filter__WEBPACK_IMPORTED_MODULE_4___default()(this.getIngredients, function (ingredient) {
+        this.foundIngredients = lodash_filter__WEBPACK_IMPORTED_MODULE_5___default()(this.getIngredients, function (ingredient) {
           return new RegExp('^' + "".concat(_this2.ingredientInput.substring(lastSpaceIndex + 1)), 'i').test(ingredient.name);
         });
       } else {
@@ -1706,22 +1940,48 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_6___default()((filepond_plu
       }
     },
     selectIngredient: function selectIngredient(id) {
-      var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_3___default()(this.foundIngredients, ['id', id]);
+      var productIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_4___default()(this.product.ingredients, ['id', id]);
 
-      var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-      selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-      this.product.ingredients.push(selectedIngredient);
-      this.ingredientInput = '';
-      this.foundIngredients = [];
+      if (productIngredient) {
+        this.openNotification({
+          type: 'info',
+          show: true,
+          message: 'The product already has this ingredient'
+        });
+      } else {
+        var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_4___default()(this.foundIngredients, ['id', id]);
+
+        var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
+        selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+        this.product.ingredients.push(selectedIngredient);
+        this.ingredientInput = '';
+        this.foundIngredients = [];
+      }
     },
     removeIngredient: function removeIngredient(id) {
-      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_5___default()(this.product.ingredients, ['id', id]);
+      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_6___default()(this.product.ingredients, ['id', id]);
 
       this.product.ingredients.splice(ingredientIndex, 1);
+    },
+    addDiscount: function addDiscount(discount) {
+      this.product.discounts.unshift(discount);
+      this.closeAddDiscountModal();
+    },
+    removeDiscount: function removeDiscount(id) {
+      var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_6___default()(this.product.discounts, ['id', id]);
+
+      this.product.discounts.splice(discountIndex, 1);
+    },
+    openAddDiscountModal: function openAddDiscountModal() {
+      this.showAddDiscountModal = true;
+    },
+    closeAddDiscountModal: function closeAddDiscountModal() {
+      this.showAddDiscountModal = false;
     }
   }),
   components: {
     ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_1__.default,
+    AddDiscountComponent: _components_discounts_AddDiscountComponent__WEBPACK_IMPORTED_MODULE_2__.default,
     FilePond: FilePond
   }
 });
@@ -2225,6 +2485,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2280,8 +2546,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     } else {
       this.orderBy = 1;
     }
-
-    this.order();
   },
   computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Products', ['getProducts', 'getPaginationData'])), {}, {
     query: function query() {
@@ -2305,6 +2569,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context2.prev = 0;
 
+                _this.$Progress.start();
+
                 if (Object.keys(_this.$route.query).length > 0) {
                   _this.$router.replace({
                     name: 'Products',
@@ -2312,27 +2578,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 }
 
-                _context2.next = 4;
+                _context2.next = 5;
                 return _this.fetchProducts();
 
-              case 4:
+              case 5:
                 _this.setFilteredState(false);
 
                 _this.orderBy = 1;
-                _context2.next = 11;
+
+                _this.$Progress.fisnih();
+
+                _context2.next = 14;
                 break;
 
-              case 8:
-                _context2.prev = 8;
+              case 10:
+                _context2.prev = 10;
                 _context2.t0 = _context2["catch"](0);
+
+                _this.$Progress.fail();
+
                 console.log(_context2.t0);
 
-              case 11:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee2, null, [[0, 10]]);
       }))();
     },
     loadProducts: function loadProducts() {
@@ -2344,31 +2616,81 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.prev = 0;
-                _context3.next = 3;
+
+                _this2.$Progress.start();
+
+                _context3.next = 4;
                 return _this2.fetchProducts(_this2.query);
 
-              case 3:
-                _context3.next = 8;
+              case 4:
+                _this2.$Progress.finish();
+
+                _context3.next = 11;
                 break;
 
-              case 5:
-                _context3.prev = 5;
+              case 7:
+                _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
+
+                _this2.$Progress.fail();
+
                 console.log(_context3.t0);
 
-              case 8:
+              case 11:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 5]]);
+        }, _callee3, null, [[0, 7]]);
       }))();
     },
     toggleFilterState: function toggleFilterState() {
       this.showFilterState = !this.showFilterState;
     },
     order: function order() {
-      this.sortProductsList(this.orderBy);
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var query;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+
+                _this3.$Progress.start();
+
+                query = Object.assign({}, _this3.$route.query);
+                query.orderBy = _this3.orderBy;
+                _context4.next = 6;
+                return _this3.fetchProducts(query);
+
+              case 6:
+                _this3.$router.replace({
+                  name: 'Products',
+                  query: query
+                });
+
+                _this3.$Progress.finish();
+
+                _context4.next = 14;
+                break;
+
+              case 10:
+                _context4.prev = 10;
+                _context4.t0 = _context4["catch"](0);
+
+                _this3.$Progress.fail();
+
+                console.log(_context4.t0);
+
+              case 14:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 10]]);
+      }))();
     }
   }),
   components: {
@@ -15210,37 +15532,6 @@ ___CSS_LOADER_EXPORT___.push([module.id, "/*!\n * FilePond 4.26.0\n * Licensed u
 
 /***/ }),
 
-/***/ "./node_modules/lodash/_baseFilter.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_baseFilter.js ***!
-  \********************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var baseEach = __webpack_require__(/*! ./_baseEach */ "./node_modules/lodash/_baseEach.js");
-
-/**
- * The base implementation of `_.filter` without support for iteratee shorthands.
- *
- * @private
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function} predicate The function invoked per iteration.
- * @returns {Array} Returns the new filtered array.
- */
-function baseFilter(collection, predicate) {
-  var result = [];
-  baseEach(collection, function(value, index, collection) {
-    if (predicate(value, index, collection)) {
-      result.push(value);
-    }
-  });
-  return result;
-}
-
-module.exports = baseFilter;
-
-
-/***/ }),
-
 /***/ "./node_modules/lodash/debounce.js":
 /*!*****************************************!*\
   !*** ./node_modules/lodash/debounce.js ***!
@@ -15438,68 +15729,6 @@ function debounce(func, wait, options) {
 }
 
 module.exports = debounce;
-
-
-/***/ }),
-
-/***/ "./node_modules/lodash/filter.js":
-/*!***************************************!*\
-  !*** ./node_modules/lodash/filter.js ***!
-  \***************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var arrayFilter = __webpack_require__(/*! ./_arrayFilter */ "./node_modules/lodash/_arrayFilter.js"),
-    baseFilter = __webpack_require__(/*! ./_baseFilter */ "./node_modules/lodash/_baseFilter.js"),
-    baseIteratee = __webpack_require__(/*! ./_baseIteratee */ "./node_modules/lodash/_baseIteratee.js"),
-    isArray = __webpack_require__(/*! ./isArray */ "./node_modules/lodash/isArray.js");
-
-/**
- * Iterates over elements of `collection`, returning an array of all elements
- * `predicate` returns truthy for. The predicate is invoked with three
- * arguments: (value, index|key, collection).
- *
- * **Note:** Unlike `_.remove`, this method returns a new array.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Collection
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function} [predicate=_.identity] The function invoked per iteration.
- * @returns {Array} Returns the new filtered array.
- * @see _.reject
- * @example
- *
- * var users = [
- *   { 'user': 'barney', 'age': 36, 'active': true },
- *   { 'user': 'fred',   'age': 40, 'active': false }
- * ];
- *
- * _.filter(users, function(o) { return !o.active; });
- * // => objects for ['fred']
- *
- * // The `_.matches` iteratee shorthand.
- * _.filter(users, { 'age': 36, 'active': true });
- * // => objects for ['barney']
- *
- * // The `_.matchesProperty` iteratee shorthand.
- * _.filter(users, ['active', false]);
- * // => objects for ['fred']
- *
- * // The `_.property` iteratee shorthand.
- * _.filter(users, 'active');
- * // => objects for ['barney']
- *
- * // Combining several predicates using `_.overEvery` or `_.overSome`.
- * _.filter(users, _.overSome([{ 'age': 36 }, ['age', 40]]));
- * // => objects for ['fred', 'barney']
- */
-function filter(collection, predicate) {
-  var func = isArray(collection) ? arrayFilter : baseFilter;
-  return func(collection, baseIteratee(predicate, 3));
-}
-
-module.exports = filter;
 
 
 /***/ }),
@@ -16045,6 +16274,45 @@ component.options.__file = "resources/js/dashboard/components/cards/CardsListCom
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/components/discounts/AddDiscountComponent.vue":
+/*!******************************************************************************!*\
+  !*** ./resources/js/dashboard/components/discounts/AddDiscountComponent.vue ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AddDiscountComponent_vue_vue_type_template_id_415c55b0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddDiscountComponent.vue?vue&type=template&id=415c55b0& */ "./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=template&id=415c55b0&");
+/* harmony import */ var _AddDiscountComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddDiscountComponent.vue?vue&type=script&lang=js& */ "./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _AddDiscountComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _AddDiscountComponent_vue_vue_type_template_id_415c55b0___WEBPACK_IMPORTED_MODULE_0__.render,
+  _AddDiscountComponent_vue_vue_type_template_id_415c55b0___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/dashboard/components/discounts/AddDiscountComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/components/filter/FilterComponent.vue":
 /*!**********************************************************************!*\
   !*** ./resources/js/dashboard/components/filter/FilterComponent.vue ***!
@@ -16497,6 +16765,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddDiscountComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AddDiscountComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddDiscountComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/components/filter/FilterComponent.vue?vue&type=script&lang=js&":
 /*!***********************************************************************************************!*\
   !*** ./resources/js/dashboard/components/filter/FilterComponent.vue?vue&type=script&lang=js& ***!
@@ -16739,6 +17023,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsListComponent_vue_vue_type_template_id_5075e810___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsListComponent_vue_vue_type_template_id_5075e810___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CardsListComponent.vue?vue&type=template&id=5075e810& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/cards/CardsListComponent.vue?vue&type=template&id=5075e810&");
+
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=template&id=415c55b0&":
+/*!*************************************************************************************************************!*\
+  !*** ./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=template&id=415c55b0& ***!
+  \*************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddDiscountComponent_vue_vue_type_template_id_415c55b0___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddDiscountComponent_vue_vue_type_template_id_415c55b0___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddDiscountComponent_vue_vue_type_template_id_415c55b0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AddDiscountComponent.vue?vue&type=template&id=415c55b0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=template&id=415c55b0&");
 
 
 /***/ }),
@@ -17227,6 +17528,404 @@ var render = function() {
       },
       [_vm._t("default")],
       2
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=template&id=415c55b0&":
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/discounts/AddDiscountComponent.vue?vue&type=template&id=415c55b0& ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("Modal", [
+    _c("h1", { staticClass: "text-3xl my-4" }, [
+      _vm._v("\n        Add discount\n    ")
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "p-1 mb-3" },
+      [
+        _c("ValidationObserver", {
+          ref: "observar",
+          scopedSlots: _vm._u([
+            {
+              key: "default",
+              fn: function(ref) {
+                var handleSubmit = ref.handleSubmit
+                return [
+                  _c(
+                    "form",
+                    {
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return handleSubmit(_vm.submit)
+                        }
+                      }
+                    },
+                    [
+                      _c("ValidationProvider", {
+                        staticClass: "w-full",
+                        attrs: { vid: "discount", rules: "required" },
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "default",
+                              fn: function(ref) {
+                                var errors = ref.errors
+                                var failed = ref.failed
+                                var passed = ref.passed
+                                return [
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "text-sm font-semibold",
+                                      attrs: { for: "discount" }
+                                    },
+                                    [_vm._v("Discount")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "text-xs text-red-600 font-semibold mb-1"
+                                    },
+                                    [_vm._v(" " + _vm._s(errors[0]))]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "select",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.discount,
+                                          expression: "discount"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                      class: {
+                                        "border-red-600": failed,
+                                        "border-green-500": passed
+                                      },
+                                      attrs: {
+                                        id: "discount",
+                                        name: "discount"
+                                      },
+                                      on: {
+                                        change: function($event) {
+                                          var $$selectedVal = Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function(o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function(o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                          _vm.discount = $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "option",
+                                        { attrs: { value: "", disabled: "" } },
+                                        [_vm._v("Select discount")]
+                                      ),
+                                      _vm._v(" "),
+                                      _vm._l(_vm.listDiscounts, function(
+                                        discount,
+                                        index
+                                      ) {
+                                        return _c(
+                                          "option",
+                                          {
+                                            key: discount.id,
+                                            staticClass:
+                                              "flex items-center gap-x-3 disabled:bg-gray-100",
+                                            attrs: {
+                                              disabled: discount.exists
+                                            },
+                                            domProps: { value: discount }
+                                          },
+                                          [
+                                            _c("span", [
+                                              _vm._v(
+                                                "\n                                " +
+                                                  _vm._s(index + 1) +
+                                                  "\n                            "
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("span", [
+                                              _c("span", [
+                                                _vm._v(
+                                                  "\n                                    " +
+                                                    _vm._s(discount.code) +
+                                                    "\n                                "
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("span", [
+                                                _vm._v(
+                                                  "\n                                    " +
+                                                    _vm._s(discount.value) +
+                                                    "%\n                                "
+                                                )
+                                              ])
+                                            ])
+                                          ]
+                                        )
+                                      })
+                                    ],
+                                    2
+                                  )
+                                ]
+                              }
+                            }
+                          ],
+                          null,
+                          true
+                        )
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-center justify-between mt-3 gap-x-4"
+                        },
+                        [
+                          _c("ValidationProvider", {
+                            staticClass: "w-full",
+                            attrs: { vid: "fromDate", rules: "required" },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "default",
+                                  fn: function(ref) {
+                                    var errors = ref.errors
+                                    var failed = ref.failed
+                                    var passed = ref.passed
+                                    return [
+                                      _c(
+                                        "label",
+                                        {
+                                          staticClass: "text-sm font-semibold",
+                                          attrs: { for: "from" }
+                                        },
+                                        [_vm._v("From")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "text-xs text-red-600 font-semibold mb-1"
+                                        },
+                                        [_vm._v(" " + _vm._s(errors[0]))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.discount.fromDate,
+                                            expression: "discount.fromDate"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                        class: {
+                                          "border-red-600": failed,
+                                          "border-green-500": passed
+                                        },
+                                        attrs: {
+                                          type: "date",
+                                          id: "fromDate",
+                                          name: "fromDate",
+                                          max: _vm.discount.toDate
+                                        },
+                                        domProps: {
+                                          value: _vm.discount.fromDate
+                                        },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.discount,
+                                              "fromDate",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ]
+                                  }
+                                }
+                              ],
+                              null,
+                              true
+                            )
+                          }),
+                          _vm._v(" "),
+                          _c("ValidationProvider", {
+                            staticClass: "w-full",
+                            attrs: { vid: "toDate", rules: "required" },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "default",
+                                  fn: function(ref) {
+                                    var errors = ref.errors
+                                    var failed = ref.failed
+                                    var passed = ref.passed
+                                    return [
+                                      _c(
+                                        "label",
+                                        {
+                                          staticClass: "text-sm font-semibold",
+                                          attrs: { for: "from" }
+                                        },
+                                        [_vm._v("To")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "text-xs text-red-600 font-semibold mb-1"
+                                        },
+                                        [_vm._v(" " + _vm._s(errors[0]))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.discount.toDate,
+                                            expression: "discount.toDate"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                                        class: {
+                                          "border-red-600": failed,
+                                          "border-green-500": passed
+                                        },
+                                        attrs: {
+                                          type: "date",
+                                          id: "toDate",
+                                          name: "toDate",
+                                          min: _vm.discount.fromDate
+                                        },
+                                        domProps: {
+                                          value: _vm.discount.toDate
+                                        },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.discount,
+                                              "toDate",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ]
+                                  }
+                                }
+                              ],
+                              null,
+                              true
+                            )
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "w-full flex justify-end items-center mt-4"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none",
+                              attrs: { type: "submit" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Add\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600",
+                              on: { click: _vm.close }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Cancel\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ]
+              }
+            }
+          ])
+        })
+      ],
+      1
     )
   ])
 }
@@ -18228,7 +18927,6 @@ var render = function() {
                                       attrs: {
                                         id: "unit_id",
                                         name: "category",
-                                        type: "text",
                                         disabled: _vm.waiting || _vm.locked
                                       },
                                       on: {
@@ -18979,8 +19677,18 @@ var render = function() {
   return _c(
     "ViewContainer",
     [
+      _vm.showAddDiscountModal
+        ? _c("AddDiscountComponent", {
+            attrs: { "product-discounts": _vm.product.discounts },
+            on: {
+              discountAdded: _vm.addDiscount,
+              close: _vm.closeAddDiscountModal
+            }
+          })
+        : _vm._e(),
+      _vm._v(" "),
       _c("template", { slot: "header" }, [
-        _vm._v("\n            Add new product\n        ")
+        _vm._v("\n        Add new product\n    ")
       ]),
       _vm._v(" "),
       _c("ValidationObserver", {
@@ -19055,6 +19763,11 @@ var render = function() {
                                 {
                                   staticClass:
                                     "border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
+                                  attrs: {
+                                    disabled:
+                                      _vm.waitForFileUpload ||
+                                      !(_vm.waiting || _vm.locked)
+                                  },
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
@@ -19064,7 +19777,7 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    "\n                                Clear image\n                            "
+                                    "\n                            Clear image\n                        "
                                   )
                                 ]
                               )
@@ -19829,224 +20542,302 @@ var render = function() {
                             ),
                             _vm._v(" "),
                             _c("div", { staticClass: "w-full" }, [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.product.hasIngredients,
-                                    expression: "product.hasIngredients"
-                                  }
-                                ],
-                                attrs: {
-                                  type: "checkbox",
-                                  id: "hasIngredients",
-                                  disabled: _vm.waiting || _vm.locked
-                                },
-                                domProps: {
-                                  checked: Array.isArray(
-                                    _vm.product.hasIngredients
-                                  )
-                                    ? _vm._i(_vm.product.hasIngredients, null) >
-                                      -1
-                                    : _vm.product.hasIngredients
-                                },
-                                on: {
-                                  change: [
-                                    function($event) {
-                                      var $$a = _vm.product.hasIngredients,
-                                        $$el = $event.target,
-                                        $$c = $$el.checked ? true : false
-                                      if (Array.isArray($$a)) {
-                                        var $$v = null,
-                                          $$i = _vm._i($$a, $$v)
-                                        if ($$el.checked) {
-                                          $$i < 0 &&
-                                            _vm.$set(
-                                              _vm.product,
-                                              "hasIngredients",
-                                              $$a.concat([$$v])
-                                            )
-                                        } else {
-                                          $$i > -1 &&
-                                            _vm.$set(
-                                              _vm.product,
-                                              "hasIngredients",
-                                              $$a
-                                                .slice(0, $$i)
-                                                .concat($$a.slice($$i + 1))
-                                            )
-                                        }
-                                      } else {
-                                        _vm.$set(
-                                          _vm.product,
-                                          "hasIngredients",
-                                          $$c
-                                        )
-                                      }
-                                    },
-                                    _vm.clearIngredients
-                                  ]
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "label",
-                                { attrs: { for: "hasIngredients" } },
-                                [_vm._v("Has ingredients")]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _vm.product.hasIngredients
-                              ? _c("div", { staticClass: "w-full" }, [
-                                  _c(
-                                    "label",
-                                    {
-                                      staticClass: "text-sm font-semibold",
-                                      attrs: { for: "name" }
-                                    },
-                                    [_vm._v("Ingredients")]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm.product.ingredients.length > 0
-                                    ? _c(
-                                        "ul",
-                                        {
-                                          staticClass:
-                                            "flex items-center gap-x-2 my-1"
-                                        },
-                                        _vm._l(
-                                          _vm.product.ingredients,
-                                          function(ingredient) {
-                                            return _c(
-                                              "li",
-                                              {
-                                                key: ingredient.id,
-                                                staticClass:
-                                                  "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
-                                                class: {
-                                                  "disabled pointer-events-none bg-gray-100":
-                                                    _vm.waiting || _vm.locked
-                                                },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.removeIngredient(
-                                                      ingredient.id
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _c("span", [
-                                                  _vm._v(
-                                                    "  " +
-                                                      _vm._s(
-                                                        ingredient.quantity
-                                                      ) +
-                                                      _vm._s(
-                                                        ingredient.unit.name
-                                                      )
-                                                  )
-                                                ]),
-                                                _vm._v(" "),
-                                                _c("span", [
-                                                  _vm._v(
-                                                    " " +
-                                                      _vm._s(ingredient.name) +
-                                                      " "
-                                                  )
-                                                ])
-                                              ]
-                                            )
-                                          }
-                                        ),
-                                        0
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
+                              _vm.product.discounts.length > 0
+                                ? _c(
+                                    "ul",
                                     {
                                       staticClass:
-                                        "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                        "mb-2 flex items-center gap-x-2 my-1"
                                     },
-                                    [
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.ingredientInput,
-                                            expression: "ingredientInput"
-                                          }
-                                        ],
-                                        staticClass:
-                                          "outline-none  p-2 h-full w-full rounded",
-                                        attrs: {
-                                          type: "text",
-                                          name: "ingredients",
-                                          disabled: _vm.waiting || _vm.locked
-                                        },
-                                        domProps: {
-                                          value: _vm.ingredientInput
-                                        },
-                                        on: {
-                                          keyup: _vm.findIngredient,
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
+                                    _vm._l(_vm.product.discounts, function(
+                                      discount
+                                    ) {
+                                      return _c(
+                                        "li",
+                                        {
+                                          key: discount.id,
+                                          staticClass:
+                                            "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
+                                          class: {
+                                            "disabled pointer-events-none bg-gray-100":
+                                              _vm.waiting || _vm.locked
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.removeDiscount(
+                                                discount.id
+                                              )
                                             }
-                                            _vm.ingredientInput =
-                                              $event.target.value
                                           }
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _vm.foundIngredients.length > 0
-                                        ? _c(
-                                            "ul",
-                                            {
-                                              staticClass:
-                                                "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
-                                            },
-                                            _vm._l(
-                                              _vm.foundIngredients,
-                                              function(ingredient) {
-                                                return _c(
-                                                  "li",
-                                                  {
-                                                    key: ingredient.id,
-                                                    staticClass:
-                                                      "p-1 cursor-pointer hover:bg-gray-50",
-                                                    on: {
-                                                      click: function($event) {
-                                                        return _vm.selectIngredient(
-                                                          ingredient.id
-                                                        )
-                                                      }
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("div", [
-                                                      _vm._v(
-                                                        "\n                                            " +
-                                                          _vm._s(
-                                                            ingredient.name
-                                                          ) +
-                                                          "\n                                        "
-                                                      )
-                                                    ])
-                                                  ]
-                                                )
-                                              }
-                                            ),
-                                            0
-                                          )
-                                        : _vm._e()
-                                    ]
+                                        },
+                                        [
+                                          _c("span", [
+                                            _vm._v("  " + _vm._s(discount.code))
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("span", [
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(discount.value) +
+                                                "% "
+                                            )
+                                          ])
+                                        ]
+                                      )
+                                    }),
+                                    0
                                   )
-                                ])
-                              : _vm._e()
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("div", [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "px-2 py-1 border rounded-sm text-sm rounded-sm hover:border-gray-600 active:shadow-inner disabled:pointer-events-none",
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.openAddDiscountModal($event)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                Add discount\n                            "
+                                    )
+                                  ]
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", [
+                              _c("div", { staticClass: "w-full" }, [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.product.hasIngredients,
+                                      expression: "product.hasIngredients"
+                                    }
+                                  ],
+                                  attrs: {
+                                    type: "checkbox",
+                                    id: "hasIngredients",
+                                    disabled: _vm.waiting || _vm.locked
+                                  },
+                                  domProps: {
+                                    checked: Array.isArray(
+                                      _vm.product.hasIngredients
+                                    )
+                                      ? _vm._i(
+                                          _vm.product.hasIngredients,
+                                          null
+                                        ) > -1
+                                      : _vm.product.hasIngredients
+                                  },
+                                  on: {
+                                    change: [
+                                      function($event) {
+                                        var $$a = _vm.product.hasIngredients,
+                                          $$el = $event.target,
+                                          $$c = $$el.checked ? true : false
+                                        if (Array.isArray($$a)) {
+                                          var $$v = null,
+                                            $$i = _vm._i($$a, $$v)
+                                          if ($$el.checked) {
+                                            $$i < 0 &&
+                                              _vm.$set(
+                                                _vm.product,
+                                                "hasIngredients",
+                                                $$a.concat([$$v])
+                                              )
+                                          } else {
+                                            $$i > -1 &&
+                                              _vm.$set(
+                                                _vm.product,
+                                                "hasIngredients",
+                                                $$a
+                                                  .slice(0, $$i)
+                                                  .concat($$a.slice($$i + 1))
+                                              )
+                                          }
+                                        } else {
+                                          _vm.$set(
+                                            _vm.product,
+                                            "hasIngredients",
+                                            $$c
+                                          )
+                                        }
+                                      },
+                                      _vm.clearIngredients
+                                    ]
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "label",
+                                  { attrs: { for: "hasIngredients" } },
+                                  [_vm._v("Has ingredients")]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _vm.product.hasIngredients
+                                ? _c("div", { staticClass: "w-full" }, [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "text-sm font-semibold",
+                                        attrs: { for: "name" }
+                                      },
+                                      [_vm._v("Ingredients")]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm.product.ingredients.length > 0
+                                      ? _c(
+                                          "ul",
+                                          {
+                                            staticClass:
+                                              "flex items-center gap-x-2 my-1"
+                                          },
+                                          _vm._l(
+                                            _vm.product.ingredients,
+                                            function(ingredient) {
+                                              return _c(
+                                                "li",
+                                                {
+                                                  key: ingredient.id,
+                                                  staticClass:
+                                                    "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
+                                                  class: {
+                                                    "disabled pointer-events-none bg-gray-100":
+                                                      _vm.waiting || _vm.locked
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.removeIngredient(
+                                                        ingredient.id
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("span", [
+                                                    _vm._v(
+                                                      "  " +
+                                                        _vm._s(
+                                                          ingredient.quantity
+                                                        ) +
+                                                        _vm._s(
+                                                          ingredient.unit.name
+                                                        )
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("span", [
+                                                    _vm._v(
+                                                      " " +
+                                                        _vm._s(
+                                                          ingredient.name
+                                                        ) +
+                                                        " "
+                                                    )
+                                                  ])
+                                                ]
+                                              )
+                                            }
+                                          ),
+                                          0
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                      },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.ingredientInput,
+                                              expression: "ingredientInput"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "outline-none  p-2 h-full w-full rounded",
+                                          attrs: {
+                                            type: "text",
+                                            name: "ingredients",
+                                            disabled: _vm.waiting || _vm.locked
+                                          },
+                                          domProps: {
+                                            value: _vm.ingredientInput
+                                          },
+                                          on: {
+                                            keyup: _vm.findIngredient,
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.ingredientInput =
+                                                $event.target.value
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm.foundIngredients.length > 0
+                                          ? _c(
+                                              "ul",
+                                              {
+                                                staticClass:
+                                                  "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
+                                              },
+                                              _vm._l(
+                                                _vm.foundIngredients,
+                                                function(ingredient) {
+                                                  return _c(
+                                                    "li",
+                                                    {
+                                                      key: ingredient.id,
+                                                      staticClass:
+                                                        "p-1 cursor-pointer hover:bg-gray-50",
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          return _vm.selectIngredient(
+                                                            ingredient.id
+                                                          )
+                                                        }
+                                                      }
+                                                    },
+                                                    [
+                                                      _c("div", [
+                                                        _vm._v(
+                                                          "\n                                            " +
+                                                            _vm._s(
+                                                              ingredient.name
+                                                            ) +
+                                                            "\n                                        "
+                                                        )
+                                                      ])
+                                                    ]
+                                                  )
+                                                }
+                                              ),
+                                              0
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    )
+                                  ])
+                                : _vm._e()
+                            ])
                           ],
                           1
                         )
@@ -20104,7 +20895,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("span", [
                             _vm._v(
-                              "\n                            Submit\n                        "
+                              "\n                        Submit\n                    "
                             )
                           ])
                         ]
@@ -20457,8 +21248,19 @@ var render = function() {
                   on: { click: _vm.refreshProducsList }
                 },
                 [_vm._v("\n                Refresh\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "block w-full py-1 px-2 mt-2 text-center  text-base text-white bg-orange-600 rounded-sm active:shadow-inner active:bg-orange-500 md:w-auto md:mt-0",
+                  attrs: { to: { name: "AddProduct" } }
+                },
+                [_vm._v("\n                Add product\n            ")]
               )
-            ]
+            ],
+            1
           ),
           _vm._v(" "),
           _c(

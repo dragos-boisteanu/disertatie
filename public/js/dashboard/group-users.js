@@ -307,17 +307,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     var routerQuery = this.$route.query;
     Object.keys(routerQuery).forEach(function (key) {
-      if (routerQuery[key].length > 0) {
-        if (key === 'roles') {
-          var _this$filterData$key;
+      if (key === 'roles') {
+        var _this$filterData$key;
 
-          _this.filterData[key] = [];
+        _this.filterData[key] = [];
 
-          (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
-        } else {
-          _this.filterData[key] = routerQuery[key];
-        }
+        (_this$filterData$key = _this.filterData[key]).push.apply(_this$filterData$key, _toConsumableArray(routerQuery[key]));
       }
+
+      _this.filterData[key] = routerQuery[key];
     });
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])),
@@ -332,7 +330,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         phoneNumber: '',
         verified: '',
         fromDate: '',
-        toDate: ''
+        toDate: '',
+        orderBy: ''
       }
     };
   },
@@ -352,35 +351,36 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               _context.prev = 0;
               query = {};
               Object.keys(this.filterData).forEach(function (key) {
-                if (_this2.filterData[key].length > 0) {
+                if (_this2.filterData[key] !== '') {
                   query[key] = _this2.filterData[key];
                 }
               });
-              _context.next = 5;
+              query.page = 1;
+              _context.next = 6;
               return this.fetchUsers(query);
 
-            case 5:
+            case 6:
               this.setFilteredState(true);
               this.$router.replace({
                 name: 'Users',
                 query: _objectSpread({}, query)
               });
               this.$Progress.finish();
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 10:
-              _context.prev = 10;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](0);
               this.$Progress.fail();
               console.log(_context.t0);
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 10]]);
+      }, _callee, this, [[0, 11]]);
     })), 500),
     close: function close() {
       this.$emit('closed');
@@ -1851,6 +1851,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1901,7 +1907,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.orderBy = 14;
     }
 
-    this.order();
+    this.sortUsersList(this.orderBy);
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)('Users', ['getUsers', 'getNextPage'])), {}, {
     showMoreState: function showMoreState() {
@@ -1914,7 +1920,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       orderBy: 0
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Users', ['refreshUsers', 'fetchMoreUsers', 'sortUsersList', 'setFilteredState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Notification', ['openNotification'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Users', ['fetchUsers', 'refreshUsers', 'fetchMoreUsers', 'sortUsersList', 'setFilteredState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Notification', ['openNotification'])), {}, {
     loadMoreUsers: function loadMoreUsers() {
       var _this = this;
 
@@ -1934,32 +1940,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this.fetchMoreUsers(query);
 
               case 6:
-                _this.order();
+                _this.$Progress.finish();
 
-                _this.$Progress.finish(); // this.openNotification({
-                //     type:'ok',
-                //     message: 'Done',
-                //     show: true
-                // })
-
-
-                _context2.next = 14;
+                _context2.next = 13;
                 break;
 
-              case 10:
-                _context2.prev = 10;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](0);
 
                 _this.$Progress.fail();
 
                 console.log(_context2.t0);
 
-              case 14:
+              case 13:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 10]]);
+        }, _callee2, null, [[0, 9]]);
       }))();
     },
     refreshUsersList: function refreshUsersList() {
@@ -1989,34 +1988,77 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this2.orderBy = 14;
 
-                _this2.$Progress.finish(); // this.openNotification({
-                //     type:'ok',
-                //     message: 'Refresh complete',
-                //     show: true
-                // })
+                _this2.$Progress.finish();
 
+                _this2.openNotification({
+                  type: 'ok',
+                  message: 'Users list refresed',
+                  show: true
+                });
 
-                _context3.next = 14;
+                _context3.next = 15;
                 break;
 
-              case 10:
-                _context3.prev = 10;
+              case 11:
+                _context3.prev = 11;
                 _context3.t0 = _context3["catch"](0);
 
                 _this2.$Progress.fail();
 
                 console.log(_context3.t0);
 
-              case 14:
+              case 15:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 10]]);
+        }, _callee3, null, [[0, 11]]);
       }))();
     },
     order: function order() {
-      this.sortUsersList(this.orderBy);
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var query;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+
+                _this3.$Progress.start();
+
+                query = Object.assign({}, _this3.$route.query);
+                query.orderBy = _this3.orderBy;
+                _context4.next = 6;
+                return _this3.fetchUsers(query);
+
+              case 6:
+                _this3.$router.replace({
+                  name: 'Users',
+                  query: query
+                });
+
+                _this3.$Progress.finish();
+
+                _context4.next = 14;
+                break;
+
+              case 10:
+                _context4.prev = 10;
+                _context4.t0 = _context4["catch"](0);
+
+                _this3.$Progress.fail();
+
+                console.log(_context4.t0);
+
+              case 14:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 10]]);
+      }))();
     },
     toggleFilterState: function toggleFilterState() {
       this.showFilterState = !this.showFilterState;
@@ -19239,8 +19281,19 @@ var render = function() {
                   on: { click: _vm.refreshUsersList }
                 },
                 [_vm._v("\n                 Refresh\n             ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "block w-full py-1 px-2 mt-2 text-center text-base text-white bg-orange-600 rounded-sm active:shadow-inner active:bg-orange-500 md:w-auto md:mt-0",
+                  attrs: { to: { name: "CreateUser" } }
+                },
+                [_vm._v("\n                 Add user\n             ")]
               )
-            ]
+            ],
+            1
           ),
           _vm._v(" "),
           _c(

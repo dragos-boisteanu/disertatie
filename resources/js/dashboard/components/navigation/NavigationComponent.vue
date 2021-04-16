@@ -62,9 +62,20 @@
                 <li class="text-sm text-gray-300 hover:text-white tracking-wide">
                     <router-link :to="{name: 'Stocks'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Stocks</router-link>
                 </li>
-                
             </ul>
         </div>
+
+        <div class="pt-2">
+            <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
+                DISCOUNTS
+            </div>
+            <ul class="mt-1">
+                <li class="text-sm text-gray-300 hover:text-white tracking-wid">
+                    <router-link :to="{name: 'Discounts'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Discounts list</router-link>
+                </li>
+            </ul>
+        </div>
+
     </div>
 </template>
 

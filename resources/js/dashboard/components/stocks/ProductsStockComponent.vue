@@ -166,7 +166,6 @@
 
             findProduct: _debounce(async function() {
                 try {
-                    console.log(this.$refs.observer.errors)
                     if(this.$refs.observer.errors.barcode.length === 0) {
                         this.$Progress.start();
                         this.waiting = true;
@@ -176,9 +175,7 @@
                         
                         this.waiting = false;
                         this.$Progress.finish();
-
                     }
-                             
                 } catch ( error ) {
                     if(error.response) {
                         if(error.response.status == '404') {
@@ -191,7 +188,6 @@
                     }
                     this.waiting = false;
                     this.$Progress.fail();
-                    console.log(error)
                     this.product = null;
                 }
             }, 250),

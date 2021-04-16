@@ -117,14 +117,14 @@
 
     export default {
 
-        async beforeRouteEnter (to, from, next) {
-            if(store.getters['Ingredients/getIngredients'].length > 0) {
-                next();
-            } else {
-                await store.dispatch('Ingredients/downloadIngredients');
-                next();
-            }
-        },
+        // async beforeRouteEnter (to, from, next) {
+        //     if(store.getters['Ingredients/getIngredients'].length > 0) {
+        //         next();
+        //     } else {
+        //         await store.dispatch('Ingredients/downloadIngredients');
+        //         next();
+        //     }
+        // },
 
         computed: {
             ...mapGetters('Ingredients', ['getIngredients']),

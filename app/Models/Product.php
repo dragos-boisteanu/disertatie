@@ -48,7 +48,7 @@ class Product extends Model
             $quantityArray = array();
             
             foreach($ingredients as $ingredient) {
-                $howManyProductsCanBeMadeFromThisIngredient =  floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
+                $howManyProductsCanBeMadeFromThisIngredient = floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
                 if($howManyProductsCanBeMadeFromThisIngredient === 0) {
                     $quantity = 0;
                     return $quantity;
@@ -83,6 +83,11 @@ class Product extends Model
     public function ingredients() 
     {
         return $this->belongsToMany('App\Models\Ingredient')->withPivot('quantity');
+    }
+
+    public function discounts() 
+    {
+        return $this->belongsToMany('App\Models\Discount');
     }
 
     public function scopeFilter(Builder $builder, Request $request)

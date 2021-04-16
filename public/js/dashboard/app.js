@@ -1958,7 +1958,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return Promise.all([_this2.downloadRoles(), _this2.fetchCounties(), _this2.fetchCategories(), _this2.fetchUnits(), _this2.downloadLoggedUserData(), _this2.downloadIngredients()]);
+              return Promise.all([_this2.downloadRoles(), _this2.fetchCounties(), _this2.fetchCategories(), _this2.fetchUnits(), _this2.downloadLoggedUserData(), _this2.downloadIngredients(), _this2.downloadDiscounts()]);
 
             case 3:
               _this2.$Progress.finish();
@@ -1987,7 +1987,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee2, null, [[0, 7]]);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Counties', ['getCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Ingredients', ['getIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Notification', ['getNotification'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('Notification', ['getNotification'])), {}, {
     mobile: function mobile() {
       return this.$mq === 'sm' || this.$mq === 'md' || this.$mq === 'lg';
     },
@@ -2000,7 +2000,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loaded: false
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['downloadLoggedUserData'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Ingredients', ['downloadIngredients'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['fetchCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Units', ['fetchUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Roles', ['fetchRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Counties', ['fetchCounties'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Users', ['downloadLoggedUserData'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Ingredients', ['downloadIngredients'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Discounts', ['downloadDiscounts'])), {}, {
     downloadRoles: function downloadRoles() {
       var _this3 = this;
 
@@ -2415,6 +2415,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2553,6 +2564,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "searchCategory": () => (/* binding */ searchCategory),
 /* harmony export */   "downloadCategories": () => (/* binding */ downloadCategories),
 /* harmony export */   "postCategory": () => (/* binding */ postCategory),
 /* harmony export */   "patchCategory": () => (/* binding */ patchCategory),
@@ -2560,7 +2572,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var BASE_URL = 'dashboard/categories';
+var BASE_URL = '/categories';
+
+var searchCategory = function searchCategory(catagoryName) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL, "/").concat(catagoryName));
+};
 
 var downloadCategories = function downloadCategories() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
@@ -2599,7 +2615,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
-var BASE_URL = 'client';
+var BASE_URL = 'http://disertatie.test/api/client';
 
 var downloadCounties = function downloadCounties() {
   return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(BASE_URL, "/counties"));
@@ -2607,6 +2623,58 @@ var downloadCounties = function downloadCounties() {
 
 var downloadCities = function downloadCities(id) {
   return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(BASE_URL, "/cities/").concat(id));
+};
+
+
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/api/discounts.api.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/dashboard/api/discounts.api.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "downloadDiscounts": () => (/* binding */ downloadDiscounts),
+/* harmony export */   "postDiscount": () => (/* binding */ postDiscount),
+/* harmony export */   "patchDiscount": () => (/* binding */ patchDiscount),
+/* harmony export */   "deleteDiscount": () => (/* binding */ deleteDiscount),
+/* harmony export */   "disableDiscount": () => (/* binding */ disableDiscount),
+/* harmony export */   "restoreDiscount": () => (/* binding */ restoreDiscount)
+/* harmony export */ });
+/* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
+
+var BASE_URL = '/discounts';
+
+var downloadDiscounts = function downloadDiscounts() {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
+};
+
+var postDiscount = function postDiscount(payload) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(BASE_URL), payload);
+};
+
+var patchDiscount = function patchDiscount(payload) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.patch("".concat(BASE_URL, "/").concat(payload.id), payload);
+};
+
+var deleteDiscount = function deleteDiscount(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(BASE_URL, "/").concat(id), {
+    data: id
+  });
+};
+
+var disableDiscount = function disableDiscount(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.delete("".concat(BASE_URL, "/").concat(id, "/disable"), {
+    data: id
+  });
+};
+
+var restoreDiscount = function restoreDiscount(id) {
+  return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.post("".concat(BASE_URL, "/").concat(id, "/restore"));
 };
 
 
@@ -2628,7 +2696,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 var httpClient = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
-  baseURL: 'http://disertatie.test/api/',
+  baseURL: 'http://disertatie.test/api/dashboard',
   timeout: 60000,
   // indicates, 1000ms ie. 1 second
   withCredentials: true,
@@ -2660,7 +2728,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var BASE_URL = 'dashboard/ingredients';
+var BASE_URL = '/ingredients';
 
 var downloadIngredients = function downloadIngredients() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
@@ -2712,7 +2780,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var END_POINT = 'dashboard/products';
+var END_POINT = '/products';
 
 var downloadProducts = function downloadProducts(query) {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT), {
@@ -2769,7 +2837,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var END_POINT = 'dashboard/roles';
+var END_POINT = '/roles';
 
 var downloadRoles = function downloadRoles() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT));
@@ -2793,7 +2861,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var BASE_URL = 'dashboard/units';
+var BASE_URL = '/units';
 
 var downloadUnits = function downloadUnits() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(BASE_URL));
@@ -2829,7 +2897,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _httpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./httpClient */ "./resources/js/dashboard/api/httpClient.js");
 
-var END_POINT = 'dashboard/users';
+var END_POINT = '/users';
 
 var downloadLoggedUserData = function downloadLoggedUserData() {
   return _httpClient__WEBPACK_IMPORTED_MODULE_0__.default.get("".concat(END_POINT, "/logged-user"));
@@ -3018,6 +3086,10 @@ var IngredientsStock = function IngredientsStock() {
   return __webpack_require__.e(/*! import() | group-stocks */ "group-stocks").then(__webpack_require__.bind(__webpack_require__, /*! ../components/stocks/IngredientsStockComponent.vue */ "./resources/js/dashboard/components/stocks/IngredientsStockComponent.vue"));
 };
 
+var Discounts = function Discounts() {
+  return __webpack_require__.e(/*! import() | group-discounts */ "group-discounts").then(__webpack_require__.bind(__webpack_require__, /*! ../views/discounts/DiscountsView.vue */ "./resources/js/dashboard/views/discounts/DiscountsView.vue"));
+};
+
 var Home = function Home() {
   return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
 };
@@ -3129,6 +3201,16 @@ var routes = [{
       parent: 'Products'
     }
   }
+}, {
+  path: "".concat(baseUrl, "/discounts"),
+  name: 'Discounts',
+  component: Discounts,
+  meta: {
+    breadcrumb: {
+      label: 'Discounts',
+      parent: 'Dashboard'
+    }
+  }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__.default({
   mode: 'history',
@@ -3194,11 +3276,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _api_categories_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/categories.api */ "./resources/js/dashboard/api/categories.api.js");
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/filter */ "./node_modules/lodash/filter.js");
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_3__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -3341,6 +3426,41 @@ var actions = {
           }
         }
       }, _callee4, null, [[1, 7]]);
+    }))();
+  },
+  searchCategory: function searchCategory(_ref6, categoryName) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              commit = _ref6.commit;
+              _context5.prev = 1;
+              _context5.next = 4;
+              return (0,_api_categories_api__WEBPACK_IMPORTED_MODULE_1__.searchCategory)(categoryName);
+
+            case 4:
+              response = _context5.sent;
+
+              if (response.status === 200) {
+                commit('SET_CATEGORIES', response.data.categories);
+              }
+
+              _context5.next = 11;
+              break;
+
+            case 8:
+              _context5.prev = 8;
+              _context5.t0 = _context5["catch"](1);
+              throw _context5.t0;
+
+            case 11:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 8]]);
     }))();
   }
 };
@@ -3493,6 +3613,291 @@ var mutations = {
   },
   SET_COUNTRIES: function SET_COUNTRIES(state, countries) {
     state.counties = countries;
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/store/modules/discounts.store.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/dashboard/store/modules/discounts.store.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _api_discounts_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api/discounts.api */ "./resources/js/dashboard/api/discounts.api.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
+var initialState = function initialState() {
+  return {
+    discounts: null
+  };
+};
+
+var state = initialState();
+var getters = {
+  getDiscounts: function getDiscounts(state) {
+    return state.discounts;
+  }
+};
+var actions = {
+  reset: function reset(_ref) {
+    var commit = _ref.commit;
+    commit('RESET');
+  },
+  downloadDiscounts: function downloadDiscounts(_ref2) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref2.commit;
+              _context.prev = 1;
+              _context.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.downloadDiscounts)();
+
+            case 4:
+              response = _context.sent;
+              commit('SET_DISCOUNTS', response.data.data.discounts);
+              _context.next = 11;
+              break;
+
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](1);
+              throw _context.t0;
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[1, 8]]);
+    }))();
+  },
+  postDiscount: function postDiscount(_ref3, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref3.commit;
+              _context2.prev = 1;
+              _context2.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.postDiscount)(payload);
+
+            case 4:
+              response = _context2.sent;
+              payload.id = response.data;
+              commit('ADD_DISCOUNT', payload);
+              _context2.next = 12;
+              break;
+
+            case 9:
+              _context2.prev = 9;
+              _context2.t0 = _context2["catch"](1);
+              throw _context2.t0;
+
+            case 12:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 9]]);
+    }))();
+  },
+  patchDiscount: function patchDiscount(_ref4, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              commit = _ref4.commit;
+              _context3.prev = 1;
+              console.log(payload.discount);
+              _context3.next = 5;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.patchDiscount)(payload.discount);
+
+            case 5:
+              commit('PATCH_DISCOUNT', payload);
+              _context3.next = 11;
+              break;
+
+            case 8:
+              _context3.prev = 8;
+              _context3.t0 = _context3["catch"](1);
+              throw _context3.t0;
+
+            case 11:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[1, 8]]);
+    }))();
+  },
+  disableDiscount: function disableDiscount(_ref5, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              commit = _ref5.commit;
+              _context4.prev = 1;
+              _context4.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.disableDiscount)(payload.id);
+
+            case 4:
+              response = _context4.sent;
+              payload.deletedAt = response.data.deletedAt;
+              commit('DISABLE_DISCOUNT', payload);
+              _context4.next = 12;
+              break;
+
+            case 9:
+              _context4.prev = 9;
+              _context4.t0 = _context4["catch"](1);
+              throw _context4.t0;
+
+            case 12:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[1, 9]]);
+    }))();
+  },
+  deleteDiscount: function deleteDiscount(_ref6, id) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              commit = _ref6.commit;
+              _context5.prev = 1;
+              _context5.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.deleteDiscount)(id);
+
+            case 4:
+              commit('DELETE_DISCOUNT', id);
+              _context5.next = 10;
+              break;
+
+            case 7:
+              _context5.prev = 7;
+              _context5.t0 = _context5["catch"](1);
+              throw _context5.t0;
+
+            case 10:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 7]]);
+    }))();
+  },
+  restoreDiscount: function restoreDiscount(_ref7, payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              commit = _ref7.commit;
+              _context6.prev = 1;
+              _context6.next = 4;
+              return (0,_api_discounts_api__WEBPACK_IMPORTED_MODULE_1__.restoreDiscount)(payload.id);
+
+            case 4:
+              commit('RESTORE_DISCOUNT', payload);
+              _context6.next = 10;
+              break;
+
+            case 7:
+              _context6.prev = 7;
+              _context6.t0 = _context6["catch"](1);
+              throw _context6.t0;
+
+            case 10:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[1, 7]]);
+    }))();
+  }
+};
+var mutations = {
+  RESET: function RESET(state) {
+    var newState = initialState();
+    Object.keys(newState).forEach(function (key) {
+      state[key] = newState[key];
+    });
+  },
+  SET_DISCOUNTS: function SET_DISCOUNTS(state, payload) {
+    state.discounts = payload;
+  },
+  ADD_DISCOUNT: function ADD_DISCOUNT(state, payload) {
+    state.discounts.push(payload);
+  },
+  PATCH_DISCOUNT: function PATCH_DISCOUNT(state, payload) {
+    var vm = payload.vm;
+    var discount = payload.discount;
+
+    var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', discount.id]);
+
+    Object.keys(discount).forEach(function (key) {
+      vm.$set(state.discounts[discountIndex], key, discount[key]);
+    });
+  },
+  DISABLE_DISCOUNT: function DISABLE_DISCOUNT(state, payload) {
+    var vm = payload.vm;
+    var discountId = payload.id;
+    var deletedAt = payload.deletedAt;
+
+    var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', discountId]);
+
+    vm.$set(state.discounts[discountIndex], 'deletedAt', deletedAt);
+  },
+  DELETE_DISCOUNT: function DELETE_DISCOUNT(state, payload) {
+    var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', payload.id]);
+
+    state.discounts.splice(discountIndex, 1);
+  },
+  RESTORE_DISCOUNT: function RESTORE_DISCOUNT(state, payload) {
+    var vm = payload.vm;
+    var discountId = payload.id;
+
+    var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default()(state.discounts, ['id', discountId]);
+
+    vm.$set(state.discounts[discountIndex], 'deletedAt', null);
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5856,6 +6261,37 @@ var baseForOwn = __webpack_require__(/*! ./_baseForOwn */ "./node_modules/lodash
 var baseEach = createBaseEach(baseForOwn);
 
 module.exports = baseEach;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_baseFilter.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_baseFilter.js ***!
+  \********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var baseEach = __webpack_require__(/*! ./_baseEach */ "./node_modules/lodash/_baseEach.js");
+
+/**
+ * The base implementation of `_.filter` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} predicate The function invoked per iteration.
+ * @returns {Array} Returns the new filtered array.
+ */
+function baseFilter(collection, predicate) {
+  var result = [];
+  baseEach(collection, function(value, index, collection) {
+    if (predicate(value, index, collection)) {
+      result.push(value);
+    }
+  });
+  return result;
+}
+
+module.exports = baseFilter;
 
 
 /***/ }),
@@ -9142,6 +9578,68 @@ function eq(value, other) {
 }
 
 module.exports = eq;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/filter.js":
+/*!***************************************!*\
+  !*** ./node_modules/lodash/filter.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var arrayFilter = __webpack_require__(/*! ./_arrayFilter */ "./node_modules/lodash/_arrayFilter.js"),
+    baseFilter = __webpack_require__(/*! ./_baseFilter */ "./node_modules/lodash/_baseFilter.js"),
+    baseIteratee = __webpack_require__(/*! ./_baseIteratee */ "./node_modules/lodash/_baseIteratee.js"),
+    isArray = __webpack_require__(/*! ./isArray */ "./node_modules/lodash/isArray.js");
+
+/**
+ * Iterates over elements of `collection`, returning an array of all elements
+ * `predicate` returns truthy for. The predicate is invoked with three
+ * arguments: (value, index|key, collection).
+ *
+ * **Note:** Unlike `_.remove`, this method returns a new array.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [predicate=_.identity] The function invoked per iteration.
+ * @returns {Array} Returns the new filtered array.
+ * @see _.reject
+ * @example
+ *
+ * var users = [
+ *   { 'user': 'barney', 'age': 36, 'active': true },
+ *   { 'user': 'fred',   'age': 40, 'active': false }
+ * ];
+ *
+ * _.filter(users, function(o) { return !o.active; });
+ * // => objects for ['fred']
+ *
+ * // The `_.matches` iteratee shorthand.
+ * _.filter(users, { 'age': 36, 'active': true });
+ * // => objects for ['barney']
+ *
+ * // The `_.matchesProperty` iteratee shorthand.
+ * _.filter(users, ['active', false]);
+ * // => objects for ['fred']
+ *
+ * // The `_.property` iteratee shorthand.
+ * _.filter(users, 'active');
+ * // => objects for ['barney']
+ *
+ * // Combining several predicates using `_.overEvery` or `_.overSome`.
+ * _.filter(users, _.overSome([{ 'age': 36 }, ['age', 40]]));
+ * // => objects for ['fred', 'barney']
+ */
+function filter(collection, predicate) {
+  var func = isArray(collection) ? arrayFilter : baseFilter;
+  return func(collection, baseIteratee(predicate, 3));
+}
+
+module.exports = filter;
 
 
 /***/ }),
@@ -32648,7 +33146,7 @@ var render = function() {
     "div",
     {
       staticClass:
-        "fixed px-4 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-40 lg:bottom-auto",
+        "fixed px-4 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-36 lg:bottom-auto",
       class: _vm.type,
       staticStyle: { "min-width": "100px" }
     },
@@ -33549,6 +34047,38 @@ var render = function() {
                   attrs: { to: { name: "Stocks" }, exact: "" }
                 },
                 [_vm._v("Stocks")]
+              )
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "pt-2" }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "text-sm text-coolGray-400 font-bold px-5 tracking-wider"
+          },
+          [_vm._v("\n            DISCOUNTS\n        ")]
+        ),
+        _vm._v(" "),
+        _c("ul", { staticClass: "mt-1" }, [
+          _c(
+            "li",
+            {
+              staticClass: "text-sm text-gray-300 hover:text-white tracking-wid"
+            },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20",
+                  attrs: { to: { name: "Discounts" }, exact: "" }
+                },
+                [_vm._v("Discounts list")]
               )
             ],
             1
@@ -50370,6 +50900,7 @@ var index = {
 var map = {
 	"./categories.store.js": "./resources/js/dashboard/store/modules/categories.store.js",
 	"./counties.store.js": "./resources/js/dashboard/store/modules/counties.store.js",
+	"./discounts.store.js": "./resources/js/dashboard/store/modules/discounts.store.js",
 	"./ingredients.store.js": "./resources/js/dashboard/store/modules/ingredients.store.js",
 	"./notification.store.js": "./resources/js/dashboard/store/modules/notification.store.js",
 	"./products.store.js": "./resources/js/dashboard/store/modules/products.store.js",
@@ -50506,7 +51037,7 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"group-ingredients":1,"group-stocks":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
+/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"group-ingredients":1,"group-stocks":1,"group-discounts":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

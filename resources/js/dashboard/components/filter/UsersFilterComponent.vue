@@ -162,15 +162,14 @@
 
         mounted() {
             const routerQuery = this.$route.query;
+
             Object.keys(routerQuery).forEach(key => {
-                if(routerQuery[key].length > 0) {
-                    if(key === 'roles') {
-                        this.filterData[key] = [];
-                        this.filterData[key].push(...routerQuery[key])
-                    } else {
-                        this.filterData[key] = routerQuery[key];
-                    }
-                }
+                if(key === 'roles') {
+                    this.filterData[key] = [];
+                    this.filterData[key].push(...routerQuery[key])
+                } 
+                 
+                this.filterData[key] = routerQuery[key];
             })
         },
 
@@ -190,6 +189,7 @@
                     verified: '',
                     fromDate: '',
                     toDate: '',
+                    orderBy: ''
                 },
             }
         },
@@ -203,7 +203,6 @@
                 this.$Progress.start()            
 
                 this.debouncedFilter();
-                
             },
 
             debouncedFilter: _debounce( async function() {
@@ -211,10 +210,12 @@
                     const query = {}
 
                     Object.keys(this.filterData).forEach(key => {
-                        if(this.filterData[key].length > 0) {
+                        if(this.filterData[key] !== '') {
                             query[key] = this.filterData[key];
                         }
                     })
+
+                    query.page = 1;
                     
                     await this.fetchUsers(query);
 

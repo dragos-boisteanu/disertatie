@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Models\Role;
+use App\Models\Discount;
 use Illuminate\Http\Request;
 use App\Filters\User\UserFilter;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 // implements MustVerifyEmail
@@ -61,6 +62,11 @@ class User extends Authenticatable
     public function addresses() 
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function discount()
+    {
+        return $this->belongsToMany('App\Models\Discount');
     }
 
     public function scopeFilter(Builder $builder, Request $request)

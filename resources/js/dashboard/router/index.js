@@ -17,6 +17,8 @@ const Stocks = () => import(/* webpackChunkName: "group-stocks" */ '../views/sto
 const ProuductsStock = () => import( /* webpackChunkName: "group-stocks" */ '../components/stocks/ProductsStockComponent.vue');
 const IngredientsStock = () => import (/* webpackChunkName: "group-stocks" */ '../components/stocks/IngredientsStockComponent.vue');
 
+const Discounts = () => import(/* webpackChunkName: "group-discounts" */ '../views/discounts/DiscountsView.vue');
+
 const Home = () => import('../views/HomeView.vue');
 
 
@@ -147,7 +149,21 @@ const routes = [
                 parent: 'Products',
             }
         }
+    },
+
+    {
+        path: `${baseUrl}/discounts`,
+        name: 'Discounts',
+        component: Discounts,
+        meta: {
+            breadcrumb: {
+                label: 'Discounts',
+                parent: 'Dashboard'
+            }
+        }
     }
+
+
     
 ];
 

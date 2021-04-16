@@ -1,6 +1,6 @@
 import httpClient from './httpClient';
 
-const END_POINT = 'dashboard/roles';
+const END_POINT = '/roles';
 
 const downloadRoles = () => httpClient.get(`${END_POINT}`);
 

@@ -59,8 +59,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
-    {
-        
+    { 
         $request->user()->can('forceDelete', Category::class);
         
         try {
@@ -72,6 +71,15 @@ class CategoryController extends Controller
         } catch(\Illuminate\Database\QueryException $e) {
             return response()->json(['message'=>'Remove or copy category\'s ( ' .  $category->name . ' ) items before deleting'], 500);
         }
-       
+    }
+
+    public function search($catagoryName) 
+    {
+        $categories = Category::where('name', 'like', '%' . $catagoryName . '%')->get();
+        if($categories->isNotEmpty()) {
+            return response()->json(['categories'=>$categories], 200);
+        }
+
+        return response()->json(null, 404);
     }
 }
