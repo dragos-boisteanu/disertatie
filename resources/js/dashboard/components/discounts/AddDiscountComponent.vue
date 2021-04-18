@@ -19,7 +19,7 @@
                         >
                             <option value="" disabled>Select discount</option>
                             <option 
-                                v-for="(discount, index) in listDiscounts" 
+                                v-for="(discount, index) in discounts" 
                                 :key="discount.id"
                                 :value="discount"
                                 class="flex items-center gap-x-3 disabled:bg-gray-100"
@@ -111,27 +111,30 @@
             ...mapGetters('Discounts', ['getDiscounts']),
 
             listDiscounts() {
-                this.getDiscounts.forEach(discount => {
-                    const foundDiscount = _find(this.productDiscounts, ['id', discount.id]);
-                    if(foundDiscount) {
-                        discount.exists = true;
-                    }
-                })
-
-                const discounts = this.getDiscounts.filter(discount => discount.deletedAt === null)
-
-                return discounts;
+                
             }
         },
 
-        mouted() {
-            if(productId) {
+        mounted() {
+            // if(productId) {
                 // call server and ask for product
                 // bring product in
                 // check if the discount that is being added alredy exists or not
                 // if not, check to see if it's start date is greater than the most recent endDate of
                 // already present discounts
-            }
+            // }
+
+
+            const discounts = Array.from(this.getDiscounts)
+            
+            discounts.forEach(discount => {
+                const foundDiscount = _find(this.productDiscounts, ['id', discount.id]);
+                if(foundDiscount) {
+                    discount.exists = true;
+                }
+            })
+
+            this.discounts = this.getDiscounts.filter(discount => discount.deletedAt === null)
         },
 
         data() {
@@ -140,6 +143,8 @@
                     id: '',
                     discounts: []
                 },
+
+                discounts: [],
 
                 discount: {
                     id: '0',

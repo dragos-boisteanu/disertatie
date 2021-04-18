@@ -1,7 +1,13 @@
 <template>
     <ViewContainer>
 
-        <AddDiscountComponent v-if="showAddDiscountModal" :product-discounts="product.discounts" @discountAdded="addDiscount" @close="closeAddDiscountModal"></AddDiscountComponent>
+        <AddDiscountComponent 
+            v-if="showAddDiscountModal" 
+            :product-discounts="product.discounts" 
+            @discountAdded="addDiscount" 
+            @close="closeAddDiscountModal"
+        >
+        </AddDiscountComponent>
 
         <template slot="header">
             Add new product

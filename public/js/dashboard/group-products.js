@@ -376,29 +376,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('Discounts', ['getDiscounts'])), {}, {
-    listDiscounts: function listDiscounts() {
-      var _this = this;
-
-      this.getDiscounts.forEach(function (discount) {
-        var foundDiscount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(_this.productDiscounts, ['id', discount.id]);
-
-        if (foundDiscount) {
-          discount.exists = true;
-        }
-      });
-      var discounts = this.getDiscounts.filter(function (discount) {
-        return discount.deletedAt === null;
-      });
-      return discounts;
-    }
+    listDiscounts: function listDiscounts() {}
   }),
-  mouted: function mouted() {
-    if (productId) {// call server and ask for product
-      // bring product in
-      // check if the discount that is being added alredy exists or not
-      // if not, check to see if it's start date is greater than the most recent endDate of
-      // already present discounts
-    }
+  mounted: function mounted() {
+    var _this = this;
+
+    // if(productId) {
+    // call server and ask for product
+    // bring product in
+    // check if the discount that is being added alredy exists or not
+    // if not, check to see if it's start date is greater than the most recent endDate of
+    // already present discounts
+    // }
+    var discounts = Array.from(this.getDiscounts);
+    discounts.forEach(function (discount) {
+      var foundDiscount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(_this.productDiscounts, ['id', discount.id]);
+
+      if (foundDiscount) {
+        discount.exists = true;
+      }
+    });
+    this.discounts = this.getDiscounts.filter(function (discount) {
+      return discount.deletedAt === null;
+    });
   },
   data: function data() {
     return {
@@ -406,6 +406,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         id: '',
         discounts: []
       },
+      discounts: [],
       discount: {
         id: '0',
         fromDate: '',
@@ -1438,6 +1439,12 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -17662,7 +17669,7 @@ var render = function() {
                                         [_vm._v("Select discount")]
                                       ),
                                       _vm._v(" "),
-                                      _vm._l(_vm.listDiscounts, function(
+                                      _vm._l(_vm.discounts, function(
                                         discount,
                                         index
                                       ) {
