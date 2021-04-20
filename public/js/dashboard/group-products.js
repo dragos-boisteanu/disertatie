@@ -377,7 +377,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 
@@ -416,7 +415,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.productDiscounts.forEach(function (discount) {
         var _this$datesToDisable;
 
-        (_this$datesToDisable = _this.datesToDisable).push.apply(_this$datesToDisable, _toConsumableArray(_this.getDatesBetweenDates(discount.fromDate, discount.toDate)));
+        (_this$datesToDisable = _this.datesToDisable).push.apply(_this$datesToDisable, _toConsumableArray(_this.getDatesBetweenDates(new Date(discount.fromDate), new Date(discount.toDate))));
       });
       this.discounts.forEach(function (discount) {
         var foundDiscount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(_this.productDiscounts, ['id', discount.id]);
@@ -444,11 +443,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     submit: function submit() {
-      if (this.discount.toDate > this.discount.fromDate) {
-        this.$emit('discountAdded', this.discount);
-      } else {
-        console.log('to date must be greader than from date');
-      }
+      this.$emit('discountAdded', this.discount);
     },
     getDatesBetweenDates: function getDatesBetweenDates(startDate, endDate) {
       var dates = []; //to avoid modifying the original date
@@ -464,24 +459,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     disableDatesInterval: function disableDatesInterval(date) {
       var today = new Date();
+      today.setHours(0, 0, 0, 0);
 
       if (this.productDiscounts.length > 0) {
         var dateIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default()(this.datesToDisable, function (dateToDisable) {
-          return dateToDisable.getTime() === date.getTime();
-        });
-
-        if (dateIndex > -1) {
-          return true;
-        }
-      } // today.setHours(0, 0, 0, 0);
-
-
-      return date < today;
-    },
-    disableBeforeFromDate: function disableBeforeFromDate(date) {
-      if (this.productDiscounts.length > 0) {
-        var dateIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default()(this.datesToDisable, function (dateToDisable) {
-          return dateToDisable.getTime() === date.getTime();
+          console.log(new Date(dateToDisable).getTime() === date.getTime());
+          var dateToDisableWithTime = new Date(dateToDisable);
+          dateToDisableWithTime.setHours(0, 0, 0, 0);
+          return dateToDisableWithTime.getTime() === date.getTime();
         });
 
         if (dateIndex > -1) {
@@ -489,7 +474,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }
 
-      var fromDate = this.discount.fromDate;
+      return date < today;
+    },
+    disableBeforeFromDate: function disableBeforeFromDate(date) {
+      if (this.productDiscounts.length > 0) {
+        var dateIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default()(this.datesToDisable, function (dateToDisable) {
+          var dateToDisableWithTime = new Date(dateToDisable);
+          dateToDisableWithTime.setHours(0, 0, 0, 0);
+          return dateToDisableWithTime.getTime() === date.getTime();
+        });
+
+        if (dateIndex > -1) {
+          return true;
+        }
+      }
+
+      var fromDate = new Date(this.discount.fromDate);
       return date < fromDate;
     },
     getAvailableDiscounts: function getAvailableDiscounts() {
@@ -1874,9 +1874,8 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   delete payload.hasIngredients;
                 }
 
-                if (pay) {
-                  _context.next = 9;
-                  break;
+                if (payload.discounts.length === 0) {
+                  delete payload.discounts;
                 }
 
                 _context.next = 9;
@@ -18536,12 +18535,11 @@ var render = function() {
                                       _c("date-picker", {
                                         attrs: {
                                           "input-attr": { name: "from" },
-                                          type: "datetime",
-                                          placeholder:
-                                            "Begining date of the discount",
+                                          type: "date",
+                                          placeholder: "Start date",
                                           confirm: true,
                                           "confirm-text": "Ok",
-                                          valueType: "date",
+                                          valueType: "format",
                                           "disabled-date":
                                             _vm.disableDatesInterval
                                         },
@@ -18597,12 +18595,11 @@ var render = function() {
                                       _c("date-picker", {
                                         attrs: {
                                           disabled: _vm.enableToDate,
-                                          type: "datetime",
-                                          placeholder:
-                                            "End date of the discount",
+                                          type: "date",
+                                          placeholder: "End date",
                                           confirm: true,
                                           "confirm-text": "Ok",
-                                          valueType: "date",
+                                          valueType: "format",
                                           "disabled-date":
                                             _vm.disableBeforeFromDate
                                         },

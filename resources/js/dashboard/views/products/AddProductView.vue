@@ -370,7 +370,9 @@
                         delete payload.hasIngredients;
                     }
 
-                    if(!pay)
+                    if(payload.discounts.length === 0) {
+                        delete payload.discounts
+                    }
                 
                     await this.addProduct(payload);
 

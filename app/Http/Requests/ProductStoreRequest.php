@@ -38,7 +38,11 @@ class ProductStoreRequest extends FormRequest
             'ingredients'=> 'required_with:hasIngredients|array',
             'ingregients.*.id' => 'required_with:ingregients|numeric',
             'ingredients.*.quantity' => 'required_with:ingregients|numeric',
-            'ingredients.*.unit.id' => 'required_with:ingregients|numeric'
+            'ingredients.*.unit.id' => 'required_with:ingregients|numeric',
+            'discounts' => ['sometimes', 'array'],
+            'discounts.*.id' => ['required_with:discounts','numeric', 'exists:discounts,id'],
+            'discount.*.fromDate' => ['required_with:discounts'],
+            'discount.*.toDate' => ['required_with:discounts'],
         ];
     }
 

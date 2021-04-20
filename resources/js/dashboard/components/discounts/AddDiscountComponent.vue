@@ -43,11 +43,11 @@
                             <date-picker
                                 :input-attr="{name: 'from'}" 
                                 v-model="discount.fromDate" 
-                                type="datetime"
-                                placeholder="Begining date of the discount"
+                                type="date"
+                                placeholder="Start date"
                                 :confirm="true"
                                 confirm-text="Ok"
-                                valueType="date"
+                                valueType="format"
                                 :disabled-date="disableDatesInterval"
                             >
                             </date-picker>
@@ -58,13 +58,12 @@
                             <date-picker 
                                 :disabled="enableToDate"
                                 v-model="discount.toDate" 
-                                type="datetime"
-                                placeholder="End date of the discount"
+                                type="date"
+                                placeholder="End date"
                                 :confirm="true"
                                 confirm-text="Ok"
-                                valueType="date"
+                                valueType="format"
                                 :disabled-date="disableBeforeFromDate"
-                                
                                 >
                             </date-picker>
                         </ValidationProvider>
@@ -134,7 +133,7 @@
 
             if(this.productDiscounts.length > 0) {
                 this.productDiscounts.forEach(discount => {
-                    this.datesToDisable.push(...this.getDatesBetweenDates(discount.fromDate, discount.toDate));
+                    this.datesToDisable.push(...this.getDatesBetweenDates(new Date(discount.fromDate), new Date(discount.toDate)));
                 })
 
                 this.discounts.forEach(discount => {
@@ -167,15 +166,11 @@
 
         methods: {
             submit() {
-                if(this.discount.toDate > this.discount.fromDate) {
-                    this.$emit('discountAdded', this.discount);
-                } else {
-                    console.log('to date must be greader than from date')
-                }
+                this.$emit('discountAdded', this.discount);
             },
 
             getDatesBetweenDates(startDate, endDate) {
-                let dates = [];
+                let dates = [];  
                 //to avoid modifying the original date
                 const theDate = new Date(startDate)
                 while (theDate <= endDate) {
@@ -187,26 +182,29 @@
 
             disableDatesInterval(date) {
                 const today = new Date();
+                today.setHours(0, 0, 0, 0);
 
                 if(this.productDiscounts.length > 0) {
                     const dateIndex = _findIndex(this.datesToDisable, dateToDisable => {
-                        return dateToDisable.getTime() === date.getTime()
+                        console.log(new Date(dateToDisable).getTime() === date.getTime())
+                        const dateToDisableWithTime = new Date(dateToDisable);
+                        dateToDisableWithTime.setHours(0, 0, 0, 0);
+                        return dateToDisableWithTime.getTime() === date.getTime()
                     })
 
                     if(dateIndex > -1) {
                         return true;
                     }
                 }
-
-                // today.setHours(0, 0, 0, 0);
-
                 return date < today;               
             },
 
             disableBeforeFromDate(date) {
                 if(this.productDiscounts.length > 0) {
                     const dateIndex = _findIndex(this.datesToDisable, dateToDisable => {
-                        return dateToDisable.getTime() === date.getTime()
+                        const dateToDisableWithTime = new Date(dateToDisable);
+                        dateToDisableWithTime.setHours(0, 0, 0, 0);
+                        return dateToDisableWithTime.getTime() === date.getTime()
                     })
 
                     if(dateIndex > -1) {
@@ -214,7 +212,7 @@
                     }
                 }
 
-                const fromDate = this.discount.fromDate;
+                const fromDate = new Date(this.discount.fromDate);
                 return date < fromDate
             },
 

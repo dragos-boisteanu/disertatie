@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use Carbon\Carbon;
 use App\Models\Stock;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -94,7 +95,6 @@ class ProductController extends Controller
                 $stock = Stock::create(['quantity' => 1]);
                 $product->stock_id = $stock->id;
                 $product->save();
-            
             }
          
 
@@ -113,6 +113,12 @@ class ProductController extends Controller
                 Storage::delete($requestPath);
             }
             
+            if($request->has('discounts')) {
+                foreach($request->discounts as $discount) {
+                    $product->discounts()->attach([$discount['id'] => ['starts_at' => Carbon::parse($discount['fromDate']), 'ends_at' => Carbon::parse($discount['toDate'])]]);
+                }
+            }
+
             DB::commit();
 
             return response()->json([
