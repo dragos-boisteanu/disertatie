@@ -262,11 +262,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ModalComponent */ "./resources/js/dashboard/components/ModalComponent.vue");
-/* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ModalComponent */ "./resources/js/dashboard/components/ModalComponent.vue");
+/* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -364,7 +378,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
+
 
 
 
@@ -377,10 +391,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     productDiscounts: {
       type: Array,
-      required: false
+      required: false,
+      "default": null
     }
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Discounts', ['getDiscounts'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Discounts', ['getDiscounts'])), {}, {
+    enableToDate: function enableToDate() {
+      return this.discount.fromDate ? false : true;
+    }
+  }),
   mounted: function mounted() {
     var _this = this;
 
@@ -392,13 +411,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // already present discounts
     // }
     this.getAvailableDiscounts();
-    this.discounts.forEach(function (discount) {
-      var foundDiscount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(_this.productDiscounts, ['id', discount.id]);
 
-      if (foundDiscount) {
-        discount.exists = true;
-      }
-    });
+    if (this.productDiscounts.length > 0) {
+      this.productDiscounts.forEach(function (discount) {
+        var _this$datesToDisable;
+
+        (_this$datesToDisable = _this.datesToDisable).push.apply(_this$datesToDisable, _toConsumableArray(_this.getDatesBetweenDates(discount.fromDate, discount.toDate)));
+      });
+      this.discounts.forEach(function (discount) {
+        var foundDiscount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(_this.productDiscounts, ['id', discount.id]);
+
+        if (foundDiscount) {
+          discount.exists = true;
+        }
+      });
+    }
   },
   data: function data() {
     return {
@@ -407,6 +434,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         discounts: []
       },
       discounts: [],
+      datesToDisable: [],
       discount: {
         id: '0',
         fromDate: '',
@@ -416,21 +444,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     submit: function submit() {
-      console.log(this.discount);
-
       if (this.discount.toDate > this.discount.fromDate) {
         this.$emit('discountAdded', this.discount);
       } else {
         console.log('to date must be greader than from date');
       }
     },
-    disableBeforeToday: function disableBeforeToday(date) {
+    getDatesBetweenDates: function getDatesBetweenDates(startDate, endDate) {
+      var dates = []; //to avoid modifying the original date
+
+      var theDate = new Date(startDate);
+
+      while (theDate <= endDate) {
+        dates = [].concat(_toConsumableArray(dates), [new Date(theDate)]);
+        theDate.setDate(theDate.getDate() + 1);
+      }
+
+      return dates;
+    },
+    disableDatesInterval: function disableDatesInterval(date) {
       var today = new Date();
-      today.setHours(0, 0, 0, 0);
+
+      if (this.productDiscounts.length > 0) {
+        var dateIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default()(this.datesToDisable, function (dateToDisable) {
+          return dateToDisable.getTime() === date.getTime();
+        });
+
+        if (dateIndex > -1) {
+          return true;
+        }
+      } // today.setHours(0, 0, 0, 0);
+
+
       return date < today;
     },
     disableBeforeFromDate: function disableBeforeFromDate(date) {
-      var fromDate = new Date(this.discount.fromDate);
+      if (this.productDiscounts.length > 0) {
+        var dateIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default()(this.datesToDisable, function (dateToDisable) {
+          return dateToDisable.getTime() === date.getTime();
+        });
+
+        if (dateIndex > -1) {
+          return true;
+        }
+      }
+
+      var fromDate = this.discount.fromDate;
       return date < fromDate;
     },
     getAvailableDiscounts: function getAvailableDiscounts() {
@@ -443,8 +502,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   components: {
-    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default,
-    DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__.default
+    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_2__.default,
+    DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_3__.default
   }
 });
 
@@ -18471,14 +18530,13 @@ var render = function() {
                                         attrs: {
                                           "input-attr": { name: "from date" },
                                           type: "datetime",
-                                          format: "YYYY-MM-DD hh:mm",
                                           placeholder:
                                             "Begining date of the discount",
                                           confirm: true,
                                           "confirm-text": "Ok",
-                                          valueType: "format",
+                                          valueType: "date",
                                           "disabled-date":
-                                            _vm.disableBeforeToday
+                                            _vm.disableDatesInterval
                                         },
                                         model: {
                                           value: _vm.discount.fromDate,
@@ -18531,13 +18589,13 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("date-picker", {
                                         attrs: {
+                                          disabled: _vm.enableToDate,
                                           type: "datetime",
-                                          format: "YYYY-MM-DD hh:mm",
                                           placeholder:
                                             "End date of the discount",
                                           confirm: true,
                                           "confirm-text": "Ok",
-                                          valueType: "format",
+                                          valueType: "date",
                                           "disabled-date":
                                             _vm.disableBeforeFromDate
                                         },
