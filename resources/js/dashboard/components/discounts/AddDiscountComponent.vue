@@ -19,15 +19,12 @@
                         >
                             <option value="" disabled>Select discount</option>
                             <option 
-                                v-for="(discount, index) in discounts" 
+                                v-for="discount in discounts" 
                                 :key="discount.id"
                                 :value="discount"
                                 class="flex items-center gap-x-3 disabled:bg-gray-100"
                                 :disabled="discount.exists"
                             >
-                                <span>
-                                    {{index+1}}
-                                </span>
                                 <span>
                                     <span>
                                         {{ discount.code }}
@@ -39,32 +36,38 @@
                             </option>
                         </select>
                     </ValidationProvider>
-                    <div class="flex items-center justify-between mt-3 gap-x-4">
-                        <ValidationProvider vid="fromDate" rules="required" v-slot="{ errors, failed, passed }" class="w-full">
+                    <div class="flex flex-col gap-y-4 md:flex-row items-center justify-between mt-3 gap-x-4">
+                        <ValidationProvider vid="fromDate" rules="required" v-slot="{ errors }" class="w-full">
                             <label for="from" class="text-sm font-semibold">From</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                            <input 
-                                type="date" 
-                                id="fromDate" 
-                                name="fromDate" 
-                                v-model="discount.fromDate"
-                                :max="discount.toDate"
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                            />
+                            <date-picker
+                                :input-attr="{name: 'from date'}" 
+                                v-model="discount.fromDate" 
+                                type="datetime"
+                                format="YYYY-MM-DD hh:mm"
+                                placeholder="Begining date of the discount"
+                                :confirm="true"
+                                confirm-text="Ok"
+                                valueType="format"
+                                :disabled-date="disableBeforeToday"
+                            >
+                            </date-picker>
                         </ValidationProvider>
-                        <ValidationProvider vid="toDate" rules="required" v-slot="{ errors, failed, passed }" class="w-full">
+                        <ValidationProvider vid="toDate" rules="required" v-slot="{ errors}" class="w-full">
                             <label for="from" class="text-sm font-semibold">To</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                            <input 
-                                type="date" 
-                                id="toDate" 
-                                name="toDate" 
-                                v-model="discount.toDate"
-                                :min="discount.fromDate"
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                            />
+                            <date-picker 
+                                v-model="discount.toDate" 
+                                type="datetime"
+                                format="YYYY-MM-DD hh:mm"
+                                placeholder="End date of the discount"
+                                :confirm="true"
+                                confirm-text="Ok"
+                                valueType="format"
+                                :disabled-date="disableBeforeFromDate"
+                                
+                                >
+                            </date-picker>
                         </ValidationProvider>
                     </div>
                     <div class="w-full flex justify-end items-center mt-4">
@@ -93,6 +96,8 @@
 
     import Modal from '../ModalComponent';
 
+    import DatePicker from 'vue2-datepicker';
+
     export default {
 
         props: {
@@ -110,9 +115,7 @@
         computed: {
             ...mapGetters('Discounts', ['getDiscounts']),
 
-            listDiscounts() {
-                
-            }
+           
         },
 
         mounted() {
@@ -123,18 +126,15 @@
                 // if not, check to see if it's start date is greater than the most recent endDate of
                 // already present discounts
             // }
-
-
-            const discounts = Array.from(this.getDiscounts)
             
-            discounts.forEach(discount => {
+            this.getAvailableDiscounts()
+
+            this.discounts.forEach(discount => {
                 const foundDiscount = _find(this.productDiscounts, ['id', discount.id]);
                 if(foundDiscount) {
                     discount.exists = true;
                 }
             })
-
-            this.discounts = this.getDiscounts.filter(discount => discount.deletedAt === null)
         },
 
         data() {
@@ -156,12 +156,27 @@
 
         methods: {
             submit() {
+                console.log(this.discount);
                 if(this.discount.toDate > this.discount.fromDate) {
                     this.$emit('discountAdded', this.discount);
                 } else {
                     console.log('to date must be greader than from date')
                 }
-                
+            },
+
+            disableBeforeToday(date) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return date < today;
+            },
+
+            disableBeforeFromDate(date) {
+                const fromDate = new Date(this.discount.fromDate);
+                return date < fromDate
+            },
+
+            getAvailableDiscounts() {
+                this.discounts =  JSON.parse(JSON.stringify(this.getDiscounts.filter(discount => discount.deletedAt === null)))
             },
 
             close() {
@@ -171,6 +186,7 @@
 
         components: {
            Modal, 
+           DatePicker
         }
     }
 </script>

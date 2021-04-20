@@ -1,6 +1,6 @@
 <template>
     <Backdrop class="flex justify-center items-center">
-        <div class="bg-white p-4 rounded-md w-11/12 shadow-md overflow-y-auto max-h-5/6 xl:w-2/4">
+        <div class="bg-white p-4 rounded-md shadow-md w-11/12 md:w-auto overflow-y-auto max-h-5/6">
             <slot></slot>
         </div>
     </Backdrop>

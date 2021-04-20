@@ -16170,7 +16170,7 @@ var render = function() {
       "div",
       {
         staticClass:
-          "bg-white p-4 rounded-md w-11/12 shadow-md overflow-y-auto max-h-5/6 xl:w-2/4"
+          "bg-white p-4 rounded-md shadow-md w-11/12 md:w-auto overflow-y-auto max-h-5/6"
       },
       [_vm._t("default")],
       2

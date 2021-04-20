@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 
+var ProgressBarPlugin = require('progress-bar-webpack-plugin');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -10,6 +11,11 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
 */
+
+new ProgressBarPlugin({
+  format: '  build [:bar] ' +':percent' + ' (:elapsed seconds)',
+  clear: false
+})
 
 mix.webpackConfig({
     module: {
@@ -24,6 +30,9 @@ mix.webpackConfig({
         }
       ],
     },
+    plugins: [
+      new ProgressBarPlugin()
+    ]
 })
 
 mix.disableNotifications();

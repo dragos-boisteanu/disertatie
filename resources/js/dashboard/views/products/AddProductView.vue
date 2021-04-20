@@ -331,7 +331,6 @@
                     base_price: '',
                     weight: '',
                     unit_id: '',
-                    quantity: '',
                     category_id: '',
                     hasIngredients: false,
                     ingredients: [],
@@ -472,7 +471,7 @@
                 }else {
                     this.foundIngredients = [];
                 }
-            },
+            }, 
 
             selectIngredient(id) {
                 const productIngredient = _find(this.product.ingredients, ['id', id]);
@@ -494,7 +493,7 @@
                     this.foundIngredients = [];
                 }
             },
-
+   
             removeIngredient(id) {
                 const ingredientIndex = _findIndex(this.product.ingredients, ['id', id]);
                 this.product.ingredients.splice(ingredientIndex, 1);
@@ -508,7 +507,6 @@
 
             removeDiscount(id) {
                 const discountIndex = _findIndex(this.product.discounts, ['id', id]);
-
                 this.product.discounts.splice(discountIndex, 1);
             },
 

@@ -6,12 +6,12 @@ const initialState = () => ({
 })
 
 const state = initialState();
-
+ 
 const getters = {
 
     getDiscounts(state) {
         return state.discounts;
-    }
+    },
 }
 
 const actions = {
