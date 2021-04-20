@@ -41,7 +41,7 @@
                             <label for="from" class="text-sm font-semibold">From</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                             <date-picker
-                                :input-attr="{name: 'from date'}" 
+                                :input-attr="{name: 'from'}" 
                                 v-model="discount.fromDate" 
                                 type="datetime"
                                 placeholder="Begining date of the discount"

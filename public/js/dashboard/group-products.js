@@ -1804,6 +1804,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -1873,10 +1874,15 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   delete payload.hasIngredients;
                 }
 
-                _context.next = 8;
+                if (pay) {
+                  _context.next = 9;
+                  break;
+                }
+
+                _context.next = 9;
                 return _this.addProduct(payload);
 
-              case 8:
+              case 9:
                 _this.product = {
                   barcode: '',
                   name: '',
@@ -1887,7 +1893,8 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   quantity: '',
                   category_id: '',
                   hasIngredients: false,
-                  ingredients: []
+                  ingredients: [],
+                  discounts: []
                 }, _this.$refs.observer.reset();
                 _this.waiting = false;
 
@@ -1899,11 +1906,11 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   message: 'Product added'
                 });
 
-                _context.next = 19;
+                _context.next = 20;
                 break;
 
-              case 14:
-                _context.prev = 14;
+              case 15:
+                _context.prev = 15;
                 _context.t0 = _context["catch"](0);
 
                 _this.$Progress.fail();
@@ -1914,12 +1921,12 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
 
                 _this.waiting = false;
 
-              case 19:
+              case 20:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 14]]);
+        }, _callee, null, [[0, 15]]);
       }))();
     },
     getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -18528,7 +18535,7 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("date-picker", {
                                         attrs: {
-                                          "input-attr": { name: "from date" },
+                                          "input-attr": { name: "from" },
                                           type: "datetime",
                                           placeholder:
                                             "Begining date of the discount",

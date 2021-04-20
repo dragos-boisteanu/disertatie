@@ -82,7 +82,8 @@
                             </ValidationProvider>
 
                             <ValidationProvider 
-                                vid="name" rules="required|alpha_spaces|max:255" 
+                                vid="name" 
+                                rules="required|alpha_spaces|max:255" 
                                 v-slot="{ errors, failed, passed }" 
                                 class="w-full"
                             >
@@ -368,6 +369,8 @@
                         delete payload.ingredients;
                         delete payload.hasIngredients;
                     }
+
+                    if(!pay)
                 
                     await this.addProduct(payload);
 
@@ -381,7 +384,8 @@
                         quantity: '',
                         category_id: '',
                         hasIngredients: false,
-                        ingredients: []
+                        ingredients: [],
+                        discounts: [],
                     },
 
                     this.$refs.observer.reset();
