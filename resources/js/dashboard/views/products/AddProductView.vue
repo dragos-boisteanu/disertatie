@@ -14,7 +14,7 @@
         </template>
 
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-            <form @submit.prevent="handleSubmit(submit)" class="lex flex-col">
+            <form @submit.prevent="handleSubmit(submit)" class="lex flex-col" :class="{'pb-10':foundIngredients.length > 0 > 0}">
                 <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
                          <file-pond
@@ -247,21 +247,34 @@
                                         <span> {{ingredient.name}} </span>
                                     </li>
                                 </ul>
-                                <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
-
-                                    <input type="text" name="ingredients" class="outline-none  p-2 h-full w-full rounded" v-model="ingredientInput" @keyup="findIngredient" :disabled="waiting || locked" />
-
-                                    <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
-                                        <li v-for="ingredient in foundIngredients" :key="ingredient.id"
-                                            @click="selectIngredient(ingredient.id)"
-                                            class="p-1 cursor-pointer hover:bg-gray-50"    
-                                        >
-                                            <div>
-                                                {{ingredient.name}}
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <ValidationProvider 
+                                    vid="ingredient"
+                                    v-slot="{ errors }" 
+                                    class="w-full"
+                                >
+                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                    <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
+                                        <input 
+                                            type="text" 
+                                            name="ingredients" 
+                                            class="outline-none p-2 h-full w-full rounded" 
+                                            v-model="ingredientInput" 
+                                            @keyup="findIngredient" 
+                                            :disabled="waiting || locked" 
+                                        />
+                                    
+                                        <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
+                                            <li v-for="ingredient in foundIngredients" :key="ingredient.id"
+                                                @click="selectIngredient(ingredient.id)"
+                                                class="p-1 cursor-pointer hover:bg-gray-50"    
+                                            >
+                                                <div>
+                                                    {{ingredient.name}}
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </ValidationProvider>
                             </div>
                         </div> 
                     </div>
@@ -374,7 +387,8 @@
                         delete payload.discounts
                     }
                 
-                    await this.addProduct(payload);
+                    const payload2 = {}
+                    await this.addProduct(payload2);
 
                     this.product = {
                         barcode: '',
@@ -400,9 +414,10 @@
                         message: 'Product added'
                     })
                 } catch ( error ) {
+                    console.log(error)
                     this.$Progress.fail();
 
-                    if(error.response.data.errors) {
+                    if(error.response) {
                         this.$refs.observer.setErrors(error.response.data.errors)
                     }  
                     this.waiting = false
@@ -489,14 +504,29 @@
                         message: 'The product already has this ingredient'
                     })
                 }else {
-                    const selectedIngredient = _find(this.foundIngredients, ['id', id]);
-                    const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-                    
-                    selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-                    this.product.ingredients.push(selectedIngredient);
-                    this.ingredientInput = '';
+                    try {
+                        const selectedIngredient = _find(this.foundIngredients, ['id', id]);
+                        const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
+                        
+                        const ingredientQuantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+                        if(ingredientQuantity.length === 0 ) {
+                            throw 'Ingredient quantity is required'
+                        }
+                        if(!Number.isSafeInteger(parseInt(ingredientQuantity))) {
+                            throw 'The first part must be an integer'
+                        }
 
-                    this.foundIngredients = [];
+                        selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+                        this.product.ingredients.push(selectedIngredient);
+                        this.ingredientInput = '';
+
+                        this.foundIngredients = [];
+                    } catch (error) {
+                        const errors = {
+                            ingredient: [ error ]
+                        }
+                        this.$refs.observer.setErrors(errors);
+                    }
                 }
             },
    

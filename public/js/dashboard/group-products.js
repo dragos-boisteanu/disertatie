@@ -1805,6 +1805,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1849,7 +1862,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var payload;
+        var payload, payload2;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -1878,10 +1891,11 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   delete payload.discounts;
                 }
 
-                _context.next = 9;
-                return _this.addProduct(payload);
+                payload2 = {};
+                _context.next = 10;
+                return _this.addProduct(payload2);
 
-              case 9:
+              case 10:
                 _this.product = {
                   barcode: '',
                   name: '',
@@ -1905,27 +1919,28 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   message: 'Product added'
                 });
 
-                _context.next = 20;
+                _context.next = 22;
                 break;
 
-              case 15:
-                _context.prev = 15;
+              case 16:
+                _context.prev = 16;
                 _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
 
                 _this.$Progress.fail();
 
-                if (_context.t0.response.data.errors) {
+                if (_context.t0.response) {
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
                 }
 
                 _this.waiting = false;
 
-              case 20:
+              case 22:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 15]]);
+        }, _callee, null, [[0, 16]]);
       }))();
     },
     getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -2037,13 +2052,30 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
           message: 'The product already has this ingredient'
         });
       } else {
-        var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_4___default()(this.foundIngredients, ['id', id]);
+        try {
+          var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_4___default()(this.foundIngredients, ['id', id]);
 
-        var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-        selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-        this.product.ingredients.push(selectedIngredient);
-        this.ingredientInput = '';
-        this.foundIngredients = [];
+          var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
+          var ingredientQuantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+
+          if (ingredientQuantity.length === 0) {
+            throw 'Ingredient quantity is required';
+          }
+
+          if (!Number.isSafeInteger(parseInt(ingredientQuantity))) {
+            throw 'The first part must be an integer';
+          }
+
+          selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
+          this.product.ingredients.push(selectedIngredient);
+          this.ingredientInput = '';
+          this.foundIngredients = [];
+        } catch (error) {
+          var errors = {
+            ingredient: [error]
+          };
+          this.$refs.observer.setErrors(errors);
+        }
       }
     },
     removeIngredient: function removeIngredient(id) {
@@ -20450,6 +20482,7 @@ var render = function() {
                   "form",
                   {
                     staticClass: "lex flex-col",
+                    class: { "pb-10": _vm.foundIngredients.length > 0 > 0 },
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
@@ -21431,158 +21464,210 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _vm.product.hasIngredients
-                                ? _c("div", { staticClass: "w-full" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("Ingredients")]
-                                    ),
-                                    _vm._v(" "),
-                                    _vm.product.ingredients.length > 0
-                                      ? _c(
-                                          "ul",
-                                          {
-                                            staticClass:
-                                              "flex items-center gap-x-2 my-1"
-                                          },
-                                          _vm._l(
-                                            _vm.product.ingredients,
-                                            function(ingredient) {
-                                              return _c(
-                                                "li",
-                                                {
-                                                  key: ingredient.id,
-                                                  staticClass:
-                                                    "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
-                                                  class: {
-                                                    "disabled pointer-events-none bg-gray-100":
-                                                      _vm.waiting || _vm.locked
-                                                  },
-                                                  on: {
-                                                    click: function($event) {
-                                                      return _vm.removeIngredient(
-                                                        ingredient.id
-                                                      )
-                                                    }
-                                                  }
-                                                },
-                                                [
-                                                  _c("span", [
-                                                    _vm._v(
-                                                      "  " +
-                                                        _vm._s(
-                                                          ingredient.quantity
-                                                        ) +
-                                                        _vm._s(
-                                                          ingredient.unit.name
-                                                        )
-                                                    )
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("span", [
-                                                    _vm._v(
-                                                      " " +
-                                                        _vm._s(
-                                                          ingredient.name
-                                                        ) +
-                                                        " "
-                                                    )
-                                                  ])
-                                                ]
-                                              )
-                                            }
-                                          ),
-                                          0
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                      },
-                                      [
-                                        _c("input", {
-                                          directives: [
+                                ? _c(
+                                    "div",
+                                    { staticClass: "w-full" },
+                                    [
+                                      _c(
+                                        "label",
+                                        {
+                                          staticClass: "text-sm font-semibold",
+                                          attrs: { for: "name" }
+                                        },
+                                        [_vm._v("Ingredients")]
+                                      ),
+                                      _vm._v(" "),
+                                      _vm.product.ingredients.length > 0
+                                        ? _c(
+                                            "ul",
                                             {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value: _vm.ingredientInput,
-                                              expression: "ingredientInput"
-                                            }
-                                          ],
-                                          staticClass:
-                                            "outline-none  p-2 h-full w-full rounded",
-                                          attrs: {
-                                            type: "text",
-                                            name: "ingredients",
-                                            disabled: _vm.waiting || _vm.locked
-                                          },
-                                          domProps: {
-                                            value: _vm.ingredientInput
-                                          },
-                                          on: {
-                                            keyup: _vm.findIngredient,
-                                            input: function($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.ingredientInput =
-                                                $event.target.value
-                                            }
-                                          }
-                                        }),
-                                        _vm._v(" "),
-                                        _vm.foundIngredients.length > 0
-                                          ? _c(
-                                              "ul",
-                                              {
-                                                staticClass:
-                                                  "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
-                                              },
-                                              _vm._l(
-                                                _vm.foundIngredients,
-                                                function(ingredient) {
-                                                  return _c(
-                                                    "li",
-                                                    {
-                                                      key: ingredient.id,
-                                                      staticClass:
-                                                        "p-1 cursor-pointer hover:bg-gray-50",
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.selectIngredient(
-                                                            ingredient.id
-                                                          )
-                                                        }
+                                              staticClass:
+                                                "flex items-center gap-x-2 my-1"
+                                            },
+                                            _vm._l(
+                                              _vm.product.ingredients,
+                                              function(ingredient) {
+                                                return _c(
+                                                  "li",
+                                                  {
+                                                    key: ingredient.id,
+                                                    staticClass:
+                                                      "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
+                                                    class: {
+                                                      "disabled pointer-events-none bg-gray-100":
+                                                        _vm.waiting ||
+                                                        _vm.locked
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.removeIngredient(
+                                                          ingredient.id
+                                                        )
                                                       }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("span", [
+                                                      _vm._v(
+                                                        "  " +
+                                                          _vm._s(
+                                                            ingredient.quantity
+                                                          ) +
+                                                          _vm._s(
+                                                            ingredient.unit.name
+                                                          )
+                                                      )
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("span", [
+                                                      _vm._v(
+                                                        " " +
+                                                          _vm._s(
+                                                            ingredient.name
+                                                          ) +
+                                                          " "
+                                                      )
+                                                    ])
+                                                  ]
+                                                )
+                                              }
+                                            ),
+                                            0
+                                          )
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _c("ValidationProvider", {
+                                        staticClass: "w-full",
+                                        attrs: { vid: "ingredient" },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function(ref) {
+                                                var errors = ref.errors
+                                                return [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "text-xs text-red-600 font-semibold mb-1"
                                                     },
                                                     [
-                                                      _c("div", [
-                                                        _vm._v(
-                                                          "\n                                            " +
-                                                            _vm._s(
-                                                              ingredient.name
-                                                            ) +
-                                                            "\n                                        "
-                                                        )
-                                                      ])
+                                                      _vm._v(
+                                                        " " + _vm._s(errors[0])
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                                    },
+                                                    [
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm.ingredientInput,
+                                                            expression:
+                                                              "ingredientInput"
+                                                          }
+                                                        ],
+                                                        staticClass:
+                                                          "outline-none p-2 h-full w-full rounded",
+                                                        attrs: {
+                                                          type: "text",
+                                                          name: "ingredients",
+                                                          disabled:
+                                                            _vm.waiting ||
+                                                            _vm.locked
+                                                        },
+                                                        domProps: {
+                                                          value:
+                                                            _vm.ingredientInput
+                                                        },
+                                                        on: {
+                                                          keyup:
+                                                            _vm.findIngredient,
+                                                          input: function(
+                                                            $event
+                                                          ) {
+                                                            if (
+                                                              $event.target
+                                                                .composing
+                                                            ) {
+                                                              return
+                                                            }
+                                                            _vm.ingredientInput =
+                                                              $event.target.value
+                                                          }
+                                                        }
+                                                      }),
+                                                      _vm._v(" "),
+                                                      _vm.foundIngredients
+                                                        .length > 0
+                                                        ? _c(
+                                                            "ul",
+                                                            {
+                                                              staticClass:
+                                                                "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
+                                                            },
+                                                            _vm._l(
+                                                              _vm.foundIngredients,
+                                                              function(
+                                                                ingredient
+                                                              ) {
+                                                                return _c(
+                                                                  "li",
+                                                                  {
+                                                                    key:
+                                                                      ingredient.id,
+                                                                    staticClass:
+                                                                      "p-1 cursor-pointer hover:bg-gray-50",
+                                                                    on: {
+                                                                      click: function(
+                                                                        $event
+                                                                      ) {
+                                                                        return _vm.selectIngredient(
+                                                                          ingredient.id
+                                                                        )
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  [
+                                                                    _c("div", [
+                                                                      _vm._v(
+                                                                        "\n                                                " +
+                                                                          _vm._s(
+                                                                            ingredient.name
+                                                                          ) +
+                                                                          "\n                                            "
+                                                                      )
+                                                                    ])
+                                                                  ]
+                                                                )
+                                                              }
+                                                            ),
+                                                            0
+                                                          )
+                                                        : _vm._e()
                                                     ]
                                                   )
-                                                }
-                                              ),
-                                              0
-                                            )
-                                          : _vm._e()
-                                      ]
-                                    )
-                                  ])
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          null,
+                                          true
+                                        )
+                                      })
+                                    ],
+                                    1
+                                  )
                                 : _vm._e()
                             ])
                           ],
