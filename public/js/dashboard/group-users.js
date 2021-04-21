@@ -16198,10 +16198,10 @@ var render = function() {
           "div",
           {
             staticClass:
-              "flex items-center justify-between text-3xl mt-4 mb-2 pb-2 px-4 border-b"
+              "flex items-center justify-between mt-4 mb-2 pb-2 px-4 border-b"
           },
           [
-            _c("h1", [_vm._t("header")], 2),
+            _c("h1", { staticClass: "text-xl" }, [_vm._t("header")], 2),
             _vm._v(" "),
             _c(
               "svg",

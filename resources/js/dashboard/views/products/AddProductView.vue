@@ -232,35 +232,36 @@
                                         <span> {{ingredient.name}} </span>
                                     </li>
                                 </ul>
-                                <ValidationProvider 
-                                    vid="ingredient"
-                                    v-slot="{ errors }" 
-                                    class="w-full"
-                                >
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
-                                        <input 
-                                            type="text" 
-                                            name="ingredients" 
-                                            class="outline-none p-2 h-full w-full rounded" 
-                                            v-model="ingredientInput" 
-                                            @keyup="findIngredient" 
-                                            :disabled="waiting " 
-                                        />
-                                    
-                                        <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
-                                            <li v-for="ingredient in foundIngredients" :key="ingredient.id"
-                                                @click="selectIngredient(ingredient.id)"
-                                                class="p-1 cursor-pointer hover:bg-gray-50"    
-                                            >
-                                                <div>
-                                                    {{ingredient.name}}
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                 </ValidationProvider>
                             </div>
+                            <ValidationProvider 
+                                vid="ingredient"
+                                v-slot="{ errors }" 
+                                class="w-full"
+                                v-if="product.hasIngredients"
+                            >
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
+                                    <input 
+                                        type="text" 
+                                        name="ingredients" 
+                                        class="outline-none p-2 h-full w-full rounded" 
+                                        v-model="ingredientInput" 
+                                        @keyup="findIngredient" 
+                                        :disabled="waiting " 
+                                    />
+                                
+                                    <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
+                                        <li v-for="ingredient in foundIngredients" :key="ingredient.id"
+                                            @click="selectIngredient(ingredient.id)"
+                                            class="p-1 cursor-pointer hover:bg-gray-50"    
+                                        >
+                                            <div>
+                                                {{ingredient.name}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                </ValidationProvider>
                         </div> 
                     </div>
                 </div>

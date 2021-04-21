@@ -150,6 +150,10 @@
                     return this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7              
                 }
             },
+
+            hasDiscount() {
+                return this.product.discount ? true : false
+            }
         },
 
         data() {

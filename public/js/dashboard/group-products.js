@@ -1888,6 +1888,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -2410,6 +2411,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (this.getLoggedUser) {
         return this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7;
       }
+    },
+    hasDiscount: function hasDiscount() {
+      return this.product.discount ? true : false;
     }
   }),
   data: function data() {
@@ -18224,10 +18228,10 @@ var render = function() {
           "div",
           {
             staticClass:
-              "flex items-center justify-between text-3xl mt-4 mb-2 pb-2 px-4 border-b"
+              "flex items-center justify-between mt-4 mb-2 pb-2 px-4 border-b"
           },
           [
-            _c("h1", [_vm._t("header")], 2),
+            _c("h1", { staticClass: "text-xl" }, [_vm._t("header")], 2),
             _vm._v(" "),
             _c(
               "svg",
@@ -21527,83 +21531,82 @@ var render = function() {
                               on: { openModal: _vm.openAddDiscountModal }
                             }),
                             _vm._v(" "),
-                            _c("div", [
-                              _c("div", { staticClass: "w-full" }, [
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.product.hasIngredients,
-                                      expression: "product.hasIngredients"
-                                    }
-                                  ],
-                                  attrs: {
-                                    type: "checkbox",
-                                    id: "hasIngredients",
-                                    disabled: _vm.waiting
-                                  },
-                                  domProps: {
-                                    checked: Array.isArray(
-                                      _vm.product.hasIngredients
-                                    )
-                                      ? _vm._i(
-                                          _vm.product.hasIngredients,
-                                          null
-                                        ) > -1
-                                      : _vm.product.hasIngredients
-                                  },
-                                  on: {
-                                    change: [
-                                      function($event) {
-                                        var $$a = _vm.product.hasIngredients,
-                                          $$el = $event.target,
-                                          $$c = $$el.checked ? true : false
-                                        if (Array.isArray($$a)) {
-                                          var $$v = null,
-                                            $$i = _vm._i($$a, $$v)
-                                          if ($$el.checked) {
-                                            $$i < 0 &&
-                                              _vm.$set(
-                                                _vm.product,
-                                                "hasIngredients",
-                                                $$a.concat([$$v])
-                                              )
+                            _c(
+                              "div",
+                              [
+                                _c("div", { staticClass: "w-full" }, [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.product.hasIngredients,
+                                        expression: "product.hasIngredients"
+                                      }
+                                    ],
+                                    attrs: {
+                                      type: "checkbox",
+                                      id: "hasIngredients",
+                                      disabled: _vm.waiting
+                                    },
+                                    domProps: {
+                                      checked: Array.isArray(
+                                        _vm.product.hasIngredients
+                                      )
+                                        ? _vm._i(
+                                            _vm.product.hasIngredients,
+                                            null
+                                          ) > -1
+                                        : _vm.product.hasIngredients
+                                    },
+                                    on: {
+                                      change: [
+                                        function($event) {
+                                          var $$a = _vm.product.hasIngredients,
+                                            $$el = $event.target,
+                                            $$c = $$el.checked ? true : false
+                                          if (Array.isArray($$a)) {
+                                            var $$v = null,
+                                              $$i = _vm._i($$a, $$v)
+                                            if ($$el.checked) {
+                                              $$i < 0 &&
+                                                _vm.$set(
+                                                  _vm.product,
+                                                  "hasIngredients",
+                                                  $$a.concat([$$v])
+                                                )
+                                            } else {
+                                              $$i > -1 &&
+                                                _vm.$set(
+                                                  _vm.product,
+                                                  "hasIngredients",
+                                                  $$a
+                                                    .slice(0, $$i)
+                                                    .concat($$a.slice($$i + 1))
+                                                )
+                                            }
                                           } else {
-                                            $$i > -1 &&
-                                              _vm.$set(
-                                                _vm.product,
-                                                "hasIngredients",
-                                                $$a
-                                                  .slice(0, $$i)
-                                                  .concat($$a.slice($$i + 1))
-                                              )
+                                            _vm.$set(
+                                              _vm.product,
+                                              "hasIngredients",
+                                              $$c
+                                            )
                                           }
-                                        } else {
-                                          _vm.$set(
-                                            _vm.product,
-                                            "hasIngredients",
-                                            $$c
-                                          )
-                                        }
-                                      },
-                                      _vm.clearIngredients
-                                    ]
-                                  }
-                                }),
+                                        },
+                                        _vm.clearIngredients
+                                      ]
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "hasIngredients" } },
+                                    [_vm._v("Has ingredients")]
+                                  )
+                                ]),
                                 _vm._v(" "),
-                                _c(
-                                  "label",
-                                  { attrs: { for: "hasIngredients" } },
-                                  [_vm._v("Has ingredients")]
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _vm.showIngredientsList
-                                ? _c(
-                                    "div",
-                                    { staticClass: "w-full" },
-                                    [
+                                _vm.showIngredientsList
+                                  ? _c("div", { staticClass: "w-full" }, [
                                       _c(
                                         "label",
                                         {
@@ -21669,140 +21672,142 @@ var render = function() {
                                             ),
                                             0
                                           )
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _c("ValidationProvider", {
-                                        staticClass: "w-full",
-                                        attrs: { vid: "ingredient" },
-                                        scopedSlots: _vm._u(
-                                          [
-                                            {
-                                              key: "default",
-                                              fn: function(ref) {
-                                                var errors = ref.errors
-                                                return [
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      staticClass:
-                                                        "text-xs text-red-600 font-semibold mb-1"
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        " " + _vm._s(errors[0])
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      staticClass:
-                                                        "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                                    },
-                                                    [
-                                                      _c("input", {
-                                                        directives: [
-                                                          {
-                                                            name: "model",
-                                                            rawName: "v-model",
-                                                            value:
-                                                              _vm.ingredientInput,
-                                                            expression:
-                                                              "ingredientInput"
-                                                          }
-                                                        ],
-                                                        staticClass:
-                                                          "outline-none p-2 h-full w-full rounded",
-                                                        attrs: {
-                                                          type: "text",
-                                                          name: "ingredients",
-                                                          disabled: _vm.waiting
-                                                        },
-                                                        domProps: {
+                                        : _vm._e()
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.product.hasIngredients
+                                  ? _c("ValidationProvider", {
+                                      staticClass: "w-full",
+                                      attrs: { vid: "ingredient" },
+                                      scopedSlots: _vm._u(
+                                        [
+                                          {
+                                            key: "default",
+                                            fn: function(ref) {
+                                              var errors = ref.errors
+                                              return [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "text-xs text-red-600 font-semibold mb-1"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      " " + _vm._s(errors[0])
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                                  },
+                                                  [
+                                                    _c("input", {
+                                                      directives: [
+                                                        {
+                                                          name: "model",
+                                                          rawName: "v-model",
                                                           value:
-                                                            _vm.ingredientInput
-                                                        },
-                                                        on: {
-                                                          keyup:
-                                                            _vm.findIngredient,
-                                                          input: function(
-                                                            $event
-                                                          ) {
-                                                            if (
-                                                              $event.target
-                                                                .composing
-                                                            ) {
-                                                              return
-                                                            }
-                                                            _vm.ingredientInput =
-                                                              $event.target.value
-                                                          }
+                                                            _vm.ingredientInput,
+                                                          expression:
+                                                            "ingredientInput"
                                                         }
-                                                      }),
-                                                      _vm._v(" "),
-                                                      _vm.foundIngredients
-                                                        .length > 0
-                                                        ? _c(
-                                                            "ul",
-                                                            {
-                                                              staticClass:
-                                                                "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
-                                                            },
-                                                            _vm._l(
-                                                              _vm.foundIngredients,
-                                                              function(
-                                                                ingredient
-                                                              ) {
-                                                                return _c(
-                                                                  "li",
-                                                                  {
-                                                                    key:
-                                                                      ingredient.id,
-                                                                    staticClass:
-                                                                      "p-1 cursor-pointer hover:bg-gray-50",
-                                                                    on: {
-                                                                      click: function(
-                                                                        $event
-                                                                      ) {
-                                                                        return _vm.selectIngredient(
-                                                                          ingredient.id
-                                                                        )
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c("div", [
-                                                                      _vm._v(
-                                                                        "\n                                                " +
-                                                                          _vm._s(
-                                                                            ingredient.name
-                                                                          ) +
-                                                                          "\n                                            "
+                                                      ],
+                                                      staticClass:
+                                                        "outline-none p-2 h-full w-full rounded",
+                                                      attrs: {
+                                                        type: "text",
+                                                        name: "ingredients",
+                                                        disabled: _vm.waiting
+                                                      },
+                                                      domProps: {
+                                                        value:
+                                                          _vm.ingredientInput
+                                                      },
+                                                      on: {
+                                                        keyup:
+                                                          _vm.findIngredient,
+                                                        input: function(
+                                                          $event
+                                                        ) {
+                                                          if (
+                                                            $event.target
+                                                              .composing
+                                                          ) {
+                                                            return
+                                                          }
+                                                          _vm.ingredientInput =
+                                                            $event.target.value
+                                                        }
+                                                      }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _vm.foundIngredients
+                                                      .length > 0
+                                                      ? _c(
+                                                          "ul",
+                                                          {
+                                                            staticClass:
+                                                              "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
+                                                          },
+                                                          _vm._l(
+                                                            _vm.foundIngredients,
+                                                            function(
+                                                              ingredient
+                                                            ) {
+                                                              return _c(
+                                                                "li",
+                                                                {
+                                                                  key:
+                                                                    ingredient.id,
+                                                                  staticClass:
+                                                                    "p-1 cursor-pointer hover:bg-gray-50",
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.selectIngredient(
+                                                                        ingredient.id
                                                                       )
-                                                                    ])
-                                                                  ]
-                                                                )
-                                                              }
-                                                            ),
-                                                            0
-                                                          )
-                                                        : _vm._e()
-                                                    ]
-                                                  )
-                                                ]
-                                              }
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c("div", [
+                                                                    _vm._v(
+                                                                      "\n                                            " +
+                                                                        _vm._s(
+                                                                          ingredient.name
+                                                                        ) +
+                                                                        "\n                                        "
+                                                                    )
+                                                                  ])
+                                                                ]
+                                                              )
+                                                            }
+                                                          ),
+                                                          0
+                                                        )
+                                                      : _vm._e()
+                                                  ]
+                                                )
+                                              ]
                                             }
-                                          ],
-                                          null,
-                                          true
-                                        )
-                                      })
-                                    ],
-                                    1
-                                  )
-                                : _vm._e()
-                            ])
+                                          }
+                                        ],
+                                        null,
+                                        true
+                                      )
+                                    })
+                                  : _vm._e()
+                              ],
+                              1
+                            )
                           ],
                           1
                         )

@@ -3204,6 +3204,16 @@ var routes = [{
     }
   }
 }, {
+  path: "".concat(baseUrl, "/products/:id/edit"),
+  name: 'EditProduct',
+  component: AddProductView,
+  meta: {
+    breadcrumb: {
+      label: 'Edit product',
+      parent: 'Product'
+    }
+  }
+}, {
   path: "".concat(baseUrl, "/discounts"),
   name: 'Discounts',
   component: Discounts,

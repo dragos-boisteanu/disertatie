@@ -152,6 +152,18 @@ const routes = [
     },
 
     {
+        path: `${baseUrl}/products/:id/edit`,
+        name: 'EditProduct',
+        component: AddProductView,
+        meta: {
+            breadcrumb: {
+                label: 'Edit product',
+                parent: 'Product'
+            }
+        }
+    },
+
+    {
         path: `${baseUrl}/discounts`,
         name: 'Discounts',
         component: Discounts,
