@@ -2197,6 +2197,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2284,6 +2297,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (this.getLoggedUser) {
         return this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7;
       }
+    },
+    hasDiscount: function hasDiscount() {
+      return this.product.discount === null ? false : true;
     }
   }),
   data: function data() {
@@ -21842,34 +21858,32 @@ var render = function() {
                     "flex flex-col items-center justify-center lg:items-start"
                 },
                 [
-                  _c("div", [
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "flex gap-x-2 items-center font-semibold text-2xl mt-2"
-                      },
-                      [
-                        _c(
-                          "h1",
-                          { staticClass: "pr-2 border-r border-gray-200" },
-                          [_vm._v(_vm._s(_vm.product.name))]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "span",
-                          { staticClass: "text-base" },
-                          [
-                            _vm._v(_vm._s(_vm.product.weight)),
-                            _c("Unit", {
-                              attrs: { "unit-id": _vm.product.unit_id }
-                            })
-                          ],
-                          1
-                        )
-                      ]
-                    )
-                  ]),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "flex gap-x-2 items-center font-semibold text-2xl mt-2"
+                    },
+                    [
+                      _c(
+                        "h1",
+                        { staticClass: "pr-2 border-r border-gray-200" },
+                        [_vm._v(_vm._s(_vm.product.name))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        { staticClass: "text-base" },
+                        [
+                          _vm._v(_vm._s(_vm.product.weight)),
+                          _c("Unit", {
+                            attrs: { "unit-id": _vm.product.unit_id }
+                          })
+                        ],
+                        1
+                      )
+                    ]
+                  ),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -21970,6 +21984,55 @@ var render = function() {
               )
             ]
           ),
+          _vm._v(" "),
+          _vm.hasDiscount
+            ? _c(
+                "div",
+                { staticClass: "text-sm mb-2 pb-2 border-b border-gray-100" },
+                [
+                  _c("h2", { staticClass: "font-bold text-lg my-2" }, [
+                    _vm._v("Discount")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c("div", [
+                      _c("span", { staticClass: "font-semibold" }, [
+                        _vm._v("Code:")
+                      ]),
+                      _vm._v(
+                        " " +
+                          _vm._s(_vm.product.discount.code) +
+                          "\n            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", [
+                      _c("span", { staticClass: "font-semibold" }, [
+                        _vm._v("Value:")
+                      ]),
+                      _vm._v(
+                        " " +
+                          _vm._s(_vm.product.discount.value) +
+                          "%\n            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", [
+                      _c("span", { staticClass: "font-semibold" }, [
+                        _vm._v("Interval:")
+                      ]),
+                      _vm._v(
+                        " " +
+                          _vm._s(_vm.product.discountStartsAt) +
+                          " > " +
+                          _vm._s(_vm.product.discountEndsAt) +
+                          "\n            "
+                      )
+                    ])
+                  ])
+                ]
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "div",

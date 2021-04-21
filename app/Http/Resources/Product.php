@@ -15,7 +15,8 @@ class Product extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+
+        $arrayData = [
             'id' => $this->id,
             'image' => $this->image,
             'name' => $this->name,
@@ -30,10 +31,16 @@ class Product extends JsonResource
             'quantity' => $this->quantity,
             'hasIngredients' => $this->has_ingredients,
             'ingredients' => new IngredientCollection($this->whenLoaded('ingredients')),
-            'discount' => new DiscountProduct($this->discount),
-            'discountStartsAt' => $this->discounted_from_date,
-            'discountEndsAt' => $this->discounted_until_date,
             'deleted_at' => $this->deleted_at
         ];
+
+
+        if(!is_null($this->discount)) {
+            $arrayData['discount'] = new DiscountProduct($this->discount);
+            $arrayData['discountStartsAt'] = $this->discounted_from_date;
+            $arrayData['discountEndsAt'] = $this->discounted_until_date;
+        }
+
+        return $arrayData;
     }
 }
