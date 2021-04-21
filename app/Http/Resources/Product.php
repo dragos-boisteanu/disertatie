@@ -22,6 +22,7 @@ class Product extends JsonResource
             'barcode' => $this->barcode,
             'description' => $this->description,
             'base_price' => $this->base_price,
+            'finalPrice' => $this->price,
             'vat' => $this->category->vat,
             'weight' => $this->weight,
             'unit_id' => $this->unit_id,

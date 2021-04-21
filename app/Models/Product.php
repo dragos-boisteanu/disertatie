@@ -33,13 +33,19 @@ class Product extends Model
 
     public $with = ['unit', 'stock', 'category', 'ingredients'];
 
-    protected $appends = array('price', 'quantity');
+    protected $appends = array('finalPrice', 'quantity');
 
     public function getPriceAttribute()
     {
-        $price = $this->base_price + $this->base_price * ($this->category->vat / 100);
+        if($this->discount) {
+            $finalPrice = $this->base_price - $this->base_price * ($this->discount->value / 100);
+        } else {
+            $finalPrice = $this->base_price;
+        }
 
-        return $price;
+        $finalPrice += $finalPrice * ($this->category->vat / 100);
+
+        return round($finalPrice, 2);
     }
 
     public function getQuantityAttribute() 
