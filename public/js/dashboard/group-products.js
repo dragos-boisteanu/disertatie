@@ -269,18 +269,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ModalComponent */ "./resources/js/dashboard/components/ModalComponent.vue");
 /* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -388,8 +376,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       type: Number,
       required: false
     },
-    productDiscounts: {
-      type: Array,
+    productDiscount: {
+      type: Object,
       required: false,
       "default": null
     }
@@ -411,16 +399,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     // }
     this.getAvailableDiscounts();
 
-    if (this.productDiscounts.length > 0) {
-      this.productDiscounts.forEach(function (discount) {
-        var _this$datesToDisable;
-
-        (_this$datesToDisable = _this.datesToDisable).push.apply(_this$datesToDisable, _toConsumableArray(_this.getDatesBetweenDates(new Date(discount.fromDate), new Date(discount.toDate))));
-      });
+    if (this.productDiscount) {
       this.discounts.forEach(function (discount) {
-        var foundDiscount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(_this.productDiscounts, ['id', discount.id]);
-
-        if (foundDiscount) {
+        if (discount.id === parseInt(_this.productDiscount.id)) {
           discount.exists = true;
         }
       });
@@ -430,10 +411,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       product: {
         id: '',
-        discounts: []
+        discount: {}
       },
       discounts: [],
-      datesToDisable: [],
       discount: {
         id: '0',
         fromDate: '',
@@ -443,54 +423,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     submit: function submit() {
+      console.log(this.discount);
       this.$emit('discountAdded', this.discount);
-    },
-    getDatesBetweenDates: function getDatesBetweenDates(startDate, endDate) {
-      var dates = []; //to avoid modifying the original date
-
-      var theDate = new Date(startDate);
-
-      while (theDate <= endDate) {
-        dates = [].concat(_toConsumableArray(dates), [new Date(theDate)]);
-        theDate.setDate(theDate.getDate() + 1);
-      }
-
-      return dates;
     },
     disableDatesInterval: function disableDatesInterval(date) {
       var today = new Date();
       today.setHours(0, 0, 0, 0);
-
-      if (this.productDiscounts.length > 0) {
-        var dateIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default()(this.datesToDisable, function (dateToDisable) {
-          console.log(new Date(dateToDisable).getTime() === date.getTime());
-          var dateToDisableWithTime = new Date(dateToDisable);
-          dateToDisableWithTime.setHours(0, 0, 0, 0);
-          return dateToDisableWithTime.getTime() === date.getTime();
-        });
-
-        if (dateIndex > -1) {
-          return true;
-        }
-      }
-
       return date < today;
     },
     disableBeforeFromDate: function disableBeforeFromDate(date) {
-      if (this.productDiscounts.length > 0) {
-        var dateIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_1___default()(this.datesToDisable, function (dateToDisable) {
-          var dateToDisableWithTime = new Date(dateToDisable);
-          dateToDisableWithTime.setHours(0, 0, 0, 0);
-          return dateToDisableWithTime.getTime() === date.getTime();
-        });
-
-        if (dateIndex > -1) {
-          return true;
-        }
-      }
-
-      var fromDate = new Date(this.discount.fromDate);
-      return date < fromDate;
+      return date < new Date(this.discount.fromDate);
     },
     getAvailableDiscounts: function getAvailableDiscounts() {
       this.discounts = JSON.parse(JSON.stringify(this.getDiscounts.filter(function (discount) {
@@ -1830,6 +1772,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -1843,7 +1790,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_10___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Ingredients', ['getIngredients'])),
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Ingredients', ['getIngredients'])), {}, {
+    showDiscountsList: function showDiscountsList() {
+      return this.product.discount !== null;
+    },
+    showIngredientsList: function showIngredientsList() {
+      return this.product.ingredients.length > 0;
+    }
+  }),
   data: function data() {
     return {
       checkingBarcode: false,
@@ -1861,7 +1815,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
         category_id: '',
         hasIngredients: false,
         ingredients: [],
-        discounts: []
+        discount: null
       },
       waitForFileUpload: false,
       files: null,
@@ -2096,13 +2050,11 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
       this.product.ingredients.splice(ingredientIndex, 1);
     },
     addDiscount: function addDiscount(discount) {
-      this.product.discounts.unshift(discount);
+      this.product.discount = discount;
       this.closeAddDiscountModal();
     },
-    removeDiscount: function removeDiscount(id) {
-      var discountIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_6___default()(this.product.discounts, ['id', id]);
-
-      this.product.discounts.splice(discountIndex, 1);
+    removeDiscount: function removeDiscount() {
+      this.product.discount = {};
     },
     openAddDiscountModal: function openAddDiscountModal() {
       this.showAddDiscountModal = true;
@@ -20470,7 +20422,7 @@ var render = function() {
     [
       _vm.showAddDiscountModal
         ? _c("AddDiscountComponent", {
-            attrs: { "product-discounts": _vm.product.discounts },
+            attrs: { "product-discount": _vm.product.discount },
             on: {
               discountAdded: _vm.addDiscount,
               close: _vm.closeAddDiscountModal
@@ -21334,20 +21286,17 @@ var render = function() {
                             ),
                             _vm._v(" "),
                             _c("div", { staticClass: "w-full" }, [
-                              _vm.product.discounts.length > 0
+                              _vm.showDiscountsList
                                 ? _c(
-                                    "ul",
+                                    "div",
                                     {
                                       staticClass:
                                         "mb-2 flex items-center gap-x-2 my-1"
                                     },
-                                    _vm._l(_vm.product.discounts, function(
-                                      discount
-                                    ) {
-                                      return _c(
-                                        "li",
+                                    [
+                                      _c(
+                                        "div",
                                         {
-                                          key: discount.id,
                                           staticClass:
                                             "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
                                           class: {
@@ -21357,20 +21306,27 @@ var render = function() {
                                           on: {
                                             click: function($event) {
                                               return _vm.removeDiscount(
-                                                discount.id
+                                                _vm.product.discount.id
                                               )
                                             }
                                           }
                                         },
                                         [
                                           _c("span", [
-                                            _vm._v("  " + _vm._s(discount.code))
+                                            _vm._v(
+                                              "  " +
+                                                _vm._s(
+                                                  _vm.product.discount.code
+                                                )
+                                            )
                                           ]),
                                           _vm._v(" "),
                                           _c("span", [
                                             _vm._v(
                                               " " +
-                                                _vm._s(discount.value) +
+                                                _vm._s(
+                                                  _vm.product.discount.value
+                                                ) +
                                                 "% "
                                             )
                                           ]),
@@ -21384,7 +21340,9 @@ var render = function() {
                                           _c("span", [
                                             _vm._v(
                                               "\n                                    " +
-                                                _vm._s(discount.fromDate) +
+                                                _vm._s(
+                                                  _vm.product.discount.fromDate
+                                                ) +
                                                 " \n                                "
                                             )
                                           ]),
@@ -21422,14 +21380,15 @@ var render = function() {
                                           _c("span", [
                                             _vm._v(
                                               "\n                                    " +
-                                                _vm._s(discount.toDate) +
+                                                _vm._s(
+                                                  _vm.product.discount.toDate
+                                                ) +
                                                 "\n                                "
                                             )
                                           ])
                                         ]
                                       )
-                                    }),
-                                    0
+                                    ]
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
@@ -21527,7 +21486,7 @@ var render = function() {
                                 )
                               ]),
                               _vm._v(" "),
-                              _vm.product.hasIngredients
+                              _vm.showIngredientsList
                                 ? _c(
                                     "div",
                                     { staticClass: "w-full" },

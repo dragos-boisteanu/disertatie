@@ -3,7 +3,7 @@
 
         <AddDiscountComponent 
             v-if="showAddDiscountModal" 
-            :product-discounts="product.discounts" 
+            :product-discount="product.discount" 
             @discountAdded="addDiscount" 
             @close="closeAddDiscountModal"
         >
@@ -204,30 +204,30 @@
                         </div>
 
                         <div class="w-full">
-                            <ul v-if="product.discounts.length > 0"
+                            <div v-if="showDiscountsList"
                                 class="mb-2 flex items-center gap-x-2 my-1"
                             >
-                                <li v-for="discount in product.discounts" :key="discount.id"
+                                <div
                                     class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
                                     :class="{'disabled pointer-events-none bg-gray-100': waiting || locked}"
-                                    @click="removeDiscount(discount.id)"
+                                    @click="removeDiscount(product.discount.id)"
                                 > 
-                                    <span>  {{ discount.code}}</span>
-                                    <span> {{ discount.value }}% </span>
+                                    <span>  {{ product.discount.code}}</span>
+                                    <span> {{ product.discount.value }}% </span>
                                     <span>
                                         |
                                     </span>
                                     <span>
-                                        {{ discount.fromDate}} 
+                                        {{ product.discount.fromDate}} 
                                     </span>
                                     <span>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
                                     </span>
                                     <span>
-                                        {{ discount.toDate }}
+                                        {{ product.discount.toDate }}
                                     </span>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
 
                             <div>
                                 <button
@@ -241,11 +241,16 @@
 
                         <div>
                             <div class="w-full">
-                                <input type="checkbox" id="hasIngredients" @change="clearIngredients" v-model="product.hasIngredients" :disabled="waiting || locked"/>
+                                <input 
+                                    type="checkbox" 
+                                    id="hasIngredients" 
+                                    @change="clearIngredients" v-model="product.hasIngredients" 
+                                    :disabled="waiting || locked"
+                                />
                                 <label for="hasIngredients" >Has ingredients</label>
                             </div>
 
-                            <div class="w-full" v-if="product.hasIngredients">
+                            <div class="w-full" v-if="showIngredientsList">
                                 <label for="name" class="text-sm font-semibold">Ingredients</label>
                                 <ul v-if="product.ingredients.length > 0"
                                     class="flex items-center gap-x-2 my-1"
@@ -339,6 +344,14 @@
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
+
+            showDiscountsList() {
+                return this.product.discount !== null
+            },
+
+            showIngredientsList() {
+                return this.product.ingredients.length > 0;
+            }
         },
 
         data() {
@@ -360,7 +373,7 @@
                     category_id: '',
                     hasIngredients: false,
                     ingredients: [],
-                    discounts: []
+                    discount: null
                 },
 
                 waitForFileUpload: false,
@@ -549,13 +562,12 @@
 
 
             addDiscount(discount) {
-                this.product.discounts.unshift(discount);
+                this.product.discount = discount;
                 this.closeAddDiscountModal();
             },
 
-            removeDiscount(id) {
-                const discountIndex = _findIndex(this.product.discounts, ['id', id]);
-                this.product.discounts.splice(discountIndex, 1);
+            removeDiscount() {
+                this.product.discount = {}; 
             },
 
             openAddDiscountModal() {

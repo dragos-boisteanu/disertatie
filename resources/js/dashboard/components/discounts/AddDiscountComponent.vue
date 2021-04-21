@@ -94,7 +94,6 @@
     import _findIndex from 'lodash/findIndex';
 
     import Modal from '../ModalComponent';
-
     import DatePicker from 'vue2-datepicker';
 
     export default {
@@ -105,8 +104,8 @@
                 required: false
             },
 
-            productDiscounts: {
-                type: Array,
+            productDiscount: {
+                type: Object,
                 required: false,
                 default: null
             }
@@ -131,14 +130,9 @@
             
             this.getAvailableDiscounts()
 
-            if(this.productDiscounts.length > 0) {
-                this.productDiscounts.forEach(discount => {
-                    this.datesToDisable.push(...this.getDatesBetweenDates(new Date(discount.fromDate), new Date(discount.toDate)));
-                })
-
+            if(this.productDiscount) {
                 this.discounts.forEach(discount => {
-                    const foundDiscount = _find(this.productDiscounts, ['id', discount.id]);
-                    if(foundDiscount) {
+                    if(discount.id === parseInt(this.productDiscount.id)) {
                         discount.exists = true;
                     }
                 })
@@ -149,12 +143,10 @@
             return {
                 product: {
                     id: '',
-                    discounts: []
+                    discount: {}
                 },
 
                 discounts: [],
-
-                datesToDisable: [],
 
                 discount: {
                     id: '0',
@@ -166,54 +158,19 @@
 
         methods: {
             submit() {
+                console.log(this.discount)
                 this.$emit('discountAdded', this.discount);
-            },
-
-            getDatesBetweenDates(startDate, endDate) {
-                let dates = [];  
-                //to avoid modifying the original date
-                const theDate = new Date(startDate)
-                while (theDate <= endDate) {
-                    dates = [...dates, new Date(theDate)]
-                    theDate.setDate(theDate.getDate() + 1)
-                }
-                return dates;
             },
 
             disableDatesInterval(date) {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                if(this.productDiscounts.length > 0) {
-                    const dateIndex = _findIndex(this.datesToDisable, dateToDisable => {
-                        console.log(new Date(dateToDisable).getTime() === date.getTime())
-                        const dateToDisableWithTime = new Date(dateToDisable);
-                        dateToDisableWithTime.setHours(0, 0, 0, 0);
-                        return dateToDisableWithTime.getTime() === date.getTime()
-                    })
-
-                    if(dateIndex > -1) {
-                        return true;
-                    }
-                }
                 return date < today;               
             },
 
             disableBeforeFromDate(date) {
-                if(this.productDiscounts.length > 0) {
-                    const dateIndex = _findIndex(this.datesToDisable, dateToDisable => {
-                        const dateToDisableWithTime = new Date(dateToDisable);
-                        dateToDisableWithTime.setHours(0, 0, 0, 0);
-                        return dateToDisableWithTime.getTime() === date.getTime()
-                    })
-
-                    if(dateIndex > -1) {
-                        return true;
-                    }
-                }
-
-                const fromDate = new Date(this.discount.fromDate);
-                return date < fromDate
+                return date < new Date(this.discount.fromDate)
             },
 
             getAvailableDiscounts() {
