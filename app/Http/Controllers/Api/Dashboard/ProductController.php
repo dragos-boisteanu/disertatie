@@ -82,6 +82,12 @@ class ProductController extends Controller
             $input['has_ingredients'] = false;
         }
 
+        if($request->has('discount')) {
+            $input['discount_id'] = $request->discount['id'];
+            $input['discounted_from_date'] = $request->discount['fromDate'];
+            $input['discounted_until_date'] = $request->discount['toDate'];
+        }
+
         try {
             DB::beginTransaction();
 
@@ -113,12 +119,6 @@ class ProductController extends Controller
                 Storage::delete($requestPath);
             }
             
-            if($request->has('discounts')) {
-                foreach($request->discounts as $discount) {
-                    $product->discounts()->attach([$discount['id'] => ['starts_at' => Carbon::parse($discount['fromDate']), 'ends_at' => Carbon::parse($discount['toDate'])]]);
-                }
-            }
-
             DB::commit();
 
             return response()->json([

@@ -43,7 +43,7 @@
                             <date-picker
                                 :input-attr="{name: 'from'}" 
                                 v-model="discount.fromDate" 
-                                type="date"
+                                type="datetime"
                                 placeholder="Start date"
                                 :confirm="true"
                                 confirm-text="Ok"
@@ -58,7 +58,7 @@
                             <date-picker 
                                 :disabled="enableToDate"
                                 v-model="discount.toDate" 
-                                type="date"
+                                type="datetime"
                                 placeholder="End date"
                                 :confirm="true"
                                 confirm-text="Ok"

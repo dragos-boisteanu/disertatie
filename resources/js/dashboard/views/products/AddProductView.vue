@@ -23,7 +23,7 @@
                             label-idle="Upload product image..."
                             v-bind:allow-multiple="false"
                             accepted-file-types="image/jpeg"
-                            :disabled="waiting || locked" 
+                            :disabled="waiting" 
                             :server="{
                                 url: '/api/dashboard/images',
                                 process: { 
@@ -46,7 +46,7 @@
 
                         <div class="text-right mt-3">
                             <button 
-                                :disabled="waitForFileUpload || !(waiting || locked)"
+                                :disabled="waitForFileUpload || !(waiting)"
                                 class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
                                 @click.prevent="clearImage"
                             >
@@ -94,7 +94,7 @@
                                     name="first name" 
                                     type="text" 
                                     v-model="product.name" 
-                                    :disabled="waiting || locked"   
+                                    :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
@@ -114,7 +114,7 @@
                                 name="description" 
                                 type="text" 
                                 v-model="product.description" 
-                                :disabled="waiting || locked"   
+                                :disabled="waiting"   
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                 :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             />
@@ -133,7 +133,7 @@
                                     name="category" 
                                     type="text" 
                                     v-model="product.category_id" 
-                                    :disabled="waiting || locked"   
+                                    :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 >
@@ -154,7 +154,7 @@
                                     name="base price" 
                                     type="text" 
                                     v-model="product.base_price" 
-                                    :disabled="waiting || locked"   
+                                    :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
@@ -175,7 +175,7 @@
                                     name="weight" 
                                     type="number" 
                                     v-model="product.weight" 
-                                    :disabled="waiting || locked"   
+                                    :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
@@ -193,7 +193,7 @@
                                     name="weight units" 
                                     type="text"    
                                     v-model="product.unit_id" 
-                                    :disabled="waiting || locked"   
+                                    :disabled="waiting"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 >
@@ -209,7 +209,7 @@
                             >
                                 <div
                                     class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
-                                    :class="{'disabled pointer-events-none bg-gray-100': waiting || locked}"
+                                    :class="{'disabled pointer-events-none bg-gray-100': waiting }"
                                     @click="removeDiscount(product.discount.id)"
                                 > 
                                     <span>  {{ product.discount.code}}</span>
@@ -245,7 +245,7 @@
                                     type="checkbox" 
                                     id="hasIngredients" 
                                     @change="clearIngredients" v-model="product.hasIngredients" 
-                                    :disabled="waiting || locked"
+                                    :disabled="waiting"
                                 />
                                 <label for="hasIngredients" >Has ingredients</label>
                             </div>
@@ -257,7 +257,7 @@
                                 >
                                     <li v-for="ingredient in product.ingredients" :key="ingredient.id"
                                         class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
-                                        :class="{'disabled pointer-events-none bg-gray-100': waiting || locked}"
+                                        :class="{'disabled pointer-events-none bg-gray-100': waiting }"
                                         @click="removeIngredient(ingredient.id)"
                                     > 
                                         <span>  {{ ingredient.quantity}}{{ ingredient.unit.name}}</span>
@@ -277,7 +277,7 @@
                                             class="outline-none p-2 h-full w-full rounded" 
                                             v-model="ingredientInput" 
                                             @keyup="findIngredient" 
-                                            :disabled="waiting || locked" 
+                                            :disabled="waiting " 
                                         />
                                     
                                         <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
@@ -300,7 +300,7 @@
                 <div class="mt-5 flex md:justify-start">
                     <button 
                         type="submit"
-                        :disabled="waiting || waitForFileUpload || locked"  
+                        :disabled="waiting || waitForFileUpload"  
                         class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
                     >
                         <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -357,7 +357,6 @@
         data() {
             return {
                 checkingBarcode: false,
-                locked: false,
                 waiting: false,
 
                 ingredientInput: '',
@@ -408,12 +407,11 @@
                         delete payload.hasIngredients;
                     }
 
-                    if(payload.discounts.length === 0) {
-                        delete payload.discounts
+                    if(payload.discounts === null) {
+                        delete payload.discount
                     }
                 
-                    const payload2 = {}
-                    await this.addProduct(payload2);
+                    await this.addProduct(payload);
 
                     this.product = {
                         barcode: '',
@@ -426,11 +424,13 @@
                         category_id: '',
                         hasIngredients: false,
                         ingredients: [],
-                        discounts: [],
+                        discount: null,
                     },
 
                     this.$refs.observer.reset();
+
                     this.waiting = false;
+                    
                     this.$Progress.finish();
 
                     this.openNotification({
@@ -442,10 +442,12 @@
                     console.log(error)
                     this.$Progress.fail();
 
+                    this.waiting = false
+
                     if(error.response) {
                         this.$refs.observer.setErrors(error.response.data.errors)
                     }  
-                    this.waiting = false
+                    
                 }
             },
 
@@ -453,7 +455,7 @@
                 try {
                     this.checkingBarcode = true;
                     if(this.$refs.observer.errors['barcode'].length === 0) {
-                        this.locked = true;
+                        this.waiting = true;
                         const response = await this.getProductByBarcode(this.product.barcode);
                         if(response.data) {
                             this.product = response.data.data;
@@ -470,12 +472,12 @@
                             //     hasIngredients: false,
                             //     ingredients: []
                             // },
-                            this.locked = false;
+                            this.waiting = false;
                         }
                         this.checkingBarcode = false;
                     } else {
                         this.checkingBarcode = false;
-                        this.locked = false;
+                        this.waiting = false;
                     }              
                 } catch (error) {
                     console.log(error)

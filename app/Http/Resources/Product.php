@@ -29,7 +29,9 @@ class Product extends JsonResource
             'quantity' => $this->quantity,
             'hasIngredients' => $this->has_ingredients,
             'ingredients' => new IngredientCollection($this->whenLoaded('ingredients')),
-            'discounts' => new DiscountCollection($this->whenLoaded('discounts')),
+            'discount' => new DiscountProduct($this->discount),
+            'discountStartsAt' => $this->discounted_from_date,
+            'discountEndsAt' => $this->discounted_until_date,
             'deleted_at' => $this->deleted_at
         ];
     }

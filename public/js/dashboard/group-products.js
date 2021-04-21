@@ -1801,7 +1801,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
   data: function data() {
     return {
       checkingBarcode: false,
-      locked: false,
       waiting: false,
       ingredientInput: '',
       foundIngredients: [],
@@ -1828,7 +1827,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var payload, payload2;
+        var payload;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -1853,15 +1852,14 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   delete payload.hasIngredients;
                 }
 
-                if (payload.discounts.length === 0) {
-                  delete payload.discounts;
+                if (payload.discounts === null) {
+                  delete payload.discount;
                 }
 
-                payload2 = {};
-                _context.next = 10;
-                return _this.addProduct(payload2);
+                _context.next = 9;
+                return _this.addProduct(payload);
 
-              case 10:
+              case 9:
                 _this.product = {
                   barcode: '',
                   name: '',
@@ -1873,7 +1871,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   category_id: '',
                   hasIngredients: false,
                   ingredients: [],
-                  discounts: []
+                  discount: null
                 }, _this.$refs.observer.reset();
                 _this.waiting = false;
 
@@ -1885,28 +1883,28 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                   message: 'Product added'
                 });
 
-                _context.next = 22;
+                _context.next = 21;
                 break;
 
-              case 16:
-                _context.prev = 16;
+              case 15:
+                _context.prev = 15;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
                 _this.$Progress.fail();
 
+                _this.waiting = false;
+
                 if (_context.t0.response) {
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
                 }
 
-                _this.waiting = false;
-
-              case 22:
+              case 21:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 16]]);
+        }, _callee, null, [[0, 15]]);
       }))();
     },
     getProduct: lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default()( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -1923,7 +1921,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                 break;
               }
 
-              this.locked = true;
+              this.waiting = true;
               _context2.next = 6;
               return this.getProductByBarcode(this.product.barcode);
 
@@ -1945,7 +1943,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
                 //     hasIngredients: false,
                 //     ingredients: []
                 // },
-                this.locked = false;
+                this.waiting = false;
               }
 
               this.checkingBarcode = false;
@@ -1954,7 +1952,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
 
             case 11:
               this.checkingBarcode = false;
-              this.locked = false;
+              this.waiting = false;
 
             case 13:
               _context2.next = 18;
@@ -18531,7 +18529,7 @@ var render = function() {
                                       _c("date-picker", {
                                         attrs: {
                                           "input-attr": { name: "from" },
-                                          type: "date",
+                                          type: "datetime",
                                           placeholder: "Start date",
                                           confirm: true,
                                           "confirm-text": "Ok",
@@ -18591,7 +18589,7 @@ var render = function() {
                                       _c("date-picker", {
                                         attrs: {
                                           disabled: _vm.enableToDate,
-                                          type: "date",
+                                          type: "datetime",
                                           placeholder: "End date",
                                           confirm: true,
                                           "confirm-text": "Ok",
@@ -20476,7 +20474,7 @@ var render = function() {
                                 "label-idle": "Upload product image...",
                                 "allow-multiple": false,
                                 "accepted-file-types": "image/jpeg",
-                                disabled: _vm.waiting || _vm.locked,
+                                disabled: _vm.waiting,
                                 server: {
                                   url: "/api/dashboard/images",
                                   process: {
@@ -20509,8 +20507,7 @@ var render = function() {
                                     "border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600",
                                   attrs: {
                                     disabled:
-                                      _vm.waitForFileUpload ||
-                                      !(_vm.waiting || _vm.locked)
+                                      _vm.waitForFileUpload || !_vm.waiting
                                   },
                                   on: {
                                     click: function($event) {
@@ -20723,8 +20720,7 @@ var render = function() {
                                                 id: "firstName",
                                                 name: "first name",
                                                 type: "text",
-                                                disabled:
-                                                  _vm.waiting || _vm.locked
+                                                disabled: _vm.waiting
                                               },
                                               domProps: {
                                                 value: _vm.product.name
@@ -20807,7 +20803,7 @@ var render = function() {
                                             id: "description",
                                             name: "description",
                                             type: "text",
-                                            disabled: _vm.waiting || _vm.locked
+                                            disabled: _vm.waiting
                                           },
                                           domProps: {
                                             value: _vm.product.description
@@ -20898,8 +20894,7 @@ var render = function() {
                                                   id: "unit_id",
                                                   name: "category",
                                                   type: "text",
-                                                  disabled:
-                                                    _vm.waiting || _vm.locked
+                                                  disabled: _vm.waiting
                                                 },
                                                 on: {
                                                   change: function($event) {
@@ -21031,8 +21026,7 @@ var render = function() {
                                                 id: "basePrice",
                                                 name: "base price",
                                                 type: "text",
-                                                disabled:
-                                                  _vm.waiting || _vm.locked
+                                                disabled: _vm.waiting
                                               },
                                               domProps: {
                                                 value: _vm.product.base_price
@@ -21122,8 +21116,7 @@ var render = function() {
                                                 id: "weight",
                                                 name: "weight",
                                                 type: "number",
-                                                disabled:
-                                                  _vm.waiting || _vm.locked
+                                                disabled: _vm.waiting
                                               },
                                               domProps: {
                                                 value: _vm.product.weight
@@ -21206,8 +21199,7 @@ var render = function() {
                                                   id: "unit_id",
                                                   name: "weight units",
                                                   type: "text",
-                                                  disabled:
-                                                    _vm.waiting || _vm.locked
+                                                  disabled: _vm.waiting
                                                 },
                                                 on: {
                                                   change: function($event) {
@@ -21301,7 +21293,7 @@ var render = function() {
                                             "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
                                           class: {
                                             "disabled pointer-events-none bg-gray-100":
-                                              _vm.waiting || _vm.locked
+                                              _vm.waiting
                                           },
                                           on: {
                                             click: function($event) {
@@ -21428,7 +21420,7 @@ var render = function() {
                                   attrs: {
                                     type: "checkbox",
                                     id: "hasIngredients",
-                                    disabled: _vm.waiting || _vm.locked
+                                    disabled: _vm.waiting
                                   },
                                   domProps: {
                                     checked: Array.isArray(
@@ -21518,8 +21510,7 @@ var render = function() {
                                                       "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
                                                     class: {
                                                       "disabled pointer-events-none bg-gray-100":
-                                                        _vm.waiting ||
-                                                        _vm.locked
+                                                        _vm.waiting
                                                     },
                                                     on: {
                                                       click: function($event) {
@@ -21605,9 +21596,7 @@ var render = function() {
                                                         attrs: {
                                                           type: "text",
                                                           name: "ingredients",
-                                                          disabled:
-                                                            _vm.waiting ||
-                                                            _vm.locked
+                                                          disabled: _vm.waiting
                                                         },
                                                         domProps: {
                                                           value:
@@ -21707,8 +21696,7 @@ var render = function() {
                             "inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none",
                           attrs: {
                             type: "submit",
-                            disabled:
-                              _vm.waiting || _vm.waitForFileUpload || _vm.locked
+                            disabled: _vm.waiting || _vm.waitForFileUpload
                           }
                         },
                         [

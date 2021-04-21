@@ -25,6 +25,9 @@ class Product extends Model
         'weight',
         'unit_id',
         'stock_id',
+        'discount_id',
+        'discounted_from_date',
+        'discounted_until_date',
         'has_ingredients',
     ];
 
@@ -85,9 +88,9 @@ class Product extends Model
         return $this->belongsToMany('App\Models\Ingredient')->withPivot('quantity');
     }
 
-    public function discounts() 
+    public function discount() 
     {
-        return $this->belongsToMany('App\Models\Discount');
+        return $this->belongsTo(Discount::class);
     }
 
     public function scopeFilter(Builder $builder, Request $request)
