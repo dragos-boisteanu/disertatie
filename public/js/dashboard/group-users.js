@@ -20,6 +20,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -16170,10 +16186,24 @@ var render = function() {
       "div",
       {
         staticClass:
-          "bg-white p-4 rounded-md shadow-md w-11/12 md:w-auto overflow-y-auto max-h-5/6"
+          "bg-white rounded-md shadow-md w-11/12 md:w-auto overflow-y-auto max-h-5/6"
       },
-      [_vm._t("default")],
-      2
+      [
+        _c("div", { staticClass: "text-3xl mt-4 mb-2 pb-2 border-b" }, [
+          _c("h1", { staticClass: "px-4" }, [_vm._t("header")], 2)
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "px-4 " }, [_vm._t("default")], 2),
+        _vm._v(" "),
+        _c("div", { staticClass: "mt-2 pt-2 border-t" }, [
+          _c(
+            "div",
+            { staticClass: "w-full flex justify-end items-center px-4 pb-4" },
+            [_vm._t("footer")],
+            2
+          )
+        ])
+      ]
     )
   ])
 }
