@@ -38,6 +38,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  methods: {
+    close: function close() {
+      this.$emit('closed');
+    }
+  },
   components: {
     Backdrop: _BackdropComponent_vue__WEBPACK_IMPORTED_MODULE_0__.default
   }
@@ -16189,11 +16194,42 @@ var render = function() {
           "bg-white rounded-md shadow-md w-11/12 md:w-auto overflow-y-auto max-h-5/6"
       },
       [
-        _c("div", { staticClass: "text-3xl mt-4 mb-2 pb-2 border-b" }, [
-          _c("h1", { staticClass: "px-4" }, [_vm._t("header")], 2)
-        ]),
+        _c(
+          "div",
+          {
+            staticClass:
+              "flex items-center justify-between text-3xl mt-4 mb-2 pb-2 px-4 border-b"
+          },
+          [
+            _c("h1", [_vm._t("header")], 2),
+            _vm._v(" "),
+            _c(
+              "svg",
+              {
+                staticClass: "cursor-pointer",
+                attrs: {
+                  xmlns: "http://www.w3.org/2000/svg",
+                  height: "24px",
+                  viewBox: "0 0 24 24",
+                  width: "24px",
+                  fill: "#000000"
+                },
+                on: { click: _vm.close }
+              },
+              [
+                _c("path", { attrs: { d: "M0 0h24v24H0V0z", fill: "none" } }),
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
         _vm._v(" "),
-        _c("div", { staticClass: "px-4 " }, [_vm._t("default")], 2),
+        _c("div", { staticClass: "px-4 py-1 mb-3" }, [_vm._t("body")], 2),
         _vm._v(" "),
         _c("div", { staticClass: "mt-2 pt-2 border-t" }, [
           _c(

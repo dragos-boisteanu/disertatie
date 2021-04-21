@@ -17,7 +17,7 @@
             <form @submit.prevent="handleSubmit(submit)" class="lex flex-col" :class="{'pb-10':foundIngredients.length > 0 > 0}">
                 <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
-                         <file-pond
+                        <file-pond
                             name="image"
                             ref="pond"
                             label-idle="Upload product image..."
@@ -122,7 +122,26 @@
 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
                             <ValidationProvider 
-                                vid="category_id" rules="required|integer" 
+                                vid="base_price" 
+                                rules="required|double:2,dot" 
+                                v-slot="{ errors, failed, passed }" 
+                                class="w-full"
+                            >
+                                <label for="name" class="text-sm font-semibold">Base price</label>
+                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <input 
+                                    id="basePrice"
+                                    name="base price" 
+                                    type="text" 
+                                    v-model="product.base_price" 
+                                    :disabled="waiting"   
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                />
+                            </ValidationProvider>
+                            <ValidationProvider 
+                                vid="category_id" 
+                                rules="required|integer" 
                                 v-slot="{ errors, failed, passed }" 
                                 class="w-full"
                             >
@@ -140,24 +159,6 @@
                                     <option value="" disabled>Select category</option>
                                     <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }} ({{ category.vat}}% VAT)</option>
                                 </select>
-                            </ValidationProvider>
-                            <ValidationProvider 
-                                vid="base_price" 
-                                rules="required|double:2,dot" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="w-full"
-                            >
-                                <label for="name" class="text-sm font-semibold">Base price</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="basePrice"
-                                    name="base price" 
-                                    type="text" 
-                                    v-model="product.base_price" 
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
                             </ValidationProvider>
                         </div>
 
@@ -203,41 +204,8 @@
                             </ValidationProvider>
                         </div>
 
-                        <div class="w-full">
-                            <div v-if="showDiscountsList"
-                                class="mb-2 flex items-center gap-x-2 my-1"
-                            >
-                                <div
-                                    class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
-                                    :class="{'disabled pointer-events-none bg-gray-100': waiting }"
-                                    @click="removeDiscount(product.discount.id)"
-                                > 
-                                    <span>  {{ product.discount.code}}</span>
-                                    <span> {{ product.discount.value }}% </span>
-                                    <span>
-                                        |
-                                    </span>
-                                    <span>
-                                        {{ product.discount.fromDate}} 
-                                    </span>
-                                    <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
-                                    </span>
-                                    <span>
-                                        {{ product.discount.toDate }}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <button
-                                    class="px-2 py-1 border rounded-sm text-sm rounded-sm hover:border-gray-600 active:shadow-inner disabled:pointer-events-none"
-                                    @click.prevent="openAddDiscountModal"   
-                                >
-                                    Add discount
-                                </button>
-                            </div>
-                        </div>
+                       <!-- DISCOUNT -->
+                       <DiscountComponent :discount="product.discount" @openModal="openAddDiscountModal" ></DiscountComponent>
 
                         <div>
                             <div class="w-full">
@@ -323,6 +291,7 @@
 
     import ViewContainer from '../ViewContainer';
     import AddDiscountComponent from '../../components/discounts/AddDiscountComponent';
+    import DiscountComponent from '../../components/discounts/DiscountComponent'
 
     import _debounce from 'lodash/debounce';
     import _find from 'lodash/find';
@@ -584,6 +553,7 @@
         components: {
             ViewContainer,
             AddDiscountComponent,
+            DiscountComponent,
             FilePond
         }
     }

@@ -1,12 +1,14 @@
 <template>
     <Modal>
-        <h1 class="text-3xl my-4">
-            Add discount
-        </h1>
 
-        <div class="p-1 mb-3">
-            <ValidationObserver v-slot="{ handleSubmit }" ref="observar">
-                <form @submit.prevent="handleSubmit(submit)">
+        <template slot="header">
+            Add discount
+        </template>
+     
+        <template slot="body">
+            <ValidationObserver ref="observar">
+                <form class="flex flex-col gap-3">
+
                     <ValidationProvider vid="discount" rules="required" v-slot="{ errors, failed, passed }" class="w-full">
                         <label for="discount" class="text-sm font-semibold">Discount</label>
                         <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
@@ -36,6 +38,7 @@
                             </option>
                         </select>
                     </ValidationProvider>
+
                     <div class="flex flex-col gap-y-4 md:flex-row items-center justify-between mt-3 gap-x-4">
                         <ValidationProvider vid="fromDate" rules="required" v-slot="{ errors }" class="w-full">
                             <label for="from" class="text-sm font-semibold">From</label>
@@ -68,23 +71,26 @@
                             </date-picker>
                         </ValidationProvider>
                     </div>
-                    <div class="w-full flex justify-end items-center mt-4">
-                        <button 
-                            type="submit" 
-                            class="flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none"
-                        >
-                            Add
-                        </button>
-                        <button 
-                            @click="close"
-                            class="bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600"
-                        >
-                            Cancel
-                        </button>
-                    </div>
+
                 </form>
             </ValidationObserver>
-        </div>
+        </template>
+
+        <template slot="footer">
+            <button 
+                @click="submit" 
+                class="flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none"
+            >
+                Add
+            </button>
+            <button 
+                @click="close"
+                class="bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600"
+            >
+                Cancel
+            </button>
+        </template>
+
     </Modal>
 </template>
 
