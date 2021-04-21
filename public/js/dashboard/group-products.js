@@ -1818,6 +1818,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -21360,6 +21372,58 @@ var render = function() {
                                               " " +
                                                 _vm._s(discount.value) +
                                                 "% "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("span", [
+                                            _vm._v(
+                                              "\n                                    |\n                                "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("span", [
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(discount.fromDate) +
+                                                " \n                                "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("span", [
+                                            _c(
+                                              "svg",
+                                              {
+                                                attrs: {
+                                                  xmlns:
+                                                    "http://www.w3.org/2000/svg",
+                                                  height: "18px",
+                                                  viewBox: "0 0 24 24",
+                                                  width: "18px",
+                                                  fill: "#000000"
+                                                }
+                                              },
+                                              [
+                                                _c("path", {
+                                                  attrs: {
+                                                    d: "M0 0h24v24H0V0z",
+                                                    fill: "none"
+                                                  }
+                                                }),
+                                                _c("path", {
+                                                  attrs: {
+                                                    d:
+                                                      "M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("span", [
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(discount.toDate) +
+                                                "\n                                "
                                             )
                                           ])
                                         ]
