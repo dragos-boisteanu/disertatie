@@ -68,11 +68,8 @@ const actions = {
 
     getProduct({state}, id) {
         try {
-            let product = _.find(state.products, ['id', id]);
-            if(product) {
-                return product;
-            }
-            return this.fetchProduct(id);
+            let product = _.find(state.products, ['id', parseInt(id)]);
+            return product;
         } catch ( error ) {
             throw error
         }

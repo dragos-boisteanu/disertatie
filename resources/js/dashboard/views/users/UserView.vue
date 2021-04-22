@@ -1,12 +1,12 @@
 <template>
     <ViewContainer v-if="user" >
-        <EditUser 
+        <!-- <EditUser 
             v-if="editUserState" 
             @close="toggleEditUserState"
             @updated="updateUser"
             :user="user"
         >
-        </EditUser>
+        </EditUser> -->
 
         <template slot="header">
            User #{{user.id}}
@@ -88,7 +88,7 @@
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
-    import EditUser from '../../components/users/EditUserComponent';
+    // import EditUser from '../../components/users/EditUserComponent';
     import { mapActions, mapGetters } from 'vuex';
 
     export default {
@@ -204,7 +204,7 @@
             ViewContainer,
             Status,
             Role,
-            EditUser
+            // EditUser
         }
     }
 </script>

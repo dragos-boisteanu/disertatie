@@ -25,15 +25,15 @@ class Product extends Model
         'weight',
         'unit_id',
         'stock_id',
+        'has_ingredients',
         'discount_id',
         'discounted_from_date',
         'discounted_until_date',
-        'has_ingredients',
     ];
 
     public $with = ['unit', 'stock', 'category', 'ingredients'];
 
-    protected $appends = array('finalPrice', 'quantity');
+    protected $appends = array('price', 'quantity');
 
     public function getPriceAttribute()
     {

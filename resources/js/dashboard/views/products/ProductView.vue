@@ -1,14 +1,5 @@
 <template>
     <ViewContainer v-if="product">
-
-        <ProductEdit 
-            v-if="editProductState" 
-            @close="toggleEditProductState"
-            @updated="updateProduct"
-            :product="product"
-        >
-        </ProductEdit>
-
         <template slot="header">
            Product #{{product.id}}
         </template>
@@ -32,8 +23,8 @@
                     <Stock :quantity="product.quantity"></Stock>
                 </div>
                 <div class="flex items-center gap-x-2">   
-                     <button 
-                        @click="toggleEditProductState"
+                    <button 
+                        @click="editProduct"
                         class="bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner active:outline-none"
                     >
                         Edit
@@ -108,7 +99,7 @@
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
     import Stock from '../../components/StockComponent';
-    import ProductEdit from '../../components/products/EditProductComponent';
+    // import ProductEdit from '../../components/products/EditProductComponent';
     import Category from '../../components/products/CategoryComponent';
     import Unit from '../../components/products/UnitComponent';
     import Vat from '../../components/products/VatComponent';
@@ -177,8 +168,8 @@
                 this.product = product;
             },
 
-            toggleEditProductState() {
-                this.editProductState = !this.editProductState;
+            editProduct() {
+                this.$router.push({name: 'EditProduct', params: {id: this.product.id}})
             },
 
             async disable() {
@@ -243,7 +234,7 @@
             ViewContainer,
             Stock,
             Status,
-            ProductEdit,
+            // ProductEdit,
             Category,
             Unit,
             Vat

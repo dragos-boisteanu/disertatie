@@ -3027,6 +3027,85 @@ new vue__WEBPACK_IMPORTED_MODULE_7__.default({
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/router/baseUrls.js":
+/*!***************************************************!*\
+  !*** ./resources/js/dashboard/router/baseUrls.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "dashboardBaseUrl": () => (/* binding */ dashboardBaseUrl)
+/* harmony export */ });
+var dashboardBaseUrl = '/dashboard';
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/router/categories.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/dashboard/router/categories.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _baseUrls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./baseUrls */ "./resources/js/dashboard/router/baseUrls.js");
+
+
+var CategoriesView = function CategoriesView() {
+  return __webpack_require__.e(/*! import() | group-categories */ "group-categories").then(__webpack_require__.bind(__webpack_require__, /*! ../views/categories/CategoriesView.vue */ "./resources/js/dashboard/views/categories/CategoriesView.vue"));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/categories"),
+  name: 'Categories',
+  component: CategoriesView,
+  meta: {
+    breadcrumb: {
+      label: 'Categories',
+      parent: 'Products'
+    }
+  }
+}]);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/router/discounts.js":
+/*!****************************************************!*\
+  !*** ./resources/js/dashboard/router/discounts.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _baseUrls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./baseUrls */ "./resources/js/dashboard/router/baseUrls.js");
+
+
+var Discounts = function Discounts() {
+  return __webpack_require__.e(/*! import() | group-discounts */ "group-discounts").then(__webpack_require__.bind(__webpack_require__, /*! ../views/discounts/DiscountsView.vue */ "./resources/js/dashboard/views/discounts/DiscountsView.vue"));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/discounts"),
+  name: 'Discounts',
+  component: Discounts,
+  meta: {
+    breadcrumb: {
+      label: 'Discounts',
+      parent: 'Dashboard'
+    }
+  }
+}]);
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/router/index.js":
 /*!************************************************!*\
   !*** ./resources/js/dashboard/router/index.js ***!
@@ -3038,23 +3117,111 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _users__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./users */ "./resources/js/dashboard/router/users.js");
+/* harmony import */ var _products__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./products */ "./resources/js/dashboard/router/products.js");
+/* harmony import */ var _categories__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./categories */ "./resources/js/dashboard/router/categories.js");
+/* harmony import */ var _stocks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./stocks */ "./resources/js/dashboard/router/stocks.js");
+/* harmony import */ var _ingredients__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ingredients */ "./resources/js/dashboard/router/ingredients.js");
+/* harmony import */ var _discounts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./discounts */ "./resources/js/dashboard/router/discounts.js");
+/* harmony import */ var _baseUrls__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./baseUrls */ "./resources/js/dashboard/router/baseUrls.js");
 /* provided dependency */ var process = __webpack_require__(/*! process/browser */ "./node_modules/process/browser.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 
 
-var UsersListView = function UsersListView() {
-  return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/UsersListView.vue */ "./resources/js/dashboard/views/users/UsersListView.vue"));
+
+var Home = function Home() {
+  return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
 };
 
-var UserView = function UserView() {
-  return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/UserView.vue */ "./resources/js/dashboard/views/users/UserView.vue"));
+
+
+
+
+
+
+
+var routes = [{
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_6__.dashboardBaseUrl, "/"),
+  name: 'Dashboard',
+  component: Home,
+  meta: {
+    breadcrumb: 'Dashboard'
+  }
+}].concat(_toConsumableArray(_users__WEBPACK_IMPORTED_MODULE_0__.default), _toConsumableArray(_products__WEBPACK_IMPORTED_MODULE_1__.default), _toConsumableArray(_categories__WEBPACK_IMPORTED_MODULE_2__.default), _toConsumableArray(_stocks__WEBPACK_IMPORTED_MODULE_3__.default), _toConsumableArray(_ingredients__WEBPACK_IMPORTED_MODULE_4__.default), _toConsumableArray(_discounts__WEBPACK_IMPORTED_MODULE_5__.default));
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__.default({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes: routes,
+  scrollBehavior: function scrollBehavior(to, from, savedPosition) {
+    return {
+      x: 0,
+      y: 0
+    };
+  }
+});
+vue__WEBPACK_IMPORTED_MODULE_8__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_7__.default);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (router);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/router/ingredients.js":
+/*!******************************************************!*\
+  !*** ./resources/js/dashboard/router/ingredients.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _baseUrls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./baseUrls */ "./resources/js/dashboard/router/baseUrls.js");
+
+
+var IngredientsView = function IngredientsView() {
+  return __webpack_require__.e(/*! import() | group-ingredients */ "group-ingredients").then(__webpack_require__.bind(__webpack_require__, /*! ../views/ingredients/IngredientsView.vue */ "./resources/js/dashboard/views/ingredients/IngredientsView.vue"));
 };
 
-var CreateUserView = function CreateUserView() {
-  return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/CreateUserView.vue */ "./resources/js/dashboard/views/users/CreateUserView.vue"));
-};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/ingredients"),
+  name: 'Ingredients',
+  component: IngredientsView,
+  meta: {
+    breadcrumb: {
+      label: 'Ingredients',
+      parent: 'Products'
+    }
+  }
+}]);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/router/products.js":
+/*!***************************************************!*\
+  !*** ./resources/js/dashboard/router/products.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _baseUrls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./baseUrls */ "./resources/js/dashboard/router/baseUrls.js");
+
 
 var ProductsListView = function ProductsListView() {
   return __webpack_require__.e(/*! import() | group-products */ "group-products").then(__webpack_require__.bind(__webpack_require__, /*! ../views/products/ProductsListView.vue */ "./resources/js/dashboard/views/products/ProductsListView.vue"));
@@ -3064,17 +3231,71 @@ var AddProductView = function AddProductView() {
   return __webpack_require__.e(/*! import() | group-products */ "group-products").then(__webpack_require__.bind(__webpack_require__, /*! ../views/products/AddProductView.vue */ "./resources/js/dashboard/views/products/AddProductView.vue"));
 };
 
+var EditProductView = function EditProductView() {
+  return __webpack_require__.e(/*! import() | group-products */ "group-products").then(__webpack_require__.bind(__webpack_require__, /*! ../views/products/EditProductView.vue */ "./resources/js/dashboard/views/products/EditProductView.vue"));
+};
+
 var ProductView = function ProductView() {
   return __webpack_require__.e(/*! import() | group-products */ "group-products").then(__webpack_require__.bind(__webpack_require__, /*! ../views/products/ProductView.vue */ "./resources/js/dashboard/views/products/ProductView.vue"));
 };
 
-var CategoriesView = function CategoriesView() {
-  return __webpack_require__.e(/*! import() | group-categories */ "group-categories").then(__webpack_require__.bind(__webpack_require__, /*! ../views/categories/CategoriesView.vue */ "./resources/js/dashboard/views/categories/CategoriesView.vue"));
-};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/products"),
+  name: 'Products',
+  component: ProductsListView,
+  meta: {
+    breadcrumb: {
+      label: 'Product lists',
+      parent: 'Dashboard'
+    }
+  }
+}, {
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/products/create"),
+  name: 'AddProduct',
+  component: AddProductView,
+  meta: {
+    breadcrumb: {
+      label: 'Add new product',
+      parent: 'Products'
+    }
+  }
+}, {
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/products/:id"),
+  name: 'Product',
+  component: ProductView,
+  meta: {
+    breadcrumb: {
+      label: 'Product',
+      parent: 'Products'
+    }
+  }
+}, {
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/products/:id/edit"),
+  name: 'EditProduct',
+  component: EditProductView,
+  meta: {
+    breadcrumb: {
+      label: 'Edit product',
+      parent: 'Product'
+    }
+  }
+}]);
 
-var IngredientsView = function IngredientsView() {
-  return __webpack_require__.e(/*! import() | group-ingredients */ "group-ingredients").then(__webpack_require__.bind(__webpack_require__, /*! ../views/ingredients/IngredientsView.vue */ "./resources/js/dashboard/views/ingredients/IngredientsView.vue"));
-};
+/***/ }),
+
+/***/ "./resources/js/dashboard/router/stocks.js":
+/*!*************************************************!*\
+  !*** ./resources/js/dashboard/router/stocks.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _baseUrls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./baseUrls */ "./resources/js/dashboard/router/baseUrls.js");
+
 
 var Stocks = function Stocks() {
   return __webpack_require__.e(/*! import() | group-stocks */ "group-stocks").then(__webpack_require__.bind(__webpack_require__, /*! ../views/stocks/StocksView.vue */ "./resources/js/dashboard/views/stocks/StocksView.vue"));
@@ -3088,94 +3309,8 @@ var IngredientsStock = function IngredientsStock() {
   return __webpack_require__.e(/*! import() | group-stocks */ "group-stocks").then(__webpack_require__.bind(__webpack_require__, /*! ../components/stocks/IngredientsStockComponent.vue */ "./resources/js/dashboard/components/stocks/IngredientsStockComponent.vue"));
 };
 
-var Discounts = function Discounts() {
-  return __webpack_require__.e(/*! import() | group-discounts */ "group-discounts").then(__webpack_require__.bind(__webpack_require__, /*! ../views/discounts/DiscountsView.vue */ "./resources/js/dashboard/views/discounts/DiscountsView.vue"));
-};
-
-var Home = function Home() {
-  return __webpack_require__.e(/*! import() */ "resources_js_dashboard_views_HomeView_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/HomeView.vue */ "./resources/js/dashboard/views/HomeView.vue"));
-};
-
-var baseUrl = '/dashboard';
-var routes = [{
-  path: "".concat(baseUrl, "/"),
-  name: 'Dashboard',
-  component: Home,
-  meta: {
-    breadcrumb: 'Dashboard'
-  }
-}, {
-  path: "".concat(baseUrl, "/users"),
-  name: 'Users',
-  component: UsersListView,
-  meta: {
-    breadcrumb: {
-      label: 'Users',
-      parent: 'Dashboard'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/users/create"),
-  name: 'CreateUser',
-  component: CreateUserView,
-  meta: {
-    breadcrumb: {
-      label: 'Create user account',
-      parent: 'Users'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/users/:id"),
-  name: 'User',
-  component: UserView,
-  meta: {
-    breadcrumb: {
-      label: 'Profile',
-      parent: 'Users'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/products"),
-  name: 'Products',
-  component: ProductsListView,
-  meta: {
-    breadcrumb: {
-      label: 'Product lists',
-      parent: 'Dashboard'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/products/create"),
-  name: 'AddProduct',
-  component: AddProductView,
-  meta: {
-    breadcrumb: {
-      label: 'Add new product',
-      parent: 'Products'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/categories"),
-  name: 'Categories',
-  component: CategoriesView,
-  meta: {
-    breadcrumb: {
-      label: 'Categories',
-      parent: 'Products'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/ingredients"),
-  name: 'Ingredients',
-  component: IngredientsView,
-  meta: {
-    breadcrumb: {
-      label: 'Ingredients',
-      parent: 'Products'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/stocks"),
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/stocks"),
   name: 'Stocks',
   component: Stocks,
   children: [{
@@ -3193,50 +3328,67 @@ var routes = [{
       parent: 'Products'
     }
   }
-}, {
-  path: "".concat(baseUrl, "/products/:id"),
-  name: 'Product',
-  component: ProductView,
+}]);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/router/users.js":
+/*!************************************************!*\
+  !*** ./resources/js/dashboard/router/users.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _baseUrls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./baseUrls */ "./resources/js/dashboard/router/baseUrls.js");
+
+
+var UsersListView = function UsersListView() {
+  return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/UsersListView.vue */ "./resources/js/dashboard/views/users/UsersListView.vue"));
+};
+
+var UserView = function UserView() {
+  return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/UserView.vue */ "./resources/js/dashboard/views/users/UserView.vue"));
+};
+
+var CreateUserView = function CreateUserView() {
+  return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/CreateUserView.vue */ "./resources/js/dashboard/views/users/CreateUserView.vue"));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/users"),
+  name: 'Users',
+  component: UsersListView,
   meta: {
     breadcrumb: {
-      label: 'Product',
-      parent: 'Products'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/products/:id/edit"),
-  name: 'EditProduct',
-  component: AddProductView,
-  meta: {
-    breadcrumb: {
-      label: 'Edit product',
-      parent: 'Product'
-    }
-  }
-}, {
-  path: "".concat(baseUrl, "/discounts"),
-  name: 'Discounts',
-  component: Discounts,
-  meta: {
-    breadcrumb: {
-      label: 'Discounts',
+      label: 'Users',
       parent: 'Dashboard'
     }
   }
-}];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__.default({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: routes,
-  scrollBehavior: function scrollBehavior(to, from, savedPosition) {
-    return {
-      x: 0,
-      y: 0
-    };
+}, {
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/users/create"),
+  name: 'CreateUser',
+  component: CreateUserView,
+  meta: {
+    breadcrumb: {
+      label: 'Create user account',
+      parent: 'Users'
+    }
   }
-});
-vue__WEBPACK_IMPORTED_MODULE_1__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_0__.default);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (router);
+}, {
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/users/:id"),
+  name: 'User',
+  component: UserView,
+  meta: {
+    breadcrumb: {
+      label: 'Profile',
+      parent: 'Users'
+    }
+  }
+}]);
 
 /***/ }),
 
@@ -4382,13 +4534,9 @@ var actions = {
     var state = _ref6.state;
 
     try {
-      var product = _.find(state.products, ['id', id]);
+      var product = _.find(state.products, ['id', parseInt(id)]);
 
-      if (product) {
-        return product;
-      }
-
-      return this.fetchProduct(id);
+      return product;
     } catch (error) {
       throw error;
     }
@@ -51103,7 +51251,7 @@ webpackContext.id = "./resources/js/dashboard/store/modules sync \\.store\\.js$"
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"group-users":1,"group-products":1,"group-categories":1,"group-ingredients":1,"group-stocks":1,"group-discounts":1,"resources_js_dashboard_views_HomeView_vue":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
+/******/ 			if ({"resources_js_dashboard_views_HomeView_vue":1,"group-users":1,"group-products":1,"group-categories":1,"group-stocks":1,"group-ingredients":1,"group-discounts":1}[chunkId]) return "js/dashboard/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
