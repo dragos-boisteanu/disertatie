@@ -287,7 +287,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
@@ -785,7 +784,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.discount.fromDate ? false : true;
     }
   }),
-  created: function created() {
+  mounted: function mounted() {
     this.getAvailableDiscounts();
 
     if (this.propDiscount) {
@@ -832,6 +831,220 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   components: {
     Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default,
     DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__.default
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalComponent */ "./resources/js/dashboard/components/modals/ModalComponent.vue");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_3__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    propIngredients: {
+      type: Array,
+      required: true,
+      "default": null
+    },
+    selectedIngredient: {
+      type: Object,
+      required: false,
+      "default": null
+    }
+  },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Ingredients', ['getIngredients'])), {}, {
+    ingredients: function ingredients() {
+      return JSON.parse(JSON.stringify(this.getIngredients));
+    },
+    isEditMode: function isEditMode() {
+      return this.selectedIngredient ? true : false;
+    }
+  }),
+  mounted: function mounted() {
+    var _this = this;
+
+    if (this.propIngredients) {
+      this.ingredients.forEach(function (ingredient) {
+        var propIngredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_3___default()(_this.propIngredients, ['id', parseInt(ingredient.id)]);
+
+        if (propIngredientIndex > -1) {
+          ingredient.exists = true;
+        }
+      });
+    }
+
+    if (this.selectedIngredient) {
+      this.ingredient = JSON.parse(JSON.stringify(this.selectedIngredient));
+    }
+  },
+  data: function data() {
+    return {
+      // ingredients: [],
+      ingredient: {
+        id: '',
+        qauantity: '',
+        unit: null
+      }
+    };
+  },
+  methods: {
+    selectIngredient: function selectIngredient() {
+      this.ingredient = lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.ingredients, ['id', parseInt(this.ingredient.id)]);
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var valid;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this2.$refs.observer.validate();
+
+              case 2:
+                valid = _context.sent;
+
+                if (valid) {
+                  _this2.$emit('saved', _this2.ingredient);
+                }
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    remove: function remove() {
+      this.$emit('removed', this.ingredient.id);
+    },
+    close: function close() {
+      this.$emit('closed');
+    }
+  },
+  components: {
+    Modal: _ModalComponent__WEBPACK_IMPORTED_MODULE_1__.default
   }
 });
 
@@ -927,6 +1140,113 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(this.getCategories, ['id', this.categoryId]);
     }
   })
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _modals_IngredientModalComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modals/IngredientModalComponent */ "./resources/js/dashboard/components/modals/IngredientModalComponent.vue");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_2__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    ingredients: {
+      type: Array,
+      required: true,
+      "default": []
+    }
+  },
+  computed: {
+    hasIngredients: function hasIngredients() {
+      return this.ingredients.length > 0;
+    }
+  },
+  data: function data() {
+    return {
+      selectedIngredient: null,
+      showModal: false
+    };
+  },
+  methods: {
+    toggleIngredients: function toggleIngredients() {
+      this.product.hasIngredients = !this.product.hasIngredients;
+    },
+    openModal: function openModal() {
+      this.selectedIngredient = null;
+      this.toggleModal();
+    },
+    toggleModal: function toggleModal() {
+      this.showModal = !this.showModal;
+    },
+    selectIngredient: function selectIngredient(id) {
+      this.selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_1___default()(this.ingredients, ['id', parseInt(id)]);
+      this.toggleModal();
+    },
+    saveIngredient: function saveIngredient(ingredient) {
+      this.$emit('saved', ingredient);
+      this.toggleModal();
+    },
+    removeIngredient: function removeIngredient(id) {
+      this.$emit('removed', id);
+      this.toggleModal();
+    },
+    closed: function closed() {
+      this.toggleModal();
+    }
+  },
+  components: {
+    IngredientModal: _modals_IngredientModalComponent__WEBPACK_IMPORTED_MODULE_0__.default
+  }
 });
 
 /***/ }),
@@ -1035,7 +1355,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _ViewContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ViewContainer */ "./resources/js/dashboard/views/ViewContainer.vue");
-/* harmony import */ var _components_modals_DiscountModalComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/modals/DiscountModalComponent */ "./resources/js/dashboard/components/modals/DiscountModalComponent.vue");
+/* harmony import */ var _components_products_IngredientsComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/products/IngredientsComponent */ "./resources/js/dashboard/components/products/IngredientsComponent.vue");
 /* harmony import */ var _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/discounts/DiscountComponent */ "./resources/js/dashboard/components/discounts/DiscountComponent.vue");
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_4__);
@@ -1302,55 +1622,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1366,14 +1637,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_11___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Ingredients', ['getIngredients'])), {}, {
-    showDiscountsList: function showDiscountsList() {
-      return this.product.discount !== null;
-    },
-    showIngredientsList: function showIngredientsList() {
+    hasIngredients: function hasIngredients() {
       return this.product.ingredients.length > 0;
-    },
-    editMode: function editMode() {
-      return this.$route.params.id ? true : false;
     }
   }),
   data: function data() {
@@ -1390,9 +1655,9 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
         weight: '',
         unit_id: '',
         category_id: '',
-        hasIngredients: false,
         ingredients: [],
-        discount: null
+        discount: null,
+        hasIngredients: false
       },
       waitForFileUpload: false,
       files: null,
@@ -1424,12 +1689,9 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
                   });
                 }
 
-                if (!payload.hasIngredients) {
-                  delete payload.ingredients;
-                  delete payload.hasIngredients;
-                }
+                payload.hasIngredients = _this.hasIngredients;
 
-                if (payload.discounts === null) {
+                if (payload.discount === null) {
                   delete payload.discount;
                 }
 
@@ -1460,13 +1722,12 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
                   message: 'Product added'
                 });
 
-                _context.next = 21;
+                _context.next = 20;
                 break;
 
               case 15:
                 _context.prev = 15;
                 _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
 
                 _this.$Progress.fail();
 
@@ -1476,7 +1737,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
                   _this.$refs.observer.setErrors(_context.t0.response.data.errors);
                 }
 
-              case 21:
+              case 20:
               case "end":
                 return _context.stop();
             }
@@ -1535,11 +1796,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
         }
       }, _callee2, this, [[0, 15]]);
     })), 500),
-    clearIngredients: function clearIngredients() {
-      if (this.product.hasIngredients) {
-        this.product.ingredients = [];
-      }
-    },
     waitForFiletoUpload: function waitForFiletoUpload() {
       this.waitForFileUpload = true;
     },
@@ -1556,59 +1812,21 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
       });
       delete this.product.image;
     },
-    toggleIngredients: function toggleIngredients() {
-      this.product.hasIngredients = !this.product.hasIngredients;
-    },
-    findIngredient: function findIngredient() {
+    saveIngredient: function saveIngredient(ingredient) {
       var _this2 = this;
 
-      if (this.ingredientInput.length > 0) {
-        var lastSpaceIndex = this.ingredientInput.lastIndexOf(" ");
-        this.foundIngredients = lodash_filter__WEBPACK_IMPORTED_MODULE_6___default()(this.getIngredients, function (ingredient) {
-          return new RegExp('^' + "".concat(_this2.ingredientInput.substring(lastSpaceIndex + 1)), 'i').test(ingredient.name);
+      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_7___default()(this.product.ingredients, ['id', parseInt(ingredient.id)]);
+
+      if (ingredientIndex > -1) {
+        Object.keys(ingredient).forEach(function (key) {
+          _this2.$set(_this2.product.ingredients[ingredientIndex], key, ingredient[key]);
         });
       } else {
-        this.foundIngredients = [];
+        this.product.ingredients.push(ingredient);
       }
     },
-    selectIngredient: function selectIngredient(id) {
-      var productIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_5___default()(this.product.ingredients, ['id', id]);
-
-      if (productIngredient) {
-        this.openNotification({
-          type: 'info',
-          show: true,
-          message: 'The product already has this ingredient'
-        });
-      } else {
-        try {
-          var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_5___default()(this.foundIngredients, ['id', id]);
-
-          var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-          var ingredientQuantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-
-          if (ingredientQuantity.length === 0) {
-            throw 'Ingredient quantity is required';
-          }
-
-          if (!Number.isSafeInteger(parseInt(ingredientQuantity))) {
-            throw 'The first part must be an integer';
-          }
-
-          selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-          this.product.ingredients.push(selectedIngredient);
-          this.ingredientInput = '';
-          this.foundIngredients = [];
-        } catch (error) {
-          var errors = {
-            ingredient: [error]
-          };
-          this.$refs.observer.setErrors(errors);
-        }
-      }
-    },
-    removeIngredient: function removeIngredient(id) {
-      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_7___default()(this.product.ingredients, ['id', id]);
+    removeIngredient: function removeIngredient(ingredientId) {
+      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_7___default()(this.product.ingredients, ['id', parseInt(ingredientId)]);
 
       this.product.ingredients.splice(ingredientIndex, 1);
     },
@@ -1621,7 +1839,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
   }),
   components: {
     ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_1__.default,
-    AddDiscountComponent: _components_modals_DiscountModalComponent__WEBPACK_IMPORTED_MODULE_2__.default,
+    IngredientsComponent: _components_products_IngredientsComponent__WEBPACK_IMPORTED_MODULE_2__.default,
     DiscountComponent: _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_3__.default,
     FilePond: FilePond
   }
@@ -1642,24 +1860,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store/index */ "./resources/js/dashboard/store/index.js");
 /* harmony import */ var _ViewContainer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ViewContainer */ "./resources/js/dashboard/views/ViewContainer.vue");
-/* harmony import */ var _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/discounts/DiscountComponent */ "./resources/js/dashboard/components/discounts/DiscountComponent.vue");
-/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
-/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var filepond_dist_filepond_min_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! filepond/dist/filepond.min.css */ "./node_modules/filepond/dist/filepond.min.css");
-/* harmony import */ var filepond_plugin_image_preview_dist_filepond_plugin_image_preview_min_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css");
-/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
-/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash/filter */ "./node_modules/lodash/filter.js");
-/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
-/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_10__);
-var _objectSpread2;
-
+/* harmony import */ var _components_products_IngredientsComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/products/IngredientsComponent */ "./resources/js/dashboard/components/products/IngredientsComponent.vue");
+/* harmony import */ var _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/discounts/DiscountComponent */ "./resources/js/dashboard/components/discounts/DiscountComponent.vue");
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
+/* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var filepond_dist_filepond_min_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! filepond/dist/filepond.min.css */ "./node_modules/filepond/dist/filepond.min.css");
+/* harmony import */ var filepond_plugin_image_preview_dist_filepond_plugin_image_preview_min_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css */ "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! filepond-plugin-file-validate-type */ "./node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js");
+/* harmony import */ var filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! lodash/filter */ "./node_modules/lodash/filter.js");
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_11__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -1899,38 +2116,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1942,7 +2127,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_4___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_7___default()));
+
+var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_8___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -2002,7 +2188,11 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_4___default()((filepond_plu
       }, _callee, null, [[1, 15]]);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapGetters)('Ingredients', ['getIngredients'])),
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Ingredients', ['getIngredients'])), {}, {
+    hasIngredients: function hasIngredients() {
+      return this.localProduct.ingredients.length > 0;
+    }
+  }),
   data: function data() {
     return {
       locked: false,
@@ -2019,16 +2209,15 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_4___default()((filepond_plu
         unit_id: '',
         quantity: '',
         category_id: '',
-        hasIngredients: false,
-        ingredients: [],
-        discount: null
+        discount: null,
+        ingredients: []
       },
       waitForFileUpload: false,
       files: [],
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapActions)('Products', ['updateProduct'])), (0,vuex__WEBPACK_IMPORTED_MODULE_11__.mapActions)('Notification', ['openNotification'])), {}, (_objectSpread2 = {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapActions)('Products', ['updateProduct'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapActions)('Notification', ['openNotification'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -2059,16 +2248,17 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_4___default()((filepond_plu
                 });
 
                 if (!(counter > 0)) {
-                  _context2.next = 14;
+                  _context2.next = 15;
                   break;
                 }
 
                 _this.$Progress.start();
 
-                _context2.next = 8;
+                payload.product.hasIngredients = _this.hasIngredients;
+                _context2.next = 9;
                 return _this.updateProduct(payload);
 
-              case 8:
+              case 9:
                 counter = 0;
 
                 _this.$router.push({
@@ -2086,34 +2276,40 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_4___default()((filepond_plu
                   message: 'Product updated'
                 });
 
-                _context2.next = 15;
+                _context2.next = 16;
                 break;
 
-              case 14:
+              case 15:
                 _this.openNotification({
                   type: 'info',
                   show: true,
                   message: 'Nothing to update'
                 });
 
-              case 15:
-                _context2.next = 21;
+              case 16:
+                _context2.next = 23;
                 break;
 
-              case 17:
-                _context2.prev = 17;
+              case 18:
+                _context2.prev = 18;
                 _context2.t0 = _context2["catch"](0);
+
+                _this.openNotification({
+                  type: 'err',
+                  show: true,
+                  message: 'Something went wrong'
+                });
 
                 _this.$Progress.fail();
 
                 console.log(_context2.t0);
 
-              case 21:
+              case 23:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 17]]);
+        }, _callee2, null, [[0, 18]]);
       }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {
@@ -2176,66 +2372,39 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_4___default()((filepond_plu
         }, _callee3, null, [[0, 10]]);
       }))();
     },
-    clearIngredients: function clearIngredients() {
-      if (this.localProduct.hasIngredients) {
-        this.localProduct.ingredients = [];
-      }
-    },
-    toggleIngredients: function toggleIngredients() {
-      this.localProduct.hasIngredients = !this.localProduct.hasIngredients;
-    },
-    findIngredient: function findIngredient() {
-      var _this3 = this;
-
-      if (this.ingredientInput.length > 0) {
-        var lastSpaceIndex = this.ingredientInput.lastIndexOf(" ");
-        this.foundIngredients = lodash_filter__WEBPACK_IMPORTED_MODULE_9___default()(this.getIngredients, function (ingredient) {
-          return new RegExp('^' + "".concat(_this3.ingredientInput.substring(lastSpaceIndex + 1)), 'i').test(ingredient.name);
-        });
-      } else {
-        this.foundIngredients = [];
-      }
-    },
-    selectIngredient: function selectIngredient(id) {
-      var selectedIngredient = lodash_find__WEBPACK_IMPORTED_MODULE_8___default()(this.foundIngredients, ['id', id]);
-
-      var localProductIngredients = lodash_find__WEBPACK_IMPORTED_MODULE_8___default()(this.localProduct.ingredients, ['id', id]);
-
-      if (localProductIngredients) {
-        this.openNotification({
-          type: 'info',
-          show: true,
-          message: 'The product already has this ingredient'
-        });
-      } else {
-        var indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-        selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-        this.localProduct.ingredients.push(selectedIngredient);
-        this.ingredientInput = '';
-        this.foundIngredients = [];
-      }
-    },
-    removeIngredient: function removeIngredient(id) {
-      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_10___default()(this.localProduct.ingredients, ['id', id]);
-
-      this.localProduct.ingredients.splice(ingredientIndex, 1);
-    },
     setProduct: function setProduct(product) {
       this.product = product;
       this.localProduct = JSON.parse(JSON.stringify(this.product));
-    }
-  }, _defineProperty(_objectSpread2, "removeIngredient", function removeIngredient(id) {
-    var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_10___default()(this.product.ingredients, ['id', id]);
+    },
+    saveIngredient: function saveIngredient(ingredient) {
+      var _this3 = this;
 
-    this.product.ingredients.splice(ingredientIndex, 1);
-  }), _defineProperty(_objectSpread2, "addDiscount", function addDiscount(discount) {
-    this.localProduct.discount = discount;
-  }), _defineProperty(_objectSpread2, "removeDiscount", function removeDiscount() {
-    this.localProduct.discount = undefined;
-  }), _objectSpread2)),
+      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_11___default()(this.localProduct.ingredients, ['id', parseInt(ingredient.id)]);
+
+      if (ingredientIndex > -1) {
+        Object.keys(ingredient).forEach(function (key) {
+          _this3.$set(_this3.localProduct.ingredients[ingredientIndex], key, ingredient[key]);
+        });
+      } else {
+        this.localProduct.ingredients.push(ingredient);
+      }
+    },
+    removeIngredient: function removeIngredient(ingredientId) {
+      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_11___default()(this.localProduct.ingredients, ['id', parseInt(ingredientId)]);
+
+      this.localProduct.ingredients.splice(ingredientIndex, 1);
+    },
+    addDiscount: function addDiscount(discount) {
+      this.localProduct.discount = discount;
+    },
+    removeDiscount: function removeDiscount() {
+      this.localProduct.discount = undefined;
+    }
+  }),
   components: {
     ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_2__.default,
-    DiscountComponent: _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_3__.default,
+    IngredientsComponent: _components_products_IngredientsComponent__WEBPACK_IMPORTED_MODULE_3__.default,
+    DiscountComponent: _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_4__.default,
     FilePond: FilePond
   }
 });
@@ -17358,6 +17527,45 @@ component.options.__file = "resources/js/dashboard/components/modals/DiscountMod
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/components/modals/IngredientModalComponent.vue":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/dashboard/components/modals/IngredientModalComponent.vue ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _IngredientModalComponent_vue_vue_type_template_id_0df0aa8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IngredientModalComponent.vue?vue&type=template&id=0df0aa8a& */ "./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=template&id=0df0aa8a&");
+/* harmony import */ var _IngredientModalComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IngredientModalComponent.vue?vue&type=script&lang=js& */ "./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _IngredientModalComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _IngredientModalComponent_vue_vue_type_template_id_0df0aa8a___WEBPACK_IMPORTED_MODULE_0__.render,
+  _IngredientModalComponent_vue_vue_type_template_id_0df0aa8a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/dashboard/components/modals/IngredientModalComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/components/modals/ModalComponent.vue":
 /*!*********************************************************************!*\
   !*** ./resources/js/dashboard/components/modals/ModalComponent.vue ***!
@@ -17432,6 +17640,45 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "resources/js/dashboard/components/products/CategoryComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/components/products/IngredientsComponent.vue":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/dashboard/components/products/IngredientsComponent.vue ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _IngredientsComponent_vue_vue_type_template_id_f0ef85b4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IngredientsComponent.vue?vue&type=template&id=f0ef85b4& */ "./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=template&id=f0ef85b4&");
+/* harmony import */ var _IngredientsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IngredientsComponent.vue?vue&type=script&lang=js& */ "./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _IngredientsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _IngredientsComponent_vue_vue_type_template_id_f0ef85b4___WEBPACK_IMPORTED_MODULE_0__.render,
+  _IngredientsComponent_vue_vue_type_template_id_f0ef85b4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/dashboard/components/products/IngredientsComponent.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -17819,6 +18066,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientModalComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IngredientModalComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientModalComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/components/modals/ModalComponent.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************!*\
   !*** ./resources/js/dashboard/components/modals/ModalComponent.vue?vue&type=script&lang=js& ***!
@@ -17848,6 +18111,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CategoryComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/products/CategoryComponent.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoryComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************!*\
+  !*** ./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IngredientsComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -18100,6 +18379,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=template&id=0df0aa8a&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=template&id=0df0aa8a& ***!
+  \**************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientModalComponent_vue_vue_type_template_id_0df0aa8a___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientModalComponent_vue_vue_type_template_id_0df0aa8a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientModalComponent_vue_vue_type_template_id_0df0aa8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IngredientModalComponent.vue?vue&type=template&id=0df0aa8a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=template&id=0df0aa8a&");
+
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/components/modals/ModalComponent.vue?vue&type=template&id=28b95819&":
 /*!****************************************************************************************************!*\
   !*** ./resources/js/dashboard/components/modals/ModalComponent.vue?vue&type=template&id=28b95819& ***!
@@ -18130,6 +18426,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoryComponent_vue_vue_type_template_id_08c09be4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoryComponent_vue_vue_type_template_id_08c09be4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CategoryComponent.vue?vue&type=template&id=08c09be4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/products/CategoryComponent.vue?vue&type=template&id=08c09be4&");
+
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=template&id=f0ef85b4&":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=template&id=f0ef85b4& ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientsComponent_vue_vue_type_template_id_f0ef85b4___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientsComponent_vue_vue_type_template_id_f0ef85b4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IngredientsComponent_vue_vue_type_template_id_f0ef85b4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IngredientsComponent.vue?vue&type=template&id=f0ef85b4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=template&id=f0ef85b4&");
 
 
 /***/ }),
@@ -18560,7 +18873,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "w-full" },
+    { staticClass: "w-full flex flex-col items-start gap-y-2" },
     [
       _vm.showModal
         ? _c("DiscountModal", {
@@ -19274,9 +19587,7 @@ var render = function() {
   return _c(
     "Modal",
     [
-      _c("template", { slot: "header" }, [
-        _vm._v("\n        Add discount\n    ")
-      ]),
+      _c("template", { slot: "header" }, [_vm._v("\n        Discount\n    ")]),
       _vm._v(" "),
       _c(
         "template",
@@ -19554,6 +19865,283 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=template&id=0df0aa8a&":
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/modals/IngredientModalComponent.vue?vue&type=template&id=0df0aa8a& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "Modal",
+    [
+      _c("template", { slot: "header" }, [
+        _vm._v("\n        Ingredient\n    ")
+      ]),
+      _vm._v(" "),
+      _c(
+        "template",
+        { slot: "body" },
+        [
+          _c("ValidationObserver", { ref: "observer" }, [
+            _c(
+              "form",
+              { staticClass: "flex flex-col gap-3" },
+              [
+                _c("ValidationProvider", {
+                  staticClass: "w-full",
+                  attrs: { vid: "ingredient", rules: "required" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "default",
+                      fn: function(ref) {
+                        var errors = ref.errors
+                        var failed = ref.failed
+                        var passed = ref.passed
+                        return [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "text-sm font-semibold",
+                              attrs: { for: "ingredient" }
+                            },
+                            [_vm._v("Ingredient")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "text-xs text-red-600 font-semibold mb-1"
+                            },
+                            [_vm._v(" " + _vm._s(errors[0]))]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.ingredient.id,
+                                  expression: "ingredient.id"
+                                }
+                              ],
+                              staticClass:
+                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                              class: {
+                                "border-red-600": failed,
+                                "border-green-500": passed
+                              },
+                              attrs: {
+                                id: "ingredient",
+                                name: "ingredient",
+                                disabled: _vm.isEditMode
+                              },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.ingredient,
+                                      "id",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  _vm.selectIngredient
+                                ]
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "", disabled: "" } },
+                                [_vm._v("Select ingredient")]
+                              ),
+                              _vm._v(" "),
+                              _vm._l(_vm.ingredients, function(ingredient) {
+                                return _c(
+                                  "option",
+                                  {
+                                    key: ingredient.id,
+                                    staticClass:
+                                      "flex items-center gap-x-3 disabled:bg-gray-100",
+                                    attrs: { disabled: ingredient.exists },
+                                    domProps: { value: ingredient.id }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(ingredient.name) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                )
+                              })
+                            ],
+                            2
+                          )
+                        ]
+                      }
+                    }
+                  ])
+                }),
+                _vm._v(" "),
+                _c("ValidationProvider", {
+                  staticClass: "w-full",
+                  attrs: { vid: "quantity", rules: "required|integer" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "default",
+                      fn: function(ref) {
+                        var errors = ref.errors
+                        var failed = ref.failed
+                        var passed = ref.passed
+                        return [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "text-sm font-semibold",
+                              attrs: { for: "quantity" }
+                            },
+                            [_vm._v("Quantity")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "text-xs text-red-600 font-semibold mb-1"
+                            },
+                            [_vm._v(" " + _vm._s(errors[0]))]
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.ingredient.quantity,
+                                expression: "ingredient.quantity"
+                              }
+                            ],
+                            staticClass:
+                              "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                            class: {
+                              "border-red-600": failed,
+                              "border-green-500": passed
+                            },
+                            attrs: {
+                              id: "quantity",
+                              name: "quantity",
+                              type: "quantity"
+                            },
+                            domProps: { value: _vm.ingredient.quantity },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.ingredient,
+                                  "quantity",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]
+                      }
+                    }
+                  ])
+                })
+              ],
+              1
+            )
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("template", { slot: "footer" }, [
+        _c(
+          "button",
+          {
+            staticClass:
+              "flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none",
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.submit($event)
+              }
+            }
+          },
+          [_vm._v("\n            Save\n        ")]
+        ),
+        _vm._v(" "),
+        _vm.isEditMode
+          ? _c(
+              "button",
+              {
+                staticClass:
+                  "flex items-center bg-red-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-red-600 active:bg-red-500 active:shadow-inner disabled:bg-gray-500 disabled:pointer-events-none",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.remove($event)
+                  }
+                }
+              },
+              [_vm._v("\n            Remove\n        ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              "bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600",
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.close($event)
+              }
+            }
+          },
+          [_vm._v("\n            Cancel\n        ")]
+        )
+      ])
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/modals/ModalComponent.vue?vue&type=template&id=28b95819&":
 /*!*******************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/modals/ModalComponent.vue?vue&type=template&id=28b95819& ***!
@@ -19660,6 +20248,105 @@ var render = function() {
         [_vm._v("\n    " + _vm._s(_vm.category.name) + "\n")]
       )
     : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=template&id=f0ef85b4&":
+/*!***************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/dashboard/components/products/IngredientsComponent.vue?vue&type=template&id=f0ef85b4& ***!
+  \***************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "w-full flex flex-col gap-y-2 items-start justify-start" },
+    [
+      _vm.showModal
+        ? _c("IngredientModal", {
+            attrs: {
+              "prop-ingredients": _vm.ingredients,
+              "selected-ingredient": _vm.selectedIngredient
+            },
+            on: {
+              saved: _vm.saveIngredient,
+              removed: _vm.removeIngredient,
+              closed: _vm.toggleModal
+            }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "text-sm font-semibold", attrs: { for: "name" } },
+        [_vm._v("Ingredients")]
+      ),
+      _vm._v(" "),
+      _vm.hasIngredients
+        ? _c(
+            "ul",
+            { staticClass: "flex items-center gap-x-2 my-1" },
+            _vm._l(_vm.ingredients, function(ingredient) {
+              return _c(
+                "li",
+                {
+                  key: ingredient.id,
+                  staticClass:
+                    "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
+                  on: {
+                    click: function($event) {
+                      return _vm.selectIngredient(ingredient.id)
+                    }
+                  }
+                },
+                [
+                  _c("span", [
+                    _vm._v(
+                      "  " +
+                        _vm._s(ingredient.quantity) +
+                        _vm._s(ingredient.unit.name)
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("span", [_vm._v(" " + _vm._s(ingredient.name) + " ")])
+                ]
+              )
+            }),
+            0
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass:
+            "px-2 py-1 border rounded-sm text-sm hover:border-gray-600 active:shadow-inner disabled:pointer-events-none",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.openModal($event)
+            }
+          }
+        },
+        [_vm._v("\n       Add ingredient\n   ")]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -20647,283 +21334,13 @@ var render = function() {
                               }
                             }),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              [
-                                _c("div", { staticClass: "w-full" }, [
-                                  _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.product.hasIngredients,
-                                        expression: "product.hasIngredients"
-                                      }
-                                    ],
-                                    attrs: {
-                                      type: "checkbox",
-                                      id: "hasIngredients",
-                                      disabled: _vm.waiting
-                                    },
-                                    domProps: {
-                                      checked: Array.isArray(
-                                        _vm.product.hasIngredients
-                                      )
-                                        ? _vm._i(
-                                            _vm.product.hasIngredients,
-                                            null
-                                          ) > -1
-                                        : _vm.product.hasIngredients
-                                    },
-                                    on: {
-                                      change: [
-                                        function($event) {
-                                          var $$a = _vm.product.hasIngredients,
-                                            $$el = $event.target,
-                                            $$c = $$el.checked ? true : false
-                                          if (Array.isArray($$a)) {
-                                            var $$v = null,
-                                              $$i = _vm._i($$a, $$v)
-                                            if ($$el.checked) {
-                                              $$i < 0 &&
-                                                _vm.$set(
-                                                  _vm.product,
-                                                  "hasIngredients",
-                                                  $$a.concat([$$v])
-                                                )
-                                            } else {
-                                              $$i > -1 &&
-                                                _vm.$set(
-                                                  _vm.product,
-                                                  "hasIngredients",
-                                                  $$a
-                                                    .slice(0, $$i)
-                                                    .concat($$a.slice($$i + 1))
-                                                )
-                                            }
-                                          } else {
-                                            _vm.$set(
-                                              _vm.product,
-                                              "hasIngredients",
-                                              $$c
-                                            )
-                                          }
-                                        },
-                                        _vm.clearIngredients
-                                      ]
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "label",
-                                    { attrs: { for: "hasIngredients" } },
-                                    [_vm._v("Has ingredients")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _vm.showIngredientsList
-                                  ? _c("div", { staticClass: "w-full" }, [
-                                      _c(
-                                        "label",
-                                        {
-                                          staticClass: "text-sm font-semibold",
-                                          attrs: { for: "name" }
-                                        },
-                                        [_vm._v("Ingredients")]
-                                      ),
-                                      _vm._v(" "),
-                                      _vm.product.ingredients.length > 0
-                                        ? _c(
-                                            "ul",
-                                            {
-                                              staticClass:
-                                                "flex items-center gap-x-2 my-1"
-                                            },
-                                            _vm._l(
-                                              _vm.product.ingredients,
-                                              function(ingredient) {
-                                                return _c(
-                                                  "li",
-                                                  {
-                                                    key: ingredient.id,
-                                                    staticClass:
-                                                      "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
-                                                    class: {
-                                                      "disabled pointer-events-none bg-gray-100":
-                                                        _vm.waiting
-                                                    },
-                                                    on: {
-                                                      click: function($event) {
-                                                        return _vm.removeIngredient(
-                                                          ingredient.id
-                                                        )
-                                                      }
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("span", [
-                                                      _vm._v(
-                                                        "  " +
-                                                          _vm._s(
-                                                            ingredient.quantity
-                                                          ) +
-                                                          _vm._s(
-                                                            ingredient.unit.name
-                                                          )
-                                                      )
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("span", [
-                                                      _vm._v(
-                                                        " " +
-                                                          _vm._s(
-                                                            ingredient.name
-                                                          ) +
-                                                          " "
-                                                      )
-                                                    ])
-                                                  ]
-                                                )
-                                              }
-                                            ),
-                                            0
-                                          )
-                                        : _vm._e()
-                                    ])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _vm.product.hasIngredients
-                                  ? _c("ValidationProvider", {
-                                      staticClass: "w-full",
-                                      attrs: { vid: "ingredient" },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var errors = ref.errors
-                                              return [
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "text-xs text-red-600 font-semibold mb-1"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      " " + _vm._s(errors[0])
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                                  },
-                                                  [
-                                                    _c("input", {
-                                                      directives: [
-                                                        {
-                                                          name: "model",
-                                                          rawName: "v-model",
-                                                          value:
-                                                            _vm.ingredientInput,
-                                                          expression:
-                                                            "ingredientInput"
-                                                        }
-                                                      ],
-                                                      staticClass:
-                                                        "outline-none p-2 h-full w-full rounded",
-                                                      attrs: {
-                                                        type: "text",
-                                                        name: "ingredients",
-                                                        disabled: _vm.waiting
-                                                      },
-                                                      domProps: {
-                                                        value:
-                                                          _vm.ingredientInput
-                                                      },
-                                                      on: {
-                                                        keyup:
-                                                          _vm.findIngredient,
-                                                        input: function(
-                                                          $event
-                                                        ) {
-                                                          if (
-                                                            $event.target
-                                                              .composing
-                                                          ) {
-                                                            return
-                                                          }
-                                                          _vm.ingredientInput =
-                                                            $event.target.value
-                                                        }
-                                                      }
-                                                    }),
-                                                    _vm._v(" "),
-                                                    _vm.foundIngredients
-                                                      .length > 0
-                                                      ? _c(
-                                                          "ul",
-                                                          {
-                                                            staticClass:
-                                                              "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
-                                                          },
-                                                          _vm._l(
-                                                            _vm.foundIngredients,
-                                                            function(
-                                                              ingredient
-                                                            ) {
-                                                              return _c(
-                                                                "li",
-                                                                {
-                                                                  key:
-                                                                    ingredient.id,
-                                                                  staticClass:
-                                                                    "p-1 cursor-pointer hover:bg-gray-50",
-                                                                  on: {
-                                                                    click: function(
-                                                                      $event
-                                                                    ) {
-                                                                      return _vm.selectIngredient(
-                                                                        ingredient.id
-                                                                      )
-                                                                    }
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _c("div", [
-                                                                    _vm._v(
-                                                                      "\n                                            " +
-                                                                        _vm._s(
-                                                                          ingredient.name
-                                                                        ) +
-                                                                        "\n                                        "
-                                                                    )
-                                                                  ])
-                                                                ]
-                                                              )
-                                                            }
-                                                          ),
-                                                          0
-                                                        )
-                                                      : _vm._e()
-                                                  ]
-                                                )
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    })
-                                  : _vm._e()
-                              ],
-                              1
-                            )
+                            _c("IngredientsComponent", {
+                              attrs: { ingredients: _vm.product.ingredients },
+                              on: {
+                                saved: _vm.saveIngredient,
+                                removed: _vm.removeIngredient
+                              }
+                            })
                           ],
                           1
                         )
@@ -21791,234 +22208,15 @@ var render = function() {
                               }
                             }),
                             _vm._v(" "),
-                            _c("div", { staticClass: "mt-4" }, [
-                              _c("div", [
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.localProduct.hasIngredients,
-                                      expression: "localProduct.hasIngredients"
-                                    }
-                                  ],
-                                  attrs: {
-                                    type: "checkbox",
-                                    id: "hasIngredients",
-                                    disabled: _vm.waiting || _vm.locked
-                                  },
-                                  domProps: {
-                                    checked: Array.isArray(
-                                      _vm.localProduct.hasIngredients
-                                    )
-                                      ? _vm._i(
-                                          _vm.localProduct.hasIngredients,
-                                          null
-                                        ) > -1
-                                      : _vm.localProduct.hasIngredients
-                                  },
-                                  on: {
-                                    change: [
-                                      function($event) {
-                                        var $$a =
-                                            _vm.localProduct.hasIngredients,
-                                          $$el = $event.target,
-                                          $$c = $$el.checked ? true : false
-                                        if (Array.isArray($$a)) {
-                                          var $$v = null,
-                                            $$i = _vm._i($$a, $$v)
-                                          if ($$el.checked) {
-                                            $$i < 0 &&
-                                              _vm.$set(
-                                                _vm.localProduct,
-                                                "hasIngredients",
-                                                $$a.concat([$$v])
-                                              )
-                                          } else {
-                                            $$i > -1 &&
-                                              _vm.$set(
-                                                _vm.localProduct,
-                                                "hasIngredients",
-                                                $$a
-                                                  .slice(0, $$i)
-                                                  .concat($$a.slice($$i + 1))
-                                              )
-                                          }
-                                        } else {
-                                          _vm.$set(
-                                            _vm.localProduct,
-                                            "hasIngredients",
-                                            $$c
-                                          )
-                                        }
-                                      },
-                                      _vm.clearIngredients
-                                    ]
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "label",
-                                  { attrs: { for: "hasIngredients" } },
-                                  [_vm._v("Has ingredients")]
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _vm.localProduct.hasIngredients
-                                ? _c("div", { staticClass: "w-full mt-2" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "text-sm font-semibold",
-                                        attrs: { for: "name" }
-                                      },
-                                      [_vm._v("Ingredients")]
-                                    ),
-                                    _vm._v(" "),
-                                    _vm.localProduct.ingredients.length > 0
-                                      ? _c(
-                                          "ul",
-                                          {
-                                            staticClass:
-                                              "flex items-center gap-x-2 my-1"
-                                          },
-                                          _vm._l(
-                                            _vm.localProduct.ingredients,
-                                            function(ingredient) {
-                                              return _c(
-                                                "li",
-                                                {
-                                                  key: ingredient.id,
-                                                  staticClass:
-                                                    "text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600",
-                                                  class: {
-                                                    "disabled pointer-events-none bg-gray-100":
-                                                      _vm.waiting || _vm.locked
-                                                  },
-                                                  on: {
-                                                    click: function($event) {
-                                                      return _vm.removeIngredient(
-                                                        ingredient.id
-                                                      )
-                                                    }
-                                                  }
-                                                },
-                                                [
-                                                  _c("span", [
-                                                    _vm._v(
-                                                      "  " +
-                                                        _vm._s(
-                                                          ingredient.quantity
-                                                        ) +
-                                                        _vm._s(
-                                                          ingredient.unit.name
-                                                        )
-                                                    )
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("span", [
-                                                    _vm._v(
-                                                      " " +
-                                                        _vm._s(
-                                                          ingredient.name
-                                                        ) +
-                                                        " "
-                                                    )
-                                                  ])
-                                                ]
-                                              )
-                                            }
-                                          ),
-                                          0
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                      },
-                                      [
-                                        _c("input", {
-                                          directives: [
-                                            {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value: _vm.ingredientInput,
-                                              expression: "ingredientInput"
-                                            }
-                                          ],
-                                          staticClass:
-                                            "outline-none  p-2 h-full w-full rounded",
-                                          attrs: {
-                                            type: "text",
-                                            name: "ingredients",
-                                            disabled: _vm.waiting || _vm.locked
-                                          },
-                                          domProps: {
-                                            value: _vm.ingredientInput
-                                          },
-                                          on: {
-                                            keyup: _vm.findIngredient,
-                                            input: function($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.ingredientInput =
-                                                $event.target.value
-                                            }
-                                          }
-                                        }),
-                                        _vm._v(" "),
-                                        _vm.foundIngredients.length > 0
-                                          ? _c(
-                                              "ul",
-                                              {
-                                                staticClass:
-                                                  "absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto"
-                                              },
-                                              _vm._l(
-                                                _vm.foundIngredients,
-                                                function(ingredient) {
-                                                  return _c(
-                                                    "li",
-                                                    {
-                                                      key: ingredient.id,
-                                                      staticClass:
-                                                        "p-1 cursor-pointer hover:bg-gray-50",
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.selectIngredient(
-                                                            ingredient.id
-                                                          )
-                                                        }
-                                                      }
-                                                    },
-                                                    [
-                                                      _c("div", [
-                                                        _vm._v(
-                                                          "\n                                            " +
-                                                            _vm._s(
-                                                              ingredient.name
-                                                            ) +
-                                                            "\n                                        "
-                                                        )
-                                                      ])
-                                                    ]
-                                                  )
-                                                }
-                                              ),
-                                              0
-                                            )
-                                          : _vm._e()
-                                      ]
-                                    )
-                                  ])
-                                : _vm._e()
-                            ])
+                            _c("IngredientsComponent", {
+                              attrs: {
+                                ingredients: _vm.localProduct.ingredients
+                              },
+                              on: {
+                                saved: _vm.saveIngredient,
+                                removed: _vm.removeIngredient
+                              }
+                            })
                           ],
                           1
                         )
@@ -22075,7 +22273,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("span", [
                             _vm._v(
-                              "\n                        Save\n                    "
+                              "\n                        Submit\n                    "
                             )
                           ])
                         ]

@@ -195,44 +195,12 @@
                             @removed="removeDiscount"
                         ></DiscountComponent>
 
-                        <div class="mt-4">
-                            <div>
-                                <input type="checkbox" id="hasIngredients" @change="clearIngredients" v-model="localProduct.hasIngredients" :disabled="waiting || locked"/>
-                                <label for="hasIngredients" >Has ingredients</label>
-                            </div>
+                        <IngredientsComponent
+                            :ingredients="localProduct.ingredients"
+                            @saved="saveIngredient"
+                            @removed="removeIngredient"
+                        ></IngredientsComponent>
 
-                            <div class="w-full mt-2" v-if="localProduct.hasIngredients">
-                                <label for="name" class="text-sm font-semibold">Ingredients</label>
-                                <!-- <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div> -->
-                                <ul v-if="localProduct.ingredients.length > 0"
-                                    class="flex items-center gap-x-2 my-1"
-                                >
-                                    <li v-for="ingredient in localProduct.ingredients" :key="ingredient.id"
-                                        class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
-                                        :class="{'disabled pointer-events-none bg-gray-100': waiting || locked}"
-                                        @click="removeIngredient(ingredient.id)"
-                                    > 
-                                        <span>  {{ ingredient.quantity}}{{ ingredient.unit.name}}</span>
-                                        <span> {{ingredient.name}} </span>
-                                    </li>
-                                </ul>
-                                <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
-
-                                    <input type="text" name="ingredients" class="outline-none  p-2 h-full w-full rounded" v-model="ingredientInput" @keyup="findIngredient" :disabled="waiting || locked" />
-
-                                    <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
-                                        <li v-for="ingredient in foundIngredients" :key="ingredient.id"
-                                            @click="selectIngredient(ingredient.id)"
-                                            class="p-1 cursor-pointer hover:bg-gray-50"    
-                                        >
-                                            <div>
-                                                {{ingredient.name}}
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
                      </div>
                 </div>
 
@@ -248,7 +216,7 @@
                         </svg>
               
                         <span>
-                            Save
+                            Submit
                         </span>
                     </button>
                 </div>
@@ -260,7 +228,10 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import store from '../../store/index'
+
     import ViewContainer from '../ViewContainer'
+
+    import IngredientsComponent from '../../components/products/IngredientsComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent';
 
     import vueFilePond from "vue-filepond";
@@ -298,11 +269,14 @@
            
         },
 
-
         computed: {
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
+
+            hasIngredients() {
+                return this.localProduct.ingredients.length > 0;
+            }
         },
 
         data() {
@@ -324,9 +298,8 @@
                     unit_id: '',
                     quantity: '',
                     category_id: '',
-                    hasIngredients: false,
-                    ingredients: [],
                     discount: null,
+                    ingredients: [],
                 },
                 
                 waitForFileUpload: false,
@@ -338,7 +311,6 @@
         methods: {
             ...mapActions('Products', ['updateProduct']),
             ...mapActions('Notification', ['openNotification']),
-
 
             async submit() {
                 try {
@@ -368,6 +340,8 @@
                     if(counter > 0) {
                         this.$Progress.start();
 
+                        payload.product.hasIngredients = this.hasIngredients;
+
                         await this.updateProduct(payload);
 
                         counter = 0;
@@ -388,6 +362,11 @@
                         })
                     }
                 } catch ( error ) {
+                    this.openNotification({
+                        type: 'err',
+                        show: true,
+                        message: 'Something went wrong'
+                    })
                     this.$Progress.fail();
                     console.log(error);
                 }
@@ -429,60 +408,28 @@
                 }               
             },
 
-            clearIngredients() {
-                if(this.localProduct.hasIngredients) {
-                    this.localProduct.ingredients = [];
-                }
-            },
-
-            toggleIngredients() {
-                this.localProduct.hasIngredients = !this.localProduct.hasIngredients;
-            },
-
-            findIngredient(){
-                if(this.ingredientInput.length > 0) {
-                    const lastSpaceIndex = this.ingredientInput.lastIndexOf(" ");
-                    this.foundIngredients = _filter(this.getIngredients, ingredient =>  (new RegExp ('^' + `${this.ingredientInput.substring(lastSpaceIndex +1 )}`, 'i').test( ingredient.name )));
-                }else {
-                    this.foundIngredients = [];
-                }
-            },
-
-            selectIngredient(id) {
-                const selectedIngredient = _find(this.foundIngredients, ['id', id]);
-                const localProductIngredients = _find(this.localProduct.ingredients, ['id', id]);
-
-                if(localProductIngredients) {
-                    this.openNotification({
-                        type: 'info',
-                        show: true,
-                        message: 'The product already has this ingredient'
-                    })
-                } else {
-                    const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-                
-                    selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-
-                    this.localProduct.ingredients.push(selectedIngredient);
-
-                    this.ingredientInput = '';
-                    this.foundIngredients = [];
-                }
-            },
-
-            removeIngredient(id) {
-                const ingredientIndex = _findIndex(this.localProduct.ingredients, ['id', id]);
-                this.localProduct.ingredients.splice(ingredientIndex, 1);
-            },
             
             setProduct(product){
                 this.product = product;
                 this.localProduct = JSON.parse(JSON.stringify(this.product))
             },
 
-            removeIngredient(id) {
-                const ingredientIndex = _findIndex(this.product.ingredients, ['id', id]);
-                this.product.ingredients.splice(ingredientIndex, 1);
+            saveIngredient(ingredient) {
+                const ingredientIndex = _findIndex(this.localProduct.ingredients, ['id', parseInt(ingredient.id)]);
+
+                if(ingredientIndex > -1) {
+                    Object.keys(ingredient).forEach(key => {
+                        this.$set(this.localProduct.ingredients[ingredientIndex], key, ingredient[key]);
+                    })
+                } else {
+                    this.localProduct.ingredients.push(ingredient);
+                }
+
+            },
+
+            removeIngredient(ingredientId) {
+                const ingredientIndex = _findIndex(this.localProduct.ingredients, ['id', parseInt(ingredientId)]);
+                this.localProduct.ingredients.splice(ingredientIndex, 1);
             },
 
             addDiscount(discount) {
@@ -497,6 +444,7 @@
 
         components: {
             ViewContainer,
+            IngredientsComponent,
             DiscountComponent,
             FilePond
         }

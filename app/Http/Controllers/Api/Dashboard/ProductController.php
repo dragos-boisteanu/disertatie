@@ -98,7 +98,7 @@ class ProductController extends Controller
                     $product->ingredients()->attach($ingredient['id'], ['quantity' => $ingredient['quantity']]);
                 }
             } else {
-                $stock = Stock::create(['quantity' => 1]);
+                $stock = Stock::create(['quantity' => 0]);
                 $product->stock_id = $stock->id;
                 $product->save();
             }
@@ -178,49 +178,31 @@ class ProductController extends Controller
 
                 Storage::delete($requestPath);
 
-                $product->save();
-
                 return response()->json(['image'=> $product->image], 200);
                 
             } else {
                 Storage::deleteDirectory('/public/products_images' . $product->id);
                 $product->image = null;
             }
+
+            $product->save();
         }
 
         if($request->has('hasIngredients')) {
             if($request->hasIngredients) {
                                 
-                $product->has_ingredients = true;
+                $product->has_ingredients = $request->hasIngredients;
+           
+                $ingredientsArray = array();
                 
-                if($request->has('ingredients')) {
-                    $ingredientsArray = array();
-                    
-                    foreach ($request->ingredients as $ingredient) {
-                        $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
-                    }
-             
-                    $product->ingredients()->sync($ingredientsArray);
-                    $product->save();
-                    $product->refresh();
-
-                    $quantityArray = array();
-                    
-                    $ingredients = $product->ingredients;
-
-                    foreach($ingredients as $ingredient) {
-                        $howManyProductsCanBeMadeFromThisIngredient = floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
-                        if($howManyProductsCanBeMadeFromThisIngredient === 0) {
-                            $quantity = 0;
-                            
-                        }else {
-                            array_push($quantityArray, $howManyProductsCanBeMadeFromThisIngredient);
-                        }
-                    }
-
-                    $quantity = min($quantityArray);
+                foreach ($request->ingredients as $ingredient) {
+                    $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
                 }
-    
+            
+                $product->ingredients()->sync($ingredientsArray);
+
+                $product->save();
+                    
                 if($product->stock_id) {
                     $product->stock_id = null;
                     $product->stock()->delete();
@@ -229,17 +211,13 @@ class ProductController extends Controller
                 $product->has_ingredients = false;
                 $product->ingredients()->detach();
                 $stock = Stock::create([
-                    'quantity'=>0,
+                    'quantity'=> 0,
                 ]);
                 $product->stock_id = $stock->id;
                 $quantity = 0;
             }
-        }
 
-        $product->save();
-
-        if(isset($quantity)) {
-            return response()->json(['message'=>'Product updated', 'quantity' => $quantity], 200);
+            $product->save();
         }
 
         return response()->json(['message'=>'Product updated'], 200);

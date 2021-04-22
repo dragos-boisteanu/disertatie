@@ -199,69 +199,20 @@
                             </ValidationProvider>
                         </div>
 
-                       <!-- DISCOUNT -->
-                       <DiscountComponent 
+                        <!-- DISCOUNT -->
+                        <DiscountComponent 
                             :discount="product.discount" 
                             @saved="addDiscount" 
                             @removed="removeDiscount"
                         ></DiscountComponent>
 
-                        <div>
-                            <div class="w-full">
-                                <input 
-                                    type="checkbox" 
-                                    id="hasIngredients" 
-                                    @change="clearIngredients" v-model="product.hasIngredients" 
-                                    :disabled="waiting"
-                                />
-                                <label for="hasIngredients" >Has ingredients</label>
-                            </div>
-
-                            <div class="w-full" v-if="showIngredientsList">
-                                <label for="name" class="text-sm font-semibold">Ingredients</label>
-                                <ul v-if="product.ingredients.length > 0"
-                                    class="flex items-center gap-x-2 my-1"
-                                >
-                                    <li v-for="ingredient in product.ingredients" :key="ingredient.id"
-                                        class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
-                                        :class="{'disabled pointer-events-none bg-gray-100': waiting }"
-                                        @click="removeIngredient(ingredient.id)"
-                                    > 
-                                        <span>  {{ ingredient.quantity}}{{ ingredient.unit.name}}</span>
-                                        <span> {{ingredient.name}} </span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <ValidationProvider 
-                                vid="ingredient"
-                                v-slot="{ errors }" 
-                                class="w-full"
-                                v-if="product.hasIngredients"
-                            >
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <div class="relative flex items-center gap-x-3 bg-white w-full text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
-                                    <input 
-                                        type="text" 
-                                        name="ingredients" 
-                                        class="outline-none p-2 h-full w-full rounded" 
-                                        v-model="ingredientInput" 
-                                        @keyup="findIngredient" 
-                                        :disabled="waiting " 
-                                    />
-                                
-                                    <ul class="absolute top-8 left-0 right-0 bg-white rounded border my-2 shadow max-h-24 overflow-y-auto" v-if="foundIngredients.length > 0">
-                                        <li v-for="ingredient in foundIngredients" :key="ingredient.id"
-                                            @click="selectIngredient(ingredient.id)"
-                                            class="p-1 cursor-pointer hover:bg-gray-50"    
-                                        >
-                                            <div>
-                                                {{ingredient.name}}
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </ValidationProvider>
-                        </div> 
+                        <!-- INGREDIENTS -->
+                        <IngredientsComponent
+                            :ingredients="product.ingredients"
+                            @saved="saveIngredient"
+                            @removed="removeIngredient"
+                        ></IngredientsComponent>
+                       
                     </div>
                 </div>
             
@@ -290,7 +241,7 @@
     import { mapActions, mapGetters } from 'vuex';
 
     import ViewContainer from '../ViewContainer';
-    import AddDiscountComponent from '../../components/modals/DiscountModalComponent';
+    import IngredientsComponent from '../../components/products/IngredientsComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent'
 
     import _debounce from 'lodash/debounce';
@@ -314,17 +265,10 @@
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
 
-            showDiscountsList() {
-                return this.product.discount !== null
-            },
-
-            showIngredientsList() {
-                return this.product.ingredients.length > 0;
-            },
-
-            editMode(){
-                return this.$route.params.id ? true : false;
+            hasIngredients(){
+                return this.product.ingredients.length > 0
             }
+
         },
 
         data() {
@@ -343,9 +287,9 @@
                     weight: '',
                     unit_id: '',
                     category_id: '',
-                    hasIngredients: false,
                     ingredients: [],
-                    discount: null
+                    discount: null,
+                    hasIngredients: false,
                 },
 
                 waitForFileUpload: false,
@@ -373,12 +317,9 @@
                         })
                     }
 
-                    if(!payload.hasIngredients) {
-                        delete payload.ingredients;
-                        delete payload.hasIngredients;
-                    }
+                    payload.hasIngredients = this.hasIngredients;
 
-                    if(payload.discounts === null) {
+                    if(payload.discount === null) {
                         delete payload.discount
                     }
                 
@@ -410,7 +351,6 @@
                         message: 'Product added'
                     })
                 } catch ( error ) {
-                    console.log(error)
                     this.$Progress.fail();
 
                     this.waiting = false
@@ -443,12 +383,6 @@
                 }
             }, 500),
 
-            clearIngredients() {
-                if(this.product.hasIngredients) {
-                    this.product.ingredients = [];
-                }                
-            },
-
             waitForFiletoUpload() {
                 this.waitForFileUpload = true;
             },
@@ -467,57 +401,21 @@
                 delete this.product.image;
             },
 
-            toggleIngredients() {
-                this.product.hasIngredients = !this.product.hasIngredients;
-            },
+            saveIngredient(ingredient) {
+                const ingredientIndex = _findIndex(this.product.ingredients, ['id', parseInt(ingredient.id)]);
 
-            findIngredient(){
-                if(this.ingredientInput.length > 0) {
-                    const lastSpaceIndex = this.ingredientInput.lastIndexOf(" ");
-                    this.foundIngredients = _filter(this.getIngredients, ingredient =>  (new RegExp ('^' + `${this.ingredientInput.substring(lastSpaceIndex +1 )}`, 'i').test( ingredient.name )));
-                }else {
-                    this.foundIngredients = [];
-                }
-            }, 
-
-            selectIngredient(id) {
-                const productIngredient = _find(this.product.ingredients, ['id', id]);
-
-                if(productIngredient) {
-                    this.openNotification({
-                        type: 'info',
-                        show: true,
-                        message: 'The product already has this ingredient'
+                if(ingredientIndex > -1) {
+                    Object.keys(ingredient).forEach(key => {
+                        this.$set(this.product.ingredients[ingredientIndex], key, ingredient[key]);
                     })
-                }else {
-                    try {
-                        const selectedIngredient = _find(this.foundIngredients, ['id', id]);
-                        const indexOfFirstSpace = this.ingredientInput.indexOf(" ");
-                        
-                        const ingredientQuantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-                        if(ingredientQuantity.length === 0 ) {
-                            throw 'Ingredient quantity is required'
-                        }
-                        if(!Number.isSafeInteger(parseInt(ingredientQuantity))) {
-                            throw 'The first part must be an integer'
-                        }
-
-                        selectedIngredient.quantity = this.ingredientInput.substring(0, indexOfFirstSpace);
-                        this.product.ingredients.push(selectedIngredient);
-                        this.ingredientInput = '';
-
-                        this.foundIngredients = [];
-                    } catch (error) {
-                        const errors = {
-                            ingredient: [ error ]
-                        }
-                        this.$refs.observer.setErrors(errors);
-                    }
+                } else {
+                    this.product.ingredients.push(ingredient);
                 }
+
             },
-   
-            removeIngredient(id) {
-                const ingredientIndex = _findIndex(this.product.ingredients, ['id', id]);
+
+            removeIngredient(ingredientId) {
+                const ingredientIndex = _findIndex(this.product.ingredients, ['id', parseInt(ingredientId)]);
                 this.product.ingredients.splice(ingredientIndex, 1);
             },
 
@@ -533,7 +431,7 @@
 
         components: {
             ViewContainer,
-            AddDiscountComponent,
+            IngredientsComponent,
             DiscountComponent,
             FilePond
         }
