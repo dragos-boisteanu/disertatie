@@ -264,11 +264,6 @@
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
-
-            hasIngredients(){
-                return this.product.ingredients.length > 0
-            }
-
         },
 
         data() {
@@ -317,12 +312,14 @@
                         })
                     }
 
-                    payload.hasIngredients = this.hasIngredients;
-
                     if(payload.discount === null) {
                         delete payload.discount
                     }
-                
+
+                    if(payload.ingredients.length === 0) {
+                        delete payload.ingredients
+                    }
+
                     await this.addProduct(payload);
 
                     this.product = {
@@ -334,7 +331,6 @@
                         unit_id: '',
                         quantity: '',
                         category_id: '',
-                        hasIngredients: false,
                         ingredients: [],
                         discount: null,
                     },

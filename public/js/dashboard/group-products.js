@@ -1636,11 +1636,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plugin_file_validate_type__WEBPACK_IMPORTED_MODULE_11___default()));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Ingredients', ['getIngredients'])), {}, {
-    hasIngredients: function hasIngredients() {
-      return this.product.ingredients.length > 0;
-    }
-  }),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Ingredients', ['getIngredients'])),
   data: function data() {
     return {
       checkingBarcode: false,
@@ -1689,10 +1685,12 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
                   });
                 }
 
-                payload.hasIngredients = _this.hasIngredients;
-
                 if (payload.discount === null) {
                   delete payload.discount;
+                }
+
+                if (payload.ingredients.length === 0) {
+                  delete payload.ingredients;
                 }
 
                 _context.next = 9;
@@ -1708,7 +1706,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
                   unit_id: '',
                   quantity: '',
                   category_id: '',
-                  hasIngredients: false,
                   ingredients: [],
                   discount: null
                 }, _this.$refs.observer.reset();
@@ -2188,11 +2185,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
       }, _callee, null, [[1, 15]]);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Ingredients', ['getIngredients'])), {}, {
-    hasIngredients: function hasIngredients() {
-      return this.localProduct.ingredients.length > 0;
-    }
-  }),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Ingredients', ['getIngredients'])),
   data: function data() {
     return {
       locked: false,
@@ -2247,6 +2240,10 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                   }
                 });
 
+                if (_this.localProduct.ingredients.length === 0) {
+                  delete payload.product.ingredients;
+                }
+
                 if (!(counter > 0)) {
                   _context2.next = 15;
                   break;
@@ -2254,7 +2251,6 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
 
                 _this.$Progress.start();
 
-                payload.product.hasIngredients = _this.hasIngredients;
                 _context2.next = 9;
                 return _this.updateProduct(payload);
 

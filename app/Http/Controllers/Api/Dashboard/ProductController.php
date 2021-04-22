@@ -76,7 +76,7 @@ class ProductController extends Controller
 
         $input = $request->validated();
 
-        if($request->has('hasIngredients')) {
+        if($request->has('ingredients')) {
             $input['has_ingredients'] = true;
         } else {
             $input['has_ingredients'] = false;
@@ -93,7 +93,7 @@ class ProductController extends Controller
 
             $product = Product::create($input);
 
-            if($request->has('hasIngredients')) {
+            if($request->has('ingredients')) {
                 foreach($input['ingredients'] as $ingredient) {
                     $product->ingredients()->attach($ingredient['id'], ['quantity' => $ingredient['quantity']]);
                 }
@@ -188,39 +188,37 @@ class ProductController extends Controller
             $product->save();
         }
 
-        if($request->has('hasIngredients')) {
-            if($request->hasIngredients) {
-                                
-                $product->has_ingredients = $request->hasIngredients;
-           
-                $ingredientsArray = array();
-                
-                foreach ($request->ingredients as $ingredient) {
-                    $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
-                }
+        if($request->has('ingredients')) {     
+
+            $product->has_ingredients = true;
+        
+            $ingredientsArray = array();
             
-                $product->ingredients()->sync($ingredientsArray);
-
-                $product->save();
-                    
-                if($product->stock_id) {
-                    $product->stock_id = null;
-                    $product->stock()->delete();
-                }
-            } else {
-                $product->has_ingredients = false;
-                $product->ingredients()->detach();
-                $stock = Stock::create([
-                    'quantity'=> 0,
-                ]);
-                $product->stock_id = $stock->id;
-                $quantity = 0;
+            foreach ($request->ingredients as $ingredient) {
+                $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
             }
-
-            $product->save();
+        
+            $product->ingredients()->sync($ingredientsArray);
+                
+            if($product->stock_id) {
+                $product->stock_id = null;
+                $product->stock()->delete();
+            }
+        } else {
+            $product->has_ingredients = false;
+            $product->ingredients()->detach();
+            $stock = Stock::create([
+                'quantity'=> 0,
+            ]);
+            $product->stock_id = $stock->id;
         }
 
-        return response()->json(['message'=>'Product updated'], 200);
+        $product->save();
+
+        $product->refresh();
+        
+
+        return response()->json(['message'=>'Product updated', ['product'=>$product]], 200);
     }
 
     public function disable(Request $request, $id) 

@@ -273,10 +273,6 @@
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
-
-            hasIngredients() {
-                return this.localProduct.ingredients.length > 0;
-            }
         },
 
         data() {
@@ -337,10 +333,12 @@
                         
                     });
 
+                    if(this.localProduct.ingredients.length === 0) {
+                        delete payload.product.ingredients;
+                    }
+
                     if(counter > 0) {
                         this.$Progress.start();
-
-                        payload.product.hasIngredients = this.hasIngredients;
 
                         await this.updateProduct(payload);
 
