@@ -195,13 +195,11 @@
                             @removed="removeDiscount"
                         ></DiscountComponent>
 
-                        <!-- INGREDIENTS -->
                         <IngredientsComponent
                             :ingredients="localProduct.ingredients"
                             @saved="saveIngredient"
                             @removed="removeIngredient"
                         ></IngredientsComponent>
-
 
                      </div>
                 </div>
@@ -271,11 +269,14 @@
            
         },
 
-
         computed: {
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
+
+            hasIngredients() {
+                return this.localProduct.ingredients.length > 0;
+            }
         },
 
         data() {
@@ -297,9 +298,8 @@
                     unit_id: '',
                     quantity: '',
                     category_id: '',
-                    hasIngredients: false,
-                    ingredients: [],
                     discount: null,
+                    ingredients: [],
                 },
                 
                 waitForFileUpload: false,
@@ -311,7 +311,6 @@
         methods: {
             ...mapActions('Products', ['updateProduct']),
             ...mapActions('Notification', ['openNotification']),
-
 
             async submit() {
                 try {
@@ -341,6 +340,8 @@
                     if(counter > 0) {
                         this.$Progress.start();
 
+                        payload.product.hasIngredients = this.hasIngredients;
+
                         await this.updateProduct(payload);
 
                         counter = 0;
@@ -361,6 +362,11 @@
                         })
                     }
                 } catch ( error ) {
+                    this.openNotification({
+                        type: 'err',
+                        show: true,
+                        message: 'Something went wrong'
+                    })
                     this.$Progress.fail();
                     console.log(error);
                 }

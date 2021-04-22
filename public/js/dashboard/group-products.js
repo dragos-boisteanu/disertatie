@@ -1656,7 +1656,8 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
         unit_id: '',
         category_id: '',
         ingredients: [],
-        discount: null
+        discount: null,
+        hasIngredients: false
       },
       waitForFileUpload: false,
       files: null,
@@ -1688,9 +1689,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_8___default()((filepond_plu
                   });
                 }
 
-                if (_this.hasIngredients) {
-                  payload.hasIngredients = true;
-                }
+                payload.hasIngredients = _this.hasIngredients;
 
                 if (payload.discount === null) {
                   delete payload.discount;
@@ -2117,8 +2116,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 
 
@@ -2191,7 +2188,11 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
       }, _callee, null, [[1, 15]]);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Ingredients', ['getIngredients'])),
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_12__.mapGetters)('Ingredients', ['getIngredients'])), {}, {
+    hasIngredients: function hasIngredients() {
+      return this.localProduct.ingredients.length > 0;
+    }
+  }),
   data: function data() {
     return {
       locked: false,
@@ -2208,9 +2209,8 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
         unit_id: '',
         quantity: '',
         category_id: '',
-        hasIngredients: false,
-        ingredients: [],
-        discount: null
+        discount: null,
+        ingredients: []
       },
       waitForFileUpload: false,
       files: [],
@@ -2248,16 +2248,17 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                 });
 
                 if (!(counter > 0)) {
-                  _context2.next = 14;
+                  _context2.next = 15;
                   break;
                 }
 
                 _this.$Progress.start();
 
-                _context2.next = 8;
+                payload.product.hasIngredients = _this.hasIngredients;
+                _context2.next = 9;
                 return _this.updateProduct(payload);
 
-              case 8:
+              case 9:
                 counter = 0;
 
                 _this.$router.push({
@@ -2275,34 +2276,40 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                   message: 'Product updated'
                 });
 
-                _context2.next = 15;
+                _context2.next = 16;
                 break;
 
-              case 14:
+              case 15:
                 _this.openNotification({
                   type: 'info',
                   show: true,
                   message: 'Nothing to update'
                 });
 
-              case 15:
-                _context2.next = 21;
+              case 16:
+                _context2.next = 23;
                 break;
 
-              case 17:
-                _context2.prev = 17;
+              case 18:
+                _context2.prev = 18;
                 _context2.t0 = _context2["catch"](0);
+
+                _this.openNotification({
+                  type: 'err',
+                  show: true,
+                  message: 'Something went wrong'
+                });
 
                 _this.$Progress.fail();
 
                 console.log(_context2.t0);
 
-              case 21:
+              case 23:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 17]]);
+        }, _callee2, null, [[0, 18]]);
       }))();
     },
     waitForFiletoUpload: function waitForFiletoUpload() {

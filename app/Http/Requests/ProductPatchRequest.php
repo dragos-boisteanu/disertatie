@@ -32,11 +32,15 @@ class ProductPatchRequest extends FormRequest
             'weight' => 'sometimes|numeric',
             'category_id' => 'sometimes|numeric|exists:categories,id',
             'unit_id' => 'sometimes|numeric|exists:units,id',
-            'hasIngredients' => 'sometimes|boolean',
-            'ingredients'=> 'required_if:hasIngredients,1|array',
-            'ingregients.*.id' => 'required_with:ingregients|numeric',
-            'ingredients.*.quantity' => 'required_with:ingregients|numeric',
-            'ingredients.*.unit.id' => 'required_with:ingregients|numeric'
+            'hasIngredients' => 'required|boolean',
+            'ingredients'=> 'required_if:hasIngredients,true|array',
+            'ingregients.*.id' => 'required_if:ingregients,true|numeric',
+            'ingredients.*.quantity' => 'required_if:ingregients,true|numeric',
+            'ingredients.*.unit.id' => 'required_if:ingregients,true|numeric',
+            'discount' => ['sometimes'],
+            'discounts.id' => ['required_with:discounts','numeric', 'exists:discounts,id'],
+            'discount.fromDate' => ['required_with:discounts', 'date'],
+            'discount.toDate' => ['required_with:discounts', 'date'],
         ];
     }
 

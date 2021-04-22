@@ -288,7 +288,8 @@
                     unit_id: '',
                     category_id: '',
                     ingredients: [],
-                    discount: null
+                    discount: null,
+                    hasIngredients: false,
                 },
 
                 waitForFileUpload: false,
@@ -316,9 +317,7 @@
                         })
                     }
 
-                    if(this.hasIngredients) {
-                        payload.hasIngredients = true;
-                    } 
+                    payload.hasIngredients = this.hasIngredients;
 
                     if(payload.discount === null) {
                         delete payload.discount
