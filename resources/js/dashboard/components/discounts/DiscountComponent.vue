@@ -1,6 +1,5 @@
 <template>
-    <div class="w-full">
-
+    <div class="w-full flex flex-col items-start gap-y-2">
         <DiscountModal 
             v-if="showModal" 
             :prop-discount="discount" 

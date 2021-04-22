@@ -2,7 +2,7 @@
     <Modal>
 
         <template slot="header">
-            Add discount
+            Discount
         </template>
      
         <template slot="body">
@@ -119,7 +119,7 @@
             }
         },
 
-        created() {            
+        mounted() {            
             this.getAvailableDiscounts()
 
             if(this.propDiscount) {
