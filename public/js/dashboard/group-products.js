@@ -2230,10 +2230,8 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                 counter = 0;
                 Object.keys(_this.localProduct).forEach(function (key) {
                   if (key === 'ingredients') {
-                    if (_this.localProduct[key].length !== _this.product[key].length) {
-                      payload.product[key] = _this.localProduct[key];
-                      counter++;
-                    }
+                    payload.product[key] = _this.localProduct[key];
+                    counter++;
                   } else if (_this.product[key] !== _this.localProduct[key]) {
                     payload.product[key] = _this.localProduct[key];
                     counter++;

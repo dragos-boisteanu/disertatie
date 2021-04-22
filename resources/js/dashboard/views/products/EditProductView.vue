@@ -322,10 +322,10 @@
                     Object.keys(this.localProduct).forEach(key => {
                         
                         if(key === 'ingredients') {
-                            if(this.localProduct[key].length !== this.product[key].length ) {
-                                payload.product[key] = this.localProduct[key];
-                                counter++;
-                            }
+                        
+                            payload.product[key] = this.localProduct[key];
+                            counter++;
+                            
                         } else if (this.product[key] !== this.localProduct[key]) {
                             payload.product[key] = this.localProduct[key];
                             counter++;
