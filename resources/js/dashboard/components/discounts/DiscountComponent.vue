@@ -1,20 +1,21 @@
 <template>
- <!-- :class="{'disabled pointer-events-none bg-gray-100': waiting }" -->
     <div class="w-full">
+
         <DiscountModal 
             v-if="showModal" 
             :prop-discount="discount" 
             @saved="save" 
-            @closed="closeModal"
+            @closed="toggleModal"
         >
         </DiscountModal>
-        <div v-if="hasDiscount" class="mb-2 flex items-center gap-x-2 my-1">
+
+        <label for="discount" class="text-sm font-semibold">Discount</label>
+        <div id="discount" v-if="hasDiscount" class="mb-2 flex items-center gap-x-2 my-1">
             <div
                 class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
-               
                 @click="removeDiscount"
             > 
-                <span>  {{ discount.code }}</span>
+                <span> {{ discount.code }} </span>
                 <span> {{ discount.value }}% </span>
                 <span>
                     |
@@ -37,7 +38,7 @@
         <div>
             <button
                 class="px-2 py-1 border rounded-sm text-sm hover:border-gray-600 active:shadow-inner disabled:pointer-events-none"
-                @click.prevent="openModal"   
+                @click.prevent="toggleModal"   
             >
                 <span v-if="hasDiscount">
                     Edit discount
@@ -77,16 +78,12 @@
         },
 
         methods: {
-            openModal() {
-                this.showModal = true;
+            toggleModal() {
+                this.showModal = !this.showModal;
             },
-
-            closeModal() {
-                this.showModal = false;
-            },
-
+            
             save(discount) {
-                this.closeModal();
+                this.toggleModal();
                 this.$emit('saved', discount);
             },
 

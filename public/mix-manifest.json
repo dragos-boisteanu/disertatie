@@ -1,11 +1,11 @@
 {
-    "/js/dashboard/app.js": "/js/dashboard/app.js?id=b2d3beecf413b31c5d4a",
+    "/js/dashboard/app.js": "/js/dashboard/app.js?id=d75fb3e08655756c52ba",
     "/js/app.js": "/js/app.js?id=d9da5dcbff3d35145d78",
     "/js/dashboard/group-users.js": "/js/dashboard/group-users.js?id=ae3e77733cde8a58c347",
-    "/js/dashboard/group-products.js": "/js/dashboard/group-products.js?id=468dc99cfce18f7d767f",
+    "/js/dashboard/group-products.js": "/js/dashboard/group-products.js?id=b3bbdff9e98e6cbeaaed",
     "/js/dashboard/group-categories.js": "/js/dashboard/group-categories.js?id=43b2ccf881251cbd90f0",
-    "/js/dashboard/group-ingredients.js": "/js/dashboard/group-ingredients.js?id=6006201e2c5bbe43549a",
     "/js/dashboard/group-stocks.js": "/js/dashboard/group-stocks.js?id=163362da1b38e6a2bf26",
+    "/js/dashboard/group-ingredients.js": "/js/dashboard/group-ingredients.js?id=6006201e2c5bbe43549a",
     "/js/dashboard/group-discounts.js": "/js/dashboard/group-discounts.js?id=9e06876d779d1dedf618",
     "/css/app.css": "/css/app.css?id=91bd90ffe50772381f3a"
 }

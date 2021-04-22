@@ -6,45 +6,48 @@
         </template>
 
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-            <form @submit.prevent="handleSubmit(submit)" class="lex flex-col" :class="{'pb-10':foundIngredients.length > 0 > 0}">
+            <form @submit.prevent="handleSubmit(submit)" class="lex flex-col">
                 <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
-                        <file-pond
-                            name="image"
-                            ref="pond"
-                            label-idle="Upload product image..."
-                            v-bind:allow-multiple="false"
-                            accepted-file-types="image/jpeg"
-                            :disabled="waiting" 
-                            :server="{
-                                url: '/api/dashboard/images',
-                                process: { 
-                                    headers: {
-                                        'X-CSRF-TOKEN': csrf
+                        <div>
+                            <file-pond
+                                name="image"
+                                ref="pond"
+                                label-idle="Upload product image..."
+                                v-bind:allow-multiple="false"
+                                accepted-file-types="image/jpeg"
+                                :disabled="waiting" 
+                                :server="{
+                                    url: '/api/dashboard/images',
+                                    process: { 
+                                        headers: {
+                                            'X-CSRF-TOKEN': csrf
+                                        },
+                                        onload: (response) =>  addImagePathToProduct(response),
                                     },
-                                    onload: (response) =>  addImagePathToProduct(response),
-                                },
-                                revert: {
-                                    url: '/delete',
-                                    headers: {
-                                        'X-CSRF-TOKEN': csrf
-                                    },
-                                }
-                            }"
-                            :files="files"
-                            :onaddfilestart="waitForFiletoUpload"
-                            :onprocessfileabort="stopWaitingForFileToUpload"
-                        />
+                                    revert: {
+                                        url: '/delete',
+                                        headers: {
+                                            'X-CSRF-TOKEN': csrf
+                                        },
+                                    }
+                                }"
+                                :files="files"
+                                :onaddfilestart="waitForFiletoUpload"
+                                :onprocessfileabort="stopWaitingForFileToUpload"
+                            />
 
-                        <div class="text-right mt-3">
-                            <button 
-                                :disabled="waitForFileUpload || !(waiting)"
-                                class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                                @click.prevent="clearImage"
-                            >
-                                Clear image
-                            </button>
+                            <div class="text-right mt-3">
+                                <button 
+                                    :disabled="waitForFileUpload || !(waiting)"
+                                    class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
+                                    @click.prevent="clearImage"
+                                >
+                                    Clear image
+                                </button>
+                            </div>
                         </div>
+                        
 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
 
@@ -198,11 +201,10 @@
 
                        <!-- DISCOUNT -->
                        <DiscountComponent 
-                        :discount="product.discount" 
-                        @openModal="openAddDiscountModal"
-                        @saved="addDiscount" 
-                        @removed="removeDiscount"
-                    ></DiscountComponent>
+                            :discount="product.discount" 
+                            @saved="addDiscount" 
+                            @removed="removeDiscount"
+                        ></DiscountComponent>
 
                         <div>
                             <div class="w-full">
@@ -258,7 +260,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                </ValidationProvider>
+                            </ValidationProvider>
                         </div> 
                     </div>
                 </div>
@@ -429,18 +431,6 @@
                         if(response.data) {
                             this.product = response.data.data;
                         } else {
-                            // this.product = {
-                            //     barcode: this.product.barcode,
-                            //     name:'',
-                            //     description: '',
-                            //     base_price: '',
-                            //     weight: '',
-                            //     unit_id: '',
-                            //     quantity: '',
-                            //     category_id: '',
-                            //     hasIngredients: false,
-                            //     ingredients: []
-                            // },
                             this.waiting = false;
                         }
                         this.checkingBarcode = false;
@@ -531,19 +521,12 @@
                 this.product.ingredients.splice(ingredientIndex, 1);
             },
 
-
             addDiscount(discount) {
-                
-                console.log(discount)
                 this.product.discount = discount;
             },
 
             removeDiscount() {
                 this.product.discount = null; 
-            },
-
-            openAddDiscountModal() {
-                this.showAddDiscountModal = true;
             },
 
         },

@@ -4534,13 +4534,9 @@ var actions = {
     var state = _ref6.state;
 
     try {
-      var product = _.find(state.products, ['id', id]);
+      var product = _.find(state.products, ['id', parseInt(id)]);
 
-      if (product) {
-        return product;
-      }
-
-      return this.fetchProduct(id);
+      return product;
     } catch (error) {
       throw error;
     }

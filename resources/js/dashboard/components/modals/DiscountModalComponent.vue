@@ -119,15 +119,7 @@
             }
         },
 
-        created() {
-            // if(productId) {
-                // call server and ask for product
-                // bring product in
-                // check if the discount that is being added alredy exists or not
-                // if not, check to see if it's start date is greater than the most recent endDate of
-                // already present discounts
-            // }
-            
+        created() {            
             this.getAvailableDiscounts()
 
             if(this.propDiscount) {
