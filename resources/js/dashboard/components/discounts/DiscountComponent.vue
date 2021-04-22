@@ -1,6 +1,13 @@
 <template>
  <!-- :class="{'disabled pointer-events-none bg-gray-100': waiting }" -->
     <div class="w-full">
+        <DiscountModal 
+            v-if="showModal" 
+            :prop-discount="discount" 
+            @saved="save" 
+            @closed="closeModal"
+        >
+        </DiscountModal>
         <div v-if="hasDiscount" class="mb-2 flex items-center gap-x-2 my-1">
             <div
                 class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
@@ -21,6 +28,9 @@
                 <span>
                     {{ discount.toDate }}
                 </span>
+                <span class="ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                </span>
             </div>
         </div>
 
@@ -29,13 +39,21 @@
                 class="px-2 py-1 border rounded-sm text-sm hover:border-gray-600 active:shadow-inner disabled:pointer-events-none"
                 @click.prevent="openModal"   
             >
-                Add discount
+                <span v-if="hasDiscount">
+                    Edit discount
+                </span>
+                <span v-else>
+                    Add discount
+                </span>
+               
             </button>
         </div>
     </div>
 </template>
 
 <script>
+    import DiscountModal from '../modals/DiscountModalComponent';
+
     export default {
 
         props: {
@@ -52,14 +70,33 @@
             }
         },
 
+        data() {
+            return {
+                showModal: false
+            }
+        },
+
         methods: {
             openModal() {
-                this.$emit('openModal');
+                this.showModal = true;
+            },
+
+            closeModal() {
+                this.showModal = false;
+            },
+
+            save(discount) {
+                this.closeModal();
+                this.$emit('saved', discount);
             },
 
             removeDiscount() {
-                this.$emit('removeDiscount', this.discount.id);
+                this.$emit('removed');
             }
+        },
+
+        components: {
+            DiscountModal
         }
     }
 </script>

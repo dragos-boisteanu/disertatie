@@ -15,31 +15,31 @@
                         <select 
                             id="discount"
                             name="discount"
-                            v-model="discount" 
+                            v-model="selectedDiscountId" 
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                             :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                            @change="selectDiscount"
                         >
                             <option value="" disabled>Select discount</option>
                             <option 
-                                v-for="discount in discounts" 
-                                :key="discount.id"
-                                :value="discount"
+                                v-for="availableDiscount in availableDiscounts" 
+                                :key="availableDiscount.id"
+                                :value="availableDiscount.id"
                                 class="flex items-center gap-x-3 disabled:bg-gray-100"
-                                :disabled="discount.exists"
                             >
                                 <span>
                                     <span>
-                                        {{ discount.code }}
+                                        {{ availableDiscount.code }}
                                     </span> 
                                     <span>
-                                        {{ discount.value }}%
+                                        {{ availableDiscount.value }}%
                                     </span>
                                 </span>
                             </option>
                         </select>
                     </ValidationProvider>
 
-                    <div class="flex flex-col gap-y-4 md:flex-row items-center justify-between mt-3 gap-x-4">
+                    <div class="flex flex-col gap-y-4 sm:flex-row items-center justify-between mt-3 gap-x-4">
                         <ValidationProvider vid="fromDate" rules="required" v-slot="{ errors }" class="w-full">
                             <label for="from" class="text-sm font-semibold">From</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
@@ -81,7 +81,7 @@
                 @click="submit" 
                 class="flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none"
             >
-                Add
+                Save
             </button>
             <button 
                 @click="close"
@@ -97,20 +97,14 @@
 <script>
     import { mapGetters } from 'vuex';
     import _find from 'lodash/find';
-    import _findIndex from 'lodash/findIndex';
 
-    import Modal from '../ModalComponent';
+    import Modal from './ModalComponent';
     import DatePicker from 'vue2-datepicker';
 
     export default {
 
         props: {
-            productId: {
-                type: Number,
-                required: false
-            },
-
-            productDiscount: {
+            propDiscount: {
                 type: Object,
                 required: false,
                 default: null
@@ -125,7 +119,7 @@
             }
         },
 
-        mounted() {
+        created() {
             // if(productId) {
                 // call server and ask for product
                 // bring product in
@@ -136,23 +130,17 @@
             
             this.getAvailableDiscounts()
 
-            if(this.productDiscount) {
-                this.discounts.forEach(discount => {
-                    if(discount.id === parseInt(this.productDiscount.id)) {
-                        discount.exists = true;
-                    }
-                })
-            }            
+            if(this.propDiscount) {
+                this.discount = JSON.parse(JSON.stringify(this.propDiscount))
+                this.selectedDiscountId = this.discount.id
+            }    
         },
 
         data() {
             return {
-                product: {
-                    id: '',
-                    discount: {}
-                },
+                availableDiscounts: [],
 
-                discounts: [],
+                selectedDiscountId: '',
 
                 discount: {
                     id: '0',
@@ -164,8 +152,12 @@
 
         methods: {
             submit() {
-                console.log(this.discount)
-                this.$emit('discountAdded', this.discount);
+                this.discount.id = this.selectedDiscountId;
+                this.$emit('saved', this.discount);
+            },
+
+            selectDiscount() {
+                this.discount = _find(this.availableDiscounts, ['id', this.selectedDiscountId]);
             },
 
             disableDatesInterval(date) {
@@ -180,11 +172,11 @@
             },
 
             getAvailableDiscounts() {
-                this.discounts =  JSON.parse(JSON.stringify(this.getDiscounts.filter(discount => discount.deletedAt === null)))
+                this.availableDiscounts =  JSON.parse(JSON.stringify(this.getDiscounts.filter(discount => discount.deletedAt === null)))
             },
 
             close() {
-                this.$emit('close');
+                this.$emit('closed');
             }
         },
 

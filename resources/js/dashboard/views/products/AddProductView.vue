@@ -1,14 +1,6 @@
 <template>
     <ViewContainer>
 
-        <AddDiscountComponent 
-            v-if="showAddDiscountModal" 
-            :product-discount="product.discount" 
-            @discountAdded="addDiscount" 
-            @close="closeAddDiscountModal"
-        >
-        </AddDiscountComponent>
-
         <template slot="header">
             Add new product
         </template>
@@ -205,7 +197,12 @@
                         </div>
 
                        <!-- DISCOUNT -->
-                       <DiscountComponent :discount="product.discount" @openModal="openAddDiscountModal" ></DiscountComponent>
+                       <DiscountComponent 
+                        :discount="product.discount" 
+                        @openModal="openAddDiscountModal"
+                        @saved="addDiscount" 
+                        @removed="removeDiscount"
+                    ></DiscountComponent>
 
                         <div>
                             <div class="w-full">
@@ -291,7 +288,7 @@
     import { mapActions, mapGetters } from 'vuex';
 
     import ViewContainer from '../ViewContainer';
-    import AddDiscountComponent from '../../components/discounts/AddDiscountComponent';
+    import AddDiscountComponent from '../../components/modals/DiscountModalComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent'
 
     import _debounce from 'lodash/debounce';
@@ -321,6 +318,10 @@
 
             showIngredientsList() {
                 return this.product.ingredients.length > 0;
+            },
+
+            editMode(){
+                return this.$route.params.id ? true : false;
             }
         },
 
@@ -348,8 +349,6 @@
                 waitForFileUpload: false,
                 files: null,
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-
-                showAddDiscountModal: false,
             }
         },
 
@@ -534,21 +533,19 @@
 
 
             addDiscount(discount) {
+                
+                console.log(discount)
                 this.product.discount = discount;
-                this.closeAddDiscountModal();
             },
 
             removeDiscount() {
-                this.product.discount = {}; 
+                this.product.discount = null; 
             },
 
             openAddDiscountModal() {
                 this.showAddDiscountModal = true;
             },
 
-            closeAddDiscountModal() {
-                this.showAddDiscountModal = false;
-            },
         },
 
         components: {

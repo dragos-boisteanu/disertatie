@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import Backdrop from './BackdropComponent.vue';
+    import Backdrop from '../BackdropComponent.vue';
     
     export default {
         methods: {

@@ -1,13 +1,13 @@
 <template>
     <ViewContainer v-if="product">
-
+<!-- 
         <ProductEdit 
             v-if="editProductState" 
             @close="toggleEditProductState"
             @updated="updateProduct"
             :product="product"
         >
-        </ProductEdit>
+        </ProductEdit> -->
 
         <template slot="header">
            Product #{{product.id}}
@@ -108,7 +108,7 @@
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
     import Stock from '../../components/StockComponent';
-    import ProductEdit from '../../components/products/EditProductComponent';
+    // import ProductEdit from '../../components/products/EditProductComponent';
     import Category from '../../components/products/CategoryComponent';
     import Unit from '../../components/products/UnitComponent';
     import Vat from '../../components/products/VatComponent';
@@ -243,7 +243,7 @@
             ViewContainer,
             Stock,
             Status,
-            ProductEdit,
+            // ProductEdit,
             Category,
             Unit,
             Vat
