@@ -1,29 +1,27 @@
 <template>
     <ViewContainer>
-
         <template slot="header">
-            Add new product
+            Edit product #{{ product.id }}
         </template>
 
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-            <form @submit.prevent="handleSubmit(submit)" class="lex flex-col">
+            <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
                 <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
-                        <div>
+                        <!-- <div>
                             <file-pond
                                 name="image"
                                 ref="pond"
-                                label-idle="Upload product image..."
+                                label-idle="Upload product image image..."
                                 v-bind:allow-multiple="false"
                                 accepted-file-types="image/jpeg"
-                                :disabled="waiting" 
                                 :server="{
                                     url: '/api/dashboard/images',
                                     process: { 
                                         headers: {
                                             'X-CSRF-TOKEN': csrf
                                         },
-                                        onload: (response) =>  addImagePathToProduct(response),
+                                        onload: (response) =>  addImagePathToProduct(response) ,
                                     },
                                     revert: {
                                         url: '/delete',
@@ -36,51 +34,53 @@
                                 :onaddfilestart="waitForFiletoUpload"
                                 :onprocessfileabort="stopWaitingForFileToUpload"
                             />
-
-                            <div class="text-right mt-3">
+                            
+                            <div class="text-right mt-6">
                                 <button 
-                                    :disabled="waitForFileUpload || !(waiting)"
-                                    class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
+                                    :disabled="waitForFileUpload"
+                                    class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
                                     @click.prevent="clearImage"
                                 >
                                     Clear image
                                 </button>
+                                <button 
+                                    v-if="this.product.image"
+                                    :disabled="waitForFileUpload"
+                                    class="ml-4 border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
+                                    @click.prevent="removeImage"
+                                >
+                                    Remove image
+                                </button>
                             </div>
-                        </div>
-                        
-
+                        </div> -->
+                   
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-
+                            
                             <ValidationProvider 
-                                vid="barcode" rules="required" 
+                                vid="barcode" 
+                                rules="required" 
                                 v-slot="{ errors, failed, passed }" 
-                                class="w-full"
+                                class="w-full mt-2"
                             >
                                 <label for="name" class="text-sm font-semibold">Barcode</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <div class="flex gap-x-3 items-center relative flex-1">
+                                <div class="flex gap-x-1 items-center relative">
                                     <input 
                                         id="barcode"
                                         name="barcode" 
                                         type="text" 
-                                        v-model="product.barcode" 
-                                        @blur="getProduct"
+                                        v-model="localProduct.barcode" 
                                         :disabled="waiting"   
                                         class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                         :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                     />
-                                    <svg v-show="checkingBarcode" class="animate-spin mr-3 h-5 w-5 text-lightBlue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
                                 </div>
                             </ValidationProvider>
-
                             <ValidationProvider 
                                 vid="name" 
                                 rules="required|alpha_spaces|max:255" 
                                 v-slot="{ errors, failed, passed }" 
-                                class="w-full"
+                                class="w-full mt-2"
                             >
                                 <label for="name" class="text-sm font-semibold">Name</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
@@ -88,8 +88,8 @@
                                     id="firstName"
                                     name="first name" 
                                     type="text" 
-                                    v-model="product.name" 
-                                    :disabled="waiting"   
+                                    v-model="localProduct.name" 
+                                    :disabled="waiting || locked"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
@@ -100,27 +100,28 @@
                             vid="description" 
                             rules="required|alpha_spaces|max:255" 
                             v-slot="{ errors, failed, passed }" 
-                            class="w-full"
-                        >
+                            class="w-full mt-2"
+                        >       
                             <label for="name" class="text-sm font-semibold">Description</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                             <textarea 
                                 id="description"
                                 name="description" 
                                 type="text" 
-                                v-model="product.description" 
-                                :disabled="waiting"   
+                                v-model="localProduct.description" 
+                                :disabled="waiting || locked"   
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                 :class="{'border-red-600': failed, 'border-green-500' : passed}"
                             />
                         </ValidationProvider>
 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
+
                             <ValidationProvider 
                                 vid="base_price" 
                                 rules="required|double:2,dot" 
                                 v-slot="{ errors, failed, passed }" 
-                                class="w-full"
+                                class="w-full mt-2"
                             >
                                 <label for="name" class="text-sm font-semibold">Base price</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
@@ -128,8 +129,8 @@
                                     id="basePrice"
                                     name="base price" 
                                     type="text" 
-                                    v-model="product.base_price" 
-                                    :disabled="waiting"   
+                                    v-model="localProduct.base_price" 
+                                    :disabled="waiting || locked"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
@@ -138,16 +139,15 @@
                                 vid="category_id" 
                                 rules="required|integer" 
                                 v-slot="{ errors, failed, passed }" 
-                                class="w-full"
+                                class="w-full mt-2"
                             >
                                 <label for="name" class="text-sm font-semibold">Category</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="unit_id"
-                                    name="category" 
-                                    type="text" 
-                                    v-model="product.category_id" 
-                                    :disabled="waiting"   
+                                    name="category"
+                                    v-model="localProduct.category_id" 
+                                    :disabled="waiting || locked"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 >
@@ -158,38 +158,28 @@
                         </div>
 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                            <ValidationProvider 
-                                vid="weight" 
-                                rules="required|integer" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="w-full"
-                            >
+                            <ValidationProvider vid="weight" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                                 <label for="name" class="text-sm font-semibold">Weight</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
                                     id="weight"
                                     name="weight" 
                                     type="number" 
-                                    v-model="product.weight" 
-                                    :disabled="waiting"   
+                                    v-model="localProduct.weight" 
+                                    :disabled="waiting || locked"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 />
                             </ValidationProvider>
-                            <ValidationProvider 
-                                vid="unit_id" 
-                                rules="required|integer" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="w-full"
-                            >
+                            <ValidationProvider vid="unit_id" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
                                 <label for="name" class="text-sm font-semibold">Weight units</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <select 
                                     id="unit_id"
                                     name="weight units" 
-                                    type="text"    
-                                    v-model="product.unit_id" 
-                                    :disabled="waiting"   
+                                    type="text" 
+                                    v-model="localProduct.unit_id" 
+                                    :disabled="waiting || locked"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                     :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 >
@@ -199,23 +189,21 @@
                             </ValidationProvider>
                         </div>
 
-                        <!-- DISCOUNT -->
                         <DiscountComponent 
-                            :discount="product.discount" 
+                            :discount="localProduct.discount" 
                             @saved="addDiscount" 
                             @removed="removeDiscount"
                         ></DiscountComponent>
 
-                        <!-- INGREDIENTS -->
                         <IngredientsComponent
-                            :ingredients="product.ingredients"
+                            :ingredients="localProduct.ingredients"
                             @saved="saveIngredient"
                             @removed="removeIngredient"
                         ></IngredientsComponent>
-                       
-                    </div>
+
+                     </div>
                 </div>
-            
+
                 <div class="mt-5 flex md:justify-start">
                     <button 
                         type="submit"
@@ -238,21 +226,22 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
+    import store from '../../store/index'
 
-    import ViewContainer from '../ViewContainer';
+    import ViewContainer from '../ViewContainer'
+
     import IngredientsComponent from '../../components/products/IngredientsComponent';
-    import DiscountComponent from '../../components/discounts/DiscountComponent'
-
-    import _debounce from 'lodash/debounce';
-    import _find from 'lodash/find';
-    import _filter from 'lodash/filter';
-    import _findIndex from 'lodash/findIndex';
+    import DiscountComponent from '../../components/discounts/DiscountComponent';
 
     import vueFilePond from "vue-filepond";
     import "filepond/dist/filepond.min.css";
     import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
     import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+
+    import _find from 'lodash/find';
+    import _filter from 'lodash/filter';
+    import _findIndex from 'lodash/findIndex';
 
     const FilePond = vueFilePond(
         FilePondPluginFileValidateType,
@@ -260,167 +249,204 @@
 
     export default {
 
+        async beforeRouteEnter (to, from, next) {
+            const id = to.params.id;
+            try{
+                if(store.getters['Products/getProducts'].length > 0) {
+                    const product = await store.dispatch('Products/getProduct', id);
+                    next(vm => vm.setProduct(product));
+                } else {
+                    const product = await store.dispatch('Products/fetchProduct', id);
+                    next(vm => vm.setProduct(product));
+                }
+            } catch(error) {
+                store.dispatch('Notification/openNotification', {
+                    type: 'err',
+                    show: true,
+                    message: 'Something wrong happened'
+                })
+            }
+           
+        },
+
         computed: {
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
+
         },
 
         data() {
             return {
-                checkingBarcode: false,
+                locked: false,
                 waiting: false,
 
                 ingredientInput: '',
                 foundIngredients: [],
 
-                product: {
+                product: {},
+
+                localProduct: {
                     barcode: '',
                     name:'',
                     description: '',
                     base_price: '',
                     weight: '',
                     unit_id: '',
+                    quantity: '',
                     category_id: '',
-                    ingredients: [],
                     discount: null,
-                    hasIngredients: false,
+                    ingredients: [],
                 },
-
+                
                 waitForFileUpload: false,
-                files: null,
+                files: [],
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
 
         methods: {
-            ...mapActions('Products', ['addProduct', 'getProductByBarcode']),
+            ...mapActions('Products', ['updateProduct']),
             ...mapActions('Notification', ['openNotification']),
 
             async submit() {
                 try {
-                    this.$Progress.start()
-                    this.waiting = true;
+                    const payload = {
+                        vm: this,
+                        product: {
+                            id: this.localProduct.id,
+                        }
+                    }
 
-                    const payload = {}
+                    let counter = 0;
+                    
+                    Object.keys(this.localProduct).forEach(key => {
+                        if(key === 'ingredients') {
 
-                    if(this.checkingBarcode) {
-                        payload.barcode = this.product.barcode;
+                            // if one ingredient from local product differ in quantity to the same ingredient from product
+                            // sasve it to a new arraw
+                            // if the new array has items set the local product ingredients list in payload
+                            // and increment the counter so the update can be sent
+                            const modifiedIngredients = this.localProduct[key].filter(({ quantity: q1 }) => !this.product[key].some(({ quantity: q2 }) => q1 === q2));
+
+                            if(modifiedIngredients.length > 0 || this.localProduct[key].length !== this.product[key].length) {
+                                payload.product[key] = this.localProduct[key];
+                                counter++;
+                            }
+
+                        } else if (this.product[key] !== this.localProduct[key]) {
+                            payload.product[key] = this.localProduct[key];
+                            counter++;
+                        }
+                    })
+
+                   
+                    if(counter > 0) {
+                        this.$Progress.start();
+
+                        if(payload.product.ingredients && payload.product.ingredients.length === 0) {
+                            delete payload.product.ingredients;
+                        }
+
+                        await this.updateProduct(payload);
+
+                        counter = 0;
+                        
+                        this.$router.push({name: 'Product', params: {id: this.product.id}})
+                        this.$Progress.finish()
+                        
+                        this.openNotification({
+                            type: 'ok',
+                            show: true,
+                            message: 'Product updated'
+                        })
                     } else {
-                        Object.keys(this.product).forEach(key => {
-                            payload[key] = this.product[key];
+                        this.openNotification({
+                            type: 'info',
+                            show: true,
+                            message: 'Nothing to update'
                         })
                     }
-
-                    if(payload.discount === null) {
-                        delete payload.discount
-                    }
-
-                    if(payload.ingredients.length === 0) {
-                        delete payload.ingredients
-                    }
-
-                    await this.addProduct(payload);
-
-                    this.product = {
-                        barcode: '',
-                        name:'',
-                        description: '',
-                        base_price: '',
-                        weight: '',
-                        unit_id: '',
-                        quantity: '',
-                        category_id: '',
-                        ingredients: [],
-                        discount: null,
-                    },
-
-                    this.$refs.observer.reset();
-
-                    this.waiting = false;
-                    
-                    this.$Progress.finish();
-
-                    this.openNotification({
-                        type: 'ok',
-                        show: true,
-                        message: 'Product added'
-                    })
                 } catch ( error ) {
+                    this.openNotification({
+                        type: 'err',
+                        show: true,
+                        message: 'Something went wrong'
+                    })
                     this.$Progress.fail();
-
-                    this.waiting = false
-
-                    if(error.response) {
-                        this.$refs.observer.setErrors(error.response.data.errors)
-                    }  
-                    
+                    console.log(error);
                 }
             },
 
-            getProduct: _debounce( async function() {
-                try {
-                    this.checkingBarcode = true;
-                    if(this.$refs.observer.errors['barcode'].length === 0) {
-                        this.waiting = true;
-                        const response = await this.getProductByBarcode(this.product.barcode);
-                        if(response.data) {
-                            this.product = response.data.data;
-                        } else {
-                            this.waiting = false;
-                        }
-                        this.checkingBarcode = false;
-                    } else {
-                        this.checkingBarcode = false;
-                        this.waiting = false;
-                    }              
-                } catch (error) {
-                    console.log(error)
-                }
-            }, 500),
+            objectsEqual(o1, o2) {
+                return typeof o1 === 'object' && Object.keys(o1).length > 0  ? Object.keys(o1).length === Object.keys(o2).length   && Object.keys(o1).every(p => this.objectsEqual(o1[p], o2[p])) : o1 === o2
+            },
 
             waitForFiletoUpload() {
                 this.waitForFileUpload = true;
+            },
+
+            addImagePathToProduct(value) {
+                this.localProduct.image = value;
+                this.waitForFileUpload = false;
             },
 
             stopWaitingForFileToUpload() {
                 this.waitForFileUpload = false;
             },
 
-            addImagePathToProduct(value) {
-                this.product.image = value;
-                this.waitForFileUpload = false;
-            },
-
             clearImage() {
                 this.$refs.pond.removeFile({revert: true});
-                delete this.product.image;
+                this.localProduct.image = this.product.image
+            },
+
+            async removeImage() {
+                try {
+                    this.$Progress.start();
+                    this.$refs.pond.removeFile({revert: false});
+
+                    this.localProduct.image = 'clear';
+
+                    await this.submit();
+
+                    delete this.localProduct.image;
+                    this.$Progress.finish();
+                } catch ( error ) {
+                    this.$Progress.fail();
+                    console.log(error)
+                    // notification
+                }               
+            },
+
+            
+            setProduct(product){
+                this.product = product;
+                this.localProduct = JSON.parse(JSON.stringify(this.product))
             },
 
             saveIngredient(ingredient) {
-                const ingredientIndex = _findIndex(this.product.ingredients, ['id', parseInt(ingredient.id)]);
+                const ingredientIndex = _findIndex(this.localProduct.ingredients, ['id', parseInt(ingredient.id)]);
 
                 if(ingredientIndex > -1) {
                     Object.keys(ingredient).forEach(key => {
-                        this.$set(this.product.ingredients[ingredientIndex], key, ingredient[key]);
+                        this.$set(this.localProduct.ingredients[ingredientIndex], key, ingredient[key]);
                     })
                 } else {
-                    this.product.ingredients.push(ingredient);
+                    this.localProduct.ingredients.push(ingredient);
                 }
-
             },
 
             removeIngredient(ingredientId) {
-                const ingredientIndex = _findIndex(this.product.ingredients, ['id', parseInt(ingredientId)]);
-                this.product.ingredients.splice(ingredientIndex, 1);
+                const ingredientIndex = _findIndex(this.localProduct.ingredients, ['id', parseInt(ingredientId)]);
+                this.localProduct.ingredients.splice(ingredientIndex, 1);
             },
 
             addDiscount(discount) {
-                this.product.discount = discount;
+                this.localProduct.discount = discount;
             },
 
             removeDiscount() {
-                this.product.discount = null; 
+                this.localProduct.discount = undefined; 
             },
 
         },

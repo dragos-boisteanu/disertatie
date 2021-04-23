@@ -22,6 +22,8 @@ Vue.component('ValidationObserver', ValidationObserver);
 
 import './validators';
 
+import 'vue2-datepicker/index.css';
+
 Vue.use(VueBreadcrumbs, Breadcrumbs);
 
 Vue.use(VueMq, {

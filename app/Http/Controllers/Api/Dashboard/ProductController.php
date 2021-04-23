@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use Carbon\Carbon;
 use App\Models\Stock;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -57,7 +58,7 @@ class ProductController extends Controller
         
         $query->orderBy('products.id', 'asc');;
 
-        $products = $query->Paginate(5);
+        $products = $query->Paginate(16);
 
         return new ProductCollection($products);
     }
@@ -75,10 +76,16 @@ class ProductController extends Controller
 
         $input = $request->validated();
 
-        if($request->has('hasIngredients')) {
+        if($request->has('ingredients')) {
             $input['has_ingredients'] = true;
         } else {
             $input['has_ingredients'] = false;
+        }
+
+        if($request->has('discount')) {
+            $input['discount_id'] = $request->discount['id'];
+            $input['discounted_from_date'] = $request->discount['fromDate'];
+            $input['discounted_until_date'] = $request->discount['toDate'];
         }
 
         try {
@@ -86,15 +93,14 @@ class ProductController extends Controller
 
             $product = Product::create($input);
 
-            if($request->has('hasIngredients')) {
+            if($request->has('ingredients')) {
                 foreach($input['ingredients'] as $ingredient) {
                     $product->ingredients()->attach($ingredient['id'], ['quantity' => $ingredient['quantity']]);
                 }
             } else {
-                $stock = Stock::create(['quantity' => 1]);
+                $stock = Stock::create(['quantity' => 0]);
                 $product->stock_id = $stock->id;
                 $product->save();
-            
             }
          
 
@@ -172,71 +178,47 @@ class ProductController extends Controller
 
                 Storage::delete($requestPath);
 
-                $product->save();
-
                 return response()->json(['image'=> $product->image], 200);
                 
             } else {
                 Storage::deleteDirectory('/public/products_images' . $product->id);
                 $product->image = null;
             }
+
+            $product->save();
         }
 
-        if($request->has('hasIngredients')) {
-            if($request->hasIngredients) {
-                                
-                $product->has_ingredients = true;
-                
-                if($request->has('ingredients')) {
-                    $ingredientsArray = array();
-                    
-                    foreach ($request->ingredients as $ingredient) {
-                        $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
-                    }
-             
-                    $product->ingredients()->sync($ingredientsArray);
-                    $product->save();
-                    $product->refresh();
+        if($request->has('ingredients')) {     
 
-                    $quantityArray = array();
-                    
-                    $ingredients = $product->ingredients;
-
-                    foreach($ingredients as $ingredient) {
-                        $howManyProductsCanBeMadeFromThisIngredient = floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
-                        if($howManyProductsCanBeMadeFromThisIngredient === 0) {
-                            $quantity = 0;
-                            
-                        }else {
-                            array_push($quantityArray, $howManyProductsCanBeMadeFromThisIngredient);
-                        }
-                    }
-
-                    $quantity = min($quantityArray);
-                }
-    
-                if($product->stock_id) {
-                    $product->stock_id = null;
-                    $product->stock()->delete();
-                }
-            } else {
-                $product->has_ingredients = false;
-                $product->ingredients()->detach();
-                $stock = Stock::create([
-                    'quantity'=>0,
-                ]);
-                $product->stock_id = $stock->id;
-                $quantity = 0;
+            $product->has_ingredients = true;
+        
+            $ingredientsArray = array();
+            
+            foreach ($request->ingredients as $ingredient) {
+                $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
             }
+        
+            $product->ingredients()->sync($ingredientsArray);
+                
+            if($product->stock_id) {
+                $product->stock_id = null;
+                $product->stock()->delete();
+            }
+        } else {
+            $product->has_ingredients = false;
+            $product->ingredients()->detach();
+            $stock = Stock::create([
+                'quantity'=> 0,
+            ]);
+            $product->stock_id = $stock->id;
         }
 
         $product->save();
 
-        if(isset($quantity)) {
-            return response()->json(['message'=>'Product updated', 'quantity' => $quantity], 200);
-        }
+        $product->refresh();
+        
 
-        return response()->json(['message'=>'Product updated'], 200);
+        return response()->json(['message'=>'Product updated', ['product'=>$product]], 200);
     }
 
     public function disable(Request $request, $id) 

@@ -34,11 +34,14 @@ class ProductStoreRequest extends FormRequest
             'weight' => 'required|numeric',
             'category_id' => 'required|numeric|exists:categories,id',
             'unit_id' => 'required|numeric|exists:units,id',
-            'hasIngredients' => 'sometimes|boolean',
-            'ingredients'=> 'required_with:hasIngredients|array',
+            'ingredients'=> 'sometimes|array|min:1',
             'ingregients.*.id' => 'required_with:ingregients|numeric',
             'ingredients.*.quantity' => 'required_with:ingregients|numeric',
-            'ingredients.*.unit.id' => 'required_with:ingregients|numeric'
+            'ingredients.*.unit.id' => 'required_with:ingregients|numeric|exists:units,id',
+            'discount' => ['sometimes'],
+            'discounts.id' => ['required_with:discounts','numeric', 'exists:discounts,id'],
+            'discount.fromDate' => ['required_with:discounts', 'date'],
+            'discount.toDate' => ['required_with:discounts', 'date'],
         ];
     }
 

@@ -15,13 +15,15 @@ class Product extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+
+        $arrayData = [
             'id' => $this->id,
             'image' => $this->image,
             'name' => $this->name,
             'barcode' => $this->barcode,
             'description' => $this->description,
             'base_price' => $this->base_price,
+            'finalPrice' => $this->price,
             'vat' => $this->category->vat,
             'weight' => $this->weight,
             'unit_id' => $this->unit_id,
@@ -29,8 +31,16 @@ class Product extends JsonResource
             'quantity' => $this->quantity,
             'hasIngredients' => $this->has_ingredients,
             'ingredients' => new IngredientCollection($this->whenLoaded('ingredients')),
-            // 'ingredients' => $this->ingredients,
             'deleted_at' => $this->deleted_at
         ];
+
+
+        if(!is_null($this->discount)) {
+            $arrayData['discount'] = new DiscountProduct($this->discount);
+            $arrayData['discountStartsAt'] = $this->discounted_from_date;
+            $arrayData['discountEndsAt'] = $this->discounted_until_date;
+        }
+
+        return $arrayData;
     }
 }

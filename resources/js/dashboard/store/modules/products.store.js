@@ -57,8 +57,6 @@ const actions = {
     async updateProduct({commit}, payload ) {
         try {
             const response = await patchProduct(payload.product)
-            payload.product.image = response.data.image
-            payload.product.quantity = response.data.quantity
             commit('PATCH_PRODUCT', payload);
             return response;
         } catch ( error ) {
@@ -68,11 +66,8 @@ const actions = {
 
     getProduct({state}, id) {
         try {
-            let product = _.find(state.products, ['id', id]);
-            if(product) {
-                return product;
-            }
-            return this.fetchProduct(id);
+            let product = _.find(state.products, ['id', parseInt(id)]);
+            return product;
         } catch ( error ) {
             throw error
         }

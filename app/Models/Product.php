@@ -26,6 +26,9 @@ class Product extends Model
         'unit_id',
         'stock_id',
         'has_ingredients',
+        'discount_id',
+        'discounted_from_date',
+        'discounted_until_date',
     ];
 
     public $with = ['unit', 'stock', 'category', 'ingredients'];
@@ -34,9 +37,15 @@ class Product extends Model
 
     public function getPriceAttribute()
     {
-        $price = $this->base_price + $this->base_price * ($this->category->vat / 100);
+        if($this->discount) {
+            $finalPrice = $this->base_price - $this->base_price * ($this->discount->value / 100);
+        } else {
+            $finalPrice = $this->base_price;
+        }
 
-        return $price;
+        $finalPrice += $finalPrice * ($this->category->vat / 100);
+
+        return round($finalPrice, 2);
     }
 
     public function getQuantityAttribute() 
@@ -85,9 +94,9 @@ class Product extends Model
         return $this->belongsToMany('App\Models\Ingredient')->withPivot('quantity');
     }
 
-    public function discounts() 
+    public function discount() 
     {
-        return $this->belongsToMany('App\Models\Discount');
+        return $this->belongsTo(Discount::class);
     }
 
     public function scopeFilter(Builder $builder, Request $request)

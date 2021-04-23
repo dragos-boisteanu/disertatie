@@ -183,7 +183,8 @@ import { mapActions, mapGetters } from 'vuex';
                 this.$refs.observer.reset();
                 this.discount = {
                     name: '',
-                    value: '',              
+                    value: '',
+                    deletedAt: null              
                 }
             },
 
