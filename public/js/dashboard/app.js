@@ -4512,22 +4512,20 @@ var actions = {
 
             case 4:
               response = _context3.sent;
-              payload.product.image = response.data.image;
-              payload.product.quantity = response.data.quantity;
               commit('PATCH_PRODUCT', payload);
               return _context3.abrupt("return", response);
 
-            case 11:
-              _context3.prev = 11;
+            case 9:
+              _context3.prev = 9;
               _context3.t0 = _context3["catch"](1);
               throw _context3.t0;
 
-            case 14:
+            case 12:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[1, 11]]);
+      }, _callee3, null, [[1, 9]]);
     }))();
   },
   getProduct: function getProduct(_ref6, id) {

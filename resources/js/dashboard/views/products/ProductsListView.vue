@@ -150,7 +150,7 @@
 
                     this.orderBy = 1;
 
-                    this.$Progress.fisnih();
+                    this.$Progress.finish();
 
                 } catch ( error) {
                     this.$Progress.fail();

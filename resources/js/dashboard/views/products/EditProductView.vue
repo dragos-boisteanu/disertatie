@@ -273,6 +273,7 @@
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
+
         },
 
         data() {
@@ -318,27 +319,34 @@
                     }
 
                     let counter = 0;
-
+                    
                     Object.keys(this.localProduct).forEach(key => {
-                        
                         if(key === 'ingredients') {
-                        
-                            payload.product[key] = this.localProduct[key];
-                            counter++;
-                            
+
+                            // if one ingredient from local product differ in quantity to the same ingredient from product
+                            // sasve it to a new arraw
+                            // if the new array has items set the local product ingredients list in payload
+                            // and increment the counter so the update can be sent
+                            const modifiedIngredients = this.localProduct[key].filter(({ quantity: q1 }) => !this.product[key].some(({ quantity: q2 }) => q1 === q2));
+
+                            if(modifiedIngredients.length > 0 || this.localProduct[key].length !== this.product[key].length) {
+                                payload.product[key] = this.localProduct[key];
+                                counter++;
+                            }
+
                         } else if (this.product[key] !== this.localProduct[key]) {
                             payload.product[key] = this.localProduct[key];
                             counter++;
                         }
-                        
-                    });
+                    })
 
-                    if(this.localProduct.ingredients.length === 0) {
-                        delete payload.product.ingredients;
-                    }
-
+                   
                     if(counter > 0) {
                         this.$Progress.start();
+
+                        if(payload.product.ingredients && payload.product.ingredients.length === 0) {
+                            delete payload.product.ingredients;
+                        }
 
                         await this.updateProduct(payload);
 
@@ -368,6 +376,10 @@
                     this.$Progress.fail();
                     console.log(error);
                 }
+            },
+
+            objectsEqual(o1, o2) {
+                return typeof o1 === 'object' && Object.keys(o1).length > 0  ? Object.keys(o1).length === Object.keys(o2).length   && Object.keys(o1).every(p => this.objectsEqual(o1[p], o2[p])) : o1 === o2
             },
 
             waitForFiletoUpload() {
@@ -422,7 +434,6 @@
                 } else {
                     this.localProduct.ingredients.push(ingredient);
                 }
-
             },
 
             removeIngredient(ingredientId) {

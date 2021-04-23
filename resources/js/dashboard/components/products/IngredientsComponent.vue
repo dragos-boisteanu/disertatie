@@ -43,14 +43,13 @@
         props: {
             ingredients: {
                 type: Array,
-                required: true,
-                default: [],
+                required: false,
             },
         },
 
         computed: {
             hasIngredients() {
-                return this.ingredients.length > 0
+                return this.ingredients
             }
         },
 

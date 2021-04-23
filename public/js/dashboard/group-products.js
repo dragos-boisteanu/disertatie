@@ -993,11 +993,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     if (this.selectedIngredient) {
       this.ingredient = JSON.parse(JSON.stringify(this.selectedIngredient));
+      this.selectedIngredientId = this.selectedIngredient.id;
     }
   },
   data: function data() {
     return {
       // ingredients: [],
+      selectedIngredientId: '',
       ingredient: {
         id: '',
         qauantity: '',
@@ -1007,7 +1009,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     selectIngredient: function selectIngredient() {
-      this.ingredient = lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.ingredients, ['id', parseInt(this.ingredient.id)]);
+      this.ingredient = lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.ingredients, ['id', parseInt(this.selectedIngredientId)]);
     },
     submit: function submit() {
       var _this2 = this;
@@ -1202,13 +1204,12 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     ingredients: {
       type: Array,
-      required: true,
-      "default": []
+      required: false
     }
   },
   computed: {
     hasIngredients: function hasIngredients() {
-      return this.ingredients.length > 0;
+      return this.ingredients;
     }
   },
   data: function data() {
@@ -1874,6 +1875,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_10__);
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_11__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2230,17 +2233,27 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                 counter = 0;
                 Object.keys(_this.localProduct).forEach(function (key) {
                   if (key === 'ingredients') {
-                    payload.product[key] = _this.localProduct[key];
-                    counter++;
+                    // if one ingredient from local product differ in quantity to the same ingredient from product
+                    // sasve it to a new arraw
+                    // if the new array has items set the local product ingredients list in payload
+                    // and increment the counter so the update can be sent
+                    var modifiedIngredients = _this.localProduct[key].filter(function (_ref) {
+                      var q1 = _ref.quantity;
+                      return !_this.product[key].some(function (_ref2) {
+                        var q2 = _ref2.quantity;
+                        return q1 === q2;
+                      });
+                    });
+
+                    if (modifiedIngredients.length > 0 || _this.localProduct[key].length !== _this.product[key].length) {
+                      payload.product[key] = _this.localProduct[key];
+                      counter++;
+                    }
                   } else if (_this.product[key] !== _this.localProduct[key]) {
                     payload.product[key] = _this.localProduct[key];
                     counter++;
                   }
                 });
-
-                if (_this.localProduct.ingredients.length === 0) {
-                  delete payload.product.ingredients;
-                }
 
                 if (!(counter > 0)) {
                   _context2.next = 15;
@@ -2248,6 +2261,10 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                 }
 
                 _this.$Progress.start();
+
+                if (payload.product.ingredients && payload.product.ingredients.length === 0) {
+                  delete payload.product.ingredients;
+                }
 
                 _context2.next = 9;
                 return _this.updateProduct(payload);
@@ -2306,6 +2323,13 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
         }, _callee2, null, [[0, 18]]);
       }))();
     },
+    objectsEqual: function objectsEqual(o1, o2) {
+      var _this2 = this;
+
+      return _typeof(o1) === 'object' && Object.keys(o1).length > 0 ? Object.keys(o1).length === Object.keys(o2).length && Object.keys(o1).every(function (p) {
+        return _this2.objectsEqual(o1[p], o2[p]);
+      }) : o1 === o2;
+    },
     waitForFiletoUpload: function waitForFiletoUpload() {
       this.waitForFileUpload = true;
     },
@@ -2323,7 +2347,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
       this.localProduct.image = this.product.image;
     },
     removeImage: function removeImage() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
@@ -2332,20 +2356,20 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
               case 0:
                 _context3.prev = 0;
 
-                _this2.$Progress.start();
+                _this3.$Progress.start();
 
-                _this2.$refs.pond.removeFile({
+                _this3.$refs.pond.removeFile({
                   revert: false
                 });
 
-                _this2.localProduct.image = 'clear';
+                _this3.localProduct.image = 'clear';
                 _context3.next = 6;
-                return _this2.submit();
+                return _this3.submit();
 
               case 6:
-                delete _this2.localProduct.image;
+                delete _this3.localProduct.image;
 
-                _this2.$Progress.finish();
+                _this3.$Progress.finish();
 
                 _context3.next = 14;
                 break;
@@ -2354,7 +2378,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                 _context3.prev = 10;
                 _context3.t0 = _context3["catch"](0);
 
-                _this2.$Progress.fail();
+                _this3.$Progress.fail();
 
                 console.log(_context3.t0); // notification
 
@@ -2371,13 +2395,13 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
       this.localProduct = JSON.parse(JSON.stringify(this.product));
     },
     saveIngredient: function saveIngredient(ingredient) {
-      var _this3 = this;
+      var _this4 = this;
 
       var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_11___default()(this.localProduct.ingredients, ['id', parseInt(ingredient.id)]);
 
       if (ingredientIndex > -1) {
         Object.keys(ingredient).forEach(function (key) {
-          _this3.$set(_this3.localProduct.ingredients[ingredientIndex], key, ingredient[key]);
+          _this4.$set(_this4.localProduct.ingredients[ingredientIndex], key, ingredient[key]);
         });
       } else {
         this.localProduct.ingredients.push(ingredient);
@@ -3014,7 +3038,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.orderBy = 1;
 
-                _this.$Progress.fisnih();
+                _this.$Progress.finish();
 
                 _context2.next = 14;
                 break;
@@ -19927,8 +19951,8 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.ingredient.id,
-                                  expression: "ingredient.id"
+                                  value: _vm.selectedIngredientId,
+                                  expression: "selectedIngredientId"
                                 }
                               ],
                               staticClass:
@@ -19954,13 +19978,10 @@ var render = function() {
                                           "_value" in o ? o._value : o.value
                                         return val
                                       })
-                                    _vm.$set(
-                                      _vm.ingredient,
-                                      "id",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
+                                    _vm.selectedIngredientId = $event.target
+                                      .multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
                                   },
                                   _vm.selectIngredient
                                 ]

@@ -134,6 +134,7 @@
 
             if(this.selectedIngredient) {
                 this.ingredient = JSON.parse(JSON.stringify(this.selectedIngredient))
+                this.selectedIngredientId = this.selectedIngredient.id
             }
         },
 
