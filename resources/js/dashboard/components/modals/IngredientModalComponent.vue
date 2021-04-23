@@ -19,7 +19,7 @@
                             <select 
                                 id="ingredient"
                                 name="ingredient"
-                                v-model="ingredient.id" 
+                                v-model="selectedIngredientId" 
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                                 :class="{'border-red-600': failed, 'border-green-500' : passed}"
                                 @change="selectIngredient"
@@ -141,6 +141,8 @@
             return {
                 // ingredients: [],
 
+                selectedIngredientId: '',
+
                 ingredient: {
                     id: '',
                     qauantity: '',
@@ -152,7 +154,7 @@
         methods: {
 
             selectIngredient() {
-                this.ingredient = _find(this.ingredients, ['id', parseInt(this.ingredient.id)]);
+                this.ingredient = _find(this.ingredients, ['id', parseInt(this.selectedIngredientId)]);
             },
 
             async submit() {
