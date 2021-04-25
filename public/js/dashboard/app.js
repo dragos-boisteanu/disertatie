@@ -3358,6 +3358,10 @@ var CreateUserView = function CreateUserView() {
   return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/CreateUserView.vue */ "./resources/js/dashboard/views/users/CreateUserView.vue"));
 };
 
+var EditUserView = function EditUserView() {
+  return __webpack_require__.e(/*! import() | group-users */ "group-users").then(__webpack_require__.bind(__webpack_require__, /*! ../views/users/EditUserView.vue */ "./resources/js/dashboard/views/users/EditUserView.vue"));
+};
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
   path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/users"),
   name: 'Users',
@@ -3384,8 +3388,18 @@ var CreateUserView = function CreateUserView() {
   component: UserView,
   meta: {
     breadcrumb: {
-      label: 'Profile',
+      label: 'User',
       parent: 'Users'
+    }
+  }
+}, {
+  path: "".concat(_baseUrls__WEBPACK_IMPORTED_MODULE_0__.dashboardBaseUrl, "/users/:id/edit"),
+  name: 'EditUser',
+  component: EditUserView,
+  meta: {
+    breadcrumb: {
+      label: 'Edit User',
+      parent: 'User'
     }
   }
 }]);

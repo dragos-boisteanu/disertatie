@@ -266,7 +266,6 @@
                     message: 'Something wrong happened'
                 })
             }
-           
         },
 
         computed: {

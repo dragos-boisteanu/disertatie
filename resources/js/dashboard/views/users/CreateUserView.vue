@@ -6,7 +6,7 @@
 
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
-                <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-full 2xl:w-3/4">
+                <div class="flex flex-col lg:items-start lg:gap-x-6 xl:w-full 2xl:w-3/4">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
                         <h2 class="mb-5 text-xl font-semibold">
                             Account details

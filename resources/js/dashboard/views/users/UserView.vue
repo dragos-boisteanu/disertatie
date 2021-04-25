@@ -37,8 +37,8 @@
                     </span>
                 </div>
                 <div class="flex items-center gap-x-2">   
-                     <button 
-                        @click="toggleEditUserState"
+                    <button
+                        @click="editUser"
                         class="bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner active:outline-none"
                     >
                         Edit
@@ -140,6 +140,10 @@
                 Object.keys(patchedUser).forEach(key => {         
                     this.user[key] = patchedUser[key];
                 })
+            },
+
+            editUser() {
+                this.$router.push({name: 'EditUser', params: {id: this.user.id}})
             },
 
             async disable(){

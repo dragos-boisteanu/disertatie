@@ -3,6 +3,7 @@ import { dashboardBaseUrl } from './baseUrls'
 const UsersListView = () => import(/* webpackChunkName: "group-users" */ '../views/users/UsersListView.vue');
 const UserView = () => import(/* webpackChunkName: "group-users" */ '../views/users/UserView.vue');
 const CreateUserView = () => import (/* webpackChunkName: "group-users" */ '../views/users/CreateUserView.vue');
+const EditUserView = () => import (/* webpackChunkName: "group-users" */ '../views/users/EditUserView.vue');
 
 export default [
     {
@@ -33,9 +34,20 @@ export default [
         component: UserView,
         meta: {
             breadcrumb: {
-                label: 'Profile',
+                label: 'User',
                 parent: 'Users'
             }
         }
     },
+    {
+        path: `${dashboardBaseUrl}/users/:id/edit`,
+        name: 'EditUser',
+        component: EditUserView,
+        meta: {
+            breadcrumb: {
+                label: 'Edit User',
+                parent: 'User'
+            }
+        }
+    }
 ]
