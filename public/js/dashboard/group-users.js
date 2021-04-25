@@ -19001,7 +19001,7 @@ var render = function() {
                     "div",
                     {
                       staticClass:
-                        "flex justify-center w-full mt-2 lg:justify-start"
+                        "flex justify-center gap-x-3 w-full mt-2 lg:justify-start"
                     },
                     [
                       _c("Status", {
