@@ -57,7 +57,7 @@
                         </h2> 
 
                         <ValidationProvider vid="name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
-                            <label for="name" class="text-sm font-semibold">Nane</label>
+                            <label for="name" class="text-sm font-semibold">Name</label>
                             <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                             <input 
                                 id="name"
@@ -71,7 +71,7 @@
                         </ValidationProvider> 
                         
                         <div class="w-full flex-1 flex items-center gap-x-4">
-                            <ValidationProvider vid="vat" rules="required|double:2,dot" v-slot="{ errors, failed, passed }" class="w-full">
+                            <ValidationProvider vid="vat" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full">
                                 <label for="vat" class="text-sm font-semibold">VAT</label>
                                 <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
                                 <input 
@@ -99,6 +99,12 @@
                                     />
                             </ValidationProvider>
                         </div>
+
+                        <DiscountComponent
+                            :discount="category.discount"
+                            @saved="saveDiscount"
+                            @removed="removeDiscount"
+                        ></DiscountComponent>
                         <div>
                             <button 
                                 v-if="categorySelected"
@@ -133,9 +139,10 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import ViewContainer from '../ViewContainer';
+    import DiscountComponent from '../../components/discounts/DiscountComponent';
+
     import _find from 'lodash/find';
     import _debounce from 'lodash/debounce'
-
 
     export default {
         
@@ -153,7 +160,8 @@
                 category: {
                     name: '',
                     vat: '',     
-                    color: '',               
+                    color: '',   
+                    discount: null            
                 },
                 searchInput: ''
             }
@@ -275,11 +283,6 @@
             },
 
             search: _debounce( async function() {
-                // if(this.searchInput.length > 1) {
-                //     this.categories = await this.searchCategory(this.searchInput);
-                // } else {
-                //     this.categories = this.getCategories;
-                // }
                 try {
                     this.$Progress.start();
 
@@ -297,6 +300,14 @@
                
             }, 250),
 
+            saveDiscount(discount){
+                this.category.discount = discount;
+            },
+
+            removeDiscount() {
+                this.category.discount = null;
+            },
+
             resetForm() {
                 this.$refs.observer.reset();
                 this.category = {
@@ -308,7 +319,8 @@
         },
 
         components: {
-            ViewContainer
+            ViewContainer,
+            DiscountComponent
         }
     }
 </script>

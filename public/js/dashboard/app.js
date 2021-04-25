@@ -3497,7 +3497,7 @@ var actions = {
 
             case 4:
               response = _context.sent;
-              commit('SET_CATEGORIES', response.data);
+              commit('SET_CATEGORIES', response.data.data);
               _context.next = 11;
               break;
 

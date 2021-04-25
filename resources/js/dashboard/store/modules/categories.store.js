@@ -20,7 +20,7 @@ const actions = {
     async fetchCategories({commit}) {
         try {
             const response = await downloadCategories();
-            commit('SET_CATEGORIES', response.data);
+            commit('SET_CATEGORIES', response.data.data);
         } catch ( error ) {
             throw error;
         }

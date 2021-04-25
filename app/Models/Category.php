@@ -15,7 +15,10 @@ class Category extends Model
     protected $fillable = [
         'name',
         'vat',
-        'color'
+        'color',
+        'discount_id',
+        'discounted_from_date',
+        'discounted_until_date'
     ];
 
     public function products() 
