@@ -104,6 +104,8 @@
                             :discount="category.discount"
                             @saved="saveDiscount"
                             @removed="removeDiscount"
+                            :beginsAt="category.discountStartsAt"
+                            :endsAt="category.discountEndsAt"
                         ></DiscountComponent>
                         <div>
                             <button 
@@ -161,7 +163,7 @@
                     name: '',
                     vat: '',     
                     color: '',   
-                    discount: null            
+                    discount: null           
                 },
                 searchInput: ''
             }
@@ -198,8 +200,12 @@
 
                         let counter = 0;
 
-                        Object.keys(originalCategory).forEach(key => {
-                            if(originalCategory[key] !== this.category[key]) {
+                        Object.keys(this.category).forEach(key => {
+                            if(key === 'discount' && this.category[key] ) {
+                                console.log(this.category['discount']);
+                                payload.category[key] = this.category[key];
+                                counter++;
+                            } else if(originalCategory[key] !== this.category[key]) {
                                 payload.category[key] = this.category[key];
                                 counter++;
                             }

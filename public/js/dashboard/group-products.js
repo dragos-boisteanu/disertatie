@@ -294,11 +294,27 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       require: true,
       "default": null
+    },
+    beginsAt: {
+      type: String,
+      required: false,
+      "default": null
+    },
+    endsAt: {
+      type: String,
+      required: false,
+      "default": null
     }
   },
   computed: {
     hasDiscount: function hasDiscount() {
       return this.discount ? true : false;
+    },
+    fromDate: function fromDate() {
+      return this.beginsAt ? this.beginsAt : this.discount.fromDate;
+    },
+    toDate: function toDate() {
+      return this.endsAt ? this.endsAt : this.discount.endsAt;
     }
   },
   data: function data() {
@@ -18931,7 +18947,7 @@ var render = function() {
                   _c("span", [
                     _vm._v(
                       "\n                " +
-                        _vm._s(_vm.discount.fromDate) +
+                        _vm._s(_vm.fromDate) +
                         " \n            "
                     )
                   ]),
@@ -18965,7 +18981,7 @@ var render = function() {
                   _c("span", [
                     _vm._v(
                       "\n                " +
-                        _vm._s(_vm.discount.toDate) +
+                        _vm._s(_vm.toDate) +
                         "\n            "
                     )
                   ]),

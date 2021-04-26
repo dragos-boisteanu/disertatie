@@ -25,4 +25,9 @@ class Category extends Model
     {
         return $this->hasMany('App\Models\Products');
     }
+
+    public function discount()
+    {
+        return $this->belongsTo(Discount::class);
+    }
 }

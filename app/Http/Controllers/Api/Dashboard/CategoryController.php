@@ -56,7 +56,17 @@ class CategoryController extends Controller
     {
         $request->user()->can('update', Category::class);
 
-        Category::findOrFail($id)->update($request->validated());
+        $category = Category::findOrFail($id);
+
+        $input = $request->validated();
+
+        if($request->has('discount')) {
+            $input['discount_id'] = $request->input('discount.id');
+            $input['discounted_from_date'] = $request->input('discount.fromDate');
+            $input['discounted_until_date'] = $request->input('discount.toDate');
+        }
+        
+        $category->update($input);
 
         return response()->json(['message' => 'Category updated'], 200);
     }
