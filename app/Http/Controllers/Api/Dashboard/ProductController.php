@@ -213,6 +213,16 @@ class ProductController extends Controller
             $product->stock_id = $stock->id;
         }
 
+        if($request->has('discount')) {
+            $product->discount_id =  $request->input('discount.id');
+            $product->discounted_from_date = $request->input('discount.fromDate');
+            $product->discounted_until_date = $request->input('discount.toDate');
+        }else if(!$request->has('discount') && !is_null($product->discount_id)) {
+            $product->discount_id = null;
+            $product->discounted_from_date = null;
+            $product->discounted_until_date = null;
+        }
+
         $product->save();
 
         $product->refresh();

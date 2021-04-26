@@ -193,6 +193,8 @@
                             :discount="localProduct.discount" 
                             @saved="addDiscount" 
                             @removed="removeDiscount"
+                            :beginsAt="localProduct.discountStartsAt"
+                            :endsAt="localProduct.discountEndsAt"
                         ></DiscountComponent>
 
                         <IngredientsComponent
