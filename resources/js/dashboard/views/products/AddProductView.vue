@@ -13,8 +13,8 @@
                         <!-- IMAGE UPLOAD -->
                         <ImageUploadComponent
                             :disabled="waiting || waitForFileUpload"
-                            @wait-forfile-to-upload="toggleWaitForFileUpload"
-                            @set-image-path="setImagePath"
+                            @waitForFileToUpload="toggleWaitForFileUpload"
+                            @setImagePath="setImagePath"
                         ></ImageUploadComponent>
 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
@@ -209,7 +209,7 @@
 
     import ViewContainer from '../ViewContainer';
     
-    import ImageUploadComponent from '../../components/FilePondComponent';
+    import ImageUploadComponent from '../../components/ImageUploadComponent';
     import IngredientsComponent from '../../components/products/IngredientsComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent'
 
@@ -237,7 +237,7 @@
                 foundIngredients: [],
 
                 product: {
-                    imagePath: '',
+                    image: '',
                     barcode: '',
                     name:'',
                     description: '',
@@ -338,13 +338,13 @@
                 }
             }, 500),
 
-            toggleWaitForFileUpload() {
-                this.waitForFileUpload = !this.waitForFileUpload;
+            toggleWaitForFileUpload(waitForFileToUpload) {
+                console.log(waitForFileToUpload);
+                this.waitForFileUpload = waitForFileToUpload;
             },
 
             setImagePath(imagePath) {
-                this.product.imagePath = imagePath;
-                console.log(this.product); 
+                this.product.image = imagePath;
             },
 
             saveIngredient(ingredient) {

@@ -6,7 +6,7 @@
             label-idle="Upload image..."
             v-bind:allow-multiple="false"
             accepted-file-types="image/jpeg"
-            :disabled="waiting" 
+            :disabled="disabled" 
             :server="{
                 url: '/api/dashboard/images',
                 process: { 
@@ -25,16 +25,17 @@
             :files="files"
             :onaddfilestart="toggleWaitingForFileToUpload"
             :onprocessfileabort="toggleWaitingForFileToUpload"
+            :onaddfile="toggleWaitingForFileToUpload"
         />
 
         <div class="text-right mt-3">
-            <button 
+            <button  
                 :disabled="disabled"
                 class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
                 @click.prevent="clearImage"
             >
                 Clear image
-            </button>
+            </button> 
         </div>
     </div>
 </template> 
@@ -62,21 +63,16 @@
         data() {
             return {
                 files: [],
-                waitForFiletoUpload: false,
+                waitForFileToUpload: false,
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
 
         methods: {
-            toggleWaitingForFileToUpload() {
-                this.waitForFiletoUpload = !this.waitForFiletoUpload;
+            toggleWaitingForFileToUpload() { 
+                this.waitForFileToUpload = !this.waitForFileToUpload;
 
-                this.$emit('waitForFiletoUpload', waitForFiletoUpload);
-            },
-
-            waitForFiletoUpload() {
-                console.log('eer');
-                this.waitForFileUpload = true;
+                this.$emit('waitForFileToUpload', this.waitForFileToUpload);
             },
 
             stopWaitingForFileToUpload() {
@@ -96,6 +92,6 @@
         components: {
             FilePond
         }
-    }
+    } 
 
 </script>
