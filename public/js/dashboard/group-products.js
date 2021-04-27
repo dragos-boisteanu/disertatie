@@ -1927,19 +1927,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store/index */ "./resources/js/dashboard/store/index.js");
 /* harmony import */ var _ViewContainer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ViewContainer */ "./resources/js/dashboard/views/ViewContainer.vue");
-/* harmony import */ var _components_products_IngredientsComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/products/IngredientsComponent */ "./resources/js/dashboard/components/products/IngredientsComponent.vue");
-/* harmony import */ var _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/discounts/DiscountComponent */ "./resources/js/dashboard/components/discounts/DiscountComponent.vue");
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash/filter */ "./node_modules/lodash/filter.js");
-/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
-/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_7__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+/* harmony import */ var _components_ImageUploadComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/ImageUploadComponent */ "./resources/js/dashboard/components/ImageUploadComponent.vue");
+/* harmony import */ var _components_products_IngredientsComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/products/IngredientsComponent */ "./resources/js/dashboard/components/products/IngredientsComponent.vue");
+/* harmony import */ var _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/discounts/DiscountComponent */ "./resources/js/dashboard/components/discounts/DiscountComponent.vue");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
+/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/filter */ "./node_modules/lodash/filter.js");
+/* harmony import */ var lodash_filter__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash_filter__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
+/* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var lodash_isEqual__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash/isEqual */ "./node_modules/lodash/isEqual.js");
+/* harmony import */ var lodash_isEqual__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash_isEqual__WEBPACK_IMPORTED_MODULE_9__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2136,6 +2137,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -2203,7 +2223,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee, null, [[1, 15]]);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapGetters)('Ingredients', ['getIngredients'])),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Categories', ['getCategories'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Units', ['getUnits'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapGetters)('Ingredients', ['getIngredients'])),
   data: function data() {
     return {
       locked: false,
@@ -2224,11 +2244,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         ingredients: []
       },
       waitForFileUpload: false,
-      files: [],
-      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      clearImage: false
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Products', ['updateProduct'])), (0,vuex__WEBPACK_IMPORTED_MODULE_8__.mapActions)('Notification', ['openNotification'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Products', ['updateProduct'])), (0,vuex__WEBPACK_IMPORTED_MODULE_10__.mapActions)('Notification', ['openNotification'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -2247,20 +2266,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 };
                 counter = 0;
                 Object.keys(_this.localProduct).forEach(function (key) {
-                  if (key === 'ingredients') {
-                    // if one ingredient from local product differ in quantity to the same ingredient from product
-                    // sasve it to a new arraw
-                    // if the new array has items set the local product ingredients list in payload
-                    // and increment the counter so the update can be sent
-                    var modifiedIngredients = _this.localProduct[key].filter(function (_ref) {
-                      var q1 = _ref.quantity;
-                      return !_this.product[key].some(function (_ref2) {
-                        var q2 = _ref2.quantity;
-                        return q1 === q2;
-                      });
-                    });
-
-                    if (modifiedIngredients.length > 0 || _this.localProduct[key].length !== _this.product[key].length) {
+                  if (key === 'discount') {
+                    if (!lodash_isEqual__WEBPACK_IMPORTED_MODULE_9___default()(_this.localProduct[key], _this.product[key])) {
+                      payload.product[key] = _this.localProduct[key];
+                      counter++;
+                    }
+                  } else if (key === 'ingredients') {
+                    if (!lodash_isEqual__WEBPACK_IMPORTED_MODULE_9___default()(_this.localProduct[key], _this.product[key])) {
                       payload.product[key] = _this.localProduct[key];
                       payload.product.hasIngredients = true;
                       counter++;
@@ -2335,32 +2347,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, null, [[0, 17]]);
       }))();
     },
-    objectsEqual: function objectsEqual(o1, o2) {
-      var _this2 = this;
-
-      return _typeof(o1) === 'object' && Object.keys(o1).length > 0 ? Object.keys(o1).length === Object.keys(o2).length && Object.keys(o1).every(function (p) {
-        return _this2.objectsEqual(o1[p], o2[p]);
-      }) : o1 === o2;
+    toggleWaitForFileUpload: function toggleWaitForFileUpload(waitForFileToUpload) {
+      console.log(waitForFileToUpload);
+      this.waitForFileUpload = waitForFileToUpload;
+    },
+    setImagePath: function setImagePath(imagePath) {
+      console.log(imagePath);
+      this.localProduct.image = imagePath;
     },
     setProduct: function setProduct(product) {
       this.product = product;
       this.localProduct = JSON.parse(JSON.stringify(this.product));
     },
     saveIngredient: function saveIngredient(ingredient) {
-      var _this3 = this;
+      var _this2 = this;
 
-      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_7___default()(this.localProduct.ingredients, ['id', parseInt(ingredient.id)]);
+      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_8___default()(this.localProduct.ingredients, ['id', parseInt(ingredient.id)]);
 
       if (ingredientIndex > -1) {
         Object.keys(ingredient).forEach(function (key) {
-          _this3.$set(_this3.localProduct.ingredients[ingredientIndex], key, ingredient[key]);
+          _this2.$set(_this2.localProduct.ingredients[ingredientIndex], key, ingredient[key]);
         });
       } else {
         this.localProduct.ingredients.push(ingredient);
       }
     },
     removeIngredient: function removeIngredient(ingredientId) {
-      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_7___default()(this.localProduct.ingredients, ['id', parseInt(ingredientId)]);
+      var ingredientIndex = lodash_findIndex__WEBPACK_IMPORTED_MODULE_8___default()(this.localProduct.ingredients, ['id', parseInt(ingredientId)]);
 
       this.localProduct.ingredients.splice(ingredientIndex, 1);
     },
@@ -2373,8 +2386,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   }),
   components: {
     ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_2__.default,
-    IngredientsComponent: _components_products_IngredientsComponent__WEBPACK_IMPORTED_MODULE_3__.default,
-    DiscountComponent: _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_4__.default
+    ImageUploadComponent: _components_ImageUploadComponent__WEBPACK_IMPORTED_MODULE_3__.default,
+    IngredientsComponent: _components_products_IngredientsComponent__WEBPACK_IMPORTED_MODULE_4__.default,
+    DiscountComponent: _components_discounts_DiscountComponent__WEBPACK_IMPORTED_MODULE_5__.default
   }
 });
 
@@ -16840,6 +16854,51 @@ module.exports = debounce;
 
 /***/ }),
 
+/***/ "./node_modules/lodash/isEqual.js":
+/*!****************************************!*\
+  !*** ./node_modules/lodash/isEqual.js ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var baseIsEqual = __webpack_require__(/*! ./_baseIsEqual */ "./node_modules/lodash/_baseIsEqual.js");
+
+/**
+ * Performs a deep comparison between two values to determine if they are
+ * equivalent.
+ *
+ * **Note:** This method supports comparing arrays, array buffers, booleans,
+ * date objects, error objects, maps, numbers, `Object` objects, regexes,
+ * sets, strings, symbols, and typed arrays. `Object` objects are compared
+ * by their own, not inherited, enumerable properties. Functions and DOM
+ * nodes are compared by strict equality, i.e. `===`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.isEqual(object, other);
+ * // => true
+ *
+ * object === other;
+ * // => false
+ */
+function isEqual(value, other) {
+  return baseIsEqual(value, other);
+}
+
+module.exports = isEqual;
+
+
+/***/ }),
+
 /***/ "./node_modules/lodash/now.js":
 /*!************************************!*\
   !*** ./node_modules/lodash/now.js ***!
@@ -18632,7 +18691,7 @@ var render = function() {
         ref: "pond",
         attrs: {
           name: "image",
-          "label-idle": "Upload image...",
+          "label-idle": "Upload image",
           "allow-multiple": false,
           "accepted-file-types": "image/jpeg",
           disabled: _vm.disabled,
@@ -21516,7 +21575,7 @@ var render = function() {
                       "div",
                       {
                         staticClass:
-                          "flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4"
+                          "flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12"
                       },
                       [
                         _c(
@@ -21526,6 +21585,75 @@ var render = function() {
                               "flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
                           },
                           [
+                            _c(
+                              "div",
+                              { staticClass: "flex items-center gap-x-5" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "w-32 h-32 rounded-md md:mr-4"
+                                  },
+                                  [
+                                    _vm.product.image
+                                      ? _c("img", {
+                                          staticClass:
+                                            "w-full h-full rounded-md object-cover",
+                                          attrs: { src: _vm.product.image }
+                                        })
+                                      : _c(
+                                          "svg",
+                                          {
+                                            staticClass: "bg-gray-500",
+                                            attrs: {
+                                              xmlns:
+                                                "http://www.w3.org/2000/svg",
+                                              viewBox: "0 0 24 24",
+                                              fill: "white",
+                                              width: "128px",
+                                              height: "128px"
+                                            }
+                                          },
+                                          [
+                                            _c("path", {
+                                              attrs: {
+                                                d: "M0 0h24v24H0z",
+                                                fill: "none"
+                                              }
+                                            }),
+                                            _c("path", {
+                                              attrs: {
+                                                d:
+                                                  "M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "flex-1" },
+                                  [
+                                    _c("ImageUploadComponent", {
+                                      attrs: {
+                                        disabled:
+                                          _vm.waiting || _vm.waitForFileUpload,
+                                        clear: _vm.clearImage
+                                      },
+                                      on: {
+                                        waitForFileToUpload:
+                                          _vm.toggleWaitForFileUpload,
+                                        setImagePath: _vm.setImagePath
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
                             _c(
                               "div",
                               {
@@ -22416,7 +22544,7 @@ var render = function() {
                 "div",
                 {
                   staticClass:
-                    "flex flex-col items-center justify-center lg:items-start"
+                    "flex flex-col items-center justify-center md:items-start"
                 },
                 [
                   _c(

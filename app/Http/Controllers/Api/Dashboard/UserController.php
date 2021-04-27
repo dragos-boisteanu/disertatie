@@ -133,7 +133,8 @@ class UserController extends Controller
 
             // event(new AccountCreated($user));
             DB::commit();
-            return ['user' => ['id'=>$user->id, 'created_at'=>$user->created_at]];
+
+            return response()->json(['user' => ['id'=>$user->id, 'created_at'=>$user->created_at]], 200);
            
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();

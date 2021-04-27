@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
-use Carbon\Carbon;
 use App\Models\Stock;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -177,8 +176,6 @@ class ProductController extends Controller
                 $product->image = $dbPath;
 
                 Storage::delete($requestPath);
-
-                return response()->json(['image'=> $product->image], 200);
                 
             } else {
                 Storage::deleteDirectory('/public/products_images' . $product->id);

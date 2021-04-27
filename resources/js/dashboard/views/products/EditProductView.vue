@@ -6,9 +6,26 @@
 
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
-                <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
+                <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
 
+                        <!-- IMAGE UPLOAD -->
+                        <div class="flex items-center gap-x-5">
+                            <div class="w-32 h-32 rounded-md md:mr-4">
+                                <img v-if="product.image" :src="product.image" class="w-full h-full rounded-md object-cover"/>
+                                <svg v-else class="bg-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="128px" height="128px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+                            </div>
+
+                            <div class="flex-1">
+                                <ImageUploadComponent
+                                    :disabled="waiting || waitForFileUpload"
+                                    :clear="clearImage"
+                                    @waitForFileToUpload="toggleWaitForFileUpload"
+                                    @setImagePath="setImagePath"
+                                ></ImageUploadComponent>
+                            </div>
+                        </div>
+                        
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
                             
                             <ValidationProvider 
@@ -158,7 +175,7 @@
                             @removed="removeIngredient"
                         ></IngredientsComponent>
 
-                     </div>
+                    </div>
                 </div>
 
                 <div class="mt-5 flex md:justify-start">
@@ -188,12 +205,14 @@
 
     import ViewContainer from '../ViewContainer'
 
+    import ImageUploadComponent from '../../components/ImageUploadComponent';
     import IngredientsComponent from '../../components/products/IngredientsComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent';
 
     import _find from 'lodash/find';
     import _filter from 'lodash/filter';
     import _findIndex from 'lodash/findIndex';
+    import _isEqual from 'lodash/isEqual';
 
     export default {
 
@@ -222,8 +241,6 @@
             ...mapGetters('Ingredients', ['getIngredients']),
         },
 
-        
-
         data() {
             return {
                 locked: false,
@@ -248,8 +265,7 @@
                 },
                 
                 waitForFileUpload: false,
-                files: [],
-                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                clearImage: false,
             }
         },
 
@@ -269,24 +285,24 @@
                     let counter = 0;
                     
                     Object.keys(this.localProduct).forEach(key => {
-                        if(key === 'ingredients') {
-                            // if one ingredient from local product differ in quantity to the same ingredient from product
-                            // sasve it to a new arraw
-                            // if the new array has items set the local product ingredients list in payload
-                            // and increment the counter so the update can be sent
-                            const modifiedIngredients = this.localProduct[key].filter(({ quantity: q1 }) => !this.product[key].some(({ quantity: q2 }) => q1 === q2));
+                        if(key === 'discount') {
+                            if(!_isEqual(this.localProduct[key], this.product[key])) {
+                                payload.product[key] = this.localProduct[key];
+                                counter++;
+                            }
 
-                            if(modifiedIngredients.length > 0 || this.localProduct[key].length !== this.product[key].length) {
+                        } else if(key === 'ingredients') {
+                            if(!_isEqual(this.localProduct[key], this.product[key])) {
                                 payload.product[key] = this.localProduct[key];
                                 payload.product.hasIngredients = true;
                                 counter++;
                             }
+                            
                         } else if (this.product[key] !== this.localProduct[key]) {
                             payload.product[key] = this.localProduct[key];
                             counter++;
                         }
-                    })
-
+                    });
                    
                     if(counter > 0) {
                         this.$Progress.start();
@@ -296,6 +312,7 @@
                         counter = 0;
                         
                         this.$router.push({name: 'Product', params: {id: this.product.id}})
+
                         this.$Progress.finish()
                         
                         this.openNotification({
@@ -321,8 +338,14 @@
                 }
             },
 
-            objectsEqual(o1, o2) {
-                return typeof o1 === 'object' && Object.keys(o1).length > 0  ? Object.keys(o1).length === Object.keys(o2).length   && Object.keys(o1).every(p => this.objectsEqual(o1[p], o2[p])) : o1 === o2
+            toggleWaitForFileUpload(waitForFileToUpload) {
+                console.log(waitForFileToUpload);
+                this.waitForFileUpload = waitForFileToUpload;
+            },
+
+            setImagePath(imagePath) {
+                console.log(imagePath)
+                this.localProduct.image = imagePath;
             },
 
             setProduct(product){
@@ -359,6 +382,7 @@
 
         components: {
             ViewContainer,
+            ImageUploadComponent,
             IngredientsComponent,
             DiscountComponent
         }

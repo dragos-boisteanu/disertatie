@@ -992,8 +992,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ViewContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ViewContainer */ "./resources/js/dashboard/views/ViewContainer.vue");
-/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/index */ "./resources/js/dashboard/store/index.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_ImageUploadComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/ImageUploadComponent */ "./resources/js/dashboard/components/ImageUploadComponent.vue");
+/* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/index */ "./resources/js/dashboard/store/index.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -1168,6 +1169,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -1183,13 +1202,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               id = to.params.id;
               _context.prev = 1;
 
-              if (!(_store_index__WEBPACK_IMPORTED_MODULE_2__.default.getters["Users/getUsers"].length > 0)) {
+              if (!(_store_index__WEBPACK_IMPORTED_MODULE_3__.default.getters["Users/getUsers"].length > 0)) {
                 _context.next = 9;
                 break;
               }
 
               _context.next = 5;
-              return _store_index__WEBPACK_IMPORTED_MODULE_2__.default.dispatch('Users/getUser', id);
+              return _store_index__WEBPACK_IMPORTED_MODULE_3__.default.dispatch('Users/getUser', id);
 
             case 5:
               user = _context.sent;
@@ -1201,7 +1220,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 9:
               _context.next = 11;
-              return _store_index__WEBPACK_IMPORTED_MODULE_2__.default.dispatch('Users/fetchUser', id);
+              return _store_index__WEBPACK_IMPORTED_MODULE_3__.default.dispatch('Users/fetchUser', id);
 
             case 11:
               _user = _context.sent;
@@ -1216,7 +1235,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 15:
               _context.prev = 15;
               _context.t0 = _context["catch"](1);
-              _store_index__WEBPACK_IMPORTED_MODULE_2__.default.dispatch('Notification/openNotification', {
+              _store_index__WEBPACK_IMPORTED_MODULE_3__.default.dispatch('Notification/openNotification', {
                 type: 'err',
                 show: true,
                 message: 'Something wrong happened'
@@ -1230,7 +1249,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee, null, [[1, 15]]);
     }))();
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Users', ['getLoggedUser'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Roles', ['getRoles'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('Users', ['getLoggedUser'])), {}, {
     canChangeRole: function canChangeRole() {
       //  TO DO: hide roles list if the auth user's role is 6 and the local user role is 6 or 7
       return [6, 7].includes(this.getLoggedUser.role_id);
@@ -1238,14 +1257,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   }),
   data: function data() {
     return {
+      clearImage: false,
       waiting: false,
       waitForFileUpload: false,
       user: {},
-      localUser: {},
-      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      localUser: {}
     };
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Users', ['updateUser'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('Notification', ['openNotification'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Users', ['updateUser'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('Notification', ['openNotification'])), {}, {
     submit: function submit() {
       var _this = this;
 
@@ -1339,13 +1358,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, null, [[0, 21]]);
       }))();
     },
+    toggleWaitForFileUpload: function toggleWaitForFileUpload(waitForFileToUpload) {
+      console.log(waitForFileToUpload);
+      this.waitForFileUpload = waitForFileToUpload;
+    },
+    setImagePath: function setImagePath(imagePath) {
+      console.log(imagePath);
+      this.localUser.avatar = imagePath;
+    },
     setUser: function setUser(user) {
       this.user = user;
       this.localUser = JSON.parse(JSON.stringify(this.user));
     }
   }),
   components: {
-    ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_1__.default
+    ViewContainer: _ViewContainer__WEBPACK_IMPORTED_MODULE_1__.default,
+    ImageUploadComponent: _components_ImageUploadComponent__WEBPACK_IMPORTED_MODULE_2__.default
   }
 });
 
@@ -16196,7 +16224,7 @@ var render = function() {
         ref: "pond",
         attrs: {
           name: "image",
-          "label-idle": "Upload image...",
+          "label-idle": "Upload image",
           "allow-multiple": false,
           "accepted-file-types": "image/jpeg",
           disabled: _vm.disabled,
@@ -18400,6 +18428,75 @@ var render = function() {
                               "flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
                           },
                           [
+                            _c(
+                              "div",
+                              { staticClass: "flex items-center gap-x-5" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "w-32 h-32 rounded-md md:mr-4"
+                                  },
+                                  [
+                                    _vm.user.avatar
+                                      ? _c("img", {
+                                          staticClass:
+                                            "w-full h-full rounded-md object-cover",
+                                          attrs: { src: _vm.user.avatar }
+                                        })
+                                      : _c(
+                                          "svg",
+                                          {
+                                            staticClass: "bg-gray-500",
+                                            attrs: {
+                                              xmlns:
+                                                "http://www.w3.org/2000/svg",
+                                              viewBox: "0 0 24 24",
+                                              fill: "white",
+                                              width: "128px",
+                                              height: "128px"
+                                            }
+                                          },
+                                          [
+                                            _c("path", {
+                                              attrs: {
+                                                d: "M0 0h24v24H0z",
+                                                fill: "none"
+                                              }
+                                            }),
+                                            _c("path", {
+                                              attrs: {
+                                                d:
+                                                  "M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "flex-1" },
+                                  [
+                                    _c("ImageUploadComponent", {
+                                      attrs: {
+                                        disabled:
+                                          _vm.waiting || _vm.waitForFileUpload,
+                                        clear: _vm.clearImage
+                                      },
+                                      on: {
+                                        waitForFileToUpload:
+                                          _vm.toggleWaitForFileUpload,
+                                        setImagePath: _vm.setImagePath
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
                             _c(
                               "div",
                               {

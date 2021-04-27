@@ -3,7 +3,7 @@
         <file-pond
             name="image"
             ref="pond"
-            label-idle="Upload image..."
+            label-idle="Upload image"
             v-bind:allow-multiple="false"
             accepted-file-types="image/jpeg"
             :disabled="disabled" 

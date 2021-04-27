@@ -37,7 +37,19 @@ class Product extends Model
 
     public function getPriceAttribute()
     {
-        if($this->discount) {
+        if($this->category->discount && $this->discount) {
+            if($this->category->discount > $this->discount) {
+                $finalPrice = $this->base_price - $this->base_price * ($this->category->discount->value / 100);
+
+            } else if ($this->category->discount == $this->discount) {
+                $finalPrice = $this->base_price - $this->base_price * ($this->category->discount->value / 100);
+
+            } else if ($this->category->discount < $this->discount) {
+                $finalPrice = $this->base_price - $this->base_price * ($this->discount->value / 100);
+            }
+        } else if($this->category->discount) {
+            $finalPrice = $this->base_price - $this->base_price * ($this->category->discount->value / 100);
+        } else if($this->discount) {
             $finalPrice = $this->base_price - $this->base_price * ($this->discount->value / 100);
         } else {
             $finalPrice = $this->base_price;
@@ -45,7 +57,7 @@ class Product extends Model
 
         $finalPrice += $finalPrice * ($this->category->vat / 100);
 
-        return round($finalPrice, 2);
+        return number_format($finalPrice, 2, '.', '');
     }
 
     public function getQuantityAttribute() 

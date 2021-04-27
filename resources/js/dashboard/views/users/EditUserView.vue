@@ -8,6 +8,23 @@
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
                 <div class="flex flex-col lg:items-start xl:w-full 2xl:w-2/5">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
+
+                        <!-- IMAGE UPLOAD -->
+                        <div class="flex items-center gap-x-5">
+                            <div class="w-32 h-32 rounded-md md:mr-4">
+                                <img v-if="user.avatar" :src="user.avatar" class="w-full h-full rounded-md object-cover"/>
+                                <svg v-else class="bg-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="128px" height="128px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+                            </div>
+
+                            <div class="flex-1">
+                                <ImageUploadComponent
+                                    :disabled="waiting || waitForFileUpload"
+                                    :clear="clearImage"
+                                    @waitForFileToUpload="toggleWaitForFileUpload"
+                                    @setImagePath="setImagePath"
+                                ></ImageUploadComponent>
+                            </div>
+                        </div>
                         
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
                             <ValidationProvider 
@@ -162,6 +179,7 @@
 
 <script>
     import ViewContainer from '../ViewContainer'
+    import ImageUploadComponent from '../../components/ImageUploadComponent'
     import store from '../../store/index';
     import { mapGetters, mapActions } from 'vuex';
 
@@ -199,14 +217,13 @@
 
         data() {
             return {
+                clearImage: false,
 
                 waiting: false,
                 waitForFileUpload: false,
 
                 user: {},
-                localUser: {},
-
-                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                localUser: {},              
 
             }
         },
@@ -273,6 +290,16 @@
                 }
             },
 
+            toggleWaitForFileUpload(waitForFileToUpload) {
+                console.log(waitForFileToUpload);
+                this.waitForFileUpload = waitForFileToUpload;
+            },
+
+            setImagePath(imagePath) {
+                console.log(imagePath)
+                this.localUser.avatar = imagePath;
+            },
+
             setUser(user) {
                 this.user = user;
                 this.localUser = JSON.parse(JSON.stringify(this.user))
@@ -282,7 +309,8 @@
 
 
         components: {
-            ViewContainer
+            ViewContainer,
+            ImageUploadComponent
         }
     }
 

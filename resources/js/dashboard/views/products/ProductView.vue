@@ -9,7 +9,7 @@
                 <img v-if="product.image" :src="product.image" class="w-full h-full rounded-md object-cover"/>
                 <svg v-else class="bg-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="128px" height="128px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
             </div>
-            <div class="flex flex-col items-center justify-center lg:items-start">
+            <div class="flex flex-col items-center justify-center md:items-start">
                 <div class="flex gap-x-2 items-center font-semibold text-2xl mt-2">
                     <h1 class="pr-2 border-r border-gray-200">{{ product.name}}</h1> 
                     <span class="text-base">{{ product.weight}}<Unit :unit-id="product.unit_id"></Unit></span>
