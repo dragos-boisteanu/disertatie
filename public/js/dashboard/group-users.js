@@ -16942,7 +16942,7 @@ var render = function() {
                       "div",
                       {
                         staticClass:
-                          "flex flex-col lg:items-start lg:gap-x-6 xl:w-full 2xl:w-3/4"
+                          "flex flex-col lg:items-start lg:flex-row lg:gap-x-6 lg:w-full 2xl:w-3/4"
                       },
                       [
                         _c(

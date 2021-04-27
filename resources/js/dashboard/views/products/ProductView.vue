@@ -65,7 +65,10 @@
                     <span class="font-semibold">Value:</span> {{product.discount.value}}%
                 </div>
                 <div>
-                   <span class="font-semibold">Interval:</span> {{ product.discountStartsAt}} > {{ product.discountEndsAt }}
+                   <span class="font-semibold">Begins on:</span> {{ product.discount.fromDate}}
+                </div>
+                 <div>
+                   <span class="font-semibold">Ends on:</span> {{ product.discount.fromDate}} 
                 </div>
             </div>
            
@@ -99,7 +102,6 @@
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
     import Stock from '../../components/StockComponent';
-    // import ProductEdit from '../../components/products/EditProductComponent';
     import Category from '../../components/products/CategoryComponent';
     import Unit from '../../components/products/UnitComponent';
     import Vat from '../../components/products/VatComponent';

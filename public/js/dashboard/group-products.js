@@ -2510,9 +2510,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
- // import ProductEdit from '../../components/products/EditProductComponent';
 
 
 
@@ -22578,14 +22580,23 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", [
                       _c("span", { staticClass: "font-semibold" }, [
-                        _vm._v("Interval:")
+                        _vm._v("Begins on:")
                       ]),
                       _vm._v(
                         " " +
-                          _vm._s(_vm.product.discountStartsAt) +
-                          " > " +
-                          _vm._s(_vm.product.discountEndsAt) +
+                          _vm._s(_vm.product.discount.fromDate) +
                           "\n            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", [
+                      _c("span", { staticClass: "font-semibold" }, [
+                        _vm._v("Ends on:")
+                      ]),
+                      _vm._v(
+                        " " +
+                          _vm._s(_vm.product.discount.fromDate) +
+                          " \n            "
                       )
                     ])
                   ])
