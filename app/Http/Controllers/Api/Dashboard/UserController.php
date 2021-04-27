@@ -131,7 +131,7 @@ class UserController extends Controller
                 Storage::delete($requestPath);
             }
 
-            event(new AccountCreated($user));
+            // event(new AccountCreated($user));
             DB::commit();
             return ['user' => ['id'=>$user->id, 'created_at'=>$user->created_at]];
            

@@ -28,7 +28,7 @@
             :onaddfile="toggleWaitingForFileToUpload"
         />
 
-        <div class="text-right mt-3">
+        <!-- <div class="text-right mt-3">
             <button  
                 :disabled="disabled"
                 class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
@@ -36,7 +36,7 @@
             >
                 Clear image
             </button> 
-        </div>
+        </div> -->
     </div>
 </template> 
 
@@ -58,8 +58,22 @@
                 required: true,
                 default: false,
             },
+            clear: {
+                type: Boolean,
+                required: true,
+                default: false,
+            }
         },
- 
+
+
+        watch: {
+            clear: function(newVal, oldVal) {
+                if(newVal) {
+                    this.$refs.pond.removeFile({revert: true});
+                }
+            }
+        },
+
         data() {
             return {
                 files: [],

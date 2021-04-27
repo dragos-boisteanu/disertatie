@@ -12,42 +12,12 @@
                             Account details
                         </h2>
 
-                        <file-pond
-                            name="image"
-                            ref="pond"
-                            label-idle="Upload user profile image..."
-                            v-bind:allow-multiple="false"
-                            accepted-file-types="image/jpeg"
-                            :server="{
-                                url: '/api/dashboard/images',
-                                process: { 
-                                    headers: {
-                                        'X-CSRF-TOKEN': csrf
-                                    },
-                                    onload: (response) =>  addAvatarPathToUser(response) ,
-                                },
-                                revert: {
-                                    url: '/delete',
-                                    headers: {
-                                        'X-CSRF-TOKEN': csrf
-                                    },
-                                }
-                            }"
-                            :files="files"
-                            :onaddfilestart="waitForFiletoUpload"
-                            :onprocessfileabort="stopWaitingForFileToUpload"
-                        />
-
-                        <div class="text-right">
-                            <button 
-                                :disabled="waitForFileUpload"
-                                class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                                @click.prevent="clearAvatar"
-                            >
-                                Clear avatar
-                            </button>
-                        </div>
-
+                        <ImageUploadComponent
+                            :disabled="waiting || waitForFileUpload"
+                            :clear="clearImage"
+                            @waitForFileToUpload="toggleWaitForFileUpload"
+                            @setImagePath="setImagePath"
+                        ></ImageUploadComponent>
 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
                             <ValidationProvider 
@@ -314,14 +284,7 @@
     import { mapActions, mapGetters } from 'vuex';
     import ViewContainer from '../ViewContainer';
     
-    import vueFilePond from "vue-filepond";
-    import "filepond/dist/filepond.min.css";
-    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-
-    const FilePond = vueFilePond(
-        FilePondPluginFileValidateType,
-    );
+    import ImageUploadComponent from '../../components/ImageUploadComponent';
 
     export default {
 
@@ -338,10 +301,16 @@
             return {
                 waitForFileUpload: false,
                 waiting: false,
+
                 counties: [],
                 cities: [],
+
+                clearImage: false,
+
                 required: false,
+
                 user: {
+                    image: '',
                     first_name: '',
                     name: '',
                     email: '',
@@ -349,6 +318,7 @@
                     birthdate: '',
                     role_id: 1,
                 },
+
                 address: {
                     first_name: '',
                     name: '',
@@ -357,9 +327,6 @@
                     city_id: '',
                     address: ''
                 },
-
-                files: null,
-                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
 
@@ -411,6 +378,11 @@
                 this.cities = [];
                 this.files = [];
 
+                if(this.user.avatar) {
+                    delete this.user.avatar
+                    this.clearImage = true;
+                }
+
                 this.user = {
                     first_name: '',
                     name: '',
@@ -446,28 +418,19 @@
                 this.required = !this.required
             },
 
-            waitForFiletoUpload() {
-                this.waitForFileUpload = true;
+            toggleWaitForFileUpload(waitForFileToUpload) {
+                console.log(waitForFileToUpload);
+                this.waitForFileUpload = waitForFileToUpload;
             },
 
-            stopWaitingForFileToUpload() {
-                this.waitForFileUpload = false;
+            setImagePath(imagePath) {
+                this.user.avatar = imagePath;
             },
-
-            addAvatarPathToUser(value) {
-                this.user.avatar = value;
-                this.waitForFileUpload = false;
-            },
-
-            clearAvatar() {
-                this.$refs.pond.removeFile({revert: true});
-                delete this.user.avatar;
-            }
         },
 
         components: {
-            FilePond,
-            ViewContainer
+            ViewContainer,
+            ImageUploadComponent
         }
     }
 </script>

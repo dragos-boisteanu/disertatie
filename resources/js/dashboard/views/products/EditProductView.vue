@@ -8,52 +8,7 @@
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
                 <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
-                        <!-- <div>
-                            <file-pond
-                                name="image"
-                                ref="pond"
-                                label-idle="Upload product image image..."
-                                v-bind:allow-multiple="false"
-                                accepted-file-types="image/jpeg"
-                                :server="{
-                                    url: '/api/dashboard/images',
-                                    process: { 
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrf
-                                        },
-                                        onload: (response) =>  addImagePathToProduct(response) ,
-                                    },
-                                    revert: {
-                                        url: '/delete',
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrf
-                                        },
-                                    }
-                                }"
-                                :files="files"
-                                :onaddfilestart="waitForFiletoUpload"
-                                :onprocessfileabort="stopWaitingForFileToUpload"
-                            />
-                            
-                            <div class="text-right mt-6">
-                                <button 
-                                    :disabled="waitForFileUpload"
-                                    class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                                    @click.prevent="clearImage"
-                                >
-                                    Clear image
-                                </button>
-                                <button 
-                                    v-if="this.product.image"
-                                    :disabled="waitForFileUpload"
-                                    class="ml-4 border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                                    @click.prevent="removeImage"
-                                >
-                                    Remove image
-                                </button>
-                            </div>
-                        </div> -->
-                   
+
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
                             
                             <ValidationProvider 
@@ -236,18 +191,9 @@
     import IngredientsComponent from '../../components/products/IngredientsComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent';
 
-    import vueFilePond from "vue-filepond";
-    import "filepond/dist/filepond.min.css";
-    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-
     import _find from 'lodash/find';
     import _filter from 'lodash/filter';
     import _findIndex from 'lodash/findIndex';
-
-    const FilePond = vueFilePond(
-        FilePondPluginFileValidateType,
-    );
 
     export default {
 
@@ -288,8 +234,6 @@
 
                 product: {},
 
-                // localProduct: {},
-
                 localProduct: {
                     barcode: '',
                     name:'',
@@ -325,7 +269,7 @@
                     let counter = 0;
                     
                     Object.keys(this.localProduct).forEach(key => {
-                         if(key === 'ingredients') {
+                        if(key === 'ingredients') {
                             // if one ingredient from local product differ in quantity to the same ingredient from product
                             // sasve it to a new arraw
                             // if the new array has items set the local product ingredients list in payload
@@ -335,7 +279,6 @@
                             if(modifiedIngredients.length > 0 || this.localProduct[key].length !== this.product[key].length) {
                                 payload.product[key] = this.localProduct[key];
                                 payload.product.hasIngredients = true;
-                                console.log(payload)
                                 counter++;
                             }
                         } else if (this.product[key] !== this.localProduct[key]) {
@@ -347,10 +290,6 @@
                    
                     if(counter > 0) {
                         this.$Progress.start();
-
-                        // if(payload.product.ingredients && payload.product.ingredients.length === 0) {
-                        //     delete payload.product.ingredients;
-                        // }
 
                         await this.updateProduct(payload);
 
@@ -386,43 +325,6 @@
                 return typeof o1 === 'object' && Object.keys(o1).length > 0  ? Object.keys(o1).length === Object.keys(o2).length   && Object.keys(o1).every(p => this.objectsEqual(o1[p], o2[p])) : o1 === o2
             },
 
-            waitForFiletoUpload() {
-                this.waitForFileUpload = true;
-            },
-
-            addImagePathToProduct(value) {
-                this.localProduct.image = value;
-                this.waitForFileUpload = false;
-            },
-
-            stopWaitingForFileToUpload() {
-                this.waitForFileUpload = false;
-            },
-
-            clearImage() {
-                this.$refs.pond.removeFile({revert: true});
-                this.localProduct.image = this.product.image
-            },
-
-            async removeImage() {
-                try {
-                    this.$Progress.start();
-                    this.$refs.pond.removeFile({revert: false});
-
-                    this.localProduct.image = 'clear';
-
-                    await this.submit();
-
-                    delete this.localProduct.image;
-                    this.$Progress.finish();
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    console.log(error)
-                    // notification
-                }               
-            },
-
-            
             setProduct(product){
                 this.product = product;
                 this.localProduct = JSON.parse(JSON.stringify(this.product))
@@ -458,8 +360,7 @@
         components: {
             ViewContainer,
             IngredientsComponent,
-            DiscountComponent,
-            FilePond
+            DiscountComponent
         }
     }
 </script>

@@ -13,6 +13,7 @@
                         <!-- IMAGE UPLOAD -->
                         <ImageUploadComponent
                             :disabled="waiting || waitForFileUpload"
+                            :clear="clearImage"
                             @waitForFileToUpload="toggleWaitForFileUpload"
                             @setImagePath="setImagePath"
                         ></ImageUploadComponent>
@@ -236,6 +237,8 @@
                 ingredientInput: '',
                 foundIngredients: [],
 
+                clearImage: false,
+
                 product: {
                     image: '',
                     barcode: '',
@@ -299,6 +302,8 @@
                     this.waiting = false;
                     
                     this.$Progress.finish();
+
+                    this.clearImage = true;
 
                     this.openNotification({
                         type: 'ok',

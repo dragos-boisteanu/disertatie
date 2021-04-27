@@ -3,51 +3,7 @@
          <template slot="header">
             Edit user #{{user.id}}
         </template>
-            <!-- <file-pond
-                name="image"
-                ref="pond"
-                label-idle="Upload new profile image..."
-                v-bind:allow-multiple="false"
-                accepted-file-types="image/jpeg"
-                :server="{
-                    url: '/api/dashboard/images',
-                    process: { 
-                        headers: {
-                            'X-CSRF-TOKEN': csrf
-                        },
-                        onload: (response) =>  addAvatarPathToUser(response) ,
-                    },
-                    revert: {
-                        url: '/delete',
-                        headers: {
-                            'X-CSRF-TOKEN': csrf
-                        },
-                    }
-                }"
-                :files="files"
-                :onaddfilestart="waitForFiletoUpload"
-                :onprocessfileabort="stopWaitingForFileToUpload"
-            />
-
-            <div class="text-right mt-6">
-                <button 
-                    :disabled="waitForFileUpload"
-                    class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                    @click.prevent="clearAvatar"
-                >
-                    Clear avatar
-                </button>
-                <button 
-                    v-if="this.user.avatar"
-                    :disabled="waitForFileUpload"
-                    class="ml-4 border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                    @click.prevent="removeAvatar"
-                >
-                    Remove avatar
-                </button>
-            </div> -->
-
-
+    
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
                 <div class="flex flex-col lg:items-start xl:w-full 2xl:w-2/5">
