@@ -9,48 +9,15 @@
             <form @submit.prevent="handleSubmit(submit)" class="lex flex-col">
                 <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
-                        <div>
-                            <file-pond
-                                name="image"
-                                ref="pond"
-                                label-idle="Upload product image..."
-                                v-bind:allow-multiple="false"
-                                accepted-file-types="image/jpeg"
-                                :disabled="waiting" 
-                                :server="{
-                                    url: '/api/dashboard/images',
-                                    process: { 
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrf
-                                        },
-                                        onload: (response) =>  addImagePathToProduct(response),
-                                    },
-                                    revert: {
-                                        url: '/delete',
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrf
-                                        },
-                                    }
-                                }"
-                                :files="files"
-                                :onaddfilestart="waitForFiletoUpload"
-                                :onprocessfileabort="stopWaitingForFileToUpload"
-                            />
 
-                            <div class="text-right mt-3">
-                                <button 
-                                    :disabled="waitForFileUpload || !(waiting)"
-                                    class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                                    @click.prevent="clearImage"
-                                >
-                                    Clear image
-                                </button>
-                            </div>
-                        </div>
-                        
+                        <!-- IMAGE UPLOAD -->
+                        <ImageUploadComponent
+                            :disabled="waiting || waitForFileUpload"
+                            @wait-forfile-to-upload="toggleWaitForFileUpload"
+                            @set-image-path="setImagePath"
+                        ></ImageUploadComponent>
 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-
                             <ValidationProvider 
                                 vid="barcode" rules="required" 
                                 v-slot="{ errors, failed, passed }" 
@@ -241,6 +208,8 @@
     import { mapActions, mapGetters } from 'vuex';
 
     import ViewContainer from '../ViewContainer';
+    
+    import ImageUploadComponent from '../../components/FilePondComponent';
     import IngredientsComponent from '../../components/products/IngredientsComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent'
 
@@ -249,14 +218,6 @@
     import _filter from 'lodash/filter';
     import _findIndex from 'lodash/findIndex';
 
-    import vueFilePond from "vue-filepond";
-    import "filepond/dist/filepond.min.css";
-    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-
-    const FilePond = vueFilePond(
-        FilePondPluginFileValidateType,
-    );
 
     export default {
 
@@ -270,11 +231,13 @@
             return {
                 checkingBarcode: false,
                 waiting: false,
+                waitForFileUpload: false,
 
                 ingredientInput: '',
                 foundIngredients: [],
 
                 product: {
+                    imagePath: '',
                     barcode: '',
                     name:'',
                     description: '',
@@ -286,10 +249,6 @@
                     discount: null,
                     hasIngredients: false,
                 },
-
-                waitForFileUpload: false,
-                files: null,
-                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
         },
 
@@ -357,7 +316,7 @@
                     
                 }
             },
-
+ 
             getProduct: _debounce( async function() {
                 try {
                     this.checkingBarcode = true;
@@ -374,27 +333,18 @@
                         this.checkingBarcode = false;
                         this.waiting = false;
                     }              
-                } catch (error) {
+                } catch (error) { 
                     console.log(error)
                 }
             }, 500),
 
-            waitForFiletoUpload() {
-                this.waitForFileUpload = true;
+            toggleWaitForFileUpload() {
+                this.waitForFileUpload = !this.waitForFileUpload;
             },
 
-            stopWaitingForFileToUpload() {
-                this.waitForFileUpload = false;
-            },
-
-            addImagePathToProduct(value) {
-                this.product.image = value;
-                this.waitForFileUpload = false;
-            },
-
-            clearImage() {
-                this.$refs.pond.removeFile({revert: true});
-                delete this.product.image;
+            setImagePath(imagePath) {
+                this.product.imagePath = imagePath;
+                console.log(this.product); 
             },
 
             saveIngredient(ingredient) {
@@ -427,9 +377,9 @@
 
         components: {
             ViewContainer,
+            ImageUploadComponent,
             IngredientsComponent,
             DiscountComponent,
-            FilePond
         }
     }
 </script>
