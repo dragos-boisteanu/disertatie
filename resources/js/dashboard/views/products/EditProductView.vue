@@ -274,8 +274,9 @@
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
-
         },
+
+        
 
         data() {
             return {
@@ -286,6 +287,8 @@
                 foundIngredients: [],
 
                 product: {},
+
+                // localProduct: {},
 
                 localProduct: {
                     barcode: '',
@@ -322,8 +325,7 @@
                     let counter = 0;
                     
                     Object.keys(this.localProduct).forEach(key => {
-                        if(key === 'ingredients') {
-
+                         if(key === 'ingredients') {
                             // if one ingredient from local product differ in quantity to the same ingredient from product
                             // sasve it to a new arraw
                             // if the new array has items set the local product ingredients list in payload
@@ -332,9 +334,10 @@
 
                             if(modifiedIngredients.length > 0 || this.localProduct[key].length !== this.product[key].length) {
                                 payload.product[key] = this.localProduct[key];
+                                payload.product.hasIngredients = true;
+                                console.log(payload)
                                 counter++;
                             }
-
                         } else if (this.product[key] !== this.localProduct[key]) {
                             payload.product[key] = this.localProduct[key];
                             counter++;
@@ -345,9 +348,9 @@
                     if(counter > 0) {
                         this.$Progress.start();
 
-                        if(payload.product.ingredients && payload.product.ingredients.length === 0) {
-                            delete payload.product.ingredients;
-                        }
+                        // if(payload.product.ingredients && payload.product.ingredients.length === 0) {
+                        //     delete payload.product.ingredients;
+                        // }
 
                         await this.updateProduct(payload);
 

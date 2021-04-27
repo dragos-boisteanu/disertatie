@@ -104,8 +104,6 @@
                             :discount="category.discount"
                             @saved="saveDiscount"
                             @removed="removeDiscount"
-                            :beginsAt="category.discountStartsAt"
-                            :endsAt="category.discountEndsAt"
                         ></DiscountComponent>
                         <div>
                             <button 
@@ -202,7 +200,6 @@
 
                         Object.keys(this.category).forEach(key => {
                             if(key === 'discount' && this.category[key] ) {
-                                console.log(this.category['discount']);
                                 payload.category[key] = this.category[key];
                                 counter++;
                             } else if(originalCategory[key] !== this.category[key]) {
@@ -218,16 +215,14 @@
                                 type: 'ok',
                                 show: true,
                                 message: 'Category updated'
-                            })
-
+                            });
                         } else {
                             this.openNotification({
                                 type: 'info',
                                 show: true,
                                 message: 'Nothing to update'
-                            })
+                            });
                         }
-
                     } else {
                         await this.postCategory(this.category);
                         
@@ -320,6 +315,7 @@
                     name: '',
                     vat: '',
                     color:'',
+                    discount: null
                 }
             },
         },

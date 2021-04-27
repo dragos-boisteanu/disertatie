@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\DiscountCategory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Category extends JsonResource
@@ -22,9 +23,13 @@ class Category extends JsonResource
         ];
 
         if(!is_null($this->discount)) {
-            $arrayData['discount'] = new DiscountProduct($this->discount);
-            $arrayData['discountStartsAt'] = $this->discounted_from_date;
-            $arrayData['discountEndsAt'] = $this->discounted_until_date;
+            $discount = $this->discount;
+            $discount['fromDate'] = $this->discounted_from_date;
+            $discount['toDate'] = $this->discounted_until_date;
+            
+            $arrayData['discount'] = new DiscountCategory($discount);
+        }else {
+            $arrayData['discount'] = null;
         }
 
         return $arrayData;

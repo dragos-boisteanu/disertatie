@@ -294,27 +294,11 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       require: true,
       "default": null
-    },
-    beginsAt: {
-      type: String,
-      required: false,
-      "default": null
-    },
-    endsAt: {
-      type: String,
-      required: false,
-      "default": null
     }
   },
   computed: {
     hasDiscount: function hasDiscount() {
       return this.discount ? true : false;
-    },
-    fromDate: function fromDate() {
-      return this.beginsAt ? this.beginsAt : this.discount.fromDate;
-    },
-    toDate: function toDate() {
-      return this.endsAt ? this.endsAt : this.discount.endsAt;
     }
   },
   data: function data() {
@@ -977,8 +961,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   props: {
     propIngredients: {
       type: Array,
-      required: true,
-      "default": null
+      required: true
     },
     selectedIngredient: {
       type: Object,
@@ -1220,7 +1203,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     ingredients: {
       type: Array,
-      required: false
+      required: true
     }
   },
   computed: {
@@ -2214,6 +2197,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
       ingredientInput: '',
       foundIngredients: [],
       product: {},
+      // localProduct: {},
       localProduct: {
         barcode: '',
         name: '',
@@ -2265,6 +2249,8 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
 
                     if (modifiedIngredients.length > 0 || _this.localProduct[key].length !== _this.product[key].length) {
                       payload.product[key] = _this.localProduct[key];
+                      payload.product.hasIngredients = true;
+                      console.log(payload);
                       counter++;
                     }
                   } else if (_this.product[key] !== _this.localProduct[key]) {
@@ -2274,20 +2260,19 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                 });
 
                 if (!(counter > 0)) {
-                  _context2.next = 15;
+                  _context2.next = 14;
                   break;
                 }
 
-                _this.$Progress.start();
+                _this.$Progress.start(); // if(payload.product.ingredients && payload.product.ingredients.length === 0) {
+                //     delete payload.product.ingredients;
+                // }
 
-                if (payload.product.ingredients && payload.product.ingredients.length === 0) {
-                  delete payload.product.ingredients;
-                }
 
-                _context2.next = 9;
+                _context2.next = 8;
                 return _this.updateProduct(payload);
 
-              case 9:
+              case 8:
                 counter = 0;
 
                 _this.$router.push({
@@ -2305,22 +2290,22 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
                   message: 'Product updated'
                 });
 
-                _context2.next = 16;
+                _context2.next = 15;
                 break;
 
-              case 15:
+              case 14:
                 _this.openNotification({
                   type: 'info',
                   show: true,
                   message: 'Nothing to update'
                 });
 
-              case 16:
-                _context2.next = 23;
+              case 15:
+                _context2.next = 22;
                 break;
 
-              case 18:
-                _context2.prev = 18;
+              case 17:
+                _context2.prev = 17;
                 _context2.t0 = _context2["catch"](0);
 
                 _this.openNotification({
@@ -2333,12 +2318,12 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_5___default()((filepond_plu
 
                 console.log(_context2.t0);
 
-              case 23:
+              case 22:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 18]]);
+        }, _callee2, null, [[0, 17]]);
       }))();
     },
     objectsEqual: function objectsEqual(o1, o2) {
@@ -18949,7 +18934,7 @@ var render = function() {
                   _c("span", [
                     _vm._v(
                       "\n                " +
-                        _vm._s(_vm.fromDate) +
+                        _vm._s(_vm.discount.fromDate) +
                         " \n            "
                     )
                   ]),
@@ -18983,7 +18968,7 @@ var render = function() {
                   _c("span", [
                     _vm._v(
                       "\n                " +
-                        _vm._s(_vm.toDate) +
+                        _vm._s(_vm.discount.toDate) +
                         "\n            "
                     )
                   ]),

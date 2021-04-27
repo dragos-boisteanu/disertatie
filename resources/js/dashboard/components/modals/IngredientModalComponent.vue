@@ -97,7 +97,6 @@
             propIngredients: {
                 type: Array,
                 required: true,
-                default: null,
             },
 
             selectedIngredient: {

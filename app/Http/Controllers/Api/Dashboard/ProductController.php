@@ -188,47 +188,48 @@ class ProductController extends Controller
             $product->save();
         }
 
-        if($request->has('ingredients')) {     
+        if($request->has('hasIngredients')) {
+            if($request->hasIngredients) {
 
-            $product->has_ingredients = true;
-        
-            $ingredientsArray = array();
+                $product->has_ingredients = true;
             
-            foreach ($request->ingredients as $ingredient) {
-                $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
-            }
-        
-            $product->ingredients()->sync($ingredientsArray);
+                $ingredientsArray = array();
                 
-            if($product->stock_id) {
-                $product->stock_id = null;
-                $product->stock()->delete();
+                foreach ($request->ingredients as $ingredient) {
+                    $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
+                }
+            
+                $product->ingredients()->sync($ingredientsArray);
+                    
+                if($product->stock_id) {
+                    $product->stock_id = null;
+                    $product->stock()->delete();
+                }
+            } else {
+                $product->has_ingredients = false;
+                $product->ingredients()->detach();
+                $stock = Stock::create([
+                    'quantity'=> 0,
+                ]);
+                $product->stock_id = $stock->id;
             }
-        } else {
-            $product->has_ingredients = false;
-            $product->ingredients()->detach();
-            $stock = Stock::create([
-                'quantity'=> 0,
-            ]);
-            $product->stock_id = $stock->id;
-        }
+        }       
+
 
         if($request->has('discount')) {
             $product->discount_id =  $request->input('discount.id');
             $product->discounted_from_date = $request->input('discount.fromDate');
             $product->discounted_until_date = $request->input('discount.toDate');
-        }else if(!$request->has('discount') && !is_null($product->discount_id)) {
+
+        } else if(!$request->has('discount') && !is_null($product->discount_id)) {
             $product->discount_id = null;
             $product->discounted_from_date = null;
             $product->discounted_until_date = null;
         }
 
-        $product->save();
+        $product->save();       
 
-        $product->refresh();
-        
-
-        return response()->json(['message'=>'Product updated', ['product'=>$product]], 200);
+        return response()->json(['message'=>'Product updated'], 200);
     }
 
     public function disable(Request $request, $id) 

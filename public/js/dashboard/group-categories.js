@@ -72,27 +72,11 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       require: true,
       "default": null
-    },
-    beginsAt: {
-      type: String,
-      required: false,
-      "default": null
-    },
-    endsAt: {
-      type: String,
-      required: false,
-      "default": null
     }
   },
   computed: {
     hasDiscount: function hasDiscount() {
       return this.discount ? true : false;
-    },
-    fromDate: function fromDate() {
-      return this.beginsAt ? this.beginsAt : this.discount.fromDate;
-    },
-    toDate: function toDate() {
-      return this.endsAt ? this.endsAt : this.discount.endsAt;
     }
   },
   data: function data() {
@@ -526,8 +510,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -590,7 +572,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 counter = 0;
                 Object.keys(_this.category).forEach(function (key) {
                   if (key === 'discount' && _this.category[key]) {
-                    console.log(_this.category['discount']);
                     payload.category[key] = _this.category[key];
                     counter++;
                   } else if (originalCategory[key] !== _this.category[key]) {
@@ -804,7 +785,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.category = {
         name: '',
         vat: '',
-        color: ''
+        color: '',
+        discount: null
       };
     }
   }),
@@ -2152,7 +2134,7 @@ var render = function() {
                   _c("span", [
                     _vm._v(
                       "\n                " +
-                        _vm._s(_vm.fromDate) +
+                        _vm._s(_vm.discount.fromDate) +
                         " \n            "
                     )
                   ]),
@@ -2186,7 +2168,7 @@ var render = function() {
                   _c("span", [
                     _vm._v(
                       "\n                " +
-                        _vm._s(_vm.toDate) +
+                        _vm._s(_vm.discount.toDate) +
                         "\n            "
                     )
                   ]),
@@ -3147,11 +3129,7 @@ var render = function() {
                             ),
                             _vm._v(" "),
                             _c("DiscountComponent", {
-                              attrs: {
-                                discount: _vm.category.discount,
-                                beginsAt: _vm.category.discountStartsAt,
-                                endsAt: _vm.category.discountEndsAt
-                              },
+                              attrs: { discount: _vm.category.discount },
                               on: {
                                 saved: _vm.saveDiscount,
                                 removed: _vm.removeDiscount
