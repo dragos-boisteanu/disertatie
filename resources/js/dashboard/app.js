@@ -17,12 +17,17 @@ import dayjs from 'dayjs';
 import { ValidationProvider } from 'vee-validate';
 import { ValidationObserver } from 'vee-validate'
 
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
+import Vuelidate from 'vuelidate'
 
 import './validators';
 
 import 'vue2-datepicker/index.css';
+
+
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
+
+Vue.use(Vuelidate)
 
 Vue.use(VueBreadcrumbs, Breadcrumbs);
 
