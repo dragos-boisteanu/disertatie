@@ -19,7 +19,8 @@ class Category extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'vat' => $this->vat,
-            'color' => $this->color
+            'color' => $this->color,
+            'productsCount' => $this->products()->count()
         ];
 
         if(!is_null($this->discount)) {

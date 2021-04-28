@@ -510,6 +510,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -535,6 +536,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Categories', ['searchCategory', 'fetchCategories', 'postCategory', 'patchCategory', 'deleteCategory'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('Notification', ['openNotification'])), {}, {
+    allowRemoval: function allowRemoval(productsCount) {
+      return parseInt(productsCount) === 0;
+    },
     selectCategory: function selectCategory(id) {
       this.category = Object.assign(this.category, lodash_find__WEBPACK_IMPORTED_MODULE_3___default()(this.getCategories, ['id', id]));
       this.categorySelected = true;
@@ -673,7 +677,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this2.openNotification({
                   type: 'ok',
                   show: true,
-                  message: 'Category deleted'
+                  message: 'Category removed'
                 });
 
                 _context2.next = 12;
@@ -2818,22 +2822,28 @@ var render = function() {
                           _vm._v(" "),
                           _c("span", [_vm._v(_vm._s(category.name))]),
                           _vm._v(" "),
-                          _c("span", [_vm._v(_vm._s(category.vat) + " %")])
+                          _c("span", [_vm._v(_vm._s(category.vat) + " %")]),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(" (" + _vm._s(category.productsCount) + ")")
+                          ])
                         ]
                       ),
                       _vm._v(" "),
                       _c("div", [
-                        _c(
-                          "button",
-                          {
-                            on: {
-                              click: function($event) {
-                                return _vm.removeCategory(category.id)
-                              }
-                            }
-                          },
-                          [_vm._v(" X")]
-                        )
+                        _vm.allowRemoval(category.productsCount)
+                          ? _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    return _vm.removeCategory(category.id)
+                                  }
+                                }
+                              },
+                              [_vm._v(" X")]
+                            )
+                          : _vm._e()
                       ])
                     ]
                   )

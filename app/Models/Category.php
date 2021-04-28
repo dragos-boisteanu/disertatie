@@ -23,7 +23,7 @@ class Category extends Model
 
     public function products() 
     {
-        return $this->hasMany('App\Models\Products');
+        return $this->hasMany(Product::class);
     }
 
     public function discount()

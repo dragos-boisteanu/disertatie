@@ -41,9 +41,10 @@
                             <span class="rounded w-4 h-4" :style="{background: category.color}"></span>
                             <span>{{ category.name }}</span>
                             <span>{{ category.vat }} %</span>
+                            <span> ({{category.productsCount}})</span>
                         </div>
                         <div>
-                            <button @click="removeCategory(category.id)"> X</button>
+                            <button v-if="allowRemoval(category.productsCount)" @click="removeCategory(category.id)"> X</button>
                         </div>
                     </li>
                 </ul>
@@ -148,9 +149,10 @@
         
         computed: {
             ...mapGetters('Categories', ['getCategories']),
+
             showResetSearch() {
                 return this.searchInput.length > 0;
-            }
+            },
         },
 
         data() {
@@ -171,6 +173,10 @@
             ...mapActions('Categories', ['searchCategory', 'fetchCategories', 'postCategory', 'patchCategory', 'deleteCategory']),
             ...mapActions('Notification', ['openNotification']),
         
+            allowRemoval(productsCount) {
+                return parseInt(productsCount) === 0
+            },
+
             selectCategory(id) {
                 this.category = Object.assign(this.category, _find(this.getCategories, ['id', id]));
                 this.categorySelected = true;
@@ -262,7 +268,7 @@
                     this.openNotification({
                         type: 'ok',
                         show: true,
-                        message: 'Category deleted'
+                        message: 'Category removed'
                     })
                 } catch ( error ) {
                     this.$Progress.fail();
