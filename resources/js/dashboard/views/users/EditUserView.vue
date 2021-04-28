@@ -23,6 +23,9 @@
                                     @waitForFileToUpload="toggleWaitForFileUpload"
                                     @setImagePath="setImagePath"
                                 ></ImageUploadComponent>
+                                <button v-if="user.avatar" @click.prevent="removeAvatar">
+                                    Remove avatar
+                                </button>
                             </div>
                         </div>
                         
@@ -288,6 +291,11 @@
                     console.log(error);
                     // notification
                 }
+            },
+
+            removeAvatar() {
+                this.user.avatar = "";
+                this.localUser.avatar = "clear";
             },
 
             toggleWaitForFileUpload(waitForFileToUpload) {

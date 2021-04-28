@@ -6,7 +6,7 @@
 
         <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
             <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
-                <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12">
+                <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-2/3">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
 
                         <!-- IMAGE UPLOAD -->
@@ -23,6 +23,9 @@
                                     @waitForFileToUpload="toggleWaitForFileUpload"
                                     @setImagePath="setImagePath"
                                 ></ImageUploadComponent>
+                                <button v-if="product.image" @click.prevent="removeImage">
+                                    Remove image
+                                </button>
                             </div>
                         </div>
                         
@@ -336,6 +339,11 @@
                     this.$Progress.fail();
                     console.log(error);
                 }
+            },
+
+            removeImage() {
+                this.product.image = "";
+                this.localProduct.image = "clear";
             },
 
             toggleWaitForFileUpload(waitForFileToUpload) {

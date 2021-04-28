@@ -28,26 +28,22 @@
             :onaddfile="toggleWaitingForFileToUpload"
         />
 
-        <!-- <div class="text-right mt-3">
-            <button  
-                :disabled="disabled"
-                class="border border-gray-600 h-7 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                @click.prevent="clearImage"
-            >
-                Clear image
-            </button> 
-        </div> -->
     </div>
 </template> 
 
 <script>
     import vueFilePond from "vue-filepond";
     import "filepond/dist/filepond.min.css";
-    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+
     import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+
+    import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
     const FilePond = vueFilePond(
         FilePondPluginFileValidateType,
+        FilePondPluginImagePreview
     ); 
  
     export default {
