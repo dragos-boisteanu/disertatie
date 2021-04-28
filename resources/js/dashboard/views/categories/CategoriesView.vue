@@ -74,8 +74,7 @@
                                 id="name"
                                 name="name" 
                                 type="text" 
-                                @keyup="$v.category.name.$touch()"
-                                @blur="$v.category.name.$touch()"
+                                @input="$v.category.name.$touch()"
                                 v-model="category.name" 
                                 :disabled="waiting"   
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
@@ -102,8 +101,7 @@
                                     id="vat"
                                     name="vat" 
                                     type="texy" 
-                                    @keyup="$v.category.vat.$touch()"
-                                    @blur="$v.category.vat.$touch()"
+                                    @input="$v.category.vat.$touch()"
                                     v-model="category.vat"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
                                     :class="{'border-red-600': $v.category.vat.$error}"
@@ -122,8 +120,7 @@
                                     id="color" 
                                     name="color"
                                     type="color"
-                                    @keyup="$v.category.color.$touch()"
-                                    @blur="$v.category.color.$touch()"
+                                    @change="$v.category.color.$touch()"
                                     v-model="category.color"
                                     class="p-1 rounded border order-gray-300 outline-none"   
                                     :class="{'border-red-600' : $v.category.color.$error}"
@@ -175,6 +172,7 @@
     import _find from 'lodash/find';
     import _debounce from 'lodash/debounce'
     import _isEqual from 'lodash/isEqual'
+    import _merge  from "lodash/merge"
 
     import { alphaSpaces } from '../../validators/index';
     import { required, numeric, integer, maxLength, minValue } from 'vuelidate/lib/validators'
@@ -187,6 +185,10 @@
             showResetSearch() {
                 return this.searchInput.length > 0;
             },
+
+            rules() {
+                return _merge({}, this.serverValidation, this.clientValidation);
+            }
         },
 
         data() {
@@ -199,7 +201,13 @@
                     color: '',   
                     discount: null           
                 },
-                searchInput: ''
+                searchInput: '',
+
+                clientValidation: {
+                   
+                },
+
+                serverValidation: {},
             }
         },
 
@@ -242,6 +250,7 @@
             async submit() {
                 try {
                     this.$v.$touch();
+
                     if(!this.$v.$invalid) {
                         this.waiting = true;
                         this.$Progress.start();
@@ -302,13 +311,14 @@
 
                 } catch ( error ) {
 
+                    this.$v.$touch();
+
                     console.log(error)
 
                     this.$Progress.fail();
                     this.waiting = false;
 
                     if(error.response.data.errors) {
-                        this.$refs.observer.setErrors(error.response.data.errors)
                     }  
                     // notificaiton
                 }
