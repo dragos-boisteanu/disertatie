@@ -91,9 +91,6 @@
                                     <p v-if="!$v.category.vat.required">
                                         The vat field is required
                                     </p>
-                                    <p v-if="!$v.category.vat.numeric">
-                                        The vat field must be only numeric
-                                    </p>
                                     <p v-if="!$v.category.vat.integer">
                                         The vat field must be an integer
                                     </p>
@@ -215,7 +212,6 @@
                 },
                 vat: {
                     required,
-                    numeric,
                     integer,
                     minValue: minValue(0)
                 },

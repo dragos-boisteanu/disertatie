@@ -555,9 +555,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 
 
@@ -594,7 +591,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       },
       vat: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_8__.required,
-        numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_8__.numeric,
         integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_8__.integer,
         minValue: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_8__.minValue)(0)
       },
@@ -3112,14 +3108,6 @@ var render = function() {
                                     ? _c("p", [
                                         _vm._v(
                                           "\n                                    The vat field is required\n                                "
-                                        )
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  !_vm.$v.category.vat.numeric
-                                    ? _c("p", [
-                                        _vm._v(
-                                          "\n                                    The vat field must be only numeric\n                                "
                                         )
                                       ])
                                     : _vm._e(),
