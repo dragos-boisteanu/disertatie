@@ -918,8 +918,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     submit: function submit() {
-      this.discount.id = this.selectedDiscountId;
-      this.$emit('saved', this.discount);
+      var counter = 0;
+      var observer = this.$refs.discountObserver.errors;
+      Object.keys(observer).forEach(function (key) {
+        if (observer[key].length === 0) {
+          counter++;
+        }
+      });
+
+      if (counter === 0) {
+        this.discount.id = this.selectedDiscountId;
+        this.$emit('saved', this.discount);
+      }
     },
     selectDiscount: function selectDiscount() {
       this.discount = lodash_find__WEBPACK_IMPORTED_MODULE_0___default()(this.availableDiscounts, ['id', this.selectedDiscountId]);
@@ -23545,7 +23555,7 @@ var render = function() {
         "template",
         { slot: "body" },
         [
-          _c("ValidationObserver", { ref: "observar" }, [
+          _c("ValidationObserver", { ref: "discountObserver" }, [
             _c(
               "form",
               { staticClass: "flex flex-col gap-3" },

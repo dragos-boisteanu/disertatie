@@ -6,7 +6,7 @@
         </template>
      
         <template slot="body">
-            <ValidationObserver ref="observar">
+            <ValidationObserver ref="discountObserver">
                 <form class="flex flex-col gap-3">
 
                     <ValidationProvider vid="discount" rules="required" v-slot="{ errors, failed, passed }" class="w-full">
@@ -116,7 +116,7 @@
 
             enableToDate(){
                 return this.discount.fromDate ? false : true
-            }
+            },
         },
 
         mounted() {            
@@ -144,8 +144,20 @@
 
         methods: {
             submit() {
-                this.discount.id = this.selectedDiscountId;
-                this.$emit('saved', this.discount);
+                let counter = 0;
+                const observer = this.$refs.discountObserver.errors;
+
+                Object.keys(observer).forEach(key => {
+                    if(observer[key].length === 0) {
+                        counter++;
+                    }
+                })
+                
+                if(counter === 0) {
+                    this.discount.id = this.selectedDiscountId;
+                    this.$emit('saved', this.discount);
+                }
+               
             },
 
             selectDiscount() {
