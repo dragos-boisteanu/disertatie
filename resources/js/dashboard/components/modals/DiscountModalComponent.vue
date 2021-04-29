@@ -56,7 +56,7 @@
                             placeholder="Start date"
                             confirm-text="Ok"
                             valueType="format"
-                            :disable="enableFromDate"
+                            :disabled="enableFromDate"
                             :disabled-date="disableDatesInterval"
                             @blur="$v.discount.fromDate.$touch()"
                         >
@@ -131,7 +131,7 @@
             },
 
             enableFromDate(){
-                return this.selectedDiscountId ? false : true
+                return this.selectedDiscountId === '' 
             }
         },
 

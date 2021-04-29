@@ -250,7 +250,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.discount.fromDate ? false : true;
     },
     enableFromDate: function enableFromDate() {
-      return this.selectedDiscountId ? false : true;
+      return this.selectedDiscountId === '';
     }
   }),
   mounted: function mounted() {
@@ -408,7 +408,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
 //
 //
 //
@@ -880,7 +879,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.category.discount = null;
     },
     resetForm: function resetForm() {
-      this.$refs.observer.reset();
+      this.$v.$reset();
       this.category = {
         name: '',
         vat: '',
@@ -2553,7 +2552,7 @@ var render = function() {
                       placeholder: "Start date",
                       "confirm-text": "Ok",
                       valueType: "format",
-                      disable: _vm.enableFromDate,
+                      disabled: _vm.enableFromDate,
                       "disabled-date": _vm.disableDatesInterval
                     },
                     on: {
@@ -3071,7 +3070,10 @@ var render = function() {
                         staticClass:
                           "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                         class: {
-                          "border-red-600": _vm.$v.category.name.$error
+                          "border-red-600": _vm.$v.category.name.$error,
+                          "border-green-600":
+                            _vm.$v.category.name.$dirty &&
+                            !_vm.$v.category.name.$error
                         },
                         attrs: {
                           id: "name",
@@ -3161,7 +3163,10 @@ var render = function() {
                             staticClass:
                               "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
                             class: {
-                              "border-red-600": _vm.$v.category.vat.$error
+                              "border-red-600": _vm.$v.category.vat.$error,
+                              "border-green-600":
+                                _vm.$v.category.vat.$dirty &&
+                                !_vm.$v.category.vat.$error
                             },
                             attrs: {
                               id: "vat",
@@ -3231,7 +3236,10 @@ var render = function() {
                             staticClass:
                               "p-1 rounded border order-gray-300 outline-none",
                             class: {
-                              "border-red-600": _vm.$v.category.color.$error
+                              "border-red-600": _vm.$v.category.color.$error,
+                              "border-green-600":
+                                _vm.$v.category.color.$dirty &&
+                                !_vm.$v.category.color.$error
                             },
                             attrs: {
                               id: "color",

@@ -78,9 +78,8 @@
                                 v-model="category.name" 
                                 :disabled="waiting"   
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
-                                :class="{'border-red-600': $v.category.name.$error}"
+                                :class="{'border-red-600' : $v.category.name.$error, 'border-green-600': $v.category.name.$dirty && !$v.category.name.$error}"
                             />
-                            
                         </div> 
                         
                         <div class="w-full flex items-center gap-x-4">
@@ -104,7 +103,7 @@
                                     @input="$v.category.vat.$touch()"
                                     v-model="category.vat"   
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
-                                    :class="{'border-red-600': $v.category.vat.$error}"
+                                    :class="{'border-red-600': $v.category.vat.$error, 'border-green-600': $v.category.vat.$dirty && !$v.category.vat.$error}"
                                     :disabled="waiting" 
                                 />
                             </div>
@@ -123,7 +122,7 @@
                                     @change="$v.category.color.$touch()"
                                     v-model="category.color"
                                     class="p-1 rounded border order-gray-300 outline-none"   
-                                    :class="{'border-red-600' : $v.category.color.$error}"
+                                    :class="{'border-red-600': $v.category.color.$error, 'border-green-600': $v.category.color.$dirty && !$v.category.color.$error}"
                                     :disabled="waiting" 
                                     />
                             </div>
@@ -373,7 +372,7 @@
             },
 
             resetForm() {
-                this.$refs.observer.reset();
+                this.$v.$reset();
                 this.category = {
                     name: '',
                     vat: '',

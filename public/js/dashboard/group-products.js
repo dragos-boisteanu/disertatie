@@ -909,7 +909,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.discount.fromDate ? false : true;
     },
     enableFromDate: function enableFromDate() {
-      return this.selectedDiscountId ? false : true;
+      return this.selectedDiscountId === '';
     }
   }),
   mounted: function mounted() {
@@ -1000,6 +1000,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/findIndex */ "./node_modules/lodash/findIndex.js");
 /* harmony import */ var lodash_findIndex__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_findIndex__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1098,6 +1099,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -1142,14 +1148,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
-      // ingredients: [],
       selectedIngredientId: '',
       ingredient: {
         id: '',
-        qauantity: '',
+        quantity: '',
         unit: null
       }
     };
+  },
+  validations: {
+    selectedIngredientId: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_5__.required
+    },
+    ingredient: {
+      quantity: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_5__.required,
+        integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_5__.integer,
+        minValue: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_5__.minValue)(1)
+      }
+    }
   },
   methods: {
     selectIngredient: function selectIngredient() {
@@ -1159,22 +1176,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var valid;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return _this2.$refs.observer.validate();
+                _this2.$v.$touch();
 
-              case 2:
-                valid = _context.sent;
-
-                if (valid) {
+                if (!_this2.$v.$invalid) {
                   _this2.$emit('saved', _this2.ingredient);
                 }
 
-              case 4:
+              case 2:
               case "end":
                 return _context.stop();
             }
@@ -23747,7 +23759,7 @@ var render = function() {
                       placeholder: "Start date",
                       "confirm-text": "Ok",
                       valueType: "format",
-                      disable: _vm.enableFromDate,
+                      disabled: _vm.enableFromDate,
                       "disabled-date": _vm.disableDatesInterval
                     },
                     on: {
@@ -23891,197 +23903,187 @@ var render = function() {
         _vm._v("\n        Ingredient\n    ")
       ]),
       _vm._v(" "),
-      _c(
-        "template",
-        { slot: "body" },
-        [
-          _c("ValidationObserver", { ref: "observer" }, [
+      _c("template", { slot: "body" }, [
+        _c("form", { staticClass: "flex flex-col gap-3" }, [
+          _c("div", { staticClass: "w-full flex flex-col gap-y-1" }, [
             _c(
-              "form",
-              { staticClass: "flex flex-col gap-3" },
-              [
-                _c("ValidationProvider", {
-                  staticClass: "w-full",
-                  attrs: { vid: "ingredient", rules: "required" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "default",
-                      fn: function(ref) {
-                        var errors = ref.errors
-                        var failed = ref.failed
-                        var passed = ref.passed
-                        return [
-                          _c(
-                            "label",
-                            {
-                              staticClass: "text-sm font-semibold",
-                              attrs: { for: "ingredient" }
-                            },
-                            [_vm._v("Ingredient")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "text-xs text-red-600 font-semibold mb-1"
-                            },
-                            [_vm._v(" " + _vm._s(errors[0]))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.selectedIngredientId,
-                                  expression: "selectedIngredientId"
-                                }
-                              ],
-                              staticClass:
-                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                              class: {
-                                "border-red-600": failed,
-                                "border-green-500": passed
-                              },
-                              attrs: {
-                                id: "ingredient",
-                                name: "ingredient",
-                                disabled: _vm.isEditMode
-                              },
-                              on: {
-                                change: [
-                                  function($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call($event.target.options, function(o) {
-                                        return o.selected
-                                      })
-                                      .map(function(o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.selectedIngredientId = $event.target
-                                      .multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  },
-                                  _vm.selectIngredient
-                                ]
-                              }
-                            },
-                            [
-                              _c(
-                                "option",
-                                { attrs: { value: "", disabled: "" } },
-                                [_vm._v("Select ingredient")]
-                              ),
-                              _vm._v(" "),
-                              _vm._l(_vm.ingredients, function(ingredient) {
-                                return _c(
-                                  "option",
-                                  {
-                                    key: ingredient.id,
-                                    staticClass:
-                                      "flex items-center gap-x-3 disabled:bg-gray-100",
-                                    attrs: { disabled: ingredient.exists },
-                                    domProps: { value: ingredient.id }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                " +
-                                        _vm._s(ingredient.name) +
-                                        "\n                            "
-                                    )
-                                  ]
-                                )
-                              })
-                            ],
-                            2
+              "label",
+              {
+                staticClass: "text-sm font-semibold",
+                attrs: { for: "ingredient" }
+              },
+              [_vm._v("Ingredient")]
+            ),
+            _vm._v(" "),
+            _vm.$v.selectedIngredientId.$error
+              ? _c(
+                  "div",
+                  { staticClass: "text-xs text-red-600 font-semibold mb-1" },
+                  [
+                    !_vm.$v.selectedIngredientId.required
+                      ? _c("p", [
+                          _vm._v(
+                            "\n                            Ingredient field is required\n                        "
                           )
-                        ]
-                      }
-                    }
-                  ])
-                }),
+                        ])
+                      : _vm._e()
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectedIngredientId,
+                    expression: "selectedIngredientId"
+                  }
+                ],
+                staticClass:
+                  "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                class: {
+                  "border-red-600": _vm.$v.selectedIngredientId.$error,
+                  "border-green-600":
+                    _vm.$v.selectedIngredientId.$dirty &&
+                    !_vm.$v.selectedIngredientId.$error
+                },
+                attrs: {
+                  id: "ingredient",
+                  name: "ingredient",
+                  disabled: _vm.isEditMode
+                },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selectedIngredientId = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    },
+                    _vm.selectIngredient
+                  ],
+                  blur: function($event) {
+                    return _vm.$v.selectedIngredientId.$touch()
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "", disabled: "" } }, [
+                  _vm._v("Select ingredient")
+                ]),
                 _vm._v(" "),
-                _c("ValidationProvider", {
-                  staticClass: "w-full",
-                  attrs: { vid: "quantity", rules: "required|integer" },
-                  scopedSlots: _vm._u([
+                _vm._l(_vm.ingredients, function(ingredient) {
+                  return _c(
+                    "option",
                     {
-                      key: "default",
-                      fn: function(ref) {
-                        var errors = ref.errors
-                        var failed = ref.failed
-                        var passed = ref.passed
-                        return [
-                          _c(
-                            "label",
-                            {
-                              staticClass: "text-sm font-semibold",
-                              attrs: { for: "quantity" }
-                            },
-                            [_vm._v("Quantity")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "text-xs text-red-600 font-semibold mb-1"
-                            },
-                            [_vm._v(" " + _vm._s(errors[0]))]
-                          ),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.ingredient.quantity,
-                                expression: "ingredient.quantity"
-                              }
-                            ],
-                            staticClass:
-                              "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                            class: {
-                              "border-red-600": failed,
-                              "border-green-500": passed
-                            },
-                            attrs: {
-                              id: "quantity",
-                              name: "quantity",
-                              type: "quantity"
-                            },
-                            domProps: { value: _vm.ingredient.quantity },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.ingredient,
-                                  "quantity",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ]
-                      }
-                    }
-                  ])
+                      key: ingredient.id,
+                      staticClass:
+                        "flex items-center gap-x-3 disabled:bg-gray-100",
+                      attrs: { disabled: ingredient.exists },
+                      domProps: { value: ingredient.id }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(ingredient.name) +
+                          "\n                        "
+                      )
+                    ]
+                  )
                 })
               ],
-              1
+              2
             )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-full flex flex-col gap-y-1" }, [
+            _c(
+              "label",
+              {
+                staticClass: "text-sm font-semibold",
+                attrs: { for: "quantity" }
+              },
+              [_vm._v("Quantity")]
+            ),
+            _vm._v(" "),
+            _vm.$v.ingredient.$error
+              ? _c(
+                  "div",
+                  { staticClass: "text-xs text-red-600 font-semibold mb-1" },
+                  [
+                    !_vm.$v.ingredient.quantity.required
+                      ? _c("p", [
+                          _vm._v(
+                            "\n                        The quantity field is required\n                    "
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    !_vm.$v.ingredient.quantity.integer
+                      ? _c("p", [
+                          _vm._v(
+                            "\n                        The quantity field must be an integer\n                    "
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    !_vm.$v.ingredient.quantity.minValue
+                      ? _c("p", [
+                          _vm._v(
+                            "\n                        The quantity field must be at least 1\n                    "
+                          )
+                        ])
+                      : _vm._e()
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.ingredient.quantity,
+                  expression: "ingredient.quantity"
+                }
+              ],
+              staticClass:
+                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+              class: {
+                "border-red-600": _vm.$v.ingredient.quantity.$error,
+                "border-green-600":
+                  _vm.$v.ingredient.quantity.$dirty &&
+                  !_vm.$v.ingredient.quantity.$error
+              },
+              attrs: { id: "quantity", name: "quantity", type: "quantity" },
+              domProps: { value: _vm.ingredient.quantity },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.ingredient, "quantity", $event.target.value)
+                  },
+                  function($event) {
+                    return _vm.$v.ingredient.quantity.$touch()
+                  }
+                ]
+              }
+            })
           ])
-        ],
-        1
-      ),
+        ])
+      ]),
       _vm._v(" "),
       _c("template", { slot: "footer" }, [
         _c(
