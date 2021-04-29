@@ -672,7 +672,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   if (key === 'discount' && !lodash_isEqual__WEBPACK_IMPORTED_MODULE_5___default()(_this.category[key], originalCategory[key])) {
                     payload.category[key] = _this.category[key];
                     counter++;
-                    console.log('here');
                   } else if (originalCategory[key] !== _this.category[key]) {
                     payload.category[key] = _this.category[key];
                     counter++;
@@ -727,25 +726,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.$Progress.finish();
 
               case 25:
-                _context.next = 34;
+                _context.next = 33;
                 break;
 
               case 27:
                 _context.prev = 27;
                 _context.t0 = _context["catch"](0);
-
-                _this.$v.$touch();
-
                 console.log(_context.t0);
 
                 _this.$Progress.fail();
 
                 _this.waiting = false;
 
-                if (_context.t0.response.data.errors) {} // notificaiton
+                if (_context.t0.response && _context.t0.response.data.errors) {
+                  _this.$v.$touch();
+                } // notificaiton
 
 
-              case 34:
+              case 33:
               case "end":
                 return _context.stop();
             }

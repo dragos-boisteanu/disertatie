@@ -264,7 +264,6 @@
                                 if(key === 'discount' && !_isEqual(this.category[key], originalCategory[key])) {
                                     payload.category[key] = this.category[key];
                                     counter++;
-                                    console.log('here')
                                 } else if(originalCategory[key] !== this.category[key]) {
                                     payload.category[key] = this.category[key];
                                     counter++;
@@ -303,16 +302,15 @@
                     }                  
 
                 } catch ( error ) {
-
-                    this.$v.$touch();
-
                     console.log(error)
 
                     this.$Progress.fail();
                     this.waiting = false;
 
-                    if(error.response.data.errors) {
-                    }  
+                    if(error.response && error.response.data.errors) {
+                        this.$v.$touch();
+                    }
+                    
                     // notificaiton
                 }
             },
