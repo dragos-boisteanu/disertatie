@@ -776,6 +776,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/find */ "./node_modules/lodash/find.js");
 /* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
 /* harmony import */ var _ModalComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalComponent */ "./resources/js/dashboard/components/modals/ModalComponent.vue");
 /* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -880,6 +881,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -895,6 +907,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('Discounts', ['getDiscounts'])), {}, {
     enableToDate: function enableToDate() {
       return this.discount.fromDate ? false : true;
+    },
+    enableFromDate: function enableFromDate() {
+      return this.selectedDiscountId ? false : true;
     }
   }),
   mounted: function mounted() {
@@ -916,17 +931,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     };
   },
+  validations: {
+    selectedDiscountId: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__.required
+    },
+    discount: {
+      fromDate: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__.required
+      },
+      toDate: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__.required
+      }
+    }
+  },
   methods: {
     submit: function submit() {
-      var counter = 0;
-      var observer = this.$refs.discountObserver.errors;
-      Object.keys(observer).forEach(function (key) {
-        if (observer[key].length === 0) {
-          counter++;
-        }
-      });
+      this.$v.$touch();
 
-      if (counter === 0) {
+      if (!this.$v.$invalid) {
         this.discount.id = this.selectedDiscountId;
         this.$emit('saved', this.discount);
       }
@@ -23551,249 +23573,233 @@ var render = function() {
     [
       _c("template", { slot: "header" }, [_vm._v("\n        Discount\n    ")]),
       _vm._v(" "),
-      _c(
-        "template",
-        { slot: "body" },
-        [
-          _c("ValidationObserver", { ref: "discountObserver" }, [
+      _c("template", { slot: "body" }, [
+        _c("div", { staticClass: "flex flex-col gap-3" }, [
+          _c("div", { staticClass: "w-full" }, [
             _c(
-              "form",
-              { staticClass: "flex flex-col gap-3" },
-              [
-                _c("ValidationProvider", {
-                  staticClass: "w-full",
-                  attrs: { vid: "discount", rules: "required" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "default",
-                      fn: function(ref) {
-                        var errors = ref.errors
-                        var failed = ref.failed
-                        var passed = ref.passed
-                        return [
-                          _c(
-                            "label",
-                            {
-                              staticClass: "text-sm font-semibold",
-                              attrs: { for: "discount" }
-                            },
-                            [_vm._v("Discount")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "text-xs text-red-600 font-semibold mb-1"
-                            },
-                            [_vm._v(" " + _vm._s(errors[0]))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.selectedDiscountId,
-                                  expression: "selectedDiscountId"
-                                }
-                              ],
-                              staticClass:
-                                "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
-                              class: {
-                                "border-red-600": failed,
-                                "border-green-500": passed
-                              },
-                              attrs: { id: "discount", name: "discount" },
-                              on: {
-                                change: [
-                                  function($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call($event.target.options, function(o) {
-                                        return o.selected
-                                      })
-                                      .map(function(o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.selectedDiscountId = $event.target
-                                      .multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  },
-                                  _vm.selectDiscount
-                                ]
-                              }
-                            },
-                            [
-                              _c(
-                                "option",
-                                { attrs: { value: "", disabled: "" } },
-                                [_vm._v("Select discount")]
-                              ),
-                              _vm._v(" "),
-                              _vm._l(_vm.availableDiscounts, function(
-                                availableDiscount
-                              ) {
-                                return _c(
-                                  "option",
-                                  {
-                                    key: availableDiscount.id,
-                                    staticClass:
-                                      "flex items-center gap-x-3 disabled:bg-gray-100",
-                                    domProps: { value: availableDiscount.id }
-                                  },
-                                  [
-                                    _c("span", [
-                                      _c("span", [
-                                        _vm._v(
-                                          "\n                                    " +
-                                            _vm._s(availableDiscount.code) +
-                                            "\n                                "
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("span", [
-                                        _vm._v(
-                                          "\n                                    " +
-                                            _vm._s(availableDiscount.value) +
-                                            "%\n                                "
-                                        )
-                                      ])
-                                    ])
-                                  ]
-                                )
-                              })
-                            ],
-                            2
-                          )
-                        ]
-                      }
-                    }
-                  ])
-                }),
-                _vm._v(" "),
-                _c(
+              "label",
+              {
+                staticClass: "text-sm font-semibold",
+                attrs: { for: "discount" }
+              },
+              [_vm._v("Discount")]
+            ),
+            _vm._v(" "),
+            _vm.$v.selectedDiscountId.$error
+              ? _c(
                   "div",
-                  {
-                    staticClass:
-                      "flex flex-col gap-y-4 sm:flex-row items-center justify-between mt-3 gap-x-4"
-                  },
+                  { staticClass: "text-xs text-red-600 font-semibold mb-1" },
                   [
-                    _c("ValidationProvider", {
-                      staticClass: "w-full",
-                      attrs: { vid: "fromDate", rules: "required" },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "default",
-                          fn: function(ref) {
-                            var errors = ref.errors
-                            return [
-                              _c(
-                                "label",
-                                {
-                                  staticClass: "text-sm font-semibold",
-                                  attrs: { for: "from" }
-                                },
-                                [_vm._v("From")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "text-xs text-red-600 font-semibold mb-1"
-                                },
-                                [_vm._v(" " + _vm._s(errors[0]))]
-                              ),
-                              _vm._v(" "),
-                              _c("date-picker", {
-                                attrs: {
-                                  "input-attr": { name: "from" },
-                                  type: "datetime",
-                                  placeholder: "Start date",
-                                  confirm: true,
-                                  "confirm-text": "Ok",
-                                  valueType: "format",
-                                  "disabled-date": _vm.disableDatesInterval
-                                },
-                                model: {
-                                  value: _vm.discount.fromDate,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.discount, "fromDate", $$v)
-                                  },
-                                  expression: "discount.fromDate"
-                                }
-                              })
-                            ]
-                          }
-                        }
-                      ])
-                    }),
-                    _vm._v(" "),
-                    _c("ValidationProvider", {
-                      staticClass: "w-full",
-                      attrs: { vid: "toDate", rules: "required" },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "default",
-                          fn: function(ref) {
-                            var errors = ref.errors
-                            return [
-                              _c(
-                                "label",
-                                {
-                                  staticClass: "text-sm font-semibold",
-                                  attrs: { for: "from" }
-                                },
-                                [_vm._v("To")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "text-xs text-red-600 font-semibold mb-1"
-                                },
-                                [_vm._v(" " + _vm._s(errors[0]))]
-                              ),
-                              _vm._v(" "),
-                              _c("date-picker", {
-                                attrs: {
-                                  disabled: _vm.enableToDate,
-                                  type: "datetime",
-                                  placeholder: "End date",
-                                  confirm: true,
-                                  "confirm-text": "Ok",
-                                  valueType: "format",
-                                  "disabled-date": _vm.disableBeforeFromDate
-                                },
-                                model: {
-                                  value: _vm.discount.toDate,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.discount, "toDate", $$v)
-                                  },
-                                  expression: "discount.toDate"
-                                }
-                              })
-                            ]
-                          }
-                        }
-                      ])
-                    })
-                  ],
-                  1
+                    !_vm.$v.selectedDiscountId.required
+                      ? _c("p", [
+                          _vm._v(
+                            "\n                        A discount must be selected\n                    "
+                          )
+                        ])
+                      : _vm._e()
+                  ]
                 )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectedDiscountId,
+                    expression: "selectedDiscountId"
+                  }
+                ],
+                staticClass:
+                  "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500",
+                class: { "border-red-600": _vm.$v.selectedDiscountId.$error },
+                attrs: { id: "discount", name: "discount" },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selectedDiscountId = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    },
+                    _vm.selectDiscount
+                  ],
+                  blur: function($event) {
+                    return _vm.$v.selectedDiscountId.$touch()
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "", disabled: "" } }, [
+                  _vm._v("Select discount")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.availableDiscounts, function(availableDiscount) {
+                  return _c(
+                    "option",
+                    {
+                      key: availableDiscount.id,
+                      staticClass:
+                        "flex items-center gap-x-3 disabled:bg-gray-100",
+                      domProps: { value: availableDiscount.id }
+                    },
+                    [
+                      _c("span", [
+                        _c("span", [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(availableDiscount.code) +
+                              "\n                            "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("span", [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(availableDiscount.value) +
+                              "%\n                            "
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                })
               ],
-              1
+              2
             )
-          ])
-        ],
-        1
-      ),
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "flex flex-col gap-y-4 sm:flex-row items-center justify-between mt-3 gap-x-4"
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "w-full flex flex-col gap-y-2" },
+                [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "text-sm font-semibold",
+                      attrs: { for: "from" }
+                    },
+                    [_vm._v("From")]
+                  ),
+                  _vm._v(" "),
+                  _vm.$v.discount.fromDate.$error
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "text-xs text-red-600 font-semibold mb-1"
+                        },
+                        [
+                          !_vm.$v.discount.fromDate.required
+                            ? _c("p", [
+                                _vm._v(
+                                  "\n                            From date is required\n                        "
+                                )
+                              ])
+                            : _vm._e()
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("date-picker", {
+                    attrs: {
+                      type: "datetime",
+                      placeholder: "Start date",
+                      "confirm-text": "Ok",
+                      valueType: "format",
+                      disable: _vm.enableFromDate,
+                      "disabled-date": _vm.disableDatesInterval
+                    },
+                    on: {
+                      blur: function($event) {
+                        return _vm.$v.discount.fromDate.$touch()
+                      }
+                    },
+                    model: {
+                      value: _vm.discount.fromDate,
+                      callback: function($$v) {
+                        _vm.$set(_vm.discount, "fromDate", $$v)
+                      },
+                      expression: "discount.fromDate"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "w-full flex flex-col gap-y-2" },
+                [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "text-sm font-semibold",
+                      attrs: { for: "from" }
+                    },
+                    [_vm._v("To")]
+                  ),
+                  _vm._v(" "),
+                  _vm.$v.discount.toDate.$error
+                    ? _c(
+                        "div",
+                        { staticClass: "text-xs text-red-600 font-semibold" },
+                        [
+                          !_vm.$v.discount.toDate.required
+                            ? _c("p", [
+                                _vm._v(
+                                  "\n                            To date is required\n                        "
+                                )
+                              ])
+                            : _vm._e()
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("date-picker", {
+                    attrs: {
+                      type: "datetime",
+                      placeholder: "End date",
+                      "confirm-text": "Ok",
+                      valueType: "format",
+                      disabled: _vm.enableToDate,
+                      "disabled-date": _vm.disableBeforeFromDate
+                    },
+                    on: {
+                      blur: function($event) {
+                        return _vm.$v.discount.toDate.$touch()
+                      }
+                    },
+                    model: {
+                      value: _vm.discount.toDate,
+                      callback: function($$v) {
+                        _vm.$set(_vm.discount, "toDate", $$v)
+                      },
+                      expression: "discount.toDate"
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          )
+        ])
+      ]),
       _vm._v(" "),
       _c("template", { slot: "footer" }, [
         _c(
@@ -23801,7 +23807,12 @@ var render = function() {
           {
             staticClass:
               "flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none",
-            on: { click: _vm.submit }
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.submit($event)
+              }
+            }
           },
           [_vm._v("\n            Save\n        ")]
         ),
@@ -23811,7 +23822,12 @@ var render = function() {
           {
             staticClass:
               "bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600",
-            on: { click: _vm.close }
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.close($event)
+              }
+            }
           },
           [_vm._v("\n            Cancel\n        ")]
         )

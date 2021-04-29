@@ -172,10 +172,9 @@
     import _find from 'lodash/find';
     import _debounce from 'lodash/debounce'
     import _isEqual from 'lodash/isEqual'
-    import _merge  from "lodash/merge"
 
     import { alphaSpaces } from '../../validators/index';
-    import { required, numeric, integer, maxLength, minValue } from 'vuelidate/lib/validators'
+    import { required, integer, maxLength, minValue } from 'vuelidate/lib/validators'
 
     export default {
         
@@ -202,12 +201,6 @@
                     discount: null           
                 },
                 searchInput: '',
-
-                clientValidation: {
-                   
-                },
-
-                serverValidation: {},
             }
         },
 
