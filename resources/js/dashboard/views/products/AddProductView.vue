@@ -53,6 +53,9 @@
                                 <p v-if="!$v.product.name.maxLength">
                                     The namme field must be shorter than 50 characters
                                 </p>
+                                <p v-if="!$v.localProduct.name.alphaSpaces">
+                                    The name field must contain only letters and spaces
+                                </p>
                             </div>
                             <input 
                                 id="firstName"
@@ -75,6 +78,9 @@
                             </p>
                             <p v-if="!$v.product.description.maxLength">
                                 The description field must be shorter than 255 characters
+                            </p>
+                            <p v-if="!$v.localProduct.description.alphaNumSpaces">
+                                The description field must contain only letters, numbers and spaces
                             </p>
                         </div>
                         <textarea 
@@ -225,6 +231,7 @@
     import _findIndex from 'lodash/findIndex';
 
     import { required, integer, decimal, maxLength, minValue } from 'vuelidate/lib/validators'
+    import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
 
     export default {
 
@@ -267,11 +274,13 @@
                 },
                 name: {
                     required,
-                    maxLength: maxLength(50)
+                    maxLength: maxLength(50),
+                    alphaSpaces
                 },
                 description: {
                     required,
-                    maxLength: maxLength(255)
+                    maxLength: maxLength(255),
+                    alphaNumSpaces
                 },
                 base_price: {
                     required,

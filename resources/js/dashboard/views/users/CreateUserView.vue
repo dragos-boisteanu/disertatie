@@ -4,7 +4,7 @@
             Create user account
         </template>
         <form @submit.prevent="submit" class="flex flex-col">
-            <div class="flex flex-col lg:items-start lg:flex-row lg:gap-x-6 lg:w-full 2xl:w-3/4">
+            <div class="flex flex-col lg:items-start lg:flex-row lg:gap-x-6 lg:w-full 2xl:w-10/12">
                 <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
                     <h2 class="mb-5 text-xl font-semibold">
                         Account details
@@ -27,6 +27,9 @@
                                 <p v-if="!$v.user.first_name.maxLength">
                                     The first name field should not be longer than 50 characters
                                 </p>
+                                <p v-if="!$v.user.first_name.alphaSpaces">
+                                    The first name field must contain only letters and spaces
+                                </p>
                             </div>
                             <input 
                                 id="firstName"
@@ -47,6 +50,9 @@
                                     </p>    
                                     <p v-if="!$v.user.name.maxLength">
                                        The name field should not be longer than 50 characters
+                                    </p>
+                                    <p v-if="!$v.user.name.alphaSpaces">
+                                        The name field must contain only letters and spaces
                                     </p>
                                 </div>
                                 <input 
@@ -108,6 +114,9 @@
                                 <p v-if="!$v.user.phone_number.required">
                                     The phone number field is required
                                 </p>
+                                <p v-if="!$v.user.phone_number.phoneNumber">
+                                    The phone number is invalid
+                                </p>
                             </div>
                             <input 
                                 id="phoneNumber" 
@@ -160,6 +169,9 @@
                                     <p v-if="!$v.address.first_name.maxLength">
                                         The first name field should not be longer than 50 characters
                                     </p>
+                                    <p v-if="!$v.address.first_name.alphaSpaces">
+                                        The first name field must contain only letters and spaces
+                                    </p>
                                 </div>
                                 <input 
                                     id="addressFirstName" 
@@ -181,6 +193,9 @@
                                     <p v-if="!$v.address.name.maxLength">
                                         The first name field shound not be longer than 50 characters
                                     </p>
+                                    <p v-if="!$v.address.name.alphaSpaces">
+                                        The  name field must contain only letters and spaces
+                                    </p>
                                 </div>
                                 <input 
                                     id="addressName" 
@@ -199,7 +214,9 @@
                                     <p v-if="!$v.address.phone_number.required">
                                         The phone number field is required
                                     </p>
-                                    <!-- phone number -->
+                                    <p v-if="!$v.user.phone_number.phoneNumber">
+                                        The phone number is invalid
+                                    </p>
                                 </div>
                                 <input 
                                     id="addressPhoneNumber" 
@@ -264,6 +281,9 @@
                                 <p v-if="!$v.address.address.required">
                                     The address field is required
                                 </p>
+                                <p v-if="!$v.address.address.alphaNumSpaces">
+                                    The address field must contain only letters, numbers and spaces
+                                </p>
                             </div>
                             <input 
                                 id="addressAddress" 
@@ -305,7 +325,8 @@
     
     import ImageUploadComponent from '../../components/ImageUploadComponent';
 
-    import { required, email, requiredIf, decimal, maxLength, minValue } from 'vuelidate/lib/validators'
+    import { required, email, requiredIf, maxLength, } from 'vuelidate/lib/validators'
+    import { alphaSpaces, alphaNumSpaces, phoneNumber } from '../../validators/index';
 
     export default {
 
@@ -356,20 +377,20 @@
                 first_name: {
                     required,
                     maxLength: maxLength(50),
-                    // alpa spaces
+                    alphaSpaces
                 },
                 name: {
                     required,
                     maxLength: maxLength(50),
-                    // alpha spaces
+                    alphaSpaces
                 },
                 email: {
                     required,
                     email
                 },
                 phone_number:{
-                    required
-                    // phonenumber
+                    required,
+                    phoneNumber
                 },
                 birthdate: {
                     required
@@ -384,20 +405,20 @@
                         return this.hasAddress;
                     }),
                     maxLength: maxLength(50),
-                    // alpa spaces
+                    alphaSpaces
                 },
                 name: {
                     required: requiredIf(function () {
                         return this.hasAddress;
                     }),
                     maxLength: maxLength(50),
-                    // alpha spaces
+                    alphaSpaces
                 }, 
                 phone_number:{
                    required: requiredIf(function () {
                         return this.hasAddress;
                     }),
-                    // phonenumber
+                    phoneNumber
                 },
                 county_id: {
                     required: requiredIf(function () {
@@ -413,6 +434,7 @@
                     required: requiredIf(function () {
                         return this.hasAddress;
                     }),
+                    alphaNumSpaces
                 }
             }
         },
