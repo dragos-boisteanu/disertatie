@@ -72,7 +72,7 @@
             <form @submit.prevent="submit">
                 <div class="flex gap-2">
                     <div class="flex-1">
-                        <label for="name" class="text-sm font-semibold">Stock quantity</label>
+                        <label for="name" class="text-sm font-semibold">Stock</label>
                         <div class="mb-1"></div>
                         <input 
                             id="quantity"
@@ -97,7 +97,17 @@
                     </div>
                     <div class="flex-1" >
                         <label for="name" class="text-sm font-semibold">Quantity</label>
-                        <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.newQuantity.$error">
+                        <input 
+                            id="newQuantity"
+                            name="new quantity" 
+                            type="text"   
+                            v-model="newQuantity"
+                            class="w-full mt-1 text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                            :class="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
+                            :disabled="waiting"
+                            @blur="$v.newQuantity.$touch()"
+                        />
+                        <div class="text-xs text-red-600 font-semibold mt-1" v-if="$v.newQuantity.$error">
                             <p v-if="!$v.newQuantity.required">
                                 The quantity field is required
                             </p>
@@ -105,16 +115,6 @@
                                 The quantity must be an integer
                             </p>
                         </div>
-                        <input 
-                            id="newQuantity"
-                            name="new quantity" 
-                            type="text"   
-                            v-model="newQuantity"
-                            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                            :class="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
-                            :disabled="waiting"
-                            @blur="$v.newQuantity.$touch()"
-                        />
                     </div> 
                 </div>
                 <div class="mt-5 flex gap-x-4 md:justify-start">
@@ -135,7 +135,7 @@
                     <button 
                         v-if="ingredient"
                         @click.prevent="clear"
-                        class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
+                        class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
                     >                       
                         Clear
                     </button>
@@ -155,7 +155,7 @@
 </template>
 
 <script>
-    import { downloadIngredientById, updateStock } from '../../api/stocks.api';
+    import { downloadIngredientStockDetails, updateStock } from '../../api/stocks.api'
     import { mapActions } from 'vuex';
 
     import { required, integer, minValue, maxLength } from 'vuelidate/lib/validators'
@@ -219,22 +219,25 @@
 
             async findIngredient() {
             
-                if(this.filter.id.length > 0 || this.filter.name.lenght > 0) {
+                if(true) {
+                    console.log('here2')
                     try {
                         this.$Progress.start();
 
                         let response = null;
 
-                        if(this.filter.id) {
+                        if(this.filter.id.length > 0) {
+                            console.log('here1')
                             this.$v.filter.id.$touch();
                             if(!this.$v.filter.id.$invalid) {
-                                response = await downloadIngredientById(this.filter.id);
+                                response = await downloadIngredientStockDetails(this.filter.id);
                             }
                             
                         } else {
+                            console.log('here')
                             this.$v.filter.name.$touch()
                             if(!this.$v.filter.name.$invalid) {
-                                response = await downloadIngredientByName(this.filter.name)
+                                response = await downloadIngredientStockDetails(this.filter.name)
                             }
                         }
 
