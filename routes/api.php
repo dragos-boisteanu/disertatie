@@ -44,7 +44,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 
     Route::group(['prefix'=>'stocks'], function() {
         Route::get('products/{barcode}', 'StockController@getProductStockDetailsByBarcode');
-        Route::get('ingredients/{id}', 'StockController@getIngredientStockDetailsById');
+        Route::get('ingredients/{input}', 'StockController@getIngredientStockDetails');
     });
 
     Route::group(['prefix'=>'discounts'], function() {

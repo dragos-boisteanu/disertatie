@@ -1,43 +1,49 @@
 <template>
     <div class="w-full">
-        <ValidationObserver ref="observer">
-            <form class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-                <ValidationProvider 
-                    vid="barcode" 
-                    rules="required"
-                    v-slot="{ errors, failed, passed }"
-                    mode="aggressive"
-                    class="w-full"
-                >
+        <div ref="observer">
+            <form @submit.prevent="findProduct" class="flex items-center gap-x-4 bg-white shadow rounded-sm p-5 md:flex-1">
+                <div class="w-full">
                     <label for="name" class="text-sm font-semibold">Barcode</label>
-                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                    <div class="flex gap-x-3 items-center relative flex-1">
-                        <input 
-                            id="barcode"
-                            name="barcode" 
-                            type="text"
-                            v-model="barcode"
-                            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                            :disabled="waiting"
-                            @input="findProduct"
-                        />
-                        <svg  v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-lightBlue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                    <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.barcode.$error">
+                        <p v-if="!$v.barcode.required">
+                            The barcode field is required  
+                        </p>
                     </div>
-                </ValidationProvider>
+                    <input 
+                        id="barcode"
+                        name="barcode" 
+                        type="text"
+                        v-model="barcode"
+                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500" 
+                        :class="{'border-red-600' : $v.barcode.$error, 'border-green-600': $v.barcode.$dirty && !$v.barcode.$error}"
+                        :disabled="waiting"
+                        @blur="$v.barcode.$touch()"
+                    />
+                </div>
+                <button 
+                    type="submit"
+                    :disabled="waiting || disableSearchButton"
+                    class="inline-flex items-center justify-center mt-6 px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                >
+                    <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+        
+                    <span>
+                        Search
+                    </span>
+                </button>
             </form>
-        </ValidationObserver>
+        </div>
 
         <div v-if="product" class="mt-4 flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
             <h2 class="text-xl font-semibold my-2">
                 <span>{{product.name}}</span> <span>{{product.weight}}</span> <span>{{product.unit}}</span>
             </h2>
 
-            <ValidationObserver v-slot="{ handleSubmit }" ref="updateForm">
-                <form @submit.prevent="handleSubmit(submit)">
+            <div>
+                <form @submit.prevent="submit">
                     <div class="flex gap-2">
                         <div class="flex-1">
                             <label for="quantity" class="text-sm font-semibold">Stock quantity</label>
@@ -53,25 +59,29 @@
                                 />
                             </div>
                         </div>
-                        <ValidationProvider 
-                            vid="newQuantity" rules="required|integer" 
-                            v-slot="{ errors, failed, passed }" 
-                            class="flex-1"
-                        >
+                        <div class="flex-1">
                             <label for="newQuantity" class="text-sm font-semibold">Quantity</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-show="errors"> {{ errors[0] }}</div>
+                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.newQuantity.$error">
+                                <p v-if="!$v.newQuantity.required">
+                                    The new quantity field is required
+                                </p>
+                                <p v-if="!$v.newQuantity.integer">
+                                    The new quantity field must be an integer
+                                </p>
+                            </div>
                             <div class="flex gap-x-3 items-center relative flex-1">
                                 <input 
                                     id="newQuantity"
                                     name="new quantity" 
                                     type="text"   
                                     v-model="newQuantity"
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                    :class="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
                                     :disabled="waiting || canNotUpdate"
+                                    @blur="$v.newQuantity.$touch()"
                                 />
                             </div>
-                        </ValidationProvider> 
+                        </div> 
                     </div>
                     <div class="mt-5 flex gap-x-4 md:justify-start">
                         <button
@@ -97,7 +107,7 @@
                         </button>
                     </div>
                 </form>
-            </ValidationObserver>
+            </div>
 
             <div v-if="hasIngredients" class="mt-4">
                 <h3 class="font-semibold text-lg my-2">
@@ -129,8 +139,9 @@
 
     import Unit from '../products/UnitComponent';
 
-    export default {
+    import { required, integer, } from 'vuelidate/lib/validators'
 
+    export default {
         mounted() {
             if(this.$route.params.barcode) {
                 this.barcode = this.$route.params.barcode;
@@ -148,6 +159,10 @@
 
             hasIngredients() {
                 return this.product.hasIngredients === 1 && this.product.ingredients.length > 0;
+            },
+
+            disableSearchButton() {
+                return this.barcode.length === 0;
             }
         },
 
@@ -160,13 +175,24 @@
                 newQuantity: 0
             }
         }, 
+
+        validations: {
+            newQuantity: {
+                required,
+                integer
+            },
+            barcode: {
+                required,
+            }
+        },
         
         methods: {
             ...mapActions('Notification', ['openNotification']),
 
-            findProduct: _debounce(async function() {
-                try {
-                    if(this.$refs.observer.errors.barcode.length === 0) {
+            async findProduct() {
+                this.$v.barcode.$touch();
+                if(!this.$v.barcode.invalid) {
+                    try {
                         this.$Progress.start();
                         this.waiting = true;
                         
@@ -175,68 +201,81 @@
                         
                         this.waiting = false;
                         this.$Progress.finish();
+                    } catch ( error ) {
+                        if(error.response) {
+                            if(error.response.status == '404') {
+                                this.openNotification({
+                                    type: 'err',
+                                    message: error.response.data.message,
+                                    show: true
+                                });
+                            }
+                        }
+                        this.waiting = false;
+                        this.$Progress.fail();
+                        this.product = null;
                     }
-                } catch ( error ) {
-                    if(error.response) {
-                        if(error.response.status == '404') {
+                }
+            },
+
+            async submit() {
+                this.$v.newQuantity.$touch();
+
+                if(!this.$v.newQuantity.invalid) {
+                    try {
+                        if(this.newQuantity !== 0) {
+                            this.$Progress.start();
+                            this.waiting = true;
+                        
+                            const payload = {
+                                id: this.product.id,
+                                data: {
+                                    type: 'product',
+                                    newQuantity: this.newQuantity
+                                }
+                            }
+
+                            const response = await updateStock(payload);
+                            this.product.quantity = parseInt(response.data.quantity);
+                            this.newQuantity = 0;
+
+                            this.waiting = false;
+                            this.$Progress.finish();
+
                             this.openNotification({
-                                type: 'err',
-                                message: error.response.data.message,
+                                type: 'ok',
+                                message: response.data.message,
+                                show: true
+                            });
+                        } else {
+                            this.waiting = false;
+                            this.$Progress.fail();
+                            this.openNotification({
+                                type: 'info',
+                                message: 'Quantity must be less or greater than 0',
                                 show: true
                             });
                         }
-                    }
-                    this.waiting = false;
-                    this.$Progress.fail();
-                    this.product = null;
-                }
-            }, 250),
-
-            async submit() {
-                try {
-                    if(this.newQuantity !== 0) {
-                        this.$Progress.start();
-                        this.waiting = true;
-                       
-                        const payload = {
-                            id: this.product.id,
-                            data: {
-                                type: 'product',
-                                newQuantity: this.newQuantity
-                            }
-                        }
-
-                        const response = await updateStock(payload);
-                        this.product.quantity = parseInt(response.data.quantity);
-                        this.newQuantity = 0;
-
-                        this.waiting = false;
-                        this.$Progress.finish();
-
-                        this.openNotification({
-                            type: 'ok',
-                            message: response.data.message,
-                            show: true
-                        });
-                    } else {
-                        this.waiting = false;
+                    } catch ( error ) {
                         this.$Progress.fail();
+                        if(error.response && error.response.data.errors) {
+                            this.$v.newQuantity.$touch();
+                        }
                         this.openNotification({
-                            type: 'info',
-                            message: 'Quantity must be less or greater than 0',
+                            type: 'err',
+                            message: 'Something went wrong',
                             show: true
                         });
+                        console.log(error)
                     }
-                    
-                } catch ( error ) {
-                    console.log(error)
                 }
             },
 
             clear() {
-                this.$refs.observer.reset();
                 this.product = null;
                 this.barcode = '';
+
+                this.$v.$reset();
 
                 if(this.$route.params.barcode) {
                     this.$router.replace({name: 'ProuductsStock'})

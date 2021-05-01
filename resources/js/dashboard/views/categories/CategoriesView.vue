@@ -50,87 +50,113 @@
                 </ul>
             </div>
 
-            <div class="mt-4 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 md:mt-0 lg:flex-1">
-                <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-                    <form @submit.prevent="handleSubmit(submit)" class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
-                        <h2 class="mb-5 text-xl font-semibold">
+            <div class="mt-4 md:mt-0 lg:flex-1">
+                <form @submit.prevent="submit" class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
+                    <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
+                        <h2 class="mb-4 text-xl font-semibold">
                             Category
                         </h2> 
 
-                        <ValidationProvider vid="name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
+                        <div>
                             <label for="name" class="text-sm font-semibold">Name</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.category.name.$error"> 
+                                <p v-if="!$v.category.name.required">
+                                    The name field is required
+                                </p>
+                                <p v-if="!$v.category.name.alphaSpaces">
+                                    The name field must contain only letters and spaces
+                                </p>
+                                <p v-if="!$v.category.name.maxLength">
+                                    The name field must shorter than 50 characters
+                                </p>
+                            </div>
                             <input 
                                 id="name"
                                 name="name" 
                                 type="text" 
+                                @input="$v.category.name.$touch()"
                                 v-model="category.name" 
                                 :disabled="waiting"   
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
+                                :class="{'border-red-600' : $v.category.name.$error, 'border-green-600': $v.category.name.$dirty && !$v.category.name.$error}"
                             />
-                        </ValidationProvider> 
+                        </div> 
                         
-                        <div class="w-full flex-1 flex items-center gap-x-4">
-                            <ValidationProvider vid="vat" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full">
+                        <div class="w-full flex items-center gap-x-4">
+                            <div class="w-full">
                                 <label for="vat" class="text-sm font-semibold">VAT</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.category.vat.$error">
+                                    <p v-if="!$v.category.vat.required">
+                                        The vat field is required
+                                    </p>
+                                    <p v-if="!$v.category.vat.integer">
+                                        The vat field must be an integer
+                                    </p>
+                                    <p v-if="!$v.category.vat.minValue">
+                                        The vat field must be equal or greater than 0
+                                    </p>
+                                </div>
                                 <input 
                                     id="vat"
                                     name="vat" 
-                                    type="number" 
-                                    v-model="category.vat" 
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                    type="texy" 
+                                    @input="$v.category.vat.$touch()"
+                                    v-model="category.vat"   
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
+                                    :class="{'border-red-600': $v.category.vat.$error, 'border-green-600': $v.category.vat.$dirty && !$v.category.vat.$error}"
+                                    :disabled="waiting" 
                                 />
-                            </ValidationProvider>
+                            </div>
 
-                            <ValidationProvider vid="color" rules="required" v-slot="{  errors, failed, passed }" class="flex-grow-0 flex-shrink">
+                            <div class="flex-grow-0 flex-shrink">
                                 <label for="vat" class="text-sm font-semibold">Color</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.category.color.$error">
+                                    <p v-if="!$v.category.color.required">
+                                        The color field is required
+                                    </p>
+                                </div>
                                 <input 
                                     id="color" 
                                     name="color"
                                     type="color"
+                                    @change="$v.category.color.$touch()"
                                     v-model="category.color"
-                                    :disabled="waiting" 
                                     class="p-1 rounded border order-gray-300 outline-none"   
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                    :class="{'border-red-600': $v.category.color.$error, 'border-green-600': $v.category.color.$dirty && !$v.category.color.$error}"
+                                    :disabled="waiting" 
                                     />
-                            </ValidationProvider>
+                            </div>
                         </div>
-
                         <DiscountComponent
                             :discount="category.discount"
                             @saved="saveDiscount"
                             @removed="removeDiscount"
                         ></DiscountComponent>
-                        <div>
-                            <button 
-                                v-if="categorySelected"
-                                @click.prevent="clearSelection"
-                                class="mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
-                            >                       
-                                Clear selection
-                            </button>
-                            <button 
-                                type="submit"
-                                :disabled="waiting"  
-                                class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
-                            >
-                                <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                <span>
-                                    Submit
-                                </span>
-                            </button>
-                        </div>                   
-                        
-                    </form>
-                </ValidationObserver>
+                    </div>
+                    
+                    <div>
+                        <button 
+                            v-if="categorySelected"
+                            @click.prevent="clearSelection"
+                            class="mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
+                        >                       
+                            Clear selection
+                        </button>
+                        <button 
+                            type="submit"
+                            :disabled="waiting"  
+                            class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                        >
+                            <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>
+                                Submit
+                            </span>
+                        </button>
+                    </div>    
+                </form>
             </div>
         </div>
     </ViewContainer>
@@ -144,6 +170,10 @@
 
     import _find from 'lodash/find';
     import _debounce from 'lodash/debounce'
+    import _isEqual from 'lodash/isEqual'
+
+    import { alphaSpaces } from '../../validators/index';
+    import { required, integer, maxLength, minValue } from 'vuelidate/lib/validators'
 
     export default {
         
@@ -153,6 +183,10 @@
             showResetSearch() {
                 return this.searchInput.length > 0;
             },
+
+            rules() {
+                return _merge({}, this.serverValidation, this.clientValidation);
+            }
         },
 
         data() {
@@ -165,7 +199,25 @@
                     color: '',   
                     discount: null           
                 },
-                searchInput: ''
+                searchInput: '',
+            }
+        },
+
+        validations: {
+            category: {
+                name: {
+                    required,
+                    maxLength: maxLength(50),
+                    alphaSpaces
+                },
+                vat: {
+                    required,
+                    integer,
+                    minValue: minValue(0)
+                },
+                color: {
+                    required
+                }
             }
         },
 
@@ -189,71 +241,75 @@
 
             async submit() {
                 try {
-                    this.waiting = true;
-                    this.$Progress.start();
+                    this.$v.$touch();
 
-                    if(this.categorySelected) {
-                        const originalCategory = _find(this.getCategories, ['id', this.category.id]);
+                    if(!this.$v.$invalid) {
+                        this.waiting = true;
+                        this.$Progress.start();
 
-                        const payload = {
-                            vm: this,
-                            category: {
-                                id: originalCategory.id
+                        if(this.categorySelected) {
+                            const originalCategory = _find(this.getCategories, ['id', this.category.id]);
+
+                            const payload = {
+                                vm: this,
+                                category: {
+                                    id: originalCategory.id
+                                }
                             }
-                        }
 
-                        let counter = 0;
+                            let counter = 0;
 
-                        Object.keys(this.category).forEach(key => {
-                            if(key === 'discount' && this.category[key] ) {
-                                payload.category[key] = this.category[key];
-                                counter++;
-                            } else if(originalCategory[key] !== this.category[key]) {
-                                payload.category[key] = this.category[key];
-                                counter++;
+                            Object.keys(this.category).forEach(key => {
+                                if(key === 'discount' && !_isEqual(this.category[key], originalCategory[key])) {
+                                    payload.category[key] = this.category[key];
+                                    counter++;
+                                } else if(originalCategory[key] !== this.category[key]) {
+                                    payload.category[key] = this.category[key];
+                                    counter++;
+                                }
+                            })
+
+                            if(counter > 0) {
+                                await this.patchCategory(payload);
+
+                                this.openNotification({
+                                    type: 'ok',
+                                    show: true,
+                                    message: 'Category updated'
+                                });
+                            } else {
+                                this.openNotification({
+                                    type: 'info',
+                                    show: true,
+                                    message: 'Nothing to update'
+                                });
                             }
-                        })
-
-                        if(counter > 0) {
-                            await this.patchCategory(payload);
+                        } else {
+                            await this.postCategory(this.category);
+                            
+                            this.resetForm();
 
                             this.openNotification({
                                 type: 'ok',
                                 show: true,
-                                message: 'Category updated'
-                            });
-                        } else {
-                            this.openNotification({
-                                type: 'info',
-                                show: true,
-                                message: 'Nothing to update'
-                            });
+                                message: 'Category added'
+                            })
                         }
-                    } else {
-                        await this.postCategory(this.category);
-                        
-                        this.resetForm();
 
-                        this.openNotification({
-                            type: 'ok',
-                            show: true,
-                            message: 'Category added'
-                        })
-                    }
-
-                    this.waiting = false;
-                    this.$Progress.finish();
+                        this.waiting = false;
+                        this.$Progress.finish();
+                    }                  
 
                 } catch ( error ) {
-
                     console.log(error)
 
                     this.$Progress.fail();
                     this.waiting = false;
 
-                    if(error.response.data.errors) {
-                        this.$refs.observer.setErrors(error.response.data.errors)
-                    }  
+                    if(error.response && error.response.data.errors) {
+                        this.$v.$touch();
+                    }
+                    
                     // notificaiton
                 }
             },
@@ -316,7 +372,7 @@
             },
 
             resetForm() {
-                this.$refs.observer.reset();
+                this.$v.$reset();
                 this.category = {
                     name: '',
                     vat: '',

@@ -29,51 +29,63 @@
                 </ul>
             </div>
 
-            <div class="mt-4 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 md:mt-0 lg:flex-1">
-                <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-                    <form @submit.prevent="handleSubmit(submit)" class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
+           <div class="mt-4 md:mt-0 lg:flex-1">
+                <form @submit.prevent="submit" class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
+                    <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
                         <h2 class="mb-5 text-xl font-semibold">
                             Discount
                         </h2> 
 
-                        <div class="w-full flex-1 flex items-center gap-x-4">
-                            <ValidationProvider 
-                                vid="code" 
-                                rules="required|alpha_num|max:50" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="flex-initial"
-                            >
+                        <div class="flex-1 flex gap-x-4">
+                            <div>
                                 <label for="code" class="text-sm font-semibold">Code</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.discount.code.$error">
+                                    <p v-if="!$v.discount.code.required">
+                                        The code field is required
+                                    </p>
+                                    <p v-if="!$v.discount.code.alphaNum">
+                                        The code field must contain only letters or numbers
+                                    </p>
+                                    <p v-if="!$v.discount.code.maxLength">
+                                        The code field should not be longer than 25 characters
+                                    </p>
+                                </div>
                                 <input 
                                     id="code"
                                     name="code" 
                                     type="text" 
-                                    v-model="discount.code" 
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                    v-model="discount.code"   
+                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500" 
+                                    :class="{'border-red-600' : $v.discount.code.$error, 'border-green-600': $v.discount.code.$dirty && !$v.discount.code.$error}"
+                                    :disabled="waiting"  
+                                    @blur="$v.discount.code.$touch()"                           
                                 />
-                            </ValidationProvider>
+                            </div>
 
-                            <ValidationProvider 
-                                vid="value" 
-                                rules="required|integer" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="flex-1"
-                            >
+                            <div>
                                 <label for="value" class="text-sm font-semibold">Value</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
+                                <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.discount.value.$error">
+                                    <p v-if="!$v.discount.value.required">
+                                        The value field is required
+                                    </p>
+                                    <p v-if="!$v.discount.value.integer">
+                                        The value field must be an integer
+                                    </p>
+                                    <p v-if="!$v.discount.value.minValue">
+                                        The value must be at least 1
+                                    </p>
+                                </div>
                                 <input 
                                     id="value"
                                     name="value" 
-                                    type="number" 
-                                    v-model="discount.value" 
-                                    :disabled="waiting"   
+                                    type="text" 
+                                    v-model="discount.value"
                                     class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                    :class="{'border-red-600' : $v.discount.value.$error, 'border-green-600': $v.discount.value.$dirty && !$v.discount.value.$error}" 
+                                    :disabled="waiting"   
+                                    @blur="$v.discount.value.$touch()"
                                 />
-                            </ValidationProvider>
+                            </div>
                         </div>
 
                         <div>
@@ -114,37 +126,39 @@
                                     </span>
                                 </button>
                             </div>
-                            
-                            <button 
-                                type="submit"
-                                :disabled="waiting"  
-                                class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
-                            >
-                                <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                <span v-if="discountSelected">
-                                    Update
-                                </span>
-                                <span v-else>
-                                    Submit
-                                </span>
-                            </button>
-                        </div>          
-                    </form>
-                </ValidationObserver>
+                        </div>  
+                    </div>
+                    <div>
+                        <button 
+                            type="submit"
+                            :disabled="waiting"  
+                            class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                        >
+                            <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span v-if="discountSelected">
+                                Update
+                            </span>
+                            <span v-else>
+                                Submit
+                            </span>
+                        </button>        
+                    </div>
+                </form>
             </div>
         </div>
-
     </ViewContainer>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     import ViewContainer from '../ViewContainer';
     import _find from 'lodash/find';
+
+    import { required, integer, alphaNum, maxLength, minValue } from 'vuelidate/lib/validators'
 
     export default {
 
@@ -164,6 +178,21 @@ import { mapActions, mapGetters } from 'vuex';
             }
         },
 
+        validations: {
+            discount: {
+                code: {
+                    required,
+                    alphaNum,
+                    maxLength: maxLength(25)
+                },
+                value: {
+                    required,
+                    integer,
+                    minValue: minValue(1)
+                }
+            }
+        },
+
         methods: {
             ...mapActions('Discounts', ['postDiscount', 'patchDiscount', 'disableDiscount', 'deleteDiscount', 'restoreDiscount']),
             ...mapActions('Notification', ['openNotification']),
@@ -171,7 +200,7 @@ import { mapActions, mapGetters } from 'vuex';
             selectDiscount(id) {
                 this.discount = Object.assign({}, _find(this.getDiscounts, ['id', id]));
                 this.discountSelected = true;
-                this.$refs.observer.reset();
+                this.$v.discount.$reset();
             },
 
             clearSelection() {
@@ -180,7 +209,7 @@ import { mapActions, mapGetters } from 'vuex';
             },
 
             resetForm() {
-                this.$refs.observer.reset();
+                this.$v.discount.$reset();
                 this.discount = {
                     name: '',
                     value: '',
@@ -189,54 +218,59 @@ import { mapActions, mapGetters } from 'vuex';
             },
 
             async submit() {
-                try {
-                    this.$Progress.start();
+                this.$v.discount.$touch();
 
-                    if(this.discountSelected) {
+                if(!this.$v.discount.$invalid) {
+                    try {
+                        this.$Progress.start();
 
-                        const originalDiscount = _find(this.getDiscounts, ['id', this.discount.id]);
+                        if(this.discountSelected) {
 
-                        const payload = {
-                            vm: this,
-                            discount: {}
-                        }
+                            const originalDiscount = _find(this.getDiscounts, ['id', this.discount.id]);
 
-                        let counter = 0;
-
-                        Object.keys(this.discount).forEach(key => {
-                            if(this.discount[key] !== originalDiscount[key]) {
-                                payload.discount[key] = this.discount[key];
-                                counter++;
+                            const payload = {
+                                vm: this,
+                                discount: {}
                             }
-                        });
 
-                        if(counter > 0) {
-                            payload.discount.id = this.discount.id;
-                            await this.patchDiscount(payload);
+                            let counter = 0;
 
-                            this.openNotification({
-                                type: 'ok',
-                                show: true,
-                                message: 'Discount updated'
+                            Object.keys(this.discount).forEach(key => {
+                                if(this.discount[key] !== originalDiscount[key]) {
+                                    payload.discount[key] = this.discount[key];
+                                    counter++;
+                                }
                             });
+
+                            if(counter > 0) {
+                                payload.discount.id = this.discount.id;
+                                await this.patchDiscount(payload);
+
+                                this.openNotification({
+                                    type: 'ok',
+                                    show: true,
+                                    message: 'Discount updated'
+                                });
+                            } else {
+                                this.openNotification({
+                                    type: 'info',
+                                    show: true,
+                                    message: 'Nothing to update'
+                                });
+                            }
+                                    
                         } else {
-                            this.openNotification({
-                                type: 'info',
-                                show: true,
-                                message: 'Nothing to update'
-                            });
+                            await this.postDiscount(this.discount);
+                            this.resetForm();
                         }
-                                   
-                    } else {
-                        await this.postDiscount(this.discount);
-                        this.resetForm();
-                    }
 
-                    this.$Progress.finish();
-                } catch( error) {
-                    this.$Progress.fail();
-                    console.log(error);
+                        this.$Progress.finish();
+                    } catch( error) {
+                        this.$Progress.fail();
+                        console.log(error);
+                    }
                 }
+                
             },
 
             async callDisableDiscount(id) {
