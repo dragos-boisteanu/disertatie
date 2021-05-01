@@ -46,7 +46,8 @@ class Product extends JsonResource
             $discount['toDate'] = $this->discounted_until_date;
             
             $arrayData['discount'] = new DiscountProduct($discount);
-
+        } else {
+            $arrayData['discount'] = null;
         }
 
         return $arrayData;
