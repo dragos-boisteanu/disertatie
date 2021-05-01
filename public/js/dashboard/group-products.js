@@ -3293,25 +3293,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "validateBarcode": () => (/* binding */ validateBarcode),
 /* harmony export */   "phoneNumber": () => (/* binding */ phoneNumber)
 /* harmony export */ });
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
 /* harmony import */ var barcode_validator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! barcode-validator */ "./node_modules/barcode-validator/index.js");
 /* harmony import */ var barcode_validator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(barcode_validator__WEBPACK_IMPORTED_MODULE_0__);
 
 
 
 var validateBarcode = function validateBarcode(value) {
-  return barcode_validator__WEBPACK_IMPORTED_MODULE_0___default()(value);
+  return !vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.helpers.req(value) || barcode_validator__WEBPACK_IMPORTED_MODULE_0___default()(value);
 };
 
 var alphaSpaces = function alphaSpaces(value) {
-  return /^[a-zA-Z\ \s]+$/.test(value);
+  return !vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.helpers.req(value) || /^[a-zA-Z\ \s]+$/.test(value);
 };
 
 var alphaNumSpaces = function alphaNumSpaces(value) {
-  return /^[\w\-\s]+$/.test(value);
+  return !vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.helpers.req(value) || /^[\w\-\s]+$/.test(value);
 };
 
 var phoneNumber = function phoneNumber(value) {
-  return /^(?:(?:(?:00\s?|\+)40\s?|0)(?:7\d{2}\s?\d{3}\s?\d{3}|(21|31)\d{1}\s?\d{3}\s?\d{3}|((2|3)[3-7]\d{1})\s?\d{3}\s?\d{3}|(8|9)0\d{1}\s?\d{3}\s?\d{3}))$/.test(value);
+  return !vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.helpers.req(value) || /^(?:(?:(?:00\s?|\+)40\s?|0)(?:7\d{2}\s?\d{3}\s?\d{3}|(21|31)\d{1}\s?\d{3}\s?\d{3}|((2|3)[3-7]\d{1})\s?\d{3}\s?\d{3}|(8|9)0\d{1}\s?\d{3}\s?\d{3}))$/.test(value);
 };
 
 
