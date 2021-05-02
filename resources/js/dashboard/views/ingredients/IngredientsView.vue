@@ -46,7 +46,7 @@
                         <div class="w-full flex-1 flex gap-x-4">
                             <InputGroup 
                                 id="name"
-                                label="Label"
+                                label="Name"
                                 :hasError="$v.ingredient.name.$error"
                             >
                                 <template v-slot:errors>
@@ -73,7 +73,7 @@
 
                             <InputGroup
                                 id="name"
-                                label="Label"
+                                label="Unit"
                                 :hasError="$v.unitId.$error"
                             >
                                 <template v-slot:errors>
