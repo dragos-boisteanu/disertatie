@@ -14,22 +14,57 @@
             </div>
         </template>
 
-        <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2 ">
+        <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2">
             <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-                <div class="w-full mb-2 pb-2 border-b flex items-center gap-x-2">
-                    <div class="flex items-center w-full px-2 text-sm rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500">
+                <div class="w-full mb-2 flex items-center gap-x-2">
+                    <div class="w-full p-2 flex items-center bg-gray-50">
+                        <svg class="text-coolGray-300 fill-current" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                         <input 
                             name="search" 
                             id="search"
                             placeholder="Search category by name"
-                            class="flex-1 outline-none py-2"
+                            class="w-full outline-none px-2 rounded bg-gray-50"
                             v-model="searchInput"
                             @input="search"
                         >
                     </div>
                 </div>
+
+                <table class="px-2 w-full rounded-sm max-h-80 md:max-h-96">
+                    <thead class="w-full bg-gray-700 text-orange-500">
+                        <tr class="text-left text-sm">
+                            <th class="p-2 text-center">Index</th>
+                            <th class="p-2">Color</th>
+                            <th class="p-2">Name</th>
+                            <th class="p-2">Vat</th>
+                            <th class="p-2">Count</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="max-h-36 overflow-y-auto">
+                        <tr 
+                            v-for="(category, index) in getCategories" :key="category.id"
+                            @click="selectCategory(category.id)"
+                            class="transition-shadow transition-transform duration-500 ease-in-out text-sm rounded-md cursor-pointer border-white transform hover:-translate-y-1
+                            hover:bg-gray-50 hover:shadow-md"
+                        >
+                            <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
+                            <td class="p-2">
+                                <div class="rounded w-4 h-4" :style="{background: category.color}"></div>
+                            </td>
+                            <td class="p-2">{{ category.name }}</td>
+                            <td class="p-2">{{ category.vat }} %</td>
+                            <td class="p-2">{{ category.productsCount }}</td>
+                            <td class="p-2 flex items-center justify-center">
+                                <button v-if="allowRemoval(category.productsCount)" @click="removeCategory(category.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 
-                <ul class="px-2 mt-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
+                <!-- <ul class="px-2 mt-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
                     <li 
                         v-for="(category, index) in getCategories" :key="category.id"
                         class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
@@ -47,7 +82,7 @@
                             <button v-if="allowRemoval(category.productsCount)" @click="removeCategory(category.id)"> X</button>
                         </div>
                     </li>
-                </ul>
+                </ul> -->
             </div>
 
             <div class="mt-4 md:mt-0 lg:flex-1">
@@ -320,6 +355,9 @@
 
                     await this.deleteCategory(id);
 
+                    if(this.categorySelected) {
+                        this.clearSelection();
+                    }
                     this.$Progress.finish();
                     this.openNotification({
                         type: 'ok',
@@ -350,11 +388,10 @@
                     this.$Progress.start();
 
                     if(this.searchInput.length > 0) {
-                         await this.searchCategory(this.searchInput);
+                        await this.searchCategory(this.searchInput);
                     } else {
                         await this.fetchCategories();
                     }
-                    
                     this.$Progress.finish();
                 } catch ( error ) {
                     this.$Progress.fail();

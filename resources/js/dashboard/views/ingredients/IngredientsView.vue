@@ -6,23 +6,33 @@
 
         <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2 ">
             <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-                <ul class="px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
-                    <li 
-                        v-for="(ingredient, index) in getIngredients" :key="ingredient.id"
-                        class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
-                    >
-                        <div 
+                <table class="px-2 w-full rounded-sm max-h-80 md:max-h-96">
+                    <thead class="w-full bg-gray-700 text-orange-500">
+                        <tr class="text-left text-sm">
+                            <th class="p-2 text-center">Index</th>
+                            <th class="p-2">Name</th>
+                            <th class="p-2">Quantity</th>
+                            <th class="p-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="overflow-y-auto">
+                        <tr 
+                            v-for="(ingredient, index) in getIngredients" :key="ingredient.id"
                             @click="selectIngredient(ingredient.id)"
-                            class="cursor-pointer flex items-center gap-x-2">
-                            <span>{{ index + 1 }}.</span>
-                            <span>{{ ingredient.name }}</span>
-                            <span>{{ ingredient.stockQuantity }} {{ ingredient.unit.name }}</span>
-                        </div>
-                        <div>
-                            <button @click="removeIngredient(ingredient.id)"> X</button>
-                        </div>
-                    </li>
-                </ul>
+                            class="transition-shadow transition-transform duration-500 ease-in-out text-sm rounded-md cursor-pointer border-white transform hover:-translate-y-1
+                            hover:bg-gray-50 hover:shadow-md"
+                        >
+                            <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
+                            <td class="p-2">{{ ingredient.name }}</td>
+                            <td class="p-2">{{ ingredient.stockQuantity }} {{ ingredient.unit.name }}</td>
+                            <td class="p-2 flex items-center justify-center">
+                                <button @click="removeIngredient(ingredient.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="mt-4 md:mt-0 lg:flex-1">
@@ -214,8 +224,6 @@
 
                 if(!this.$v.$invalid) {
                     try {
-                        this.$Progress.start();
-
                         if(this.ingredientSelected) {
 
                             const originalIngredient = _find(this.getIngredients, ['id', this.ingredient.id]);
@@ -237,6 +245,8 @@
                             });
 
                             if(counter > 0 ) {
+                                this.$Progress.start();
+
                                 await this.patchIngredient(payload);
                             } else {
                                 this.openNotification({
@@ -247,6 +257,8 @@
                             }
                             
                         } else {
+                            this.$Progress.start();
+
                             await this.postIngredient(this.ingredient);
                             this.resetForm();
                         }
@@ -272,6 +284,10 @@
                     this.$Progress.start();
 
                     await this.deleteIngredient(id);
+
+                    if(this.selectIngredient) {
+                        this.clearSelection();
+                    }
 
                     this.$Progress.finish();
                 } catch ( error ) {
