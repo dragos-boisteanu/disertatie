@@ -26,7 +26,7 @@
             </div>
 
             <div class="mt-4 md:mt-0 lg:flex-1">
-                <form @submit.prevent="submit" class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
+                <form class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
                     <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
 
                         <h2 class="mb-5 text-xl font-semibold">
@@ -34,9 +34,12 @@
                         </h2> 
 
                         <div class="w-full flex-1 flex gap-x-4">
-                            <div class="flex-grow flex-1">
-                                <label for="name" class="text-sm font-semibold">Nane</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.ingredient.name.$error">
+                            <InputGroup 
+                                id="name"
+                                label="Label"
+                                :hasError="$v.ingredient.name.$error"
+                            >
+                                <template v-slot:errors>
                                     <p v-if="!$v.ingredient.name.required">
                                         The name field is required
                                     </p>
@@ -46,77 +49,81 @@
                                     <p v-if="!$v.ingredient.name.maxLength">
                                         The name field must be no longer than 50 characters
                                     </p>
-                                </div>
-                                <input 
-                                    id="name"
-                                    name="name" 
-                                    type="text" 
+                                </template>
+                                <Input 
                                     v-model="ingredient.name" 
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600' : $v.ingredient.name.$error, 'border-green-600': $v.ingredient.name.$dirty && !$v.ingredient.name.$error}"
+                                    id="name"
+                                    name="name"
+                                    :eclass="{'border-red-600' : $v.ingredient.name.$error, 'border-green-600': $v.ingredient.name.$dirty && !$v.ingredient.name.$error}"
                                     :disabled="disabled"
-                                    @blur="$v.ingredient.name.$touch()"
-                                />
-                            </div> 
+                                    @blur.native="$v.ingredient.name.$touch()"
+                                >
+                                </Input>
+                            </InputGroup> 
 
-                            <div class="flex-0">
-                                <label for="vat" class="text-sm font-semibold">Unit</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.ingredient.unit.id.$error">
-                                    <p v-if="!$v.ingredient.unit.id.required">
+                            <InputGroup
+                                id="name"
+                                label="Label"
+                                :hasError="$v.unitId.$error"
+                            >
+                                <template v-slot:errors>
+                                    <p v-if="!$v.unitId.required">
                                         The unit field is required
                                     </p> 
-                                </div>
-                                <select 
+                                </template>
+                                <Select
+                                    v-model="unitId" 
                                     id="unit_id"
-                                    name="weight units" 
-                                    type="text" 
-                                    v-model="ingredient.unit" 
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600' : $v.ingredient.unit.id.$error, 'border-green-600': $v.ingredient.unit.id.$dirty && !$v.ingredient.unit.id.$error}"
+                                    name="weight_units"
+                                    :eclass="{'border-red-600' : $v.unitId.$error, 'border-green-600': $v.unitId.$dirty && !$v.unitId.$error}"
                                     :disabled="disabled" 
-                                    @blur="$v.ingredient.unit.id.$touch()"
+                                    @blur.native="$v.unitId.$touch()"
+                                    @change.native="selectUnit"
                                 >
                                     <option value="" disabled>Select unit</option>
-                                    <option :value="unit" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
-                                </select>
-                            </div>
+                                    <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
+                                </Select>
+                            </InputGroup>
                         </div>    
                     </div>
                     <div>
-                        <button 
+                        <Button 
                             v-if="ingredientSelected"
-                            @click.prevent="clearSelection"
-                            class="mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
+                            type="secondary"
+                            @click.native.prevent="clearSelection"
                         >                       
                             Clear selection
-                        </button>
-                        <button 
-                            type="submit"
-                            :disabled="disabled"  
-                            class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                        </Button>
+                        <Button 
+                            type="primary"
+                            :disabled="disabled"
+                            :waiting="waiting"
+                            @click.native.prevent="submit"
                         >
-                            <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
                             <span v-if="ingredientSelected">
                                 Update
                             </span>
                             <span v-else>
                                 Submit
                             </span>
-                        </button>
+                        </Button>
                     </div>                              
                 </form>
             </div>
         </div>
-
     </ViewContainer>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex'
+
     import ViewContainer from '../ViewContainer'
+
+    import Input from '../../components/inputs/TextInputComponent';
+    import Select from '../../components/inputs/SelectInputComponent';
+    import Button from '../../components/buttons/ButtonComponent';
+    import InputGroup from '../../components/inputs/InputGroupComponent';
+
     import _find from 'lodash/find';
 
     import { required, maxLength, } from 'vuelidate/lib/validators'
@@ -143,6 +150,7 @@
             return {
                 waiting: false,
                 ingredientSelected: false,
+                unitId: '',
                 ingredient: {
                     id: '',
                     name: '',
@@ -161,11 +169,9 @@
                     alphaSpaces,
                     maxLength: maxLength(50),
                 },
-                unit: {
-                    id: {
-                        required
-                    }
-                }
+            },
+            unitId: { 
+                required
             }
         },
 
@@ -176,6 +182,7 @@
             selectIngredient(id) {
                 this.ingredientSelected = true;
                 this.ingredient = Object.assign(this.ingredient, _find(this.getIngredients, ['id', id]));
+                this.unitId = String(this.ingredient.unit.id)
                 this.$v.$reset();
             },
 
@@ -186,6 +193,7 @@
 
             resetForm() {
                 this.$v.$reset();
+                this.unitId = '';
                 this.ingredient = {
                     id: '',
                     name: '',
@@ -194,6 +202,10 @@
                         name: '',
                     }
                 }
+            },
+
+            selectUnit() {
+                this.ingredient.unit = _find(this.getUnits, ['id', parseInt(this.unitId)]);
             },
 
             async submit() {
@@ -271,7 +283,11 @@
         },
 
         components: {
-            ViewContainer
+            ViewContainer,
+            Input,
+            Select,
+            Button,
+            InputGroup
         }
     }
 </script>
