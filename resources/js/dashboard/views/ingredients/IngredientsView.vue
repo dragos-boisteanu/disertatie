@@ -19,14 +19,14 @@
                         <tr 
                             v-for="(ingredient, index) in getIngredients" :key="ingredient.id"
                             @click="selectIngredient(ingredient.id)"
-                            class="transition-shadow transition-transform duration-500 ease-in-out text-sm rounded-md cursor-pointer border-white transform hover:-translate-y-1
+                            class="transition-shadow transition-transform duration-500 ease-in-out text-sm rounded-md cursor-pointer border-white transform hover:scale-105
                             hover:bg-gray-50 hover:shadow-md"
                         >
                             <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
                             <td class="p-2">{{ ingredient.name }}</td>
                             <td class="p-2">{{ ingredient.stockQuantity }} {{ ingredient.unit.name }}</td>
                             <td class="p-2 flex items-center justify-center">
-                                <button @click="removeIngredient(ingredient.id)">
+                                <button v-if="allowRemoval(ingredient.productsCount)" @click="removeIngredient(ingredient.id)">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
                                 </button>
                             </td>
@@ -188,6 +188,10 @@
         methods: {
             ...mapActions('Ingredients', ['postIngredient', 'patchIngredient', 'deleteIngredient']),
             ...mapActions('Notification', ['openNotification']),
+
+            allowRemoval(productsCount) {
+                return parseInt(productsCount) === 0
+            },
 
             selectIngredient(id) {
                 this.ingredientSelected = true;

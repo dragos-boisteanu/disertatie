@@ -218,23 +218,19 @@
             ...mapActions('Notification', ['openNotification']),
 
             async findIngredient() {
-            
-                if(true) {
-                    console.log('here2')
+                if(!this.$v.filter.id.$invalid || !this.$v.filter.name.$invalid) {
                     try {
                         this.$Progress.start();
 
                         let response = null;
 
                         if(this.filter.id.length > 0) {
-                            console.log('here1')
                             this.$v.filter.id.$touch();
                             if(!this.$v.filter.id.$invalid) {
                                 response = await downloadIngredientStockDetails(this.filter.id);
                             }
                             
                         } else {
-                            console.log('here')
                             this.$v.filter.name.$touch()
                             if(!this.$v.filter.name.$invalid) {
                                 response = await downloadIngredientStockDetails(this.filter.name)
@@ -254,6 +250,8 @@
                                 show: true,
                                 message: 'No ingredient found'
                             });
+
+                            this.ingredient = null;
                         }
                         // this.$v.filter.$touch();
                         this.$Progress.fail();

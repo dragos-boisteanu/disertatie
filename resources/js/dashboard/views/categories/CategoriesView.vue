@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <table class="px-2 w-full rounded-sm max-h-80 md:max-h-96">
+                <table class="px-2 w-full table-auto rounded-sm max-h-80 md:max-h-96">
                     <thead class="w-full bg-gray-700 text-orange-500">
                         <tr class="text-left text-sm">
                             <th class="p-2 text-center">Index</th>
@@ -45,7 +45,7 @@
                         <tr 
                             v-for="(category, index) in getCategories" :key="category.id"
                             @click="selectCategory(category.id)"
-                            class="transition-shadow transition-transform duration-500 ease-in-out text-sm rounded-md cursor-pointer border-white transform hover:-translate-y-1
+                            class="transition-shadow transition-transform duration-500 ease-in-out text-sm rounded-md cursor-pointer border-white transform hover:scale-105
                             hover:bg-gray-50 hover:shadow-md"
                         >
                             <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
@@ -54,35 +54,15 @@
                             </td>
                             <td class="p-2">{{ category.name }}</td>
                             <td class="p-2">{{ category.vat }} %</td>
-                            <td class="p-2">{{ category.productsCount }}</td>
-                            <td class="p-2 flex items-center justify-center">
-                                <button v-if="allowRemoval(category.productsCount)" @click="removeCategory(category.id)">
+                            <td class="p-2 max-w-4">{{ category.productsCount }}</td>
+                            <td class="p-2">
+                                <button class="flex items-center justify-center" v-if="allowRemoval(category.productsCount)" @click="removeCategory(category.id)">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
                                 </button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                
-                <!-- <ul class="px-2 mt-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
-                    <li 
-                        v-for="(category, index) in getCategories" :key="category.id"
-                        class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
-                    >
-                        <div 
-                            @click="selectCategory(category.id)"
-                            class="cursor-pointer flex items-center gap-x-2">
-                            <span>{{ index + 1 }}.</span>
-                            <span class="rounded w-4 h-4" :style="{background: category.color}"></span>
-                            <span>{{ category.name }}</span>
-                            <span>{{ category.vat }} %</span>
-                            <span> ({{category.productsCount}})</span>
-                        </div>
-                        <div>
-                            <button v-if="allowRemoval(category.productsCount)" @click="removeCategory(category.id)"> X</button>
-                        </div>
-                    </li>
-                </ul> -->
             </div>
 
             <div class="mt-4 md:mt-0 lg:flex-1">
@@ -109,7 +89,7 @@
                                 id="name"
                                 name="name" 
                                 type="text" 
-                                @input="$v.category.name.$touch()"
+                                @blur="$v.category.name.$touch()"
                                 v-model="category.name" 
                                 :disabled="waiting"   
                                 class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
@@ -267,6 +247,7 @@
             selectCategory(id) {
                 this.category = Object.assign(this.category, _find(this.getCategories, ['id', id]));
                 this.categorySelected = true;
+                this.$v.$reset();
             },
 
             clearSelection() {
