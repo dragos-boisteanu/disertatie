@@ -150,7 +150,6 @@
             },
 
             disabled() {
-                console.log(this.canNotCreate)
                 return this.waiting || this.canNotCreate
             }
 

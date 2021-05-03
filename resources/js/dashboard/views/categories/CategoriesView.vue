@@ -72,35 +72,39 @@
                             Category
                         </h2> 
 
-                        <div>
-                            <label for="name" class="text-sm font-semibold">Name</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.category.name.$error"> 
+                        <InputGroup 
+                            id="name"
+                            label="Name"
+                            :hasError="$v.category.name.$error"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.category.name.required">
-                                    The name field is required
+                                    The vat field is required
                                 </p>
-                                <p v-if="!$v.category.name.alphaSpaces">
-                                    The name field must contain only letters and spaces
+                                <p v-if="!$v.category.name.integer">
+                                    The vat field must be an integer
                                 </p>
-                                <p v-if="!$v.category.name.maxLength">
-                                    The name field must shorter than 50 characters
+                                <p v-if="!$v.category.name.minValue">
+                                    The vat field must be equal or greater than 0
                                 </p>
-                            </div>
-                            <input 
-                                id="name"
-                                name="name" 
-                                type="text" 
-                                @blur="$v.category.name.$touch()"
+                            </template>
+                           <Input 
                                 v-model="category.name" 
-                                :disabled="waiting"   
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
-                                :class="{'border-red-600' : $v.category.name.$error, 'border-green-600': $v.category.name.$dirty && !$v.category.name.$error}"
-                            />
-                        </div> 
-                        
+                                id="name"
+                                name="name"
+                                :eclass="{'border-red-600' : $v.category.name.$error, 'border-green-600': $v.category.name.$dirty && !$v.category.name.$error}"
+                                :disabled="waiting"
+                                @blur.native="$v.category.name.$touch()"
+                            ></Input>
+                        </InputGroup>
+                            
                         <div class="w-full flex items-center gap-x-4">
-                            <div class="w-full">
-                                <label for="vat" class="text-sm font-semibold">VAT</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.category.vat.$error">
+                            <InputGroup 
+                                id="vat"
+                                label="VAT"
+                                :hasError="$v.category.vat.$error"
+                            >
+                                <template v-slot:errors>
                                     <p v-if="!$v.category.vat.required">
                                         The vat field is required
                                     </p>
@@ -110,27 +114,27 @@
                                     <p v-if="!$v.category.vat.minValue">
                                         The vat field must be equal or greater than 0
                                     </p>
-                                </div>
-                                <input 
+                                </template>
+                                <Input 
+                                    v-model="category.vat" 
                                     id="vat"
-                                    name="vat" 
-                                    type="texy" 
-                                    @input="$v.category.vat.$touch()"
-                                    v-model="category.vat"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
-                                    :class="{'border-red-600': $v.category.vat.$error, 'border-green-600': $v.category.vat.$dirty && !$v.category.vat.$error}"
-                                    :disabled="waiting" 
-                                />
-                            </div>
-
-                            <div class="flex-grow-0 flex-shrink">
-                                <label for="vat" class="text-sm font-semibold">Color</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.category.color.$error">
+                                    name="vat"
+                                    :eclass="{'border-red-600' : $v.category.vat.$error, 'border-green-600': $v.category.vat.$dirty && !$v.category.vat.$error}"
+                                    :disabled="waiting"
+                                    @blur.native="$v.category.vat.$touch()"
+                                ></Input>
+                            </InputGroup>
+                            <InputGroup
+                                id="color"
+                                label="Color"
+                                :hasError="$v.category.color.$error"
+                            >
+                                <template slot="errors">
                                     <p v-if="!$v.category.color.required">
                                         The color field is required
                                     </p>
-                                </div>
-                                <input 
+                                </template>
+                                <input
                                     id="color" 
                                     name="color"
                                     type="color"
@@ -140,7 +144,7 @@
                                     :class="{'border-red-600': $v.category.color.$error, 'border-green-600': $v.category.color.$dirty && !$v.category.color.$error}"
                                     :disabled="waiting" 
                                     />
-                            </div>
+                            </InputGroup>
                         </div>
                         <DiscountComponent
                             :discount="category.discount"
@@ -150,26 +154,25 @@
                     </div>
                     
                     <div>
-                        <button 
+                        <Button 
                             v-if="categorySelected"
-                            @click.prevent="clearSelection"
-                            class="mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
+                            type="secondary"
+                            @click.native.prevent="clearSelection"
                         >                       
                             Clear selection
-                        </button>
-                        <button 
-                            type="submit"
-                            :disabled="waiting"  
-                            class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                        </Button>
+                        <Button 
+                            type="primary"
+                            :waiting="waiting"
+                            @click.native.prevent="submit"
                         >
-                            <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span>
+                            <span v-if="categorySelected">
+                                Update
+                            </span>
+                            <span v-else>
                                 Submit
                             </span>
-                        </button>
+                        </Button>
                     </div>    
                 </form>
             </div>
@@ -182,6 +185,11 @@
     import { mapGetters, mapActions } from 'vuex';
     import ViewContainer from '../ViewContainer';
     import DiscountComponent from '../../components/discounts/DiscountComponent';
+
+    import Input from '../../components/inputs/TextInputComponent';
+    import Select from '../../components/inputs/SelectInputComponent';
+    import Button from '../../components/buttons/ButtonComponent';
+    import InputGroup from '../../components/inputs/InputGroupComponent';
 
     import _find from 'lodash/find';
     import _debounce from 'lodash/debounce'
@@ -212,7 +220,7 @@
                     name: '',
                     vat: '',     
                     color: '',   
-                    discount: null           
+                    discount: null,        
                 },
                 searchInput: '',
             }
@@ -301,6 +309,11 @@
                                 });
                             }
                         } else {
+
+                            if(this.category.discount === null) {
+                                delete this.category.discount
+                            }
+
                             await this.postCategory(this.category);
                             
                             this.resetForm();
@@ -402,6 +415,10 @@
 
         components: {
             ViewContainer,
+            Input,
+            Select,
+            Button,
+            InputGroup,
             DiscountComponent
         }
     }
