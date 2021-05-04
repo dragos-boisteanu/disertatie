@@ -15,7 +15,7 @@
 <script>
 
     export default {
-        props:{
+        props: {
             id: {
                 type: String,
                 required: false,
@@ -25,7 +25,7 @@
                 required: false,
             },
             value:{
-                type: String,
+                type: [String, Number],
                 required: true,
             },
             eclass: {
@@ -37,7 +37,7 @@
                 required: false,
                 default: false,
             },
-        }
+        },
     }
 
 </script>

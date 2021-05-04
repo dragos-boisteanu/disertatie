@@ -1,29 +1,32 @@
 <template>
-    <Modal>
-
+    <Modal
+        @close="close"
+    >
         <template slot="header">
             Discount
         </template>
      
         <template slot="body">
             <div class="flex flex-col gap-3">
-                <div class="w-full">
-                    <label for="discount" class="text-sm font-semibold">Discount</label>
-                    <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.selectedDiscountId.$error">
+                <InputGroup
+                    id="discount"
+                    label="Discount"
+                    :hasError="$v.selectedDiscountId.$error"
+                >
+                    <template v-slot:errors>
                         <p v-if="!$v.selectedDiscountId.required">
                             A discount must be selected
                         </p>
-                    </div>
-                    <select 
+                    </template>
+                    <Select 
+                        v-model="selectedDiscountId" 
                         id="discount"
                         name="discount"
-                        v-model="selectedDiscountId" 
-                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                        :class="{'border-red-600': $v.selectedDiscountId.$error}"
-                        @change="selectDiscount"
-                        @blur="$v.selectedDiscountId.$touch()"
+                        :eclass="{'border-red-600': $v.selectedDiscountId.$error}"
+                        @change.native="selectDiscount"
+                        @blur.native="$v.selectedDiscountId.$touch()"
                     >
-                        <option value="" disabled>Select discount</option>
+                        <option value="0" disabled>Select discount</option>
                         <option 
                             v-for="availableDiscount in availableDiscounts" 
                             :key="availableDiscount.id"
@@ -31,56 +34,62 @@
                             class="flex items-center gap-x-3 disabled:bg-gray-100"
                         >
                             <span>
-                                <span>
-                                    {{ availableDiscount.code }}
-                                </span> 
-                                <span>
-                                    {{ availableDiscount.value }}%
-                                </span>
+                                {{ availableDiscount.code }}
+                            </span> 
+                            <span>
+                                {{ availableDiscount.value }}%
                             </span>
                         </option>
-                    </select>
-                </div>
+                    </Select>
+                </InputGroup>
 
                 <div class="flex flex-col gap-y-4 sm:flex-row items-center justify-between mt-3 gap-x-4">
-                    <div class="w-full flex flex-col gap-y-2">
-                        <label for="from" class="text-sm font-semibold">From</label>
-                        <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.discount.fromDate.$error"> 
+                    <InputGroup
+                        id="from"
+                        label="From"
+                        :hasError="$v.discount.fromDate.$error"
+                    >
+                        <template v-slot:errors> 
                             <p v-if="!$v.discount.fromDate.required">
                                 From date is required
                             </p>
-                        </div>
-                        <date-picker
+                        </template>
+                        <date-picker 
                             v-model="discount.fromDate" 
                             type="datetime"
                             placeholder="Start date"
                             confirm-text="Ok"
                             valueType="format"
+                            :confirm="true"
                             :disabled="enableFromDate"
                             :disabled-date="disableDatesInterval"
                             @blur="$v.discount.fromDate.$touch()"
                         >
                         </date-picker>
-                    </div>
-                    <div class="w-full flex flex-col gap-y-2">
-                        <label for="from" class="text-sm font-semibold">To</label>
-                        <div class="text-xs text-red-600 font-semibold" v-if="$v.discount.toDate.$error"> 
+                    </InputGroup>
+                    <InputGroup
+                        id="to"
+                        label="To"
+                        :hasError="$v.discount.toDate.$error"
+                    >
+                        <template v-slot:errors> 
                             <p v-if="!$v.discount.toDate.required">
                                 To date is required
                             </p>
-                        </div>
+                        </template>
                         <date-picker 
                             v-model="discount.toDate" 
                             type="datetime"
                             placeholder="End date"
                             confirm-text="Ok"
                             valueType="format"
+                            :confirm="true"
                             :disabled="enableToDate"
                             :disabled-date="disableBeforeFromDate"
                             @blur="$v.discount.toDate.$touch()"
                         >
                         </date-picker>
-                    </div>
+                    </InputGroup>
                 </div>
 
             </div>
@@ -100,7 +109,6 @@
                 Cancel
             </button>
         </template>
-
     </Modal>
 </template>
 
@@ -112,6 +120,9 @@
 
     import Modal from './ModalComponent';
     import DatePicker from 'vue2-datepicker';
+    import Input from '../inputs/TextInputComponent';
+    import Select from '../inputs/SelectInputComponent';
+    import InputGroup from '../inputs/InputGroupComponent';
 
     export default {
 
@@ -131,7 +142,7 @@
             },
 
             enableFromDate(){
-                return this.selectedDiscountId === '' 
+                return this.selectedDiscountId === '0' 
             }
         },
 
@@ -147,9 +158,7 @@
         data() {
             return {
                 availableDiscounts: [],
-
-                selectedDiscountId: '',
-
+                selectedDiscountId: '0',
                 discount: {
                     id: '0',
                     fromDate: '',
@@ -174,7 +183,6 @@
 
         methods: {
             submit() {
-
                 this.$v.$touch();
 
                 if(!this.$v.$invalid) {
@@ -184,7 +192,7 @@
             },
 
             selectDiscount() {
-                this.discount = _find(this.availableDiscounts, ['id', this.selectedDiscountId]);
+                this.discount = _find(this.availableDiscounts, ['id', parseInt(this.selectedDiscountId)]);
             },
 
             disableDatesInterval(date) {
@@ -209,7 +217,11 @@
 
         components: {
            Modal, 
-           DatePicker
+           DatePicker,
+           Input,
+           Select,
+           InputGroup
+           
         }
     }
 </script>

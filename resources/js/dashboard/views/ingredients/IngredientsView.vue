@@ -71,7 +71,7 @@
                             </InputGroup> 
 
                             <InputGroup
-                                id="name"
+                                id="unitId"
                                 label="Unit"
                                 :hasError="$v.unitId.$error"
                             >
@@ -82,7 +82,7 @@
                                 </template>
                                 <Select
                                     v-model="unitId" 
-                                    id="unit_id"
+                                    id="unitId"
                                     name="weight_units"
                                     :eclass="{'border-red-600' : $v.unitId.$error, 'border-green-600': $v.unitId.$dirty && !$v.unitId.$error}"
                                     :disabled="disabled" 

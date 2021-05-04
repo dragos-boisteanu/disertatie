@@ -1,5 +1,7 @@
 <template>
-    <Modal>
+    <Modal
+     @close="close"
+    >
 
         <template slot="header">
             Ingredient
@@ -7,39 +9,44 @@
 
         <template slot="body">
             <form class="flex flex-col gap-3">
-               <div class="w-full flex flex-col gap-y-1" >
-                    <label for="ingredient" class="text-sm font-semibold">Ingredient</label>
-                        <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.selectedIngredientId.$error">
-                            <p v-if="!$v.selectedIngredientId.required">
-                                Ingredient field is required
-                            </p> 
-                        </div>
-                        <select 
-                            id="ingredient"
-                            name="ingredient"
-                            v-model="selectedIngredientId" 
-                            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                            :disabled="isEditMode"
-                            :class="{'border-red-600': $v.selectedIngredientId.$error, 'border-green-600': $v.selectedIngredientId.$dirty && !$v.selectedIngredientId.$error}"
-                            @change="selectIngredient"
-                            @blur="$v.selectedIngredientId.$touch()"
+                <InputGroup
+                    id="ingredient"
+                    label="Ingredient"
+                    :hasError="$v.selectedIngredientId.$error"
+                >
+                    <template v-slot:errors>
+                        <p v-if="!$v.selectedIngredientId.required">
+                            Ingredient field is required
+                        </p> 
+                    </template>
+                    <Select 
+                        v-model="selectedIngredientId"
+                        id="ingredient"
+                        name="ingredient" 
+                        :disabled="isEditMode"
+                        :eclass="{'border-red-600': $v.selectedIngredientId.$error, 'border-green-600': $v.selectedIngredientId.$dirty && !$v.selectedIngredientId.$error}"
+                        @change.native="selectIngredient"
+                        @blur.native="$v.selectedIngredientId.$touch()"
+                    >
+                        <option value="" disabled>Select ingredient</option>
+                        <option 
+                            v-for="ingredient in ingredients" 
+                            :key="ingredient.id"
+                            :value="ingredient.id"
+                            :disabled="ingredient.exists"
+                            class="flex items-center gap-x-3 disabled:bg-gray-100"
                         >
-                            <option value="" disabled>Select ingredient</option>
-                            <option 
-                                v-for="ingredient in ingredients" 
-                                :key="ingredient.id"
-                                :value="ingredient.id"
-                                :disabled="ingredient.exists"
-                                class="flex items-center gap-x-3 disabled:bg-gray-100"
-                            >
-                                {{ingredient.name}}
-                            </option>
-                        </select>
-                </div>
+                            {{ingredient.name}}
+                        </option>
+                    </Select>
+                </InputGroup>
                 
-                <div class="w-full flex flex-col gap-y-1" >
-                    <label for="quantity" class="text-sm font-semibold">Quantity</label>
-                    <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.ingredient.$error">
+                <InputGroup
+                    id="quantity"
+                    label="Quantity"
+                    :hasError="$v.ingredient.quantity.$error"
+                >
+                    <template v-slot:errors>
                         <p v-if="!$v.ingredient.quantity.required">
                             The quantity field is required
                         </p>
@@ -49,17 +56,15 @@
                         <p v-if="!$v.ingredient.quantity.minValue">
                             The quantity field must be at least 1
                         </p>
-                    </div>
-                    <input 
+                    </template>
+                    <Input 
+                        v-model="ingredient.quantity"  
                         id="quantity"
                         name="quantity" 
-                        type="quantity" 
-                        v-model="ingredient.quantity"  
-                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"  
-                        :class="{'border-red-600': $v.ingredient.quantity.$error, 'border-green-600': $v.ingredient.quantity.$dirty && !$v.ingredient.quantity.$error}"
-                        @input="$v.ingredient.quantity.$touch()"
+                        :eclass="{'border-red-600': $v.ingredient.quantity.$error, 'border-green-600': $v.ingredient.quantity.$dirty && !$v.ingredient.quantity.$error}"
+                        @input.native="$v.ingredient.quantity.$touch()"
                     />
-                </div>
+                </InputGroup>
             </form>
         </template>
 
@@ -91,6 +96,9 @@
 <script>
     import { mapGetters } from 'vuex'
     import Modal from './ModalComponent'
+    import Input from '../inputs/TextInputComponent';
+    import Select from '../inputs/SelectInputComponent';
+    import InputGroup from '../inputs/InputGroupComponent';
 
     import _find from 'lodash/find'
     import _findIndex from 'lodash/findIndex'
@@ -193,7 +201,10 @@
 
 
         components: {
-            Modal
+            Modal,
+            Input,
+            Select,
+            InputGroup
         }
     }
 </script>
