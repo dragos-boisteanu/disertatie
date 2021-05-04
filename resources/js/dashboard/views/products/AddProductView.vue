@@ -18,71 +18,79 @@
                     ></ImageUploadComponent>
 
                     <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                        <div class="w-full" >
-                            <label for="name" class="text-sm font-semibold">Barcode</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.product.barcode.$error"> 
+                        <InputGroup
+                            id="barcode"
+                            label="Barcode"
+                            :hasError="$v.product.barcode.$error"
+                            :eclass="{'flex-1': true}"
+                        >
+                            <template v-slot:errors> 
                                 <p v-if="!$v.product.barcode.required">
                                     The barcode field is required
                                 </p>
-                            </div>
+                            </template>
                             <div class="flex gap-x-3 items-center relative flex-1">
-                                <input 
+                                <Input 
+                                    v-model="product.barcode"
                                     id="barcode"
                                     name="barcode" 
                                     type="text" 
-                                    v-model="product.barcode"
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500" 
                                     :class="{'border-red-600' : $v.product.barcode.$error, 'border-green-600': $v.product.barcode.$dirty && !$v.product.barcode.$error}"   
                                     :disabled="waiting"
-                                    @blur="getProduct"
-                                    @input="$v.product.barcode.$touch()"
+                                    @blur.native="getProduct"
+                                    @input.native="$v.product.barcode.$touch()"
                                 />
                                 <svg v-show="checkingBarcode" class="animate-spin mr-3 h-5 w-5 text-lightBlue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                             </div>
-                        </div>
+                        </InputGroup>
 
-                        <div class="w-full">
-                            <label for="name" class="text-sm font-semibold">Name</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.product.name.$error">
+                        <InputGroup
+                            id="name"
+                            label="Name"
+                            :hasError="$v.product.name.$error"
+                            :eclass="{'flex-1': true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.product.name.required">
                                     The name field is required
                                 </p>
                                 <p v-if="!$v.product.name.maxLength">
                                     The namme field must be shorter than 50 characters
                                 </p>
-                                <p v-if="!$v.localProduct.name.alphaSpaces">
+                                <p v-if="!$v.product.name.alphaSpaces">
                                     The name field must contain only letters and spaces
                                 </p>
-                            </div>
-                            <input 
-                                id="firstName"
-                                name="first name" 
-                                type="text" 
+                            </template>
+                            <Input 
                                 v-model="product.name" 
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                id="firstName"
+                                name="first name"  
                                 :class="{'border-red-600' : $v.product.name.$error, 'border-green-600': $v.product.name.$dirty && !$v.product.name.$error}"
                                 :disabled="waiting" 
-                                @input="$v.product.name.$touch()"
+                                @input.native="$v.product.name.$touch()"
                             />
-                        </div>
+                        </InputGroup>
                     </div>
 
-                    <div class="w-full" >
-                        <label for="name" class="text-sm font-semibold">Description</label>
-                        <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.product.description.$error">
+                    <InputGroup 
+                        id="name"
+                        label="Description"
+                        :hasError="$v.product.description.$error"
+                    >
+                        <template v-slot:errors>
                             <p v-if="!$v.product.description.required">
                                 The description field is required
                             </p>
                             <p v-if="!$v.product.description.maxLength">
                                 The description field must be shorter than 255 characters
                             </p>
-                            <p v-if="!$v.localProduct.description.alphaNumSpaces">
+                            <p v-if="!$v.product.description.alphaNumSpaces">
                                 The description field must contain only letters, numbers and spaces
                             </p>
-                        </div>
+                        </template>
                         <textarea 
                             id="description"
                             name="description" 
@@ -93,90 +101,99 @@
                             :disabled="waiting"
                             @input="$v.product.description.$touch()"
                         />
-                    </div>
+                    </InputGroup>
 
                     <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                        <div class="w-full">
-                            <label for="name" class="text-sm font-semibold">Base price</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.product.base_price.$error">
+                        <InputGroup
+                            id="name"
+                            label="Name"
+                            :hasError="$v.product.base_price.$error"
+                            :eclass="{'flex-1': true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.product.base_price.required">
                                     The base price field is required
                                 </p>
-                            </div>
-                            <input 
+                            </template>
+                            <Input
+                                v-model="product.base_price" 
                                 id="basePrice"
-                                name="base price" 
-                                type="text" 
-                                v-model="product.base_price"
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                name="base price"     
                                 :class="{'border-red-600' : $v.product.base_price.$error, 'border-green-600': $v.product.base_price.$dirty && !$v.product.base_price.$error}"
                                 :disabled="waiting"
-                                @input="$v.product.base_price.$touch()"  
+                                @input.native="$v.product.base_price.$touch()"  
                             />
-                        </div>
-                        <div class="w-full">
-                            <label for="name" class="text-sm font-semibold">Category</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.product.category_id.$error">
+                        </InputGroup>
+                        <InputGroup
+                            id="category"
+                            label="Category"
+                            :hasError="$v.product.category_id.$error"
+                            :eclass="{'flex-1': true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.product.category_id.error">
                                     The category field is required
                                 </p>
-                            </div>
-                            <select 
+                            </template>
+                            <Select 
+                                v-model="product.category_id" 
                                 id="unit_id"
-                                name="category" 
-                                type="text" 
-                                v-model="product.category_id"                                      
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                name="category"
                                 :class="{'border-red-600' : $v.product.category_id.$error, 'border-green-600': $v.product.category_id.$dirty && !$v.product.category_id.$error}"
                                 :disabled="waiting"  
-                                @change="$v.product.category_id.$touch()"
+                                @change.native="$v.product.category_id.$touch()"
                             >
                                 <option value="" disabled>Select category</option>
                                 <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }} ({{ category.vat}}% VAT)</option>
-                            </select>
-                        </div>
+                            </Select>
+                        </InputGroup>
                     </div>
 
                     <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                        <div class="w-full">
-                            <label for="name" class="text-sm font-semibold">Weight</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.product.weight.$error">
+                        <InputGroup
+                            id="weight"
+                            label="Weight"
+                            :hasError="$v.product.weight.$error"
+                            :eclass="{'flex-1': true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.product.weight.required">
                                     The weight field is required
                                 </p>
-                            </div>
-                            <input 
-                                id="weight"
-                                name="weight" 
-                                type="number" 
+                            </template>
+                            <Input 
                                 v-model="product.weight" 
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+                                id="weight"
+                                name="weight"                               
                                 :class="{'border-red-600' : $v.product.weight.$error, 'border-green-600': $v.product.weight.$dirty && !$v.product.weight.$error}"
                                 :disabled="waiting" 
-                                @input="$v.product.weight.$touch()"
+                                @input.native="$v.product.weight.$touch()"
                             />
-                        </div>
-                        <div class="w-full">
-                            <label for="name" class="text-sm font-semibold">Weight units</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.product.unit_id.$error">
+                        </InputGroup>
+                        <InputGroup
+                            id="unitId"
+                            label="Weight units"
+                            :hasError="$v.product.unit_id.$error"
+                            :eclass="{'flex-1': true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.product.unit_id.required">
                                     The weight unit field is required
                                 </p>
-                            </div>
-                            <select 
-                                id="unit_id"
-                                name="weight units" 
-                                type="text"    
+                            </template>
+                            <Select     
                                 v-model="product.unit_id"
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                                id="unit_id"
+                                name="unitId"                                
                                 :class="{'border-red-600' : $v.product.unit_id.$error, 'border-green-600': $v.product.unit_id.$dirty && !$v.product.unit_id.$error}"
                                 :disabled="waiting" 
-                                @change="$v.product.unit_id.$touch()"
+                                @change.native="$v.product.unit_id.$touch()"
+                                :eclass="{'flex-1': true}"
                             >
                                 <option value="" disabled>Select unit</option>
                                 <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
-                            </select>
-                        </div>
+                            </Select>
+                        </InputGroup>
                     </div>
 
                     <!-- DISCOUNT -->
@@ -224,6 +241,10 @@
     import ImageUploadComponent from '../../components/ImageUploadComponent';
     import IngredientsComponent from '../../components/products/IngredientsComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent'
+
+    import Input from '../../components/inputs/TextInputComponent';
+    import Select from '../../components/inputs/SelectInputComponent';
+    import InputGroup from '../../components/inputs/InputGroupComponent';
 
     import _debounce from 'lodash/debounce';
     import _find from 'lodash/find';
@@ -438,6 +459,9 @@
             ImageUploadComponent,
             IngredientsComponent,
             DiscountComponent,
+            Input,
+            Select,
+            InputGroup
         }
     }
 </script>

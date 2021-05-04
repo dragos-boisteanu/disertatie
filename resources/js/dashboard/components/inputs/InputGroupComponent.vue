@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-y-1">
+    <div class="flex flex-col gap-y-1" :class="eclass">
         <label :for="id" class="text-sm font-semibold">{{ label }}</label>
         <div class="text-xs text-red-600 font-semibold" v-if="hasError">
             <slot name="errors"></slot>
@@ -23,6 +23,10 @@
                 type:Boolean,
                 required: false,
                 defualt: false,
+            },
+            eclass: {
+                type: Object,
+                required: false,
             }
         }
     }
