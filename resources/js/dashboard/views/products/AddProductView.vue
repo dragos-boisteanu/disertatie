@@ -95,8 +95,7 @@
                             v-model="product.description" 
                             id="description"
                             name="description"
-                            :maxLength="50"
-                            :class="{'border-red-600' : $v.product.description.$error, 'border-green-600': $v.product.description.$dirty && !$v.product.description.$error}"
+                            :eclass="{'border-red-600' : $v.product.description.$error, 'border-green-600': $v.product.description.$dirty && !$v.product.description.$error}"
                             :disabled="waiting"
                             @input.native="$v.product.description.$touch()"
                         />
@@ -140,7 +139,7 @@
                                 name="category"
                                 :class="{'border-red-600' : $v.product.category_id.$error, 'border-green-600': $v.product.category_id.$dirty && !$v.product.category_id.$error}"
                                 :disabled="waiting"  
-                                @change.native="$v.product.category_id.$touch()"
+                                @blur.native="$v.product.category_id.$touch()"
                             >
                                 <option value="" disabled>Select category</option>
                                 <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }} ({{ category.vat}}% VAT)</option>
@@ -164,7 +163,7 @@
                                 v-model="product.weight" 
                                 id="weight"
                                 name="weight"                               
-                                :class="{'border-red-600' : $v.product.weight.$error, 'border-green-600': $v.product.weight.$dirty && !$v.product.weight.$error}"
+                                :eclass="{'border-red-600' : $v.product.weight.$error, 'border-green-600': $v.product.weight.$dirty && !$v.product.weight.$error}"
                                 :disabled="waiting" 
                                 @input.native="$v.product.weight.$touch()"
                             />
@@ -183,11 +182,11 @@
                             <Select     
                                 v-model="product.unit_id"
                                 id="unit_id"
-                                name="unitId"                                
-                                :class="{'border-red-600' : $v.product.unit_id.$error, 'border-green-600': $v.product.unit_id.$dirty && !$v.product.unit_id.$error}"
+                                name="unitId"     
+                                :eclass="{'border-red-600' : $v.product.unit_id.$error, 'border-green-600': $v.product.unit_id.$dirty && !$v.product.unit_id.$error}"          
                                 :disabled="waiting" 
-                                @change.native="$v.product.unit_id.$touch()"
-                                :eclass="{'flex-1': true}"
+                                @blur.native="$v.product.unit_id.$touch()"
+                                
                             >
                                 <option value="" disabled>Select unit</option>
                                 <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
