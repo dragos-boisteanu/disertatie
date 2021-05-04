@@ -22,11 +22,11 @@
                         v-model="selectedDiscountId" 
                         id="discount"
                         name="discount"
-                        :eclass="{'border-red-600': $v.selectedDiscountId.$error}"
+                        :eclass="{'border-red-600' : $v.selectedDiscountId.$error, 'border-green-600': $v.selectedDiscountId.$dirty && !$v.selectedDiscountId.$error}"
                         @change.native="selectDiscount"
                         @blur.native="$v.selectedDiscountId.$touch()"
                     >
-                        <option value="0" disabled>Select discount</option>
+                        <option value="" disabled>Select discount</option>
                         <option 
                             v-for="availableDiscount in availableDiscounts" 
                             :key="availableDiscount.id"
@@ -60,10 +60,11 @@
                             placeholder="Start date"
                             confirm-text="Ok"
                             valueType="format"
+                            :input-class="fromDateClass"
                             :confirm="true"
                             :disabled="enableFromDate"
                             :disabled-date="disableDatesInterval"
-                            @blur="$v.discount.fromDate.$touch()"
+                            @input="$v.discount.fromDate.$touch()"
                         >
                         </date-picker>
                     </InputGroup>
@@ -83,10 +84,11 @@
                             placeholder="End date"
                             confirm-text="Ok"
                             valueType="format"
+                            :input-class="toDateClass"
                             :confirm="true"
                             :disabled="enableToDate"
                             :disabled-date="disableBeforeFromDate"
-                            @blur="$v.discount.toDate.$touch()"
+                            @input="$v.discount.toDate.$touch()"
                         >
                         </date-picker>
                     </InputGroup>
@@ -142,7 +144,27 @@
             },
 
             enableFromDate(){
-                return this.selectedDiscountId === '0' 
+                return this.selectedDiscountId === '' 
+            },
+
+            fromDateClass() {
+                let customClass = "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
+                if(this.$v.discount.fromDate.$error) {
+                    customClass = customClass.concat(' ', 'border-red-600')
+                } else if (this.$v.discount.fromDate.$dirty && !this.$v.discount.fromDate.$error) {
+                    customClass = customClass.concat(' ', 'border-green-600');
+                }
+                return customClass;
+            },
+
+            toDateClass() {
+                let customClass = "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
+                if(this.$v.discount.toDate.$error) {
+                    customClass = customClass.concat(' ', 'border-red-600')
+                } else if (this.$v.discount.toDate.$dirty && !this.$v.discount.toDate.$error) {
+                    customClass = customClass.concat(' ', 'border-green-600');
+                }
+                return customClass;
             }
         },
 
