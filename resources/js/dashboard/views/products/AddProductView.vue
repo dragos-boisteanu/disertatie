@@ -91,15 +91,14 @@
                                 The description field must contain only letters, numbers and spaces
                             </p>
                         </template>
-                        <textarea 
-                            id="description"
-                            name="description" 
-                            type="text" 
+                        <Textarea 
                             v-model="product.description" 
-                            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
+                            id="description"
+                            name="description"
+                            :maxLength="50"
                             :class="{'border-red-600' : $v.product.description.$error, 'border-green-600': $v.product.description.$dirty && !$v.product.description.$error}"
                             :disabled="waiting"
-                            @input="$v.product.description.$touch()"
+                            @input.native="$v.product.description.$touch()"
                         />
                     </InputGroup>
 
@@ -244,6 +243,7 @@
 
     import Input from '../../components/inputs/TextInputComponent';
     import Select from '../../components/inputs/SelectInputComponent';
+    import Textarea from '../../components/inputs/TextareaInputComponent';
     import InputGroup from '../../components/inputs/InputGroupComponent';
 
     import _debounce from 'lodash/debounce';
@@ -461,6 +461,7 @@
             DiscountComponent,
             Input,
             Select,
+            Textarea,
             InputGroup
         }
     }
