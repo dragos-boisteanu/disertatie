@@ -81,11 +81,11 @@
                                 <p v-if="!$v.category.name.required">
                                     The vat field is required
                                 </p>
-                                <p v-if="!$v.category.name.integer">
-                                    The vat field must be an integer
+                                <p v-if="!$v.category.name.maxLength">
+                                    The vat field must be no longer than 50 characters
                                 </p>
-                                <p v-if="!$v.category.name.minValue">
-                                    The vat field must be equal or greater than 0
+                                <p v-if="!$v.category.name.alphaSpaces">
+                                    The vat field must contain only letters or spaces
                                 </p>
                             </template>
                            <Input 
@@ -157,6 +157,7 @@
                         <Button 
                             v-if="categorySelected"
                             type="secondary"
+                            eclass="mb-2"
                             @click.native.prevent="clearSelection"
                         >                       
                             Clear selection

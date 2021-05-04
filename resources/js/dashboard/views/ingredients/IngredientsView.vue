@@ -67,8 +67,7 @@
                                     :eclass="{'border-red-600' : $v.ingredient.name.$error, 'border-green-600': $v.ingredient.name.$dirty && !$v.ingredient.name.$error}"
                                     :disabled="disabled"
                                     @blur.native="$v.ingredient.name.$touch()"
-                                >
-                                </Input>
+                                ></Input>
                             </InputGroup> 
 
                             <InputGroup
