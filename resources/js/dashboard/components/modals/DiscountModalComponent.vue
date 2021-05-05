@@ -180,7 +180,7 @@
         data() {
             return {
                 availableDiscounts: [],
-                selectedDiscountId: '0',
+                selectedDiscountId: '',
                 discount: {
                     id: '0',
                     fromDate: '',

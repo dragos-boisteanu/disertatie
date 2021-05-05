@@ -161,7 +161,8 @@
                             :class="{'border-red-600' : $v.user.role_id.$error, 'border-green-600': $v.user.role_id.$dirty && !$v.user.role_id.$error}"
                             :disabled="waiting"
                             @blur.native="$v.user.role_id.$touch()"
-                        >
+                        >   
+                            <option value="" disabled>Select role</option>
                             <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
                         </Select>
                     </InputGroup>

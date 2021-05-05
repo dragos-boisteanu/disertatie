@@ -29,9 +29,13 @@
                     </div>
                     
                     <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                        <div class="flex-1">
-                            <label for="firstName" class="text-sm font-semibold">First name</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.localUser.first_name.$error">
+                        <InputGroup
+                            id="firstName"
+                            label="First name"
+                            :hasError="$v.localUser.first_name.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.localUser.first_name.required">
                                     The first name field is required
                                 </p>
@@ -41,21 +45,23 @@
                                 <p v-if="!$v.localUser.first_name.alphaSpaces">
                                     The first name field must contain only letters and spaces
                                 </p>
-                            </div>
-                            <input 
-                                id="firstName" 
-                                name="first name"
-                                type="text" 
+                            </template>
+                            <Input 
                                 v-model="localUser.first_name"
-                                class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
+                                id="firstName" 
+                                name="first name" 
                                 :disabled="waiting"  
                                 :class="{'border-red-600' : $v.localUser.first_name.$error, 'border-green-600': $v.localUser.first_name.$dirty && !$v.localUser.first_name.$error}"
-                                @blur="$v.localUser.first_name.$touch()" 
+                                @blur.native="$v.localUser.first_name.$touch()" 
                             />
-                        </div>
-                        <div class="flex-1">
-                            <label for="name" class="text-sm font-semibold">Name</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.localUser.name.$error">
+                        </InputGroup>
+                        <InputGroup
+                            id="name"
+                            label="Name"
+                            :hasError="$v.localUser.name.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
                                     <p v-if="!$v.localUser.name.required">
                                         The name field is required
                                     </p>    
@@ -65,119 +71,121 @@
                                     <p v-if="!$v.localUser.name.alphaSpaces">
                                         The name field must contain only letters and spaces
                                     </p>
-                                </div>
-                            <input 
-                                id="name" 
-                                name="name"
-                                type="text" 
+                                </template>
+                            <Input 
                                 v-model="localUser.name"
-                                class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
+                                id="name" 
+                                name="name" 
                                 :class="{'border-red-600' : $v.localUser.name.$error, 'border-green-600': $v.localUser.name.$dirty && !$v.localUser.name.$error}"
                                 :disabled="waiting"
-                                @blur="$v.localUser.name.$touch()"
+                                @blur.native="$v.localUser.name.$touch()"
                             />
-                        </div>
-                        <div class="flex-1">
-                            <label for="birthdate" class="text-sm font-semibold">Birthdate</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.localUser.birthdate.$error">
+                        </InputGroup>
+                        <InputGroup
+                            id="birthdate"
+                            label="Birthdate"
+                            :hasError="$v.localUser.birthdate.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.localUser.birthdate.required">
                                     The birthdate field is required
                                 </p>
-                            </div>                            
-                            <input 
-                                id="birthdate" 
-                                name="birthdate"
-                                type="date" 
-                                v-model="localUser.birthdate"
-                                class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
-                                :class="{'border-red-600' : $v.localUser.birthdate.$error, 'border-green-600': $v.localUser.birthdate.$dirty && !$v.localUser.birthdate.$error}"
+                            </template>   
+                            <date-picker 
+                                v-model="localUser.birthdate" 
+                                type="date"
+                                confirm-text="Ok"
+                                valueType="format"
+                                :input-class="birthdateClass"
+                                :confirm="true"
                                 :disabled="waiting"
-                                @blur="$v.localUser.birthdate.$touch()"
-                            />
-                        </div>
+                                @input.native="$v.localUser.birthdate.$touch()"
+                            ></date-picker>
+                        </InputGroup>
                         
                     </div>
 
                     <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:gap-x-4">
-                        <div class="flex-1">
-                            <label for="email" class="text-sm font-semibold">Email</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.localUser.email.$error">
+                        <InputGroup
+                            id="email"
+                            label="Email"
+                            :hasError="$v.localUser.email.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.localUser.email.required">
                                     The email field is required
                                 </p>
                                 <p v-if="!$v.localUser.email.email">
                                     The email field must have valid email
                                 </p>
-                            </div>
-                            <input 
-                                id="email" 
-                                name="email"
-                                type="email" 
+                            </template>
+                            <Input 
                                 v-model="localUser.email"
-                                class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
+                                id="email" 
+                                name="email"   
                                 :class="{'border-red-600' : $v.localUser.email.$error, 'border-green-600': $v.localUser.email.$dirty && !$v.localUser.email.$error}"
                                 :disabled="waiting"
-                                @blur="$v.localUser.email.$touch()"
+                                @blur.native="$v.localUser.email.$touch()"
                             />
-                        </div>
-                        <div class="flex-1">
-                            <label for="phone" class="text-sm font-semibold">Phone number</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.localUser.phone_number.$error">
+                        </InputGroup>
+                        <InputGroup
+                            id="phoneNumber"
+                            label="Phone number"
+                            :hasError="$v.localUser.phone_number.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.localUser.phone_number.required">
                                     The phone number field is required
                                 </p>
                                 <p v-if="!$v.localUser.phone_number.phoneNumber">
                                     The phone number is invalid
                                 </p>
-                            </div>
-                            <input 
-                                id="phone" 
-                                name="phone number"
-                                type="text" 
+                            </template>
+                            <Input 
                                 v-model="localUser.phone_number"
-                                class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
+                                id="phone" 
+                                name="phone number" 
                                 :class="{'border-red-600' : $v.localUser.phone_number.$error, 'border-green-600': $v.localUser.phone_number.$dirty && !$v.localUser.phone_number.$error}"
                                 :disabled="waiting" 
                                 @blur="$v.localUser.phone_number.$touch()"
                             />
-                        </div>
+                        </InputGroup>
                     </div>
-                    <div>
-                        <label for="role" class="text-sm font-semibold">Role</label>
-                         <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.localUser.role_id.$error">
+                    <InputGroup
+                        id="roleId"
+                        label="Role"
+                        :hasError="$v.localUser.phone_number.$error"
+                    >
+                         <template v-slot:errors>
                             <p v-if="!$v.localUser.role_id.required">
                                 The role field is required
                             </p>
-                        </div>
-                        <select 
+                        </template>
+                        <Select 
+                            v-model="localUser.role_id"
                             id="role" 
                             name="role"
-                            v-model="localUser.role_id"
-                            class="w-full text-sm p-1 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"   
                             :class="{'border-red-600' : $v.localUser.role_id.$error, 'border-green-600': $v.localUser.role_id.$dirty && !$v.localUser.role_id.$error}"
                             :disabled="waiting"
-                            @blur="$v.localUser.role_id.$touch()"   
+                            @blur.native="$v.localUser.role_id.$touch()"   
                         >
                             <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
-                        </select>
-                    </div>
+                        </Select>
+                    </InputGroup>
                 </div>
 
                 <div class="mt-5 flex md:justify-start">
-                    <button 
-                        type="submit"
+                    <Button 
+                        type="primary"
                         :disabled="waiting || waitForFileUpload"  
-                        class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                        :waiting="waiting"
+                        @click.native.prevent="submit"
                     >
-                        <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-            
-                        <span>
-                            Submit
-                        </span>
-                    </button>
+                        Submit
+                    </Button>
                 </div>
             </div>
         </form>          
@@ -187,6 +195,14 @@
 <script>
     import ViewContainer from '../ViewContainer'
     import ImageUploadComponent from '../../components/ImageUploadComponent'
+
+    import Input from '../../components/inputs/TextInputComponent';
+    import InputGroup from '../../components/inputs/InputGroupComponent';
+    import Select from '../../components/inputs/SelectInputComponent';
+    import Button from '../../components/buttons/ButtonComponent';
+
+    import DatePicker from 'vue2-datepicker';
+
     import store from '../../store/index';
     import { mapGetters, mapActions } from 'vuex';
 
@@ -222,6 +238,16 @@
             canChangeRole() {
                 //  TO DO: hide roles list if the auth user's role is 6 and the local user role is 6 or 7
                return [6,7].includes(this.getLoggedUser.role_id)
+            },
+
+            birthdateClass() {
+                let customClass = "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
+                if(this.$v.localUser.birthdate.$error) {
+                    customClass = customClass.concat(' ', 'border-red-600')
+                } else if (this.$v.localUser.birthdate.$dirty && !this.$v.localUser.birthdate.$error) {
+                    customClass = customClass.concat(' ', 'border-green-600');
+                }
+                return customClass;
             }
         },
 
@@ -233,7 +259,15 @@
                 waitForFileUpload: false,
 
                 user: {},
-                localUser: {},              
+                localUser: {
+                    id: '',
+                    first_name: '',
+                    name: '',
+                    birthdate: '',
+                    email: '',
+                    phone_number: '',
+                    role_id: ''
+                },              
 
             }
         },
@@ -361,7 +395,12 @@
 
         components: {
             ViewContainer,
-            ImageUploadComponent
+            ImageUploadComponent,
+            Input,
+            InputGroup,
+            Select,
+            Button,
+            DatePicker
         }
     }
 
