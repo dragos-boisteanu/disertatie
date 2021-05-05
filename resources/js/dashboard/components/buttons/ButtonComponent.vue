@@ -35,7 +35,6 @@
             disabled: {
                 type: Boolean,
                 required: false,
-                default: false
             },
             waiting: {
                 type: Boolean,

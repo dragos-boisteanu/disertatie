@@ -186,7 +186,7 @@
             ...mapGetters('Stocks', ['getIngredientStockDetails']),
 
             disableSearchButton() {
-                return (this.filter.id.length === 0 && this.filter.name.length === 0) || this.waiting
+                return this.filter.id.length === 0 && this.filter.name.length === 0
             },
         },
 

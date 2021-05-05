@@ -157,7 +157,7 @@
             },
 
             disableSearchButton() {
-                return (this.barcode && this.barcode.length === 0) || this.searching;
+                return this.barcode && this.barcode.length === 0;
             },
         },
 
