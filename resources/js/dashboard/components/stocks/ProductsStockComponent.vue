@@ -18,14 +18,14 @@
                         id="barcode"
                         name="barcode" 
                         :class="{'border-red-600' : $v.barcode.$error, 'border-green-600': $v.barcode.$dirty && !$v.barcode.$error}"
-                        :disabled="waiting"
+                        :disabled="searching"
                         @blur.native="$v.barcode.$touch()"
                     />
                 </InputGroup>
                 <Button 
                     type="primary"
-                    :disabled="waiting || disableSearchButton"
-                    :waiting="waiting"
+                    :disabled="disableSearchButton"
+                    :waiting="searching"
                     eclass="mt-6"
                     @click.native.prevent="findProduct"
                 >
@@ -39,81 +39,82 @@
                 <span>{{getProductStockDetails.name}}</span> <span>{{getProductStockDetails.weight}}</span> <span>{{getProductStockDetails.unit}}</span>
             </h2>
 
-            <div>
-                <form>
-                    <div class="flex gap-2">
-                        <InputGroup
+            <form>
+                <div class="flex gap-2">
+                    <InputGroup
+                        id="quantity"
+                        label="Quantity"
+                        :eclass="{'flex-1':true}"
+                    >
+                        <Input 
+                            v-model="getProductStockDetails.quantity"
                             id="quantity"
-                            label="Quantity"
-                            :eclass="{'flex-1':true}"
-                        >
-                            <Input 
-                                v-model="getProductStockDetails.quantity"
-                                id="quantity"
-                                name="quantity" 
-                                :disabled="true"
-                            />
-                        </InputGroup>
-                        <InputGroup
-                            id="quantity"
-                            label="Quantity"
-                            :hasError="$v.newQuantity.$error"
-                            :eclass="{'flex-1':true}"
-                        >
-                            <template v-slot:errors>
-                                <p v-if="!$v.newQuantity.required">
-                                    The new quantity field is required
-                                </p>
-                                <p v-if="!$v.newQuantity.integer">
-                                    The new quantity field must be an integer
-                                </p>
-                            </template>
-                            <Input 
-                                v-model="newQuantity"
-                                id="newQuantity"
-                                name="new quantity"
-                                :eclass="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
-                                :disabled="waiting || canNotUpdate"
-                                @blur.native="$v.newQuantity.$touch()"
-                            />
-                        </InputGroup> 
-                    </div>
-                    <div v-if="hasIngredients" class="mt-4">
-                        <h3 class="font-semibold text-lg my-2">
-                            Ingredients
-                        </h3>
-                        <ul>
-                            <li v-for="ingredient in getProductStockDetails.ingredients" :key="ingredient.id">
-                                <span>{{ ingredient.name}}</span> <span>{{ingredient.quantity}}</span> <span>{{ingredient.unit.name}}</span> 
-                                <router-link :to="{name: 'IngredientsStock', params: {id: ingredient.id}}"  class="ml-5 text-sm text-lightBlue-600 hover:underline hover:text-lightBlue-400">View</router-link>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mt-5 flex gap-x-4 md:justify-start">
-                        <Button
-                            v-if="!canNotUpdate"
-                            type="primary"
-                            :disabled="waiting" 
-                            @click.native.prevent="submit" 
-                        >
-                            Update
-                        </Button>
-                        <Button
-                            type="secondary"
-                            :disabled="waiting" 
-                            @click.native.prevent="clear" 
-                        >
-                            Clear
-                        </Button>
-                    </div>
-                </form>
-            </div>
+                            name="quantity" 
+                            :disabled="true"
+                        />
+                    </InputGroup>
+                    <InputGroup
+                        id="quantity"
+                        label="Quantity"
+                        :hasError="$v.newQuantity.$error"
+                        :eclass="{'flex-1':true}"
+                    >
+                        <template v-slot:errors>
+                            <p v-if="!$v.newQuantity.required">
+                                The new quantity field is required
+                            </p>
+                            <p v-if="!$v.newQuantity.integer">
+                                The new quantity field must be an integer
+                            </p>
+                        </template>
+                        <Input 
+                            v-model="newQuantity"
+                            id="newQuantity"
+                            name="new quantity"
+                            :eclass="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
+                            :disabled="updating || canNotUpdate"
+                            @blur.native="$v.newQuantity.$touch()"
+                        />
+                    </InputGroup> 
+                </div>
+                <div v-if="hasIngredients" class="mt-4">
+                    <h3 class="font-semibold text-lg my-2">
+                        Ingredients
+                    </h3>
+                    <ul>
+                        <li v-for="ingredient in getProductStockDetails.ingredients" :key="ingredient.id">
+                            <span>{{ ingredient.name}}</span> <span>{{ingredient.quantity}}</span> <span>{{ingredient.unit.name}}</span> 
+                            <router-link :to="{name: 'IngredientsStock', params: {id: ingredient.id}}"  class="ml-5 text-sm text-lightBlue-600 hover:underline hover:text-lightBlue-400">View</router-link>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mt-5 flex gap-x-4 md:justify-start">
+                    <Button
+                        v-if="!canNotUpdate"
+                        type="primary"
+                        :disabled="updating" 
+                        :waiting="updating"
+                        @click.native.prevent="submit" 
+                    >
+                        Update
+                    </Button>
+                    <Button
+                        type="secondary"
+                        :disabled="updating || refreshing" 
+                        @click.native.prevent="clear" 
+                    >
+                        Clear
+                    </Button>
+                </div>
+            </form>
         </div>
         <Button 
             type="secondary"
             v-if="getProductStockDetails"
-            @click="findProduct"
+            @click.native="findProduct"
             eclass="mt-4"
+            :disabled="refreshing || updating"
+            :waiting="refreshing"
         >                       
             Refresh
         </Button>
@@ -156,14 +157,15 @@
             },
 
             disableSearchButton() {
-                return this.barcode && this.barcode.length === 0;
+                return (this.barcode && this.barcode.length === 0) || this.searching;
             },
         },
 
         data() {
             return {
-                waiting: false,
-                waitingForProduct: false,
+                searching: false,
+                updating: false,
+                refreshing: false,
                 barcode: '',
                 newQuantity: ''
             }
@@ -188,11 +190,22 @@
                 if(!this.$v.barcode.invalid) {
                     try {
                         this.$Progress.start();
-                        this.waiting = true;
-                        
+
+                        if(this.getProductStockDetails) {
+                            this.refreshing = true;
+                        } else {
+                            this.searching = true;
+                        }
+                                             
                         await this.downloadProductStockDetails(this.barcode);
           
-                        this.waiting = false;
+                        if(this.getProductStockDetails) {
+                            this.refreshing = false;
+                            this.searching = false;
+                        } else {
+                            this.searching = false;
+                        }
+
                         this.$Progress.finish();
                     } catch ( error ) {
                         if(error.response && error.response.status == '404') {
@@ -202,7 +215,14 @@
                                 show: true
                             });
                         }
-                        this.waiting = false;
+
+                        if(this.getProductStockDetails) {
+                            this.refreshing = false;
+                            this.searching = false;
+                        } else {
+                            this.searching = false;
+                        }
+
                         this.$Progress.fail();
                     }
                 }
@@ -215,7 +235,8 @@
                     try {
                         if(parseInt(this.newQuantity) !== 0) {
                             this.$Progress.start();
-                            this.waiting = true;
+
+                            this.updating = true; 
                         
                             const payload = {
                                 id: this.getProductStockDetails.id,
@@ -231,7 +252,7 @@
 
                             this.$v.newQuantity.$reset();
 
-                            this.waiting = false;
+                            this.updating = false;
 
                             this.$Progress.finish();
 
@@ -241,7 +262,7 @@
                                 show: true
                             });
                         } else {
-                            this.waiting = false;
+                            this.updating = false;
                             this.$Progress.fail();
                             this.openNotification({
                                 type: 'info',
@@ -259,7 +280,7 @@
                             message: 'Something went wrong',
                             show: true
                         });
-                        this.waiting = false;
+                        this.updating = false;
                         console.log(error)
                     }
                 }

@@ -20,7 +20,7 @@
                     id="id"
                     name="id" 
                     :class="{'border-red-600' : $v.filter.id.$error, 'border-green-600': $v.filter.id.$dirty && !$v.filter.id.$error}"
-                    :disabled="waiting"  
+                    :disabled="searching || updating"  
                     @blur.native="$v.filter.id.$touch()"
                     @focus.native="clearName"
                 />
@@ -45,7 +45,7 @@
                     id="name"
                     name="name"  
                     :eclass="{'border-red-600' : $v.filter.name.$error, 'border-green-600': $v.filter.name.$dirty && !$v.filter.name.$error}"
-                    :disabled="waiting"  
+                    :disabled="searching || updating"  
                     @blur.native="$v.filter.name.$touch()"
                     @focus.native="clearId"
                 />
@@ -54,7 +54,7 @@
             <Button 
                 type="primary"
                 :disabled="disableSearchButton"
-                :waiting="waiting"
+                :waiting="searching"
                 @click.native.prevent="findIngredient"
                 eclass="mt-6"
             >
@@ -111,7 +111,7 @@
                             id="quanity"
                             name="quanity"
                             :eclass="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
-                            :disabled="waiting"
+                            :disabled="updating"
                             @blur.native="$v.newQuantity.$touch()"
                         />
                     </InputGroup> 
@@ -119,8 +119,8 @@
                 <div class="mt-5 flex gap-x-4 md:justify-start">
                     <Button 
                         type="primary"
-                        :disabled="waiting"
-                        :waiting="waiting"  
+                        :disabled="updating || refreshing"
+                        :waiting="updating"  
                         @click.native.prevent="submit"
                     >
                         Update
@@ -129,6 +129,7 @@
                         v-if="getIngredientStockDetails"
                         @click.native.prevent="clear"
                         type="secondary"
+                        :disable="updating || refreshing"
                     >                       
                         Clear
                     </Button>
@@ -141,6 +142,8 @@
             v-if="getIngredientStockDetails"
             @click.native="findIngredient"
             eclass="mt-4"
+            :disabled="refreshing"
+            :waiting="refreshing"
         >                       
             Refresh
         </Button>
@@ -189,9 +192,9 @@
 
         data() {
             return {
-                waiting: false,
-                searchingForIngredientId: false,
-                searchingForIngredientByName: false,
+                searching: false,
+                updating: false,
+                refreshing: false,
 
                 newQuantity: '',
 
@@ -228,11 +231,16 @@
             async findIngredient() {
                 try {
                     this.$Progress.start();
-                    this.waiting = true;
+
+                    if(this.getIngredientStockDetails) {
+                        this.refreshing = true;
+                    } else {
+                        this.searching = true;
+                    }
+
                     if(this.filter.id) {
                         this.$v.filter.id.$touch();
                         if(!this.$v.filter.id.$invalid) {
-                            console.log('here')
                             await this.downloadIngredientStockDetails(this.filter.id);
                         }
                     } else {
@@ -242,7 +250,12 @@
                         }
                     }
 
-                    this.waiting = false;
+                    if(this.getIngredientStockDetails) {
+                        this.refreshing = false;
+                        this.searching = false;
+                    } else {
+                        this.searching = false;
+                    }
 
                     this.$Progress.finish();
                 } catch ( error ) {
@@ -255,9 +268,12 @@
                         });
                     }
                     // this.$v.filter.$touch();
-                    this.waiting = false;
+                   if(this.getIngredientStockDetails) {
+                        this.refreshing = false;
+                    } else {
+                        this.searching = false;
+                    }
                     this.$Progress.fail();
-                    console.log(error)
                 }
             },
 
@@ -266,6 +282,7 @@
 
                 if(!this.$v.newQuantity.$invalid) {
                     try {
+                        this.updating = true;
                         this.$Progress.start();
 
                         const payload = {
@@ -281,6 +298,7 @@
                         this.newQuantity = '';
 
                         this.$Progress.finish();
+                        this.updating = false;
                         
                         this.$v.newQuantity.$reset();
                         this.openNotification({
@@ -290,6 +308,7 @@
                         });
                             
                     } catch ( error ) {
+                        this.updating = false;
                         this.$v.newQuantity.$touch();
                         this.$Progress.fail();
                     }
