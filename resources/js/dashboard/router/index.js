@@ -12,6 +12,7 @@ import categoriesRoutes from './categories'
 import stocksRoutes from './stocks'
 import ingredientsRoutes from './ingredients'
 import discountsRoutes from './discounts'
+import ordersRoutes from './orders'
 
 import { dashboardBaseUrl } from './baseUrls'
 
@@ -29,7 +30,8 @@ const routes = [
     ...categoriesRoutes,
     ...stocksRoutes,
     ...ingredientsRoutes,
-    ...discountsRoutes,        
+    ...discountsRoutes,    
+    ...ordersRoutes    
 ];
 
 const router = new VueRouter({

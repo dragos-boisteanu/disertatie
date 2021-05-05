@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute lg:relative left-0 top-0 w-9/12 md:w-2/5 lg:w-full h-full bg-coolGray-800 overflow-y-auto" >
+    <div class="absolute lg:relative left-0 top-0 w-9/12 md:w-2/5 lg:w-full h-full bg-coolGray-800 overflow-y-auto">
         <div class="text-white flex flex-col items-center justify-start mb-2" v-if="getLoggedUser">
             <div class="my-5 flex flex-col items-center justify-start">
                 <div class="w-24 h-24 rounded-md">
@@ -23,59 +23,73 @@
             </div> 
         </div>
         
-
         <div class="text-gray-300 hover:text-white pb-2 mb-2 border-b border-coolGray-500">
             <router-link :to="{name: 'Dashboard'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Dashboard</router-link>
         </div>
-     
-        <div class="pt-2">
-            <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
-                USERS
+        
+        <div>
+            <div class="pt-2">
+                <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
+                    ORDERS
+                </div>
+                <ul class="mt-1">
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wid">
+                        <router-link :to="{name: 'Orders'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Orders list</router-link>
+                    </li>
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wid">
+                        <router-link :to="{name: 'CreateOrder'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Create order</router-link>
+                    </li>
+                </ul>
             </div>
-            <ul class="mt-1">
-                <li class="text-sm text-gray-300 hover:text-white">
-                    <router-link :to="{name: 'Users'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Users List</router-link>
-                </li>
-                <li class="text-sm text-gray-300 hover:text-white">
-                    <router-link :to="{name: 'CreateUser'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Create User Profile</router-link>
-                </li>
-            </ul>
-        </div>
-
-        <div class="pt-2">
-            <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
-                PRODUCTS
+        
+            <div class="pt-2">
+                <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
+                    USERS
+                </div>
+                <ul class="mt-1">
+                    <li class="text-sm text-gray-300 hover:text-white">
+                        <router-link :to="{name: 'Users'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Users List</router-link>
+                    </li>
+                    <li class="text-sm text-gray-300 hover:text-white">
+                        <router-link :to="{name: 'CreateUser'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Create User Profile</router-link>
+                    </li>
+                </ul>
             </div>
-            <ul class="mt-1">
-                <li class="text-sm text-gray-300 hover:text-white tracking-wid">
-                    <router-link :to="{name: 'Products'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Products list</router-link>
-                </li>
-                <li class="text-sm text-gray-300 hover:text-white tracking-wide">
-                    <router-link :to="{name: 'AddProduct'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Add product</router-link>
-                </li>
-                <li class="text-sm text-gray-300 hover:text-white tracking-wide">
-                    <router-link :to="{name: 'Categories'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Categories</router-link>
-                </li>
-                <li class="text-sm text-gray-300 hover:text-white tracking-wide">
-                    <router-link :to="{name: 'Ingredients'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Ingredients</router-link>
-                </li>
-                <li class="text-sm text-gray-300 hover:text-white tracking-wide">
-                    <router-link :to="{name: 'Stocks'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Stocks</router-link>
-                </li>
-            </ul>
-        </div>
 
-        <div class="pt-2">
-            <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
-                DISCOUNTS
+            <div class="pt-2">
+                <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
+                    PRODUCTS
+                </div>
+                <ul class="mt-1">
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wid">
+                        <router-link :to="{name: 'Products'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Products list</router-link>
+                    </li>
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wide">
+                        <router-link :to="{name: 'AddProduct'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Add product</router-link>
+                    </li>
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wide">
+                        <router-link :to="{name: 'Categories'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Categories</router-link>
+                    </li>
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wide">
+                        <router-link :to="{name: 'Ingredients'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Ingredients</router-link>
+                    </li>
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wide">
+                        <router-link :to="{name: 'Stocks'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Stocks</router-link>
+                    </li>
+                </ul>
             </div>
-            <ul class="mt-1">
-                <li class="text-sm text-gray-300 hover:text-white tracking-wid">
-                    <router-link :to="{name: 'Discounts'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Discounts list</router-link>
-                </li>
-            </ul>
-        </div>
 
+            <div class="pt-2 mb-32">
+                <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
+                    DISCOUNTS
+                </div>
+                <ul class="mt-1">
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wid">
+                        <router-link :to="{name: 'Discounts'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Discounts list</router-link>
+                    </li>
+                </ul>
+            </div>  
+        </div>      
     </div>
 </template>
 
