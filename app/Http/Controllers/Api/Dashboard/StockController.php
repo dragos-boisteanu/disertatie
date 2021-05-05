@@ -26,7 +26,7 @@ class StockController extends Controller
         $quantity = 0;
         
         if($request->type === 'product') {
-            $product = Product::findOrFail($id);
+            $product = Product::withTrashed()->findOrFail($id);
             $product->stock->quantity += $request->newQuantity;
             $quantity = $product->stock->quantity;
             $product->stock->save();

@@ -1,39 +1,36 @@
 <template>
     <div class="w-full">
         <div ref="observer">
-            <form @submit.prevent="findProduct" class="flex items-center gap-x-4 bg-white shadow rounded-sm p-5 md:flex-1">
-                <div class="w-full">
-                    <label for="name" class="text-sm font-semibold">Barcode</label>
-                    <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.barcode.$error">
+            <form class="flex items-end gap-x-4 bg-white shadow rounded-sm p-5 md:flex-1">
+                <InputGroup
+                    id="barcode"
+                    label="Barcode"
+                    :hasError="$v.barcode.$error"
+                    :eclass="{'flex-auto':true}"
+                >
+                    <template v-slot:errors>
                         <p v-if="!$v.barcode.required">
                             The barcode field is required  
                         </p>
-                    </div>
-                    <input 
+                    </template>
+                    <Input 
+                        v-model="barcode"
                         id="barcode"
                         name="barcode" 
-                        type="text"
-                        v-model="barcode"
-                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500" 
                         :class="{'border-red-600' : $v.barcode.$error, 'border-green-600': $v.barcode.$dirty && !$v.barcode.$error}"
                         :disabled="waiting"
-                        @blur="$v.barcode.$touch()"
+                        @blur.native="$v.barcode.$touch()"
                     />
-                </div>
-                <button 
-                    type="submit"
+                </InputGroup>
+                <Button 
+                    type="primary"
                     :disabled="waiting || disableSearchButton"
-                    class="inline-flex items-center justify-center mt-6 px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                    :waiting="waiting"
+                    :eclass="{'flex-0':true}"
+                    @click.native.prevent="findProduct"
                 >
-                    <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-        
-                    <span>
-                        Search
-                    </span>
-                </button>
+                    Search
+                </Button>
             </form>
         </div>
 
@@ -43,68 +40,67 @@
             </h2>
 
             <div>
-                <form @submit.prevent="submit">
+                <form>
                     <div class="flex gap-2">
-                        <div class="flex-1">
-                            <label for="quantity" class="text-sm font-semibold">Stock quantity</label>
-                            <div class="mb-1"></div>
-                            <div class="flex gap-x-3 items-center relative flex-1">
-                                <input 
-                                    id="quantity"
-                                    name="quantity" 
-                                    type="text"   
-                                    v-model="product.quantity"
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :disabled="true"
-                                />
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <label for="newQuantity" class="text-sm font-semibold">Quantity</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1" v-if="$v.newQuantity.$error">
+                        <InputGroup
+                            id="quantity"
+                            label="Quantity"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <Input 
+                                v-model="product.quantity"
+                                id="quantity"
+                                name="quantity" 
+                                :disabled="true"
+                            />
+                        </InputGroup>
+                        <InputGroup
+                            id="quantity"
+                            label="Quantity"
+                            :hasError="$v.newQuantity.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
                                 <p v-if="!$v.newQuantity.required">
                                     The new quantity field is required
                                 </p>
                                 <p v-if="!$v.newQuantity.integer">
                                     The new quantity field must be an integer
                                 </p>
-                            </div>
-                            <div class="flex gap-x-3 items-center relative flex-1">
-                                <input 
-                                    id="newQuantity"
-                                    name="new quantity" 
-                                    type="text"   
-                                    v-model="newQuantity"
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                    :class="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
-                                    :disabled="waiting || canNotUpdate"
-                                    @blur="$v.newQuantity.$touch()"
-                                />
-                            </div>
-                        </div> 
+                            </template>
+                            <Input 
+                                v-model="newQuantity"
+                                id="newQuantity"
+                                name="new quantity"
+                                :class="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
+                                :disabled="waiting || canNotUpdate"
+                                @blur.native="$v.newQuantity.$touch()"
+                            />
+                        </InputGroup> 
                     </div>
                     <div class="mt-5 flex gap-x-4 md:justify-start">
-                        <button
-                            v-if="!canNotUpdate"  
-                            type="submit"
-                            :disabled="waiting"  
-                            class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                        <Button
+                            v-if="!canNotUpdate"
+                            type="primary"
+                            :disabled="waiting" 
+                            @click.native.prevent="submit" 
                         >
-                            <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                
-                            <span>
-                                Update
-                            </span>
-                        </button>
-                        <button 
+                            Update
+                        </Button>
+                        <Button
+                            v-if="!canNotUpdate"
+                            type="secondary"
+                            :disabled="waiting" 
+                            @click.native.prevent="clear" 
+                        >
+                            Clear
+                        </Button>
+                        <!-- <button 
                             @click.prevent="clear"
                             class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
                         >                       
                             Clear
-                        </button>
+                        </button> -->
                     </div>
                 </form>
             </div>
@@ -138,6 +134,9 @@
     import { updateStock, downloadProduct } from '../../api/stocks.api';
 
     import Unit from '../products/UnitComponent';
+    import Input from '../inputs/TextInputComponent';
+    import InputGroup from '../inputs/InputGroupComponent';
+    import Button from '../buttons/ButtonComponent';
 
     import { required, integer, } from 'vuelidate/lib/validators'
 
@@ -195,6 +194,8 @@
                     try {
                         this.$Progress.start();
                         this.waiting = true;
+
+                        console.log(this.barcode)
                         
                         const response = await downloadProduct(this.barcode);
                         this.product = response.data.data;
@@ -266,6 +267,7 @@
                             message: 'Something went wrong',
                             show: true
                         });
+                        this.waiting = false;
                         console.log(error)
                     }
                 }
@@ -284,7 +286,10 @@
         },
 
         components: {
-            Unit
+            Unit,
+            Input,
+            InputGroup,
+            Button
         }
 
     }

@@ -2,10 +2,10 @@
     <button
         :id="id"
         :name="name"
-        :class="eclass"
+        :class="cclass"
         :disabled="disabled"
         type="button"
-        class="w-full inline-flex items-center justify-center px-2 py-1 text-base rounded-sm active:shadow-inner md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+        class="w-full inline-flex items-center justify-center px-2 py-1 text-base rounded-sm active:shadow-inner active:outline-none md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
     >
         <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -42,10 +42,14 @@
                 requried: false,
                 default: false
             },
+            eclass: {
+                type: String,
+                required: false,
+            }
         },
 
         computed: {
-            eclass() {
+            cclass() {
                 let result = '';
 
                 switch (this.type) {
@@ -53,14 +57,21 @@
                         result = 'text-white bg-green-600 active:bg-green-500';
                         break;
                     case 'secondary': 
-                        result = 'mb-3 md:mb-0 text-white bg-lightBlue-600 active:bg-lightBlue-500';
+                        result = 'text-white bg-lightBlue-600 active:bg-lightBlue-500';
                         break;
                     case 'danger':
                         result = 'text-white bg-red-600 active:bg-red-500'
+                        break;
                     default:
                         result = 'text-black transparent border active:border-gray-600'
                         break;
                 }
+
+                if(this.eclass) {
+                    result = result.concat(' ', this.eclass);
+                }
+
+                console.log(result)
 
                 return result;
             }
