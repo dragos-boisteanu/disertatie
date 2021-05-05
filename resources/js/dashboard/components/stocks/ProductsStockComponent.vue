@@ -1,7 +1,7 @@
 <template>
     <div class="w-full">
         <div ref="observer">
-            <form class="flex items-end gap-x-4 bg-white shadow rounded-sm p-5 md:flex-1">
+            <form class="flex items-center gap-x-4 bg-white shadow rounded-sm p-5 md:flex-1">
                 <InputGroup
                     id="barcode"
                     label="Barcode"
@@ -26,7 +26,7 @@
                     type="primary"
                     :disabled="waiting || disableSearchButton"
                     :waiting="waiting"
-                    :eclass="{'flex-0':true}"
+                    eclass="mt-6"
                     @click.native.prevent="findProduct"
                 >
                     Search
@@ -72,7 +72,7 @@
                                 v-model="newQuantity"
                                 id="newQuantity"
                                 name="new quantity"
-                                :class="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
+                                :eclass="{'border-red-600' : $v.newQuantity.$error, 'border-green-600': $v.newQuantity.$dirty && !$v.newQuantity.$error}"
                                 :disabled="waiting || canNotUpdate"
                                 @blur.native="$v.newQuantity.$touch()"
                             />
@@ -109,13 +109,14 @@
                 </form>
             </div>
         </div>
-        <button 
+        <Button 
+            type="secondary"
             v-if="getProductStockDetails"
             @click="findProduct"
-            class="mt-4 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
+            eclass="mt-4"
         >                       
             Refresh
-        </button>
+        </Button>
 
     </div>
 </template>
@@ -164,7 +165,7 @@
                 waiting: false,
                 waitingForProduct: false,
                 barcode: '',
-                newQuantity: 0
+                newQuantity: ''
             }
         }, 
 
@@ -212,7 +213,7 @@
 
                 if(!this.$v.newQuantity.invalid) {
                     try {
-                        if(this.newQuantity !== 0) {
+                        if(parseInt(this.newQuantity) !== 0) {
                             this.$Progress.start();
                             this.waiting = true;
                         

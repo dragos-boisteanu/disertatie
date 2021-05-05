@@ -43,7 +43,7 @@
                 default: false
             },
             eclass: {
-                type: Object,
+                type: String,
                 required: false,
             }
         },
