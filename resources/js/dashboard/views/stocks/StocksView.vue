@@ -26,13 +26,21 @@
 <script>
     import ViewContainer from '../ViewContainer';
     import ProductsStockComponent from '../../components/stocks/ProductsStockComponent';
+import { mapActions } from 'vuex';
 
     export default {
+        destroyed() {
+            this.resetStockStore();
+        },
 
         data() {
             return {
                 tab: 'products'
             }
+        },
+
+        methods: {
+            ...mapActions('Stocks', ['resetStockStore'])
         },
 
         components: {
