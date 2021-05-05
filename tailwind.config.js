@@ -6,9 +6,14 @@ module.exports = {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './resources/js/**/*.vue'
     ],
 
     theme: {
+        ripple: theme => ({
+            colors: theme('colors'),
+            darken: 0.1
+        }),
         extend: {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
@@ -42,6 +47,9 @@ module.exports = {
             backgroundColor: ['active', 'disabled'],
         },
     },
+    plugins: [
+        require('tailwindcss-ripple')()
+    ]
 
     // plugins: [require('@tailwindcss/forms')],
 };

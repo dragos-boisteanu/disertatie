@@ -54,13 +54,13 @@
 
                 switch (this.type) {
                     case 'primary':
-                        result = 'text-white bg-green-600 active:bg-green-500';
+                        result = 'text-white ripple-bg-green-600';
                         break;
                     case 'secondary': 
-                        result = 'text-white bg-lightBlue-600 active:bg-lightBlue-500';
+                        result = 'text-white ripple-bg-lightBlue-600';
                         break;
                     case 'danger':
-                        result = 'text-white bg-red-600 active:bg-red-500'
+                        result = 'text-white ripple-bg-red-600'
                         break;
                     default:
                         result = 'text-black transparent border active:border-gray-600'
