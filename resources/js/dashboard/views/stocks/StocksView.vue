@@ -14,10 +14,10 @@
         </div>
 
         <div class="w-full mt-2 md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/4 ">
-            <keep-alive>
+            <!-- <keep-alive>
                 <router-view :key="$route.fullPath"></router-view> 
-            </keep-alive>
-            <!-- <router-view></router-view> -->
+            </keep-alive> -->
+            <router-view></router-view>
         </div>
 
     </ViewContainer>

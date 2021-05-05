@@ -132,7 +132,7 @@
                                 Restore
                             </Button>
                             <Button 
-                                v-if="discount.deletedAt"
+                                v-if="discount.deletedAt && canPermanentyDelete"
                                 type="danger"
                                 :waiting="waiting"
                                 @click.native.prevent="callDeleteDiscount"
@@ -186,6 +186,10 @@
 
         computed: {
             ...mapGetters('Discounts', ['getDiscounts']),
+
+            canPermanentyDelete() {
+                return this.discount.productCounts === 0 || this.discount.categoriesCount === 0
+            }
         },
 
         data() {

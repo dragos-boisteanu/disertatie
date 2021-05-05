@@ -65,9 +65,9 @@
             </button>
         </form>
 
-        <div v-if="ingredient" class="mt-4 flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
+        <div v-if="getIngredientStockDetails" class="mt-4 flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
             <h2 class="text-xl font-semibold my-2">
-                <span>{{ingredient.name}}</span>
+                <span>{{getIngredientStockDetails.name}}</span>
             </h2>
             <form @submit.prevent="submit">
                 <div class="flex gap-2">
@@ -78,7 +78,7 @@
                             id="quantity"
                             name="quantity" 
                             type="text"   
-                            v-model="ingredient.quantity"
+                            v-model="getIngredientStockDetails.quantity"
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                             :disabled="true"
                         />
@@ -90,7 +90,7 @@
                             id="unit"
                             name="unit" 
                             type="text"   
-                            v-model="ingredient.unit"
+                            v-model="getIngredientStockDetails.unit"
                             class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
                             :disabled="true"
                         />
@@ -133,7 +133,7 @@
                         </span>
                     </button>
                     <button 
-                        v-if="ingredient"
+                        v-if="getIngredientStockDetails"
                         @click.prevent="clear"
                         class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
                     >                       
@@ -144,7 +144,7 @@
         </div>
 
         <button 
-            v-if="ingredient"
+            v-if="getIngredientStockDetails"
             @click="findIngredient"
             class="mt-4 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
         >                       
@@ -155,8 +155,7 @@
 </template>
 
 <script>
-    import { downloadIngredientStockDetails, updateStock } from '../../api/stocks.api'
-    import { mapActions } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     import { required, integer, minValue, maxLength } from 'vuelidate/lib/validators'
     import { alphaSpaces } from '../../validators/index';
@@ -167,16 +166,27 @@
 
         async mounted() {
             if(this.$route.params.id) {
+                this.clearIngredientStockDetails();
                 this.filter.id = this.$route.params.id;
                 await this.findIngredient();
+                
+            } else if (this.$route.params.name) {
+                this.clearIngredientStockDetails();
+                this.filter.name = this.$route.params.name;
+                await this.findIngredient();
+
+            } else if (this.getIngredientStockDetails) {
+                this.filter.id = this.getIngredientStockDetails.id;
+                this.filter.name = this.getIngredientStockDetails.name
             }
         },
 
         computed: {
+            ...mapGetters('Stocks', ['getIngredientStockDetails']),
+
             disableSearchButton() {
                 return this.filter.id.length === 0 && this.filter.name.length === 0
             },
-
         },
 
         data() {
@@ -185,14 +195,13 @@
                 searchingForIngredientId: false,
                 searchingForIngredientByName: false,
 
-                newQuantity: 0,
+                newQuantity: '',
 
                 filter: {
                     id: '',
                     name: '',
                 },
 
-                ingredient: null
             }
         },
 
@@ -216,46 +225,40 @@
 
         methods: {
             ...mapActions('Notification', ['openNotification']),
+            ...mapActions('Stocks', ['clearIngredientStockDetails', 'updateStock','downloadIngredientStockDetails']),
 
             async findIngredient() {
-                if(!this.$v.filter.id.$invalid || !this.$v.filter.name.$invalid) {
-                    try {
-                        this.$Progress.start();
-
-                        let response = null;
-
-                        if(this.filter.id.length > 0) {
-                            this.$v.filter.id.$touch();
-                            if(!this.$v.filter.id.$invalid) {
-                                response = await downloadIngredientStockDetails(this.filter.id);
-                            }
-                            
-                        } else {
-                            this.$v.filter.name.$touch()
-                            if(!this.$v.filter.name.$invalid) {
-                                response = await downloadIngredientStockDetails(this.filter.name)
-                            }
+                try {
+                    this.$Progress.start();
+                    this.waiting = true;
+                    if(this.filter.id) {
+                        this.$v.filter.id.$touch();
+                        if(!this.$v.filter.id.$invalid) {
+                            console.log('here')
+                            await this.downloadIngredientStockDetails(this.filter.id);
                         }
-
-                        if(response) {
-                            this.ingredient = response.data.data;
-                            this.$v.newQuantity.$reset();
+                    } else {
+                        this.$v.filter.name.$touch()
+                        if(!this.$v.filter.name.$invalid) {
+                            await this.downloadIngredientStockDetails(this.filter.name)
                         }
-
-                        this.$Progress.finish();
-                    } catch ( error ) {
-                        if(error.response && error.response.status === 404) {
-                            this.openNotification({
-                                type: 'err',
-                                show: true,
-                                message: 'No ingredient found'
-                            });
-
-                            this.ingredient = null;
-                        }
-                        // this.$v.filter.$touch();
-                        this.$Progress.fail();
                     }
+
+                    this.waiting = false;
+
+                    this.$Progress.finish();
+                } catch ( error ) {
+                    if(error.response && error.response.status === 404) {
+                        this.openNotification({
+                            type: 'err',
+                            show: true,
+                            message: 'No ingredient found'
+                        });
+                    }
+                    // this.$v.filter.$touch();
+                    this.waiting = false;
+                    this.$Progress.fail();
+                    console.log(error)
                 }
             },
 
@@ -267,19 +270,20 @@
                         this.$Progress.start();
 
                         const payload = {
-                            id: this.ingredient.id,
+                            id: this.getIngredientStockDetails.id,
                             data: {
                                 type: 'ingredient',
                                 newQuantity: this.newQuantity
                             }
                         }
 
-                        const response = await updateStock(payload);
-                        this.ingredient.quantity = parseInt(response.data.quantity);
-                        this.newQuantity = 0;
+                        const response = await this.updateStock(payload);
+
+                        this.newQuantity = '';
 
                         this.$Progress.finish();
-
+                        
+                        this.$v.newQuantity.$reset();
                         this.openNotification({
                             type: 'ok',
                             message: response.data.message,
@@ -289,7 +293,6 @@
                     } catch ( error ) {
                         this.$v.newQuantity.$touch();
                         this.$Progress.fail();
-                        console.log(error)
                     }
                 }
             },
@@ -305,11 +308,12 @@
             },
 
             clear() {
-                this.ingredient = null;
                 this.filter = {
                     id: '',
                     name: ''
                 };
+
+                this.clearIngredientStockDetails();
 
                 this.$v.$reset();
 

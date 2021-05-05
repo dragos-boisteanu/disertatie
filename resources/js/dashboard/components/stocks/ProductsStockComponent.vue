@@ -34,9 +34,9 @@
             </form>
         </div>
 
-        <div v-if="product" class="mt-4 flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
+        <div v-if="getProductStockDetails" class="mt-4 flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
             <h2 class="text-xl font-semibold my-2">
-                <span>{{product.name}}</span> <span>{{product.weight}}</span> <span>{{product.unit}}</span>
+                <span>{{getProductStockDetails.name}}</span> <span>{{getProductStockDetails.weight}}</span> <span>{{getProductStockDetails.unit}}</span>
             </h2>
 
             <div>
@@ -48,7 +48,7 @@
                             :eclass="{'flex-1':true}"
                         >
                             <Input 
-                                v-model="product.quantity"
+                                v-model="getProductStockDetails.quantity"
                                 id="quantity"
                                 name="quantity" 
                                 :disabled="true"
@@ -78,6 +78,17 @@
                             />
                         </InputGroup> 
                     </div>
+                    <div v-if="hasIngredients" class="mt-4">
+                        <h3 class="font-semibold text-lg my-2">
+                            Ingredients
+                        </h3>
+                        <ul>
+                            <li v-for="ingredient in getProductStockDetails.ingredients" :key="ingredient.id">
+                                <span>{{ ingredient.name}}</span> <span>{{ingredient.quantity}}</span> <span>{{ingredient.unit.name}}</span> 
+                                <router-link :to="{name: 'IngredientsStock', params: {id: ingredient.id}}"  class="ml-5 text-sm text-lightBlue-600 hover:underline hover:text-lightBlue-400">View</router-link>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="mt-5 flex gap-x-4 md:justify-start">
                         <Button
                             v-if="!canNotUpdate"
@@ -88,37 +99,18 @@
                             Update
                         </Button>
                         <Button
-                            v-if="!canNotUpdate"
                             type="secondary"
                             :disabled="waiting" 
                             @click.native.prevent="clear" 
                         >
                             Clear
                         </Button>
-                        <!-- <button 
-                            @click.prevent="clear"
-                            class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
-                        >                       
-                            Clear
-                        </button> -->
                     </div>
                 </form>
             </div>
-
-            <div v-if="hasIngredients" class="mt-4">
-                <h3 class="font-semibold text-lg my-2">
-                    Ingredients
-                </h3>
-                <ul>
-                    <li v-for="ingredient in product.ingredients" :key="ingredient.id">
-                        <span>{{ ingredient.name}}</span> <span>{{ingredient.quantity}}</span> <span>{{ingredient.unit.name}}</span> 
-                        <router-link :to="{name: 'IngredientsStock', params: {id: ingredient.id}}" class="ml-5 text-sm text-lightBlue-600 hover:underline hover:text-lightBlue-400">View</router-link>
-                    </li>
-                </ul>
-            </div>
         </div>
         <button 
-            v-if="product"
+            v-if="getProductStockDetails"
             @click="findProduct"
             class="mt-4 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto md:mb-0"
         >                       
@@ -131,7 +123,6 @@
 <script>
     import _debounce from 'lodash/debounce';
     import { mapActions, mapGetters } from 'vuex';
-    import { updateStock, downloadProduct } from '../../api/stocks.api';
 
     import Unit from '../products/UnitComponent';
     import Input from '../inputs/TextInputComponent';
@@ -141,28 +132,31 @@
     import { required, integer, } from 'vuelidate/lib/validators'
 
     export default {
-        mounted() {
+        async mounted() {
             if(this.$route.params.barcode) {
+                this.resetStockStore();
                 this.barcode = this.$route.params.barcode;
-                this.findProduct();
+                await this.findProduct();
+            } else if (this.getProductStockDetails) {
+                this.barcode = this.getProductStockDetails.barcode;
             }
         },
 
         computed: {
             ...mapGetters('Units', ['getUnits']),
+            ...mapGetters('Stocks', ['getProductStockDetails']),
 
             canNotUpdate() {
-                return this.product.hasIngredients === 1
-                
+                return this.getProductStockDetails.hasIngredients === 1
             },
 
             hasIngredients() {
-                return this.product.hasIngredients === 1 && this.product.ingredients.length > 0;
+                return this.getProductStockDetails.hasIngredients === 1 && this.getProductStockDetails.ingredients.length > 0;
             },
 
             disableSearchButton() {
-                return this.barcode.length === 0;
-            }
+                return this.barcode && this.barcode.length === 0;
+            },
         },
 
         data() {
@@ -170,7 +164,6 @@
                 waiting: false,
                 waitingForProduct: false,
                 barcode: '',
-                product: null,
                 newQuantity: 0
             }
         }, 
@@ -187,6 +180,7 @@
         
         methods: {
             ...mapActions('Notification', ['openNotification']),
+            ...mapActions('Stocks', ['resetStockStore', 'updateStock', 'downloadProductStockDetails']),
 
             async findProduct() {
                 this.$v.barcode.$touch();
@@ -194,27 +188,21 @@
                     try {
                         this.$Progress.start();
                         this.waiting = true;
-
-                        console.log(this.barcode)
                         
-                        const response = await downloadProduct(this.barcode);
-                        this.product = response.data.data;
-                        
+                        await this.downloadProductStockDetails(this.barcode);
+          
                         this.waiting = false;
                         this.$Progress.finish();
                     } catch ( error ) {
-                        if(error.response) {
-                            if(error.response.status == '404') {
-                                this.openNotification({
-                                    type: 'err',
-                                    message: error.response.data.message,
-                                    show: true
-                                });
-                            }
+                        if(error.response && error.response.status == '404') {
+                            this.openNotification({
+                                type: 'err',
+                                message: error.response.data.message,
+                                show: true
+                            });
                         }
                         this.waiting = false;
                         this.$Progress.fail();
-                        this.product = null;
                     }
                 }
             },
@@ -229,18 +217,21 @@
                             this.waiting = true;
                         
                             const payload = {
-                                id: this.product.id,
+                                id: this.getProductStockDetails.id,
                                 data: {
                                     type: 'product',
                                     newQuantity: this.newQuantity
                                 }
                             }
 
-                            const response = await updateStock(payload);
-                            this.product.quantity = parseInt(response.data.quantity);
-                            this.newQuantity = 0;
+                            const response = await this.updateStock(payload);
+
+                            this.newQuantity = '';
+
+                            this.$v.newQuantity.$reset();
 
                             this.waiting = false;
+
                             this.$Progress.finish();
 
                             this.openNotification({
@@ -274,10 +265,11 @@
             },
 
             clear() {
-                this.product = null;
                 this.barcode = '';
 
                 this.$v.$reset();
+
+                this.resetStockStore();
 
                 if(this.$route.params.barcode) {
                     this.$router.replace({name: 'ProuductsStock'})

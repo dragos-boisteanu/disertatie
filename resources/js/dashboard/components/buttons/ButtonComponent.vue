@@ -43,7 +43,7 @@
                 default: false
             },
             eclass: {
-                type: String,
+                type: Object,
                 required: false,
             }
         },
@@ -70,9 +70,7 @@
                 if(this.eclass) {
                     result = result.concat(' ', this.eclass);
                 }
-
-                console.log(result)
-
+                
                 return result;
             }
         }
