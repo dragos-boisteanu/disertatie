@@ -104,7 +104,7 @@
                     <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
                         <InputGroup
                             id="name"
-                            label="Name"
+                            label="Base price"
                             :hasError="$v.product.base_price.$error"
                             :eclass="{'flex-1': true}"
                         >

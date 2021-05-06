@@ -166,24 +166,32 @@
     export default {
 
         async mounted() {
-            if(this.$route.params.id) {
-                this.clearIngredientStockDetails();
-                this.filter.id = this.$route.params.id;
-                await this.findIngredient();
-                
-            } else if (this.$route.params.name) {
-                this.clearIngredientStockDetails();
-                this.filter.name = this.$route.params.name;
-                await this.findIngredient();
 
-            } else if (this.getIngredientStockDetails) {
+            if(this.getIngredientStockDetails && (this.getIngredientStockDetails.id === this.$route.params.id || this.getIngredientStockDetails.name === this.$route.params.name )) {
                 this.filter.id = this.getIngredientStockDetails.id;
                 this.filter.name = this.getIngredientStockDetails.name
+            } else {
+                if(this.$route.params.id) {
+                    this.clearIngredientStockDetails();
+                    this.filter.id = this.$route.params.id;
+                    await this.findIngredient();
+                    
+                } else if (this.$route.params.name) {
+                    this.clearIngredientStockDetails();
+                    this.filter.name = this.$route.params.name;
+                    await this.findIngredient();
+                }
+            }
+        },
+
+        destroyed() {
+            if(this.getProductStockDetails === null) {
+                this.clearIngredientStockDetails();
             }
         },
 
         computed: {
-            ...mapGetters('Stocks', ['getIngredientStockDetails']),
+            ...mapGetters('Stocks', ['getIngredientStockDetails', 'getProductStockDetails']),
 
             disableSearchButton() {
                 return this.filter.id.length === 0 && this.filter.name.length === 0

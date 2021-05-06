@@ -39,8 +39,6 @@
                 <option :value="2">Name desc</option>
                 <option :value="3">Price asc</option>
                 <option :value="4">Price desc</option>
-                <option :value="5">Quantity asc</option>
-                <option :value="6">Quantity desc</option>
             </select> 
         </div>
 
@@ -54,7 +52,7 @@
                         </div>
                         <div class="flex-1">
                             <div class="font-semibold text-base">
-                                <span class="pr-1 border-r border-gray-200">{{ product.name}}</span> 
+                                <span class="border-gray-200">{{ product.name}}</span> 
                                 <span>{{ product.weight}}<Unit :unit-id="product.unit_id"></Unit></span>
                             </div>
                             <div class="text-sm">

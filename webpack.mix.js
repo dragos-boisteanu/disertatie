@@ -37,7 +37,7 @@ mix.webpackConfig({
 
 mix.disableNotifications();
 
-mix.js('resources/js/dashboard/app.js', 'public/js/dashboard')
+mix.js('resources/js/dashboard/app.js', 'public/js/dashboard').extract(['vue', 'axios'])
     .js('resources/js/client/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         require('postcss-import'),

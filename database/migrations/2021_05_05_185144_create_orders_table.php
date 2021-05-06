@@ -28,7 +28,7 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
 
             $table->foreign('client_id')->references('id')->on('users');
-            $table->foreing('staff_id')->references('id')->on('users');
+            $table->foreign('staff_id')->references('id')->on('users');
             $table->foreign('payment_method_id')->references('id')->on('paymen_methods');
 
         });

@@ -179,7 +179,7 @@
                 },
             },
             unitId: { 
-                required
+                required 
             }
         },
 
@@ -188,7 +188,7 @@
             ...mapActions('Notification', ['openNotification']),
 
             allowRemoval(productsCount) {
-                return parseInt(productsCount) === 0
+                return parseInt(productsCount) !== 0
             },
 
             selectIngredient(id) {
