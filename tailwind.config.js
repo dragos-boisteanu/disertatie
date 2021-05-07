@@ -44,7 +44,8 @@ module.exports = {
             opacity: ['disabled'],
             pointerEvents: ['hover', 'disabled'],
             boxShadow: ['active'],
-            backgroundColor: ['active', 'disabled'],
+            backgroundColor: ['active', 'disabled', 'even'],
+
         },
     },
     plugins: [

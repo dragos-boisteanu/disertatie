@@ -26,7 +26,7 @@
                         @change.native="selectDiscount"
                         @blur.native="$v.selectedDiscountId.$touch()"
                     >
-                        <option value="" disabled>Select discount</option>
+                        <option value="" selected disabled>Select discount</option>
                         <option 
                             v-for="availableDiscount in availableDiscounts" 
                             :key="availableDiscount.id"

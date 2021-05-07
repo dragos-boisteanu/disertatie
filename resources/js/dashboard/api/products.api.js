@@ -22,5 +22,5 @@ export {
     disableProduct,
     restoreProduct,
     deleteProduct,
-    downloadProductByBarcode
+    downloadProductByBarcode,
 }

@@ -1,6 +1,6 @@
 <template>
     <Modal
-     @close="close"
+        @close="close"
     >
 
         <template slot="header">

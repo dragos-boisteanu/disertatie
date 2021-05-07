@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
-use App\Http\Controllers\Controller;
-use Facade\FlareClient\Http\Response;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductOrder;
+use Facade\FlareClient\Http\Response;
+use App\Http\Resources\ProductOrderCollection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
 {
@@ -61,5 +65,25 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getProductsByName($name)
+    {
+        try {
+            $products = Product::where('name', 'like', $name . '%')->get();
+            if(count($products) == 0) {
+                throw new ModelNotFoundException('No products for ' . $name . ' name');
+            }
+            return new ProductOrderCollection($products);
+        } catch ( ModelNotFoundException $ex) {
+            return response()->json(null, 404);
+        }
+    }
+
+    public function getProductsById($id)
+    {
+        $product = Product::findOrFail($id);
+
+        return new ProductOrder($product);
     }
 }

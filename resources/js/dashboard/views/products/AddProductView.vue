@@ -5,7 +5,7 @@
             Add new product
         </template>
 
-        <form @submit.prevent="submit" class="lex flex-col">
+        <form @submit.prevent="submit" class="flex flex-col">
             <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
                 <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
 
@@ -34,7 +34,6 @@
                                     v-model="product.barcode"
                                     id="barcode"
                                     name="barcode" 
-                                    type="text" 
                                     :class="{'border-red-600' : $v.product.barcode.$error, 'border-green-600': $v.product.barcode.$dirty && !$v.product.barcode.$error}"   
                                     :disabled="waiting"
                                     @blur.native="getProduct"
