@@ -88,7 +88,8 @@
                                 id="clientPhoneNumber"
                                 name="clientPhoneNumber"
                                 :class="{'border-red-600' : $v.client.phoneNumber.$error, 'border-green-600': $v.client.phoneNumber.$dirty && !$v.client.phoneNumber.$error}"
-                                @blur.native="$v.client.phoneNumber.$touch()"
+                                @blur.native="getClient"
+
                             ></Input>
                         </InputGroup>
 
@@ -114,26 +115,49 @@
 
                     </div>
 
-                    <div class="flex flex-col gap-2 md:flex-row md:items-center">
+                    <InputGroup
+                        id="orderDeliveryMethod"
+                        label="Delivery method"
+                        :hasError="$v.order.deliveryMethodId.$error"
+                        :eclass="{'flex-initial':true}"
+                    >
+                        <template v-slot:errors>
+                            <p v-if="!$v.order.deliveryMethodId.required">
+                                The delivery method field is required
+                            </p>
+                        </template>
+                        <Select 
+                            v-model="order.deliveryMethodId"
+                            id="orderDeliveryMethod"
+                            name="orderDeliveryMethod"
+                            :class="{'border-red-600' : $v.order.deliveryMethodId.$error, 'border-green-600': $v.order.deliveryMethodId.$dirty && !$v.order.deliveryMethodId.$error}"             
+                            @blur.native="$v.order.deliveryMethodId.$touch()"
+                        >
+                            <option value="" selected disabled>Select delivery method</option>
+                            <option v-for="method in getDeliveryMethods" :key="method.id" :value="method.id">{{method.name}}</option>
+                        </Select>
+                    </InputGroup>
+
+                    <div class="flex flex-col gap-2 md:flex-row md:items-center" v-if="showAddressFields">
                         <div class="flex items-center gap-x-2">   
                             <InputGroup
                                 id="clientCounty"
                                 label="County"
-                                :hasError="$v.countyId.$error"
+                                :hasError="$v.county.id.$error"
                                 :eclass="{'flex-1':true}"
                             >  
                                 <template v-slot:errors>
-                                    <p v-if="!$v.countyId.required">
+                                    <p v-if="!$v.county.id.required">
                                         The county field is required
                                     </p>
                                 </template>
                                 <Select 
-                                    v-model="countyId"
+                                    v-model="county.id"
                                     id="clientCounty"
                                     name="country"
-                                    :class="{'border-red-600' : $v.countyId.$error, 'border-green-600': $v.countyId.$dirty && !$v.countyId.$error}"
+                                    :class="{'border-red-600' : $v.county.id.$error, 'border-green-600': $v.county.id.$dirty && !$v.county.id.$error}"
                                     @change.native="getCitites"
-                                    @blur.native="$v.countyId.$touch()"
+                                    @blur.native="$v.county.id.$touch()"
                                 >
                                     <option value="" disabled>Select user country</option>
                                     <option v-for="county in getCounties" :key="county.id" :value="county.id"> {{county.name}} </option>
@@ -143,21 +167,21 @@
                             <InputGroup
                                 id="clientCity"
                                 label="City"
-                                :hasError="$v.cityId.$error"
+                                :hasError="$v.city.id.$error"
                                 :eclass="{'flex-1':true}"
                             >
                                 <template v-slot:errors>
-                                    <p v-if="!$v.cityId.required">
+                                    <p v-if="!$v.city.id.required">
                                         The city field is required
                                     </p>
                                 </template>
                                 <Select 
-                                    v-model="cityId"
+                                    v-model="city.id"
                                     id="clientCity"
                                     name="city"
-                                    :disabled="countyId ? false : true"
-                                    :class="{'border-red-600' : $v.cityId.$error, 'border-green-600': $v.cityId.$dirty && !$v.cityId.$error}"             
-                                    @blur.native="$v.cityId.$touch()"
+                                    :disabled="county.id ? false : true"
+                                    :class="{'border-red-600' : $v.city.id.$error, 'border-green-600': $v.city.id.$dirty && !$v.city.id.$error}"             
+                                    @blur.native="$v.city.id.$touch()"
                                     @change.native="selectCity"
                                 >
                                     <option value="" selected disabled>Select user city</option>
@@ -169,23 +193,23 @@
                         <InputGroup
                             id="clientAddress"
                             label="Adrress"
-                            :hasError="$v.client.address.$error"
+                            :hasError="$v.address.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.client.address.required">
+                                <p v-if="!$v.address.required">
                                     The client address field is required 
                                 </p>
-                                <p v-if="!$v.client.address.alphaNumSpaces">
+                                <p v-if="!$v.address.alphaNumSpaces">
                                     The client address field must contain only letters, spaces or numbers
                                 </p>
                             </template>
                             <Input
-                                v-model="client.address"
+                                v-model="address"
                                 id="clientAddress"
                                 name="clientAddress"
-                                :class="{'border-red-600' : $v.client.address.$error, 'border-green-600': $v.client.address.$dirty && !$v.client.address.$error}"
-                                @blur.native="$v.client.address.$touch()"
+                                :class="{'border-red-600' : $v.address.$error, 'border-green-600': $v.address.$dirty && !$v.address.$error}"
+                                @blur.native="$v.address.$touch()"
                             ></Input>
                         </InputGroup>
                     </div>
@@ -208,56 +232,7 @@
                             @blur.native="$v.order.observations.$touch()"
                         ></Textarea>
                     </InputGroup>
-
-                    <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                        <InputGroup
-                            id="orderDeliveryMethod"
-                            label="Delivery method"
-                            :hasError="$v.order.deliveryMethodId.$error"
-                            :eclass="{'flex-1':true}"
-                        >
-                            <template v-slot:errors>
-                                <p v-if="!$v.order.deliveryMethodId.required">
-                                    The delivery method field is required
-                                </p>
-                            </template>
-                            <Select 
-                                v-model="order.deliveryMethodId"
-                                id="orderDeliveryMethod"
-                                name="orderDeliveryMethod"
-                                :class="{'border-red-600' : $v.order.deliveryMethodId.$error, 'border-green-600': $v.order.deliveryMethodId.$dirty && !$v.order.deliveryMethodId.$error}"             
-                                @blur.native="$v.order.deliveryMethodId.$touch()"
-                            >
-                                <option value="" selected disabled>Select delivery method</option>
-                                <!-- <option v-for="city in cities" :key="city.id" :value="city.id">{{city.name}}</option> -->
-                            </Select>
-                        </InputGroup>
-
-                        <InputGroup
-                            id="orderPaymentMethod"
-                            label="Delivery method"
-                            :hasError="$v.order.paymentMethodId.$error"
-                            :eclass="{'flex-1':true}"
-                        >
-                            <template v-slot:errors>
-                                <p v-if="!$v.order.paymentMethodId.required">
-                                    The payment method field is required
-                                </p>
-                            </template>
-                            <Select 
-                                v-model="order.deliveryMethodId"
-                                id="orderPaymentMethod"
-                                name="orderPaymentMethod"
-                                :class="{'border-red-600' : $v.order.paymentMethodId.$error, 'border-green-600': $v.order.paymentMethodId.$dirty && !$v.order.paymentMethodId.$error}"             
-                                @blur.native="$v.order.paymentMethodId.$touch()"
-                            >
-                                <option value="" selected disabled>Select payment method</option>
-                                <!-- <option v-for="city in cities" :key="city.id" :value="city.id">{{city.name}}</option> -->
-                            </Select>
-                        </InputGroup>
-
-                    </div>
-
+                    
                     <!-- ORDER'S PRODUCTS TABLE -->
                     <div>
                         <div class="text-sm font-semibold">Products</div>
@@ -279,12 +254,12 @@
                                     @edit="editOrderProduct(item)"
                                     @remove="removeProductFromOrder"
                                 ></OrderItem>
-                                <tr v-if="order.items.length > 0">                                    
-                                    <td colspan="2">
+                                <tr v-if="order.items.length > 0" class="mt-1 font-bold border-t">                                    
+                                    <td colspan="2" class="p-2">
                                         TOTAL
                                     </td>
-                                    <td>{{ orderTotalQuantity }}</td>
-                                    <td>{{ orderTotalPrice }}</td>
+                                    <td class="p-2">{{ orderTotalQuantity }}</td>
+                                    <td class="p-2">{{ orderTotalPrice }} Ron</td>
                                 </tr>
                                 <tr>
                                     <td colspan="5">
@@ -327,7 +302,7 @@
     import OrderItem from '../../components/orders/OrderItemComponent';
     import OrderItemModal from '../../components/modals/OrderItemModalComponent';
 
-    import { required, numeric, maxLength, email } from 'vuelidate/lib/validators'
+    import { required, numeric, maxLength, email, requiredIf  } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
 
     import { mapActions, mapGetters } from 'vuex';
@@ -339,7 +314,7 @@
 
         computed: {
             // ...mapGetters('PaymentMethods', ['getPaymentMethods']),
-            // ...mapGetters('DeliveryMethods', ['getDeliveryMethods']),
+            ...mapGetters('DeliveryMethods', ['getDeliveryMethods']),
             ...mapGetters('Counties', ['getCounties']),
 
             orderTotalQuantity() {
@@ -350,7 +325,7 @@
 
                 return totalQuantity;
             },
-
+            
             orderTotalPrice() {
                 let totalPrice = 0
                 this.order.items.forEach(item => {
@@ -358,13 +333,28 @@
                 })
 
                 return totalPrice.toFixed(2);
+            },
+
+            showAddressFields() {
+                this.$v.address.$reset();
+                this.$v.city.id.$reset();
+                this.$v.county.id.$reset();
+                return parseInt(this.order.deliveryMethodId) === 1;
             }
         },
         
         data() {
             return {
-                countyId: '',
-                cityId: '',
+                county: {
+                    id: '',
+                    name: ''
+                },
+
+                city: {
+                    id: '',
+                    name: '',
+                },
+
                 cities: [],
 
                 client: {
@@ -372,14 +362,12 @@
                     name: '',
                     phoneNumber: '',
                     email: '',
-                    county: '',
-                    city: '',
-                    address: '',
                 },
+
+                address: '',
 
                 order: {
                     address: '',
-                    paymentMethodId: '',
                     deliveryMethodId: '',
                     observations: '',
                     items: []
@@ -392,73 +380,82 @@
         },
 
         validations: {
-            countyId: {
-                required,
-                numeric
+            address: {
+                requiredIf: requiredIf(function () {
+                    return this.showAddressFields
+                }),
+                alphaNumSpaces
+            },
+            county: {
+                id: {
+                    required: requiredIf(function () {
+                        return this.showAddressFields
+                    }),
+                    numeric,
+                },
             },
 
-            cityId: {
-                required,
-                numeric
+            city: {
+                id: {
+                    required: requiredIf(function () {
+                        return this.showAddressFields
+                    }),
+                    numeric
+                }
             },
 
             client: {
-                firstName: {
-                    required,
-                    maxLength: maxLength(50),
-                    alphaSpaces,
-                },
                 name: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
-                phoneNumber: {
+                firstName: {
                     required,
+                    maxLength: maxLength(50),
+                    alphaSpaces
+                },
+                phoneNumber: {
+                    required
                 },
                 email: {
                     email
-                },
-                address: {
-                    required,
-                    alphaNumSpaces
                 }
             },
 
             order: {
-                paymentMethodId: {
-                    required,
-                    numeric
-                },
                 deliveryMethodId: {
-                    required,
-                    numeric
-                },
-                paymentMethodId: {
                     required,
                     numeric
                 },
                 observations: {
                     alphaNumSpaces
-                },
-                products: {
-                    required
                 }
             }
+
         },
 
         methods: {
             ...mapActions('Users', ['getUserByPhoneNumber']),
             ...mapActions('Counties', ['fetchCitites']),
-            ...mapActions('Notification', ['openNotification']),
-            
+            ...mapActions('Notification', ['openNotification']),     
+            ...mapActions('Users', ['downloadUserByPhoneNumber']),       
 
             submit() {
 
-            },
+                this.$v.$touch()
 
-            selectUser() {
-
+                if(!this.$v.$invalid) {
+                    if(this.showAddressFields) {
+                        this.order.address = `${this.client.firstName}, ${this.client.name}, ${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
+                    } else {
+                        this.order.address = 'Local';
+                    }
+                    console.log('order: ', this.order);
+                } else {
+                    console.log('error', this.$v)
+                }
+                                             
             },
 
             saveEdit(product) {    
@@ -467,12 +464,11 @@
             },
 
             addProductToOrder(product) {
-                const existingProduct = _find(this.order.items, ['name', product.name]);
-                const existingProductIndex = _findIndex(this.order.items, ['name', product.name]);
+                const existingProduct = _find(this.order.items, ['id', parseInt(product.id)]);
+                const existingProductIndex = _findIndex(this.order.items, ['id', parseInt(product.id)]);
 
                 if(existingProduct) {
                     const newQuantity = parseInt(existingProduct.quantity) + parseInt(product.quantity);
-
                     if(newQuantity <= existingProduct.stock) {
                         this.$set(this.order.items[existingProductIndex], 'quantity', newQuantity);
                         this.openNotification({
@@ -484,7 +480,7 @@
                         this.openNotification({
                             type: 'err',
                             show: true,
-                            message: 'Product quantity is greater than the available stock'
+                            message: 'Product total quantity is greater than the available stock'
                         })
                     }
                     
@@ -523,17 +519,34 @@
 
             async getCitites() {
                 try {
-                    const selectedCounty =  _find(this.getCounties, ['id', parseInt(this.countyId)]);
-                    this.client.county = selectedCounty.name;
-                    this.cities= await this.fetchCitites(this.countyId);
+                    const selectedCounty =  _find(this.getCounties, ['id', parseInt(this.county.id)]);
+                    this.county.name = selectedCounty.name;
+                    this.cities= await this.fetchCitites(this.county.id);
+                } catch ( error ) {
+                    console.log(error)
+                }
+            },
+
+            async getClient() {
+                try {
+                    this.$v.client.phoneNumber.$touch();
+
+                    if(!this.$v.client.phoneNumber.$invalid) {
+                        const response = await this.downloadUserByPhoneNumber(this.client.phoneNumber);
+                        this.client.firstName = response.firstName;
+                        this.client.name = response.name;
+                        this.client.id = response.id;
+                        this.client.email = response.email;
+                    }
+                    
                 } catch ( error ) {
                     console.log(error)
                 }
             },
 
             selectCity() {
-                const selectedCity = _find(this.cities, ['id', parseInt(this.cityId)]);
-                this.client.city = selectedCity.name;
+                const selectedCity = _find(this.cities, ['id', parseInt(this.city.id)]);
+                this.city.name = selectedCity.name;
             }
         },
 

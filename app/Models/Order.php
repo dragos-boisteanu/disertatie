@@ -38,4 +38,9 @@ class Order extends Model
         return $this->hasOne(User::class, 'id', 'staff_id');
     }
 
+    public function deliveryMethod()
+    {
+        return $this->hasOne(DeliveryMethod::class);
+    }
+
 }

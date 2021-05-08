@@ -68,7 +68,8 @@
                     this.fetchUnits(),
                     this.downloadLoggedUserData(),
                     this.downloadIngredients(),
-                    this.downloadDiscounts()
+                    this.downloadDiscounts(),
+                    this.fetchDeliveryMethods(),
                 ]);
 
                 this.$Progress.finish()
@@ -112,6 +113,7 @@
             ...mapActions('Users', ['downloadLoggedUserData']),
             ...mapActions('Ingredients', ['downloadIngredients']),
             ...mapActions('Discounts', ['downloadDiscounts']),
+            ...mapActions('DeliveryMethods', ['fetchDeliveryMethods']),
             
             async downloadRoles() {
                 try {

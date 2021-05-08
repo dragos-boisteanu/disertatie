@@ -12,6 +12,7 @@ use App\Events\AccountCreated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\ClientResource;
 use App\Http\Resources\UserCollection;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\UserPatchRequest;
@@ -260,5 +261,16 @@ class UserController extends Controller
 
     public function getLoggedUser(Request $request) {
         return new UserResource($request->user());
+    }
+
+    public function getClientByPhoneNumer($phoneNumber)
+    {
+        $client = User::where('phone_number', $phoneNumber)->first();
+
+        if(empty($client)) {
+            abort(404);
+        }
+
+        return new ClientResource($client);
     }
 }

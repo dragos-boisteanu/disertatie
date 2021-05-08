@@ -15,7 +15,7 @@ class CreateIngredientProductTable extends Migration
     {
         Schema::create('ingredient_product', function (Blueprint $table) {
             $table->primary(['product_id', 'ingredient_id']);
-            $table->foreignId('product_id')->constrained();
+            $table->foreignId('product_id')->constrained()->onDelete("cascade");
             $table->foreignId('ingredient_id')->constrained();
             $table->integer('quantity');
         });

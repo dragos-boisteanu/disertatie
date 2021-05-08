@@ -1,4 +1,4 @@
-import {downloadLoggedUserData, downloadUsers, downloadUser, storeUser, patchUser,  disableUser, restoreUser, deleteUser } from '../../api/users.api';
+import {downloadLoggedUserData, downloadUsers, downloadUser, storeUser, patchUser,  disableUser, restoreUser, deleteUser, downloadUserByPhoneNumber } from '../../api/users.api';
 import _orderBy from 'lodash/orderBy';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
@@ -133,6 +133,15 @@ const actions = {
     async fetchUser({}, id) {
         try {
             const response = await downloadUser(id);
+            return response.data.data;
+        } catch ( error ) {
+            throw error
+        }
+    },
+
+    async downloadUserByPhoneNumber({}, payload) {
+        try {
+            const response = await downloadUserByPhoneNumber(payload);
             return response.data.data;
         } catch ( error ) {
             throw error

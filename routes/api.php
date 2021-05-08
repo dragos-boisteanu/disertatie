@@ -26,6 +26,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('stocks', 'StockController')->only('update');
     Route::apiResource('discounts', 'DiscountController');
     Route::apiResource('orders', 'OrderController');
+    Route::apiResource('delivery-methods', 'DeliveryMethodController');
    
     Route::group(['prefix'=>'categories'], function() {
         Route::get('/{catagoryName}', 'CategoryController@search');
@@ -34,6 +35,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::group(['prefix'=>'users'], function() {
         Route::delete('{id}/disable', 'UserController@disable');
         Route::post('{id}/restore', 'UserController@restore');
+        Route::get('/phone-number/{phoneNumber}', 'UserController@getClientByPhoneNumer');
     });
   
     Route::group(['prefix'=>'products'], function() {

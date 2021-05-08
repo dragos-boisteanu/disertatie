@@ -15,6 +15,7 @@ const disableUser = (id) => httpClient.delete(`${END_POINT}/${id}/disable`, {dat
 const restoreUser = (id) => httpClient.post(`${END_POINT}/${id}/restore`);
 
 const deleteUser = (id) => httpClient.delete(`${END_POINT}/${id}`, {data: id});
+const downloadUserByPhoneNumber = (phoneNumber) => httpClient.get(`${END_POINT}/phone-number/${phoneNumber}`);
 
 export {
     downloadLoggedUserData,
@@ -24,5 +25,6 @@ export {
     patchUser,
     disableUser,
     restoreUser,
-    deleteUser
+    deleteUser,
+    downloadUserByPhoneNumber
 }

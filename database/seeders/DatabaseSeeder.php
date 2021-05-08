@@ -16,10 +16,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {            
         $this->call([
-            CountySeeder::class,
-            RoleSeeder::class,
-            CategorySeeder::class,
-            UnitSeeder::class,
+            // CountySeeder::class,
+            // RoleSeeder::class,
+            // CategorySeeder::class,
+            // UnitSeeder::class,
+            DeliveryMethodSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();

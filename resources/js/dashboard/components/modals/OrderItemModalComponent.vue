@@ -219,17 +219,17 @@
                 this.$v.product.$touch();
 
                 if(!this.$v.$invalid) {
-                    const product = {
-                        id: this.product.id,
-                        name: this.product.name,
-                        quantity: this.product.quantity,
-                        price: this.product.price
-                    }
+                    // const product = {
+                    //     id: this.product.id,
+                    //     name: this.product.name,
+                    //     quantity: this.product.quantity,
+                    //     price: this.product.price
+                    // }
 
                     if(this.edit) {
-                        this.$emit('edit', product)
+                        this.$emit('edit', this.product)
                     } else {
-                        this.$emit('add', product)
+                        this.$emit('add', this.product)
                     }
                     this.$emit('closed');
                 }
