@@ -23,6 +23,7 @@
                             label="First name"
                             :hasError="$v.client.firstName.$error"
                             :eclass="{'flex-1':true}"
+                            :required="true"
                         >
                             <template v-slot:errors>
                                 <p v-if="!$v.client.firstName.required">
@@ -51,9 +52,6 @@
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.client.name.required">
-                                    The client name field is required 
-                                </p>
                                 <p v-if="!$v.client.name.maxLength">
                                     The client name must not be longer than 50 characters
                                 </p>
@@ -77,6 +75,7 @@
                             label="Phone number"
                             :hasError="$v.client.phoneNumber.$error"
                             :eclass="{'flex-1':true}"
+                            :required="true"
                         >
                             <template v-slot:errors>
                                 <p v-if="!$v.client.phoneNumber.required">
@@ -100,8 +99,8 @@
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.client.email.required">
-                                    The client email field is required 
+                                <p v-if="!$v.client.email.email">
+                                    The client email field must have an valid email address
                                 </p>
                             </template>
                             <Input
@@ -120,6 +119,7 @@
                         label="Delivery method"
                         :hasError="$v.order.deliveryMethodId.$error"
                         :eclass="{'flex-initial':true}"
+                        :required="true"
                     >
                         <template v-slot:errors>
                             <p v-if="!$v.order.deliveryMethodId.required">
@@ -145,6 +145,7 @@
                                 label="County"
                                 :hasError="$v.county.id.$error"
                                 :eclass="{'flex-1':true}"
+                                :required="true"
                             >  
                                 <template v-slot:errors>
                                     <p v-if="!$v.county.id.required">
@@ -169,6 +170,7 @@
                                 label="City"
                                 :hasError="$v.city.id.$error"
                                 :eclass="{'flex-1':true}"
+                                :required="true"
                             >
                                 <template v-slot:errors>
                                     <p v-if="!$v.city.id.required">
@@ -195,6 +197,7 @@
                             label="Adrress"
                             :hasError="$v.address.$error"
                             :eclass="{'flex-1':true}"
+                            :required="true"
                         >
                             <template v-slot:errors>
                                 <p v-if="!$v.address.required">
@@ -235,7 +238,12 @@
                     
                     <!-- ORDER'S PRODUCTS TABLE -->
                     <div>
-                        <div class="text-sm font-semibold">Products</div>
+                        <div class="text-sm font-semibold">Products <span class="text-red-500">*</span></div>
+                        <div v-if="$v.order.items.$error" class="text-xs text-red-600 font-semibold">
+                            <p v-if="!$v.order.items.required">
+                                The order must have at least 1 product
+                            </p>
+                        </div>
                         <table class="mt-1 px-2 w-full rounded-sm max-h-80 md:max-h-96">
                             <thead class="w-full bg-gray-700 text-orange-500">
                                 <tr class="text-left text-sm">
@@ -302,7 +310,7 @@
     import OrderItem from '../../components/orders/OrderItemComponent';
     import OrderItemModal from '../../components/modals/OrderItemModalComponent';
 
-    import { required, numeric, maxLength, email, requiredIf  } from 'vuelidate/lib/validators'
+    import { required, numeric, minLength, maxLength, email, requiredIf  } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
 
     import { mapActions, mapGetters } from 'vuex';
@@ -406,7 +414,6 @@
 
             client: {
                 name: {
-                    required,
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
@@ -430,6 +437,10 @@
                 },
                 observations: {
                     alphaNumSpaces
+                },
+                items: {
+                    required,
+                    minLength: minLength(1)
                 }
             }
 
