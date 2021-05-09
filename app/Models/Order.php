@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use function PHPSTORM_META\map;
+
 class Order extends Model
 {
     use HasFactory, SoftDeletes;
@@ -14,6 +16,9 @@ class Order extends Model
         'client_id',
         'staff_id',
         'payment_method_id',
+        'delivery_method_id',
+        'phone_number',
+        'email',
         'address',
         'observations',
     ];

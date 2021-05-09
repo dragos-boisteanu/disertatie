@@ -317,6 +317,7 @@
 
     import _find from 'lodash/find'
     import _findIndex from 'lodash/findIndex'
+import { storeOrder } from '../../api/orders.api';
 
     export default {
 
@@ -450,21 +451,28 @@
             ...mapActions('Users', ['getUserByPhoneNumber']),
             ...mapActions('Counties', ['fetchCitites']),
             ...mapActions('Notification', ['openNotification']),     
-            ...mapActions('Users', ['downloadUserByPhoneNumber']),       
+            ...mapActions('Users', ['downloadUserByPhoneNumber']),     
+            ...mapActions('Orders', ['storeOrder']),  
 
-            submit() {
+            async submit() {
+                try {
+                    this.$v.$touch()
 
-                this.$v.$touch()
+                    if(!this.$v.$invalid) {
+                        if(this.showAddressFields) {
+                            this.order.address = `${this.client.firstName}, ${this.client.name}, ${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
+                        } else {
+                            this.order.address = 'Local';
+                        }
 
-                if(!this.$v.$invalid) {
-                    if(this.showAddressFields) {
-                        this.order.address = `${this.client.firstName}, ${this.client.name}, ${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
+                        await storeOrder(this.order)
+                        
+                        console.log('order: ', this.order);
                     } else {
-                        this.order.address = 'Local';
+                        console.log('error', this.$v)
                     }
-                    console.log('order: ', this.order);
-                } else {
-                    console.log('error', this.$v)
+                } catch ( error ) {
+                    console.log(error)
                 }
                                              
             },
