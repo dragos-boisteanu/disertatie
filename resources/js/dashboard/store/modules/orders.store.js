@@ -1,7 +1,7 @@
 import {storeOrder} from '../../api/orders.api'
 
 const initialState = () => ({
-    orders: null
+    orders: []
 })
 
 const state = initialState();
@@ -13,17 +13,28 @@ const getters = {
 }
 
 const actions = {
-    async storeOrder({comit}, payload) {
+    resetOrders({commit}) {
+        commit('RESET');
+    },
+
+    async storeOrder({commit}, payload) {
         try {
             await storeOrder(payload);
-            comit('ADD_ORDER', payload)
+            commit('ADD_ORDER', payload)
         } catch ( error ) {
             throw error
         }
     }
 }
 
-const muttations = {
+const mutations = {
+    RESET(state) {
+        const newState = initialState();
+        Object.keys(newState).forEach(key => {
+            state[key] = newState[key]
+        })
+    },
+    
     ADD_ORDER(state, payload) {
         state.orders.unshift(payload)
     }
@@ -34,5 +45,5 @@ export default {
     state,
     getters,
     actions,
-    muttations
+    mutations
 }

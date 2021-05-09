@@ -317,7 +317,6 @@
 
     import _find from 'lodash/find'
     import _findIndex from 'lodash/findIndex'
-import { storeOrder } from '../../api/orders.api';
 
     export default {
 
@@ -459,22 +458,41 @@ import { storeOrder } from '../../api/orders.api';
                     this.$v.$touch()
 
                     if(!this.$v.$invalid) {
+                        this.$Progress.start();
+
                         if(this.showAddressFields) {
                             this.order.address = `${this.client.firstName}, ${this.client.name}, ${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
                         } else {
                             this.order.address = 'Local';
                         }
 
-                        await storeOrder(this.order)
-                        
-                        console.log('order: ', this.order);
-                    } else {
-                        console.log('error', this.$v)
+                        if(this.client.id) {
+                            this.order.clientId = this.client.id;
+                        }
+
+                        await this.storeOrder(this.order)
+
+                        this.openNotification({
+                            type: 'ok',
+                            show: true,
+                            message: 'Order created succesfully'
+                        })
+
+                        this.$Progress.finish();
+
+                        this.resetForm();
                     }
                 } catch ( error ) {
+                    this.openNotification({
+                        type: 'err',
+                        show: true,
+                        message: 'Failed to create new order'
+                    })
+
+                    this.$Progress.fail();
+                    console.log('error', this.$v)
                     console.log(error)
-                }
-                                             
+                }                          
             },
 
             saveEdit(product) {    
@@ -566,6 +584,41 @@ import { storeOrder } from '../../api/orders.api';
             selectCity() {
                 const selectedCity = _find(this.cities, ['id', parseInt(this.city.id)]);
                 this.city.name = selectedCity.name;
+            },
+
+            resetForm() {
+                this.$v.$reset();
+                this.county = {
+                    id: '',
+                    name: ''
+                },
+
+                this.city = {
+                    id: '',
+                    name: '',
+                },
+
+                this.cities = [],
+
+                this.client = {
+                    firstName: '',
+                    name: '',
+                    phoneNumber: '',
+                    email: '',
+                },
+
+                this.address = '',
+
+                this.order = {
+                    address: '',
+                    deliveryMethodId: '',
+                    observations: '',
+                    items: []
+                },
+
+                this.selectedItemId = '',
+                this.selectedItemQuantity = '',
+                this.showAddProductModalState = false
             }
         },
 
