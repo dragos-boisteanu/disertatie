@@ -277,15 +277,9 @@ class ProductController extends Controller
 
     public function getProductByBarcode($barcode) 
     {
-        try {
-            $product = Product::withTrashed()->where('barcode', $barcode)->first();
-            if(!isset($product)) {
-                throw new ModelNotFoundException('No products for ' . $barcode . ' barcode');
-            }
-            return new ProductResource($product);
-        } catch ( ModelNotFoundException $ex) {
-            response()->json(['message' => $ex->getMessage()], 404);
-        }
+        $product = Product::withTrashed()->where('barcode', $barcode)->firstOrCreate();
+        
+        return new ProductResource($product);
     }
 
 }

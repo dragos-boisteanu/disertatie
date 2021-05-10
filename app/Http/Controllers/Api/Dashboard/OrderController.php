@@ -40,6 +40,8 @@ class OrderController extends Controller
     
             $input['delivery_method_id'] = $request->deliveryMethodId;
             $input['address'] = $request->address;
+            $input['phone_number'] = $request->phoneNumber;
+            $input['status_id'] = 2;
 
             if($request->has('observations')) {
                 $input['observations'] = $request->observations;

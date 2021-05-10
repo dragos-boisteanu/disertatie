@@ -43,10 +43,11 @@ const options = {
   thickness: '4px',
   transition: {
     speed: '0.2s',
-    opacity: '0.7s',
+    opacity: '0.9s',
     termination: 300
   },
   autoRevert: true,
+  autoFinish: false,
   location: 'top',
   inverse: false
 }

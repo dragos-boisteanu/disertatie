@@ -1,7 +1,9 @@
-import {downloadOrders,storeOrder} from '../../api/orders.api'
+import { downloadOrders, storeOrder } from '../../api/orders.api'
+import { downloadStatuses } from '../../api/orderStatuses.api'
 
 const initialState = () => ({
-    orders: []
+    orders: [],
+    statuses: [],
 })
 
 const state = initialState();
@@ -9,6 +11,10 @@ const state = initialState();
 const getters = {
     getOrders(state) {
         return state.orders
+    },
+
+    getOrderStatuses(state) {
+        return state.statuses;
     }
 }
 
@@ -23,6 +29,15 @@ const actions = {
             commit('SET_ORDERS', response.data.data);
         } catch ( error ) {
 
+        }
+    },
+
+    async downloadOrderStatues({commit}) {
+        try {
+            const response = await downloadStatuses();
+            commit('SET_ORDER_STATUSES', response.data)
+        } catch ( error ) {
+            throw error
         }
     },
 
@@ -50,6 +65,10 @@ const mutations = {
     
     ADD_ORDER(state, payload) {
         state.orders.unshift(payload)
+    },
+
+    SET_ORDER_STATUSES(state, payload) {
+        state.statuses = payload;
     }
 }
 

@@ -21,6 +21,7 @@ class Order extends Model
         'payment_method_id',
         'delivery_method_id',
         'phone_number',
+        'status_id',
         'email',
         'address',
         'observations',
@@ -51,6 +52,11 @@ class Order extends Model
     public function deliveryMethod()
     {
         return $this->hasOne(DeliveryMethod::class);
+    }
+
+    public function status() 
+    {
+        return $this->hasOne(OrderStatus::class);
     }
 
     public function scopeFilter(Builder $builder, Request $request)

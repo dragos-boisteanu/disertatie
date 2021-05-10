@@ -1,13 +1,5 @@
 <template>
     <ViewContainer v-if="user" >
-        <!-- <EditUser 
-            v-if="editUserState" 
-            @close="toggleEditUserState"
-            @updated="updateUser"
-            :user="user"
-        >
-        </EditUser> -->
-
         <template slot="header">
            User #{{user.id}}
         </template>
@@ -88,7 +80,6 @@
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
-    // import EditUser from '../../components/users/EditUserComponent';
     import { mapActions, mapGetters } from 'vuex';
 
     export default {
@@ -192,10 +183,6 @@
                     this.$Progress.failed()
                     console.log(error)
                 }
-            },
-
-            toggleEditUserState() {
-                this.editUserState = !this.editUserState;
             },
 
             setUser(user) {

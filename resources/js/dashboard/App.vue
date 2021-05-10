@@ -70,6 +70,7 @@
                     this.downloadIngredients(),
                     this.downloadDiscounts(),
                     this.fetchDeliveryMethods(),
+                    this.downloadOrderStatues(),
                 ]);
 
                 this.$Progress.finish()
@@ -114,6 +115,7 @@
             ...mapActions('Ingredients', ['downloadIngredients']),
             ...mapActions('Discounts', ['downloadDiscounts']),
             ...mapActions('DeliveryMethods', ['fetchDeliveryMethods']),
+            ...mapActions('Orders', ['downloadOrderStatues']),
             
             async downloadRoles() {
                 try {

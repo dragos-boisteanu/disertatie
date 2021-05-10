@@ -13,7 +13,7 @@ export default [
         component: ProductsListView,
         meta: {
             breadcrumb: {
-                label: 'Product lists',
+                label: 'Products',
                 parent: 'Dashboard'
             }
         }

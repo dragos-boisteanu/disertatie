@@ -463,12 +463,14 @@
                         if(this.showAddressFields) {
                             this.order.address = `${this.client.firstName}, ${this.client.name}, ${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
                         } else {
-                            this.order.address = 'Local';
+                            this.order.address = `${this.client.firstName} Local`;
                         }
 
                         if(this.client.id) {
                             this.order.clientId = this.client.id;
                         }
+
+                        this.order.phoneNumber = this.client.phoneNumber;
 
                         await this.storeOrder(this.order)
 
