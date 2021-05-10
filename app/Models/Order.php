@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Http\Request;
 use function PHPSTORM_META\map;
+use App\Filters\Order\OrderFilter;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -22,6 +25,8 @@ class Order extends Model
         'address',
         'observations',
     ];
+
+    public $with = ['items'];
 
     public function paymentMethod()
     {
@@ -46,6 +51,11 @@ class Order extends Model
     public function deliveryMethod()
     {
         return $this->hasOne(DeliveryMethod::class);
+    }
+
+    public function scopeFilter(Builder $builder, Request $request)
+    {
+        return (new OrderFilter($request))->filter($builder);
     }
 
 }

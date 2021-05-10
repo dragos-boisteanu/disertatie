@@ -16,13 +16,14 @@ class Order extends JsonResource
     {
         return [
             'id' => $this->id,
-            'client' => ['name' => $this->client->first_name . ' ' . $this->client->name, 'id'=> $this->client->id],
+            'client' => new OrderClient($this->whenLoaded('client')),
             'staff' => [ 'name' => $this->staff->first_name . ' ' . $this->staff->name, 'id'=> $this->staff->id],
-            'paymentMethod' => $this->paymentMethod,
+            'deliveryMethod' => $this->delivery_method_id,
             'address' => $this->address,
             'observations' => $this->observations,
-            'craetedAt' => $this->createdAt,
-            'updatedAt' => $this->updatedAt
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
+            'items' => new OrderItemCollection($this->items),
         ];
     }
 }

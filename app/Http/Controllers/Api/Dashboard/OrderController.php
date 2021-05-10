@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductOrder;
-use Facade\FlareClient\Http\Response;
 use App\Http\Requests\OrderStoreRequest;
+use App\Http\Resources\OrderCollection;
 use App\Http\Resources\ProductOrderCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -21,9 +21,11 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $orders = Order::with('client', 'staff')->filter($request)->paginate(100);
+
+        return new OrderCollection($orders);
     }
 
     /**

@@ -1,4 +1,4 @@
-import {storeOrder} from '../../api/orders.api'
+import {downloadOrders,storeOrder} from '../../api/orders.api'
 
 const initialState = () => ({
     orders: []
@@ -15,6 +15,15 @@ const getters = {
 const actions = {
     resetOrders({commit}) {
         commit('RESET');
+    },
+
+    async downloadOrders({commit}, payload) {
+        try {
+            const response = await downloadOrders(payload);
+            commit('SET_ORDERS', response.data.data);
+        } catch ( error ) {
+
+        }
     },
 
     async storeOrder({commit}, payload) {
@@ -34,6 +43,10 @@ const mutations = {
             state[key] = newState[key]
         })
     },
+
+    SET_ORDERS(state, payload) {
+        state.orders = payload;
+    },  
     
     ADD_ORDER(state, payload) {
         state.orders.unshift(payload)
