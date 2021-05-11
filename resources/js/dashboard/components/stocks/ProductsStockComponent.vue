@@ -189,7 +189,6 @@
                 this.$v.barcode.$touch();
                 if(!this.$v.barcode.invalid) {
                     try {
-                        this.$Progress.start();
 
                         if(this.getProductStockDetails) {
                             this.refreshing = true;
@@ -206,7 +205,6 @@
                             this.searching = false;
                         }
 
-                        this.$Progress.finish();
                     } catch ( error ) {
                         if(error.response && error.response.status == '404') {
                             this.openNotification({
@@ -223,7 +221,6 @@
                             this.searching = false;
                         }
 
-                        this.$Progress.fail();
                     }
                 }
             },
@@ -234,7 +231,6 @@
                 if(!this.$v.newQuantity.invalid) {
                     try {
                         if(parseInt(this.newQuantity) !== 0) {
-                            this.$Progress.start();
 
                             this.updating = true; 
                         
@@ -254,8 +250,6 @@
 
                             this.updating = false;
 
-                            this.$Progress.finish();
-
                             this.openNotification({
                                 type: 'ok',
                                 message: response.data.message,
@@ -263,7 +257,6 @@
                             });
                         } else {
                             this.updating = false;
-                            this.$Progress.fail();
                             this.openNotification({
                                 type: 'info',
                                 message: 'Quantity must be less or greater than 0',
@@ -271,7 +264,6 @@
                             });
                         }
                     } catch ( error ) {
-                        this.$Progress.fail();
                         if(error.response && error.response.data.errors) {
                             this.$v.newQuantity.$touch();
                         }
