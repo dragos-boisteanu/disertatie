@@ -370,7 +370,7 @@
                                     payload.product[key] = this.localProduct[key];
                                     counter++;
                                 }
-
+                                
                             } else if(key === 'ingredients') {
                                 if(!_isEqual(this.localProduct[key], this.product[key])) {
                                     payload.product[key] = this.localProduct[key];

@@ -89,7 +89,7 @@
                 </div>
             </div>
 
-            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+            <div class="mt-3 pb-2">
                 <div class="mb-2 text-base font-semibold">
                     Price range
                 </div>
@@ -112,36 +112,6 @@
                             id="priceEnd" 
                             name="priceEnd" 
                             v-model="filterData.priceEnd"
-                            class="w-full py-1 px-2 text-sm rounded-sm"
-                            @change="callFilter"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
-                <div class="mb-2 text-base font-semibold">
-                    Stock quantity range
-                </div>
-                <div class="flex flex-col items-start gap-3 md:flex-row">
-                    <div class="flex items-center">
-                        <label class="text-sm font-semibold mr-3" for="quantityStart">From:</label>
-                        <input 
-                            type="text" 
-                            id="quantityStart" 
-                            name="quantityStart" 
-                            v-model="filterData.quantityStart"
-                            class="w-full  py-1 px-2 text-sm rounded-sm"
-                            @change="callFilter"
-                        />
-                    </div>
-                    <div class="flex items-center">
-                        <label class="text-sm font-semibold mr-3" for="quantityEnd">To:</label>
-                        <input 
-                            type="text" 
-                            id="quantityEnd" 
-                            name="quantityEnd" 
-                            v-model="filterData.quantityEnd"
                             class="w-full py-1 px-2 text-sm rounded-sm"
                             @change="callFilter"
                         />
@@ -187,8 +157,6 @@
                     categories: [],
                     priceStart: '',
                     priceEnd: '',
-                    quantityStart: '',
-                    quantityEnd:'',
                     orderBy: ''
                 }
             }

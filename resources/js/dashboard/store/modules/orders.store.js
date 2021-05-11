@@ -6,6 +6,7 @@ const initialState = () => ({
     orders: [],
     statuses: [],
     nextPage: 1,
+    filtered: false,
 })
 
 const state = initialState();
@@ -104,7 +105,7 @@ const mutations = {
     },  
 
     REFRESH_ORDERS(state, payload) {
-        state.order = payload;
+        state.orders = payload;
         state.nextPage = 2;
     },
     

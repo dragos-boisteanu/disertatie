@@ -1,14 +1,20 @@
 <template>
     <ViewContainer>
+
+        <OrdersFilter
+            v-if="showFilterState"
+            @closed="toggleFilterState"
+        />
+
         <template slot="header">
             Orders
         </template>
-  
+   
         <div class="flex flex-col pb-3 md:flex-row md:justify-between items-end">
             <div class="w-full md:flex md:flex-row md:gap-3 md:items-center">
                 <button 
                     class="w-full py-1 text-base text-white ripple-bg-green-600 rounded-sm active:shadow-inner md:w-20"
-                    
+                    @click="toggleFilterState"
                     >
                     Filter
                 </button>
@@ -98,6 +104,8 @@
     import Card from '../../components/cards/CardComponent';
     import OrderStatus from '../../components/orders/OrderStatusComponent';
 
+    import OrdersFilter from '../../components/filter/OrdersFilterComponent'
+
     import store from '../../store/index'
     import { mapActions, mapGetters } from 'vuex';
 
@@ -116,6 +124,12 @@
 
         computed: {
             ...mapGetters('Orders', ['getOrders']),
+        },
+
+        data() {
+            return {
+                showFilterState: false
+            }
         },
 
         methods: {
@@ -153,6 +167,10 @@
 
             extractClientFirstNameFromOrderAddres(address) {
               return address.substr(0, address.indexOf(' '));
+            },
+
+            toggleFilterState() {
+                this.showFilterState = !this.showFilterState
             }
         },
         
@@ -161,7 +179,8 @@
             ViewContainer,
             Card,
             CardsList,
-            OrderStatus
+            OrderStatus,
+            OrdersFilter
         }
     }
 </script>
