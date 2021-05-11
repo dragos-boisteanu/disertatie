@@ -349,8 +349,6 @@
                     });
 
                     if(counter > 0) {
-                        this.$Progress.start();
-
                         const response = await this.updateProduct(payload);
                         if(response.data.image) {
                             payload.product.image = response.data.image;
@@ -364,7 +362,6 @@
 
                         counter = 0;
                         
-                        this.$Progress.finish();
                         this.close();
 
                         this.openNotification({
@@ -404,7 +401,6 @@
 
             async removeImage() {
                 try {
-                    this.$Progress.start();
                     this.$refs.pond.removeFile({revert: false});
 
                     this.localProduct.image = 'clear';
@@ -412,9 +408,7 @@
                     await this.submit();
 
                     delete this.localProduct.image;
-                    this.$Progress.finish();
                 } catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error)
                     // notification
                 }               

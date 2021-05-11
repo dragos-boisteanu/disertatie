@@ -238,8 +238,6 @@
 
             async findIngredient() {
                 try {
-                    this.$Progress.start();
-
                     if(this.getIngredientStockDetails) {
                         this.refreshing = true;
                     } else {
@@ -265,7 +263,6 @@
                         this.searching = false;
                     }
 
-                    this.$Progress.finish();
                 } catch ( error ) {
                     this.clearIngredientStockDetails();
                     if(error.response && error.response.status === 404) {
@@ -281,7 +278,6 @@
                     } else {
                         this.searching = false;
                     }
-                    this.$Progress.fail();
                 }
             },
 
@@ -291,7 +287,6 @@
                 if(!this.$v.newQuantity.$invalid) {
                     try {
                         this.updating = true;
-                        this.$Progress.start();
 
                         const payload = {
                             id: this.getIngredientStockDetails.id,
@@ -305,7 +300,6 @@
 
                         this.newQuantity = '';
 
-                        this.$Progress.finish();
                         this.updating = false;
                         
                         this.$v.newQuantity.$reset();
@@ -318,7 +312,6 @@
                     } catch ( error ) {
                         this.updating = false;
                         this.$v.newQuantity.$touch();
-                        this.$Progress.fail();
                     }
                 }
             },

@@ -385,7 +385,6 @@
                         });
                     
                         if(counter > 0) {
-                            this.$Progress.start();
 
                             await this.updateProduct(payload);
 
@@ -393,7 +392,6 @@
                             
                             this.$router.push({name: 'Product', params: {id: this.product.id}})
 
-                            this.$Progress.finish()
                             
                             this.openNotification({
                                 type: 'ok',
@@ -414,7 +412,6 @@
                             message: 'Something went wrong'
                         })
                         this.$v.$touch();
-                        this.$Progress.fail();
                         console.log(error);
                     }
                 }

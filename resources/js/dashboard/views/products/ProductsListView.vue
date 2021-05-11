@@ -136,7 +136,6 @@
 
             async refreshProducsList() {
                 try {
-                    this.$Progress.start();
 
                     if(Object.keys(this.$route.query).length > 0) { 
                         this.$router.replace({name:'Products', query: {}});
@@ -148,23 +147,15 @@
 
                     this.orderBy = 1;
 
-                    this.$Progress.finish();
-
                 } catch ( error) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
             },
 
             async loadProducts() {
                 try {
-                    this.$Progress.start();
-
                     await this.fetchProducts(this.query);
-
-                    this.$Progress.finish();
                 } catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error);
                 }
             },
@@ -175,7 +166,6 @@
 
             async order() {
                 try {
-                    this.$Progress.start();
 
                     const query = Object.assign({}, this.$route.query);
                  
@@ -185,10 +175,7 @@
 
                     this.$router.replace({name:'Products', query});
 
-                    this.$Progress.finish();
-
                 }  catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
             }

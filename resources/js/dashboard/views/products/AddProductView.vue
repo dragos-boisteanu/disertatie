@@ -324,7 +324,6 @@
 
                 if(!this.$v.$invalid) {
                     try {           
-                        this.$Progress.start()
                         this.waiting = true;
 
                         const payload = {}
@@ -364,7 +363,6 @@
 
                         this.waiting = false;
                         
-                        this.$Progress.finish();
 
                         this.clearImage = true;
 
@@ -379,7 +377,6 @@
                     } catch ( error ) {
 
                         console.log(error)
-                        this.$Progress.fail();
 
                         this.waiting = false
 

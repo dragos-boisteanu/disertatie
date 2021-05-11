@@ -247,7 +247,6 @@
                             });
 
                             if(counter > 0 ) {
-                                this.$Progress.start();
 
                                 await this.patchIngredient(payload);
                             } else {
@@ -259,17 +258,14 @@
                             }
                             
                         } else {
-                            this.$Progress.start();
 
                             await this.postIngredient(this.ingredient);
                             this.resetForm();
                         }
 
                         this.waiting = false;
-                        this.$Progress.finish()
 
                     } catch ( error ) {
-                        this.$Progress.fail();
                         this.waiting = false;
                         console.log(error);
                         
@@ -283,7 +279,6 @@
 
             async removeIngredient(id) {
                 try {
-                    this.$Progress.start();
 
                     await this.deleteIngredient(id);
 
@@ -291,9 +286,7 @@
                         this.clearSelection();
                     }
 
-                    this.$Progress.finish();
                 } catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
             },

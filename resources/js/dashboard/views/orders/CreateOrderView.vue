@@ -458,7 +458,6 @@
                     this.$v.$touch()
 
                     if(!this.$v.$invalid) {
-                        this.$Progress.start();
 
                         if(this.showAddressFields) {
                             this.order.address = `${this.client.firstName}, ${this.client.name}, ${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
@@ -480,8 +479,6 @@
                             message: 'Order created succesfully'
                         })
 
-                        this.$Progress.finish();
-
                         this.resetForm();
                     }
                 } catch ( error ) {
@@ -491,7 +488,6 @@
                         message: 'Failed to create new order'
                     })
 
-                    this.$Progress.fail();
                     console.log('error', this.$v)
                     console.log(error)
                 }                          

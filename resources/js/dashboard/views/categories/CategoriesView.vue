@@ -270,7 +270,6 @@
 
                     if(!this.$v.$invalid) {
                         this.waiting = true;
-                        this.$Progress.start();
 
                         if(this.categorySelected) {
                             const originalCategory = _find(this.getCategories, ['id', this.category.id]);
@@ -327,13 +326,11 @@
                         }
 
                         this.waiting = false;
-                        this.$Progress.finish();
                     }                  
 
                 } catch ( error ) {
                     console.log(error)
 
-                    this.$Progress.fail();
                     this.waiting = false;
 
                     if(error.response && error.response.data.errors) {
@@ -346,50 +343,40 @@
 
             async removeCategory(id) {
                 try {
-                    this.$Progress.start();
 
                     await this.deleteCategory(id);
 
                     if(this.categorySelected) {
                         this.clearSelection();
                     }
-                    this.$Progress.finish();
                     this.openNotification({
                         type: 'ok',
                         show: true,
                         message: 'Category removed'
                     })
                 } catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
             },
 
             async refresh() {
                 try {
-                    this.$Progress.start();
-
                     await this.fetchCategories();
                     
-                    this.$Progress.finish();
                 } catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
             },
 
             search: _debounce( async function() {
                 try {
-                    this.$Progress.start();
 
                     if(this.searchInput.length > 0) {
                         await this.searchCategory(this.searchInput);
                     } else {
                         await this.fetchCategories();
                     }
-                    this.$Progress.finish();
                 } catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
                
