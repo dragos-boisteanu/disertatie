@@ -149,7 +149,7 @@ const actions = {
     },
 
 
-    async getUser({state}, id) {
+    async getUser({state, dispatch }, id) {
         try {
             let user = _.find(state.users, ['id', id]);
             if(user) {
