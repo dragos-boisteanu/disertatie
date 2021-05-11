@@ -12,20 +12,20 @@
         <div class="flex flex-col pb-3 md:flex-row md:justify-between items-end">
             <div class="w-full md:flex md:flex-row md:gap-3 md:items-center">
                 <button 
-                    class="w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-20"
+                    class="w-full py-1 text-base text-white ripple-bg-green-600 rounded-sm active:shadow-inner md:w-20"
                     @click="toggleFilterState"
                 >
                     Filter
                 </button>
                 <button 
-                    class="w-full py-1 mt-2  text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-20 md:mt-0" 
+                    class="w-full py-1 mt-2  text-base text-white ripple-bg-lightBlue-600 rounded-sm active:shadow-inner md:w-20 md:mt-0" 
                     @click="refreshProducsList"
                 >
                     Refresh
                 </button>
                 <router-link
                     :to="{name: 'AddProduct'}" 
-                    class="block w-full py-1 px-2 mt-2 text-center  text-base text-white bg-orange-600 rounded-sm active:shadow-inner active:bg-orange-500 md:w-auto md:mt-0" 
+                    class="block w-full py-1 px-2 mt-2 text-center text-base text-white ripple-bg-orange-600 rounded-sm active:shadow-inner md:w-auto md:mt-0" 
                 >
                     Add product
                 </router-link>
