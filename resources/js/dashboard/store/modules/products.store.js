@@ -121,10 +121,6 @@ const actions = {
             throw error;
         }
     },
-
-    sortProductsList({commit}, sortBy) {
-        commit('SORT_PRODUCTS', sortBy);
-    }
 }
 
 const mutations = {
@@ -173,30 +169,6 @@ const mutations = {
             state.products.splice(selectedProductIndex, 1);
         }
     },
-
-    SORT_PRODUCTS(state, orderBy) {
-        switch(orderBy) {
-            case 1:
-                state.products = _orderBy(state.products, [product => product.name.toLowerCase()], ['asc']);
-                break;
-            case 2:
-                state.products = _orderBy(state.products, [product => product.name.toLowerCase()], ['desc']);
-                break;
-            case 3:
-                state.products = _orderBy(state.products, [product => parseFloat(product.base_price.replace(',', '.'))], ['asc']);
-                break;
-            case 4:
-                state.products = _orderBy(state.products, [product =>  parseFloat(product.base_price.replace(',', '.'))], ['desc']);
-                break;
-            case 5:
-                state.products = _orderBy(state.products, [product => product.quantity], ['asc']);
-                break;
-            case 6: 
-                state.products = _orderBy(state.products, [product => product.quantity], ['desc']);
-                break;
-        }
-    },
-
 }
 
 export default {

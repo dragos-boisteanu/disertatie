@@ -154,7 +154,7 @@
                 this.orderBy = 14;
             }
 
-            this.sortUsersList(this.orderBy);
+            // this.sortUsersList(this.orderBy);
         },
 
         computed: {
@@ -173,7 +173,7 @@
         },
 
         methods: { 
-            ...mapActions('Users', ['fetchUsers', 'refreshUsers', 'fetchMoreUsers', 'sortUsersList', 'setFilteredState']),
+            ...mapActions('Users', ['fetchUsers', 'refreshUsers', 'fetchMoreUsers', 'setFilteredState']),
             ...mapActions('Notification', ['openNotification']),
 
             async loadMoreUsers() {

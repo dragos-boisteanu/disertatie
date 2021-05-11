@@ -125,6 +125,14 @@
             }
         },
 
+        mounted() {
+             if(this.$route.query.orderBy) {
+                this.orderBy = this.$route.query.orderBy;
+            } else {
+                this.orderBy = 1;
+            }
+        },
+
         computed: {
             ...mapGetters('Orders', ['getOrders']),
         },
@@ -159,10 +167,10 @@
 
             async refresh() {
                 try {
-                    
                     if(Object.keys(this.$route.query).length > 0) { 
                         this.$router.replace({name:'Orders', query: {}});
                     }
+                    this.orderBy = 1
                     await this.refreshOrders();
                 } catch ( error ) {
                     console.log(error)
