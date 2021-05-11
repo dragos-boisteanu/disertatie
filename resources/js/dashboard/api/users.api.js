@@ -1,8 +1,6 @@
+import httpClient from '../../api/httpClient';
 
-
-import httpClient from './httpClient';
-
-const END_POINT = '/users';
+const END_POINT = '/dashboard/users';
 
 const downloadLoggedUserData = () => httpClient.get(`${END_POINT}/logged-user`);
 

@@ -1,4 +1,4 @@
-import { downloadCounties, downloadCities } from '../../api/counties.api';
+import { downloadCounties, downloadCities } from '../../../api/counties.api';
 
 const initialState = () => ({
     counties: [],

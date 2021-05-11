@@ -1,6 +1,6 @@
-import httpClient from './httpClient';
+import httpClient from '../../api/httpClient';
 
-const BASE_URl = '/delivery-methods';
+const BASE_URl = '/dashboard/delivery-methods';
 
 const fetchDeliveryMethods = () => httpClient.get(`${BASE_URl}`);
 

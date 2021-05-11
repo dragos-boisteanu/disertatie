@@ -1,6 +1,6 @@
-import httpClient from './httpClient'
+import httpClient from '../../api/httpClient';
 
-const END_POINT = '/order-statuses';
+const END_POINT = '/dashboard/order-statuses';
 
 const downloadStatuses = () => httpClient.get(`${END_POINT}`);
 

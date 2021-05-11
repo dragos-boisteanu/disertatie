@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const httpClient = axios.create({
-    baseURL: 'http://disertatie.test/api/dashboard',
+    baseURL: 'http://disertatie.test/api',
     timeout: 60000, // indicates, 1000ms ie. 1 second
     withCredentials: true,
     headers: {
