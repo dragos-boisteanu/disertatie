@@ -24,7 +24,26 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::with('client', 'staff')->filter($request)->paginate(100);
+        $query = Order::with('client', 'staff');
+        
+        if(!$request->has('orderBy')) {
+            $orderByValue = 14;
+        } else {
+            $orderByValue = $request->orderBy;
+        }
+
+        switch ($orderByValue) {
+            case 1:
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 2:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $query->orderBy('id', 'asc');
+
+        $orders = $query->filter($request)->paginate(100);
 
         return new OrderCollection($orders);
     }

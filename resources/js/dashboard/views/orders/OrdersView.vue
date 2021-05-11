@@ -32,9 +32,12 @@
                 </router-link>
             </div>
         
-            <select  
+            <select 
+                v-model="orderBy" 
+                @change="order"
                 class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm md:w-auto">
-                <option :value="1">Name asc</option>
+                <option :value="1">Created at asc</option>
+                <option :value="2">Created at desc</option>
             </select>
         </div>
 
@@ -128,12 +131,13 @@
 
         data() {
             return {
-                showFilterState: false
+                showFilterState: false,
+                orderBy: 1
             }
         },
 
         methods: {
-            ...mapActions('Orders', ['refreshOrders']),
+            ...mapActions('Orders', ['refreshOrders', 'downloadOrders']),
 
             orderTotalValue(items) {
                 let totalValue = 0;
@@ -162,6 +166,25 @@
                     await this.refreshOrders();
                 } catch ( error ) {
                     console.log(error)
+                }
+            },
+
+            async order() {
+                try {
+                    this.$Progress.start()
+
+                    const query = Object.assign({}, this.$route.query);
+                 
+                    query.orderBy = this.orderBy;
+                    
+                    await this.downloadOrders(query)
+
+                    this.$router.replace({name:'Orders', query});
+
+                    this.$Progress.finish()
+                } catch ( error ) {
+                    this.$Progress.fail();
+                    console.log(error);
                 }
             },
 
