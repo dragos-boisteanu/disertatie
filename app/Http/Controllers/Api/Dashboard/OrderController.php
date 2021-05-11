@@ -58,26 +58,29 @@ class OrderController extends Controller
     {
         DB::transaction(function () use ($request) {
     
-            $input['delivery_method_id'] = $request->deliveryMethodId;
-            $input['address'] = $request->address;
-            $input['phone_number'] = $request->phoneNumber;
-            $input['status_id'] = 2;
+            $order = new Order;
+
+            $order->delivery_method_id = $request->deliveryMethodId;
+            $order->address = $request->address;
+            $order->phone_number =  $request->phoneNumber;
+            $order->status_id = 2;
+            $order->staff_id = $request->user()->id;
 
             if($request->has('observations')) {
-                $input['observations'] = $request->observations;
+                $order->observations =  $request->observations;
             }
 
             if($request->has('clientId')) {
-                $input['client_id'] = $request->clientId;
+                $order->client_id = $request->clientId;
+            } else {
+                $order->first_name = $request->firstName;
             }
 
-            $input['staff_id'] = $request->user()->id;
-    
             if($request->has('email')) {
                 //send email with order details
             }
     
-            $order = Order::create($input);
+            $order->save();
     
             // add each item into order products table
             // link each item to the order

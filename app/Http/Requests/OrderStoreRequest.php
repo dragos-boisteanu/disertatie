@@ -25,6 +25,7 @@ class OrderStoreRequest extends FormRequest
     {
         return [
             'clientId' => ['sometimes', 'numeric', 'exists:users,id'],
+            'firstName' => ['sometimes', 'string'],
             'address' => ['required', 'string'],
             'items' => ['required', 'array'],
             'items.*.id' => ['required'],

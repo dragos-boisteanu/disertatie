@@ -370,6 +370,7 @@
                     name: '',
                     phoneNumber: '',
                     email: '',
+                    id: '',
                 },
 
                 address: '',
@@ -460,17 +461,19 @@
                     if(!this.$v.$invalid) {
 
                         if(this.showAddressFields) {
-                            this.order.address = `${this.client.firstName}, ${this.client.name}, ${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
+                            this.order.address = `${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
                         } else {
-                            this.order.address = `${this.client.firstName} Local`;
+                            this.order.address = 'Local';
                         }
 
                         if(this.client.id) {
                             this.order.clientId = this.client.id;
+                        } else {
+                            this.order.firstName = this.client.firstName
                         }
 
                         this.order.phoneNumber = this.client.phoneNumber;
-
+console.log(this.order)
                         await this.storeOrder(this.order)
 
                         this.openNotification({
@@ -487,9 +490,6 @@
                         show: true,
                         message: 'Failed to create new order'
                     })
-
-                    console.log('error', this.$v)
-                    console.log(error)
                 }                          
             },
 
