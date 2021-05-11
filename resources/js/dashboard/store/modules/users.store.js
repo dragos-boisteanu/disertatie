@@ -155,7 +155,7 @@ const actions = {
             if(user) {
                 return user;
             }
-            return this.fetchUser(id);
+            return dispatch('fetchUser', id);
         } catch ( error ) {
             throw error
         }

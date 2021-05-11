@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductOrder;
-use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\OrderCollection;
+use App\Http\Requests\OrderStoreRequest;
+use App\Http\Resources\Order as OrderResource;
 use App\Http\Resources\ProductOrderCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -98,7 +99,9 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = Order::findOrFail($id);
+
+        return new OrderResource($order);
     }
 
     /**

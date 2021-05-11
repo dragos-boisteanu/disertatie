@@ -13,6 +13,7 @@
                     Filter
                 </button>
                 <button 
+                    @click="refresh"
                     class="w-full py-1 mt-2  text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-20 md:mt-0" 
                     >
                     Refresh
@@ -54,7 +55,7 @@
                                         {{ order.phoneNumber}} 
                                     </div>
                                </div>
-                               <div v-if="order.email" class="ml-2 flex items-center">
+                               <div v-if="order.email" class="flex items-center">
                                     <span class="mx-2">|</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
                                     <span class="ml-2">{{order.email}}</span>
@@ -98,7 +99,7 @@
     import OrderStatus from '../../components/orders/OrderStatusComponent';
 
     import store from '../../store/index'
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     import _findIndex from 'lodash/findIndex'
     
@@ -118,6 +119,8 @@
         },
 
         methods: {
+            ...mapActions('Orders', ['refreshOrders']),
+
             orderTotalValue(items) {
                 let totalValue = 0;
                 items.forEach(item => {
@@ -134,6 +137,18 @@
                 })
 
                 return totalQuantity
+            },
+
+            async refresh() {
+                try {
+                    
+                    if(Object.keys(this.$route.query).length > 0) { 
+                        this.$router.replace({name:'Orders', query: {}});
+                    }
+                    await this.refreshOrders();
+                } catch ( error ) {
+                    console.log(error)
+                }
             },
 
             extractClientFirstNameFromOrderAddres(address) {
