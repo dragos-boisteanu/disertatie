@@ -25,7 +25,7 @@ class RoleSeeder extends Seeder
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'Server',
+            'name' => 'Waiter',
             'livel' => 3
         ]);
 
@@ -35,7 +35,7 @@ class RoleSeeder extends Seeder
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'Kitchen Manager/Chef',
+            'name' => 'Kitchen Manager',
             'livel' => 5
         ]);
 

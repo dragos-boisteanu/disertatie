@@ -2,7 +2,7 @@ import httpClient from '../../api/httpClient';
 
 const END_POINT = '/dashboard/roles';
 
-const downloadRoles = () => httpClient.get(`${END_POINT}`);
+const downloadRoles = (type) => httpClient.get(`${END_POINT}`, {params: type});
 
 export {
     downloadRoles

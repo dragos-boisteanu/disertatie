@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import store from '../store/index'
 
 
 const Home = () => import('../views/HomeView.vue');
@@ -42,6 +43,17 @@ const router = new VueRouter({
         return { x: 0, y: 0 }
     }
 });
+
+router.beforeEach( (to, from, next) => {
+    // const isAdmin = store.getters['Users/isAdmin'];
+    // const isLocationManager = store.getters['Users/isLocationManager'];
+    // const isWaiter = store.getters['Users/isWaiter'];
+    // const isKitchenManager = store.getters['Users/isKitchenManager'];
+    // const isDelivery = store.getters['Users/isDelivery'];
+    // const isKitchen = store.getters['Users/isKitchen'];
+    next();
+    
+})
 
 Vue.use(VueRouter);
 

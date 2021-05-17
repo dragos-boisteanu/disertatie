@@ -106,7 +106,7 @@
                                     {{ user.created_at | formatDate }}
                                 </span>
                             </div>
-                            <Role :roleId="user.role_id"/>
+                            <Role :role-name="user.role.name"/>
                         </div>
                     </div>
                 </router-link>

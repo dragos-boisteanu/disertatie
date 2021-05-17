@@ -162,8 +162,8 @@
                             :disabled="waiting"
                             @blur.native="$v.user.role_id.$touch()"
                         >   
-                            <option value="" disabled>Select role</option>
-                            <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
+                            <option value="" selected disabled>Select role</option>
+                            <option v-for="role in availableRoles" :key="role.id" :value="role.id">{{role.name}}</option>
                         </Select>
                     </InputGroup>
                 </div>
@@ -359,11 +359,17 @@
     import { required, email, requiredIf, maxLength, } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces, phoneNumber } from '../../validators/index';
 
+    import { downloadRoles } from "../../api/roles.api";
+
     export default {
+
+        async mounted() {
+            const response = await downloadRoles({available:true});
+            this.availableRoles = response.data.data.roles;
+        },
 
         computed: {
             ...mapGetters('Counties', ['getCounties']),
-            ...mapGetters('Roles', ['getRoles']),
 
             citiesSelectState() {
                 return this.address.county_id ? false : true;
@@ -382,6 +388,8 @@
 
         data() {
             return {
+                availableRoles: [],
+
                 waitForFileUpload: false,
                 waiting: false,
 

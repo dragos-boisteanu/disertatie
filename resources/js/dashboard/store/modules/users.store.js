@@ -21,6 +21,30 @@ const getters = {
         return state.loggedUser;
     },
 
+    isAdmin(state) {
+        return state.loggedUser.role.name === "Administrator";
+    },
+
+    isLocationManager(state) {
+        return state.loggedUser.role.name === "Location Manager";
+    },
+
+    isWaiter(state) {
+        return state.loggedUser.role.name === "Waiter";
+    },
+
+    isKitchenManager(state) {
+        return state.loggedUser.role.name === "Kitchen Manager";
+    },
+
+    isDelivery(state) {
+        return state.loggedUser.role.name === "Delivery";
+    },
+
+    isKitchen(state) {
+        return state.loggedUser.role.name === "Kitchen";
+    },
+
     getNextPage(state) {
         return state.nextPage;
     },

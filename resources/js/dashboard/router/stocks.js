@@ -22,6 +22,7 @@ export default [
             }
         ],
         meta: {
+            notAllowedToDelivery: true,
             breadcrumb: {
                 label: 'Stocks',
                 parent: 'Products'

@@ -12,7 +12,7 @@
             <div class="flex flex-col items-center justify-center md:items-start">
                 <div class="flex justify-center gap-x-3 w-full mt-2 lg:justify-start">
                     <Status :deleted-at="user.deleted_at"/>
-                    <Role :roleId="user.role_id"/>
+                    <Role :role-name="user.role.name"/>
                 </div>
                 <div class="font-semibold text-2xl mt-2">
                     {{user.first_name}} {{user.name}}
