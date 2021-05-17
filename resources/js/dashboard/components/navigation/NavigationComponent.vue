@@ -18,7 +18,7 @@
                         </button>
                     </form>
                     
-                    <Role :role-id="getLoggedUser.role_id"></Role>
+                    <Role :role-name="getLoggedUser.role.name"></Role>
                 </div>
             </div> 
         </div>

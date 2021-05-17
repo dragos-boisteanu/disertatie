@@ -15,31 +15,39 @@ class RoleSeeder extends Seeder
     public function run()
     {
         DB::table('roles')->insert([
-            'name' => 'Client'
+            'name' => 'Client',
+            'livel' => 1
+        ]);
+        
+        DB::table('roles')->insert([
+            'name' => 'Delivery',
+            'livel' => 2
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'Server'
+            'name' => 'Server',
+            'livel' => 3
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'Kitchen'
+            'name' => 'Kitchen',
+            'livel' => 4
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'Kitchen Manager/Chef'
+            'name' => 'Kitchen Manager/Chef',
+            'livel' => 5
         ]);
 
-        DB::table('roles')->insert([
-            'name' => 'Delivery'
-        ]);
 
         DB::table('roles')->insert([
             'name' => 'Location Manager',
+            'livel' => 6
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'Administrator'
+            'name' => 'Administrator',
+            'livel' => 7
         ]);
     }
 }

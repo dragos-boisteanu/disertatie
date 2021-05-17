@@ -534,6 +534,8 @@
             },
 
             restForm() {
+                this.$v.$reset();
+                
                 this.cities = [];
                 this.files = [];
 
