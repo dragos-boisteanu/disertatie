@@ -1,5 +1,5 @@
 <template>
-    <div class="py-1 px-2 text-xs text-black rounded-sm"
+    <div class="py-1 px-2 text-xs  text-white rounded-sm"
         :class="statusClass"
     >
        {{ status.name }}                              
@@ -19,31 +19,38 @@
         computed: {
             statusClass() {
                 let result = "";
-                switch ( this.status.id ) {
-                    case 1:
-                        result = ''
+                switch ( this.status.name ) {
+                    case "Awaiting delivery":
+                        result = 'bg-amber-500'
                         break;
-                    case 2:
-                        result = 'bg-lightBlue-600';
+                    case "Awaiting payment":
+                        result = 'bg-amber-700';
                         break;
-                    case 3:  
-                        result = '';
+                    case "Awaiting reception":  
+                        result = 'bg-amber-700';
                         break;
-                    case 5:
-                        result = '';
+                    case "In delivery":
+                        result = 'bg-amber-700';
                         break;
-                    case 6: 
-                        result = '';
+                    case "Is preparing": 
+                        result = 'bg-amber-700';
                         break;
-                    case 7:
-                        result = '';
+                    case "Canceled":
+                        result = 'bg-red-600';
                         break;
-                    case 8: 
-                        result = ''
-                    case 9: 
-                        result = ''
-                    case 10: 
-                        result = ''
+                    case "Payment failed": 
+                        result = 'bg-red-600'
+                        break;
+                    case "Completed": 
+                        result = 'bg-green-600'
+                        break;
+                    case "Delivered": 
+                        result = 'bg-lightBlue-400'
+                        break;
+                    case "Recived": {
+                        result = 'bg-lightBlue-600'
+                        break;
+                    }
                 }
 
                 return result;

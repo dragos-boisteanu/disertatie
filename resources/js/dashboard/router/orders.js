@@ -38,10 +38,14 @@ export default [
         name: 'Order',
         component: OrderView,
         meta: {
-            breadcrumb: {
-                label: 'Order',
-                parent: 'Orders'
-            }
+            breadcrumb() {
+                const { params } = this.$route;
+        
+                return {
+                    label: `Order #${params.id}`,
+                    parent: "Orders",
+                };
+            },
         }
     },
 
@@ -50,10 +54,14 @@ export default [
         name: 'EditOrder',
         component: EditOrderView,
         meta: {
-            breadcrumb: {
-                label: 'Edit',
-                parent: 'Order'
-            }
+            breadcrumb() {
+                const { params } = this.$route;
+        
+                return {
+                    label: `Edit order #${params.id}`,
+                    parent: "Orders",
+                };
+            },
         }
     },
 ]

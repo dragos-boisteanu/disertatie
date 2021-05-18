@@ -1,6 +1,7 @@
-import { downloadOrders, storeOrder, downloadOrder } from '../../api/orders.api'
+import { downloadOrders, storeOrder, downloadOrder, disableOrder } from '../../api/orders.api'
 import { downloadStatuses } from '../../api/orderStatuses.api'
 import _find from 'lodash/find';
+import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
     orders: [],
@@ -89,6 +90,14 @@ const actions = {
         } catch ( error ) {
             throw error
         }
+    },
+
+    async disableOrder({commit}, payload) {
+        console.log(payload)
+        const response = await disableOrder(payload.id);
+        console.log(response.data);
+        // payload.deletedAt = response.data;
+        // commit('DISABLE_ORDER', payload);
     }
 }
 
@@ -115,6 +124,11 @@ const mutations = {
 
     SET_ORDER_STATUSES(state, payload) {
         state.statuses = payload;
+    },
+
+    DISABLE_ORDER(state, payload) {
+        const orderIndex = _findIndex(state.orders, ['id', payload.orderId]);
+        payload.vm.$set(state.orders[orderIndex], 'deleted_at', payload.deletedAt);
     }
 }
 

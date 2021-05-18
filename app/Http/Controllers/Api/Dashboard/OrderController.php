@@ -24,7 +24,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Order::with('client', 'staff');
+        $query = Order::withTrashed()->with('client', 'staff');
         
         if(!$request->has('orderBy')) {
             $orderByValue = 2;
@@ -122,7 +122,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::withTrashed()->findOrFail($id);
 
         return new OrderResource($order);
     }
@@ -147,7 +147,21 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+     
+    }
+
+    public function disable($id) 
+    {
+        $order = Order::findOrFail($id);
+
+        $order->status_id = 8;
+        $order->save();
+
+        $order->delete();
+
+        $order->refresh();
+
+        return $order->deleted_at;
     }
 
     public function getProductsByName($name)

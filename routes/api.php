@@ -57,7 +57,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     });
 
     Route::group(['prefix'=>'orders'], function() {
-        // Route::delete('{id}/disable', 'OrderController@disable');
+        Route::delete('{id}/disable', 'OrderController@disable');
         // Route::post('{id}/restore', 'OrderController@restore');
         Route::get('/products/name/{name}', 'OrderController@getProductsByName');
         Route::get('/products/id/{id}', 'OrderController@getProductsById');

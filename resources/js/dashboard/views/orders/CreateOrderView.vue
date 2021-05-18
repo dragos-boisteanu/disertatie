@@ -266,8 +266,8 @@
                                     <td colspan="2" class="p-2">
                                         TOTAL
                                     </td>
-                                    <td class="p-2">{{ orderTotalQuantity }}</td>
-                                    <td class="p-2">{{ orderTotalPrice }} Ron</td>
+                                    <td class="p-2">{{ order.totalQuantity }}</td>
+                                    <td class="p-2">{{ order.totalValue }} Ron</td>
                                 </tr>
                                 <tr>
                                     <td colspan="5">
