@@ -27,7 +27,7 @@ class OrderController extends Controller
         $query = Order::with('client', 'staff');
         
         if(!$request->has('orderBy')) {
-            $orderByValue = 14;
+            $orderByValue = 2;
         } else {
             $orderByValue = $request->orderBy;
         }
@@ -77,6 +77,7 @@ class OrderController extends Controller
             }
 
             if($request->has('email')) {
+                $order->email = $request->email;
                 //send email with order details
             }
     

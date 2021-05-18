@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEmailAndPhoneNumberCollumnsToOrdersTable extends Migration
+class AddLevelColumnToRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddEmailAndPhoneNumberCollumnsToOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->string('phone_number')->after('delivery_method_id');
-            $table->string('email')->nullable()->after('phone_number');
+        Schema::table('roles', function (Blueprint $table) {
+            $table->integer('level');
         });
     }
 
@@ -26,7 +25,7 @@ class AddEmailAndPhoneNumberCollumnsToOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('roles', function (Blueprint $table) {
             //
         });
     }

@@ -17,6 +17,7 @@ class Order extends JsonResource
         return [
             'id' => $this->id,
             'client' => new OrderClient($this->whenLoaded('client')),
+            'firstName' => $this->first_name,
             'staff' => [ 'name' => $this->staff->first_name . ' ' . $this->staff->name, 'id'=> $this->staff->id],
             'deliveryMethod' => $this->delivery_method_id,
             'phoneNumber' => $this->phone_number,
@@ -26,8 +27,10 @@ class Order extends JsonResource
             'deletedAt' => $this->deleted_at,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
+            'status' => [ 'id' => $this->status->id, 'name' => $this->status->name],
+            'totalQuantity' => $this->totalQuantity,
+            'totalValue' => $this->totalValue,
             'items' => new OrderItemCollection($this->items),
-            'status' => $this->status_id
         ];
     }
 }

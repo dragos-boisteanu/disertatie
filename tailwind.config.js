@@ -15,6 +15,9 @@ module.exports = {
             darken: 0.1
         }),
         extend: {
+            maxHeight: {
+                90: "90%",
+            },
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },

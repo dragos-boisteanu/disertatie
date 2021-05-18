@@ -78,8 +78,8 @@
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.user.birthdate.required">
-                                    The birthdate field is required
+                                <p v-if="!$v.user.birthdate.date">
+                                    The birthdate field must be a valid date
                                 </p>
                             </template>
                             <date-picker 
@@ -162,8 +162,8 @@
                             :disabled="waiting"
                             @blur.native="$v.user.role_id.$touch()"
                         >   
-                            <option value="" disabled>Select role</option>
-                            <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
+                            <option value="" selected disabled>Select role</option>
+                            <option v-for="role in availableRoles" :key="role.id" :value="role.id">{{role.name}}</option>
                         </Select>
                     </InputGroup>
                 </div>
@@ -174,7 +174,7 @@
                         <label for="addressToggle">Address (optional)</label>
                     </h2>
 
-                    <div ref="addressForm" class="flex flex-col gap-y-4"> 
+                    <div ref="addressForm" class="flex flex-col gap-y-4" v-show="hasAddress"> 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">                  
                             <InputGroup
                                 id="addressFirstName"
@@ -360,13 +360,21 @@
     import { alphaSpaces, alphaNumSpaces, phoneNumber } from '../../validators/index';
 
     export default {
-
         computed: {
             ...mapGetters('Counties', ['getCounties']),
-            ...mapGetters('Roles', ['getRoles']),
+            ...mapGetters('Roles', ["getRoles"]),
+            ...mapGetters('Users', ["isWaiter"]),
 
             citiesSelectState() {
                 return this.address.county_id ? false : true;
+            },
+
+            availableRoles() {
+                if(this.isWaiter) {
+                    return this.getRoles.filter(role => role.name === "Client");
+                }
+
+                return this.getRoles;
             },
 
             birthdateClass() {
@@ -434,7 +442,7 @@
                     // phoneNumber
                 },
                 birthdate: {
-                    required
+                    //date
                 },
                 role_id: {
                     required
@@ -483,6 +491,7 @@
         methods: {
             ...mapActions('Users', ['addUser']),
             ...mapActions('Counties', ['fetchCitites']),
+            ...mapActions('Notification', ["openNotification"]),
 
             async submit() {
                 this.$v.user.$touch();
@@ -510,6 +519,12 @@
 
                         this.$Progress.finish()
 
+                        this.openNotification({
+                            type: "ok",
+                            message: "User account created",
+                            show: true,
+                        })
+
                     } catch ( error ) {  
                         this.$Progress.fail();
 
@@ -534,6 +549,8 @@
             },
 
             restForm() {
+                this.$v.$reset();
+                
                 this.cities = [];
                 this.files = [];
 

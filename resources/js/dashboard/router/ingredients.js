@@ -8,6 +8,8 @@ export default [
         name: 'Ingredients',
         component: IngredientsView,
         meta: {
+            requireLocationManager: true,
+            requiredAdmin: true,
             breadcrumb: {
                 label: 'Ingredients',
                 parent: 'Products'

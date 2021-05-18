@@ -473,7 +473,10 @@
                         }
 
                         this.order.phoneNumber = this.client.phoneNumber;
-console.log(this.order)
+                        if(this.client.email) {
+                            this.order.email = this.client.email
+                        }
+                        
                         await this.storeOrder(this.order)
 
                         this.openNotification({

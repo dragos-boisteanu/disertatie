@@ -24,6 +24,8 @@ export default [
         name: 'AddProduct',
         component: AddProductView,
         meta: {
+            requireLocationManager: true,
+            requiredAdmin: true,
             breadcrumb: {
                 label: 'Add new product',
                 parent: 'Products'
@@ -48,6 +50,10 @@ export default [
         name: 'EditProduct',
         component: EditProductView,
         meta: {
+            requireLocationManager: true,
+            requiredAdmin: true,
+            requireKitchenManager: true,
+            requireWaiter: true,
             breadcrumb: {
                 label: 'Edit product',
                 parent: 'Product'
