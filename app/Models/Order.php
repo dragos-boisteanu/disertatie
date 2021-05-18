@@ -29,6 +29,30 @@ class Order extends Model
 
     public $with = ['items'];
 
+   protected $appends = array('totalQuantity', 'totalValue');
+
+   public function getTotalQuantityAttribute()
+    {
+        $totalQuantity = 0;
+        
+        forEach($this->items as $item) {
+            $totalQuantity += $item->quantity;
+        }
+
+        return $totalQuantity;
+    }
+
+    public function getTotalValueAttribute()
+    {
+        $totalValue = 0;
+
+        forEach($this->items as $item) {
+            $totalValue += $item->quantity + $item->price;
+        }
+
+        return number_format($totalValue, 2, '.', '');
+    }
+
     public function paymentMethod()
     {
         return $this->hasOne(PaymentMethod::class);
@@ -56,7 +80,7 @@ class Order extends Model
 
     public function status() 
     {
-        return $this->hasOne(OrderStatus::class);
+        return $this->belongsTo(OrderStatus::class);
     }
 
     public function scopeFilter(Builder $builder, Request $request)

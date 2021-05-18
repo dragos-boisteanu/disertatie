@@ -16,21 +16,25 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->available) {
-            if(auth()->user()->role->name !== "Administrator") {
-                $roles = Role::where('level', '<', function($query) {
-                    $query->select('level')
-                            ->from('roles')
-                            ->where('id', auth()->user()->role->id);
-                })->distinct()->get();
+     
+        if(auth()->user()->role->name === "Administrator") {
+            $roles = Role::all();
 
-                return new RoleCollection($roles);
-            } 
-        }        
-        
-        $roles = Role::all();
-       
-        return new RoleCollection($roles);
+            return new RoleCollection($roles);
+        } 
+
+        if(auth()->user()->role->name === "Location Manager") {
+            $roles = Role::where('level', '<', function($query) {
+                $query->select('level')
+                        ->from('roles')
+                        ->where('id', auth()->user()->role->id);
+            })->distinct()->get();
+
+            return new RoleCollection($roles);
+        }
+
+        return new RoleCollection(Role::all());  
+   
     }
 
 

@@ -23,6 +23,7 @@
                     Refresh
                 </button>
                 <router-link
+                    v-if="hideAddUser"
                     :to="{name: 'CreateUser'}" 
                     class="block w-full py-1 px-2 mt-2 text-center text-base text-white ripple-bg-orange-600 rounded-sm active:shadow-inner md:w-auto md:mt-0" 
                 >
@@ -158,11 +159,15 @@
         },
 
         computed: {
-            ...mapGetters('Users', ['getUsers', 'getNextPage']),
+            ...mapGetters('Users', ['getUsers', 'getNextPage', 'isAdmin', 'isWaiter','isLocationManager']),
 
             showMoreState() {
                 return this.getNextPage;
-            }
+            }, 
+
+            hideAddUser() {
+                return this.isAdmin || this.isLocationManager || this.isWaiter;
+            },
         },
 
         data() {

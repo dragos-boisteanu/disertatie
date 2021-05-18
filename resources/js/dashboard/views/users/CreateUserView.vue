@@ -78,8 +78,8 @@
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.user.birthdate.required">
-                                    The birthdate field is required
+                                <p v-if="!$v.user.birthdate.date">
+                                    The birthdate field must be a valid date
                                 </p>
                             </template>
                             <date-picker 
@@ -174,7 +174,7 @@
                         <label for="addressToggle">Address (optional)</label>
                     </h2>
 
-                    <div ref="addressForm" class="flex flex-col gap-y-4"> 
+                    <div ref="addressForm" class="flex flex-col gap-y-4" v-show="hasAddress"> 
                         <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">                  
                             <InputGroup
                                 id="addressFirstName"
@@ -359,20 +359,22 @@
     import { required, email, requiredIf, maxLength, } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces, phoneNumber } from '../../validators/index';
 
-    import { downloadRoles } from "../../api/roles.api";
-
     export default {
-
-        async mounted() {
-            const response = await downloadRoles({available:true});
-            this.availableRoles = response.data.data.roles;
-        },
-
         computed: {
             ...mapGetters('Counties', ['getCounties']),
+            ...mapGetters('Roles', ["getRoles"]),
+            ...mapGetters('Users', ["isWaiter"]),
 
             citiesSelectState() {
                 return this.address.county_id ? false : true;
+            },
+
+            availableRoles() {
+                if(this.isWaiter) {
+                    return this.getRoles.filter(role => role.name === "Client");
+                }
+
+                return this.getRoles;
             },
 
             birthdateClass() {
@@ -388,8 +390,6 @@
 
         data() {
             return {
-                availableRoles: [],
-
                 waitForFileUpload: false,
                 waiting: false,
 
@@ -442,7 +442,7 @@
                     // phoneNumber
                 },
                 birthdate: {
-                    required
+                    //date
                 },
                 role_id: {
                     required
@@ -491,6 +491,7 @@
         methods: {
             ...mapActions('Users', ['addUser']),
             ...mapActions('Counties', ['fetchCitites']),
+            ...mapActions('Notification', ["openNotification"]),
 
             async submit() {
                 this.$v.user.$touch();
@@ -517,6 +518,12 @@
                         this.waiting = false;
 
                         this.$Progress.finish()
+
+                        this.openNotification({
+                            type: "ok",
+                            message: "User account created",
+                            show: true,
+                        })
 
                     } catch ( error ) {  
                         this.$Progress.fail();

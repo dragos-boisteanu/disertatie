@@ -23,6 +23,9 @@ export default [
         name: 'CreateOrder',
         component: CreateOrderView,
         meta: {
+            requireAdmin: true,
+            requireWaiter: true,
+            requireLocationManager: true,
             breadcrumb: {
                 label: 'Create',
                 parent: 'Orders'

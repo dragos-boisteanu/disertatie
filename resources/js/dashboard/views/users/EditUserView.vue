@@ -1,6 +1,6 @@
 <template>
     <ViewContainer>
-         <template slot="header">
+        <template slot="header">
             Edit user #{{user.id}}
         </template>
     
@@ -160,17 +160,17 @@
                         :hasError="$v.localUser.phone_number.$error"
                     >
                          <template v-slot:errors>
-                            <p v-if="!$v.localUser.role_id.required">
+                            <p v-if="!$v.localUser.role.id.required">
                                 The role field is required
                             </p>
                         </template>
                         <Select 
-                            v-model="localUser.role_id"
+                            v-model="localUser.role.id"
                             id="role" 
                             name="role"
-                            :class="{'border-red-600' : $v.localUser.role_id.$error, 'border-green-600': $v.localUser.role_id.$dirty && !$v.localUser.role_id.$error}"
-                            :disabled="waiting"
-                            @blur.native="$v.localUser.role_id.$touch()"   
+                            :class="{'border-red-600' : $v.localUser.role.id.$error, 'border-green-600': $v.localUser.role.id.$dirty && !$v.localUser.role.id.$error}"
+                            :disabled="waiting || disableRoleChange"
+                            @blur.native="$v.localUser.role.id.$touch()"   
                         >
                             <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
                         </Select>
@@ -204,12 +204,11 @@
     import DatePicker from 'vue2-datepicker';
 
     import store from '../../store/index';
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     import { required, email, maxLength, } from 'vuelidate/lib/validators'
     import { alphaSpaces, phoneNumber } from '../../validators/index';
-
-
+    
     export default {
 
         async beforeRouteEnter (to, from, next) {
@@ -232,12 +231,11 @@
         },
 
         computed: {
-           ...mapGetters('Roles', ['getRoles']),
-           ...mapGetters('Users', ['getLoggedUser']),
+            ...mapGetters('Roles', ['getRoles']),
+            ...mapGetters('Users', ["isAdmin", "isLocationManager"]),
 
-            canChangeRole() {
-                //  TO DO: hide roles list if the auth user's role is 6 and the local user role is 6 or 7
-               return [6,7].includes(this.getLoggedUser.role_id)
+            disableRoleChange() {
+                return !(this.isAdmin || this.isLocationManager)
             },
 
             birthdateClass() {
@@ -266,7 +264,10 @@
                     birthdate: '',
                     email: '',
                     phone_number: '',
-                    role_id: ''
+                    role: {
+                        id: '',
+                        name: '',
+                    }
                 },              
 
             }
@@ -295,8 +296,10 @@
                 birthdate: {
                     required
                 },
-                role_id: {
-                    required
+                role: {
+                    id: {
+                        required
+                    }
                 }
             },
         },
@@ -388,7 +391,7 @@
             setUser(user) {
                 this.user = user;
                 this.localUser = JSON.parse(JSON.stringify(this.user))
-
+             
             }
         },
 

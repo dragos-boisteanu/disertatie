@@ -14,7 +14,7 @@ class AddBirthdateColumToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->date('birthdate')->after('name');
+            $table->date('birthdate')->after('name')->nullable();
         });
     }
 

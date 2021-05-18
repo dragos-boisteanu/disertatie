@@ -27,7 +27,7 @@ class UserStoreRequest extends FormRequest
             'data.user.avatar' => 'sometimes|string',
             'data.user.first_name' => 'required|string|max:255',
             'data.user.name' => 'required|string|max:255',
-            'data.user.birthdate' => 'required|date',
+            'data.user.birthdate' => 'sometimes|date',
             'data.user.phone_number' => 'required|string|unique:users,phone_number',
             'data.user.email' => 'required|string|email|max:255|unique:users,email',
             'data.user.role_id' => 'required|integer|exists:roles,id',
