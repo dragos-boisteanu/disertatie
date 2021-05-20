@@ -10,8 +10,8 @@
         <td class="p-2">{{item.vat}} %</td>
         <td class="p-2">{{ discount }}</td>
         <td class="p-2">{{ price }} Ron</td>
-        <td class="p-2 flex items-center justify-center relative" v-if="showActions">
-            <button @click.prevent="toggleMenu">
+        <td class="p-2 flex items-center justify-center relative text-left" v-if="showActions" v-click-outside="closeMenu">
+            <button @click.prevent="openMenu">
                 <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </button>
             <ul v-if="showMenu" class="absolute z-50 top-5 right-4 lg:top-5 lg:-left-2 lg:right-auto p-1 bg-white text-xs text-gray-800 hover:text-black rounded shadow">
@@ -64,18 +64,22 @@
         },
 
         methods: {
-            toggleMenu() {
-                this.showMenu = !this.showMenu;
+            closeMenu() {
+                this.showMenu = false;
+            },
+
+            openMenu() {
+                this.showMenu = true;
             },
 
             openProductModal() {
                 this.$emit('edit', this.item);
-                this.toggleMenu();
+                this.closeMenu();
             },
 
             removeProduct(){
                 this.$emit('remove', this.item.id);
-                this.toggleMenu();
+                this.closeMenu();
             }
             
         }

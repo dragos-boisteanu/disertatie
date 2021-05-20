@@ -10,6 +10,8 @@ import VueProgressBar from 'vue-progressbar'
 import VueBreadcrumbs from 'vue-2-breadcrumbs';
 import Breadcrumbs from './components/Breadcrumbs.vue';
 
+import ClickOutside from './directives/ClickOutside';
+
 import VueMq from 'vue-mq'
 
 import dayjs from 'dayjs';
@@ -53,6 +55,8 @@ const options = {
 }
 
 Vue.use(VueProgressBar, options)
+
+Vue.directive('click-outside', ClickOutside);
 
 new Vue({
     router,
