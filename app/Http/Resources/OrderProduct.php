@@ -16,9 +16,12 @@ class OrderProduct extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'productName' => $this->product_name,
-            'quantity' => $this->quantity,
-            'price' => $this->price,
+            'name' => $this->pivot->product_name,
+            'unitPrice' => $this->price,
+            'vat' => $this->category->vat,
+            'discount' => $this->finalDiscount,
+            'quantity' => $this->pivot->quantity,
+            'price' => $this->pivot->price,
         ];
     }
 }

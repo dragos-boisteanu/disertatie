@@ -50,7 +50,7 @@
                     :eclass="{'flex-1':true}"
                 >
                     <Input
-                        v-model="product.price"
+                        v-model="product.basePrice"
                         id="productName"
                         :disabled="true"
                     ></Input>
@@ -169,7 +169,7 @@
                     name: '',
                     stock: '',
                     quantity: '',
-                    price: '',
+                    basePrice: '',
                 },
 
                 edit: false,

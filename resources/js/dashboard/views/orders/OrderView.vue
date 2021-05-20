@@ -63,15 +63,18 @@
             </div>
         </div>
 
-        <div class="border-b pb-2">   
-            <table class="my-4 px-2 w-full rounded-sm lg:w-1/2">
+        <div class="w-full border-b pb-2 overflow-y-auto">   
+            <table class="my-4 px-2 w-full rounded-sm lg:w-1/2 text-center">
                 <thead class="w-full bg-gray-700 text-orange-500">
                     <tr class="text-left text-sm">
                         <th class="p-2 text-center rounded-tl">#</th>
-                        <th class="p-2">Name</th>
-                        <th class="p-2">Quantity</th>
-                        <th class="p-2">Price</th>
-                        <th class="p-2"></th>
+                        <th class="p-2 text-center">Name</th>
+                        <th class="p-2 text-center">Quantity</th>
+                        <th class="p-2 text-center">Unit Price</th>
+                        <th class="p-2 text-center">VAT</th>
+                        <th class="p-2 text-center">Discount</th>
+                        <th class="p-2 text-center">Total Price</th>
+                        <th class="p-2 text-center"></th>
                     </tr>
                 </thead>
                 <tbody class="overflow-y-auto">
@@ -82,11 +85,14 @@
                         :show-actions="false"
                     ></OrderItem>
                     <tr v-if="order.items.length > 0" class="mt-1 font-bold border-t">                                    
-                        <td colspan="2" class="p-2">
+                        <td colspan="2" class="p-2 text-center">
                             TOTAL
                         </td>
                         <td class="p-2">{{ order.totalQuantity }}</td>
-                        <td class="p-2">{{ order.totalValue }} Ron</td>
+                        <td class="p-2"></td>
+                        <td class="p-2"></td>
+                        <td class="p-2"></td>
+                        <td class="p-2 text-center">{{ order.totalValue }} Ron</td>
                     </tr>
                 </tbody>
             </table>
@@ -135,14 +141,13 @@ export default {
     },
 
     computed: {
-        ...mapGetters('Users', ['isAdmin', 'isLocationManager', 'isWaiter', 'loggedUser']),
+        ...mapGetters('Users', ['isAdmin', 'isLocationManager', 'isWaiter', 'getLoggedUser']),
 
         canDoAction() {
             return this.isAdmin || this.isLocationManager || this.isWaiter;
         },
 
         canCancel() {
-            console.log(this.order.deletedAt === null)
             if(this.isWaiter && this.order.staff.id === this.loggedUser.id && this.order.deletedAt === null) {
                 return true;
                     

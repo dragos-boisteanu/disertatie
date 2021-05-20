@@ -142,14 +142,14 @@
         computed: {
             ...mapGetters('Ingredients', ['getIngredients']),
             ...mapGetters('Units', ['getUnits']),
-            ...mapGetters('Users',['getLoggedUser']),
+            ...mapGetters('Users',['getLoggedUser', 'isAdmin', 'isKitchenManager', 'isLocationManager']),
 
-            canNotCreate() {
-                return this.getLoggedUser.role_id !== 6 && this.getLoggedUser.role_id !== 7
+            canCreate() {
+                return this.isAdmin || this.isKitchenManager || this.isLocationManager
             },
 
             disabled() {
-                return this.waiting || this.canNotCreate
+                return this.waiting || !this.canCreate
             }
 
         },

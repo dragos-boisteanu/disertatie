@@ -244,13 +244,16 @@
                                 The order must have at least 1 product
                             </p>
                         </div>
-                        <table class="mt-1 px-2 w-full rounded-sm max-h-80 md:max-h-96">
+                        <table class="mt-1 px-2 w-full rounded-sm max-h-80 md:max-h-96 text-center">
                             <thead class="w-full bg-gray-700 text-orange-500">
                                 <tr class="text-left text-sm">
                                     <th class="p-2 text-center rounded-tl">#</th>
-                                    <th class="p-2">Name</th>
-                                    <th class="p-2">Quantity</th>
-                                    <th class="p-2">Price</th>
+                                    <th class="p-2 text-center">Name</th>
+                                    <th class="p-2 text-center">Quantity</th>
+                                    <th class="p-2 text-center">Unit Price</th>
+                                    <th class="p-2 text-center ">VAT</th>
+                                    <th class="p-2 text-center">Discount</th>
+                                    <th class="p-2 text-center">Total Price</th>
                                     <th class="p-2"></th>
                                 </tr>
                             </thead>
@@ -262,15 +265,18 @@
                                     @edit="editOrderProduct(item)"
                                     @remove="removeProductFromOrder"
                                 ></OrderItem>
-                                <tr v-if="order.items.length > 0" class="mt-1 font-bold border-t">                                    
-                                    <td colspan="2" class="p-2">
+                                 <tr v-if="order.items.length > 0" class="mt-1 font-bold border-t">                                    
+                                    <td colspan="2" class="p-2 text-center">
                                         TOTAL
                                     </td>
-                                    <td class="p-2">{{ order.totalQuantity }}</td>
-                                    <td class="p-2">{{ order.totalValue }} Ron</td>
+                                    <td class="p-2">{{ orderTotalQuantity }}</td>
+                                    <td class="p-2"></td>
+                                    <td class="p-2"></td>
+                                    <td class="p-2"></td>
+                                    <td class="p-2 text-center">{{ orderTotalPrice }} Ron</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5">
+                                    <td colspan="8">
                                         <button 
                                             id="addItemBtn"
                                             class="w-full py-1 mt-2 text-white text-sm ripple-bg-orange-400 rounded-sm"

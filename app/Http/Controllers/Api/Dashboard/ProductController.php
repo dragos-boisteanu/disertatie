@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductCollection;
 use App\Http\Requests\ProductPatchRequest;
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Resources\OrderProduct;
 use App\Http\Resources\Product as ProductResource;
 use App\Http\Resources\ProductOrderCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -277,9 +278,9 @@ class ProductController extends Controller
 
     public function getProductByBarcode($barcode) 
     {
-        $product = Product::withTrashed()->where('barcode', $barcode)->firstOrCreate();
+        $product = Product::withTrashed()->where('barcode', $barcode)->firstOrFail();
         
-        return new ProductResource($product);
+        return new OrderProduct($product);
     }
 
 }

@@ -27,7 +27,7 @@ class Order extends Model
         'observations',
     ];
 
-    public $with = ['items'];
+    public $with = ['products'];
 
    protected $appends = array('totalQuantity', 'totalValue');
 
@@ -35,8 +35,8 @@ class Order extends Model
     {
         $totalQuantity = 0;
         
-        forEach($this->items as $item) {
-            $totalQuantity += $item->quantity;
+        forEach($this->products as $item) {
+            $totalQuantity += $item->pivot->quantity;
         }
 
         return $totalQuantity;
@@ -46,8 +46,8 @@ class Order extends Model
     {
         $totalValue = 0;
 
-        forEach($this->items as $item) {
-            $totalValue += $item->quantity + $item->price;
+        forEach($this->products as $item) {
+            $totalValue += $item->pivot->quantity * $item->pivot->price;
         }
 
         return number_format($totalValue, 2, '.', '');
@@ -56,11 +56,6 @@ class Order extends Model
     public function paymentMethod()
     {
         return $this->hasOne(PaymentMethod::class);
-    }
-
-    public function items()
-    {
-        return $this->hasMany(OrderProduct::class);
     }
 
     public function client()
@@ -81,6 +76,11 @@ class Order extends Model
     public function status() 
     {
         return $this->belongsTo(OrderStatus::class);
+    }
+
+    public function products() 
+    {
+        return $this->belongsToMany(Product::class)->withPivot('product_name', 'quantity', 'price');
     }
 
     public function scopeFilter(Builder $builder, Request $request)
