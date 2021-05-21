@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\ClientAddress;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderClient extends JsonResource

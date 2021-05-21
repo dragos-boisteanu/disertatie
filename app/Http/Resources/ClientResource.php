@@ -18,7 +18,8 @@ class ClientResource extends JsonResource
             'id' => $this->id,
             'firstName' => $this->first_name,
             'name' => $this->name,
-            'email' => $this->email
+            'email' => $this->email,
+            'addresses' => ClientAddress::collection($this->whenLoaded('addresses')),
         ];
     }
 }

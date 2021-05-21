@@ -69,6 +69,7 @@ class OrderController extends Controller
             $order->phone_number =  $request->phoneNumber;
             $order->status_id = 2;
             $order->staff_id = $request->user()->id;
+            $order->name = $request->name;
 
             if($request->has('observations')) {
                 $order->observations =  $request->observations;
@@ -76,9 +77,7 @@ class OrderController extends Controller
 
             if($request->has('clientId')) {
                 $order->client_id = $request->clientId;
-            } else {
-                $order->first_name = $request->firstName;
-            }
+            }          
 
             if($request->has('email')) {
                 $order->email = $request->email;
@@ -137,7 +136,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::withTrashed()->findOrFail($id);
+        $order = Order::with('client')->withTrashed()->findOrFail($id);
 
         return new OrderResource($order);
     }

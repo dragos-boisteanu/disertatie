@@ -132,6 +132,7 @@
                             name="orderDeliveryMethod"
                             :class="{'border-red-600' : $v.order.deliveryMethodId.$error, 'border-green-600': $v.order.deliveryMethodId.$dirty && !$v.order.deliveryMethodId.$error}"             
                             @blur.native="$v.order.deliveryMethodId.$touch()"
+                            @change="setOrderAddress"
                         >
                             <option value="" selected disabled>Select delivery method</option>
                             <option v-for="method in getDeliveryMethods" :key="method.id" :value="method.id">{{method.name}}</option>
@@ -139,83 +140,50 @@
                     </InputGroup>
 
                     <div class="flex flex-col gap-2 md:flex-row md:items-center" v-if="showAddressFields">
-                        <div class="flex items-center gap-x-2">   
-                            <InputGroup
-                                id="clientCounty"
-                                label="County"
-                                :hasError="$v.county.id.$error"
-                                :eclass="{'flex-1':true}"
-                                :required="true"
-                            >  
-                                <template v-slot:errors>
-                                    <p v-if="!$v.county.id.required">
-                                        The county field is required
-                                    </p>
-                                </template>
-                                <Select 
-                                    v-model="county.id"
-                                    id="clientCounty"
-                                    name="country"
-                                    :class="{'border-red-600' : $v.county.id.$error, 'border-green-600': $v.county.id.$dirty && !$v.county.id.$error}"
-                                    @change.native="getCitites"
-                                    @blur.native="$v.county.id.$touch()"
-                                >
-                                    <option value="" disabled>Select user country</option>
-                                    <option v-for="county in getCounties" :key="county.id" :value="county.id"> {{county.name}} </option>
-                                </Select>
-                            </InputGroup>
-
-                            <InputGroup
-                                id="clientCity"
-                                label="City"
-                                :hasError="$v.city.id.$error"
-                                :eclass="{'flex-1':true}"
-                                :required="true"
-                            >
-                                <template v-slot:errors>
-                                    <p v-if="!$v.city.id.required">
-                                        The city field is required
-                                    </p>
-                                </template>
-                                <Select 
-                                    v-model="city.id"
-                                    id="clientCity"
-                                    name="city"
-                                    :disabled="county.id ? false : true"
-                                    :class="{'border-red-600' : $v.city.id.$error, 'border-green-600': $v.city.id.$dirty && !$v.city.id.$error}"             
-                                    @blur.native="$v.city.id.$touch()"
-                                    @change.native="selectCity"
-                                >
-                                    <option value="" selected disabled>Select user city</option>
-                                    <option v-for="city in cities" :key="city.id" :value="city.id">{{city.name}}</option>
-                                </Select>
-                            </InputGroup>
-                        </div>
-                        
                         <InputGroup
+                            v-if="client.addresses.length > 0"
+                            id="clientAddresses"
+                            label="Adrress"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <Select
+                                v-model="order.address"
+                                id="clientAddresses"
+                                name="clientAddresses"
+                            >
+                                <option value="" selected disabled>Select client address</option>
+                                <option v-for="(address, index) in client.addresses" :key="index" :value="address.address">{{ index }}. {{address.address}}</option>
+                            </Select>
+                        </InputGroup>
+
+                        <InputGroup
+                            v-if="showAddressFields"
                             id="clientAddress"
                             label="Adrress"
-                            :hasError="$v.address.$error"
+                            :hasError="$v.order.address.$error"
                             :eclass="{'flex-1':true}"
                             :required="true"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.address.required">
-                                    The client address field is required 
+                                <p v-if="!$v.order.address.required">
+                                    The address field is required 
                                 </p>
-                                <p v-if="!$v.address.alphaNumSpaces">
-                                    The client address field must contain only letters, spaces or numbers
+                                <p v-if="!$v.order.address.alphaNumSpaces">
+                                    The address field must contain only letters, spaces or numbers
                                 </p>
                             </template>
                             <Input
-                                v-model="address"
-                                id="clientAddress"
+                                v-model="order.address"
+                                id="orderAddress"
                                 name="clientAddress"
-                                :class="{'border-red-600' : $v.address.$error, 'border-green-600': $v.address.$dirty && !$v.address.$error}"
-                                @blur.native="$v.address.$touch()"
+                                :class="{'border-red-600' : $v.order.address.$error, 'border-green-600': $v.order.address.$dirty && !$v.order.address.$error}"
+                                @blur.native="$v.order.address.$touch()"
                             ></Input>
                         </InputGroup>
-                    </div>
+
+                        
+                    </div>  
+                    
 
                     <InputGroup
                         id="observations"
@@ -327,9 +295,7 @@
     export default {
 
         computed: {
-            // ...mapGetters('PaymentMethods', ['getPaymentMethods']),
             ...mapGetters('DeliveryMethods', ['getDeliveryMethods']),
-            ...mapGetters('Counties', ['getCounties']),
 
             orderTotalQuantity() {
                 let totalQuantity = 0
@@ -350,36 +316,20 @@
             },
 
             showAddressFields() {
-                this.$v.address.$reset();
-                this.$v.city.id.$reset();
-                this.$v.county.id.$reset();
                 return parseInt(this.order.deliveryMethodId) === 1;
             }
         },
         
         data() {
             return {
-                county: {
-                    id: '',
-                    name: ''
-                },
-
-                city: {
-                    id: '',
-                    name: '',
-                },
-
-                cities: [],
-
                 client: {
                     firstName: '',
                     name: '',
                     phoneNumber: '',
                     email: '',
                     id: '',
+                    addresses: ''
                 },
-
-                address: '',
 
                 order: {
                     address: '',
@@ -396,29 +346,9 @@
 
         validations: {
             address: {
-                requiredIf: requiredIf(function () {
-                    return this.showAddressFields
-                }),
-                alphaNumSpaces
+               
             },
-            county: {
-                id: {
-                    required: requiredIf(function () {
-                        return this.showAddressFields
-                    }),
-                    numeric,
-                },
-            },
-
-            city: {
-                id: {
-                    required: requiredIf(function () {
-                        return this.showAddressFields
-                    }),
-                    numeric
-                }
-            },
-
+           
             client: {
                 name: {
                     maxLength: maxLength(50),
@@ -438,6 +368,12 @@
             },
 
             order: {
+                address: {
+                    requiredIf: requiredIf(function () {
+                    return this.showAddressFields
+                    }),
+                    alphaNumSpaces
+                },
                 deliveryMethodId: {
                     required,
                     numeric
@@ -466,19 +402,18 @@
 
                     if(!this.$v.$invalid) {
 
-                        if(this.showAddressFields) {
-                            this.order.address = `${this.county.name}, ${this.city.name}, ${this.address}, ${this.client.phoneNumber}`;
-                        } else {
+                        if(!this.showAddressFields) {
                             this.order.address = 'Local';
                         }
 
                         if(this.client.id) {
                             this.order.clientId = this.client.id;
-                        } else {
-                            this.order.firstName = this.client.firstName
-                        }
-
+                        } 
+                        
+                        this.order.name = this.client.firstName
+    
                         this.order.phoneNumber = this.client.phoneNumber;
+
                         if(this.client.email) {
                             this.order.email = this.client.email
                         }
@@ -561,16 +496,6 @@
                 }
             },
 
-            async getCitites() {
-                try {
-                    const selectedCounty =  _find(this.getCounties, ['id', parseInt(this.county.id)]);
-                    this.county.name = selectedCounty.name;
-                    this.cities= await this.fetchCitites(this.county.id);
-                } catch ( error ) {
-                    console.log(error)
-                }
-            },
-
             async getClient() {
                 try {
                     this.$v.client.phoneNumber.$touch();
@@ -581,10 +506,15 @@
                         this.client.name = response.name;
                         this.client.id = response.id;
                         this.client.email = response.email;
+                        this.client.addresses = response.addresses;
                     }
-                    
                 } catch ( error ) {
-                    console.log(error)
+                    this.client = {
+                        firstName: '',
+                        name: '',
+                        email: '',
+                        addresses: [],
+                    }
                 }
             },
 
@@ -593,28 +523,22 @@
                 this.city.name = selectedCity.name;
             },
 
+            setOrderAddress() {
+                if(this.order.deliveryMethodId === 2){
+                    this.order.address = 'Local'
+                }
+            },
+
             resetForm() {
                 this.$v.$reset();
-                this.county = {
-                    id: '',
-                    name: ''
-                },
-
-                this.city = {
-                    id: '',
-                    name: '',
-                },
-
-                this.cities = [],
 
                 this.client = {
                     firstName: '',
                     name: '',
                     phoneNumber: '',
                     email: '',
+                    addresses: [],
                 },
-
-                this.address = '',
 
                 this.order = {
                     address: '',

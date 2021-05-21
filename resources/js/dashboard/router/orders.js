@@ -2,7 +2,7 @@ import { dashboardBaseUrl } from './baseUrls'
 
 const OrdersViews = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/OrdersView.vue')
 const OrderView = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/OrderView.vue')
-const EditOrderView = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/EditOrderView.vue')
+// const EditOrderView = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/EditOrderView.vue')
 const CreateOrderView = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/CreateOrderView.vue')
 
 export default [
@@ -49,19 +49,19 @@ export default [
         }
     },
 
-    {   
-        path: `${dashboardBaseUrl}/order/:id/edit`,
-        name: 'EditOrder',
-        component: EditOrderView,
-        meta: {
-            breadcrumb() {
-                const { params } = this.$route;
+    // {   
+    //     path: `${dashboardBaseUrl}/order/:id/edit`,
+    //     name: 'EditOrder',
+    //     component: EditOrderView,
+    //     meta: {
+    //         breadcrumb() {
+    //             const { params } = this.$route;
         
-                return {
-                    label: `Edit order #${params.id}`,
-                    parent: "Orders",
-                };
-            },
-        }
-    },
+    //             return {
+    //                 label: `Edit order #${params.id}`,
+    //                 parent: "Orders",
+    //             };
+    //         },
+    //     }
+    // },
 ]

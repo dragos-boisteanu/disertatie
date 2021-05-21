@@ -18,8 +18,6 @@ class CreateAddressesTable extends Migration
             $table->string('first_name');
             $table->string('name');
             $table->string('phone_number');
-            $table->foreignId('county_id')->constrained();
-            $table->foreignId('city_id')->constrained();
             $table->string('address');
             $table->timestamps();
         });

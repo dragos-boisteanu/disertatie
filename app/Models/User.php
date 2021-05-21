@@ -52,7 +52,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public $with = ['role'];
+    public $with = ['role', 'addresses'];
     
     public function role()
     {

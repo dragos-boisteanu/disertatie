@@ -18,7 +18,7 @@ class Order extends JsonResource
         return [
             'id' => $this->id,
             'client' => new OrderClient($this->whenLoaded('client')),
-            'firstName' => $this->first_name,
+            'name' => $this->name,
             'staff' => [ 'name' => $this->staff->first_name . ' ' . $this->staff->name, 'id'=> $this->staff->id],
             'deliveryMethod' => $this->delivery_method_id,
             'phoneNumber' => $this->phone_number,

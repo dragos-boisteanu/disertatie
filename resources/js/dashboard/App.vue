@@ -63,7 +63,6 @@
                 
                 await Promise.all([
                     this.downloadRoles(),
-                    this.fetchCounties(),
                     this.fetchCategories(),
                     this.fetchUnits(),
                     this.downloadLoggedUserData(),
@@ -109,7 +108,6 @@
             ...mapActions('Categories', ['fetchCategories']),
             ...mapActions('Units', ['fetchUnits']),
             ...mapActions('Roles', ['fetchRoles']),
-            ...mapActions('Counties', ['fetchCounties']),
             ...mapActions('Notification', ['openNotification']),
             ...mapActions('Users', ['downloadLoggedUserData']),
             ...mapActions('Ingredients', ['downloadIngredients']),
