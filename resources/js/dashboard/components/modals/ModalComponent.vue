@@ -1,6 +1,6 @@
 <template>
     <Backdrop class="flex justify-center items-center">
-        <div class="bg-white rounded-md shadow-md w-11/12 md:1/2 lg:w-1/4 overflow-y-auto max-h-5/6">
+        <div class="bg-white rounded-md shadow-md w-11/12 md:w-1/2 xl:w-1/4 overflow-y-auto max-h-5/6">
             <div class="flex items-center justify-between mt-4 mb-2 pb-2 px-4 border-b">
                 <h1 class="text-xl">
                     <slot name="header"></slot>
