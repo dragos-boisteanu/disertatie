@@ -1,4 +1,4 @@
-import { downloadOrders, storeOrder, downloadOrder, disableOrder } from '../../api/orders.api'
+import { downloadOrders, storeOrder, downloadOrder, disableOrder, patchOrder } from '../../api/orders.api'
 import { downloadStatuses } from '../../api/orderStatuses.api'
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
@@ -92,6 +92,18 @@ const actions = {
         }
     },
 
+    async patchOrder({state, commit}, payload ) {
+        console.log('patchOrder: ', payload);
+        // const response = await patchOrder(payload.localData);
+        // payload.updatedAt = response.data.udatedAt;
+
+        // if(state.orders.length > 0) {
+        //     commit('PATCH_ORDER', payload);
+        // }
+
+        // return payload.updatedAt;        
+    },
+
     async disableOrder({commit}, payload) {
         console.log(payload)
         const response = await disableOrder(payload.id);
@@ -124,6 +136,16 @@ const mutations = {
 
     SET_ORDER_STATUSES(state, payload) {
         state.statuses = payload;
+    },
+
+    PATCH_ORDER(state, payload) {
+        const orderIndex = _findIndex(state.orders, ['id', payload.localData.id]);
+
+        Object.keys(payload.localData).forEach(key => {
+            payload.vm.$set(state.orders[orderIndex], key, payload.localData[key]);
+        });
+
+        payload.vm.$set(state.orders[orderIndex], 'updatedAt', payload.updatedAt);
     },
 
     DISABLE_ORDER(state, payload) {

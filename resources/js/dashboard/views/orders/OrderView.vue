@@ -2,21 +2,38 @@
     <ViewContainer v-if="order">
         <template slot="header">
             View order #{{ order.id }}
+            <OrderStatus :status="order.status"></OrderStatus>
         </template>
 
+        <EditOrderDetailsModal 
+            v-if="showOrderDetailsEditModalState" 
+            :order-id="order.id"
+            :client-id="order.client.id"
+            :address="order.address" 
+            :observations="order.observations"
+            @closed="showOrderDetailsEditModalToggle"
+        >
+        </EditOrderDetailsModal>
+
         <div class="flex flex-col gap-4 md:flex-row md:flex-wrap">
-            <div class="w-full bg-white shadow rounded p-4 md:flex-grow md:flex-shrink-0">
+            <div class="relative w-full bg-white shadow rounded p-4 md:flex-grow md:flex-shrink-0">
+                <button class="absolute top-2 right-2" @click="showOrderDetailsEditModalToggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg>
+                </button>
                 <div class="text-xl font-semibold my-3">Order details</div>
                 <div class="text-sm">
                     <div class="my-1">
                         <div>
                             <span class="font-semibold">Created At: </span> <span>{{ order.createdAt | formatDate}}</span>
                         </div>
-                        <div>
+                        <div class="my-1">
                             <span class="font-semibold">Updated At: </span> <span>{{ order.updatedAt | formatDate}}</span>
                         </div>
-                        <div>
-                            <span class="font-semibold">Status: </span> <span>{{ order.status.name }}</span>
+                        <div class="my-1">
+                            <span class="font-semibold">Address: </span> <span>{{ order.address}}</span>
+                        </div>
+                        <div class="my-1">
+                            <span class="font-semibold">Observations: </span> <span>{{ order.observations}}</span>
                         </div>
                     </div>
                 </div>
@@ -25,6 +42,9 @@
                 <div class="text-xl font-semibold my-3">Client</div>
                 <div class="text-sm">
                     <div class="my-1">
+                        <div v-if="order.client">
+                            <span class="font-semibold">ID: </span> <span>{{ order.client.id}}</span>
+                        </div>
                         <div v-if="order.client">
                             <span class="font-semibold">Name: </span> <span>{{ order.client.name}}</span>
                         </div>
@@ -39,12 +59,6 @@
                         <div v-if="order.email">
                             <span class="font-semibold">Email: </span> <span>{{ order.email }}</span>
                         </div>
-                    </div>
-                    <div class="my-1">
-                        <span class="font-semibold">Address: </span> <span>{{ order.address}}</span>
-                    </div>
-                    <div>
-                        <span class="font-semibold">Observations: </span> <span>{{ order.observations}}</span>
                     </div>
                 </div>
             </div>
@@ -125,6 +139,8 @@
 
 import ViewContainer from '../ViewContainer';
 import OrderItem from '../../components/orders/OrderItemComponent'
+import OrderStatus from '../../components/orders/OrderStatusComponent';
+import EditOrderDetailsModal from '../../components/modals/EditOrderDetailsModalComponent';
 
 import Button from '../../components/buttons/ButtonComponent';
 
@@ -161,6 +177,7 @@ export default {
         return {
             waiting: false,
             order: null,
+            showOrderDetailsEditModalState: false,
         }
     },
 
@@ -197,6 +214,10 @@ export default {
           
         },
 
+        showOrderDetailsEditModalToggle() {
+            this.showOrderDetailsEditModalState = !this.showOrderDetailsEditModalState;
+        },
+
         setOrder(order) {
             this.order = order
         },
@@ -206,7 +227,9 @@ export default {
     components: {
         ViewContainer,
         OrderItem,
-        Button
+        Button,
+        OrderStatus,
+        EditOrderDetailsModal
     }
 }
 </script>

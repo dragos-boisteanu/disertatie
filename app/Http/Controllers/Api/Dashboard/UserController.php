@@ -263,14 +263,5 @@ class UserController extends Controller
         return new UserResource($request->user());
     }
 
-    public function getClientByPhoneNumer($phoneNumber)
-    {
-        $client = User::where('phone_number', $phoneNumber)->first();
-
-        if(empty($client)) {
-            abort(404);
-        }
-
-        return new ClientResource($client);
-    }
+    
 }

@@ -283,6 +283,8 @@
 
     import OrderItem from '../../components/orders/OrderItemComponent';
     import OrderItemModal from '../../components/modals/OrderItemModalComponent';
+    
+    import { downloadClientByPhoneNumber } from '../../api/client.api';
 
     import { required, numeric, minLength, maxLength, email, requiredIf  } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
@@ -392,8 +394,7 @@
         methods: {
             ...mapActions('Users', ['getUserByPhoneNumber']),
             ...mapActions('Counties', ['fetchCitites']),
-            ...mapActions('Notification', ['openNotification']),     
-            ...mapActions('Users', ['downloadUserByPhoneNumber']),     
+            ...mapActions('Notification', ['openNotification']),      
             ...mapActions('Orders', ['storeOrder']),  
 
             async submit() {
@@ -436,6 +437,31 @@
                     })
                 }                          
             },
+
+             async getClient() {
+                try {
+                    this.$v.client.phoneNumber.$touch();
+
+                    if(!this.$v.client.phoneNumber.$invalid) {
+                        const response = await downloadClientByPhoneNumber(this.client.phoneNumber);
+                        const client = response.data.data;
+                        this.client.firstName = client.firstName;
+                        this.client.name = client.name;
+                        this.client.id = client.id;
+                        this.client.email = client.email;
+                        this.client.addresses = client.addresses;
+                    }
+                } catch ( error ) {
+                    console.log(error)
+                    this.client.firstName = "";
+                    this.client.name = "";
+                    this.client.id = "";
+                    this.client.email = "";
+                    this.client.addresses = "";
+                
+                }
+            },
+
 
             saveEdit(product) {    
                 const existingProductIndex = _findIndex(this.order.items, ['name', product.name]);
@@ -495,29 +521,7 @@
                     this.selectedItemQuantity = '';
                 }
             },
-
-            async getClient() {
-                try {
-                    this.$v.client.phoneNumber.$touch();
-
-                    if(!this.$v.client.phoneNumber.$invalid) {
-                        const response = await this.downloadUserByPhoneNumber(this.client.phoneNumber);
-                        this.client.firstName = response.firstName;
-                        this.client.name = response.name;
-                        this.client.id = response.id;
-                        this.client.email = response.email;
-                        this.client.addresses = response.addresses;
-                    }
-                } catch ( error ) {
-                    this.client = {
-                        firstName: '',
-                        name: '',
-                        email: '',
-                        addresses: [],
-                    }
-                }
-            },
-
+          
             selectCity() {
                 const selectedCity = _find(this.cities, ['id', parseInt(this.city.id)]);
                 this.city.name = selectedCity.name;

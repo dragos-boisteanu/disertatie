@@ -36,7 +36,6 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::group(['prefix'=>'users'], function() {
         Route::delete('{id}/disable', 'UserController@disable');
         Route::post('{id}/restore', 'UserController@restore');
-        Route::get('/phone-number/{phoneNumber}', 'UserController@getClientByPhoneNumer');
     });
   
     Route::group(['prefix'=>'products'], function() {
@@ -63,13 +62,15 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::get('/products/id/{id}', 'OrderController@getProductsById');
     });
 
+    Route::group(['prefix'=>'clients'], function() {
+        Route::get('phone-number/{phoneNumber}', 'ClientController@getClientByPhoneNumer');
+        Route::get('addresses/{id}', 'ClientController@getClientAddresses');
+    });
+
+
 
     Route::apiResource('images', 'FileController')->only('store', 'destroy');
        
 });
 
-Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {
-    Route::get('counties', 'CountyController@index');
-    Route::get('cities/{id}','CityController@index');
-});
 
