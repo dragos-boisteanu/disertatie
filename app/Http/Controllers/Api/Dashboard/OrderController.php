@@ -14,6 +14,7 @@ use App\Http\Resources\ModalOrderProduct;
 use App\Http\Resources\Order as OrderResource;
 use App\Http\Resources\OrderProductCollection;
 use App\Http\Resources\ModalOrderProductCollection;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
@@ -57,7 +58,9 @@ class OrderController extends Controller
      */
     public function store(OrderStoreRequest $request)
     {
-        DB::transaction(function () use ($request) {
+        DB::beginTransaction();
+
+        try  {
     
             $order = new Order;
 
@@ -96,18 +99,34 @@ class OrderController extends Controller
                 if($product->has_ingredients) {
                     //modify ingredients quantity
                     foreach($product->ingredients as $ingredient) {
-                        $ingredient->stock->quantity -= $ingredient->pivot->quantity * $item['quantity'];
-                        $ingredient->stock->save();
+                        if($ingredient->stock->quantity >=  $ingredient->pivot->quantity * $item['quantity']) {
+                            $ingredient->stock->quantity -= $ingredient->pivot->quantity * $item['quantity'];
+                            $ingredient->stock->save();
+                        } else {
+                            throw new  Exception('There are not enought ' . $product->name . ' in stock');
+                        }
+                       
                     }
                 } else {
                     // modify stock quantity
-                    $product->stock->quantity -= $item['quantity'];
-                    $product->stock->save();
+                    if( $product->stock->quantity >= $item['quantity']) {
+                        $product->stock->quantity -= $item['quantity'];
+                        $product->stock->save();
+                    } else {
+                        throw new  Exception('There are not enought ' . $product->name . ' in stock');
+                    }
                 }
             }
-        });
 
-        return response()->json(['message'=>'Order created succesfully'], 200 );
+            DB::commit();
+            
+            return response()->json(['message'=>'Order created succesfully'], 200 );
+
+        } catch (\Exception $e ) {
+            DB::rollBack();
+            return  response()->json(['message'=>$e->getMessage()], 400 );
+        };
+       
     }
 
     /**
