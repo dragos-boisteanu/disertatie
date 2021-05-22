@@ -112,8 +112,9 @@ class UserController extends Controller
             $user = User::create($userInputData);
     
             if($request->has('data.address')) {
-                $addressInputData = $request->input('data.address');
+                $addressInputData['address'] = $request->input('data.address');
                 $addressInputData['user_id'] = $user->id;
+                
                 Address::create($addressInputData); 
             }
 

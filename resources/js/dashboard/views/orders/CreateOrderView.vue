@@ -37,11 +37,10 @@
                                 </p>
                             </template>
                             <Input
-                                v-model="client.firstName"
+                                v-model="$v.client.firstName.$model"
                                 id="clientFirstName"
                                 name="clientFirstName"
                                 :class="{'border-red-600' : $v.client.firstName.$error, 'border-green-600': $v.client.firstName.$dirty && !$v.client.firstName.$error}"
-                                @blur.native="$v.client.firstName.$touch()"
                             ></Input>
                         </InputGroup>
 
@@ -73,42 +72,40 @@
                         <InputGroup
                             id="clientPhoneNumber"
                             label="Phone number"
-                            :hasError="$v.client.phoneNumber.$error"
+                            :hasError="$v.order.phoneNumber.$error"
                             :eclass="{'flex-1':true}"
                             :required="true"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.client.phoneNumber.required">
+                                <p v-if="!$v.order.phoneNumber.required">
                                     The client phobe number field is required 
                                 </p>
                             </template>
                             <Input
-                                v-model="client.phoneNumber"
+                                v-model="$v.order.phoneNumber.$model"
                                 id="clientPhoneNumber"
                                 name="clientPhoneNumber"
-                                :class="{'border-red-600' : $v.client.phoneNumber.$error, 'border-green-600': $v.client.phoneNumber.$dirty && !$v.client.phoneNumber.$error}"
+                                :class="{'border-red-600' : $v.order.phoneNumber.$error, 'border-green-600': $v.order.phoneNumber.$dirty && !$v.order.phoneNumber.$error}"
                                 @blur.native="getClient"
-
                             ></Input>
                         </InputGroup>
 
                         <InputGroup
                             id="clientEmail"
                             label="Email"
-                            :hasError="$v.client.email.$error"
+                            :hasError="$v.order.email.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.client.email.email">
+                                <p v-if="!$v.order.email.email">
                                     The client email field must have an valid email address
                                 </p>
                             </template>
                             <Input
-                                v-model="client.email"
+                                v-model="$v.order.email.$model"
                                 id="clientEmail"
                                 name="clientEmail"
-                                :class="{'border-red-600' : $v.client.email.$error, 'border-green-600': $v.client.email.$dirty && !$v.client.email.$error}"
-                                @blur.native="$v.client.email.$touch()"
+                                :class="{'border-red-600' : $v.order.email.$error, 'border-green-600': $v.order.email.$dirty && !$v.order.email.$error}"
                             ></Input>
                         </InputGroup>   
 
@@ -127,15 +124,13 @@
                             </p>
                         </template>
                         <Select 
-                            v-model="order.deliveryMethodId"
+                            v-model="$v.order.deliveryMethodId.$model"
                             id="orderDeliveryMethod"
                             name="orderDeliveryMethod"
-                            :class="{'border-red-600' : $v.order.deliveryMethodId.$error, 'border-green-600': $v.order.deliveryMethodId.$dirty && !$v.order.deliveryMethodId.$error}"             
-                            @blur.native="$v.order.deliveryMethodId.$touch()"
-                            @change="setOrderAddress"
+                            :class="{'border-red-600' : $v.order.deliveryMethodId.$error, 'border-green-600': $v.order.deliveryMethodId.$dirty && !$v.order.deliveryMethodId.$error}"
                         >
                             <option value="" selected disabled>Select delivery method</option>
-                            <option v-for="method in getDeliveryMethods" :key="method.id" :value="method.id">{{method.name}}</option>
+                            <option v-for="method in getDeliveryMethods" :key="method.id" :value="method.id">{{method.name}} ({{method.price}} Ron)</option>
                         </Select>
                     </InputGroup>
 
@@ -152,7 +147,7 @@
                                 name="clientAddresses"
                             >
                                 <option value="" selected disabled>Select client address</option>
-                                <option v-for="(address, index) in client.addresses" :key="index" :value="address.address">{{ index }}. {{address.address}}</option>
+                                <option v-for="(address, index) in client.addresses" :key="index" :value="address.address">{{address.address}}</option>
                             </Select>
                         </InputGroup>
 
@@ -218,7 +213,7 @@
                                     <th class="p-2 text-center rounded-tl">#</th>
                                     <th class="p-2 text-center">Name</th>
                                     <th class="p-2 text-center">Quantity</th>
-                                    <th class="p-2 text-center">Unit Price</th>
+                                    <th class="p-2 text-center">Base Price</th>
                                     <th class="p-2 text-center ">VAT</th>
                                     <th class="p-2 text-center">Discount</th>
                                     <th class="p-2 text-center">Total Price</th>
@@ -285,11 +280,13 @@
     import OrderItemModal from '../../components/modals/OrderItemModalComponent';
     
     import { downloadClientByPhoneNumber } from '../../api/client.api';
+    import { downloadProductByBarcode } from '../../api/products.api';
 
     import { required, numeric, minLength, maxLength, email, requiredIf  } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
 
     import { mapActions, mapGetters } from 'vuex';
+    
 
     import _find from 'lodash/find'
     import _findIndex from 'lodash/findIndex'
@@ -311,9 +308,8 @@
             orderTotalPrice() {
                 let totalPrice = 0
                 this.order.items.forEach(item => {
-                    totalPrice += parseFloat(item.price * item.quantity)
+                    totalPrice += parseFloat(item.price * item.quantity);
                 })
-
                 return totalPrice.toFixed(2);
             },
 
@@ -327,13 +323,13 @@
                 client: {
                     firstName: '',
                     name: '',
+                    addresses: [],
+                    id: ''
+                },
+                
+                order: {
                     phoneNumber: '',
                     email: '',
-                    id: '',
-                    addresses: ''
-                },
-
-                order: {
                     address: '',
                     deliveryMethodId: '',
                     observations: '',
@@ -346,11 +342,7 @@
             }
         },
 
-        validations: {
-            address: {
-               
-            },
-           
+        validations: {           
             client: {
                 name: {
                     maxLength: maxLength(50),
@@ -361,15 +353,17 @@
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
-                phoneNumber: {
-                    required
-                },
-                email: {
-                    email
-                }
             },
 
             order: {
+                phoneNumber: {
+                    required
+                },
+
+                email: {
+                    email
+                },
+
                 address: {
                     requiredIf: requiredIf(function () {
                     return this.showAddressFields
@@ -385,10 +379,29 @@
                 },
                 items: {
                     required,
-                    minLength: minLength(1)
+                    minLength: minLength(2)
                 }
             }
 
+        },
+
+        watch: {
+            'order.deliveryMethodId': async function(newValue, oldValue) {
+
+                let deliveryMethodProduct = null;
+                if(newValue === '1'){
+                    //delivery to address product barcode 
+                    deliveryMethodProduct = await this.getDeliveryMethodProduct('000001');
+                } else {
+                    deliveryMethodProduct = await this.getDeliveryMethodProduct('000002');
+                }
+
+                if(oldValue) {
+                    this.removeDeliveryProductFromOrder(oldValue);
+                }
+
+                this.order.items.push(deliveryMethodProduct);
+            }
         },
 
         methods: {
@@ -403,22 +416,15 @@
 
                     if(!this.$v.$invalid) {
 
-                        if(!this.showAddressFields) {
-                            this.order.address = 'Local';
-                        }
-
                         if(this.client.id) {
                             this.order.clientId = this.client.id;
                         } 
                         
                         this.order.name = this.client.firstName
-    
-                        this.order.phoneNumber = this.client.phoneNumber;
-
-                        if(this.client.email) {
-                            this.order.email = this.client.email
+                        if(this.order.deliveryMethodId == 2) {
+                            this.order.address = "Local"
                         }
-                        
+  
                         await this.storeOrder(this.order)
 
                         this.openNotification({
@@ -439,26 +445,19 @@
             },
 
              async getClient() {
-                try {
-                    this.$v.client.phoneNumber.$touch();
+                this.$v.order.phoneNumber.$touch();
 
-                    if(!this.$v.client.phoneNumber.$invalid) {
-                        const response = await downloadClientByPhoneNumber(this.client.phoneNumber);
-                        const client = response.data.data;
-                        this.client.firstName = client.firstName;
-                        this.client.name = client.name;
-                        this.client.id = client.id;
-                        this.client.email = client.email;
-                        this.client.addresses = client.addresses;
-                    }
-                } catch ( error ) {
-                    console.log(error)
-                    this.client.firstName = "";
-                    this.client.name = "";
-                    this.client.id = "";
-                    this.client.email = "";
-                    this.client.addresses = "";
+                if(!this.$v.order.phoneNumber.$invalid) {
+                    const response = await downloadClientByPhoneNumber(this.order.phoneNumber);
+                    const client = response.data.data;
+
+                    this.client.firstName = client.firstName;
+                    this.client.name = client.name;
+                    this.client.id = client.id;
                 
+                    this.client.addresses = client.addresses;
+
+                    this.order.email = client.email;
                 }
             },
 
@@ -527,10 +526,23 @@
                 this.city.name = selectedCity.name;
             },
 
-            setOrderAddress() {
-                if(this.order.deliveryMethodId === 2){
-                    this.order.address = 'Local'
+            async getDeliveryMethodProduct(barcode) {
+                const response = await downloadProductByBarcode(barcode);
+                const product = response.data;
+
+                return {
+                    id: product.id,
+                    name: product.name,
+                    quantity: 1,
+                    basePrice: parseFloat(product.price),
+                    price: parseFloat(product.price),
                 }
+            },
+
+            removeDeliveryProductFromOrder(id) {
+                const index = _findIndex(this.order.items, ['id', id]);
+
+                this.order.items.splice(index, 1);
             },
 
             resetForm() {

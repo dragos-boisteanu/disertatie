@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class PaymentMethodSeeder extends Seeder
+class StockSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,12 @@ class PaymentMethodSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('payment_methods')->insert([
-            'name' => 'Cash',
+        DB::table('stocks')->insert([
+            'quantity' => '999999999',
         ]);
 
-        DB::table('payment_methods')->insert([
-            'name' => 'Online with card',
+        DB::table('stocks')->insert([
+            'quantity' => '999999999',
         ]);
     }
 }

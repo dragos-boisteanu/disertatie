@@ -279,8 +279,13 @@ class ProductController extends Controller
     public function getProductByBarcode($barcode) 
     {
         $product = Product::withTrashed()->where('barcode', $barcode)->firstOrFail();
-        
-        return new OrderProduct($product);
+
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'quantity' => 1,
+            'price' => $product->price
+        ];
     }
 
 }

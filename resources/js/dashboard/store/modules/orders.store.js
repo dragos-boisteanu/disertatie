@@ -94,14 +94,14 @@ const actions = {
 
     async patchOrder({state, commit}, payload ) {
         console.log('patchOrder: ', payload);
-        // const response = await patchOrder(payload.localData);
-        // payload.updatedAt = response.data.udatedAt;
+        const response = await patchOrder(payload.localData);
+        payload.updatedAt = response.data.udatedAt;
 
-        // if(state.orders.length > 0) {
-        //     commit('PATCH_ORDER', payload);
-        // }
+        if(state.orders.length > 0) {
+            commit('PATCH_ORDER', payload);
+        }
 
-        // return payload.updatedAt;        
+        return payload.updatedAt;        
     },
 
     async disableOrder({commit}, payload) {

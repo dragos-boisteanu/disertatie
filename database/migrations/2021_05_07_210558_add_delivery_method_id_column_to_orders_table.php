@@ -14,7 +14,7 @@ class AddDeliveryMethodIdColumnToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('delivery_method_id')->after('payment_method_id');
+            $table->unsignedBigInteger('delivery_method_id')->after('staff_id');
 
             $table->foreign('delivery_method_id')->references('id')->on('delivery_methods');
         });

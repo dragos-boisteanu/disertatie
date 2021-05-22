@@ -7,7 +7,7 @@
         <td class="p-2">{{ item.name }}</td>
         <td class="p-2">{{ item.quantity }}</td>
         <td class="p-2">{{ item.basePrice}} Ron </td>
-        <td class="p-2">{{item.vat}} %</td>
+        <td class="p-2">{{ vat }}</td>
         <td class="p-2">{{ discount }}</td>
         <td class="p-2">{{ price }} Ron</td>
         <td class="p-2 flex items-center justify-center relative text-left" v-if="showActions" v-click-outside="closeMenu">
@@ -54,6 +54,10 @@
 
             discount() {
                 return this.item.discount ? `${this.item.discount.value} %` : '-'
+            },
+
+            vat() {
+                return this.item.vat ? `${this.item.vat} %` : '-'
             },
         },
 

@@ -7,15 +7,12 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderProduct;
 use App\Http\Resources\OrderCollection;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\ModalOrderProduct;
 use App\Http\Resources\Order as OrderResource;
-use App\Http\Resources\OrderProductCollection;
 use App\Http\Resources\ModalOrderProductCollection;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
 {
@@ -65,11 +62,16 @@ class OrderController extends Controller
             $order = new Order;
 
             $order->delivery_method_id = $request->deliveryMethodId;
+
             $order->address = $request->address;
             $order->phone_number =  $request->phoneNumber;
-            $order->status_id = 2;
+
+            $order->status_id = 2; // recieved
             $order->staff_id = $request->user()->id;
-            $order->name = $request->name;
+           
+            if($request->has('name')) {
+                $order->name = $request->name;
+            }   
 
             if($request->has('observations')) {
                 $order->observations =  $request->observations;
@@ -88,10 +90,11 @@ class OrderController extends Controller
     
             // add each item into order products table
             // link each item to the order
+            
             foreach($request->items as $item) {
                 $order->products()->attach($item['id'], ['product_name'=>$item['name'], "quantity"=>$item['quantity'], "price"=>$item['price']]);
             }
-
+            
             // update stocks
             foreach($request->items as $item) {
                 $product = Product::findOrFail($item['id']);
@@ -136,7 +139,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::with('client')->withTrashed()->findOrFail($id);
+        $order = Order::with('client', 'staff')->withTrashed()->findOrFail($id);
 
         return new OrderResource($order);
     }
@@ -155,6 +158,8 @@ class OrderController extends Controller
         if($request->has('status_id')) {
             $order->status_id = $request->status_id;
         }
+
+        dd($request->all());
     }
 
     /**

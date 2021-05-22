@@ -20,5 +20,5 @@ export {
     fetchProductById,
     storeOrder,
     disableOrder,
-    enable
+    enable,patchOrder
 }

@@ -25,14 +25,18 @@ class OrderStoreRequest extends FormRequest
     {
         return [
             'clientId' => ['sometimes', 'numeric', 'exists:users,id'],
-            'firstName' => ['sometimes', 'string'],
+            'phoneNumber' => ['required'],
+            'email' => ['required', 'email'],
+            'name' => ['sometimes', 'string'],
             'address' => ['required', 'string'],
+            'deliveryMethodId' => ['required', 'numeric', 'exists:delivery_methods,id'],
+            'orbservations' => ['sometimes', 'string'],
             'items' => ['required', 'array'],
-            'items.*.id' => ['required'],
+            'items.*.id' => ['required', 'exists:products,id'],
             'items.*.name' => ['required', 'string'],
             'items.*.price' => ['required', 'numeric'],
             'items.*.quantity' => ['required', 'numeric'],
-            'orbservations' => ['sometimes', 'string']
+           
         ];
     }
 }

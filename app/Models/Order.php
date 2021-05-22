@@ -27,11 +27,11 @@ class Order extends Model
         'observations',
     ];
 
-    public $with = ['products'];
+    public $with = ['products', 'deliveryMethod'];
 
-   protected $appends = array('totalQuantity', 'totalValue');
+    protected $appends = array('totalQuantity', 'totalValue');
 
-   public function getTotalQuantityAttribute()
+    public function getTotalQuantityAttribute()
     {
         $totalQuantity = 0;
         
@@ -49,6 +49,8 @@ class Order extends Model
         forEach($this->products as $item) {
             $totalValue += $item->pivot->quantity * $item->pivot->price;
         }
+
+        $totalValue += $this->deliveryMethod->price;
 
         return number_format($totalValue, 2, '.', '');
     }
@@ -70,7 +72,7 @@ class Order extends Model
 
     public function deliveryMethod()
     {
-        return $this->hasOne(DeliveryMethod::class);
+        return $this->belongsTo(DeliveryMethod::class);
     }
 
     public function status() 

@@ -8,20 +8,21 @@
 
     <template slot="body">
       <form class="flex flex-col gap-y-4">
-          <InputGroup
-            v-if="clientAddresses.length > 0"
-            id="addresses"
-            label="Client adrresses"
-            :eclass="{'flex-1':true}"
+
+        <InputGroup
+          v-if="clientAddresses.length > 0"
+          id="addresses"
+          label="Client adrresses"
+          :eclass="{'flex-1':true}"
         >
-            <Select
-              v-model="localData.address"
-              id="addresses"
-              name="clientAddresses"
-          >
-              <option value="" selected disabled>Select client address</option>
-              <option v-for="(address, index) in clientAddresses" :key="index" :value="address.address">{{address.address}}</option>
-            </Select>
+          <Select
+            v-model="localData.address"
+            id="addresses"
+            name="clientAddresses"
+        >
+            <option value="" selected disabled>Select client address</option>
+            <option v-for="(address, index) in clientAddresses" :key="index" :value="address.address">{{address.address}}</option>
+          </Select>
         </InputGroup>
 
         <InputGroup
@@ -99,7 +100,8 @@
 
   import { required } from 'vuelidate/lib/validators'
   import { alphaNumSpaces } from '../../validators/index';
-import { mapActions } from 'vuex';
+
+  import { mapActions } from 'vuex';
 
   export default {
 
@@ -126,7 +128,6 @@ import { mapActions } from 'vuex';
     async mounted() {
       if(this.clientId) {
         const response = await downoloadClientAddress(this.clientId);
-        console.log(response.data.data.addresses)
         this.clientAddresses = response.data.data.addresses;
       }
 

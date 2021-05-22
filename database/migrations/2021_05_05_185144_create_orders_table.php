@@ -19,6 +19,9 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('client_id')->nullable();
             $table->unsignedBigInteger('staff_id');
 
+            $table->string('name')->nullable();
+            $table->string('phone_number');
+            $table->string('email')->nullable();
             $table->string('address');
 
             $table->string('observations')->nullable();
@@ -28,7 +31,6 @@ class CreateOrdersTable extends Migration
 
             $table->foreign('client_id')->references('id')->on('users');
             $table->foreign('staff_id')->references('id')->on('users');
-            $table->foreign('payment_method_id')->references('id')->on('paymen_methods');
 
         });
     }
