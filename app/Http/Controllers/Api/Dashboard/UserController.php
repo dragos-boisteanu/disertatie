@@ -104,7 +104,7 @@ class UserController extends Controller
         $request->user()->can('create');
         
         $userInputData = $request->input('data.user');
-        $userInputData['password'] = Hash::make(Str::random(8));
+        $userInputData['password'] = Hash::make('12345678');
 
         try {
             DB::beginTransaction();
