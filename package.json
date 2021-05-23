@@ -8,7 +8,7 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-	    "postinstall": "npm run prod"
+        "postinstall": "npm run dev"
     },
     "devDependencies": {
         "autoprefixer": "10.1.0",
@@ -40,8 +40,6 @@
         "vuex": "3.6.2"
     },
     "engines": {
-        "node": "14.x"
+        "node": "14.5.x"
     }
-    
-      
 }
