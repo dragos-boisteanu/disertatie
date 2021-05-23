@@ -3,7 +3,7 @@ import Vue from 'vue';
 
 const httpClient = axios.create({
     // baseURL: 'http://disertatie.test/api',
-    bvaseURL: 'http://disertatie-app.herokuapp.com/api',
+    baseURL: 'http://disertatie-app.herokuapp.com/api',
     timeout: 60000, // indicates, 1000ms ie. 1 second
     withCredentials: true,
     headers: {
