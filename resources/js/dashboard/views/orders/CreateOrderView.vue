@@ -207,50 +207,48 @@
                                 The order must have at least 1 product
                             </p>
                         </div>
-                        <table class="mt-1 px-2 w-full rounded-sm max-h-80 md:max-h-96 text-center">
-                            <thead class="w-full bg-gray-700 text-orange-500">
-                                <tr class="text-left text-sm">
-                                    <th class="p-2 text-center rounded-tl">#</th>
-                                    <th class="p-2 text-center">Name</th>
-                                    <th class="p-2 text-center">Quantity</th>
-                                    <th class="p-2 text-center">Base Price</th>
-                                    <th class="p-2 text-center ">VAT</th>
-                                    <th class="p-2 text-center">Discount</th>
-                                    <th class="p-2 text-center">Total Price</th>
-                                    <th class="p-2"></th>
-                                </tr>
-                            </thead>
-                            <tbody class="overflow-y-auto">
-                                <OrderItem  
-                                    v-for="(item, index) in order.items" 
-                                    :key="index" :item="item" 
-                                    :index="index"
-                                    @edit="editOrderProduct(item)"
-                                    @remove="removeProductFromOrder"
-                                ></OrderItem>
-                                 <tr v-if="order.items.length > 0" class="mt-1 font-bold border-t">                                    
-                                    <td colspan="2" class="p-2 text-center">
-                                        TOTAL
-                                    </td>
-                                    <td class="p-2">{{ orderTotalQuantity }}</td>
-                                    <td class="p-2"></td>
-                                    <td class="p-2"></td>
-                                    <td class="p-2"></td>
-                                    <td class="p-2 text-center">{{ orderTotalPrice }} Ron</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="8">
-                                        <button 
-                                            id="addItemBtn"
-                                            class="w-full py-1 mt-2 text-white text-sm ripple-bg-orange-400 rounded-sm"
-                                            @click.prevent="openAddProductModal"
-                                        >
-                                            Add product
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="w-full overflow-y-auto">   
+                            <table class="mt-1 px-2 w-full rounded-sm text-center">
+                                <thead class="w-full bg-gray-700 text-orange-500">
+                                    <tr class="text-left text-sm">
+                                        <th class="p-2 text-center rounded-tl">#</th>
+                                        <th class="p-2 text-center">Name</th>
+                                        <th class="p-2 text-center">Quantity</th>
+                                        <th class="p-2 text-center">Base Price</th>
+                                        <th class="p-2 text-center ">VAT</th>
+                                        <th class="p-2 text-center">Discount</th>
+                                        <th class="p-2 text-center">Total Price</th>
+                                        <th class="p-2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="overflow-y-auto">
+                                    <OrderItem  
+                                        v-for="(item, index) in order.items" 
+                                        :key="index" :item="item" 
+                                        :index="index"
+                                        @edit="editOrderProduct(item)"
+                                        @remove="removeProductFromOrder"
+                                    ></OrderItem>
+                                    <tr v-if="order.items.length > 0" class="mt-1 font-bold border-t">                                    
+                                        <td colspan="2" class="p-2 text-center">
+                                            TOTAL
+                                        </td>
+                                        <td class="p-2">{{ orderTotalQuantity }}</td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2 text-center">{{ orderTotalPrice }} Ron</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button 
+                            id="addItemBtn"
+                            class="w-full py-1 mt-2 text-white text-sm ripple-bg-orange-400 rounded-sm"
+                            @click.prevent="openAddProductModal"
+                        >
+                            Add product
+                        </button>
                     </div>
                 </div>
             </div>
@@ -540,9 +538,12 @@
             },
 
             removeDeliveryProductFromOrder(id) {
-                const index = _findIndex(this.order.items, ['id', id]);
+                
+                const index = _findIndex(this.order.items, ['id', parseInt(id)]);
 
-                this.order.items.splice(index, 1);
+                if(index > -1) {
+                    this.order.items.splice(index, 1);
+                }
             },
 
             resetForm() {
