@@ -288,7 +288,6 @@
     import _findIndex from 'lodash/findIndex'
 
     export default {
-
         computed: {
             ...mapGetters('DeliveryMethods', ['getDeliveryMethods']),
 

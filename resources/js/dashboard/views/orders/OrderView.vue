@@ -11,6 +11,13 @@
                 </button>
         </template>
 
+        <ConfirmCancelOrderModalComponent
+            v-if="showRemoveConfirmModalState"
+            :order-id="order.id"
+            @closed="toggleRemoveConfirmModalState"
+            @cancel="cancelOrder"
+        ></ConfirmCancelOrderModalComponent>
+
         <EditOrderDetailsModal 
             v-if="showOrderDetailsEditModalState" 
             :order-id="order.id"
@@ -148,7 +155,7 @@
                 name="edit"
                 type="danger"
                 :waiting="waiting"
-                @click.native="cancelOrder"
+                @click.native="toggleRemoveConfirmModalState"
             >
                 Cancel Order
             </Button>
@@ -163,6 +170,8 @@ import ViewContainer from '../ViewContainer';
 import OrderItem from '../../components/orders/OrderItemComponent'
 import OrderStatus from '../../components/orders/OrderStatusComponent';
 import EditOrderDetailsModal from '../../components/modals/EditOrderDetailsModalComponent';
+
+import ConfirmCancelOrderModalComponent from '../../components/modals/ConfirmCancelOrderModalComponent';
 
 import Button from '../../components/buttons/ButtonComponent';
 
@@ -209,6 +218,7 @@ export default {
 
     data() {
         return {
+            showRemoveConfirmModalState: false,
             waiting: false,
             order: null,
             showOrderDetailsEditModalState: false,
@@ -222,7 +232,6 @@ export default {
         async refresh() {
             this.order = await this.downloadOrder(this.order.id)
         },
-
 
         async cancelOrder() {
             try {
@@ -241,7 +250,9 @@ export default {
                     type: 'ok',
                     message: `Order #${this.order.id} was canceled`
                 })
-                this.$router.push({name: "Orders"});
+
+                this.toggleRemoveConfirmModalState();
+                // this.$router.push({name: "Orders"});
             } catch ( error ) {
                 this.waiting = false;
                 this.openNotification({
@@ -250,11 +261,14 @@ export default {
                     message: `Failed to cancel order`
                 })
             }
-          
         },
 
         showOrderDetailsEditModalToggle() {
             this.showOrderDetailsEditModalState = !this.showOrderDetailsEditModalState;
+        },
+
+        toggleRemoveConfirmModalState() {
+            this.showRemoveConfirmModalState = !this.showRemoveConfirmModalState;
         },
 
         updateOrder(order) {
@@ -275,7 +289,8 @@ export default {
         OrderItem,
         Button,
         OrderStatus,
-        EditOrderDetailsModal
+        EditOrderDetailsModal,
+        ConfirmCancelOrderModalComponent
     }
 }
 </script>
