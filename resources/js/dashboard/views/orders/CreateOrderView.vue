@@ -432,7 +432,7 @@
                 }                          
             },
 
-             async getClient() {
+            async getClient() {
                 this.$v.order.phoneNumber.$touch();
 
                 if(!this.$v.order.phoneNumber.$invalid) {
@@ -448,7 +448,6 @@
                     this.order.email = client.email;
                 }
             },
-
 
             saveEdit(product) {    
                 const existingProductIndex = _findIndex(this.order.items, ['name', product.name]);
