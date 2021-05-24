@@ -506,11 +506,6 @@
                     this.selectedItemQuantity = '';
                 }
             },
-          
-            selectCity() {
-                const selectedCity = _find(this.cities, ['id', parseInt(this.city.id)]);
-                this.city.name = selectedCity.name;
-            },
 
             async getDeliveryMethodProduct(barcode) {
                 const response = await downloadProductByBarcode(barcode);
