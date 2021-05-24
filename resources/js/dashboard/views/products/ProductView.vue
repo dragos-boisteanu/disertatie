@@ -134,13 +134,13 @@
 
             canDelete() {
                 if(this.getLoggedUser) {
-                    return this.getLoggedUser.role_id === 7
+                    return this.getLoggedUser.role.name === "Administrator"
                 }
             },
 
             canDisable() {
                 if(this.getLoggedUser) {
-                    return this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7              
+                    return this.getLoggedUser.role.name === "Location Manager" || this.getLoggedUser.role.name === "Administrator"              
                 }
             },
 

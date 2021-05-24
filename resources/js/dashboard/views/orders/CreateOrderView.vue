@@ -108,7 +108,6 @@
                                 :class="{'border-red-600' : $v.order.email.$error, 'border-green-600': $v.order.email.$dirty && !$v.order.email.$error}"
                             ></Input>
                         </InputGroup>   
-
                     </div>
 
                     <InputGroup
@@ -175,11 +174,8 @@
                                 @blur.native="$v.order.address.$touch()"
                             ></Input>
                         </InputGroup>
-
-                        
                     </div>  
                     
-
                     <InputGroup
                         id="observations"
                         label="Observations"
@@ -204,6 +200,9 @@
                         <div class="text-sm font-semibold">Products <span class="text-red-500">*</span></div>
                         <div v-if="$v.order.items.$error" class="text-xs text-red-600 font-semibold">
                             <p v-if="!$v.order.items.required">
+                                The order must have products
+                            </p>
+                            <p v-if="!$v.order.items.minLength">
                                 The order must have at least 1 product
                             </p>
                         </div>
@@ -305,6 +304,11 @@
             
             orderTotalPrice() {
                 let totalPrice = 0
+
+                if(this.order.deliveryMethodId) {
+                    const deliveryMethod = _find(this.getDeliveryMethods, ['id', parseInt(this.order.deliveryMethodId)]);
+                    totalPrice += parseFloat(deliveryMethod.price);
+                }
                 this.order.items.forEach(item => {
                     totalPrice += parseFloat(item.price * item.quantity);
                 })
@@ -377,29 +381,10 @@
                 },
                 items: {
                     required,
-                    minLength: minLength(2)
+                    minLength: minLength(1)
                 }
             }
 
-        },
-
-        watch: {
-            'order.deliveryMethodId': async function(newValue, oldValue) {
-
-                let deliveryMethodProduct = null;
-                if(newValue === '1'){
-                    //delivery to address product barcode 
-                    deliveryMethodProduct = await this.getDeliveryMethodProduct('000001');
-                } else {
-                    deliveryMethodProduct = await this.getDeliveryMethodProduct('000002');
-                }
-
-                if(oldValue) {
-                    this.removeDeliveryProductFromOrder(oldValue);
-                }
-
-                this.order.items.push(deliveryMethodProduct);
-            }
         },
 
         methods: {
@@ -568,7 +553,7 @@
                     observations: '',
                     items: []
                 },
-
+                
                 this.selectedItemId = '',
                 this.selectedItemQuantity = '',
                 this.showAddProductModalState = false
