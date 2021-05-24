@@ -37,7 +37,7 @@
                             <span class="font-semibold">Address: </span> <span>{{ order.address}}</span>
                         </div>
                         <div class="my-1">
-                            <span class="font-semibold">Observations: </span> <span>{{ order.observations}}</span>
+                            <span class="font-semibold">Observations: </span> <pre>{{ order.observations}}</pre>
                         </div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@ export default {
         },
 
         clientId() {
-            return this.order.clientId ? this.order.clientId : null;
+            return this.order.client.id ? this.order.client.id : null;
         },
 
         showAddressForDelivery() {
