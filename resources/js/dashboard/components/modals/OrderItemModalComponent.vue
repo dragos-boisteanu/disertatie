@@ -24,6 +24,7 @@
                     
                     <div class="relative">
                         <Input
+                            ref="productName"
                             v-model.lazy="product.name"
                             id="productName"
                             :disabled="edit"
@@ -149,12 +150,17 @@
         },
 
         async mounted() {
+            this.$nextTick(() => {
+                this.$refs.productName.$el.focus();
+            });
+
             if(this.id && this.quantity) {
                 const repsonse = await fetchProductById(this.id);
                 repsonse.data.data.quantity = this.quantity;
                 this.product = repsonse.data.data;
                 this.edit = true;
             }
+            
         },
 
         computed: {

@@ -38,6 +38,12 @@
                 type: Object,
                 required: true
             },
+            showActions: {
+                type: Boolean,
+                required: false,
+                default: true,
+            }
+            
         },
 
         computed: {
@@ -53,10 +59,6 @@
                 return this.item.vat ? `${this.item.vat} %` : '-'
             },
 
-            showActions() {
-                const lowerCaseName = this.item.name.toLowerCase();
-                return !lowerCaseName.includes('delivery');
-            }
         },
 
         data() {
