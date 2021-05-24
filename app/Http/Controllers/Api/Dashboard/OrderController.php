@@ -198,7 +198,7 @@ class OrderController extends Controller
                     $product->stock->save();
                 }
 
-                $order->products()->detach($product->id);
+                // $order->products()->detach($product->id);
             }
 
             $order->status_id = 8;
