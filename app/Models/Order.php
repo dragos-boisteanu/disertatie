@@ -47,7 +47,7 @@ class Order extends Model
         $totalValue = 0;
 
         forEach($this->products as $item) {
-            $totalValue += $item->pivot->quantity * $item->pivot->price;
+            $totalValue += $item->pivot->quantity * $item->pivot->unit_price;
         }
 
         $totalValue += $this->deliveryMethod->price;

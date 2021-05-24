@@ -89,8 +89,8 @@
             </div>
         </div>
 
-        <div class="w-full border-b pb-2 overflow-y-auto">   
-            <table class="my-4 px-2 w-full rounded-sm lg:w-1/2 text-center">
+        <div class="w-full overflow-y-auto lg:w-1/2">   
+            <table class="my-4 px-2 w-full rounded-sm  text-center">
                 <thead class="w-full bg-gray-700 text-orange-500">
                     <tr class="text-left text-sm">
                         <th class="p-2 text-center rounded-tl">#</th>
@@ -114,7 +114,6 @@
                         :key="index" 
                         :item="item" 
                         :index="index"
-                        :show-actions="false"
                     ></OrderItem>
                     <tr class="text-sm">
                         <td class="p-2">{{ order.items.length + 1 }}</td>
@@ -133,9 +132,16 @@
                     </tr>
                 </tbody>
             </table>
+            <button 
+                id="addItemBtn"
+                class="w-full py-1 mt-2 text-white text-sm ripple-bg-orange-400 rounded-sm"
+                @click.prevent="openAddProductModal"
+            >
+                Add product
+            </button>
         </div>
-
-         <div class="mt-5 flex gap-4 md:justify-start" >
+         
+        <div class="mt-5 flex gap-4 md:justify-start" >
             <Button 
                 v-if="canCancel"
                 id="cancel"
