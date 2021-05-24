@@ -3,6 +3,12 @@
         <template slot="header">
             View order #{{ order.id }}
             <OrderStatus :status="order.status"></OrderStatus>
+             <button 
+                    @click="refresh" 
+                    class="p-1 bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                </button>
         </template>
 
         <EditOrderDetailsModal 
@@ -31,7 +37,7 @@
                             <span class="font-semibold">Updated At: </span> <span>{{ order.updatedAt | formatDate}}</span>
                         </div>
                         <div class="my-1">
-                            <span class="font-semibold">Delivery method: </span> <span>{{ order.deliveryMethod.name}}</span>
+                            <span class="font-semibold">Delivery method: </span> <span>{{ order.deliveryMethod.name}} ({{ order.deliveryMethod.price}} Ron)</span>
                         </div>
                         <div class="my-1" v-if="showAddressForDelivery">
                             <span class="font-semibold">Address: </span> <span>{{ order.address}}</span>
@@ -90,9 +96,14 @@
                         <th class="p-2 text-center rounded-tl">#</th>
                         <th class="p-2 text-center">Name</th>
                         <th class="p-2 text-center">Quantity</th>
-                        <th class="p-2 text-center">Unit Price</th>
-                        <th class="p-2 text-center">VAT</th>
-                        <th class="p-2 text-center">Discount</th>
+                        <th class="p-2 text-center">
+                            <div>
+                                Unit Price 
+                            </div>
+                            <div>
+                                (includes VAT + Discount)
+                            </div>
+                        </th>
                         <th class="p-2 text-center">Total Price</th>
                         <th class="p-2 text-center"></th>
                     </tr>
@@ -100,17 +111,23 @@
                 <tbody class="overflow-y-auto">
                     <OrderItem  
                         v-for="(item, index) in order.items" 
-                        :key="index" :item="item" 
+                        :key="index" 
+                        :item="item" 
                         :index="index"
                         :show-actions="false"
                     ></OrderItem>
+                    <tr class="text-sm">
+                        <td class="p-2">{{ order.items.length + 1 }}</td>
+                        <td class="p-2">{{order.deliveryMethod.name}}</td>
+                        <td class="p-2">1</td>
+                        <td class="p-2">{{ order.deliveryMethod.price }} Ron</td>
+                        <td class="p-2">{{ order.deliveryMethod.price }} Ron</td>
+                    </tr>
                     <tr v-if="order.items.length > 0" class="mt-1 font-bold border-t">                                    
                         <td colspan="2" class="p-2 text-center">
                             TOTAL
                         </td>
                         <td class="p-2">{{ order.totalQuantity }}</td>
-                        <td class="p-2"></td>
-                        <td class="p-2"></td>
                         <td class="p-2"></td>
                         <td class="p-2 text-center">{{ order.totalValue }} Ron</td>
                     </tr>
@@ -118,14 +135,7 @@
             </table>
         </div>
 
-         <div class="mt-5 flex gap-4 md:justify-start" v-if="canDoAction">
-            <Button 
-                id="edit"
-                name="edit"
-                type="primary"
-            >
-                Edit
-            </Button>
+         <div class="mt-5 flex gap-4 md:justify-start" >
             <Button 
                 v-if="canCancel"
                 id="cancel"
@@ -134,7 +144,7 @@
                 :waiting="waiting"
                 @click.native="cancelOrder"
             >
-                Cancel
+                Cancel Order
             </Button>
         </div>
                
@@ -200,8 +210,13 @@ export default {
     },
 
     methods: {
-        ...mapActions('Orders', ['disableOrder']),
+        ...mapActions('Orders', ['disableOrder', 'downloadOrder']),
         ...mapActions('Notification', ['openNotification']),
+
+        async refresh() {
+            this.order = await this.downloadOrder(this.order.id)
+        },
+
 
         async cancelOrder() {
             try {

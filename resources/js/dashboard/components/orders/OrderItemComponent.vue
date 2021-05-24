@@ -6,10 +6,8 @@
         <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
         <td class="p-2">{{ item.name }}</td>
         <td class="p-2">{{ item.quantity }}</td>
-        <td class="p-2">{{ item.basePrice}} Ron </td>
-        <td class="p-2">{{ vat }}</td>
-        <td class="p-2">{{ discount }}</td>
-        <td class="p-2">{{ price }} Ron</td>
+        <td class="p-2">{{ item.unitPrice}} Ron </td>
+        <td class="p-2">{{ totalPrice }} Ron</td>
         <td class="p-2 flex items-center justify-center relative text-left" v-if="showActions" v-click-outside="closeMenu">
             <button @click.prevent="openMenu">
                 <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -38,6 +36,7 @@
                 type: Object,
                 required: true
             },
+            
             showActions: {
                 type: Boolean,
                 required: false,
@@ -47,18 +46,9 @@
         },
 
         computed: {
-            price() {
-                return this.item.price * this.item.quantity
+            totalPrice() {
+                return this.item.totalPrice ? this.item.totalPrice : this.item.price * this.item.quantity
             },
-
-            discount() {
-                return this.item.discount ? `${this.item.discount.value} %` : '-'
-            },
-
-            vat() {
-                return this.item.vat ? `${this.item.vat} %` : '-'
-            },
-
         },
 
         data() {

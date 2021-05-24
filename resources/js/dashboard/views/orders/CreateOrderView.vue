@@ -213,9 +213,10 @@
                                         <th class="p-2 text-center rounded-tl">#</th>
                                         <th class="p-2 text-center">Name</th>
                                         <th class="p-2 text-center">Quantity</th>
-                                        <th class="p-2 text-center">Base Price</th>
-                                        <th class="p-2 text-center ">VAT</th>
-                                        <th class="p-2 text-center">Discount</th>
+                                        <th class="p-2 text-center">
+                                            <div>Unit Price </div>
+                                            <div>(includes VAT + Discount)</div>
+                                        </th>
                                         <th class="p-2 text-center">Total Price</th>
                                         <th class="p-2"></th>
                                     </tr>
@@ -233,8 +234,6 @@
                                             TOTAL
                                         </td>
                                         <td class="p-2">{{ orderTotalQuantity }}</td>
-                                        <td class="p-2"></td>
-                                        <td class="p-2"></td>
                                         <td class="p-2"></td>
                                         <td class="p-2 text-center">{{ orderTotalPrice }} Ron</td>
                                     </tr>

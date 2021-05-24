@@ -93,7 +93,12 @@ class OrderController extends Controller
             // link each item to the order
             
             foreach($request->items as $item) {
-                $order->products()->attach($item['id'], ['product_name'=>$item['name'], "quantity"=>$item['quantity'], "price"=>$item['price']]);
+                $product = Product::findOrFail($item['id']);
+                $order->products()->attach($item['id'], [
+                "product_name"=>$product->name, 
+                "quantity"=>$item['quantity'], 
+                "unit_price"=>$product->price,              
+                ]);
             }
             
             // update stocks

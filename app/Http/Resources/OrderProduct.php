@@ -21,7 +21,7 @@ class OrderProduct extends JsonResource
             'vat' => $this->category->vat,
             'discount' => $this->finalDiscount,
             'quantity' => $this->pivot->quantity,
-            'price' => $this->pivot->price,
+            'totalPrice' => number_format($this->pivot->unit_price * $this->pivot->quantity, 2, '.', ''),
         ];
     }
 }
