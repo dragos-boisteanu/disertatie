@@ -26,8 +26,8 @@ class OrderStoreRequest extends FormRequest
         return [
             'clientId' => ['sometimes', 'numeric', 'exists:users,id'],
             'phoneNumber' => ['required'],
-            'email' => ['required', 'email'],
-            'name' => ['sometimes', 'string'],
+            'email' => ['sometimes', 'email'],
+            'name' => ['required', 'string'],
             'address' => ['required', 'string'],
             'deliveryMethodId' => ['required', 'numeric', 'exists:delivery_methods,id'],
             'orbservations' => ['sometimes', 'string'],

@@ -419,6 +419,11 @@
                         } 
                         
                         this.order.name = this.client.firstName
+
+                        if(this.order.email === "") {
+                            delete this.order.email
+                        }
+
                         if(this.order.deliveryMethodId == 2) {
                             this.order.address = "Local"
                         }

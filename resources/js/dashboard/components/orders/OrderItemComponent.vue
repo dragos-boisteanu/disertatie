@@ -14,7 +14,7 @@
             <button @click.prevent="openMenu">
                 <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </button>
-            <ul v-if="showMenu" class="absolute z-50 top-5 right-4 lg:top-5 lg:-left-2 lg:right-auto p-1 bg-white text-xs text-gray-800 hover:text-black rounded shadow">
+            <ul v-if="showMenu" class="absolute z-50 top-5 right-4 lg:top-5 lg:-left-6 lg:right-auto p-1 bg-white text-xs text-gray-800 hover:text-black rounded shadow">
                 <li class="p-2 cursor-pointer lg:p-1" @click.prevent="openProductModal">
                     Edit
                 </li>
