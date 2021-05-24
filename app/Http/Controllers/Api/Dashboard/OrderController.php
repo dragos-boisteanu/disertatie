@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderPatchRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\ModalOrderProduct;
@@ -107,7 +108,6 @@ class OrderController extends Controller
                         } else {
                             throw new  Exception('There are not enought ' . $product->name . ' in stock');
                         }
-                       
                     }
                 } else {
                     // modify stock quantity
@@ -151,15 +151,13 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(OrderPatchRequest $request, $id)
     {
         $order = Order::findOrfail($id);
 
-        if($request->has('status_id')) {
-            $order->status_id = $request->status_id;
-        }
+        $order->update($request->validated());
 
-        dd($request->all());
+        return $order->updated_at;
     }
 
     /**

@@ -8,7 +8,6 @@
 
     <template slot="body">
       <form class="flex flex-col gap-y-4">
-
         <InputGroup
           v-if="clientAddresses.length > 0"
           id="addresses"
@@ -26,27 +25,27 @@
         </InputGroup>
 
         <InputGroup
-            id="address"
-            label="Adrress"
-            :hasError="$v.localData.address.$error"
-            :eclass="{'flex-1':true}"
-            :required="true"
+          id="address"
+          label="Adrress"
+          :hasError="$v.localData.address.$error"
+          :eclass="{'flex-1':true}"
+          :required="true"
         >
-            <template v-slot:errors>
-              <p v-if="!$v.localData.address.required">
-                  The address field is required 
-              </p>
-              <p v-if="!$v.localData.address.alphaNumSpaces">
-                  The address field must contain only letters, spaces or numbers
-              </p>
-            </template>
-            <Input
-              v-model="localData.address"
-              id="address"
-              name="address"
-              :class="{'border-red-600' : $v.localData.address.$error, 'border-green-600': $v.localData.address.$dirty && !$v.localData.address.$error}"
-              @blur.native="$v.localData.address.$touch()"
-            ></Input>
+          <template v-slot:errors>
+            <p v-if="!$v.localData.address.required">
+                The address field is required 
+            </p>
+            <p v-if="!$v.localData.address.alphaNumSpaces">
+                The address field must contain only letters, spaces or numbers
+            </p>
+          </template>
+          <Input
+            v-model="localData.address"
+            id="address"
+            name="address"
+            :class="{'border-red-600' : $v.localData.address.$error, 'border-green-600': $v.localData.address.$dirty && !$v.localData.address.$error}"
+            @blur.native="$v.localData.address.$touch()"
+          ></Input>
         </InputGroup>
 
         <InputGroup
@@ -67,7 +66,6 @@
             @blur.native="$v.localData.observations.$touch()"
           ></Textarea>
         </InputGroup>
-
 
       </form>
     </template>
@@ -122,6 +120,7 @@
       observations: {
         type: String,
         required: false,
+        default: ""
       }
     },
 
@@ -131,9 +130,10 @@
         this.clientAddresses = response.data.data.addresses;
       }
 
-      this.localData.address = JSON.parse(JSON.stringify(this.address));
-      this.localData.observations = JSON.parse(JSON.stringify(this.observations));
-
+      this.localData.address = this.address;
+      if(this.observations) {
+        this.localData.observations = this.observations;
+      }
     },
 
     data() {
@@ -172,16 +172,25 @@
             }
           }
 
+          let counter = 0;
+
           if(this.localData.address !== this.address) {
             patchBody.localData.address = this.localData.address;
+            counter++;
           }
 
-          if(this.localData.observations !== this.observations) {
+          if(this.localData.observations && this.localData.observations !== this.observations) {
             patchBody.localData.observations = this.localData.observations
+            counter++;
           }
 
-          await this.patchOrder(patchBody);
-
+          if(counter > 0) {
+            const payload = await this.patchOrder(patchBody);
+            this.$emit('updated', payload)
+            this.close();
+          }else {
+            console.log('nothing to update');
+          }         
         }
        
       },

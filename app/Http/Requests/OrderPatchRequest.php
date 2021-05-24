@@ -24,7 +24,8 @@ class OrderPatchRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'address' => ['sometimes', 'string'],
+            'observations' => ['sometimes', 'string'],
         ];
     }
 }

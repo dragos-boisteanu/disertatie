@@ -12,6 +12,7 @@
             :address="order.address" 
             :observations="order.observations"
             @closed="showOrderDetailsEditModalToggle"
+            @updated="updateOrder"
         >
         </EditOrderDetailsModal>
 
@@ -233,6 +234,13 @@ export default {
 
         showOrderDetailsEditModalToggle() {
             this.showOrderDetailsEditModalState = !this.showOrderDetailsEditModalState;
+        },
+
+        updateOrder(order) {
+            console.log(order);
+            Object.keys(order).forEach(key => {
+                this.order[key] = order[key]
+            })
         },
 
         setOrder(order) {

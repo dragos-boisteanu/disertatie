@@ -93,21 +93,18 @@ const actions = {
     },
 
     async patchOrder({state, commit}, payload ) {
-        console.log('patchOrder: ', payload);
         const response = await patchOrder(payload.localData);
-        payload.updatedAt = response.data.udatedAt;
+        payload.localData.updatedAt = response.data;
 
         if(state.orders.length > 0) {
             commit('PATCH_ORDER', payload);
         }
 
-        return payload.updatedAt;        
+        return payload.localData;        
     },
 
     async disableOrder({commit}, payload) {
-        console.log(payload)
         const response = await disableOrder(payload.id);
-        console.log(response.data);
         // payload.deletedAt = response.data;
         // commit('DISABLE_ORDER', payload);
     }
@@ -145,7 +142,7 @@ const mutations = {
             payload.vm.$set(state.orders[orderIndex], key, payload.localData[key]);
         });
 
-        payload.vm.$set(state.orders[orderIndex], 'updatedAt', payload.updatedAt);
+        // payload.vm.$set(state.orders[orderIndex], 'updatedAt', payload.updatedAt);
     },
 
     DISABLE_ORDER(state, payload) {
