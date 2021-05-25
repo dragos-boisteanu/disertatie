@@ -121,6 +121,7 @@
                         :key="index" 
                         :item="item" 
                         :index="index"
+                        @remove="removeItem"
                     ></OrderItem>
                     <tr class="text-sm">
                         <td class="p-2">{{ order.items.length + 1 }}</td>
@@ -177,6 +178,7 @@ import Button from '../../components/buttons/ButtonComponent';
 
 import store from '../../store/index';
 import { mapActions, mapGetters } from 'vuex';
+import _findIndex from 'lodash/findIndex';
 
     
 export default {
@@ -226,7 +228,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('Orders', ['disableOrder', 'downloadOrder']),
+        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder']),
         ...mapActions('Notification', ['openNotification']),
 
         async refresh() {
@@ -261,6 +263,27 @@ export default {
                     message: `Failed to cancel order`
                 })
             }
+        },
+
+        async removeItem(id){
+            const payload ={
+                vm: this,
+                localData: {
+                    id: this.order.id,
+                    itemId: id
+                }
+            }
+
+            const response = await this.removeItemFromOrder(payload);
+            // this.order.updatedAt = response.localData.updatedAt;
+
+            const itemIndex = _findIndex(this.order.items, ['id', id]);
+ 
+            if(itemIndex > 0) {
+                this.order.items.splice(itemIndex, 1);
+            }   
+            
+            
         },
 
         showOrderDetailsEditModalToggle() {

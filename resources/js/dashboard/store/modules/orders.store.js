@@ -1,4 +1,4 @@
-import { downloadOrders, storeOrder, downloadOrder, disableOrder, patchOrder } from '../../api/orders.api'
+import { downloadOrders, storeOrder, downloadOrder, disableOrder, patchOrder, removeItem } from '../../api/orders.api'
 import { downloadStatuses } from '../../api/orderStatuses.api'
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
@@ -103,6 +103,28 @@ const actions = {
         return payload.localData;        
     },
 
+    
+    async removeItemFromOrder({state,commit}, payload) {
+        const response = await removeItem(payload.localData);
+        payload.localData.updatedAt = response.data;
+        
+        if(state.orders.length > 0) {
+            commit('REMOVE_ITEM', payload);
+        }
+
+        return payload.localData
+    },
+
+    async addItemToOrder({state,commuit}, payload) {
+        const response = await addItem(payload);
+        
+        if(state.orders.length > 0) {
+            commit('ADD_ITEM', payload)
+        }
+
+    },
+    
+
     async disableOrder({commit}, payload) {
         const response = await disableOrder(payload.id);
         // payload.deletedAt = response.data;
@@ -143,6 +165,17 @@ const mutations = {
         });
 
         // payload.vm.$set(state.orders[orderIndex], 'updatedAt', payload.updatedAt);
+    },
+
+    REMOVE_ITEM(state, payload) {
+        const orderIndex =_findIndex(state.orders, ['id', payload.localData.id]);
+
+        const itemIndex = _findIndex(state.orders[orderIndex].items, ['id', payload.localData.itemId]);
+
+        state.orders[orderIndex].items.splice(itemIndex, 1);
+
+        state.orders[orderIndex].updatedAt = payload.localData.updatedAt;
+        
     },
 
     DISABLE_ORDER(state, payload) {

@@ -60,6 +60,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         // Route::post('{id}/restore', 'OrderController@restore');
         Route::get('/products/name/{name}', 'OrderController@getProductsByName');
         Route::get('/products/id/{id}', 'OrderController@getProductsById');
+
+        Route::patch('/remove-item/{id}', 'OrderController@removeItem');
     });
 
     Route::group(['prefix'=>'clients'], function() {
