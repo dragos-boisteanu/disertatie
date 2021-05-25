@@ -58,11 +58,12 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::group(['prefix'=>'orders'], function() {
         Route::delete('{id}/disable', 'OrderController@disable');
         // Route::post('{id}/restore', 'OrderController@restore');
-        Route::get('/products/name/{name}', 'OrderController@getProductsByName');
-        Route::get('/products/id/{id}', 'OrderController@getProductsById');
+        
+        Route::get('/products/name/{name}', 'OrderItemController@getProductsByName');
+        Route::get('/products/id/{id}', 'OrderItemController@getProductsById');
 
-        Route::patch('/remove-item/{orderId}', 'OrderController@removeItem');
-        Route::patch('/add-item/{orderId}', 'OrderController@addItem');
+        Route::patch('/remove-item/{orderId}', 'OrderItemController@removeItem');
+        Route::patch('/add-item/{orderId}', 'OrderItemController@addItem');
     });
 
     Route::group(['prefix'=>'clients'], function() {

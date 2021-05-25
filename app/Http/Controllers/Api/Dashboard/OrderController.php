@@ -105,7 +105,7 @@ class OrderController extends Controller
             // update stocks
             foreach($request->items as $item) {
                 $product = Product::findOrFail($item['id']);
-                $this->removeFromStock($product, $item);
+                $product->removeFromStock($product, $item);
             }
 
             DB::commit();
@@ -148,16 +148,6 @@ class OrderController extends Controller
         return $order->updated_at;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-    }
-
     public function disable($id) 
     {
         $order = Order::findOrFail($id);
@@ -174,7 +164,7 @@ class OrderController extends Controller
 
         DB::transaction(function () use ($order){
             forEach($order->products as $product) {
-                $this->addBackToStock($product);
+                $product->addBackToStock($product);
             }
 
             $order->status_id = 8;
@@ -187,115 +177,4 @@ class OrderController extends Controller
 
         return $order->deleted_at;
     }
-
-    public function getProductsByName($name)
-    {
-
-        $products = Product::where('name', 'like', '%' . $name . '%')->get();
-
-        return new ModalOrderProductCollection($products);
-        
-    }
-
-    public function getProductsById($id)
-    {
-        $product = Product::findOrFail($id);
-
-        return new ModalOrderProduct($product);
-    }
-
-    public function removeItem(Request $request, $orderId) 
-    {
-        $order = Order::findOrFail($orderId);
-
-        DB::transaction(function () use ($order, $request) {
-
-            $product = $order->products()->where('product_id', $request->itemId)->first();
-
-            $this->addBackToStock($product);
-
-            $order->products()->detach($request->itemId);
-            
-            $order->save(); 
-            $order->fresh();   
-        });
-
-        return $order->updated_at;
-    }
-
-    public function addItem(Request $request, $orderId)
-    {
-        $order = Order::findOrFail($orderId);
-        $item = $request->item;
-
-        DB::transaction(function () use ($order, $item) {
-
-            $product = $order->products()->where('product_id',  $item['id'])->first();
-
-            if(isset($product)) {
-                $newQuantity = $product->pivot->quantity + $item['quantity'];
-                $order->products()->updateExistingPivot($item['id'], ['quantity'=>$newQuantity]);
-            } else {
-                $product = Product::findOrFail($item['id']);
-                $order->products()->attach($item['id'], [
-                    "product_name"=>$product->name, 
-                    "quantity"=>$item['quantity'], 
-                    "unit_price"=>$product['price'],              
-                ]);
-            }
-            
-            $order->save();
-            $order->refresh();
-
-            $this->removeFromStock($product, $item);
-        });
-
-        $newProduct = $order->products()->where('product_id', $item['id'])->first();
-
-        return response()->json([
-            'item' => new OrderProduct($newProduct),
-            'totalValue' => $order->getTotalValueAttribute(),
-            'totalQuantity' => $order->getTotalQuantityAttribute(),
-            'updatedAt' => $order->updated_at
-        ]);
-    }
-
-    private function removeFromStock($product, $item)
-    {
-        if($product->has_ingredients) {
-            //modify ingredients quantity
-            foreach($product->ingredients as $ingredient) {
-                if($ingredient->stock->quantity >=  $ingredient->pivot->quantity * $item['quantity']) {
-                    $ingredient->stock->quantity -= $ingredient->pivot->quantity * $item['quantity'];
-                    $ingredient->stock->save();
-                } else {
-                    throw new  Exception('There are not enought ' . $product->name . ' in stock');
-                }
-            }
-        } else {
-            // modify stock quantity
-            if( $product->stock->quantity >= $item['quantity']) {
-                $product->stock->quantity -= $item['quantity'];
-                $product->stock->save();
-            } else {
-                throw new  Exception('There are not enought ' . $product->name . ' in stock');
-            }
-        }
-    }
-
-    private function addBackToStock($product)
-    {
-        if($product->has_ingredients)
-        {
-            forEach($product->ingredients as $ingredient) {
-                $ingredient->stock->quantity += $ingredient->pivot->quantity * $product->pivot->quantity;
-                $ingredient->stock->save();
-            }
-        } else {
-            $product->stock->quantity += $product->pivot->quantity;
-            $product->stock->save();
-        }
-    }
-
-
 }

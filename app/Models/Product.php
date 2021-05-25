@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Filters\Product\ProductFilter;
 use Illuminate\Database\Eloquent\Model;
@@ -137,5 +138,42 @@ class Product extends Model
     public function scopeFilter(Builder $builder, Request $request)
     {
         return (new ProductFilter($request))->filter($builder);
+    }
+
+    public function removeFromStock($item)
+    {
+        if($this->has_ingredients) {
+            //modify ingredients quantity
+            foreach($this->ingredients as $ingredient) {
+                if($ingredient->stock->quantity >=  $ingredient->pivot->quantity * $item['quantity']) {
+                    $ingredient->stock->quantity -= $ingredient->pivot->quantity * $item['quantity'];
+                    $ingredient->stock->save();
+                } else {
+                    throw new  Exception('There are not enought ' . $this->name . ' in stock');
+                }
+            }
+        } else {
+            // modify stock quantity
+            if( $this->stock->quantity >= $item['quantity']) {
+                $this->stock->quantity -= $item['quantity'];
+                $this->stock->save();
+            } else {
+                throw new  Exception('There are not enought ' . $this->name . ' in stock');
+            }
+        }
+    }
+
+    public function addBackToStock()
+    {
+        if($this->has_ingredients)
+        {
+            forEach($this->ingredients as $ingredient) {
+                $ingredient->stock->quantity += $ingredient->pivot->quantity * $this->pivot->quantity;
+                $ingredient->stock->save();
+            }
+        } else {
+            $this->stock->quantity += $this->pivot->quantity;
+            $this->stock->save();
+        }
     }
 }
