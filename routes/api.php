@@ -61,7 +61,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::get('/products/name/{name}', 'OrderController@getProductsByName');
         Route::get('/products/id/{id}', 'OrderController@getProductsById');
 
-        Route::patch('/remove-item/{id}', 'OrderController@removeItem');
+        Route::patch('/remove-item/{orderId}', 'OrderController@removeItem');
+        Route::patch('/add-item/{orderId}', 'OrderController@addItem');
     });
 
     Route::group(['prefix'=>'clients'], function() {

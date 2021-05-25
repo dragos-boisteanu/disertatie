@@ -26,6 +26,7 @@ export {
     disableOrder,
     enable,
     patchOrder,
-    removeItem
+    removeItem,
+    addItem,
 
 }

@@ -17,9 +17,7 @@ class ModalOrderProduct extends JsonResource
         return [
             'id'=>$this->id,
             'name' => $this->name,
-            'basePrice' => $this->base_price,
-            'vat' => $this->category->vat,
-            'discount' => $this->finalDiscount,
+            'unitPrice' => $this->base_price,
             'quantity' => null,
             'price' => $this->price,
             'stock' => $this->quantity,

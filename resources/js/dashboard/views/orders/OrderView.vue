@@ -11,6 +11,14 @@
                 </button>
         </template>
 
+        <OrderItemModal
+            v-if="showAddProductModalState"
+            :id="selectedItemId"
+            :quantity="selectedItemQuantity"
+            @closed="closeAddProductModal"
+            @add="addItem"
+        ></OrderItemModal>
+
         <ConfirmCancelOrderModalComponent
             v-if="showRemoveConfirmModalState"
             :order-id="order.id"
@@ -171,6 +179,7 @@ import ViewContainer from '../ViewContainer';
 import OrderItem from '../../components/orders/OrderItemComponent'
 import OrderStatus from '../../components/orders/OrderStatusComponent';
 import EditOrderDetailsModal from '../../components/modals/EditOrderDetailsModalComponent';
+import OrderItemModal from '../../components/modals/OrderItemModalComponent';
 
 import ConfirmCancelOrderModalComponent from '../../components/modals/ConfirmCancelOrderModalComponent';
 
@@ -220,15 +229,20 @@ export default {
 
     data() {
         return {
+            showAddProductModalState: false,
             showRemoveConfirmModalState: false,
+            showOrderDetailsEditModalState: false,
+
             waiting: false,
             order: null,
-            showOrderDetailsEditModalState: false,
+
+            selectedItemId: '',
+            selectedItemQuantity: '',
         }
     },
 
     methods: {
-        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder']),
+        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder', 'addItemToOrder']),
         ...mapActions('Notification', ['openNotification']),
 
         async refresh() {
@@ -273,16 +287,50 @@ export default {
                     itemId: id
                 }
             }
-
             const response = await this.removeItemFromOrder(payload);
             // this.order.updatedAt = response.localData.updatedAt;
 
             const itemIndex = _findIndex(this.order.items, ['id', id]);
  
-            if(itemIndex > 0) {
+            if(itemIndex >= 0) {
                 this.order.items.splice(itemIndex, 1);
             }   
-            
+        },
+
+        openAddProductModal() {
+            this.showAddProductModalState = true;
+        },
+
+        closeAddProductModal() {
+            this.showAddProductModalState = false;
+            if(this.selectedItemId && this.selectedItemQuantity) {
+                this.selectedItemId = '';
+                this.selectedItemQuantity = '';
+            }
+        },
+
+        async addItem(item) {
+            const payload = {
+                id: this.order.id,
+                item,
+            }
+
+            const response = await this.addItemToOrder(payload);
+
+            const itemIndex = _findIndex(this.order.items, ['id', response.item.id]);
+
+            if(itemIndex >= 0) {
+                Object.keys(this.order.items[itemIndex]).forEach(key => {
+                    this.$set(this.order.items[itemIndex], key, response.item[key]);
+                });
+
+               
+            } else {
+                this.order.items.push(response.item)
+            }
+
+            this.order.totalQuantity = response.totalQuantity;
+            this.order.totalValue = response.totalValue;
             
         },
 
@@ -295,7 +343,6 @@ export default {
         },
 
         updateOrder(order) {
-            console.log(order);
             Object.keys(order).forEach(key => {
                 this.order[key] = order[key]
             })
@@ -313,7 +360,8 @@ export default {
         Button,
         OrderStatus,
         EditOrderDetailsModal,
-        ConfirmCancelOrderModalComponent
+        ConfirmCancelOrderModalComponent,
+        OrderItemModal
     }
 }
 </script>
