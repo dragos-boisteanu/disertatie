@@ -3,7 +3,7 @@
         <template slot="header">
             View order #{{ order.id }}
             <OrderStatus :status="order.status"></OrderStatus>
-             <button 
+             <button
                     @click="refresh" 
                     class="p-1 bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500"
                 >
@@ -130,6 +130,7 @@
                         :key="index" 
                         :item="item" 
                         :index="index"
+                        :showActions="canEdit"
                         @edit="editOrderProduct(item)"
                         @remove="removeItem"
                     ></OrderItem>
@@ -151,6 +152,7 @@
                 </tbody>
             </table>
             <button 
+                v-if="canEdit"
                 id="addItemBtn"
                 class="w-full py-1 mt-2 text-white text-sm ripple-bg-orange-400 rounded-sm"
                 @click.prevent="openAddProductModal"
@@ -163,15 +165,24 @@
             <Button 
                 v-if="canCancel"
                 id="cancel"
-                name="edit"
+                name="cancel"
                 type="danger"
                 :waiting="waiting"
                 @click.native="toggleRemoveConfirmModalState"
             >
                 Cancel Order
             </Button>
+            <Button 
+                v-if="canMarkAsIsPreparing"
+                id="isPreparing"
+                name="isPreparing"
+                type="secondary"
+                :waiting="waiting"
+                @click.native="markAsIsPreparing"
+            >
+                Is preparing
+            </Button>
         </div>
-               
     </ViewContainer>
 </template>
 
@@ -190,8 +201,6 @@ import Button from '../../components/buttons/ButtonComponent';
 import store from '../../store/index';
 import { mapActions, mapGetters } from 'vuex';
 import _findIndex from 'lodash/findIndex';
-import { patchOrder } from '../../api/orders.api';
-
     
 export default {
 
@@ -202,19 +211,20 @@ export default {
     },
 
     computed: {
-        ...mapGetters('Users', ['isAdmin', 'isLocationManager', 'isWaiter', 'getLoggedUser']),
-
-        canDoAction() {
-            return this.isAdmin || this.isLocationManager || this.isWaiter;
-        },
+        ...mapGetters('Users', ['isAdmin', 'isLocationManager', 'isWaiter', 'getLoggedUser', 'isKitchenManager']),
 
         canCancel() {
-            if(this.isWaiter && this.order.staff.id === this.loggedUser.id && this.order.deletedAt === null) {
+            if((this.isWaiter && this.order.staff.id === this.loggedUser.id) && this.order.deletedAt === null) {
                 return true;
-                    
-            } else if ( this.order.deletedAt === null) {
-                return true;
+            } 
+        },
+
+        canEdit() {
+            if( (this.isWaiter && this.order.staff.id === this.loggedUser.id) || this.isAdmin || this.isLocationManager ) {
+                return true
             }
+
+            return false
         },
 
         clientId() {
@@ -226,7 +236,11 @@ export default {
         },
 
         showOrderDetailsEditButton() {
-            return this.order.deliveryMethod.name === 'Delivery' ? true : false;
+            return this.order.deliveryMethod.name === 'Delivery' && this.canEdit ? true : false;
+        },
+
+        canMarkAsIsPreparing() {
+            return (this.isKitchenManager || this.isisKitchen) && this.order.status.name === 'Received' && this.order.deletedAt === null;
         }
     },
 
@@ -245,7 +259,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder', 'addItemToOrder', 'patchItem']),
+        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder', 'addItemToOrder', 'patchItem', 'updateOrderStatus']),
         ...mapActions('Notification', ['openNotification']),
 
         async refresh() {
@@ -300,18 +314,6 @@ export default {
             }   
         },
 
-        openAddProductModal() {
-            this.showAddProductModalState = true;
-        },
-
-        closeAddProductModal() {
-            this.showAddProductModalState = false;
-            if(this.selectedItemId && this.selectedItemQuantity) {
-                this.selectedItemId = '';
-                this.selectedItemQuantity = '';
-            }
-        },
-
         async addItem(item) {
             const payload = {
                 id: this.order.id,
@@ -334,20 +336,14 @@ export default {
             this.order.totalValue = response.totalValue;
             this.order.updatedAt = response.updatedAt;
         },
-
-        editOrderProduct(product) {
-            this.selectedItemId = product.id;
-            this.selectedItemQuantity = product.quantity;
-            this.showAddProductModalState = true;
-        },
-
+       
         async saveEdit(item) {          
             const itemIndex = _findIndex(this.order.items, ['id', item.id]);
 
             if(item.quantity !== this.order.items[itemIndex].quantity) {
                 const payload = {
                     vm: this,
-                    patchBody: {
+                    data: {
                         id: this.order.id,
                         itemId: item.id,
                         quantity: item.quantity
@@ -356,13 +352,9 @@ export default {
 
                 const response = await this.patchItem(payload)
 
-                const itemIndex = _findIndex(this.order.items, ['id', response.patchBody.itemId]);
-
-                    console.log(response.patchBody)
-
-
+                const itemIndex = _findIndex(this.order.items, ['id', response.data.itemId]);
                 
-                this.$set(this.order.items[itemIndex], 'quantity', response.patchBody.quantity);
+                this.$set(this.order.items[itemIndex], 'quantity', response.data.quantity);
                 this.$set(this.order.items[itemIndex], 'totalPrice', response.totalPrice);
 
                 this.order.totalQuantity = response.totalQuantity;
@@ -371,6 +363,43 @@ export default {
                 
             } else {
                 console.log('nothing to update');
+            }
+        },
+
+        async updateStatus(statusId) {
+            const data = {
+                vm:this,
+                data: {
+                    id: this.order.id,
+                    status: {
+                        id: statusId
+                    }
+                }
+            }
+            const response = await this.updateOrderStatus(data)
+
+            this.order.status = response.status;
+        },
+
+        async markAsIsPreparing() {
+          await this.updateStatus(3);  
+        },
+
+        editOrderProduct(product) {
+            this.selectedItemId = product.id;
+            this.selectedItemQuantity = product.quantity;
+            this.showAddProductModalState = true;
+        },
+
+        openAddProductModal() {
+            this.showAddProductModalState = true;
+        },
+
+        closeAddProductModal() {
+            this.showAddProductModalState = false;
+            if(this.selectedItemId && this.selectedItemQuantity) {
+                this.selectedItemId = '';
+                this.selectedItemQuantity = '';
             }
         },
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Dashboard;
 use Exception;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -13,6 +14,7 @@ use App\Http\Resources\OrderCollection;
 use App\Http\Requests\OrderPatchRequest;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\ModalOrderProduct;
+use App\Http\Requests\OrderPatchStatusRequest;
 use App\Http\Resources\Order as OrderResource;
 use App\Http\Resources\ModalOrderProductCollection;
 
@@ -136,11 +138,35 @@ class OrderController extends Controller
      */
     public function update(OrderPatchRequest $request, $id)
     {
-        $order = Order::findOrfail($id);
+        $order = Order::with(['status'])->findOrfail($id);
 
-        $order->update($request->validated());
+        if($request->has('address')) {
+            $order->address = $request->address;
+        }
 
-        return $order->updated_at;
+        if($request->has('observations')) {
+            $order->observations = $request->observations;
+        }
+
+        $order->save();
+        $order->refresh();
+
+        return response()->json($order->updated_at, 200);
+    }
+
+    public function updateStatus(OrderPatchStatusRequest $request, $id) 
+    {
+        $order = Order::with('status')->findOrFail($id);
+
+        $order->status_id = $request->status['id'];
+
+        $order->save();
+        $order->refresh();
+
+        return response()->json([
+            'updatedAt' => $order->updated_at,
+            'status' => $order->status
+        ]);
     }
 
     public function disable($id) 

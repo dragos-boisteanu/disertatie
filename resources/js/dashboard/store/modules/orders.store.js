@@ -1,4 +1,4 @@
-import { downloadOrders, storeOrder, downloadOrder, disableOrder, patchOrder, removeItem, addItem, patchItem } from '../../api/orders.api'
+import { downloadOrders, storeOrder, downloadOrder, disableOrder, patchOrder, removeItem, addItem, patchItem, updateOrderStatus } from '../../api/orders.api'
 import { downloadStatuses } from '../../api/orderStatuses.api'
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
@@ -27,10 +27,6 @@ const getters = {
 }
 
 const actions = {
-    resetOrders({commit}) {
-        commit('RESET');
-    },
-
     async downloadOrders({commit}, payload) {
         try {
             const response = await downloadOrders(payload);
@@ -93,9 +89,8 @@ const actions = {
     },
 
     async patchOrder({state, commit}, payload ) {
-        const response = await patchOrder(payload.localData);
-        payload.localData.updatedAt = response.data;
-
+        const response = await patchOrder(payload.data);
+        payload.data.updatedAt = response.data;
         if(state.orders.length > 0) {
             commit('PATCH_ORDER', payload);
         }
@@ -103,6 +98,16 @@ const actions = {
         return payload.localData;        
     },
 
+    async updateOrderStatus({commit}, payload) {
+        const response = await updateOrderStatus(payload.data);
+
+        payload.data.updatedAt = response.data.updatedAt;
+        payload.data.status = response.data.status;
+
+        commit('PATCH_ORDER', payload);
+
+        return payload.data;
+    },
     
     async removeItemFromOrder({state,commit}, payload) {
         const response = await removeItem(payload.localData);
@@ -180,13 +185,18 @@ const mutations = {
     },
 
     PATCH_ORDER(state, payload) {
-        const orderIndex = _findIndex(state.orders, ['id', payload.localData.id]);
+        if(state.orders.length > 0) { 
+            const orderIndex = _findIndex(state.orders, ['id', payload.data.id]);
 
-        Object.keys(payload.localData).forEach(key => {
-            payload.vm.$set(state.orders[orderIndex], key, payload.localData[key]);
-        });
+            Object.keys(payload.data).forEach(key => {
+                console.log('key: ', key)
+                console.log('payload data: ', payload.data[key])
+                payload.vm.$set(state.orders[orderIndex], key, payload.data[key]);
+            });
 
         // payload.vm.$set(state.orders[orderIndex], 'updatedAt', payload.updatedAt);
+        }
+        
     },
 
     REMOVE_ITEM(state, payload) {

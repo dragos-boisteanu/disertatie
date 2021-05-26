@@ -46,7 +46,7 @@
                     case "Delivered": 
                         result = 'bg-lightBlue-400'
                         break;
-                    case "Recived": {
+                    case "Received": {
                         result = 'bg-lightBlue-600'
                         break;
                     }

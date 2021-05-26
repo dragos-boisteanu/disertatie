@@ -9,6 +9,7 @@ const downloadOrder = (id) => httpClient.get(`${END_POINT}/${id}`);
 const storeOrder = (order) => httpClient.post(`${END_POINT}`, order);
 
 const patchOrder = (data) => httpClient.patch(`${END_POINT}/${data.id}`, data);
+const updateOrderStatus = (data) => httpClient.patch(`${END_POINT}/update-status/${data.id}`, data);
 
 const removeItem = (data) =>httpClient.patch(`${END_POINT}/remove-item/${data.id}`, data);
 const addItem = (data) =>httpClient.patch(`${END_POINT}/add-item/${data.id}`, data);
@@ -29,4 +30,5 @@ export {
     removeItem,
     addItem,
     patchItem,
+    updateOrderStatus,
 }

@@ -19,7 +19,7 @@ class OrderStatusSeeder extends Seeder
         ]);
 
         DB::table('order_statuses')->insert([
-           'name' =>  'Recived'
+           'name' =>  'Received'
         ]);
 
         DB::table('order_statuses')->insert([
