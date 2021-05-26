@@ -322,7 +322,7 @@ export default {
 
             const itemIndex = _findIndex(this.order.items, ['id', response.item.id]);
 
-            if(itemIndex >= 0) {              
+            if(itemIndex >= 0) {           
                 this.$set(this.order.items[itemIndex], 'quantity', response.item.quantity);
                 this.$set(this.order.items[itemIndex], 'totalPrice', response.item.totalPrice);
                 
@@ -359,8 +359,11 @@ export default {
                 const itemIndex = _findIndex(this.order.items, ['id', response.patchBody.itemId]);
 
                     console.log(response.patchBody)
+
+
                 
                 this.$set(this.order.items[itemIndex], 'quantity', response.patchBody.quantity);
+                this.$set(this.order.items[itemIndex], 'totalPrice', response.totalPrice);
 
                 this.order.totalQuantity = response.totalQuantity;
                 this.order.totalValue = response.totalValue;

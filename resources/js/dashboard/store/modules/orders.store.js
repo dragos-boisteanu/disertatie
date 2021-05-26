@@ -134,6 +134,7 @@ const actions = {
 
         const response = await patchItem(payload.patchBody);
 
+        payload.totalPrice = response.data.itemTotalPrice;
         payload.updatedAt = response.data.updatedAt;
         payload.totalQuantity = response.data.totalQuantity;
         payload.totalValue = response.data.totalValue;

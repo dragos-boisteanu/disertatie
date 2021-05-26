@@ -110,7 +110,11 @@ class OrderItemController extends Controller
             
         });
 
+        $product = $order->products()->where('product_id', $request->itemId)->first();
+
+        $itemTotalPrice = number_format($product->pivot->unit_price * $product->pivot->quantity, 2, '.', '');
         return response()->json([
+            'itemTotalPrice' => $itemTotalPrice,
             'totalValue' => $order->getTotalValueAttribute(),
             'totalQuantity' => $order->getTotalQuantityAttribute(),
             'updatedAt' => $order->updated_at
