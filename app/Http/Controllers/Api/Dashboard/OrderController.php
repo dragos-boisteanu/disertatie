@@ -100,7 +100,7 @@ class OrderController extends Controller
                     "quantity"=>$item['quantity'], 
                     "unit_price"=>$product->price,              
                 ]);
-                $product->removeFromStock($item);
+                $product->removeFromStock($item['quantity']);
             }
             
             DB::commit();

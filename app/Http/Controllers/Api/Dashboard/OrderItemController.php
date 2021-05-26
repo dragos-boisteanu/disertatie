@@ -74,7 +74,7 @@ class OrderItemController extends Controller
 
             $order->save();
             $order->refresh();
-
+   
             $product->removeFromStock($item['quantity']);
         });
 
