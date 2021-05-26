@@ -172,6 +172,8 @@
             >
                 Cancel Order
             </Button>
+
+            
             <Button 
                 v-if="canMarkAsIsPreparing"
                 id="isPreparing"
@@ -181,6 +183,61 @@
                 @click.native="markAsIsPreparing"
             >
                 Is preparing
+            </Button>
+
+            <Button 
+                v-if="canMarkAsAwaitingDelivery"
+                id="awaitingDelivery"
+                name="awaitingDelivery"
+                type="secondary"
+                :waiting="waiting"
+                @click.native="markAsAwaitingDelivery"
+            >
+                Awaiting delivery
+            </Button>
+            
+            <Button 
+                v-if="canMarkAsInDelivery"
+                id="inDelivery"
+                name="inDelivery"
+                type="secondary"
+                :waiting="waiting"
+                @click.native="markAsInDelivery"
+            >
+                In delivery
+            </Button>
+
+            <Button 
+                v-if="canMarkAsDelivered"
+                id="delivered"
+                name="delivered"
+                type="secondary"
+                :waiting="waiting"
+                @click.native="markAsDelivered"
+            >
+                Delivered
+            </Button>
+
+            <Button 
+                v-if="canMarkAsCompleted"
+                id="completed"
+                name="completed"
+                type="secondary"
+                :waiting="waiting"
+                @click.native="markAsCompleted"
+            >
+                Completed
+            </Button>
+
+            <Button 
+                v-if="canMarkAsCompleted"
+                id="completed"
+                name="completed"
+                type="secondary"
+                :waiting="waiting"
+                @click.native="markAsCompleted"
+            >
+                Completed
             </Button>
         </div>
     </ViewContainer>
@@ -211,12 +268,14 @@ export default {
     },
 
     computed: {
-        ...mapGetters('Users', ['isAdmin', 'isLocationManager', 'isWaiter', 'getLoggedUser', 'isKitchenManager']),
+        ...mapGetters('Users', ['isAdmin', 'isLocationManager', 'isWaiter', 'getLoggedUser', 'isKitchenManager', 'isDelivery']),
 
         canCancel() {
             if((this.isWaiter && this.order.staff.id === this.loggedUser.id) && this.order.deletedAt === null) {
                 return true;
-            } 
+            } else {
+                return false;
+            }
         },
 
         canEdit() {
@@ -240,7 +299,27 @@ export default {
         },
 
         canMarkAsIsPreparing() {
-            return (this.isKitchenManager || this.isisKitchen) && this.order.status.name === 'Received' && this.order.deletedAt === null;
+            return (this.isKitchenManager || this.isAdmin || this.isLocationManager) && this.order.status.name === 'Received' && this.order.deletedAt === null;
+        },
+
+        canMarkAsAwaitingDelivery() {
+            return (this.isKitchenManager || this.isAdmin || this.isLocationManager )&& this.order.status.name === 'Is preparing' && this.order.deletedAt === null;
+        },
+
+        canMarkAsInDelivery() {
+            return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === "Awaiting delivery" && this.order.deletedAt === null;
+        },
+
+        canMarkAsDelivered() {
+            return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === 'In delivery' && this.order.deletedAt === null;
+        },
+
+        // canMarkAsAwaitingPayment() {
+        //     return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === "Delivered" && this.order.deletedAt === null;
+        // },
+
+        canMarkAsCompleted() {
+            return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && (this.order.status.name === 'Delivered' || this.order.staus.name === "Awaiting payment") && this.order.deletedAt === null;
         }
     },
 
@@ -382,8 +461,24 @@ export default {
         },
 
         async markAsIsPreparing() {
-          await this.updateStatus(3);  
+            await this.updateStatus(3);  
         },
+
+        async markAsAwaitingDelivery() {
+            await this.updateStatus(4);
+        },
+
+        async markAsInDelivery() {
+            await this.updateStatus(5);  
+        },
+
+        async markAsDelivered() {
+            await this.updateStatus(6)
+        },
+
+        async markAsCompleted() {
+            await this.updateStatus(7)
+        },  
 
         editOrderProduct(product) {
             this.selectedItemId = product.id;
