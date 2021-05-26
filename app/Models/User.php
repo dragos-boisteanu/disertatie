@@ -53,6 +53,8 @@ class User extends Authenticatable
     ];
 
     public $with = ['role', 'addresses'];
+
+    // protected $appends = array('isAdmin', 'isLocationManager', 'isWaiter', 'isKitchenManager', 'isDelivery', 'isKitchen');
     
     public function role()
     {
@@ -73,4 +75,30 @@ class User extends Authenticatable
     {
         return (new UserFilter($request))->filter($builder);
     }
+
+    // public function isAdmin() {
+    //     return $this->role->name === "Administrator";
+    // }
+
+    // public function isLocationManager() 
+    // {
+    //     return $this->role->name === "Location Manager";
+    // }
+
+    // public function isWaiter() 
+    // {
+    //     return $this->role->name === "Waiter";
+    // }
+
+    // public function isKitchenManager() {
+    //     return $this->role->name === "Kitchen Manager";
+    // }
+
+    // public function isDelivery() {
+    //     return $this->role->name === "Delivery";
+    // }
+
+    // public function isKitchen() {
+    //     return $this->role->name === "Kitchen";
+    // }
 }

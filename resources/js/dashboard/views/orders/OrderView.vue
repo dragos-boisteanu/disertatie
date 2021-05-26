@@ -319,7 +319,7 @@ export default {
         // },
 
         canMarkAsCompleted() {
-            return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && (this.order.status.name === 'Delivered' || this.order.staus.name === "Awaiting payment") && this.order.deletedAt === null;
+            return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && (this.order.status.name === 'Delivered' || this.order.status.name === "Awaiting payment") && this.order.deletedAt === null;
         }
     },
 
