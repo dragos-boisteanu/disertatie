@@ -15,7 +15,6 @@ class OrderItemController extends Controller
 {
     public function getProductsByName($name)
     {
-
         $products = Product::where('name', 'like', '%' . $name . '%')->get();
 
         return new ModalOrderProductCollection($products);
@@ -40,9 +39,11 @@ class OrderItemController extends Controller
             $product->addBackToStock();
 
             $order->products()->detach($request->itemId);
+
+            $order->touch();
             
             $order->save(); 
-            $order->fresh();   
+            $order->refresh();   
         });
 
         return $order->updated_at;
@@ -51,12 +52,12 @@ class OrderItemController extends Controller
     public function addItem(Request $request, $orderId)
     {
         $order = Order::findOrFail($orderId);
+
         $item = $request->item;
+       
 
         DB::transaction(function () use ($order, $item) {
-
-            $product = $order->products()->where('product_id',  $item['id'])->first();
-
+            $product = $order->products()->where('product_id',  $item['id'])->firstOrFail();
             if(isset($product)) {
                 $newQuantity = $product->pivot->quantity + $item['quantity'];
                 $order->products()->updateExistingPivot($item['id'], ['quantity'=>$newQuantity]);
@@ -69,16 +70,18 @@ class OrderItemController extends Controller
                 ]);
             }
 
+            $order->touch();
+
             $order->save();
             $order->refresh();
 
             $product->removeFromStock($item['quantity']);
         });
 
-        $newProduct = $order->products()->where('product_id', $item['id'])->first();
-
+        $product = $order->products()->where('product_id',  $item['id'])->firstOrFail();
+        
         return response()->json([
-            'item' => new OrderProduct($newProduct),
+            'item' => new OrderProduct($product),
             'totalValue' => $order->getTotalValueAttribute(),
             'totalQuantity' => $order->getTotalQuantityAttribute(),
             'updatedAt' => $order->updated_at
@@ -99,6 +102,8 @@ class OrderItemController extends Controller
             } else if ($request->quantity < $product->pivot->quantity) {
                 $product->addBackToStock($product->pivot->quantity - $request->quantity);
             }
+
+            $order->touch();
 
             $order->save();
             $order->refresh();

@@ -116,7 +116,7 @@ const actions = {
     },
 
     async addItemToOrder({state,commit}, payload) {
-        const response = await addItem(payload.localData);
+        const response = await addItem(payload);
 
         payload.item = response.data.item
         payload.updatedAt = response.data.updatedAt;

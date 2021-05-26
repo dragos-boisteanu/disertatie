@@ -322,19 +322,17 @@ export default {
 
             const itemIndex = _findIndex(this.order.items, ['id', response.item.id]);
 
-            if(itemIndex >= 0) {
-                Object.keys(this.order.items[itemIndex]).forEach(key => {
-                    this.$set(this.order.items[itemIndex], key, response.item[key]);
-                });
-
-               
+            if(itemIndex >= 0) {              
+                this.$set(this.order.items[itemIndex], 'quantity', response.item.quantity);
+                this.$set(this.order.items[itemIndex], 'totalPrice', response.item.totalPrice);
+                
             } else {
                 this.order.items.push(response.item)
             }
 
             this.order.totalQuantity = response.totalQuantity;
             this.order.totalValue = response.totalValue;
-            
+            this.order.updatedAt = response.updatedAt;
         },
 
         editOrderProduct(product) {
@@ -366,6 +364,7 @@ export default {
 
                 this.order.totalQuantity = response.totalQuantity;
                 this.order.totalValue = response.totalValue;
+                this.order.updatedAt = response.updatedAt;
                 
             } else {
                 console.log('nothing to update');
