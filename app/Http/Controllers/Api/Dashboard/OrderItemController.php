@@ -72,13 +72,40 @@ class OrderItemController extends Controller
             $order->save();
             $order->refresh();
 
-            $product->removeFromStock($item);
+            $product->removeFromStock($item['quantity']);
         });
 
         $newProduct = $order->products()->where('product_id', $item['id'])->first();
 
         return response()->json([
             'item' => new OrderProduct($newProduct),
+            'totalValue' => $order->getTotalValueAttribute(),
+            'totalQuantity' => $order->getTotalQuantityAttribute(),
+            'updatedAt' => $order->updated_at
+        ]);
+    }
+
+    public function patchItem(Request $request, $orderId) 
+    {
+        $order = Order::findOrFail($orderId);
+
+        DB::transaction(function () use($request, $order) {
+            $product = $order->products()->where('product_id', $request->itemId)->first();
+            // $product->pivot->quantity = $request->quantity;
+            $order->products()->updateExistingPivot($request->itemId, ['quantity'=>$request->quantity]);
+
+            if($request->quantity > $product->pivot->quantity) {
+                $product->removeFromStock($request->quantity - $product->pivot->quantity);
+            } else if ($request->quantity < $product->pivot->quantity) {
+                $product->addBackToStock($product->pivot->quantity - $request->quantity);
+            }
+
+            $order->save();
+            $order->refresh();
+            
+        });
+
+        return response()->json([
             'totalValue' => $order->getTotalValueAttribute(),
             'totalQuantity' => $order->getTotalQuantityAttribute(),
             'updatedAt' => $order->updated_at

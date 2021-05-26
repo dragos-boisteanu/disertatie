@@ -1,4 +1,4 @@
-import { downloadOrders, storeOrder, downloadOrder, disableOrder, patchOrder, removeItem, addItem } from '../../api/orders.api'
+import { downloadOrders, storeOrder, downloadOrder, disableOrder, patchOrder, removeItem, addItem, patchItem } from '../../api/orders.api'
 import { downloadStatuses } from '../../api/orderStatuses.api'
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
@@ -116,7 +116,7 @@ const actions = {
     },
 
     async addItemToOrder({state,commit}, payload) {
-        const response = await addItem(payload);
+        const response = await addItem(payload.localData);
 
         payload.item = response.data.item
         payload.updatedAt = response.data.updatedAt;
@@ -128,7 +128,21 @@ const actions = {
         }
 
         return payload;
+    },
 
+    async patchItem({state, commit}, payload) {
+
+        const response = await patchItem(payload.patchBody);
+
+        payload.updatedAt = response.data.updatedAt;
+        payload.totalQuantity = response.data.totalQuantity;
+        payload.totalValue = response.data.totalValue;
+
+        if(state.orders.length > 0) {
+            commit('PATCH_ITEM', payload);
+        }
+
+        return payload;
     },
     
 
@@ -182,7 +196,13 @@ const mutations = {
         state.orders[orderIndex].items.splice(itemIndex, 1);
 
         state.orders[orderIndex].updatedAt = payload.localData.updatedAt;
-        
+    },
+
+    PATCH_ITEM(state, payload) {
+        const orderIndex =_findIndex(state.orders, ['id', payload.patchBody.id]);
+        const itemIndex = _findIndex(state.orders[orderIndex].items, ['id', payload.patchBody.itemId]);
+
+        payload.vm.$set(state.orders[orderIndex].items[itemIndex], 'quantity', payload.patchBody.quantity);
     },
 
     DISABLE_ORDER(state, payload) {

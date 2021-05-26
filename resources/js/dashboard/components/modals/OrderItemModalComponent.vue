@@ -201,7 +201,6 @@
         },
 
         methods: {
-
             findProduct: _debounce(async function() {
                 try {
                     if(this.product.name.length > 1)

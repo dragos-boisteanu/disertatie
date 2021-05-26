@@ -64,6 +64,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 
         Route::patch('/remove-item/{orderId}', 'OrderItemController@removeItem');
         Route::patch('/add-item/{orderId}', 'OrderItemController@addItem');
+        Route::patch('/patch-item/{orderId}', 'OrderItemController@patchItem');
+
     });
 
     Route::group(['prefix'=>'clients'], function() {

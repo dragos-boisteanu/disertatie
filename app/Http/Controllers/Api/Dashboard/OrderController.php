@@ -96,18 +96,13 @@ class OrderController extends Controller
             foreach($request->items as $item) {
                 $product = Product::findOrFail($item['id']);
                 $order->products()->attach($item['id'], [
-                "product_name"=>$product->name, 
-                "quantity"=>$item['quantity'], 
-                "unit_price"=>$product->price,              
+                    "product_name"=>$product->name, 
+                    "quantity"=>$item['quantity'], 
+                    "unit_price"=>$product->price,              
                 ]);
+                $product->removeFromStock($item);
             }
             
-            // update stocks
-            foreach($request->items as $item) {
-                $product = Product::findOrFail($item['id']);
-                $product->removeFromStock($product, $item);
-            }
-
             DB::commit();
             
             return response()->json(['message'=>'Order created succesfully'], 200 );

@@ -12,8 +12,7 @@ const patchOrder = (data) => httpClient.patch(`${END_POINT}/${data.id}`, data);
 
 const removeItem = (data) =>httpClient.patch(`${END_POINT}/remove-item/${data.id}`, data);
 const addItem = (data) =>httpClient.patch(`${END_POINT}/add-item/${data.id}`, data);
-const pathItem = (data) => httpClient.patch(`${END_POINT}/patch-item/${data.id}`, data);
-
+const patchItem = (data) => httpClient.patch(`${END_POINT}/patch-item/${data.id}`, data);
 const disableOrder = (id) => httpClient.delete(`${END_POINT}/${id}/disable`, {data: id});
 const enable = (id) => httpClient.post(`${END_POINT}/${id}/enable`);
 
@@ -28,5 +27,5 @@ export {
     patchOrder,
     removeItem,
     addItem,
-
+    patchItem,
 }

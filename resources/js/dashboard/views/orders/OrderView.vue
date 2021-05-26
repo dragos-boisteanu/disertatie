@@ -17,6 +17,7 @@
             :quantity="selectedItemQuantity"
             @closed="closeAddProductModal"
             @add="addItem"
+            @edit="saveEdit"
         ></OrderItemModal>
 
         <ConfirmCancelOrderModalComponent
@@ -129,6 +130,7 @@
                         :key="index" 
                         :item="item" 
                         :index="index"
+                        @edit="editOrderProduct(item)"
                         @remove="removeItem"
                     ></OrderItem>
                     <tr class="text-sm">
@@ -188,6 +190,7 @@ import Button from '../../components/buttons/ButtonComponent';
 import store from '../../store/index';
 import { mapActions, mapGetters } from 'vuex';
 import _findIndex from 'lodash/findIndex';
+import { patchOrder } from '../../api/orders.api';
 
     
 export default {
@@ -215,7 +218,7 @@ export default {
         },
 
         clientId() {
-            return this.order.client.id ? this.order.client.id : null;
+            return this.order.client ? this.order.client.id : null;
         },
 
         showAddressForDelivery() {
@@ -242,7 +245,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder', 'addItemToOrder']),
+        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder', 'addItemToOrder', 'patchItem']),
         ...mapActions('Notification', ['openNotification']),
 
         async refresh() {
@@ -332,6 +335,41 @@ export default {
             this.order.totalQuantity = response.totalQuantity;
             this.order.totalValue = response.totalValue;
             
+        },
+
+        editOrderProduct(product) {
+            this.selectedItemId = product.id;
+            this.selectedItemQuantity = product.quantity;
+            this.showAddProductModalState = true;
+        },
+
+        async saveEdit(item) {          
+            const itemIndex = _findIndex(this.order.items, ['id', item.id]);
+
+            if(item.quantity !== this.order.items[itemIndex].quantity) {
+                const payload = {
+                    vm: this,
+                    patchBody: {
+                        id: this.order.id,
+                        itemId: item.id,
+                        quantity: item.quantity
+                    }
+                }
+
+                const response = await this.patchItem(payload)
+
+                const itemIndex = _findIndex(this.order.items, ['id', response.patchBody.itemId]);
+
+                    console.log(response.patchBody)
+                
+                this.$set(this.order.items[itemIndex], 'quantity', response.patchBody.quantity);
+
+                this.order.totalQuantity = response.totalQuantity;
+                this.order.totalValue = response.totalValue;
+                
+            } else {
+                console.log('nothing to update');
+            }
         },
 
         showOrderDetailsEditModalToggle() {

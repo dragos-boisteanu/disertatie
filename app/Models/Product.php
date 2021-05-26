@@ -140,13 +140,13 @@ class Product extends Model
         return (new ProductFilter($request))->filter($builder);
     }
 
-    public function removeFromStock($item)
+    public function removeFromStock($quantity)
     {
         if($this->has_ingredients) {
             //modify ingredients quantity
             foreach($this->ingredients as $ingredient) {
-                if($ingredient->stock->quantity >=  $ingredient->pivot->quantity * $item['quantity']) {
-                    $ingredient->stock->quantity -= $ingredient->pivot->quantity * $item['quantity'];
+                if($ingredient->stock->quantity >=  $ingredient->pivot->quantity * $quantity) {
+                    $ingredient->stock->quantity -= $ingredient->pivot->quantity * $quantity;
                     $ingredient->stock->save();
                 } else {
                     throw new  Exception('There are not enought ' . $this->name . ' in stock');
@@ -154,8 +154,8 @@ class Product extends Model
             }
         } else {
             // modify stock quantity
-            if( $this->stock->quantity >= $item['quantity']) {
-                $this->stock->quantity -= $item['quantity'];
+            if( $this->stock->quantity >= $quantity) {
+                $this->stock->quantity -= $quantity;
                 $this->stock->save();
             } else {
                 throw new  Exception('There are not enought ' . $this->name . ' in stock');
@@ -163,16 +163,18 @@ class Product extends Model
         }
     }
 
-    public function addBackToStock()
+    public function addBackToStock($quantity = null)
     {
+        $quantityToAdd = is_null($quantity) ? $this->pivot->quantity : $quantity;
+        
         if($this->has_ingredients)
         {
             forEach($this->ingredients as $ingredient) {
-                $ingredient->stock->quantity += $ingredient->pivot->quantity * $this->pivot->quantity;
+                $ingredient->stock->quantity += $ingredient->pivot->quantity * $quantityToAdd;
                 $ingredient->stock->save();
             }
         } else {
-            $this->stock->quantity += $this->pivot->quantity;
+            $this->stock->quantity += $quantityToAdd;
             $this->stock->save();
         }
     }
