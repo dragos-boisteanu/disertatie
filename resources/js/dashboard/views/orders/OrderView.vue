@@ -228,17 +228,6 @@
             >
                 Completed
             </Button>
-
-            <Button 
-                v-if="canMarkAsCompleted"
-                id="completed"
-                name="completed"
-                type="secondary"
-                :waiting="waiting"
-                @click.native="markAsCompleted"
-            >
-                Completed
-            </Button>
         </div>
     </ViewContainer>
 </template>
@@ -279,7 +268,7 @@ export default {
         },
 
         canEdit() {
-            if( ((this.isWaiter && this.order.staff.id === this.getLoggedUser.id) || this.isAdmin || this.isLocationManager ) && this.order.deletedAt === null ){
+            if( ((this.isWaiter && this.order.staff.id === this.getLoggedUser.id) || this.isAdmin || this.isLocationManager ) && (this.order.deletedAt === null || (this.order.status.name !== 'Completed' || this.order.status.name !== 'Delivered' )) ){
                 return true
             }
 

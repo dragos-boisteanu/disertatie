@@ -2,8 +2,8 @@ import axios from 'axios';
 import Vue from 'vue';
 
 const httpClient = axios.create({
-  // baseURL: 'http://disertatie.test/api',
-  baseURL: 'http://disertatie-app.herokuapp.com/api',
+  baseURL: 'http://disertatie.test/api',
+  // baseURL: 'http://disertatie-app.herokuapp.com/api',
   timeout: 60000, // indicates, 1000ms ie. 1 second
   withCredentials: true,
   headers: {
@@ -28,7 +28,7 @@ const errorInterceptor = (error) => {
   switch (error.response.status) {
   case 404:
       Vue.prototype.$Progress.fail();
-      console.error(error.response.status, error.message);
+      // console.error(error.response.status, error.message);
       break;
 
   case 401: // authentication error, logout the user
@@ -40,7 +40,7 @@ const errorInterceptor = (error) => {
 
   default:
       Vue.prototype.$Progress.fail();
-      console.error(error.response.status, error.message);
+      // console.error(error.response.status, error.message);
   }
   return Promise.reject(error);
 };
