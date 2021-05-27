@@ -13,10 +13,6 @@ class ClientController extends Controller
     {
         $client = User::where('phone_number', $phoneNumber)->firstOrFail();
 
-        // if(empty($client)) {
-        //     abort(404);
-        // }
-
         return new ClientResource($client);
     }
 

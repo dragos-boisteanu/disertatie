@@ -75,8 +75,6 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::get('addresses/{id}', 'ClientController@getClientAddresses');
     });
 
-
-
     Route::apiResource('images', 'FileController')->only('store', 'destroy');
        
 });

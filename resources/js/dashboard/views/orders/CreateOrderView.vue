@@ -431,20 +431,27 @@
             },
 
             async getClient() {
-                this.$v.order.phoneNumber.$touch();
+                try {
+                    this.$v.order.phoneNumber.$touch();
 
-                if(!this.$v.order.phoneNumber.$invalid) {
-                    const response = await downloadClientByPhoneNumber(this.order.phoneNumber);
-                    const client = response.data.data;
+                    if(!this.$v.order.phoneNumber.$invalid) {
+                        const response = await downloadClientByPhoneNumber(this.order.phoneNumber);
+                        if(response.data.data) {
+                            client = response.data.data;
 
-                    this.client.firstName = client.firstName;
-                    this.client.name = client.name;
-                    this.client.id = client.id;
-                
-                    this.client.addresses = client.addresses;
+                            this.client.firstName = client.firstName;
+                            this.client.name = client.name;
+                            this.client.id = client.id;
+                        
+                            this.client.addresses = client.addresses;
 
-                    this.order.email = client.email;
+                            this.order.email = client.email;
+                        }
+                    }
+                } catch( error ) {
+                    
                 }
+              
             },
 
             saveEdit(product) {    
@@ -531,20 +538,22 @@
             resetForm() {
                 this.$v.$reset();
 
+
                 this.client = {
                     firstName: '',
                     name: '',
-                    phoneNumber: '',
-                    email: '',
                     addresses: [],
-                },
+                    id: ''
+                }
 
                 this.order = {
+                    phoneNumber: '',
+                    email: '',
                     address: '',
                     deliveryMethodId: '',
                     observations: '',
                     items: []
-                },
+                }
                 
                 this.selectedItemId = '',
                 this.selectedItemQuantity = '',

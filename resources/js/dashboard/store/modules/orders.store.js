@@ -89,13 +89,13 @@ const actions = {
     },
 
     async patchOrder({state, commit}, payload ) {
-        const response = await patchOrder(payload.data);
-        payload.data.updatedAt = response.data;
+        const response = await patchOrder(payload.patchData);
+        payload.patchData.updatedAt = response.data;
         if(state.orders.length > 0) {
             commit('PATCH_ORDER', payload);
         }
 
-        return payload.localData;        
+        return payload.patchData;        
     },
 
     async updateOrderStatus({commit}, payload) {
@@ -117,7 +117,7 @@ const actions = {
             commit('REMOVE_ITEM', payload);
         }
 
-        return payload.localData
+        return payload.data
     },
 
     async addItemToOrder({state,commit}, payload) {
@@ -137,7 +137,7 @@ const actions = {
 
     async patchItem({state, commit}, payload) {
 
-        const response = await patchItem(payload.patchBody);
+        const response = await patchItem(payload.data);
 
         payload.totalPrice = response.data.itemTotalPrice;
         payload.updatedAt = response.data.updatedAt;
@@ -154,6 +154,7 @@ const actions = {
 
     async disableOrder({commit}, payload) {
         const response = await disableOrder(payload.id);
+        return response.data;
         // payload.deletedAt = response.data;
         // commit('DISABLE_ORDER', payload);
     }
@@ -210,10 +211,10 @@ const mutations = {
     },
 
     PATCH_ITEM(state, payload) {
-        const orderIndex =_findIndex(state.orders, ['id', payload.patchBody.id]);
-        const itemIndex = _findIndex(state.orders[orderIndex].items, ['id', payload.patchBody.itemId]);
+        const orderIndex =_findIndex(state.orders, ['id', payload.data.id]);
+        const itemIndex = _findIndex(state.orders[orderIndex].items, ['id', payload.data.itemId]);
 
-        payload.vm.$set(state.orders[orderIndex].items[itemIndex], 'quantity', payload.patchBody.quantity);
+        payload.vm.$set(state.orders[orderIndex].items[itemIndex], 'quantity', payload.data.quantity);
     },
 
     DISABLE_ORDER(state, payload) {

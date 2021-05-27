@@ -165,28 +165,28 @@
         this.$v.$touch();
 
         if(!this.$v.$invalid) {
-          const patchBody = {
+          const payload = {
             vm: this,
-            data: {
+            patchData: {
               id: this.orderId,
             }
           }
 
           let counter = 0;
 
-          if(this.localData.address !== this.address) {
-            patchBody.localData.address = this.localData.address;
+          if(payload.patchData.address !== this.localData.address) {
+            payload.patchData.address = this.localData.address;
             counter++;
           }
 
-          if(this.localData.observations && this.localData.observations !== this.observations) {
-            patchBody.localData.observations = this.localData.observations
+          if(payload.patchData.observations && this.payload.patchData.observations !== this.localData.observations) {
+            payload.patchData.observations = this.localData.observations
             counter++;
           }
 
           if(counter > 0) {
-            const payload = await this.patchOrder(patchBody);
-            this.$emit('updated', payload)
+            const respose = await this.patchOrder(payload);
+            this.$emit('updated', respose)
             this.close();
           }else {
             console.log('nothing to update');

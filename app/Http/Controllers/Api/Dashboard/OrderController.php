@@ -185,7 +185,7 @@ class OrderController extends Controller
 
         DB::transaction(function () use ($order){
             forEach($order->products as $product) {
-                $product->addBackToStock($product);
+                $product->addBackToStock($product->pivot->quantity);
             }
 
             $order->status_id = 8;

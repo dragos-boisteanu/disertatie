@@ -166,7 +166,6 @@ class Product extends Model
     public function addBackToStock($quantity = null)
     {
         $quantityToAdd = is_null($quantity) ? $this->pivot->quantity : $quantity;
-        
         if($this->has_ingredients)
         {
             forEach($this->ingredients as $ingredient) {

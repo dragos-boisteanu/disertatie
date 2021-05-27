@@ -271,7 +271,7 @@ export default {
         ...mapGetters('Users', ['isAdmin', 'isLocationManager', 'isWaiter', 'getLoggedUser', 'isKitchenManager', 'isDelivery']),
 
         canCancel() {
-            if((this.isWaiter && this.order.staff.id === this.loggedUser.id) && this.order.deletedAt === null) {
+            if(((this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.staff.id === this.getLoggedUser.id) && this.order.deletedAt === null) {
                 return true;
             } else {
                 return false;
@@ -279,7 +279,7 @@ export default {
         },
 
         canEdit() {
-            if( (this.isWaiter && this.order.staff.id === this.loggedUser.id) || this.isAdmin || this.isLocationManager ) {
+            if( ((this.isWaiter && this.order.staff.id === this.getLoggedUser.id) || this.isAdmin || this.isLocationManager ) && this.order.deletedAt === null ){
                 return true
             }
 
@@ -330,7 +330,35 @@ export default {
             showOrderDetailsEditModalState: false,
 
             waiting: false,
-            order: null,
+
+            order: {
+                id: '',
+                client: null,
+                name: '',
+                staff: {
+                    id: '',
+                    name: '',
+                },
+                deliveryMethod: {
+                    id: '',
+                    name: '',
+                    price: '',
+                },
+                phoneNumber: '',
+                email: '',
+                address: '',
+                observations: '',
+                deletedAt: '',
+                createdAt: '',
+                updatedAt: '',
+                status: {
+                    id: '',
+                    name: '',
+                },
+                totalQuantity: '',
+                totalValue: '',
+                items: []
+            },
 
             selectedItemId: '',
             selectedItemQuantity: '',
@@ -353,10 +381,13 @@ export default {
                     vm: this
                 }
 
-                await this.disableOrder(payload)
+                const response = await this.disableOrder(payload)
+
+                console.log()
+                this.order.deletedAt = response;
 
                 this.waiting = false;
-            
+
                 this.openNotification({
                     show: true,
                     type: 'ok',

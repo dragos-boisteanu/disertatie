@@ -54,10 +54,9 @@ class OrderItemController extends Controller
         $order = Order::findOrFail($orderId);
 
         $item = $request->item;
-       
 
         DB::transaction(function () use ($order, $item) {
-            $product = $order->products()->where('product_id',  $item['id'])->firstOrFail();
+            $product = $order->products()->where('product_id',  $item['id'])->first();
             if(isset($product)) {
                 $newQuantity = $product->pivot->quantity + $item['quantity'];
                 $order->products()->updateExistingPivot($item['id'], ['quantity'=>$newQuantity]);
