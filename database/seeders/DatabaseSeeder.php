@@ -21,8 +21,7 @@ class DatabaseSeeder extends Seeder
             UnitSeeder::class,
             DeliveryMethodSeeder::class,
             OrderStatusSeeder::class,
-            StockSeeder::class,
-            DeliveryProductsSeeder::class,
+            UserSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();

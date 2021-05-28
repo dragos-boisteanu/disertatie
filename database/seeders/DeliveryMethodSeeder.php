@@ -23,5 +23,10 @@ class DeliveryMethodSeeder extends Seeder
             'name' => 'Local',
             'price' => 0
         ]);
+
+        DB::table('delivery_methods')->insert([
+            'name' => 'Table',
+            'price' => 0
+        ]);
     }
 }

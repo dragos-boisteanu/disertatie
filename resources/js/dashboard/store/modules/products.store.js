@@ -4,7 +4,6 @@ import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
     products: [],
-    orderedProducts: [],
     pagination: {},
     filtered: false,
 });
