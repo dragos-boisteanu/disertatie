@@ -22,8 +22,14 @@
             </div>
         </div>
     </div>
-    <div v-else>
-        Loading...
+    <div v-else class="w-full h-full flex items-center justify-center">
+        <Spinner
+            :size="90"
+            :spacing="24"
+            :line-size="7"
+            :font-size="20"
+            line-fg-color="#0084C7"
+            ></Spinner>
     </div>
     
 </template>
@@ -33,6 +39,8 @@
     import UtilityBar from './components/header/utility_bar/UtilityBarComponent';
     import Navigation from './components/navigation/NavigationComponent';
     import Notification from './components/NotificationComponenet';
+
+    import Spinner from 'vue-simple-spinner'
 
     export default {
 
@@ -127,7 +135,8 @@
             Header,
             UtilityBar,
             Navigation,
-            Notification
+            Notification,
+            Spinner
         }
     }
 </script>

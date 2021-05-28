@@ -46,52 +46,30 @@
                             />
                         </InputGroup>
                         <InputGroup
-                            id="name"
-                            label="Name"
-                            :hasError="$v.user.name.$error"
+                            id="lastName"
+                            label="Last name"
+                            :hasError="$v.user.last_name.$error"
                             :class="{'flex-1':true}"
                         > 
                             <template v-slot:errors>
-                                <p v-if="!$v.user.name.required">
-                                    The name field is required
+                                <p v-if="!$v.user.last_name.required">
+                                    The last name field is required
                                 </p>    
-                                <p v-if="!$v.user.name.maxLength">
-                                    The name field should not be longer than 50 characters
+                                <p v-if="!$v.user.last_name.maxLength">
+                                    The last name field should not be longer than 50 characters
                                 </p>
-                                <p v-if="!$v.user.name.alphaSpaces">
-                                    The name field must contain only letters and spaces
+                                <p v-if="!$v.user.last_name.alphaSpaces">
+                                    The last name field must contain only letters and spaces
                                 </p>
                             </template>
                             <Input 
-                                v-model="user.name" 
-                                id="name" 
+                                v-model="user.last_name" 
+                                id="lastName" 
                                 type="text"       
-                                :class="{'border-red-600' : $v.user.name.$error, 'border-green-600': $v.user.name.$dirty && !$v.user.name.$error}"
+                                :class="{'border-red-600' : $v.user.last_name.$error, 'border-green-600': $v.user.last_name.$dirty && !$v.user.last_name.$error}"
                                 :disabled="waiting"
-                                @blur.native="$v.user.name.$touch()"
+                                @blur.native="$v.user.last_name.$touch()"
                             />
-                        </InputGroup>
-                        <InputGroup
-                            id="birthdate"
-                            label="Birthdate"
-                            :hasError="$v.user.birthdate.$error"
-                            :eclass="{'flex-1':true}"
-                        >
-                            <template v-slot:errors>
-                                <p v-if="!$v.user.birthdate.date">
-                                    The birthdate field must be a valid date
-                                </p>
-                            </template>
-                            <date-picker 
-                                v-model="user.birthdate" 
-                                type="date"
-                                confirm-text="Ok"
-                                valueType="format"
-                                :input-class="birthdateClass"
-                                :confirm="true"
-                                :disabled="waiting"
-                                @input.native="$v.user.birthdate.$touch()"
-                            ></date-picker>
                         </InputGroup>
                     </div>
                     
@@ -249,16 +227,6 @@
 
                 return this.getRoles;
             },
-
-            birthdateClass() {
-                let customClass = "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
-                if(this.$v.user.birthdate.$error) {
-                    customClass = customClass.concat(' ', 'border-red-600')
-                } else if (this.$v.user.birthdate.$dirty && !this.$v.user.birthdate.$error) {
-                    customClass = customClass.concat(' ', 'border-green-600');
-                }
-                return customClass;
-            }
         },
 
         data() {
@@ -273,10 +241,9 @@
                 user: {
                     image: '',
                     first_name: '',
-                    name: '',
+                    last_name: '',
                     email: '',
                     phone_number: '',
-                    birthdate: '',
                     role_id: '',
                 },
 
@@ -291,7 +258,7 @@
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
-                name: {
+                last_name: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
@@ -303,9 +270,6 @@
                 phone_number:{
                     required,
                     // phoneNumber
-                },
-                birthdate: {
-                    //date
                 },
                 role_id: {
                     required
@@ -392,10 +356,9 @@
 
                 this.user = {
                     first_name: '',
-                    name: '',
+                    last_name: '',
                     email: '',
                     phone_number: '',
-                    birthdate: '',
                     role_id: 1,
                 }
 

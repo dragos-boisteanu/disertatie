@@ -36,10 +36,14 @@ export default [
         name: 'User',
         component: UserView,
         meta: {
-            breadcrumb: {
-                label: 'User',
-                parent: 'Users'
-            }
+            breadcrumb() {
+                const { params } = this.$route;
+        
+                return {
+                    label: `User #${params.id}`,
+                    parent: "Users",
+                };
+            },
         }
     },
     {
@@ -51,7 +55,7 @@ export default [
         requireWaiter: true,
         meta: {
             breadcrumb: {
-                label: 'Edit User',
+                label: 'Edit',
                 parent: 'User'
             }
         }

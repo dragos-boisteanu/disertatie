@@ -14,11 +14,21 @@ export default [
                 name: 'ProuductsStock',
                 path: 'products/:barcode?',
                 component: ProuductsStock,
+                meta: {
+                    breadcrumb: {
+                        label: 'Product Stock',
+                    }
+                }
             },
             {
                 name: 'IngredientsStock',
                 path: 'ingredients/:id?',
                 component: IngredientsStock,
+                meta: {
+                    breadcrumb: {
+                        label: 'Ingredient Stock',
+                    }
+                }
             }
         ],
         meta: {

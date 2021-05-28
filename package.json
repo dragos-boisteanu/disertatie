@@ -35,6 +35,7 @@
         "vue-mq": "1.0.1",
         "vue-progressbar": "0.7.5",
         "vue-router": "3.5.1",
+        "vue-simple-spinner": "^1.2.10",
         "vue2-datepicker": "^3.9.0",
         "vuelidate": "^0.7.6",
         "vuex": "3.6.2"

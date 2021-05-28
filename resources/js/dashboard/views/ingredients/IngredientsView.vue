@@ -108,6 +108,7 @@
                             :disabled="disabled"
                             :waiting="waiting"
                             @click.native.prevent="submit"
+                            class="mt-2"
                         >
                             <span v-if="ingredientSelected">
                                 Update
@@ -205,6 +206,7 @@
 
             resetForm() {
                 this.$v.$reset();
+                this.ingredientSelected = false;
                 this.unitId = '';
                 this.ingredient = {
                     id: '',
@@ -249,6 +251,9 @@
                             if(counter > 0 ) {
 
                                 await this.patchIngredient(payload);
+
+                                this.resetForm();
+
                             } else {
                                 this.openNotification({
                                     type: 'info',

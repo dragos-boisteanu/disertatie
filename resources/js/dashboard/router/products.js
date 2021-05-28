@@ -37,10 +37,14 @@ export default [
         path: `${dashboardBaseUrl}/products/:id`,
         name: 'Product',
         component: ProductView,
-        meta: {
-            breadcrumb: {
-                label: 'Product',
-                parent: 'Products',
+        meta: { 
+            breadcrumb() {
+                const { params } = this.$route;
+        
+                return {
+                    label: `Product #${params.id}`,
+                    parent: "Products",
+                };
             }
         }
     },
@@ -55,7 +59,7 @@ export default [
             requireKitchenManager: true,
             requireWaiter: true,
             breadcrumb: {
-                label: 'Edit product',
+                label: 'Edit',
                 parent: 'Product'
             }
         }

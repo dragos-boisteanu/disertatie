@@ -48,20 +48,4 @@ export default [
             },
         }
     },
-
-    // {   
-    //     path: `${dashboardBaseUrl}/order/:id/edit`,
-    //     name: 'EditOrder',
-    //     component: EditOrderView,
-    //     meta: {
-    //         breadcrumb() {
-    //             const { params } = this.$route;
-        
-    //             return {
-    //                 label: `Edit order #${params.id}`,
-    //                 parent: "Orders",
-    //             };
-    //         },
-    //     }
-    // },
 ]

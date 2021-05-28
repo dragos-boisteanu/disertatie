@@ -15,7 +15,7 @@
                     <Role :role-name="user.role.name"/>
                 </div>
                 <div class="font-semibold text-2xl mt-2">
-                    {{user.first_name}} {{user.name}}
+                    {{user.first_name}} {{user.last_name}}
                 </div>
                 <div class="text-sm mt-2">
                     <a :href="`mailto:${user.email}`">{{user.email}}</a> <span class="mx-2">|</span> <a :href="`tel:${user.phone_number}`">{{user.phone_number}}</a>

@@ -45,14 +45,20 @@
                             Disable
                         </button>
                     </div>
-                    <button 
+                    <!-- <button 
                         v-if="canDelete"
                         @click="callDeleteUser"
                         class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
                     >
                         Delete
-                    </button>
+                    </button> -->
                 </div>
+                <router-link
+                    :to="{name: 'ProuductsStock', params: {barcode: this.product.barcode}}" 
+                    class="bg-lightBlue-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-400 active:shadow-inner active:outline-none"
+                >
+                    Update stock
+                </router-link>
             </div>
         </div> 
         <div v-if="hasDiscount" class="text-sm mb-2 pb-2 border-b border-gray-100">
