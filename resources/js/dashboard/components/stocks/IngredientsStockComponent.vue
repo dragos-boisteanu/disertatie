@@ -53,7 +53,7 @@
 
             <Button 
                 type="primary"
-                :disabled="disableSearchButton"
+                :disabled="disableButton"
                 :waiting="searching"
                 @click.native.prevent="findIngredient"
                 eclass="mt-6"
@@ -119,7 +119,7 @@
                 <div class="mt-5 flex gap-x-4 md:justify-start">
                     <Button 
                         type="primary"
-                        :disabled="updating || refreshing"
+                        :disabled="disableButton"
                         :waiting="updating"  
                         @click.native.prevent="submit"
                     >
@@ -129,7 +129,7 @@
                         v-if="getIngredientStockDetails"
                         @click.native.prevent="clear"
                         type="secondary"
-                        :disable="updating || refreshing"
+                        :disabled="disableButton"
                     >                       
                         Clear
                     </Button>
@@ -142,8 +142,7 @@
             v-if="getIngredientStockDetails"
             @click.native="findIngredient"
             eclass="mt-4"
-            :disabled="refreshing"
-            :waiting="refreshing"
+            :disabled="disableButton"
         >                       
             Refresh
         </Button>
@@ -193,8 +192,8 @@
         computed: {
             ...mapGetters('Stocks', ['getIngredientStockDetails', 'getProductStockDetails']),
 
-            disableSearchButton() {
-                return this.filter.id.length === 0 && this.filter.name.length === 0
+            disableButton() {
+                return this.searching || this.updating;
             },
         },
 
@@ -202,7 +201,6 @@
             return {
                 searching: false,
                 updating: false,
-                refreshing: false,
 
                 newQuantity: '',
 
@@ -238,11 +236,7 @@
 
             async findIngredient() {
                 try {
-                    if(this.getIngredientStockDetails) {
-                        this.refreshing = true;
-                    } else {
-                        this.searching = true;
-                    }
+                    this.searching = true;
 
                     if(this.filter.id) {
                         this.$v.filter.id.$touch();
@@ -256,12 +250,7 @@
                         }
                     }
 
-                    if(this.getIngredientStockDetails) {
-                        this.refreshing = false;
-                        this.searching = false;
-                    } else {
-                        this.searching = false;
-                    }
+                    this.searching = false;
 
                 } catch ( error ) {
                     this.clearIngredientStockDetails();
@@ -273,11 +262,7 @@
                         });
                     }
                     // this.$v.filter.$touch();
-                   if(this.getIngredientStockDetails) {
-                        this.refreshing = false;
-                    } else {
-                        this.searching = false;
-                    }
+                   this.searching = false;
                 }
             },
 
