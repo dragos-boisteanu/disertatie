@@ -260,7 +260,7 @@ export default {
         ...mapGetters('Users', ['isAdmin', 'isLocationManager', 'isWaiter', 'getLoggedUser', 'isKitchenManager', 'isDelivery']),
 
         canCancel() {
-            if(((this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.staff.id === this.getLoggedUser.id) && this.order.deletedAt === null) {
+            if((((this.isWaiter  && this.order.staff.id === this.getLoggedUser.id) || this.isAdmin || this.isLocationManager)) && this.order.deletedAt === null && (this.order.status.name !== 'Delivered' && this.order.status.name !== 'Completed')) {
                 return true;
             } else {
                 return false;
