@@ -22,16 +22,25 @@
                         </p>
                     </template>
                     
-                    <div class="relative">
+                    <div class="relative flex items-center">
                         <Input
                             ref="productName"
                             v-model.lazy="product.name"
                             id="productName"
                             :disabled="edit"
-                            :class="{'border-red-600' : $v.product.name.$error, 'border-green-600': $v.product.name.$dirty && !$v.product.name.$error}"
+                            :class="{'border-red-600' : $v.product.name.$error, 'border-green-600': $v.product.name.$dirty && !$v.product.name.$error, 'mr-4': searching}"
                             @blur.native="$v.product.name.$touch()"
                             @input="findProduct"
                         ></Input>
+                        <Spinner
+                            v-if="searching"
+                            size="small"
+                            :spacing="24"
+                            :line-size="7"
+                            :font-size="20"
+                            line-fg-color="#0084C7"
+                        ></Spinner>
+                        
                         <ul v-if="foundProducts.length > 0" class="absolute z-50 top-10 right-0 left-0 bg-white text-xs text-gray-800 hover:text-black rounded shadow">
                             <li 
                                 v-for="product in foundProducts" :key="product.id"
@@ -76,6 +85,7 @@
                     label="Quantity"
                     :hasError="$v.product.quantity.$error"
                     :eclass="{'flex-1':true}"
+                    ref="quantity"
                 >
                     <template v-slot:errors>
                         <p v-if="!$v.product.quantity.required">
@@ -132,6 +142,7 @@
 
     import Input from '../../components/inputs/TextInputComponent';
     import InputGroup from '../../components/inputs/InputGroupComponent';
+    import Spinner from 'vue-simple-spinner'
 
     import _debounce from 'lodash/debounce'
 
@@ -149,16 +160,24 @@
             }
         },
 
-        async mounted() {
-            this.$nextTick(() => {
-                this.$refs.productName.$el.focus();
-            });
-
+        async mounted() {           
             if(this.id && this.quantity) {
+                this.searching = true;
+                this.edit = true;
                 const repsonse = await fetchProductById(this.id);
                 repsonse.data.data.quantity = this.quantity;
                 this.product = repsonse.data.data;
-                this.edit = true;
+                if(this.product === null) {
+                    this.edit = false;
+                }
+                this.searching = false;
+                this.$nextTick(() => {
+                    this.$refs.quantity.$el.focus();
+                });
+            } else {
+                this.$nextTick(() => {
+                    this.$refs.productName.$el.focus();
+                });
             }
             
         },
@@ -177,7 +196,7 @@
                     quantity: '',
                     unitPrice: '',
                 },
-
+                searching: false,
                 edit: false,
                 foundProducts: []
             }
@@ -223,12 +242,7 @@
                 this.$v.product.$touch();
 
                 if(!this.$v.$invalid) {
-                    // const product = {
-                    //     id: this.product.id,
-                    //     name: this.product.name,
-                    //     quantity: this.product.quantity,
-                    //     price: this.product.price
-                    // }
+  
 
                     if(this.edit) {
                         this.$emit('edit', this.product)
@@ -248,7 +262,8 @@
         components: {
             Modal,
             Input,
-            InputGroup
+            InputGroup,
+            Spinner
         }
     }
 </script>

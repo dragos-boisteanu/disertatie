@@ -89,13 +89,13 @@ const actions = {
     },
 
     async patchOrder({state, commit}, payload ) {
-        const response = await patchOrder(payload.patchData);
-        payload.patchData.updatedAt = response.data;
+        const response = await patchOrder(payload.data);
+        payload.data.updatedAt = response.data;
         if(state.orders.length > 0) {
             commit('PATCH_ORDER', payload);
         }
 
-        return payload.patchData;        
+        return payload.data;        
     },
 
     async updateOrderStatus({commit}, payload) {

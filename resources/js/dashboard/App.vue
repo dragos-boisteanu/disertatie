@@ -29,7 +29,7 @@
             :line-size="7"
             :font-size="20"
             line-fg-color="#0084C7"
-            ></Spinner>
+        ></Spinner>
     </div>
     
 </template>

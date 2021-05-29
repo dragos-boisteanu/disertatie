@@ -149,11 +149,11 @@
             ...mapGetters('Stocks', ['getProductStockDetails']),
 
             canNotUpdate() {
-                return this.getProductStockDetails.hasIngredients === 1
+                return this.getProductStockDetails.hasIngredients
             },
 
             hasIngredients() {
-                return this.getProductStockDetails.hasIngredients === 1 && this.getProductStockDetails.ingredients.length > 0;
+                return this.getProductStockDetails.hasIngredients  && this.getProductStockDetails.ingredients.length > 0;
             },
 
             disableSearchButton() {
