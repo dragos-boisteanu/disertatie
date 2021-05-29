@@ -73,13 +73,15 @@
    <template slot="footer">
       <button 
         @click.prevent="submit"
+        :disabled="waiting"
         class="flex items-center bg-lightBlue-700 rounded-sm text-xs py-1 px-4 mr-2 text-white mt-2 hover:bg-lightBlue-600 active:bg-lightBlue-500 active:shadow-inner  disabled:bg-gray-500 disabled:pointer-events-none"
     >
         Save
       </button>
       <button 
         @click.prevent="close"
-        class="bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600"
+        :disabled="waiting"
+        class="bg-transparent rounded-sm text-xs py-1 px-4 text-black text-bold mt-2 hover:text-gray-600 disabled:pointer-events-none"
     >
         Cancel
       </button>
@@ -142,7 +144,8 @@
         localData: {
           address: '',
           observations: '',
-        }
+        }, 
+        waiting: false
       }
     },
 
@@ -167,26 +170,29 @@
         if(!this.$v.$invalid) {
           const payload = {
             vm: this,
-            patchData: {
+            data: {
               id: this.orderId,
             }
           }
 
           let counter = 0;
 
-          if(payload.patchData.address !== this.localData.address) {
-            payload.patchData.address = this.localData.address;
+          if(this.address !== this.localData.address) {
+            payload.data.address = this.localData.address;
             counter++;
           }
 
-          if(payload.patchData.observations && this.payload.patchData.observations !== this.localData.observations) {
-            payload.patchData.observations = this.localData.observations
+          if(this.observations && this.observations !== this.localData.observations) {
+            payload.data.observations = this.localData.observations
             counter++;
           }
 
+      
           if(counter > 0) {
+            this.waiting = true;
             const respose = await this.patchOrder(payload);
-            this.$emit('updated', respose)
+            this.waiting = false;
+            this.$emit('update', respose)
             this.close();
           }else {
             console.log('nothing to update');
