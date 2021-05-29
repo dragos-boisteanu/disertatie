@@ -100,13 +100,13 @@
                             v-if="ingredientSelected"
                             type="secondary"
                             @click.native.prevent="clearSelection"
+                            :disabled="waiting"
                         >                       
                             Clear selection
                         </Button>
                         <Button 
                             type="primary"
-                            :disabled="disabled"
-                            :waiting="waiting"
+                            :disabled="waiting"
                             @click.native.prevent="submit"
                             class="mt-2"
                         >
@@ -206,6 +206,7 @@
 
             resetForm() {
                 this.$v.$reset();
+                this.waiting = false;
                 this.ingredientSelected = false;
                 this.unitId = '';
                 this.ingredient = {
@@ -249,7 +250,7 @@
                             });
 
                             if(counter > 0 ) {
-
+                                this.waiting = true;
                                 await this.patchIngredient(payload);
 
                                 this.resetForm();

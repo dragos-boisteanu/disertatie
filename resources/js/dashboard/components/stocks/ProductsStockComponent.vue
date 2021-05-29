@@ -24,10 +24,10 @@
                 </InputGroup>
                 <Button 
                     type="primary"
-                    :disabled="disableSearchButton"
-                    :waiting="searching"
                     eclass="mt-6"
                     @click.native.prevent="findProduct"
+                    :disabled="disableButton"
+                    :waiting="searching"
                 >
                     Search
                 </Button>
@@ -92,16 +92,15 @@
                     <Button
                         v-if="!canNotUpdate"
                         type="primary"
-                        :disabled="updating" 
-                        :waiting="updating"
                         @click.native.prevent="submit" 
+                        :disabled="disableButton"
                     >
                         Update
                     </Button>
                     <Button
                         type="secondary"
-                        :disabled="updating || refreshing" 
                         @click.native.prevent="clear" 
+                        :disabled="disableButton"
                     >
                         Clear
                     </Button>
@@ -113,8 +112,7 @@
             v-if="getProductStockDetails"
             @click.native="findProduct"
             eclass="mt-4"
-            :disabled="refreshing || updating"
-            :waiting="refreshing"
+            :disabled="disableButton"
         >                       
             Refresh
         </Button>
@@ -156,8 +154,8 @@
                 return this.getProductStockDetails.hasIngredients  && this.getProductStockDetails.ingredients.length > 0;
             },
 
-            disableSearchButton() {
-                return this.barcode && this.barcode.length === 0;
+            disableButton() {
+                return this.searching || this.updating;
             },
         },
 
@@ -165,7 +163,6 @@
             return {
                 searching: false,
                 updating: false,
-                refreshing: false,
                 barcode: '',
                 newQuantity: ''
             }
@@ -187,23 +184,17 @@
 
             async findProduct() {
                 this.$v.barcode.$touch();
+
                 if(!this.$v.barcode.invalid) {
                     try {
 
-                        if(this.getProductStockDetails) {
-                            this.refreshing = true;
-                        } else {
-                            this.searching = true;
-                        }
-                                             
+                        this.searching = true;
+
+                        console.log(this.searching)
+                                         
                         await this.downloadProductStockDetails(this.barcode);
           
-                        if(this.getProductStockDetails) {
-                            this.refreshing = false;
-                            this.searching = false;
-                        } else {
-                            this.searching = false;
-                        }
+                        this.searching = false;
 
                     } catch ( error ) {
                         if(error.response && error.response.status == '404') {
@@ -214,12 +205,7 @@
                             });
                         }
 
-                        if(this.getProductStockDetails) {
-                            this.refreshing = false;
-                            this.searching = false;
-                        } else {
-                            this.searching = false;
-                        }
+                        this.searching = false;
 
                     }
                 }
