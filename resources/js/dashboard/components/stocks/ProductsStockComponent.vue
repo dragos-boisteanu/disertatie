@@ -147,11 +147,11 @@
             ...mapGetters('Stocks', ['getProductStockDetails']),
 
             canNotUpdate() {
-                return this.getProductStockDetails.hasIngredients
+                return Boolean(this.getProductStockDetails.hasIngredients)
             },
 
             hasIngredients() {
-                return this.getProductStockDetails.hasIngredients  && this.getProductStockDetails.ingredients.length > 0;
+                return Boolean(this.getProductStockDetails.hasIngredients)  && this.getProductStockDetails.ingredients.length > 0;
             },
 
             disableButton() {
