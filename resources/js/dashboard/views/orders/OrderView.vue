@@ -268,7 +268,7 @@ export default {
         },
 
         canEdit() {
-            if( ((this.isWaiter && this.order.staff.id === this.getLoggedUser.id) || this.isAdmin || this.isLocationManager ) && (this.order.deletedAt === null || (this.order.status.name !== 'Completed' || this.order.status.name !== 'Delivered' )) ){
+            if( ((this.isWaiter && this.order.staff.id === this.getLoggedUser.id) || this.isAdmin || this.isLocationManager ) && this.order.deletedAt === null && (this.order.status.name !== 'Completed' || this.order.status.name !== 'Delivered' ) ){
                 return true
             }
 
