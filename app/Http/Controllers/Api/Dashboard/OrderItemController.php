@@ -9,10 +9,18 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderProduct;
 use App\Http\Resources\ModalOrderProduct;
+use App\Interfaces\ProductStockServiceInterface;
 use App\Http\Resources\ModalOrderProductCollection;
 
 class OrderItemController extends Controller
 {
+    private $productStockService;
+
+    public function __construct(ProductStockServiceInterface $productStockService)
+    {
+        $this->productStockService = $productStockService;
+    }
+
     public function getProductsByName($name)
     {
         $products = Product::where('name', 'like', '%' . $name . '%')->get();
@@ -36,7 +44,7 @@ class OrderItemController extends Controller
 
             $product = $order->products()->where('product_id', $request->itemId)->first();
 
-            $product->addBackToStock();
+            $this->productStockService->addBackToStock($product);
 
             $order->products()->detach($request->itemId);
 
@@ -73,8 +81,9 @@ class OrderItemController extends Controller
 
             $order->save();
             $order->refresh();
-   
-            $product->removeFromStock($item['quantity']);
+
+            $this->productStockService->removeFromStock($product, $item['quantity']);
+
         });
 
         $product = $order->products()->where('product_id',  $item['id'])->firstOrFail();
@@ -97,9 +106,9 @@ class OrderItemController extends Controller
             $order->products()->updateExistingPivot($request->itemId, ['quantity'=>$request->quantity]);
 
             if($request->quantity > $product->pivot->quantity) {
-                $product->removeFromStock($request->quantity - $product->pivot->quantity);
+                $this->productStockService->removeFromStock($product, $request->quantity - $product->pivot->quantity);
             } else if ($request->quantity < $product->pivot->quantity) {
-                $product->addBackToStock($product->pivot->quantity - $request->quantity);
+                $this->productStockService->addBackToStock($product, $product->pivot->quantity - $request->quantity);
             }
 
             $order->touch();
@@ -112,6 +121,7 @@ class OrderItemController extends Controller
         $product = $order->products()->where('product_id', $request->itemId)->first();
 
         $itemTotalPrice = number_format($product->pivot->unit_price * $product->pivot->quantity, 2, '.', '');
+
         return response()->json([
             'itemTotalPrice' => $itemTotalPrice,
             'totalValue' => $order->getTotalValueAttribute(),
