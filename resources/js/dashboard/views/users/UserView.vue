@@ -133,7 +133,7 @@
 
             async restore() {
                 const response = await restoreUser(this.user.id);
-                this.user.deteledAt = response.data.deletedAy;               
+                this.user.deteledAt = response.data.deletedAt;               
             },
 
             // async callDeleteUser() {
