@@ -60,7 +60,7 @@ class ProductController extends Controller
         
         $query->orderBy('products.id', 'asc');;
 
-        $products = $query->Paginate(16);
+        $products = $query->Paginate(1);
 
         return new ProductCollection($products);
     }

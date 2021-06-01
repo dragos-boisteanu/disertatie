@@ -79,6 +79,9 @@
                 </router-link>
             </Card>
         </CardsList>
+
+        <Pagination :data="pagination" :query="query" route="Products" @navigate="callDownloadProducts"></Pagination>
+
     </ViewContainer>
 </template>
 
@@ -97,6 +100,7 @@
     import { mapGetters } from 'vuex';
 
     import _isEqual from 'lodash/isEqual';
+    import _isEmpty from 'lodash/isEmpty';
 
     import { downloadProducts } from '../../api/products.api';
 
@@ -117,6 +121,20 @@
 
         computed: {
             ...mapGetters('Categories', ['getCategories']),
+
+            query() {
+                const query = {};
+
+                Object.keys(this.filterData).forEach(key => {
+                    if(!_isEmpty(this.filterData[key])) {
+                        query[key] = this.filterData[key];
+                    }
+                })
+
+                query.orderBy = this.orderBy;
+
+                return query;
+            }
         },
 
         data() {
@@ -144,7 +162,7 @@
             async refreshProducsList() {
                 try {
 
-                    if(Object.keys(this.$route.query).length > 0) { 
+                    if(!_isEmpty(this.$route.query)) { 
                         this.$router.replace({name:'Products', query: {}});
                     }
 
@@ -172,12 +190,9 @@
                 }               
             },
 
-            async loadProducts() {
-                try {
-                    await this.fetchProducts(this.query);
-                } catch ( error ) {
-                    console.log(error);
-                }
+            async callDownloadProducts(query) {
+                const response = await downloadProducts(query);
+                this.setData(response.data);
             },
 
             async order() {
@@ -191,6 +206,7 @@
                         };
                     })
 
+                    query.page = 1;
                     query.orderBy = this.orderBy;
                 
                     const response = await downloadProducts(query);
@@ -208,7 +224,17 @@
             },
 
             setData(data) {
-                this.products = data.data.products;
+                this.setProducts(data.data.products);
+                this.setPagination(data.meta)
+            },
+
+            setProducts(products) {
+                this.products = products;
+            },
+
+            setPagination(meta) {
+                this.pagination.currentPage = meta.current_page;
+                this.pagination.lastPage = meta.last_page;
             },
 
             resetFilterData(){
