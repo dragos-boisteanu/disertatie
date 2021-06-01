@@ -255,26 +255,13 @@
 
     import { required, integer, decimal, maxLength, minValue } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
-
+    import { patchProduct, downloadProduct } from '../../api/products.api';
+    
     export default {
 
         async beforeRouteEnter (to, from, next) {
-            const id = to.params.id;
-            try{
-                if(store.getters['Products/getProducts'].length > 0) {
-                    const product = await store.dispatch('Products/getProduct', id);
-                    next(vm => vm.setProduct(product));
-                } else {
-                    const product = await store.dispatch('Products/fetchProduct', id);
-                    next(vm => vm.setProduct(product));
-                }
-            } catch(error) {
-                store.dispatch('Notification/openNotification', {
-                    type: 'err',
-                    show: true,
-                    message: 'Something wrong happened'
-                })
-            }
+            const response = await downloadProduct(to.params.id);
+            next(vm => vm.setProduct(response.data.data));
         },
 
         computed: {
@@ -346,7 +333,6 @@
         },
 
         methods: {
-            ...mapActions('Products', ['updateProduct']),
             ...mapActions('Notification', ['openNotification']),
 
             async submit() {
@@ -356,7 +342,6 @@
                 if(!this.$v.$invalid) {
                     try {
                         const payload = {
-                            vm: this,
                             product: {
                                 id: this.localProduct.id,
                             }
@@ -386,7 +371,7 @@
                     
                         if(counter > 0) {
 
-                            await this.updateProduct(payload);
+                            await patchProduct(payload.product);
 
                             counter = 0;
                             
