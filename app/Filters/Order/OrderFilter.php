@@ -22,6 +22,6 @@ class OrderFilter extends AbstractFilter
        'fromDate' => FromDateFilter::class,
        'toDate' => ToDateFilter::class,
        'staffFirstName' => StaffFirstNameFilter::class,
-       'staffName' => StaffNameFilter::class
+       'staffLastName' => StaffLastNameFilter::class
     ];
 }

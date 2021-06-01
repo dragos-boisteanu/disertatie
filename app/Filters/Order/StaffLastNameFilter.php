@@ -2,12 +2,12 @@
 
 namespace App\Filters\Order;
 
-class NameFilter
+class StaffLastNameFilter
 {
     public function filter($builder, $value)
     {
         return $builder->whereHas('staff', function($q) use ($value) {
-            $q->where('name', 'like', '%' . $value . '%');
+            $q->where('last_name', $value);
         });  
     }
 }
