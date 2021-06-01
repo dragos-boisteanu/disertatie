@@ -211,6 +211,8 @@
     import { required, email, requiredIf, maxLength, } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces, phoneNumber } from '../../validators/index';
 
+    import { storeUser } from '../../api/users.api';
+
     export default {
         computed: {
             ...mapGetters('Roles', ["getRoles"]),
@@ -284,8 +286,6 @@
         },
 
         methods: {
-            ...mapActions('Users', ['addUser']),
-            ...mapActions('Counties', ['fetchCitites']),
             ...mapActions('Notification', ["openNotification"]),
 
             async submit() {
@@ -300,16 +300,15 @@
                         this.$Progress.start()
 
                         this.waiting = true;
-                        const payload = {
-                            user: this.user
-                        }
-
+      
                         if(this.hasAddress) {
                             payload.address = this.address
                         }
 
-                        await this.addUser(payload);
+                        await storeUser(this.user);
+
                         this.restForm();
+
                         this.waiting = false;
 
                         this.$Progress.finish()
