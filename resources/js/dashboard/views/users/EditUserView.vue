@@ -32,53 +32,53 @@
                         <InputGroup
                             id="firstName"
                             label="First name"
-                            :hasError="$v.localUser.first_name.$error"
+                            :hasError="$v.localUser.firstName.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.localUser.first_name.required">
+                                <p v-if="!$v.localUser.firstName.required">
                                     The first name field is required
                                 </p>
-                                <p v-if="!$v.localUser.first_name.maxLength">
+                                <p v-if="!$v.localUser.firstName.maxLength">
                                     The first name field should not be longer than 50 characters
                                 </p>
-                                <p v-if="!$v.localUser.first_name.alphaSpaces">
+                                <p v-if="!$v.localUser.firstName.alphaSpaces">
                                     The first name field must contain only letters and spaces
                                 </p>
                             </template>
                             <Input 
-                                v-model="localUser.first_name"
+                                v-model="localUser.firstName"
                                 id="firstName" 
                                 name="first name" 
                                 :disabled="waiting"  
-                                :class="{'border-red-600' : $v.localUser.first_name.$error, 'border-green-600': $v.localUser.first_name.$dirty && !$v.localUser.first_name.$error}"
-                                @blur.native="$v.localUser.first_name.$touch()" 
+                                :class="{'border-red-600' : $v.localUser.firstName.$error, 'border-green-600': $v.localUser.firstName.$dirty && !$v.localUser.firstName.$error}"
+                                @blur.native="$v.localUser.firstName.$touch()" 
                             />
                         </InputGroup>
                         <InputGroup
                             id="lastName"
                             label="Last name"
-                            :hasError="$v.localUser.last_name.$error"
+                            :hasError="$v.localUser.lastName.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                    <p v-if="!$v.localUser.last_name.required">
+                                    <p v-if="!$v.localUser.lastName.required">
                                         The last name field is required
                                     </p>    
-                                    <p v-if="!$v.localUser.last_name.maxLength">
+                                    <p v-if="!$v.localUser.lastName.maxLength">
                                        The last name field should not be longer than 50 characters
                                     </p>
-                                    <p v-if="!$v.localUser.last_name.alphaSpaces">
+                                    <p v-if="!$v.localUser.lastName.alphaSpaces">
                                         The last name field must contain only letters and spaces
                                     </p>
                                 </template>
                             <Input 
-                                v-model="localUser.last_name"
+                                v-model="localUser.lastName"
                                 id="lastName" 
                                 name="lastName" 
-                                :class="{'border-red-600' : $v.localUser.last_name.$error, 'border-green-600': $v.localUser.last_name.$dirty && !$v.localUser.last_name.$error}"
+                                :class="{'border-red-600' : $v.localUser.lastName.$error, 'border-green-600': $v.localUser.lastName.$dirty && !$v.localUser.lastName.$error}"
                                 :disabled="waiting"
-                                @blur.native="$v.localUser.last_name.$touch()"
+                                @blur.native="$v.localUser.lastName.$touch()"
                             />
                         </InputGroup>
                     </div>
@@ -110,31 +110,31 @@
                         <InputGroup
                             id="phoneNumber"
                             label="Phone number"
-                            :hasError="$v.localUser.phone_number.$error"
+                            :hasError="$v.localUser.phoneNumber.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.localUser.phone_number.required">
+                                <p v-if="!$v.localUser.phoneNumber.required">
                                     The phone number field is required
                                 </p>
-                                <p v-if="!$v.localUser.phone_number.phoneNumber">
+                                <p v-if="!$v.localUser.phoneNumber.phoneNumber">
                                     The phone number is invalid
                                 </p>
                             </template>
                             <Input 
-                                v-model="localUser.phone_number"
+                                v-model="localUser.phoneNumber"
                                 id="phone" 
                                 name="phone number" 
-                                :class="{'border-red-600' : $v.localUser.phone_number.$error, 'border-green-600': $v.localUser.phone_number.$dirty && !$v.localUser.phone_number.$error}"
+                                :class="{'border-red-600' : $v.localUser.phoneNumber.$error, 'border-green-600': $v.localUser.phoneNumber.$dirty && !$v.localUser.phoneNumber.$error}"
                                 :disabled="waiting" 
-                                @blur="$v.localUser.phone_number.$touch()"
+                                @blur="$v.localUser.phoneNumber.$touch()"
                             />
                         </InputGroup>
                     </div>
                     <InputGroup
                         id="roleId"
                         label="Role"
-                        :hasError="$v.localUser.phone_number.$error"
+                        :hasError="$v.localUser.phoneNumber.$error"
                     >
                          <template v-slot:errors>
                             <p v-if="!$v.localUser.role.id.required">
@@ -215,13 +215,13 @@
                 user: {},
                 localUser: {
                     id: '',
-                    first_name: '',
-                    last_name: '',
+                    firstName: '',
+                    lastName: '',
                     email: '',
-                    phone_number: '',
+                    phoneNumber: '',
                     role: {
                         id: '',
-                        name: '',
+                        name: ''
                     }
                 },              
 
@@ -230,12 +230,12 @@
 
         validations: {
             localUser: {
-                first_name: {
+                firstName: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
-                last_name: {
+                lastName: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
@@ -244,7 +244,7 @@
                     required,
                     email
                 },
-                phone_number:{
+                phoneNumber:{
                     required,
                     // phoneNumber
                 },

@@ -22,53 +22,53 @@
                         <InputGroup
                             id="firstName"
                             label="First name"
-                            :hasError="$v.user.first_name.$error"
+                            :hasError="$v.user.firstName.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.user.first_name.required">
+                                <p v-if="!$v.user.firstName.required">
                                     The first name field is required
                                 </p>
-                                <p v-if="!$v.user.first_name.maxLength">
+                                <p v-if="!$v.user.firstName.maxLength">
                                     The first name field should not be longer than 50 characters
                                 </p>
-                                <p v-if="!$v.user.first_name.alphaSpaces">
+                                <p v-if="!$v.user.firstName.alphaSpaces">
                                     The first name field must contain only letters and spaces
                                 </p>
                             </template>
                             <Input 
-                                v-model="user.first_name"
+                                v-model="user.firstName"
                                 id="firstName"
                                 name="firstName" 
                                 :disabled="waiting"  
-                                :class="{'border-red-600' : $v.user.first_name.$error, 'border-green-600': $v.user.first_name.$dirty && !$v.user.first_name.$error}"
-                                @blur.native="$v.user.first_name.$touch()"
+                                :class="{'border-red-600' : $v.user.firstName.$error, 'border-green-600': $v.user.firstName.$dirty && !$v.user.firstName.$error}"
+                                @blur.native="$v.user.firstName.$touch()"
                             />
                         </InputGroup>
                         <InputGroup
                             id="lastName"
                             label="Last name"
-                            :hasError="$v.user.last_name.$error"
+                            :hasError="$v.user.lastName.$error"
                             :class="{'flex-1':true}"
                         > 
                             <template v-slot:errors>
-                                <p v-if="!$v.user.last_name.required">
+                                <p v-if="!$v.user.lastName.required">
                                     The last name field is required
                                 </p>    
-                                <p v-if="!$v.user.last_name.maxLength">
+                                <p v-if="!$v.user.lastName.maxLength">
                                     The last name field should not be longer than 50 characters
                                 </p>
-                                <p v-if="!$v.user.last_name.alphaSpaces">
+                                <p v-if="!$v.user.lastName.alphaSpaces">
                                     The last name field must contain only letters and spaces
                                 </p>
                             </template>
                             <Input 
-                                v-model="user.last_name" 
+                                v-model="user.lastName" 
                                 id="lastName" 
                                 type="text"       
-                                :class="{'border-red-600' : $v.user.last_name.$error, 'border-green-600': $v.user.last_name.$dirty && !$v.user.last_name.$error}"
+                                :class="{'border-red-600' : $v.user.lastName.$error, 'border-green-600': $v.user.lastName.$dirty && !$v.user.lastName.$error}"
                                 :disabled="waiting"
-                                @blur.native="$v.user.last_name.$touch()"
+                                @blur.native="$v.user.lastName.$touch()"
                             />
                         </InputGroup>
                     </div>
@@ -100,24 +100,24 @@
                         <InputGroup 
                             id="phoneNumber"
                             label="Phone number"
-                            :hasError="$v.user.phone_number.$error"
+                            :hasError="$v.user.phoneNumber.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.user.phone_number.required">
+                                <p v-if="!$v.user.phoneNumb.required">
                                     The phone number field is required
                                 </p>
-                                <p v-if="!$v.user.phone_number.phoneNumber">
+                                <p v-if="!$v.user.phoneNumb.phoneNumber">
                                     The phone number is invalid
                                 </p>
                             </template>
                             <Input 
-                                v-model="user.phone_number"
+                                v-model="user.phoneNumber"
                                 id="phoneNumber"
                                 name="phoneNumber"        
-                                :class="{'border-red-600' : $v.user.phone_number.$error, 'border-green-600': $v.user.phone_number.$dirty && !$v.user.phone_number.$error}"
+                                :class="{'border-red-600' : $v.user.phoneNumber.$error, 'border-green-600': $v.user.phoneNumber.$dirty && !$v.user.phoneNumber.$error}"
                                 :disabled="waiting" 
-                                @blur.native="$v.user.phone_number.$touch()"
+                                @blur.native="$v.user.phoneNumber.$touch()"
                             />
                         </InputGroup>
                     </div>
@@ -125,20 +125,20 @@
                     <InputGroup
                         id="role"
                         label="Role"
-                        :hasError="$v.user.role_id.$error"
+                        :hasError="$v.user.roleId.$error"
                     >
                         <template v-slot:errors>
-                            <p v-if="!$v.user.role_id.required">
+                            <p v-if="!$v.user.roleId.required">
                                 The role field is required
                             </p>
                         </template>
                         <Select                         
-                            v-model="user.role_id" 
+                            v-model="user.roleId" 
                             id="role"
                             name="role"   
-                            :class="{'border-red-600' : $v.user.role_id.$error, 'border-green-600': $v.user.role_id.$dirty && !$v.user.role_id.$error}"
+                            :class="{'border-red-600' : $v.user.roleId.$error, 'border-green-600': $v.user.roleId.$dirty && !$v.user.roleId.$error}"
                             :disabled="waiting"
-                            @blur.native="$v.user.role_id.$touch()"
+                            @blur.native="$v.user.roleId.$touch()"
                         >   
                             <option value="" selected disabled>Select role</option>
                             <option v-for="role in availableRoles" :key="role.id" :value="role.id">{{role.name}}</option>
@@ -218,10 +218,6 @@
             ...mapGetters('Roles', ["getRoles"]),
             ...mapGetters('Users', ["isWaiter"]),
 
-            citiesSelectState() {
-                return this.address.county_id ? false : true;
-            },
-
             availableRoles() {
                 if(this.isWaiter) {
                     return this.getRoles.filter(role => role.name === "Client");
@@ -242,11 +238,11 @@
 
                 user: {
                     image: '',
-                    first_name: '',
-                    last_name: '',
+                    firstName: '',
+                    lastName: '',
                     email: '',
-                    phone_number: '',
-                    role_id: '',
+                    phoneNumber: '',
+                    roleId: '',
                 },
 
                 address: ''
@@ -255,12 +251,12 @@
 
         validations: {
             user: {
-                first_name: {
+                firstName: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
-                last_name: {
+                lastName: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
@@ -269,11 +265,11 @@
                     required,
                     email
                 },
-                phone_number:{
+                phoneNumber:{
                     required,
                     // phoneNumber
                 },
-                role_id: {
+                roleId: {
                     required
                 }
             },
@@ -297,21 +293,21 @@
                 
                 if(!this.$v.$invalid) {
                     try {
-                        this.$Progress.start()
-
                         this.waiting = true;
       
+                        const payload = {
+                            ...this.user
+                        };
+
                         if(this.hasAddress) {
                             payload.address = this.address
                         }
-
+                    
                         await storeUser(this.user);
 
                         this.restForm();
 
                         this.waiting = false;
-
-                        this.$Progress.finish()
 
                         this.openNotification({
                             type: "ok",
@@ -320,7 +316,6 @@
                         })
 
                     } catch ( error ) {  
-                        this.$Progress.fail();
 
                         if(error.response && error.response.data.errors) {
                            this.$v.$touch();
@@ -354,11 +349,11 @@
                 }
 
                 this.user = {
-                    first_name: '',
-                    last_name: '',
+                    firstName: '',
+                    lastName: '',
                     email: '',
-                    phone_number: '',
-                    role_id: 1,
+                    phoneNumber: '',
+                    roleId: 1,
                 }
 
                 this.address  = ''

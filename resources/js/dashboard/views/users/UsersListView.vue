@@ -61,13 +61,13 @@
                         </div>
                         <div class="flex-1">
                             <div class="capitalize font-semibold">
-                               <span>{{ user.first_name}}</span> <span>{{user.last_name}}</span>
+                               <span>{{ user.firstName}}</span> <span>{{user.lastName}}</span>
                             </div>
                             <div class="font-light">
                                {{ user.email}}
                             </div>
                             <div class="mt-1 text-xs">
-                               {{ user.phone_number}}
+                               {{ user.phoneNumber}}
                             </div>
                         </div>
                         <div>
@@ -75,7 +75,7 @@
                                 #{{user.id}}
                             </div>
                             <div class="mt-2">
-                                <Status :deleted-at="user.deleted_at"/>
+                                <Status :deleted-at="user.deletedAt"/>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                                     Joined on:
                                 </span>
                                 <span class="text-xs">
-                                    {{ user.created_at | formatDate }}
+                                    {{ user.createdAt | formatDate }}
                                 </span>
                             </div>
                             <Role :role-name="user.role.name"/>

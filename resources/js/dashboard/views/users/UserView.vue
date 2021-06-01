@@ -11,21 +11,21 @@
             </div>
             <div class="flex flex-col items-center justify-center md:items-start">
                 <div class="flex justify-center gap-x-3 w-full mt-2 lg:justify-start">
-                    <Status :deleted-at="user.deleted_at"/>
+                    <Status :deleted-at="user.deletedAt"/>
                     <Role :role-name="user.role.name"/>
                 </div>
                 <div class="font-semibold text-2xl mt-2">
-                    {{user.first_name}} {{user.last_name}}
+                    {{user.firstName}} {{user.lastName}}
                 </div>
                 <div class="text-sm mt-2">
-                    <a :href="`mailto:${user.email}`">{{user.email}}</a> <span class="mx-2">|</span> <a :href="`tel:${user.phone_number}`">{{user.phone_number}}</a>
+                    <a :href="`mailto:${user.email}`">{{user.email}}</a> <span class="mx-2">|</span> <a :href="`tel:${user.phoneNumber}`">{{user.phoneNumber}}</a>
                 </div>
                 <div class="flex items-baseline mt-2">
                     <span class="font-semibold text-sm mr-2">
                         Joined on:
                     </span>
                     <span class="text-xs">
-                        {{ user.created_at | formatDate }}
+                        {{ user.createdAt | formatDate }}
                     </span>
                 </div>
                 <div class="flex items-center gap-x-2">   
@@ -37,7 +37,7 @@
                     </button>
                     <div v-if="canDisable">
                         <button 
-                            v-if="user.deleted_at"
+                            v-if="user.deletedAt"
                             @click="restore"
                             class="bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none"
                         >
@@ -128,12 +128,12 @@
 
             async disable(){
                 const response = await disableUser(this.user.id);
-                this.user.deleted_at = response.data.deleted_at;
+                this.user.deletedAt = response.data.deletedAt;
             },
 
             async restore() {
                 const response = await restoreUser(this.user.id);
-                this.user.deleted_at = response.data.deleted_at;               
+                this.user.deteledAt = response.data.deletedAy;               
             },
 
             // async callDeleteUser() {

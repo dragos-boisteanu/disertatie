@@ -24,15 +24,15 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'data.user.avatar' => 'sometimes|string',
-            'data.user.first_name' => 'required|string|max:255',
-            'data.user.name' => 'required|string|max:255',
+            'avatar' => 'sometimes|string',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
             // 'data.user.birthdate' => 'sometimes|date',
-            'data.user.phone_number' => 'required|string|unique:users,phone_number',
-            'data.user.email' => 'required|string|email|max:255|unique:users,email',
-            'data.user.role_id' => 'required|integer|exists:roles,id',
+            'phoneNumber' => 'required|string|unique:users,phone_number',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'roleId' => 'required|integer|exists:roles,id',
 
-            'data.address' => 'sometimes|required|string|max:255'
+            'address' => 'sometimes|required|string|max:255'
         ];
     }
 
