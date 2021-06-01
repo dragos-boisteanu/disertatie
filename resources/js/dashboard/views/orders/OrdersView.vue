@@ -41,7 +41,7 @@
             </select>
         </div>
         <CardsList>
-            <Card v-for="order in getOrders" :key="order.id">
+            <Card v-for="order in orders" :key="order.id">
                 <router-link :to="{name: 'Order', params: { id: order.id}}">
                     <div class="w-full flex justify-start items-center pb-1 border-b border-gray-100">
                        <div class="flex-1">
@@ -107,20 +107,23 @@
 
     import OrdersFilter from '../../components/filter/OrdersFilterComponent'
 
-    import store from '../../store/index'
     import { mapActions, mapGetters } from 'vuex';
 
     import _findIndex from 'lodash/findIndex'
+
+    import {downloadOrders} from '../../api/orders.api';
+
     
     export default {
         async beforeRouteEnter(to, from, next) {
+            let response = {};
             if(Object.keys(to.query).length === 0) {
-                await store.dispatch('Orders/downloadOrders');
-                next();
+                response = await downloadOrders();
             } else {
-                await store.dispatch('Orders/downloadOrders', to.query);
-                next();
+                response = await downloadOrders(to.query);
             }
+
+            next(vm => vm.setOrders(response.data.data));
         },
 
         mounted() {
@@ -137,6 +140,7 @@
 
         data() {
             return {
+                orders: [],
                 showFilterState: false,
                 orderBy: 1
             }
@@ -174,6 +178,10 @@
                     this.$Progress.fail();
                     console.log(error);
                 }
+            },
+
+            setOrders(orders) {
+                this.orders = orders;
             },
 
             toggleFilterState() {

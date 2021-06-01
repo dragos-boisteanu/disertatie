@@ -103,6 +103,8 @@
 
   import { mapActions } from 'vuex';
 
+  import { patchOrder } from '../../api/orders.api';
+
   export default {
 
     props: {
@@ -169,31 +171,35 @@
 
         if(!this.$v.$invalid) {
           const payload = {
-            vm: this,
-            data: {
-              id: this.orderId,
-            }
+            id: this.orderId,
           }
 
           let counter = 0;
 
           if(this.address !== this.localData.address) {
-            payload.data.address = this.localData.address;
+            payload.address = this.localData.address;
             counter++;
           }
 
           if(this.observations && this.observations !== this.localData.observations) {
-            payload.data.observations = this.localData.observations
+            payload.observations = this.localData.observations
             counter++;
           }
 
       
           if(counter > 0) {
             this.waiting = true;
-            const respose = await this.patchOrder(payload);
+
+            const response = await patchOrder(payload);
+
             this.waiting = false;
-            this.$emit('update', respose)
+
+            payload.updatedAt = response.data;
+
+            this.$emit('update', payload)
             this.close();
+
+           
           }else {
             console.log('nothing to update');
           }         
