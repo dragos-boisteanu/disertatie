@@ -19,7 +19,7 @@
                 type="text"
                 class="w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Barcode"
-                v-model="filterData.barcode"
+                v-model="localFilterData.barcode"
                 @keyup="callFilter"
             />
 
@@ -29,45 +29,9 @@
                 type="text"
                 class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Product name"
-                v-model="filterData.name"
+                v-model="localFilterData.name"
                 @keyup="callFilter"
             />
-
-            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
-                <div class="mb-2 text-base font-semibold">
-                    Is active
-                </div>
-                <div class="flex items-center flex-wrap gap-2">
-                    <div class="flex justify-between items-center">
-                        <input 
-                            id="isActive"
-                            name="active" type="radio" 
-                            value="1" 
-                            v-model="filterData.status"
-                            class="mr-1 outline-none"
-                            @click="callFilter"
-                        />
-                        <label for="isActive" class="text-sm capitalize">Active</label>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <input 
-                            id="isInactive"
-                            name="inactive" type="radio" 
-                            value="2" 
-                            v-model="filterData.status"
-                            class="mr-1 outline-none"
-                            @click="callFilter"
-                        />
-                        <label for="isInactive" class="text-sm capitalize">Inactive</label>
-                    </div>
-                    <button 
-                        class="text-sm  border px-2 py-1 rounded border-gray-400 hover:border-lightBlue-600"
-                        @click="resetActiveFilter"
-                    >
-                        Reset
-                    </button>
-                </div>
-            </div>
 
             <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
                 <div class="mb-2 text-base font-semibold">
@@ -80,7 +44,7 @@
                             :name="category.name"
                             :value="category.id" 
                             type="checkbox"
-                            v-model="filterData.categories"
+                            v-model="localFilterData.categories"
                             class="mr-1 outline-none"
                             @click="callFilter"
                         />
@@ -100,7 +64,7 @@
                             type="text" 
                             id="priceStart" 
                             name="priceStart" 
-                            v-model="filterData.priceStart"
+                            v-model="localFilterData.priceStart"
                             class="w-full  py-1 px-2 text-sm rounded-sm"
                             @change="callFilter"
                         />
@@ -111,7 +75,7 @@
                             type="text" 
                             id="priceEnd" 
                             name="priceEnd" 
-                            v-model="filterData.priceEnd"
+                            v-model="localFilterData.priceEnd"
                             class="w-full py-1 px-2 text-sm rounded-sm"
                             @change="callFilter"
                         />
@@ -130,17 +94,11 @@
 
     export default {
 
-        mounted() {
-            const routerQuery = this.$route.query;
-
-            Object.keys(routerQuery).forEach(key => {
-                if(key === 'categories') {
-                    this.filterData[key] = [];
-                    this.filterData[key].push(...routerQuery[key])
-                } 
-                 
-                this.filterData[key] = routerQuery[key];
-            })
+        props: {
+            filterData: {
+                type: Object,
+                required: true
+            }
         },
 
         computed: {
@@ -149,15 +107,11 @@
 
         data() {
             return {
-                filterData: {
-                    barcode: '',
-                    id: '',
-                    name: '',
-                    status: '',
-                    categories: [],
-                    priceStart: '',
-                    priceEnd: '',
-                    orderBy: ''
+                localFilterData: {
+                    barcode: this.filterData.barcode,
+                    name: this.filterData.name,
+                    stockStatus: this.filterData.stockStatus,
+                    categories: this.filterData.categories,
                 }
             }
         },
@@ -167,35 +121,30 @@
 
             callFilter: _debounce( async function() {
                 try {
-                    const query = {}
+                    const query = {};
 
-                    Object.keys(this.filterData).forEach(key => {
-                        if(this.filterData[key] !== '' ) {
-                            query[key] = this.filterData[key];
+                    Object.keys(this.localFilterData).forEach(key => {
+                        if(this.localFilterData[key] !== "") {
+                            query[key] = this.localFilterData[key];
                         }
                     })
 
-                    query.page = 1;
-
-                    await this.fetchProducts(query);
-
-                    this.setFilteredState(true);
-                                       
-                    this.$router.replace({name:'Products', query: {...query}});
-                  
+                    this.filter(query);
+                                                      
                 } catch ( error ) {
                     console.log(error)
                 }
             }, 750),
 
+            filter(query) {
+                this.$emit('filter', query)
+            },
+
             close() {
                 this.$emit('closed')
             },
 
-            resetActiveFilter() {
-                this.filterData.status = '';
-                this.callFilter();
-            }
+           
         },
 
         components: {

@@ -2,7 +2,9 @@
     <ViewContainer>
         <ProductFilter
             v-if="showFilterState"
+            :filterData="filterData"
             @closed="toggleFilterState"
+            @filter="filter"
         />
 
         <template slot="header">
@@ -43,7 +45,7 @@
         </div>
 
         <CardsList>
-            <Card v-for="product in getProducts" :key="product.id">
+            <Card v-for="product in products" :key="product.id">
                 <router-link :to="{name: 'Product', params: {id: product.id}}">
                     <div class="w-full flex justify-start items-center pb-2 border-b border-gray-100">
                         <div class="w-12 h-12 mr-4 rounded-md">
@@ -77,7 +79,6 @@
                 </router-link>
             </Card>
         </CardsList>
-        <Pagination :data="getPaginationData" route="Products" :query="query" @navigate="loadProducts" ></Pagination>
     </ViewContainer>
 </template>
 
@@ -93,47 +94,53 @@
     import Unit from '../../components/products/UnitComponent';
     import Vat from '../../components/products/VatComponent';
 
-    import store from '../../store/index';
-    import { mapActions, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
+
+    import _isEqual from 'lodash/isEqual';
+
+    import { downloadProducts } from '../../api/products.api';
 
     export default {
         async beforeRouteEnter (to, from, next) {
-            if(Object.keys(to.query).length === 0) {
-                await store.dispatch('Products/fetchProducts', {page:1});
-                next();
-            } else {
-                await store.dispatch('Products/fetchProducts', to.query);
-                next();
-            }
-        },
+            let data = {};
 
-        mounted() {
-            if(this.$route.query.orderBy) {
-                this.orderBy = this.$route.query.orderBy;
+            if(Object.keys(to.query).length === 0) {
+                const response = await downloadProducts();
+                data = response.data;
             } else {
-                this.orderBy = 1;
+                const response = await downloadProducts(to.query);
+                data = response.data;
             }
+
+            next(vm => vm.setData(data));
         },
 
         computed: {
             ...mapGetters('Categories', ['getCategories']),
-            ...mapGetters('Products', ['getProducts','getPaginationData']),
-
-            query() {
-                return this.$route.query
-            }
         },
 
         data() {
             return {
+                products: [],
+                pagination: {
+                    currentPage: '',
+                    lastPage: '',
+                },
+                filterData: {
+                    barcode: '',
+                    name: '',
+                    categories: [],
+                    priceStart: '',
+                    priceEnd: '',
+                    stockStatus: '',
+                },
+
                 showFilterState: false,
-                orderBy: 1
+                orderBy: 1,
             }
         },
 
         methods: {
-            ...mapActions('Products', ['fetchProducts', 'sortProductsList', 'setFilteredState']),
-
             async refreshProducsList() {
                 try {
 
@@ -141,15 +148,28 @@
                         this.$router.replace({name:'Products', query: {}});
                     }
 
-                    await this.fetchProducts();
+                    this.resetFilterData();
 
-                    this.setFilteredState(false);
-
-                    this.orderBy = 1;
-
+                    const response = await downloadProducts();
+                    this.setData(response.data);
                 } catch ( error) {
                     console.log(error)
                 }
+            },
+
+            async filter(query) {
+                if(!_isEqual(this.filterData, query)) {
+                    query.page = this.pagination.currentPage;
+                    query.orderBy = this.orderBy;
+
+                    this.$router.replace({name:'Products', query});
+
+                    const response = await downloadProducts(query);
+
+                    this.updateFilterData(query);
+
+                    this.setData(response.data);
+                }               
             },
 
             async loadProducts() {
@@ -160,24 +180,51 @@
                 }
             },
 
-            toggleFilterState() {
-                this.showFilterState = !this.showFilterState;
-            },
-
             async order() {
                 try {
 
-                    const query = Object.assign({}, this.$route.query);
-                 
-                    query.orderBy = this.orderBy;
+                    const query = {};
 
-                    await this.fetchProducts(query);
+                    Object.keys(this.filterData).forEach(key => {
+                        if(this.filterData[key] !== "") {
+                            query[key] = this.filterData[key];
+                        };
+                    })
+
+                    query.orderBy = this.orderBy;
+                
+                    const response = await downloadProducts(query);
+                    this.setData(response.data);
 
                     this.$router.replace({name:'Products', query});
 
                 }  catch ( error ) {
                     console.log(error)
                 }
+            },
+
+            toggleFilterState() {
+                this.showFilterState = !this.showFilterState;
+            },
+
+            setData(data) {
+                this.products = data.data.products;
+            },
+
+            resetFilterData(){
+                Object.keys(this.filterData).forEach(key => {
+                    this.filterData[key] = "";
+                })
+
+                this.filterData.categories = [];
+            },
+
+            updateFilterData(query) {
+                Object.keys(query).forEach(key => {
+                    if(query[key] !== "") {
+                        this.filterData[key] = query[key]
+                    }
+                })
             }
         },
 
