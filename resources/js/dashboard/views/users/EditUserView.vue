@@ -180,31 +180,18 @@
 
     import DatePicker from 'vue2-datepicker';
 
-    import store from '../../store/index';
     import { mapActions, mapGetters } from 'vuex';
 
     import { required, email, maxLength, } from 'vuelidate/lib/validators'
     import { alphaSpaces, phoneNumber } from '../../validators/index';
+
+    import { downloadUser, patchUser } from '../../api/users.api';
     
     export default {
 
         async beforeRouteEnter (to, from, next) {
-            const id = to.params.id;
-            try{
-                if(store.getters['Users/getUsers'].length > 0) {
-                    const user = await store.dispatch('Users/getUser', id);
-                    next(vm => vm.setUser(user));
-                } else {
-                    const user = await store.dispatch('Users/fetchUser', id);
-                    next(vm => vm.setUser(user));
-                }
-            } catch(error) {
-                store.dispatch('Notification/openNotification', {
-                    type: 'err',
-                    show: true,
-                    message: 'Something wrong happened'
-                })
-            }
+            const response = downloadUser(to.params.id);
+            next(vm => vm.setUser(response.data.data));
         },
 
         computed: {
@@ -268,7 +255,6 @@
         },
 
         methods: {
-            ...mapActions('Users', ['updateUser']),
             ...mapActions('Notification', ['openNotification']),
 
             async submit() {
@@ -281,7 +267,6 @@
 
                         this.waiting = true;
                         const payload = {
-                            vm: this,
                             user: {
                                 id: this.user.id
                             }
@@ -297,11 +282,9 @@
                         })
 
                         if(counter > 0) {
-                            const response = await this.updateUser(payload);
+                            const response = await patchUser(payload.user);
 
                             payload.user.avatar = response.data.avatar;
-
-                            this.$emit('updated', payload.user);
 
                             this.$router.push({name: 'User', params: {id: this.user.id}});
 
@@ -325,12 +308,12 @@
                     } catch ( error ) {
                         this.$v.$touch();
                         this.$Progress.fail();
-                        if(error.response.data.errors) {
-                            this.$refs.observer.setErrors(error.response.data.errors)
-                        } 
                         this.waiting = false;
-                        console.log(error);
-                        // notification
+                        this.openNotification({
+                            type: 'error',
+                            show: true,
+                            message: 'Failed to update user account'
+                        })
                     }
                 }
                 

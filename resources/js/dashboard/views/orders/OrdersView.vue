@@ -35,7 +35,7 @@
             </div>
         
             <select 
-                v-model="filterData.orderBy" 
+                v-model="orderBy" 
                 @change="order"
                 class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm md:w-auto">
                 <option :value="1">Created at asc</option>
@@ -151,36 +151,29 @@
                     phoneNumber: '',
                     staffFirstName: '',
                     staffLastName: '',
-                    page: 1,
-                    orderBy: 2,
                 },
                 pagination: {
                     currentPage: '',
                     lastPage: ''
                 },
-            
+                orderBy: 2,
                 showFilterState: false,
             }
         },
 
         methods: {
-
             async refresh() {
-                try {
-                    if(Object.keys(this.$route.query).length > 0) { 
-                        this.$router.replace({name:'Orders', query: {}});
-                    }
-
-                    this.resetFilterData();
-
-                    const response = await downloadOrders();
-                    this.setOrders(response.data.data)
-
-                    const pagination = response.data.meta;
-                    this.setPagination(pagination)
-                } catch ( error ) {
-                    console.log(error)
+                if(Object.keys(this.$route.query).length > 0) { 
+                    this.$router.replace({name:'Orders', query: {}});
                 }
+
+                this.orderBy = 2;
+
+                this.resetFilterData();
+
+                const response = await downloadOrders();
+
+                this.setData(response.data);
             },
 
             async order() {
@@ -241,9 +234,6 @@
                 Object.keys(this.filterData).forEach(key => {
                     this.filterData[key] = "";
                 })
-
-                this.filterData.orderBy = 2;
-                this.filterData.page = 1;
             },
 
             updateFilterData(filterData) {

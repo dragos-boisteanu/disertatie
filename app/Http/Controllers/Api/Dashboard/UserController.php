@@ -41,10 +41,10 @@ class UserController extends Controller
       
         switch($orderByValue) {
             case 1:
-                $query->orderBy('name', 'asc');
+                $query->orderBy('last_name', 'asc');
                 break;
             case 2: 
-                $query->orderBy('name', 'desc');
+                $query->orderBy('last_name', 'desc');
                 break;
             case 3:
                 $query->orderBy('first_name', 'asc');
@@ -57,12 +57,6 @@ class UserController extends Controller
                 break;
             case 6:
                 $query->orderBy('emal', 'desc');
-                break;
-            case 7:        
-                $query->orderBy('role_id', 'asc');
-                break;
-            case 8:
-                $query->orderBy('role_id', 'desc');
                 break;
             // TO DO: special order by for orders and reservations count
             // case 9:

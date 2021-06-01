@@ -4,19 +4,12 @@ import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
-    users: [],
-    nextPage: 1,
     loggedUser: null,
-    filtered: false,
 });
 
 const state = initialState();
 
 const getters = {
-    getUsers (state) {
-        return state.users; 
-    },
-
     getLoggedUser(state) {
         return state.loggedUser;
     },
@@ -44,27 +37,15 @@ const getters = {
     isKitchen(state) {
         return state.loggedUser.role.name === "Kitchen";
     },
-
-    getNextPage(state) {
-        return state.nextPage;
-    },
-
-    getFilteredState(state) {
-        return state.filtered;
-    }
    
 }
 
 const actions = {
-    reset({ commit }) {
+    resetUser({ commit }) {
         commit('RESET');
     },
 
-    setFilteredState({commit}, payload) {
-        commit('SET_FILTERED_STATE', payload);
-    },
-
-    async downloadLoggedUserData({commit}) {
+     async downloadLoggedUserData({commit}) {
         try {
             const response = await downloadLoggedUserData();
             commit('SET_LOGGED_USER', response.data.data);
@@ -217,61 +198,9 @@ const mutations = {
         })
     },
 
-    SET_FILTERED_STATE(state, payload) {
-        state.filtered = payload;
-    },
-
     SET_LOGGED_USER(state, payload) {
         state.loggedUser = payload;
     },
-
-    SET_USERS(state, users) {
-        state.users = users;
-    },
-
-    ADD_USERS(state, users) {
-        state.users.push(...users);
-    },
-
-    REFRESH_USERS(state, users) {
-        state.users = users;
-        state.nextPage = 2;
-    },
-
-    ADD_USER(state, user) {
-        state.users.unshift(user);
-    },
-    
-    PATCH_USER(state, payload) {
-        if(state.users.length > 0) {
-            const selectedUserIndex = _.findIndex(state.users, ['id', payload.user.id]);
-            const vm = payload.vm;
-            Object.keys(payload.user).forEach(key => {
-                vm.$set(state.users[selectedUserIndex], key, payload.user[key])
-            })
-        }
-        
-    },
-
-    UPDATE_USER_STATUS(state, payload) {
-        if(state.users.length > 0) {
-            const selectedUserIndex = _.findIndex(state.users, ['id', payload.id]);
-            const vm = payload.vm;
-            vm.$set(state.users[selectedUserIndex], 'deleted_at', payload.deleted_at);
-        }
-    },
-
-    DELETE_USER(state, payload) {
-        if(state.users.length > 0) {
-            const selectedUserIndex = _.findIndex(state.users, ['id', payload]);
-            state.users.splice(selectedUserIndex, 1);
-        }
-    },
-
-    SAVE_NEXT_PAGE(state, page) {
-        state.nextPage = page;
-    },
-
 }
 
 export default {
