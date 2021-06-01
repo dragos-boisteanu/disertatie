@@ -2,30 +2,32 @@
     <ViewContainer>
         <ProductFilter
             v-if="showFilterState"
+            :filterData="filterData"
             @closed="toggleFilterState"
+            @filter="filter"
         />
 
         <template slot="header">
            Products List
         </template>
 
-        <div class="flex flex-col md:flex-row md:justify-between items-end">
+        <div class="flex flex-col pb-3 md:flex-row md:justify-between items-end">
             <div class="w-full md:flex md:flex-row md:gap-3 md:items-center">
                 <button 
-                    class="w-full py-1 text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-20"
+                    class="w-full py-1 text-base text-white ripple-bg-green-600 rounded-sm active:shadow-inner md:w-20"
                     @click="toggleFilterState"
                 >
                     Filter
                 </button>
                 <button 
-                    class="w-full py-1 mt-2  text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-20 md:mt-0" 
+                    class="w-full py-1 mt-2  text-base text-white ripple-bg-lightBlue-600 rounded-sm active:shadow-inner md:w-20 md:mt-0" 
                     @click="refreshProducsList"
                 >
                     Refresh
                 </button>
                 <router-link
                     :to="{name: 'AddProduct'}" 
-                    class="block w-full py-1 px-2 mt-2 text-center  text-base text-white bg-orange-600 rounded-sm active:shadow-inner active:bg-orange-500 md:w-auto md:mt-0" 
+                    class="block w-full py-1 px-2 mt-2 text-center text-base text-white ripple-bg-orange-600 rounded-sm active:shadow-inner md:w-auto md:mt-0" 
                 >
                     Add product
                 </router-link>
@@ -39,13 +41,11 @@
                 <option :value="2">Name desc</option>
                 <option :value="3">Price asc</option>
                 <option :value="4">Price desc</option>
-                <option :value="5">Quantity asc</option>
-                <option :value="6">Quantity desc</option>
             </select> 
         </div>
 
         <CardsList>
-            <Card v-for="product in getProducts" :key="product.id">
+            <Card v-for="product in products" :key="product.id">
                 <router-link :to="{name: 'Product', params: {id: product.id}}">
                     <div class="w-full flex justify-start items-center pb-2 border-b border-gray-100">
                         <div class="w-12 h-12 mr-4 rounded-md">
@@ -54,7 +54,7 @@
                         </div>
                         <div class="flex-1">
                             <div class="font-semibold text-base">
-                                <span class="pr-1 border-r border-gray-200">{{ product.name}}</span> 
+                                <span class="border-gray-200">{{ product.name}}</span> 
                                 <span>{{ product.weight}}<Unit :unit-id="product.unit_id"></Unit></span>
                             </div>
                             <div class="text-sm">
@@ -79,7 +79,9 @@
                 </router-link>
             </Card>
         </CardsList>
-        <Pagination :data="getPaginationData" route="Products" :query="query" @navigate="loadProducts" ></Pagination>
+
+        <Pagination :data="pagination" :query="query" route="Products" @navigate="callDownloadProducts"></Pagination>
+
     </ViewContainer>
 </template>
 
@@ -95,79 +97,125 @@
     import Unit from '../../components/products/UnitComponent';
     import Vat from '../../components/products/VatComponent';
 
-    import store from '../../store/index';
-    import { mapActions, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
+
+    import _isEqual from 'lodash/isEqual';
+    import _isEmpty from 'lodash/isEmpty';
+
+    import { downloadProducts } from '../../api/products.api';
 
     export default {
         async beforeRouteEnter (to, from, next) {
-            if(Object.keys(to.query).length === 0) {
-                await store.dispatch('Products/fetchProducts', {page:1});
-                next();
-            } else {
-                await store.dispatch('Products/fetchProducts', to.query);
-                next();
-            }
-        },
+            let data = {};
 
-        mounted() {
-            if(this.$route.query.orderBy) {
-                this.orderBy = this.$route.query.orderBy;
+            if(Object.keys(to.query).length === 0) {
+                const response = await downloadProducts();
+                data = response.data;
             } else {
-                this.orderBy = 1;
+                const response = await downloadProducts(to.query);
+                data = response.data;
             }
+
+            next(vm => vm.setData(data));
         },
 
         computed: {
             ...mapGetters('Categories', ['getCategories']),
-            ...mapGetters('Products', ['getProducts','getPaginationData']),
 
             query() {
-                return this.$route.query
+                const query = {};
+
+                Object.keys(this.filterData).forEach(key => {
+                    if(!_isEmpty(this.filterData[key])) {
+                        query[key] = this.filterData[key];
+                    }
+                })
+
+                query.orderBy = this.orderBy;
+
+                return query;
             }
         },
 
         data() {
             return {
+                products: [],
+                pagination: {
+                    currentPage: '',
+                    lastPage: '',
+                },
+                filterData: {
+                    barcode: '',
+                    name: '',
+                    categories: [],
+                    priceStart: '',
+                    priceEnd: '',
+                    stockStatus: '',
+                },
+
                 showFilterState: false,
-                orderBy: 1
+                orderBy: 1,
             }
         },
 
         methods: {
-            ...mapActions('Products', ['fetchProducts', 'sortProductsList', 'setFilteredState']),
-
             async refreshProducsList() {
                 try {
-                    this.$Progress.start();
 
-                    if(Object.keys(this.$route.query).length > 0) { 
+                    if(!_isEmpty(this.$route.query)) { 
                         this.$router.replace({name:'Products', query: {}});
                     }
 
-                    await this.fetchProducts();
+                    this.resetFilterData();
 
-                    this.setFilteredState(false);
-
-                    this.orderBy = 1;
-
-                    this.$Progress.finish();
-
+                    const response = await downloadProducts();
+                    this.setData(response.data);
                 } catch ( error) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
             },
 
-            async loadProducts() {
+            async filter(query) {
+                if(!_isEqual(this.filterData, query)) {
+                    query.page = this.pagination.currentPage;
+                    query.orderBy = this.orderBy;
+
+                    this.$router.replace({name:'Products', query});
+
+                    const response = await downloadProducts(query);
+
+                    this.updateFilterData(query);
+
+                    this.setData(response.data);
+                }               
+            },
+
+            async callDownloadProducts(query) {
+                const response = await downloadProducts(query);
+                this.setData(response.data);
+            },
+
+            async order() {
                 try {
-                    this.$Progress.start();
 
-                    await this.fetchProducts(this.query);
+                    const query = {};
 
-                    this.$Progress.finish();
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    console.log(error);
+                    Object.keys(this.filterData).forEach(key => {
+                        if(this.filterData[key] !== "") {
+                            query[key] = this.filterData[key];
+                        };
+                    })
+
+                    query.page = 1;
+                    query.orderBy = this.orderBy;
+                
+                    const response = await downloadProducts(query);
+                    this.setData(response.data);
+
+                    this.$router.replace({name:'Products', query});
+
+                }  catch ( error ) {
+                    console.log(error)
                 }
             },
 
@@ -175,24 +223,34 @@
                 this.showFilterState = !this.showFilterState;
             },
 
-            async order() {
-                try {
-                    this.$Progress.start();
+            setData(data) {
+                this.setProducts(data.data.products);
+                this.setPagination(data.meta)
+            },
 
-                    const query = Object.assign({}, this.$route.query);
-                 
-                    query.orderBy = this.orderBy;
+            setProducts(products) {
+                this.products = products;
+            },
 
-                    await this.fetchProducts(query);
+            setPagination(meta) {
+                this.pagination.currentPage = meta.current_page;
+                this.pagination.lastPage = meta.last_page;
+            },
 
-                    this.$router.replace({name:'Products', query});
+            resetFilterData(){
+                Object.keys(this.filterData).forEach(key => {
+                    this.filterData[key] = "";
+                })
 
-                    this.$Progress.finish();
+                this.filterData.categories = [];
+            },
 
-                }  catch ( error ) {
-                    this.$Progress.fail();
-                    console.log(error)
-                }
+            updateFilterData(query) {
+                Object.keys(query).forEach(key => {
+                    if(query[key] !== "") {
+                        this.filterData[key] = query[key]
+                    }
+                })
             }
         },
 

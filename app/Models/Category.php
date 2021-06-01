@@ -21,6 +21,8 @@ class Category extends Model
         'discounted_until_date'
     ];
 
+    public $with = ['discount'];
+
     public function products() 
     {
         return $this->hasMany(Product::class);

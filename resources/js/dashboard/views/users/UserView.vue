@@ -1,13 +1,5 @@
 <template>
     <ViewContainer v-if="user" >
-        <!-- <EditUser 
-            v-if="editUserState" 
-            @close="toggleEditUserState"
-            @updated="updateUser"
-            :user="user"
-        >
-        </EditUser> -->
-
         <template slot="header">
            User #{{user.id}}
         </template>
@@ -20,10 +12,10 @@
             <div class="flex flex-col items-center justify-center md:items-start">
                 <div class="flex justify-center gap-x-3 w-full mt-2 lg:justify-start">
                     <Status :deleted-at="user.deleted_at"/>
-                    <Role :roleId="user.role_id"/>
+                    <Role :role-name="user.role.name"/>
                 </div>
                 <div class="font-semibold text-2xl mt-2">
-                    {{user.first_name}} {{user.name}}
+                    {{user.first_name}} {{user.last_name}}
                 </div>
                 <div class="text-sm mt-2">
                     <a :href="`mailto:${user.email}`">{{user.email}}</a> <span class="mx-2">|</span> <a :href="`tel:${user.phone_number}`">{{user.phone_number}}</a>
@@ -88,7 +80,6 @@
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
-    // import EditUser from '../../components/users/EditUserComponent';
     import { mapActions, mapGetters } from 'vuex';
 
     export default {
@@ -192,10 +183,6 @@
                     this.$Progress.failed()
                     console.log(error)
                 }
-            },
-
-            toggleEditUserState() {
-                this.editUserState = !this.editUserState;
             },
 
             setUser(user) {

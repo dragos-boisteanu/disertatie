@@ -18,13 +18,16 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::get('users/logged-user', 'UserController@getLoggedUser');
      
     Route::apiResource('users', 'UserController');
-    Route::apiResource('roles', 'RoleController')->only('index', 'store', 'update', 'destroy');;
+    Route::apiResource('roles', 'RoleController');
     Route::apiResource('products', 'ProductController');
-    Route::apiResource('categories', 'CategoryController')->only('index', 'store', 'update', 'destroy');;
-    Route::apiResource('units', 'UnitController')->only('index', 'store', 'update', 'destroy');;
-    Route::apiResource('ingredients', 'IngredientController')->only('index', 'store', 'update', 'destroy');
+    Route::apiResource('categories', 'CategoryController');
+    Route::apiResource('units', 'UnitController');
+    Route::apiResource('ingredients', 'IngredientController');
     Route::apiResource('stocks', 'StockController')->only('update');
-    Route::apiResource('discounts', 'DiscountController')->only('index', 'store', 'update', 'destroy');
+    Route::apiResource('discounts', 'DiscountController');
+    Route::apiResource('orders', 'OrderController');
+    Route::apiResource('delivery-methods', 'DeliveryMethodController');
+    Route::apiResource('order-statuses', 'OrderStatusController');
    
     Route::group(['prefix'=>'categories'], function() {
         Route::get('/{catagoryName}', 'CategoryController@search');
@@ -52,13 +55,28 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::post('{id}/restore', 'DiscountController@restore');
     });
 
+    Route::group(['prefix'=>'orders'], function() {
+        Route::delete('{id}/disable', 'OrderController@disable');
+        // Route::post('{id}/restore', 'OrderController@restore');
+
+        Route::get('products/name/{name}', 'OrderItemController@getProductsByName');
+        Route::get('products/id/{id}', 'OrderItemController@getProductsById');
+
+        Route::patch('update-status/{orderId}', 'OrderController@updateStatus');
+
+        Route::patch('remove-item/{orderId}', 'OrderItemController@removeItem');
+        Route::patch('add-item/{orderId}', 'OrderItemController@addItem');
+        Route::patch('patch-item/{orderId}', 'OrderItemController@patchItem');
+
+    });
+
+    Route::group(['prefix'=>'clients'], function() {
+        Route::get('phone-number/{phoneNumber}', 'ClientController@getClientByPhoneNumer');
+        Route::get('addresses/{id}', 'ClientController@getClientAddresses');
+    });
 
     Route::apiResource('images', 'FileController')->only('store', 'destroy');
        
 });
 
-Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {
-    Route::get('counties', 'CountyController@index');
-    Route::get('cities/{id}','CityController@index');
-});
 

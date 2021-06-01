@@ -5,7 +5,7 @@
             Add new product
         </template>
 
-        <form @submit.prevent="submit" class="lex flex-col">
+        <form @submit.prevent="submit" class="flex flex-col">
             <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
                 <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
 
@@ -34,7 +34,6 @@
                                     v-model="product.barcode"
                                     id="barcode"
                                     name="barcode" 
-                                    type="text" 
                                     :class="{'border-red-600' : $v.product.barcode.$error, 'border-green-600': $v.product.barcode.$dirty && !$v.product.barcode.$error}"   
                                     :disabled="waiting"
                                     @blur.native="getProduct"
@@ -104,7 +103,7 @@
                     <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
                         <InputGroup
                             id="name"
-                            label="Name"
+                            label="Base price"
                             :hasError="$v.product.base_price.$error"
                             :eclass="{'flex-1': true}"
                         >
@@ -249,6 +248,8 @@
     import { required, integer, decimal, maxLength, minValue } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
 
+    import { storeProduct } from '../../api/products.api';
+
     export default {
 
         computed: {
@@ -325,7 +326,6 @@
 
                 if(!this.$v.$invalid) {
                     try {           
-                        this.$Progress.start()
                         this.waiting = true;
 
                         const payload = {}
@@ -338,8 +338,6 @@
                             })
                         }
 
-                        console.log(payload)
-
                         if(payload.discount === null) {
                             delete payload.discount
                         }
@@ -348,7 +346,7 @@
                             delete payload.ingredients
                         }
 
-                        await this.addProduct(payload);
+                        await storeProduct(payload);
 
                         this.product = {
                             barcode: '',
@@ -365,8 +363,6 @@
 
                         this.waiting = false;
                         
-                        this.$Progress.finish();
-
                         this.clearImage = true;
 
                         this.openNotification({
@@ -380,7 +376,6 @@
                     } catch ( error ) {
 
                         console.log(error)
-                        this.$Progress.fail();
 
                         this.waiting = false
 

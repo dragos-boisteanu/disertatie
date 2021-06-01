@@ -41,7 +41,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 
@@ -57,7 +57,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        if( $user->role_id !== 1 || ($user->role_id === 1 && $model->id === $user->id) ) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 
@@ -73,8 +73,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-
-        if( ($user->role_id === 6 || $user->role_id === 7) && $user->id != $model->id && $model->role_id < $user->role_id) {
+        if( ( $user->role->name === "Administrator" || $user->role_id === "Location Manager") && $user->id != $model->id && $model->role->level < $user->role->level) {
             Response::allow();
         }
 
@@ -90,7 +89,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model)
     {
-        if( ($user->role_id === 6 || $user->role_id === 7) && $user->id != $model->id && $model->role_id < $user->role_id) {
+        if( ($user->role->name === "Administrator" || $user->role_id === "Location Manager") && $user->id != $model->id && $model->role->level < $user->role->level) {
             Response::allow();
         }
 
@@ -106,7 +105,7 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model)
     {
-        if( ($user->role_id === 7 && $user->id != $model->id) || ($user->role_id === 1 && $model->id === $user->id)) {
+        if( ($user->role->name === "Administrator" || $user->role_id === "Location Manager") || ($user->role->name === "Client" && $model->id === $user->id)) {
             Response::allow();
         }
 

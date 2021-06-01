@@ -1,6 +1,6 @@
 <template>
     <ViewContainer>
-         <template slot="header">
+        <template slot="header">
             Edit user #{{user.id}}
         </template>
     
@@ -56,54 +56,31 @@
                             />
                         </InputGroup>
                         <InputGroup
-                            id="name"
-                            label="Name"
-                            :hasError="$v.localUser.name.$error"
+                            id="lastName"
+                            label="Last name"
+                            :hasError="$v.localUser.last_name.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                    <p v-if="!$v.localUser.name.required">
-                                        The name field is required
+                                    <p v-if="!$v.localUser.last_name.required">
+                                        The last name field is required
                                     </p>    
-                                    <p v-if="!$v.localUser.name.maxLength">
-                                       The name field should not be longer than 50 characters
+                                    <p v-if="!$v.localUser.last_name.maxLength">
+                                       The last name field should not be longer than 50 characters
                                     </p>
-                                    <p v-if="!$v.localUser.name.alphaSpaces">
-                                        The name field must contain only letters and spaces
+                                    <p v-if="!$v.localUser.last_name.alphaSpaces">
+                                        The last name field must contain only letters and spaces
                                     </p>
                                 </template>
                             <Input 
-                                v-model="localUser.name"
-                                id="name" 
-                                name="name" 
-                                :class="{'border-red-600' : $v.localUser.name.$error, 'border-green-600': $v.localUser.name.$dirty && !$v.localUser.name.$error}"
+                                v-model="localUser.last_name"
+                                id="lastName" 
+                                name="lastName" 
+                                :class="{'border-red-600' : $v.localUser.last_name.$error, 'border-green-600': $v.localUser.last_name.$dirty && !$v.localUser.last_name.$error}"
                                 :disabled="waiting"
-                                @blur.native="$v.localUser.name.$touch()"
+                                @blur.native="$v.localUser.last_name.$touch()"
                             />
                         </InputGroup>
-                        <InputGroup
-                            id="birthdate"
-                            label="Birthdate"
-                            :hasError="$v.localUser.birthdate.$error"
-                            :eclass="{'flex-1':true}"
-                        >
-                            <template v-slot:errors>
-                                <p v-if="!$v.localUser.birthdate.required">
-                                    The birthdate field is required
-                                </p>
-                            </template>   
-                            <date-picker 
-                                v-model="localUser.birthdate" 
-                                type="date"
-                                confirm-text="Ok"
-                                valueType="format"
-                                :input-class="birthdateClass"
-                                :confirm="true"
-                                :disabled="waiting"
-                                @input.native="$v.localUser.birthdate.$touch()"
-                            ></date-picker>
-                        </InputGroup>
-                        
                     </div>
 
                     <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:gap-x-4">
@@ -160,17 +137,17 @@
                         :hasError="$v.localUser.phone_number.$error"
                     >
                          <template v-slot:errors>
-                            <p v-if="!$v.localUser.role_id.required">
+                            <p v-if="!$v.localUser.role.id.required">
                                 The role field is required
                             </p>
                         </template>
                         <Select 
-                            v-model="localUser.role_id"
+                            v-model="localUser.role.id"
                             id="role" 
                             name="role"
-                            :class="{'border-red-600' : $v.localUser.role_id.$error, 'border-green-600': $v.localUser.role_id.$dirty && !$v.localUser.role_id.$error}"
-                            :disabled="waiting"
-                            @blur.native="$v.localUser.role_id.$touch()"   
+                            :class="{'border-red-600' : $v.localUser.role.id.$error, 'border-green-600': $v.localUser.role.id.$dirty && !$v.localUser.role.id.$error}"
+                            :disabled="waiting || disableRoleChange"
+                            @blur.native="$v.localUser.role.id.$touch()"   
                         >
                             <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
                         </Select>
@@ -204,12 +181,11 @@
     import DatePicker from 'vue2-datepicker';
 
     import store from '../../store/index';
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     import { required, email, maxLength, } from 'vuelidate/lib/validators'
     import { alphaSpaces, phoneNumber } from '../../validators/index';
-
-
+    
     export default {
 
         async beforeRouteEnter (to, from, next) {
@@ -232,23 +208,12 @@
         },
 
         computed: {
-           ...mapGetters('Roles', ['getRoles']),
-           ...mapGetters('Users', ['getLoggedUser']),
+            ...mapGetters('Roles', ['getRoles']),
+            ...mapGetters('Users', ["isAdmin", "isLocationManager"]),
 
-            canChangeRole() {
-                //  TO DO: hide roles list if the auth user's role is 6 and the local user role is 6 or 7
-               return [6,7].includes(this.getLoggedUser.role_id)
+            disableRoleChange() {
+                return !(this.isAdmin || this.isLocationManager)
             },
-
-            birthdateClass() {
-                let customClass = "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
-                if(this.$v.localUser.birthdate.$error) {
-                    customClass = customClass.concat(' ', 'border-red-600')
-                } else if (this.$v.localUser.birthdate.$dirty && !this.$v.localUser.birthdate.$error) {
-                    customClass = customClass.concat(' ', 'border-green-600');
-                }
-                return customClass;
-            }
         },
 
         data() {
@@ -262,11 +227,13 @@
                 localUser: {
                     id: '',
                     first_name: '',
-                    name: '',
-                    birthdate: '',
+                    last_name: '',
                     email: '',
                     phone_number: '',
-                    role_id: ''
+                    role: {
+                        id: '',
+                        name: '',
+                    }
                 },              
 
             }
@@ -279,7 +246,7 @@
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
-                name: {
+                last_name: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
@@ -292,11 +259,10 @@
                     required,
                     phoneNumber
                 },
-                birthdate: {
-                    required
-                },
-                role_id: {
-                    required
+                role: {
+                    id: {
+                        required
+                    }
                 }
             },
         },
@@ -388,7 +354,7 @@
             setUser(user) {
                 this.user = user;
                 this.localUser = JSON.parse(JSON.stringify(this.user))
-
+             
             }
         },
 

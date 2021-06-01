@@ -14,33 +14,29 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
+        
         DB::table('categories')->insert([
             'name' => 'Pizza',
             'vat' => 9
         ]);
 
         DB::table('categories')->insert([
-            'name' => 'Paste',
-            'vat' => 9
+            'name' => 'Deserturi',
+            'vat' => 19
         ]);
 
         DB::table('categories')->insert([
-            'name' => 'Pui',
-            'vat' => 9
+            'name' => 'Ceaiuri',
+            'vat' => 19
         ]);
 
         DB::table('categories')->insert([
-            'name' => 'Porc',
-            'vat' => 9
+            'name' => 'Bauturi Alcoolice',
+            'vat' => 19
         ]);
 
         DB::table('categories')->insert([
-            'name' => 'Salate',
-            'vat' => 9
-        ]);
-
-        DB::table('categories')->insert([
-            'name' => 'Bauturi',
+            'name' => 'Bauturi Non-Alcolice',
             'vat' => 19
         ]);
     }

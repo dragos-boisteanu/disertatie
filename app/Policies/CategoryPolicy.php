@@ -20,7 +20,7 @@ class CategoryPolicy
      */
     public function create(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 
@@ -36,7 +36,7 @@ class CategoryPolicy
      */
     public function update(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 
@@ -52,7 +52,7 @@ class CategoryPolicy
      */
     public function forceDelete(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 

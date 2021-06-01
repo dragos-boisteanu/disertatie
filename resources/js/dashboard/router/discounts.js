@@ -8,6 +8,8 @@ export default [
         name: 'Discounts',
         component: Discounts,
         meta: {
+            requireLocationManager: true,
+            requiredAdmin: true,
             breadcrumb: {
                 label: 'Discounts',
                 parent: 'Dashboard'

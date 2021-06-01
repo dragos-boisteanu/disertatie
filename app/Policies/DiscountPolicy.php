@@ -12,7 +12,6 @@ class DiscountPolicy
     use HandlesAuthorization;
 
 
-
     /**
      * Determine whether the user can create models.
      *
@@ -21,7 +20,7 @@ class DiscountPolicy
      */
     public function create(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 
@@ -37,7 +36,7 @@ class DiscountPolicy
      */
     public function update(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 
@@ -53,7 +52,7 @@ class DiscountPolicy
      */
     public function delete(User $user)
     {
-        if( $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 
@@ -69,7 +68,7 @@ class DiscountPolicy
      */
     public function restore(User $user)
     {
-        if( $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
             Response::allow();
         }
 
@@ -85,7 +84,7 @@ class DiscountPolicy
      */
     public function forceDelete(User $user)
     {
-        if( $user->role_id === 7 ) {
+        if( $user->role->name === "Administrator") {
             Response::allow();
         }
 

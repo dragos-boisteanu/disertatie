@@ -22,6 +22,9 @@ export default [
         name: 'CreateUser',
         component: CreateUserView,
         meta: {
+            requireLocationManager: true,
+            requiredAdmin: true,
+            requireWaiter: true,
             breadcrumb: {
                 label: 'Create user account',
                 parent: 'Users'
@@ -33,19 +36,26 @@ export default [
         name: 'User',
         component: UserView,
         meta: {
-            breadcrumb: {
-                label: 'User',
-                parent: 'Users'
-            }
+            breadcrumb() {
+                const { params } = this.$route;
+        
+                return {
+                    label: `User #${params.id}`,
+                    parent: "Users",
+                };
+            },
         }
     },
     {
         path: `${dashboardBaseUrl}/users/:id/edit`,
         name: 'EditUser',
         component: EditUserView,
+        requireLocationManager: true,
+        requiredAdmin: true,
+        requireWaiter: true,
         meta: {
             breadcrumb: {
-                label: 'Edit User',
+                label: 'Edit',
                 parent: 'User'
             }
         }

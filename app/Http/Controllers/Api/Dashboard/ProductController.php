@@ -7,11 +7,14 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductOrder;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductCollection;
 use App\Http\Requests\ProductPatchRequest;
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Resources\OrderProduct;
 use App\Http\Resources\Product as ProductResource;
+use App\Http\Resources\ProductOrderCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
@@ -57,7 +60,7 @@ class ProductController extends Controller
         
         $query->orderBy('products.id', 'asc');;
 
-        $products = $query->Paginate(16);
+        $products = $query->Paginate(1);
 
         return new ProductCollection($products);
     }
@@ -275,15 +278,14 @@ class ProductController extends Controller
 
     public function getProductByBarcode($barcode) 
     {
-        try {
-            $product = Product::withTrashed()->where('barcode', $barcode)->with('stock')->first();
-            if(!isset($product)) {
-                throw new ModelNotFoundException('No products for ' . $barcode . ' barcode');
-            }
-            return new ProductResource($product);
-        } catch ( ModelNotFoundException $ex) {
-            response()->json(['message' => $ex->getMessage()], 200);
-        }
-       
+        $product = Product::withTrashed()->where('barcode', $barcode)->firstOrFail();
+
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'quantity' => 1,
+            'price' => $product->price
+        ];
     }
+
 }

@@ -200,8 +200,6 @@
 
 
             callFilter() {
-                this.$Progress.start()            
-
                 this.debouncedFilter();
             },
 
@@ -222,11 +220,8 @@
                     this.setFilteredState(true);
                     
                     this.$router.replace({name:'Users', query: {...query}});
-            
-                    this.$Progress.finish()
-                
+    
                 } catch ( error ) {
-                    this.$Progress.fail()
                     console.log(error)
                 }
             }, 500),

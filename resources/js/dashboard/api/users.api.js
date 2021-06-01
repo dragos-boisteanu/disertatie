@@ -1,8 +1,6 @@
+import httpClient from '../../api/httpClient';
 
-
-import httpClient from './httpClient';
-
-const END_POINT = '/users';
+const END_POINT = '/dashboard/users';
 
 const downloadLoggedUserData = () => httpClient.get(`${END_POINT}/logged-user`);
 
@@ -16,6 +14,7 @@ const restoreUser = (id) => httpClient.post(`${END_POINT}/${id}/restore`);
 
 const deleteUser = (id) => httpClient.delete(`${END_POINT}/${id}`, {data: id});
 
+
 export {
     downloadLoggedUserData,
     downloadUsers,
@@ -24,5 +23,5 @@ export {
     patchUser,
     disableUser,
     restoreUser,
-    deleteUser
+    deleteUser,
 }

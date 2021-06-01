@@ -12,6 +12,7 @@ use App\Events\AccountCreated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\ClientResource;
 use App\Http\Resources\UserCollection;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\UserPatchRequest;
@@ -103,7 +104,7 @@ class UserController extends Controller
         $request->user()->can('create');
         
         $userInputData = $request->input('data.user');
-        $userInputData['password'] = Hash::make(Str::random(8));
+        $userInputData['password'] = Hash::make('12345678');
 
         try {
             DB::beginTransaction();
@@ -111,8 +112,9 @@ class UserController extends Controller
             $user = User::create($userInputData);
     
             if($request->has('data.address')) {
-                $addressInputData = $request->input('data.address');
+                $addressInputData['address'] = $request->input('data.address');
                 $addressInputData['user_id'] = $user->id;
+                
                 Address::create($addressInputData); 
             }
 
@@ -134,7 +136,7 @@ class UserController extends Controller
             // event(new AccountCreated($user));
             DB::commit();
 
-            return response()->json(['user' => ['id'=>$user->id, 'created_at'=>$user->created_at]], 200);
+            return response()->json(['user' => ['id'=>$user->id, 'created_at'=>$user->created_at]], 201);
            
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
@@ -261,4 +263,6 @@ class UserController extends Controller
     public function getLoggedUser(Request $request) {
         return new UserResource($request->user());
     }
+
+    
 }

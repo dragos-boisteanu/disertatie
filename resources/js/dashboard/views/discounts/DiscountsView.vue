@@ -36,28 +36,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <!-- <ul class="px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
-                    <li 
-                        v-for="(discount, index) in getDiscounts" :key="discount.id"
-                        class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
-                    >
-                        <div 
-                            @click="selectDiscount(discount.id)"
-                            class="cursor-pointer flex items-center gap-x-2">
-                            <span>{{ index + 1 }}.</span>
-                            <span>{{ discount.code }}</span>
-                            <span>{{ discount.value }} %</span>
-                            
-                        </div>
-                        <div>
-                            <button @click="callDisableDiscount(discount.id)" v-if="discount.deletedAt === null">X</button>
-                            <span v-else>
-                                DISABLED
-                            </span>
-                        </div>
-                    </li>
-                </ul> -->
             </div>
 
            <div class="mt-4 md:mt-0 lg:flex-1">
@@ -70,7 +48,7 @@
                         <div class="flex-1 flex gap-x-4">
                             <InputGroup 
                                 id="name"
-                                label="Name"
+                                label="Code"
                                 :hasError="$v.discount.code.$error"
                             >
                                 <template v-slot:errors>
@@ -248,7 +226,6 @@
 
                 if(!this.$v.discount.$invalid) {
                     try {
-                        this.$Progress.start();
 
                         if(this.discountSelected) {
 
@@ -290,9 +267,7 @@
                             this.resetForm();
                         }
 
-                        this.$Progress.finish();
                     } catch( error) {
-                        this.$Progress.fail();
                         console.log(error);
                     }
                 }
@@ -301,7 +276,6 @@
 
             async callDisableDiscount(id) {
                 try {
-                    this.$Progress.start();
 
                     const payload = {
                         id,
@@ -311,7 +285,6 @@
                     await this.disableDiscount(payload);
 
                     this.discount = Object.assign({}, _find(this.getDiscounts, ['id', payload.id]));
-                    this.$Progress.finish();
 
                     this.openNotification({
                         type: 'ok',
@@ -320,7 +293,6 @@
                     })
 
                 } catch ( error ) {
-                    this.$Progress.fail();
 
                     console.log(error);
                 }
@@ -328,7 +300,6 @@
 
             async callRestoreDiscount() {
                 try {
-                    this.$Progress.start();
 
                     const payload = {
                         id: this.discount.id,
@@ -339,25 +310,20 @@
 
                     this.discount = Object.assign({}, _find(this.getDiscounts, ['id', payload.id]));
 
-                    this.$Progress.finish();
                     this.openNotification({
                         type: 'ok',
                         show: true,
                         message: 'Discount restored'
                     })
                 } catch (error) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
             },
 
             async callDeleteDiscount() {
                 try {
-                    this.$Progress.start();
-
                     await this.deleteDiscount(this.discount.id);
 
-                    this.$Progress.finish();
 
                     this.discountSelected = false;
                     this.resetForm();
@@ -368,7 +334,6 @@
                         message: 'Discount permanently removed'
                     })
                 } catch ( error ) {
-                    this.$Progress.fail();
 
                     console.log(error);
                 }

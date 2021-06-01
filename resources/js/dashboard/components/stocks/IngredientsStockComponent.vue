@@ -53,7 +53,7 @@
 
             <Button 
                 type="primary"
-                :disabled="disableSearchButton"
+                :disabled="disableButton"
                 :waiting="searching"
                 @click.native.prevent="findIngredient"
                 eclass="mt-6"
@@ -119,7 +119,7 @@
                 <div class="mt-5 flex gap-x-4 md:justify-start">
                     <Button 
                         type="primary"
-                        :disabled="updating || refreshing"
+                        :disabled="disableButton"
                         :waiting="updating"  
                         @click.native.prevent="submit"
                     >
@@ -129,7 +129,7 @@
                         v-if="getIngredientStockDetails"
                         @click.native.prevent="clear"
                         type="secondary"
-                        :disable="updating || refreshing"
+                        :disabled="disableButton"
                     >                       
                         Clear
                     </Button>
@@ -142,8 +142,7 @@
             v-if="getIngredientStockDetails"
             @click.native="findIngredient"
             eclass="mt-4"
-            :disabled="refreshing"
-            :waiting="refreshing"
+            :disabled="disableButton"
         >                       
             Refresh
         </Button>
@@ -166,27 +165,35 @@
     export default {
 
         async mounted() {
-            if(this.$route.params.id) {
-                this.clearIngredientStockDetails();
-                this.filter.id = this.$route.params.id;
-                await this.findIngredient();
-                
-            } else if (this.$route.params.name) {
-                this.clearIngredientStockDetails();
-                this.filter.name = this.$route.params.name;
-                await this.findIngredient();
 
-            } else if (this.getIngredientStockDetails) {
+            if(this.getIngredientStockDetails && (this.getIngredientStockDetails.id === this.$route.params.id || this.getIngredientStockDetails.name === this.$route.params.name )) {
                 this.filter.id = this.getIngredientStockDetails.id;
                 this.filter.name = this.getIngredientStockDetails.name
+            } else {
+                if(this.$route.params.id) {
+                    this.clearIngredientStockDetails();
+                    this.filter.id = this.$route.params.id;
+                    await this.findIngredient();
+                    
+                } else if (this.$route.params.name) {
+                    this.clearIngredientStockDetails();
+                    this.filter.name = this.$route.params.name;
+                    await this.findIngredient();
+                }
+            }
+        },
+
+        destroyed() {
+            if(this.getProductStockDetails === null) {
+                this.clearIngredientStockDetails();
             }
         },
 
         computed: {
-            ...mapGetters('Stocks', ['getIngredientStockDetails']),
+            ...mapGetters('Stocks', ['getIngredientStockDetails', 'getProductStockDetails']),
 
-            disableSearchButton() {
-                return this.filter.id.length === 0 && this.filter.name.length === 0
+            disableButton() {
+                return this.searching || this.updating;
             },
         },
 
@@ -194,7 +201,6 @@
             return {
                 searching: false,
                 updating: false,
-                refreshing: false,
 
                 newQuantity: '',
 
@@ -230,13 +236,7 @@
 
             async findIngredient() {
                 try {
-                    this.$Progress.start();
-
-                    if(this.getIngredientStockDetails) {
-                        this.refreshing = true;
-                    } else {
-                        this.searching = true;
-                    }
+                    this.searching = true;
 
                     if(this.filter.id) {
                         this.$v.filter.id.$touch();
@@ -250,14 +250,8 @@
                         }
                     }
 
-                    if(this.getIngredientStockDetails) {
-                        this.refreshing = false;
-                        this.searching = false;
-                    } else {
-                        this.searching = false;
-                    }
+                    this.searching = false;
 
-                    this.$Progress.finish();
                 } catch ( error ) {
                     this.clearIngredientStockDetails();
                     if(error.response && error.response.status === 404) {
@@ -268,12 +262,7 @@
                         });
                     }
                     // this.$v.filter.$touch();
-                   if(this.getIngredientStockDetails) {
-                        this.refreshing = false;
-                    } else {
-                        this.searching = false;
-                    }
-                    this.$Progress.fail();
+                   this.searching = false;
                 }
             },
 
@@ -283,7 +272,6 @@
                 if(!this.$v.newQuantity.$invalid) {
                     try {
                         this.updating = true;
-                        this.$Progress.start();
 
                         const payload = {
                             id: this.getIngredientStockDetails.id,
@@ -297,7 +285,6 @@
 
                         this.newQuantity = '';
 
-                        this.$Progress.finish();
                         this.updating = false;
                         
                         this.$v.newQuantity.$reset();
@@ -310,7 +297,6 @@
                     } catch ( error ) {
                         this.updating = false;
                         this.$v.newQuantity.$touch();
-                        this.$Progress.fail();
                     }
                 }
             },

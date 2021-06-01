@@ -100,14 +100,15 @@
                             v-if="ingredientSelected"
                             type="secondary"
                             @click.native.prevent="clearSelection"
+                            :disabled="waiting"
                         >                       
                             Clear selection
                         </Button>
                         <Button 
                             type="primary"
-                            :disabled="disabled"
-                            :waiting="waiting"
+                            :disabled="waiting"
                             @click.native.prevent="submit"
+                            class="mt-2"
                         >
                             <span v-if="ingredientSelected">
                                 Update
@@ -142,14 +143,14 @@
         computed: {
             ...mapGetters('Ingredients', ['getIngredients']),
             ...mapGetters('Units', ['getUnits']),
-            ...mapGetters('Users',['getLoggedUser']),
+            ...mapGetters('Users',['getLoggedUser', 'isAdmin', 'isKitchenManager', 'isLocationManager']),
 
-            canNotCreate() {
-                return this.getLoggedUser.role_id !== 6 && this.getLoggedUser.role_id !== 7
+            canCreate() {
+                return this.isAdmin || this.isKitchenManager || this.isLocationManager
             },
 
             disabled() {
-                return this.waiting || this.canNotCreate
+                return this.waiting || !this.canCreate
             }
 
         },
@@ -179,7 +180,7 @@
                 },
             },
             unitId: { 
-                required
+                required 
             }
         },
 
@@ -188,7 +189,7 @@
             ...mapActions('Notification', ['openNotification']),
 
             allowRemoval(productsCount) {
-                return parseInt(productsCount) === 0
+                return parseInt(productsCount) !== 0
             },
 
             selectIngredient(id) {
@@ -205,6 +206,8 @@
 
             resetForm() {
                 this.$v.$reset();
+                this.waiting = false;
+                this.ingredientSelected = false;
                 this.unitId = '';
                 this.ingredient = {
                     id: '',
@@ -247,9 +250,11 @@
                             });
 
                             if(counter > 0 ) {
-                                this.$Progress.start();
-
+                                this.waiting = true;
                                 await this.patchIngredient(payload);
+
+                                this.resetForm();
+
                             } else {
                                 this.openNotification({
                                     type: 'info',
@@ -259,17 +264,14 @@
                             }
                             
                         } else {
-                            this.$Progress.start();
 
                             await this.postIngredient(this.ingredient);
                             this.resetForm();
                         }
 
                         this.waiting = false;
-                        this.$Progress.finish()
 
                     } catch ( error ) {
-                        this.$Progress.fail();
                         this.waiting = false;
                         console.log(error);
                         
@@ -283,7 +285,6 @@
 
             async removeIngredient(id) {
                 try {
-                    this.$Progress.start();
 
                     await this.deleteIngredient(id);
 
@@ -291,9 +292,7 @@
                         this.clearSelection();
                     }
 
-                    this.$Progress.finish();
                 } catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
             },

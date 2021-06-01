@@ -14,8 +14,6 @@ class Address extends Model
         'first_name',
         'name',
         'phone_number',
-        'county_id',
-        'city_id',
         'address'
     ];
 

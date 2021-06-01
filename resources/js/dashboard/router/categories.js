@@ -7,6 +7,8 @@ export default [
         path: `${dashboardBaseUrl}/categories`,
         name: 'Categories',
         component: CategoriesView,
+        requireLocationManager: true,
+        requiredAdmin: true,
         meta: {
             breadcrumb: {
                 label: 'Categories',

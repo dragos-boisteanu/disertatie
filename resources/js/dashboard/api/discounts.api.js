@@ -1,6 +1,6 @@
-import httpClient from './httpClient'
+import httpClient from '../../api/httpClient';
 
-const BASE_URL = '/discounts';
+const BASE_URL = '/dashboard/discounts';
 
 const downloadDiscounts = () => httpClient.get(`${BASE_URL}`);
 const postDiscount = (payload) => httpClient.post(`${BASE_URL}`, payload); 

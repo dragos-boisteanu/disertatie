@@ -1,6 +1,6 @@
 <template>
     <Modal
-     @close="close"
+        @close="close"
     >
 
         <template slot="header">
@@ -61,8 +61,9 @@
                         v-model="ingredient.quantity"  
                         id="quantity"
                         name="quantity" 
+                        :disabled="selectedIngredientId === ''"
                         :eclass="{'border-red-600': $v.ingredient.quantity.$error, 'border-green-600': $v.ingredient.quantity.$dirty && !$v.ingredient.quantity.$error}"
-                        @input.native="$v.ingredient.quantity.$touch()"
+                        @blur.native="$v.ingredient.quantity.$touch()"
                     />
                 </InputGroup>
             </form>
