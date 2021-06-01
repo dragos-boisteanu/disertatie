@@ -17,7 +17,7 @@
                 type="text"
                 class="w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none focus:border-lightBlue-500 focus:shadow"
                 placeholder="ID"
-                v-model.trim.lazy="filterData.id"
+                v-model.trim.lazy="localFilterData.id"
                 @change="callFilter"
             />
 
@@ -27,27 +27,7 @@
                 type="text"
                 class="w-full mt-3 border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none focus:border-lightBlue-500 focus:shadow"
                 placeholder="Phone number"
-                v-model.trim.lazy="filterData.phoneNumber"
-                @change="callFilter"
-            />
-
-            <input 
-                id="clientFirstName" 
-                name="clientFirstName" 
-                type="text"
-                class="w-full mt-3 border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none focus:border-lightBlue-500 focus:shadow"
-                placeholder="Client first name"
-                v-model.trim.lazy="filterData.clientFirstName"
-                @change="callFilter"
-            />
-
-            <input 
-                id="clientName" 
-                name="clientName" 
-                type="text"
-                class="w-full mt-3 border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none focus:border-lightBlue-500 focus:shadow"
-                placeholder="Client name"
-                v-model.trim.lazy="filterData.clientName"
+                v-model.trim.lazy="localFilterData.phoneNumber"
                 @change="callFilter"
             />
 
@@ -57,17 +37,17 @@
                 type="text"
                 class="w-full mt-3 border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none focus:border-lightBlue-500 focus:shadow"
                 placeholder="Sfatff first name"
-                v-model.trim.lazy="filterData.staffFirstName"
+                v-model.trim.lazy="localFilterData.staffFirstName"
                 @change="callFilter"
             />
 
             <input 
-                id="staffName" 
-                name="staffName" 
+                id="staffLastName" 
+                name="staffLastName" 
                 type="text"
                 class="w-full mt-3 border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none focus:border-lightBlue-500 focus:shadow"
-                placeholder="Sfatff name"
-                v-model.trim.lazy="filterData.staffName"
+                placeholder="Sfatff Last Name"
+                v-model.trim.lazy="localFilterData.staffLastName"
                 @change="callFilter"
             />
         </div>
@@ -81,7 +61,6 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
     import FilterComponent from './FilterComponent'
 
     export default {
@@ -93,42 +72,49 @@
                 this.filterData[key] = routerQuery[key];
             })
         },
+
+        props: {
+            filterData: {
+                type: Object,
+                required: true
+            }
+        },
         
         data() {
             return {
-                filterData: {
-                    id: '',
-                    phoneNumber: '',
-                    clientName: '',
-                    clientFirstName: '',
-                    staffName: '',
-                    staffFirstName: '',
-                    orderBy: ''
+                localFilterData: {
+                    id: this.filterData.id,
+                    phoneNumber: this.filterData.phoneNumber,
+                    staffLastName: this.filterData.staffLastName,
+                    staffFirstName: this.filterData.staffFirstName,
+                    orderBy: this.filterData.orderBy,
+                    page: this.filterData.page,
                 }
             }
         },
  
         methods: {
-            ...mapActions('Orders', ['downloadOrders']),
-
             async callFilter() {
                 try {
-                    const query = {}
 
-                    Object.keys(this.filterData).forEach(key => {
-                        if(this.filterData[key] !== '') {
-                            query[key] = this.filterData[key];
+                    const query = {};
+
+                    Object.keys(this.localFilterData).forEach(key => {
+                        if(this.localFilterData[key] !== "") {
+                            query[key] = this.localFilterData[key];
                         }
                     })
 
-                    query.page = 1;
+                    this.$router.replace({name:'Orders', query: query});
 
-                    await this.downloadOrders(query);
-
-                    this.$router.replace({name:'Orders', query: {...query}});
+                    this.filter(query);
                 } catch ( error ) {
                     throw error
                 }
+            },
+
+            filter(query ){
+                this.$emit('filter', query);
             },
 
             close() {

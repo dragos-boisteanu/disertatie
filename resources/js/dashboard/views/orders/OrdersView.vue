@@ -2,8 +2,10 @@
     <ViewContainer>
 
         <OrdersFilter
+            :filterData="filterData"
             v-if="showFilterState"
             @closed="toggleFilterState"
+            @filter="filter"
         />
 
         <template slot="header">
@@ -33,7 +35,7 @@
             </div>
         
             <select 
-                v-model="orderBy" 
+                v-model="filterData.orderBy" 
                 @change="order"
                 class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm md:w-auto">
                 <option :value="1">Created at asc</option>
@@ -107,13 +109,10 @@
 
     import OrdersFilter from '../../components/filter/OrdersFilterComponent'
 
-    import { mapActions, mapGetters } from 'vuex';
-
     import _findIndex from 'lodash/findIndex'
 
     import {downloadOrders} from '../../api/orders.api';
 
-    
     export default {
         async beforeRouteEnter(to, from, next) {
             let response = {};
@@ -126,36 +125,33 @@
             next(vm => vm.setOrders(response.data.data));
         },
 
-        mounted() {
-             if(this.$route.query.orderBy) {
-                this.orderBy = this.$route.query.orderBy;
-            } else {
-                this.orderBy = 2;
-            }
-        },
-
-        computed: {
-            ...mapGetters('Orders', ['getOrders']),
-        },
-
         data() {
             return {
                 orders: [],
+                filterData: {
+                    id: '',
+                    phoneNumber: '',
+                    staffFirstName: '',
+                    staffLastName: '',
+                    page: 1,
+                    orderBy: 2,
+                },
                 showFilterState: false,
-                orderBy: 1
             }
         },
 
         methods: {
-            ...mapActions('Orders', ['refreshOrders', 'downloadOrders']),
 
             async refresh() {
                 try {
                     if(Object.keys(this.$route.query).length > 0) { 
                         this.$router.replace({name:'Orders', query: {}});
                     }
-                    this.orderBy = 1
-                    await this.refreshOrders();
+
+                    this.resetFilterData();
+
+                    const response = await downloadOrders();
+                    this.setOrders(response.data.data)
                 } catch ( error ) {
                     console.log(error)
                 }
@@ -164,12 +160,16 @@
             async order() {
                 try {
                     this.$Progress.start()
+                    const query = {};
 
-                    const query = Object.assign({}, this.$route.query);
-                 
-                    query.orderBy = this.orderBy;
-                    
-                    await this.downloadOrders(query)
+                    Object.keys(this.filterData).forEach(key => {
+                        if(this.filterData[key] !== "") {
+                            query[key] = this.filterData[key];
+                        }
+                    })
+                                      
+                    const response = await downloadOrders(query)
+                    this.setOrders(response.data.data)
 
                     this.$router.replace({name:'Orders', query});
 
@@ -180,16 +180,39 @@
                 }
             },
 
+            async filter(filterData) {
+                const response = await downloadOrders(filterData);
+                this.setOrders(response.data.data);
+
+                this.updateFilterData(filterData);
+            },
+
             setOrders(orders) {
                 this.orders = orders;
             },
 
             toggleFilterState() {
                 this.showFilterState = !this.showFilterState
+            },
+
+            resetFilterData(){
+                Object.keys(this.filterData).forEach(key => {
+                    this.filterData[key] = "";
+                })
+
+                this.filterData.orderBy = 2;
+                this.filterData.page = 1;
+            },
+
+            updateFilterData(filterData) {
+                Object.keys(filterData).forEach(key => {
+                    if(filterData[key] !== "") {
+                        this.filterData[key] = filterData[key]
+                    }
+                })
             }
         },
         
-
         components: {
             ViewContainer,
             Card,
