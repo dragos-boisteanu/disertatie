@@ -45,13 +45,6 @@
                             Disable
                         </button>
                     </div>
-                    <!-- <button 
-                        v-if="canDelete"
-                        @click="callDeleteUser"
-                        class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
-                    >
-                        Delete
-                    </button> -->
                 </div>
                 <router-link
                     :to="{name: 'ProuductsStock', params: {barcode: this.product.barcode}}" 
@@ -112,26 +105,21 @@
     import Unit from '../../components/products/UnitComponent';
     import Vat from '../../components/products/VatComponent';
 
-    import store from '../../store/index';
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapGetters } from 'vuex';
+
+    import { downloadProduct, disableProduct, restoreProduct,  } from '../../api/products.api';
 
     export default {
 
         async beforeRouteEnter(to, from, next) {
-            try {
-                const id = to.params.id;
-                if(store.getters['Products/getProducts'].length > 0) {
-                    let product = await store.dispatch('Products/getProduct', id);
-                    if(!product) {
-                        product = await store.dispatch('Products/fetchProduct', id);
-                    }
-                    next(vm => vm.setProduct(product));
-                } else {
-                    const product = await store.dispatch('Products/fetchProduct', id);
-                    next(vm => vm.setProduct(product));
-                }
-            } catch ( error ) {
-                console.log(error)
+            const response = await downloadProduct(to.params.id) 
+            next(vm => vm.setProduct(response.data.data));
+        },
+
+        props: {
+            productProp: {
+                type: Object,
+                required: true
             }
         },
 
@@ -157,15 +145,11 @@
 
         data() {
             return {
-                editProductState: false,
                 product: null,
             }
         },
 
-        methods: {
-
-            ...mapActions('Products', ['disableProduct', 'restoreProduct', 'deleteProduct']),
-            
+        methods: {            
             updateProduct(product) {
                 Object.keys(product).forEach(key => {         
                     this.product[key] = product[key];
@@ -181,45 +165,13 @@
             },
 
             async disable() {
-                try {
-                    const payload = {
-                        vm: this,
-                        id: this.product.id
-                    }
-
-                    const response = await this.disableProduct(payload);
-                    this.product.deleted_at = response.deleted_at;
-
-                } catch ( error ) {
-
-                    console.log(error);
-                }
+                const response = await disableProduct(this.product.id);
+                this.product.deleted_at = response.data.deleted_at;
             },
 
             async restore() {
-                try {
-                    const payload = {
-                        vm: this,
-                        id: this.product.id
-                    }
-
-                    const response = await this.restoreProduct(payload);
-                    this.product.deleted_at = response.deleted_at;
-
-                } catch ( error ) {
-                    console.log(error);
-                }
-            },
-
-            async callDeleteUser() {
-                try {
-
-                    await this.deleteProduct(this.product.id);
-                    this.$router.push({name: 'Products'});
-
-                } catch ( error ) {
-                    console.log(error)
-                }
+                const response = await restoreProduct(this.product.id);
+                this.product.deleted_at = response.data.deleted_at;
             },
 
         },
@@ -228,7 +180,6 @@
             ViewContainer,
             Stock,
             Status,
-            // ProductEdit,
             Category,
             Unit,
             Vat

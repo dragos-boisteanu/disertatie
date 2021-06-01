@@ -248,6 +248,8 @@
     import { required, integer, decimal, maxLength, minValue } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
 
+    import { storeProduct } from '../../api/products.api';
+
     export default {
 
         computed: {
@@ -336,8 +338,6 @@
                             })
                         }
 
-                        console.log(payload)
-
                         if(payload.discount === null) {
                             delete payload.discount
                         }
@@ -346,7 +346,7 @@
                             delete payload.ingredients
                         }
 
-                        await this.addProduct(payload);
+                        await storeProduct(payload);
 
                         this.product = {
                             barcode: '',
@@ -363,7 +363,6 @@
 
                         this.waiting = false;
                         
-
                         this.clearImage = true;
 
                         this.openNotification({
