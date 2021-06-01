@@ -247,7 +247,7 @@ import Button from '../../components/buttons/ButtonComponent';
 import { mapActions, mapGetters } from 'vuex';
 import _findIndex from 'lodash/findIndex';
     
-import {downloadOrder, patchOrder, updateOrderStatus, removeItem, addItem, patchItem, disableOrder } from '../../api/orders.api';
+import {downloadOrder, updateOrderStatus, removeItem, addItem, patchItem, disableOrder } from '../../api/orders.api';
 
 export default {
 
