@@ -51,13 +51,13 @@
                             Disable
                         </button>
                     </div>
-                    <button 
+                    <!-- <button 
                         v-if="canDelete"
                         @click="callDeleteUser"
                         class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
                     >
                         Delete
-                    </button>
+                    </button> -->
                 </div>
                
             </div>
@@ -76,43 +76,32 @@
 </template>
 
 <script>
-    import store from '../../store/index';
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
     import { mapActions, mapGetters } from 'vuex';
 
+    import { downloadUser, disableUser, restoreUser } from '../../api/users.api';
+
     export default {
         async beforeRouteEnter(to, from, next) {
-            // try {
-            //     const id = to.params.id;
-            //     if(store.getters['Users/getUsers'].length > 0) {
-            //         let user = await store.dispatch('Users/getUser', id);
-            //         if(!user) {
-            //             user = await store.dispatch('Users/fetchUser', id);
-            //         }
-            //         next(vm => vm.setUser(user));
-            //     } else {
-            //         const user = await store.dispatch('Users/fetchUser', id);
-            //         next(vm => vm.setUser(user));
-            //     }
-            // } catch ( error ) {
-            //     console.log(error)
-            // }
+            const response = await downloadUser(to.params.id);
+
+            next(vm => vm.setUser(response.data.data));
         },
 
         computed: {
-            ...mapGetters('Users', ['getLoggedUser']),
+            ...mapGetters('Users', ['getLoggedUser', 'isAdmin', 'isLocationManager']),
 
-            canDelete() {
-                if(this.getLoggedUser) {
-                    return this.getLoggedUser.role_id === 7 && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id
-                }
-            },
+            // canDelete() {
+            //     if(this.getLoggedUser) {
+            //         return this.getLoggedUser.role_id === 7 && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id
+            //     }
+            // },
 
             canDisable() {
                 if(this.getLoggedUser) {
-                    return (this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7) && (this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id )               
+                    return this.getLoggedUser.id !== this.user.id && (this.isAdmin || this.isLocationManager)                
                 }
             },
         },
@@ -138,52 +127,27 @@
             },
 
             async disable(){
-                try {
-                    this.$Progress.start()
-                    const payload = {
-                        vm: this,
-                        id: this.user.id
-                    }
-
-                    const response = await this.disableUser(payload);
-                    this.user.deleted_at = response.deleted_at;
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.failed()
-                    console.log(error);
-                }
+                const response = await disableUser(this.user.id);
+                this.user.deleted_at = response.data.deleted_at;
             },
 
             async restore() {
-                try {
-                    this.$Progress.start()
-                    const payload = {
-                        vm: this,
-                        id: this.user.id
-                    }
-
-                    const response = await this.restoreUser(payload);
-                    this.user.deleted_at = response.deleted_at;
-
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.failed()
-                    console.log(error);
-                }
+                const response = await restoreUser(this.user.id);
+                this.user.deleted_at = response.data.deleted_at;               
             },
 
-            async callDeleteUser() {
-                try {
-                    this.$Progress.start()
-                    await this.deleteUser(this.user.id);
-                    this.$router.push({name: 'Users'});
+            // async callDeleteUser() {
+            //     try {
+            //         this.$Progress.start()
+            //         await this.deleteUser(this.user.id);
+            //         this.$router.push({name: 'Users'});
 
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.failed()
-                    console.log(error)
-                }
-            },
+            //         this.$Progress.finish()
+            //     } catch ( error ) {
+            //         this.$Progress.failed()
+            //         console.log(error)
+            //     }
+            // },
 
             setUser(user) {
                 this.user = user;
