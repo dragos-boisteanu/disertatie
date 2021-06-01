@@ -46,7 +46,7 @@ class OrderController extends Controller
 
         $query->orderBy('id', 'asc');
 
-        $orders = $query->filter($request)->paginate(16);
+        $orders = $query->filter($request)->paginate(1);
         
         return new OrderCollection($orders);
     }

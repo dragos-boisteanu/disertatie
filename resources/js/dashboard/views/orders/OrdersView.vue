@@ -96,6 +96,8 @@
                 </router-link>
             </Card>
         </CardsList>
+
+        <Pagination :data="pagination" :query="query" route="Orders" @navigate="callDownloadOrders"></Pagination>
        
     </ViewContainer>
 </template>
@@ -106,8 +108,8 @@
     import CardsList from '../../components/cards/CardsListComponent';
     import Card from '../../components/cards/CardComponent';
     import OrderStatus from '../../components/orders/OrderStatusComponent';
-
     import OrdersFilter from '../../components/filter/OrdersFilterComponent'
+    import Pagination from '../../components/PaginationComponent';
 
     import _findIndex from 'lodash/findIndex'
 
@@ -115,14 +117,30 @@
 
     export default {
         async beforeRouteEnter(to, from, next) {
+            console.log(to.query)
             let response = {};
             if(Object.keys(to.query).length === 0) {
                 response = await downloadOrders();
+                 console.log('0: ', to.query)
             } else {
                 response = await downloadOrders(to.query);
             }
 
-            next(vm => vm.setOrders(response.data.data));
+            next(vm => vm.setData(response.data));
+        },
+
+        computed: {
+            query() {
+                const query = {};
+
+                Object.keys(this.filterData).forEach(key => {
+                    if(this.filterData[key] !== "") {
+                        query[key] = this.filterData[key];
+                    }
+                })
+
+                return query;
+            }
         },
 
         data() {
@@ -136,6 +154,11 @@
                     page: 1,
                     orderBy: 2,
                 },
+                pagination: {
+                    currentPage: '',
+                    lastPage: ''
+                },
+            
                 showFilterState: false,
             }
         },
@@ -152,6 +175,9 @@
 
                     const response = await downloadOrders();
                     this.setOrders(response.data.data)
+
+                    const pagination = response.data.meta;
+                    this.setPagination(pagination)
                 } catch ( error ) {
                     console.log(error)
                 }
@@ -182,13 +208,29 @@
 
             async filter(filterData) {
                 const response = await downloadOrders(filterData);
-                this.setOrders(response.data.data);
+                this.setData(response.data);
 
                 this.updateFilterData(filterData);
             },
 
+            async callDownloadOrders(query) {
+                
+                const response = await downloadOrders(query);
+                this.setData(response.data);
+            },
+
+            setData(data) {
+                this.setOrders(data.data);
+                this.setPagination(data.meta)
+            },
+
             setOrders(orders) {
                 this.orders = orders;
+            },
+
+            setPagination(pagination) {
+                this.pagination.currentPage = pagination.current_page;
+                this.pagination.lastPage = pagination.last_page;
             },
 
             toggleFilterState() {
@@ -218,7 +260,8 @@
             Card,
             CardsList,
             OrderStatus,
-            OrdersFilter
+            OrdersFilter,
+            Pagination
         }
     }
 </script>

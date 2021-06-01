@@ -1,5 +1,5 @@
 <template>
-    <div class="my-4 flex items-center justify-between text-xs md:justify-end">
+    <div class="flex items-center justify-between text-xs md:justify-end">
             <div v-if="showNextAndPrevious">
                 <router-link 
                     :to="{name: route, query: {page:previousPage, ...cleanQuery} }" 
@@ -13,7 +13,9 @@
             <div v-else></div>
             <ul class="flex items-center gap-x-2 md:mx-3">
                 <li v-for="(page, index) in lastPage" :key="index">
-                    <router-link :to="{name: route, query: {page, ...cleanQuery} }" @click.prevent.native="goTo(page)"  
+                    <router-link 
+                        @click.prevent.native="goTo(page)" 
+                        :to="{name: route, query: {page, ...cleanQuery}}"   
                         class="px-2 py-1 border  hover:border-lightBlue-500 rounded-sm" 
                         :class="{'border-lightBlue-500': page === currentPage, 'border-gray-300': page !== currentPage}"
                         
@@ -57,23 +59,17 @@
 
         computed: {
             cleanQuery() {
-                const result = {};
+                delete this.query.page;
 
-                Object.keys(this.query).forEach( key => {
-                    if(key !== 'page') {
-                        result[key] = this.query[key];
-                    }
-                });
-
-                return result;
+                return this.query;
             },
 
             currentPage() {
-                return this.data.current_page;
+                return this.data.currentPage;
             },
 
             lastPage() {
-                return this.data.last_page;
+                return this.data.lastPage;
             },
 
             showNextAndPrevious() {
@@ -105,7 +101,11 @@
 
         methods: {
             goTo(page) {
-                this.$emit('navigate', page);
+                const query = {
+                    page,
+                    ...this.cleanQuery
+                }
+                this.$emit('navigate', query);
             }
         }
     }
