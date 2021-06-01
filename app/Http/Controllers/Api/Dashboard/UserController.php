@@ -166,6 +166,8 @@ class UserController extends Controller
 
         $request->user()->can('update', $user);
 
+        dd($request->role);
+
         $user->update($request->validated());
         
         if($request->has('email')) {

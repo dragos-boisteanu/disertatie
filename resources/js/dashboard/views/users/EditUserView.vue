@@ -5,7 +5,7 @@
         </template>
     
         <form @submit.prevent="submit" class="flex flex-col">
-            <div class="flex flex-col lg:items-start xl:w-full 2xl:w-2/5">
+           <div class="flex flex-col lg:items-start lg:w-full 2xl:w-10/12">
                 <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
 
                     <!-- IMAGE UPLOAD -->
@@ -186,11 +186,13 @@
     import { alphaSpaces, phoneNumber } from '../../validators/index';
 
     import { downloadUser, patchUser } from '../../api/users.api';
+
+    import _isEqual from 'lodash/isEqual';
     
     export default {
 
         async beforeRouteEnter (to, from, next) {
-            const response = downloadUser(to.params.id);
+            const response = await downloadUser(to.params.id);
             next(vm => vm.setUser(response.data.data));
         },
 
@@ -244,7 +246,7 @@
                 },
                 phone_number:{
                     required,
-                    phoneNumber
+                    // phoneNumber
                 },
                 role: {
                     id: {
@@ -263,9 +265,8 @@
 
                 if(!this.$v.$invalid) {
                     try {
-                        this.$Progress.start()
-
                         this.waiting = true;
+
                         const payload = {
                             user: {
                                 id: this.user.id
@@ -275,13 +276,14 @@
                         let counter = 0;
 
                         Object.keys(this.user).forEach(key => {
-                            if(this.localUser[key] != this.user[key]) {
+                            if(!_isEqual(this.localUser[key], this.user[key])) {
                                 payload.user[key] = this.localUser[key];
                                 counter++;
                             }
                         })
 
                         if(counter > 0) {
+
                             const response = await patchUser(payload.user);
 
                             payload.user.avatar = response.data.avatar;
@@ -301,16 +303,14 @@
                             })
                         }
 
-                        this.$Progress.finish()
-
                         this.waiting = false;
 
                     } catch ( error ) {
+                        console.log(error)
                         this.$v.$touch();
-                        this.$Progress.fail();
                         this.waiting = false;
                         this.openNotification({
-                            type: 'error',
+                            type: 'err',
                             show: true,
                             message: 'Failed to update user account'
                         })
