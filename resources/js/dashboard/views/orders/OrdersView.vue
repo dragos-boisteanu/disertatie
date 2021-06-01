@@ -35,7 +35,7 @@
             </div>
         
             <select 
-                v-model="filterData.orderBy" 
+                v-model="orderBy" 
                 @change="order"
                 class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm md:w-auto">
                 <option :value="1">Created at asc</option>
@@ -113,15 +113,15 @@
 
     import _findIndex from 'lodash/findIndex'
 
+    import _isEqual from 'lodash/isEqual';
+    
     import {downloadOrders} from '../../api/orders.api';
 
     export default {
         async beforeRouteEnter(to, from, next) {
-            console.log(to.query)
             let response = {};
             if(Object.keys(to.query).length === 0) {
                 response = await downloadOrders();
-                 console.log('0: ', to.query)
             } else {
                 response = await downloadOrders(to.query);
             }
@@ -151,66 +151,59 @@
                     phoneNumber: '',
                     staffFirstName: '',
                     staffLastName: '',
-                    page: 1,
-                    orderBy: 2,
                 },
                 pagination: {
                     currentPage: '',
                     lastPage: ''
                 },
-            
+                orderBy: 2,
                 showFilterState: false,
             }
         },
 
         methods: {
-
             async refresh() {
-                try {
-                    if(Object.keys(this.$route.query).length > 0) { 
-                        this.$router.replace({name:'Orders', query: {}});
-                    }
-
-                    this.resetFilterData();
-
-                    const response = await downloadOrders();
-                    this.setOrders(response.data.data)
-
-                    const pagination = response.data.meta;
-                    this.setPagination(pagination)
-                } catch ( error ) {
-                    console.log(error)
+                if(Object.keys(this.$route.query).length > 0) { 
+                    this.$router.replace({name:'Orders', query: {}});
                 }
+
+                this.orderBy = 2;
+
+                this.resetFilterData();
+
+                const response = await downloadOrders();
+
+                this.setData(response.data);
             },
 
             async order() {
-                try {
-                    this.$Progress.start()
-                    const query = {};
+                const query = {};
 
-                    Object.keys(this.filterData).forEach(key => {
-                        if(this.filterData[key] !== "") {
-                            query[key] = this.filterData[key];
-                        }
-                    })
-                                      
-                    const response = await downloadOrders(query)
-                    this.setOrders(response.data.data)
+                Object.keys(this.filterData).forEach(key => {
+                    if(this.filterData[key] !== "") {
+                        query[key] = this.filterData[key];
+                    }
+                })
+                                    
+                const response = await downloadOrders(query)
+                this.setOrders(response.data.data)
 
-                    this.$router.replace({name:'Orders', query});
+                this.$router.replace({name:'Orders', query});
 
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    console.log(error);
-                }
             },
 
-            async filter(filterData) {
-                const response = await downloadOrders(filterData);
-                this.setData(response.data);
+            async filter(query) {
+                if(!_isEqual(this.filterData, query)) {
+                    query.orderBy = this.orderBy;
+                    query.page = 1;
 
-                this.updateFilterData(filterData);
+                    const response = await downloadOrders(query);
+                    this.setData(response.data);
+
+                    this.$router.replace({name:'Orders', query})
+                    
+                    this.updateFilterData(query);
+                }   
             },
 
             async callDownloadOrders(query) {
@@ -241,9 +234,6 @@
                 Object.keys(this.filterData).forEach(key => {
                     this.filterData[key] = "";
                 })
-
-                this.filterData.orderBy = 2;
-                this.filterData.page = 1;
             },
 
             updateFilterData(filterData) {

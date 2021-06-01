@@ -18,11 +18,10 @@ class UserFilter extends AbstractFilter
    protected $filters = [
       'id' => IdFilter::class,
       'firstName' => FirstNameFilter::class,
-      'name' => NameFilter::class,
+      'lastName' => LastNameFilter::class,
       'email' => EmailFilter::class,
       'phoneNumber' => PhoneNumberFilter::class,
       'roles' => RolesFilter::class,
-      'status' => StatusFilter::class,
       'fromDate' => FromDateFilter::class,
       'toDate' => ToDateFilter::class,
       'verified' => EmailVerifiedFilter::class,

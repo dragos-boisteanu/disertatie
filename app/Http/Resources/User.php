@@ -18,14 +18,13 @@ class User extends JsonResource
         return [
             'id' => $this->id,
             'avatar' => $this->avatar,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'birthdate' => $this->birthdate,
+            'firstName' => $this->first_name,
+            'lastName' => $this->last_name,
             'email' => $this->email,
-            'phone_number' => $this->phone_number,
+            'phoneNumber' => $this->phone_number,
             'role' => ['id'=>$this->role->id, 'name'=>$this->role->name],
-            'deleted_at' => $this->deleted_at,
-            'created_at' => $this->created_at
+            'deletedAt' => $this->deleted_at,
+            'createdAt' => $this->created_at
         ];
     }
 }

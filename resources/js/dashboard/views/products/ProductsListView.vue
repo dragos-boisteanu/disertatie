@@ -152,7 +152,6 @@
                     priceEnd: '',
                     stockStatus: '',
                 },
-
                 showFilterState: false,
                 orderBy: 1,
             }
@@ -166,6 +165,8 @@
                         this.$router.replace({name:'Products', query: {}});
                     }
 
+                    this.orderBy = 1;
+                    
                     this.resetFilterData();
 
                     const response = await downloadProducts();
@@ -177,13 +178,11 @@
 
             async filter(query) {
                 if(!_isEqual(this.filterData, query)) {
-                    query.page = this.pagination.currentPage;
                     query.orderBy = this.orderBy;
 
                     this.$router.replace({name:'Products', query});
-
+                
                     const response = await downloadProducts(query);
-
                     this.updateFilterData(query);
 
                     this.setData(response.data);
