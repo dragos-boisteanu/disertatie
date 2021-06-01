@@ -116,13 +116,6 @@
             next(vm => vm.setProduct(response.data.data));
         },
 
-        props: {
-            productProp: {
-                type: Object,
-                required: true
-            }
-        },
-
         computed: {
              ...mapGetters('Users', ['getLoggedUser']),
 
