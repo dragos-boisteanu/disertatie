@@ -356,11 +356,11 @@ export default {
     },
 
     methods: {
-        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder', 'addItemToOrder', 'patchItem', 'updateOrderStatus']),
         ...mapActions('Notification', ['openNotification']),
 
         async refresh() {
-            this.order = await this.downloadOrder(this.order.id)
+            const response = await downloadOrder(this.order.id)
+            this.order = response.data;
         },
 
         async cancelOrder() {
@@ -443,12 +443,12 @@ export default {
 
                 const response = await patchItem(payload)
                 const responseData = response.data;
-             
-                const itemIndex = _findIndex(this.order.items, ['id', responseData.data.itemId]);
-                
-                this.$set(this.order.items[itemIndex], 'quantity', responseData.data.quantity);
-                this.$set(this.order.items[itemIndex], 'totalPrice', responseData.totalPrice);
 
+                const itemIndex = _findIndex(this.order.items, ['id', item.id]);
+                
+                this.$set(this.order.items[itemIndex], 'quantity', item.quantity);
+                this.$set(this.order.items[itemIndex], 'totalPrice', responseData.itemTotalPrice);
+                
                 this.order.totalQuantity = responseData.totalQuantity;
                 this.order.totalValue = responseData.totalValue;
                 this.order.updatedAt = responseData.updatedAt;
@@ -460,17 +460,16 @@ export default {
 
         async updateStatus(statusId) {
             const data = {
-                vm:this,
-                data: {
-                    id: this.order.id,
-                    status: {
-                        id: statusId
-                    }
+                id: this.order.id,
+                status: {
+                    id: statusId
                 }
+                
             }
-            const response = await this.updateOrderStatus(data)
 
-            this.order.status = response.status;
+            const response = await updateOrderStatus(data)
+
+            this.order.status = response.data.status;
         },
 
         async markAsIsPreparing() {
@@ -520,7 +519,6 @@ export default {
         },
 
         updateOrder(order) {
-            console.log(order);
             Object.keys(order).forEach(key => {
                 this.order[key] = order[key]
             })

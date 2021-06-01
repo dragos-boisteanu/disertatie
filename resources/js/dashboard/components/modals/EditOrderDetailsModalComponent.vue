@@ -101,12 +101,9 @@
   import { required } from 'vuelidate/lib/validators'
   import { alphaNumSpaces } from '../../validators/index';
 
-  import { mapActions } from 'vuex';
-
   import { patchOrder } from '../../api/orders.api';
 
   export default {
-
     props: {
       clientId: {
         type: [String, Number],
@@ -164,8 +161,6 @@
     },
 
     methods: {
-      ...mapActions('Orders', ['patchOrder']),
-
       async submit() {
         this.$v.$touch();
 

@@ -243,7 +243,6 @@
 
                 if(!this.$v.$invalid) {
   
-
                     if(this.edit) {
                         this.$emit('edit', this.product)
                     } else {
