@@ -178,13 +178,11 @@
 
             async filter(query) {
                 if(!_isEqual(this.filterData, query)) {
-                    query.page = this.pagination.currentPage;
                     query.orderBy = this.orderBy;
 
                     this.$router.replace({name:'Products', query});
-
+                
                     const response = await downloadProducts(query);
-
                     this.updateFilterData(query);
 
                     this.setData(response.data);

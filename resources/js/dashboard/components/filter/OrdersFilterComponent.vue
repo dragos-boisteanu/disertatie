@@ -103,9 +103,7 @@
                         if(this.localFilterData[key] !== "") {
                             query[key] = this.localFilterData[key];
                         }
-                    })
-
-                    this.$router.replace({name:'Orders', query: query});
+                    }) 
 
                     this.filter(query);
                 } catch ( error ) {

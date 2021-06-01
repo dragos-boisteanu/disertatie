@@ -114,13 +114,7 @@
             </Card>
       </CardsList>
       
-      <div class="mt-5 text-center md:text-right" v-if="showMoreState">
-            <button 
-                class="w-full py-1 mt-2 text-base text-white ripple-bg-lightBlue-600 rounded-sm active:shadow-inner md:w-28" 
-                @click="loadMoreUsers">
-                Load more
-            </button>
-      </div>
+     <Pagination :data="pagination" :query="query" route="Users" @navigate="callDownloadUsers"></Pagination>
       
    </ViewContainer>
 </template>
@@ -132,6 +126,7 @@
     import UsersFilter from '../../components/filter/UsersFilterComponent';
     import CardsList from '../../components/cards/CardsListComponent';
     import Card from '../../components/cards/CardComponent';
+    import Pagination from '../../components/PaginationComponent';
 
     import { mapGetters, mapActions } from 'vuex';
 
@@ -156,13 +151,23 @@
         computed: {
             ...mapGetters('Users', ['isAdmin', 'isWaiter','isLocationManager']),
 
-            showMoreState() {
-                return this.getNextPage;
-            }, 
-
             hideAddUser() {
                 return this.isAdmin || this.isLocationManager || this.isWaiter;
             },
+
+            query() {
+                const query = {};
+
+                Object.keys(this.filterData).forEach(key => {
+                    if(!_isEmpty(this.filterData[key])) {
+                        query[key] = this.filterData[key];
+                    }
+                })
+
+                query.orderBy = this.orderBy;
+
+                return query;
+            }
         },
 
         data() {
@@ -172,7 +177,7 @@
                     id: "",
                     firstName: "",
                     lastName: "",
-                    roles: "",
+                    roles: [],
                     email: "",
                     phoneNumber: "",
                     verified: "",
@@ -180,7 +185,7 @@
                     toDate: "",
                 },
                 pagination: {
-                    curentPage: '',
+                    currentPage: '',
                     lastPage: ''
                 },
                 showFilterState: false,
@@ -222,15 +227,20 @@
             },
 
             async filter(query) {
-                query.page = 1;
-                query.orderBy = this.orderBy;
-
-                const response = await downloadUsers(query);
-
                 if(!_isEqual(this.filterData, query)) {
+                    query.orderBy = this.orderBy;
+                    query.page = 1;
+
+                    const response = await downloadUsers(query);
+                    this.setData(response.data);
+
                     this.$router.push({name:'Users', query})
+                    this.updateFilterData(query);
                 }
-                
+            },
+
+            async callDownloadUsers(query) {
+                const response = await downloadUsers(query);
                 this.setData(response.data);
             },
 
@@ -240,10 +250,16 @@
 
             setData(data) {
                 this.setUsers(data.data.users);
+                this.setPagination(data.meta)
             },
 
             setUsers(users) {
                 this.users = users;
+            },
+
+            setPagination(meta) {
+                this.pagination.currentPage = meta.current_page;
+                this.pagination.lastPage = meta.last_page;
             },
 
             resetFilterData(){
@@ -253,6 +269,14 @@
 
                 this.filterData.roles = [];
             },
+
+            updateFilterData(query) {
+                Object.keys(query).forEach(key => {
+                    if(query[key] !== "") {
+                        this.filterData[key] = query[key]
+                    }
+                })
+            }
         },  
 
         components: {
@@ -261,7 +285,8 @@
             Role,
             UsersFilter,
             CardsList,
-            Card
+            Card,
+            Pagination
         }
     }
 </script>
