@@ -196,6 +196,9 @@ class OrderController extends Controller
           
         $order->refresh();
 
-        return $order->deleted_at;
+        return response()->json([
+            'deletedAt' => $order->deleted_at,
+            'status' => $order->status,
+        ]);
     }
 }

@@ -359,8 +359,9 @@ export default {
         ...mapActions('Notification', ['openNotification']),
 
         async refresh() {
+            console.log(this.order)
             const response = await downloadOrder(this.order.id)
-            this.order = response.data;
+            this.order = response.data.data;
         },
 
         async cancelOrder() {
@@ -369,7 +370,9 @@ export default {
 
                 const response = await disableOrder(this.order.id)
 
-                this.order.deletedAt = response;
+                this.order.deletedAt = response.data.deletedAt;
+                this.order.status.id = response.data.status.id;
+                this.order.status.name = response.data.status.name;
 
                 this.waiting = false;
 
@@ -463,8 +466,7 @@ export default {
                 id: this.order.id,
                 status: {
                     id: statusId
-                }
-                
+                }              
             }
 
             const response = await updateOrderStatus(data)
