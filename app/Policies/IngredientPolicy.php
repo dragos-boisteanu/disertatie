@@ -19,7 +19,7 @@ class IngredientPolicy
      */
     public function create(User $user)
     {
-        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
+        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
             Response::allow();
         }
 
@@ -35,7 +35,7 @@ class IngredientPolicy
      */
     public function update(User $user)
     {
-        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
+        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
             Response::allow();
         }
 
@@ -51,7 +51,7 @@ class IngredientPolicy
      */
     public function forceDelete(User $user)
     {
-        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
+        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
             Response::allow();
         }
 

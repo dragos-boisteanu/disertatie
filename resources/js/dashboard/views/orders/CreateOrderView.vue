@@ -282,6 +282,8 @@
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
 
     import { mapActions, mapGetters } from 'vuex';
+
+    import { storeOrder } from '../../api/orders.api';
     
 
     import _find from 'lodash/find'
@@ -389,7 +391,6 @@
             ...mapActions('Users', ['getUserByPhoneNumber']),
             ...mapActions('Counties', ['fetchCitites']),
             ...mapActions('Notification', ['openNotification']),      
-            ...mapActions('Orders', ['storeOrder']),  
 
             async submit() {
                 try {
@@ -411,7 +412,7 @@
                             this.order.address = "Local"
                         }
   
-                        await this.storeOrder(this.order)
+                        await storeOrder(this.order)
 
                         this.openNotification({
                             type: 'ok',

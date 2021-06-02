@@ -1,8 +1,8 @@
 <template>
-    <div class="my-4 flex items-center justify-between text-xs md:justify-end">
+    <div class="flex items-center justify-between text-xs md:justify-end">
             <div v-if="showNextAndPrevious">
                 <router-link 
-                    :to="{name: route, query: {page:previousPage, ...cleanQuery} }" 
+                    :to="{name: route, query: {page:previousPage, ...query} }" 
                     @click.prevent.native="goTo(previousPage)" 
                     class="px-2 py-1 border hover:border-lightBlue-500" 
                     :class="{'pointer-events-none': !canPrevious, 'border-gray-200': !canPrevious, 'border-gray-300': canPrevious}"
@@ -13,7 +13,9 @@
             <div v-else></div>
             <ul class="flex items-center gap-x-2 md:mx-3">
                 <li v-for="(page, index) in lastPage" :key="index">
-                    <router-link :to="{name: route, query: {page, ...cleanQuery} }" @click.prevent.native="goTo(page)"  
+                    <router-link 
+                        @click.prevent.native="goTo(page)" 
+                        :to="{name: route, query: {page, ...query}}"   
                         class="px-2 py-1 border  hover:border-lightBlue-500 rounded-sm" 
                         :class="{'border-lightBlue-500': page === currentPage, 'border-gray-300': page !== currentPage}"
                         
@@ -24,7 +26,7 @@
             </ul>
             <div v-if="showNextAndPrevious">
                 <router-link 
-                    :to="{name: route, query: {page:nextPage, ...cleanQuery}}" 
+                    :to="{name: route, query: {page:nextPage, ...query}}" 
                     @click.prevent.native="goTo(nextPage)" 
                     class="px-2 py-1 border hover:border-lightBlue-500" 
                     :class="{'pointer-events-none': !canNext, 'border-gray-200': !canNext, 'border-gray-300': canNext}"
@@ -56,24 +58,12 @@
         },
 
         computed: {
-            cleanQuery() {
-                const result = {};
-
-                Object.keys(this.query).forEach( key => {
-                    if(key !== 'page') {
-                        result[key] = this.query[key];
-                    }
-                });
-
-                return result;
-            },
-
             currentPage() {
-                return this.data.current_page;
+                return this.data.currentPage;
             },
 
             lastPage() {
-                return this.data.last_page;
+                return this.data.lastPage;
             },
 
             showNextAndPrevious() {
@@ -105,7 +95,11 @@
 
         methods: {
             goTo(page) {
-                this.$emit('navigate', page);
+                const query = {
+                    page,
+                    ...this.query
+                }
+                this.$emit('navigate', query);
             }
         }
     }

@@ -5,7 +5,7 @@
         </template>
     
         <form @submit.prevent="submit" class="flex flex-col">
-            <div class="flex flex-col lg:items-start xl:w-full 2xl:w-2/5">
+           <div class="flex flex-col lg:items-start lg:w-full 2xl:w-10/12">
                 <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
 
                     <!-- IMAGE UPLOAD -->
@@ -32,53 +32,53 @@
                         <InputGroup
                             id="firstName"
                             label="First name"
-                            :hasError="$v.localUser.first_name.$error"
+                            :hasError="$v.localUser.firstName.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.localUser.first_name.required">
+                                <p v-if="!$v.localUser.firstName.required">
                                     The first name field is required
                                 </p>
-                                <p v-if="!$v.localUser.first_name.maxLength">
+                                <p v-if="!$v.localUser.firstName.maxLength">
                                     The first name field should not be longer than 50 characters
                                 </p>
-                                <p v-if="!$v.localUser.first_name.alphaSpaces">
+                                <p v-if="!$v.localUser.firstName.alphaSpaces">
                                     The first name field must contain only letters and spaces
                                 </p>
                             </template>
                             <Input 
-                                v-model="localUser.first_name"
+                                v-model="localUser.firstName"
                                 id="firstName" 
                                 name="first name" 
                                 :disabled="waiting"  
-                                :class="{'border-red-600' : $v.localUser.first_name.$error, 'border-green-600': $v.localUser.first_name.$dirty && !$v.localUser.first_name.$error}"
-                                @blur.native="$v.localUser.first_name.$touch()" 
+                                :class="{'border-red-600' : $v.localUser.firstName.$error, 'border-green-600': $v.localUser.firstName.$dirty && !$v.localUser.firstName.$error}"
+                                @blur.native="$v.localUser.firstName.$touch()" 
                             />
                         </InputGroup>
                         <InputGroup
                             id="lastName"
                             label="Last name"
-                            :hasError="$v.localUser.last_name.$error"
+                            :hasError="$v.localUser.lastName.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                    <p v-if="!$v.localUser.last_name.required">
+                                    <p v-if="!$v.localUser.lastName.required">
                                         The last name field is required
                                     </p>    
-                                    <p v-if="!$v.localUser.last_name.maxLength">
+                                    <p v-if="!$v.localUser.lastName.maxLength">
                                        The last name field should not be longer than 50 characters
                                     </p>
-                                    <p v-if="!$v.localUser.last_name.alphaSpaces">
+                                    <p v-if="!$v.localUser.lastName.alphaSpaces">
                                         The last name field must contain only letters and spaces
                                     </p>
                                 </template>
                             <Input 
-                                v-model="localUser.last_name"
+                                v-model="localUser.lastName"
                                 id="lastName" 
                                 name="lastName" 
-                                :class="{'border-red-600' : $v.localUser.last_name.$error, 'border-green-600': $v.localUser.last_name.$dirty && !$v.localUser.last_name.$error}"
+                                :class="{'border-red-600' : $v.localUser.lastName.$error, 'border-green-600': $v.localUser.lastName.$dirty && !$v.localUser.lastName.$error}"
                                 :disabled="waiting"
-                                @blur.native="$v.localUser.last_name.$touch()"
+                                @blur.native="$v.localUser.lastName.$touch()"
                             />
                         </InputGroup>
                     </div>
@@ -110,31 +110,31 @@
                         <InputGroup
                             id="phoneNumber"
                             label="Phone number"
-                            :hasError="$v.localUser.phone_number.$error"
+                            :hasError="$v.localUser.phoneNumber.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.localUser.phone_number.required">
+                                <p v-if="!$v.localUser.phoneNumber.required">
                                     The phone number field is required
                                 </p>
-                                <p v-if="!$v.localUser.phone_number.phoneNumber">
+                                <p v-if="!$v.localUser.phoneNumber.phoneNumber">
                                     The phone number is invalid
                                 </p>
                             </template>
                             <Input 
-                                v-model="localUser.phone_number"
+                                v-model="localUser.phoneNumber"
                                 id="phone" 
                                 name="phone number" 
-                                :class="{'border-red-600' : $v.localUser.phone_number.$error, 'border-green-600': $v.localUser.phone_number.$dirty && !$v.localUser.phone_number.$error}"
+                                :class="{'border-red-600' : $v.localUser.phoneNumber.$error, 'border-green-600': $v.localUser.phoneNumber.$dirty && !$v.localUser.phoneNumber.$error}"
                                 :disabled="waiting" 
-                                @blur="$v.localUser.phone_number.$touch()"
+                                @blur="$v.localUser.phoneNumber.$touch()"
                             />
                         </InputGroup>
                     </div>
                     <InputGroup
                         id="roleId"
                         label="Role"
-                        :hasError="$v.localUser.phone_number.$error"
+                        :hasError="$v.localUser.phoneNumber.$error"
                     >
                          <template v-slot:errors>
                             <p v-if="!$v.localUser.role.id.required">
@@ -180,31 +180,20 @@
 
     import DatePicker from 'vue2-datepicker';
 
-    import store from '../../store/index';
     import { mapActions, mapGetters } from 'vuex';
 
     import { required, email, maxLength, } from 'vuelidate/lib/validators'
     import { alphaSpaces, phoneNumber } from '../../validators/index';
+
+    import { downloadUser, patchUser } from '../../api/users.api';
+
+    import _isEqual from 'lodash/isEqual';
     
     export default {
 
         async beforeRouteEnter (to, from, next) {
-            const id = to.params.id;
-            try{
-                if(store.getters['Users/getUsers'].length > 0) {
-                    const user = await store.dispatch('Users/getUser', id);
-                    next(vm => vm.setUser(user));
-                } else {
-                    const user = await store.dispatch('Users/fetchUser', id);
-                    next(vm => vm.setUser(user));
-                }
-            } catch(error) {
-                store.dispatch('Notification/openNotification', {
-                    type: 'err',
-                    show: true,
-                    message: 'Something wrong happened'
-                })
-            }
+            const response = await downloadUser(to.params.id);
+            next(vm => vm.setUser(response.data.data));
         },
 
         computed: {
@@ -226,13 +215,13 @@
                 user: {},
                 localUser: {
                     id: '',
-                    first_name: '',
-                    last_name: '',
+                    firstName: '',
+                    lastName: '',
                     email: '',
-                    phone_number: '',
+                    phoneNumber: '',
                     role: {
                         id: '',
-                        name: '',
+                        name: ''
                     }
                 },              
 
@@ -241,12 +230,12 @@
 
         validations: {
             localUser: {
-                first_name: {
+                firstName: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
-                last_name: {
+                lastName: {
                     required,
                     maxLength: maxLength(50),
                     alphaSpaces
@@ -255,9 +244,9 @@
                     required,
                     email
                 },
-                phone_number:{
+                phoneNumber:{
                     required,
-                    phoneNumber
+                    // phoneNumber
                 },
                 role: {
                     id: {
@@ -268,7 +257,6 @@
         },
 
         methods: {
-            ...mapActions('Users', ['updateUser']),
             ...mapActions('Notification', ['openNotification']),
 
             async submit() {
@@ -277,11 +265,9 @@
 
                 if(!this.$v.$invalid) {
                     try {
-                        this.$Progress.start()
-
                         this.waiting = true;
+
                         const payload = {
-                            vm: this,
                             user: {
                                 id: this.user.id
                             }
@@ -290,18 +276,17 @@
                         let counter = 0;
 
                         Object.keys(this.user).forEach(key => {
-                            if(this.localUser[key] != this.user[key]) {
+                            if(!_isEqual(this.localUser[key], this.user[key])) {
                                 payload.user[key] = this.localUser[key];
                                 counter++;
                             }
                         })
 
                         if(counter > 0) {
-                            const response = await this.updateUser(payload);
+
+                            const response = await patchUser(payload.user);
 
                             payload.user.avatar = response.data.avatar;
-
-                            this.$emit('updated', payload.user);
 
                             this.$router.push({name: 'User', params: {id: this.user.id}});
 
@@ -318,19 +303,17 @@
                             })
                         }
 
-                        this.$Progress.finish()
-
                         this.waiting = false;
 
                     } catch ( error ) {
+                        console.log(error)
                         this.$v.$touch();
-                        this.$Progress.fail();
-                        if(error.response.data.errors) {
-                            this.$refs.observer.setErrors(error.response.data.errors)
-                        } 
                         this.waiting = false;
-                        console.log(error);
-                        // notification
+                        this.openNotification({
+                            type: 'err',
+                            show: true,
+                            message: 'Failed to update user account'
+                        })
                     }
                 }
                 

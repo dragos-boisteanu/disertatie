@@ -2,7 +2,9 @@
    <ViewContainer>
         <UsersFilter
             v-if="showFilterState"
+            :filterData="filterData"
             @closed="toggleFilterState"
+            @filter="filter"
         />
 
         <template slot="header">
@@ -41,8 +43,6 @@
                 <option :value="4">First Name desc</option>
                 <option :value="5">Email asc</option>
                 <option :value="6">Email desc</option>
-                <option :value="7">Role asc</option>
-                <option :value="8">Role desc</option>
                 <option :value="9">Orders asc</option>
                 <option :value="10">Orders desc</option>
                 <option :value="11">Reservations asc</option>
@@ -52,7 +52,7 @@
             </select>
         </div>
         <CardsList>
-            <Card v-for="user in getUsers" :key="user.id">
+            <Card v-for="user in users" :key="user.id">
                 <router-link :to="{name: 'User', params:{id:user.id}}">
                     <div class="w-full flex justify-start items-center pb-1 border-b border-gray-100">
                         <div class="w-12 h-12 mr-4 rounded-md">
@@ -61,13 +61,13 @@
                         </div>
                         <div class="flex-1">
                             <div class="capitalize font-semibold">
-                               <span>{{ user.first_name}}</span> <span>{{user.name}}</span>
+                               <span>{{ user.firstName}}</span> <span>{{user.lastName}}</span>
                             </div>
                             <div class="font-light">
                                {{ user.email}}
                             </div>
                             <div class="mt-1 text-xs">
-                               {{ user.phone_number}}
+                               {{ user.phoneNumber}}
                             </div>
                         </div>
                         <div>
@@ -75,7 +75,7 @@
                                 #{{user.id}}
                             </div>
                             <div class="mt-2">
-                                <Status :deleted-at="user.deleted_at"/>
+                                <Status :deleted-at="user.deletedAt"/>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                                     Joined on:
                                 </span>
                                 <span class="text-xs">
-                                    {{ user.created_at | formatDate }}
+                                    {{ user.createdAt | formatDate }}
                                 </span>
                             </div>
                             <Role :role-name="user.role.name"/>
@@ -114,137 +114,168 @@
             </Card>
       </CardsList>
       
-      <div class="mt-5 text-center md:text-right" v-if="showMoreState">
-            <button 
-                class="w-full py-1 mt-2 text-base text-white ripple-bg-lightBlue-600 rounded-sm active:shadow-inner md:w-28" 
-                @click="loadMoreUsers">
-                Load more
-            </button>
-      </div>
+     <Pagination :data="pagination" :query="query" route="Users" @navigate="callDownloadUsers"></Pagination>
       
    </ViewContainer>
 </template>
 
 <script>
-    import store from '../../store/index';
-
-    import { mapGetters, mapActions } from 'vuex';
-
     import ViewContainer from '../ViewContainer';
     import Status from '../../components/StatusComponent';
     import Role from '../../components/users/RoleComponent';
     import UsersFilter from '../../components/filter/UsersFilterComponent';
     import CardsList from '../../components/cards/CardsListComponent';
     import Card from '../../components/cards/CardComponent';
+    import Pagination from '../../components/PaginationComponent';
+
+    import { mapGetters, mapActions } from 'vuex';
+
+    import _isEmpty from 'lodash/isEmpty'
+    import _isEqual from 'lodash/isEqual'
+
+    import { downloadUsers } from  '../../api/users.api';
 
     export default {
         async beforeRouteEnter (to, from, next) {
+            let response = {};
+
             if(Object.keys(to.query).length === 0) {
-                await store.dispatch('Users/fetchUsers');
-                next();
+                response = await downloadUsers()
             } else {
-                await store.dispatch('Users/fetchUsers', to.query);
-                next();
-            }
-        },
-
-        mounted() {
-            if(this.$route.query.orderBy) {
-                this.orderBy = this.$route.query.orderBy;
-            } else {
-                this.orderBy = 14;
+                response = await downloadUsers(to.query)
             }
 
-            // this.sortUsersList(this.orderBy);
+            next(vm => vm.setData(response.data));
         },
 
         computed: {
-            ...mapGetters('Users', ['getUsers', 'getNextPage', 'isAdmin', 'isWaiter','isLocationManager']),
-
-            showMoreState() {
-                return this.getNextPage;
-            }, 
+            ...mapGetters('Users', ['isAdmin', 'isWaiter','isLocationManager']),
 
             hideAddUser() {
                 return this.isAdmin || this.isLocationManager || this.isWaiter;
             },
+
+            query() {
+                const query = {};
+
+                Object.keys(this.filterData).forEach(key => {
+                    if(!_isEmpty(this.filterData[key])) {
+                        query[key] = this.filterData[key];
+                    }
+                })
+
+                query.orderBy = this.orderBy;
+
+                return query;
+            }
         },
 
         data() {
             return {
+                users: {},
+                filterData: {
+                    id: "",
+                    firstName: "",
+                    lastName: "",
+                    roles: [],
+                    email: "",
+                    phoneNumber: "",
+                    verified: "",
+                    fromDate: "",
+                    toDate: "",
+                },
+                pagination: {
+                    currentPage: '',
+                    lastPage: ''
+                },
                 showFilterState: false,
-                orderBy: 0
+                orderBy: 14
             }
         },
 
         methods: { 
-            ...mapActions('Users', ['fetchUsers', 'refreshUsers', 'fetchMoreUsers', 'setFilteredState']),
             ...mapActions('Notification', ['openNotification']),
 
-            async loadMoreUsers() {
-                try {
-                    this.$Progress.start()
-
-                    const query = this.$route.query;
-                    query.page = this.getNextPage,
-                    query.orderBy = this.orderBy
-        
-                    await this.fetchMoreUsers(query)
-                    
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.fail()
-                    console.log(error)
-                }
-            },
-
             async refreshUsersList() {
-                try {
-                    this.$Progress.start()
-
-                    if(Object.keys(this.$route.query).length > 0) { 
-                        this.$router.replace({name:'Users', query: {}});
-                    }
-
-                    await this.refreshUsers();
-
-                    this.setFilteredState(false);
-
-                    this.orderBy = 14;
-                    
-                    this.$Progress.finish()
-                    this.openNotification({
-                        type:'ok',
-                        message: 'Users list refresed',
-                        show: true
-                    })
-                } catch ( error ) {
-                    this.$Progress.fail()
-                    console.log(error);
+                if(!_isEmpty(this.$route.query)) { 
+                    this.$router.replace({name:'Users', query: {}});
                 }
+
+                this.orderBy = 13;
+
+                const response = await downloadUsers();
+                this.setData(response.data)
+
+                this.resetFilterData();
             },
 
             async order() {
-                try {
-                    this.$Progress.start()
+                const  query = {}
 
-                    const query = Object.assign({}, this.$route.query);
-                 
+                Object.keys(this.filterData).forEach(key => {
+                    if(this.filterData[key] !== "") {
+                        query[key] = this.filterData[key];
+                    }
+                })
+
+                query.orderBy = this.orderBy;
+                
+                const response = await downloadUsers(query)
+                this.setData(response.data);
+
+                this.$router.replace({name:'Users', query});
+            },
+
+            async filter(query) {
+                if(!_isEqual(this.filterData, query)) {
                     query.orderBy = this.orderBy;
-                    
-                    await this.fetchUsers(query)
+                    query.page = 1;
 
-                    this.$router.replace({name:'Users', query});
+                    const response = await downloadUsers(query);
+                    this.setData(response.data);
 
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    console.log(error);
+                    this.$router.push({name:'Users', query})
+                    this.updateFilterData(query);
                 }
+            },
+
+            async callDownloadUsers(query) {
+                const response = await downloadUsers(query);
+                this.setData(response.data);
             },
 
             toggleFilterState() {
                 this.showFilterState = !this.showFilterState;
+            },
+
+            setData(data) {
+                this.setUsers(data.data.users);
+                this.setPagination(data.meta)
+            },
+
+            setUsers(users) {
+                this.users = users;
+            },
+
+            setPagination(meta) {
+                this.pagination.currentPage = meta.current_page;
+                this.pagination.lastPage = meta.last_page;
+            },
+
+            resetFilterData(){
+                Object.keys(this.filterData).forEach(key => {
+                    this.filterData[key] = "";
+                })
+
+                this.filterData.roles = [];
+            },
+
+            updateFilterData(query) {
+                Object.keys(query).forEach(key => {
+                    if(query[key] !== "") {
+                        this.filterData[key] = query[key]
+                    }
+                })
             }
         },  
 
@@ -254,7 +285,8 @@
             Role,
             UsersFilter,
             CardsList,
-            Card
+            Card,
+            Pagination
         }
     }
 </script>

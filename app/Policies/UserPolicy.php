@@ -41,7 +41,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
+        if( $user->role->name === "Administrator" || $user->name === "Location Manager") {
             Response::allow();
         }
 
@@ -57,7 +57,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        if( $user->role->name === "Administrator" || $user->role_id === "Location Manager") {
+        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
             Response::allow();
         }
 
@@ -73,7 +73,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        if( ( $user->role->name === "Administrator" || $user->role_id === "Location Manager") && $user->id != $model->id && $model->role->level < $user->role->level) {
+        if( ( $user->role->name === "Administrator" || $user->role->name === "Location Manager") && $user->id != $model->id && $model->role->level < $user->role->level) {
             Response::allow();
         }
 
@@ -89,7 +89,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model)
     {
-        if( ($user->role->name === "Administrator" || $user->role_id === "Location Manager") && $user->id != $model->id && $model->role->level < $user->role->level) {
+        if( ($user->role->name === "Administrator" || $user->role->name === "Location Manager") && $user->id != $model->id && $model->role->level < $user->role->level) {
             Response::allow();
         }
 
@@ -105,7 +105,7 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model)
     {
-        if( ($user->role->name === "Administrator" || $user->role_id === "Location Manager") || ($user->role->name === "Client" && $model->id === $user->id)) {
+        if( ($user->role->name === "Administrator" || $user->role->name === "Location Manager") || ($user->role->name === "Client" && $model->id === $user->id)) {
             Response::allow();
         }
 

@@ -16,7 +16,7 @@
             :id="selectedItemId"
             :quantity="selectedItemQuantity"
             @closed="closeAddProductModal"
-            @add="addItem"
+            @add="callAddItem"
             @edit="saveEdit"
         ></OrderItemModal>
 
@@ -34,7 +34,7 @@
             :address="order.address" 
             :observations="order.observations"
             @closed="showOrderDetailsEditModalToggle"
-            @updated="updateOrder"
+            @update="updateOrder"
         >
         </EditOrderDetailsModal>
 
@@ -132,7 +132,7 @@
                         :index="index"
                         :showActions="canEdit"
                         @edit="editOrderProduct(item)"
-                        @remove="removeItem"
+                        @remove="callRemoveItem"
                     ></OrderItem>
                     <tr class="text-sm">
                         <td class="p-2">{{ order.items.length + 1 }}</td>
@@ -244,16 +244,17 @@ import ConfirmCancelOrderModalComponent from '../../components/modals/ConfirmCan
 
 import Button from '../../components/buttons/ButtonComponent';
 
-import store from '../../store/index';
 import { mapActions, mapGetters } from 'vuex';
 import _findIndex from 'lodash/findIndex';
     
+import {downloadOrder, updateOrderStatus, removeItem, addItem, patchItem, disableOrder } from '../../api/orders.api';
+
 export default {
 
     async beforeRouteEnter(to, from, next) {
         const id = to.params.id;
-        let order = await store.dispatch('Orders/getOrder', id);
-        next(vm => vm.setOrder(order));
+        let response  = await downloadOrder(id);
+        next(vm => vm.setOrder(response.data.data));
     },
 
     computed: {
@@ -268,7 +269,7 @@ export default {
         },
 
         canEdit() {
-            if( ((this.isWaiter && this.order.staff.id === this.getLoggedUser.id) || this.isAdmin || this.isLocationManager ) && (this.order.deletedAt === null || (this.order.status.name !== 'Completed' || this.order.status.name !== 'Delivered' )) ){
+            if( ((this.isWaiter && this.order.staff.id === this.getLoggedUser.id) || this.isAdmin || this.isLocationManager ) && this.order.deletedAt === null && (this.order.status.name !== 'Completed' && this.order.status.name !== 'Delivered' ) ){
                 return true
             }
 
@@ -355,25 +356,23 @@ export default {
     },
 
     methods: {
-        ...mapActions('Orders', ['disableOrder', 'downloadOrder', 'removeItemFromOrder', 'addItemToOrder', 'patchItem', 'updateOrderStatus']),
         ...mapActions('Notification', ['openNotification']),
 
         async refresh() {
-            this.order = await this.downloadOrder(this.order.id)
+            console.log(this.order)
+            const response = await downloadOrder(this.order.id)
+            this.order = response.data.data;
         },
 
         async cancelOrder() {
             try {
-                this.waiting = true
-                const payload = {
-                    id: this.order.id,
-                    vm: this
-                }
+                this.waiting = true;
 
-                const response = await this.disableOrder(payload)
+                const response = await disableOrder(this.order.id)
 
-                console.log()
-                this.order.deletedAt = response;
+                this.order.deletedAt = response.data.deletedAt;
+                this.order.status.id = response.data.status.id;
+                this.order.status.name = response.data.status.name;
 
                 this.waiting = false;
 
@@ -395,16 +394,15 @@ export default {
             }
         },
 
-        async removeItem(id){
+        async callRemoveItem(id){
             const payload ={
-                vm: this,
-                localData: {
-                    id: this.order.id,
-                    itemId: id
-                }
+                id: this.order.id,
+                itemId: id
             }
-            const response = await this.removeItemFromOrder(payload);
-            // this.order.updatedAt = response.localData.updatedAt;
+
+            const response = await removeItem(payload);
+
+            this.order.updatedAt = response.data;
 
             const itemIndex = _findIndex(this.order.items, ['id', id]);
  
@@ -413,27 +411,27 @@ export default {
             }   
         },
 
-        async addItem(item) {
+        async callAddItem(item) {
             const payload = {
                 id: this.order.id,
                 item,
             }
 
-            const response = await this.addItemToOrder(payload);
-
-            const itemIndex = _findIndex(this.order.items, ['id', response.item.id]);
+            const response = await addItem(payload);
+            const responseData = response.data;
+            const itemIndex = _findIndex(this.order.items, ['id', responseData.item.id]);
 
             if(itemIndex >= 0) {           
-                this.$set(this.order.items[itemIndex], 'quantity', response.item.quantity);
-                this.$set(this.order.items[itemIndex], 'totalPrice', response.item.totalPrice);
+                this.$set(this.order.items[itemIndex], 'quantity', responseData.item.quantity);
+                this.$set(this.order.items[itemIndex], 'totalPrice', responseData.item.totalPrice);
                 
             } else {
-                this.order.items.push(response.item)
+                this.order.items.push(responseData.item)
             }
 
-            this.order.totalQuantity = response.totalQuantity;
-            this.order.totalValue = response.totalValue;
-            this.order.updatedAt = response.updatedAt;
+            this.order.totalQuantity = responseData.totalQuantity;
+            this.order.totalValue = responseData.totalValue;
+            this.order.updatedAt = responseData.updatedAt;
         },
        
         async saveEdit(item) {          
@@ -441,24 +439,22 @@ export default {
 
             if(item.quantity !== this.order.items[itemIndex].quantity) {
                 const payload = {
-                    vm: this,
-                    data: {
-                        id: this.order.id,
-                        itemId: item.id,
-                        quantity: item.quantity
-                    }
+                    id: this.order.id,
+                    itemId: item.id,
+                    quantity: item.quantity
                 }
 
-                const response = await this.patchItem(payload)
+                const response = await patchItem(payload)
+                const responseData = response.data;
 
-                const itemIndex = _findIndex(this.order.items, ['id', response.data.itemId]);
+                const itemIndex = _findIndex(this.order.items, ['id', item.id]);
                 
-                this.$set(this.order.items[itemIndex], 'quantity', response.data.quantity);
-                this.$set(this.order.items[itemIndex], 'totalPrice', response.totalPrice);
-
-                this.order.totalQuantity = response.totalQuantity;
-                this.order.totalValue = response.totalValue;
-                this.order.updatedAt = response.updatedAt;
+                this.$set(this.order.items[itemIndex], 'quantity', item.quantity);
+                this.$set(this.order.items[itemIndex], 'totalPrice', responseData.itemTotalPrice);
+                
+                this.order.totalQuantity = responseData.totalQuantity;
+                this.order.totalValue = responseData.totalValue;
+                this.order.updatedAt = responseData.updatedAt;
                 
             } else {
                 console.log('nothing to update');
@@ -467,17 +463,15 @@ export default {
 
         async updateStatus(statusId) {
             const data = {
-                vm:this,
-                data: {
-                    id: this.order.id,
-                    status: {
-                        id: statusId
-                    }
-                }
+                id: this.order.id,
+                status: {
+                    id: statusId
+                }              
             }
-            const response = await this.updateOrderStatus(data)
 
-            this.order.status = response.status;
+            const response = await updateOrderStatus(data)
+
+            this.order.status = response.data.status;
         },
 
         async markAsIsPreparing() {

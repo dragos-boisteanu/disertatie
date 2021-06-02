@@ -2,8 +2,10 @@
     <ViewContainer>
 
         <OrdersFilter
+            :filterData="filterData"
             v-if="showFilterState"
             @closed="toggleFilterState"
+            @filter="filter"
         />
 
         <template slot="header">
@@ -41,7 +43,7 @@
             </select>
         </div>
         <CardsList>
-            <Card v-for="order in getOrders" :key="order.id">
+            <Card v-for="order in orders" :key="order.id">
                 <router-link :to="{name: 'Order', params: { id: order.id}}">
                     <div class="w-full flex justify-start items-center pb-1 border-b border-gray-100">
                        <div class="flex-1">
@@ -94,6 +96,8 @@
                 </router-link>
             </Card>
         </CardsList>
+
+        <Pagination :data="pagination" :query="query" route="Orders" @navigate="callDownloadOrders"></Pagination>
        
     </ViewContainer>
 </template>
@@ -104,90 +108,150 @@
     import CardsList from '../../components/cards/CardsListComponent';
     import Card from '../../components/cards/CardComponent';
     import OrderStatus from '../../components/orders/OrderStatusComponent';
-
     import OrdersFilter from '../../components/filter/OrdersFilterComponent'
-
-    import store from '../../store/index'
-    import { mapActions, mapGetters } from 'vuex';
+    import Pagination from '../../components/PaginationComponent';
 
     import _findIndex from 'lodash/findIndex'
+
+    import _isEqual from 'lodash/isEqual';
     
+    import {downloadOrders} from '../../api/orders.api';
+
     export default {
         async beforeRouteEnter(to, from, next) {
+            let response = {};
             if(Object.keys(to.query).length === 0) {
-                await store.dispatch('Orders/downloadOrders');
-                next();
+                response = await downloadOrders();
             } else {
-                await store.dispatch('Orders/downloadOrders', to.query);
-                next();
+                response = await downloadOrders(to.query);
             }
-        },
 
-        mounted() {
-             if(this.$route.query.orderBy) {
-                this.orderBy = this.$route.query.orderBy;
-            } else {
-                this.orderBy = 2;
-            }
+            next(vm => vm.setData(response.data));
         },
 
         computed: {
-            ...mapGetters('Orders', ['getOrders']),
+            query() {
+                const query = {};
+
+                Object.keys(this.filterData).forEach(key => {
+                    if(this.filterData[key] !== "") {
+                        query[key] = this.filterData[key];
+                    }
+                })
+
+                return query;
+            }
         },
 
         data() {
             return {
+                orders: [],
+                filterData: {
+                    id: '',
+                    phoneNumber: '',
+                    staffFirstName: '',
+                    staffLastName: '',
+                },
+                pagination: {
+                    currentPage: '',
+                    lastPage: ''
+                },
+                orderBy: 2,
                 showFilterState: false,
-                orderBy: 1
             }
         },
 
         methods: {
-            ...mapActions('Orders', ['refreshOrders', 'downloadOrders']),
-
             async refresh() {
-                try {
-                    if(Object.keys(this.$route.query).length > 0) { 
-                        this.$router.replace({name:'Orders', query: {}});
-                    }
-                    this.orderBy = 1
-                    await this.refreshOrders();
-                } catch ( error ) {
-                    console.log(error)
+                if(Object.keys(this.$route.query).length > 0) { 
+                    this.$router.replace({name:'Orders', query: {}});
                 }
+
+                this.orderBy = 2;
+
+                this.resetFilterData();
+
+                const response = await downloadOrders();
+
+                this.setData(response.data);
             },
 
             async order() {
-                try {
-                    this.$Progress.start()
+                const query = {};
 
-                    const query = Object.assign({}, this.$route.query);
-                 
+                Object.keys(this.filterData).forEach(key => {
+                    if(this.filterData[key] !== "") {
+                        query[key] = this.filterData[key];
+                    }
+                })
+                                    
+                const response = await downloadOrders(query)
+                this.setOrders(response.data.data)
+
+                this.$router.replace({name:'Orders', query});
+
+            },
+
+            async filter(query) {
+                if(!_isEqual(this.filterData, query)) {
                     query.orderBy = this.orderBy;
+                    query.page = 1;
+
+                    const response = await downloadOrders(query);
+                    this.setData(response.data);
+
+                    this.$router.replace({name:'Orders', query})
                     
-                    await this.downloadOrders(query)
+                    this.updateFilterData(query);
+                }   
+            },
 
-                    this.$router.replace({name:'Orders', query});
+            async callDownloadOrders(query) {
+                
+                const response = await downloadOrders(query);
+                this.setData(response.data);
+            },
 
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    console.log(error);
-                }
+            setData(data) {
+                this.setOrders(data.data);
+                this.setPagination(data.meta)
+            },
+
+            setOrders(orders) {
+                this.orders = orders;
+            },
+
+            setPagination(pagination) {
+                this.pagination.currentPage = pagination.current_page;
+                this.pagination.lastPage = pagination.last_page;
             },
 
             toggleFilterState() {
                 this.showFilterState = !this.showFilterState
+            },
+
+            resetFilterData(){
+                Object.keys(this.filterData).forEach(key => {
+                    this.filterData[key] = "";
+                })
+            },
+
+            updateFilterData(filterData) {
+                Object.keys(filterData).forEach(key => {
+                    if(filterData[key] !== "") {
+                        this.filterData[key] = filterData[key]
+                    }
+                })
             }
         },
         
-
         components: {
             ViewContainer,
             Card,
             CardsList,
             OrderStatus,
-            OrdersFilter
+            OrdersFilter,
+            Pagination
         }
     }
 </script>
