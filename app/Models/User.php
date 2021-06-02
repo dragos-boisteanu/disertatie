@@ -70,8 +70,8 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Discount');
     }
 
-    public function scopeFilter(Builder $builder, Request $request)
+    public function scopeFilter(Builder $builder, array $data)
     {
-        return (new UserFilter($request))->filter($builder);
+        return (new UserFilter($data))->filter($builder);
     }
 }

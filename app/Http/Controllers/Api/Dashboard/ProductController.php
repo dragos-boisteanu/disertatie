@@ -27,7 +27,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
 
-        $query = Product::withTrashed()->filter($request);
+        $query = Product::withTrashed()->filter($request->all());
         
 
         if(!$request->has('orderBy')) {

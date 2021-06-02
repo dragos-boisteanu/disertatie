@@ -134,9 +134,9 @@ class Product extends Model
         return $this->belongsToMany(Order::class);
     }
 
-    public function scopeFilter(Builder $builder, Request $request)
+    public function scopeFilter(Builder $builder, array $data)
     {
-        return (new ProductFilter($request))->filter($builder);
+        return (new ProductFilter($data))->filter($builder);
     }
 
 }
