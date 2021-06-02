@@ -73,19 +73,19 @@ class OrderService implements OrderServiceInterface
       $order->status_id = 2; // recieved
       $order->staff_id = $userId;
       
-      if(in_array('name', $data)) {
+      if(array_key_exists('name', $data)) {
         $order->name = $data['name'];
       }   
 
-      if(in_array('observations', $data)) {
+      if(array_key_exists('observations', $data)) {
         $order->observations =  $data['observations'];
       }
 
-      if(in_array('clientId', $data)) {
+      if(array_key_exists('clientId', $data)) {
         $order->client_id = $data['clientId'];
       }          
 
-      if(in_array('email', $data)) {
+      if(array_key_exists('email', $data)) {
           $order->email = $data['email'];
           //send email with order details
       }
@@ -111,11 +111,11 @@ class OrderService implements OrderServiceInterface
     try {
       $order = Order::findOrfail($orderId);
 
-      if(in_array('address', $data)) {
+      if(array_key_exists('address', $data)) {
         $order->address = $data['address'];
       }
   
-      if(in_array('observations', $data)) {
+      if(array_key_exists('observations', $data)) {
         $order->observations = $data['observations'];
       }
   
