@@ -27,9 +27,9 @@ class OrderService implements OrderServiceInterface
       $order = Order::withTrashed()->findOrFail($orderId);
       return $order;
     } catch (ModelNotFoundException $mex) {
-      throw new Exception('No order found with #' . $orderId . ' id');
+      throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch ( \Exception $ex) {
-      throw new \Exception('Faied to update order #', $orderId);
+      throw new \Exception('Something went wrong');
     }
   }
 
@@ -141,7 +141,7 @@ class OrderService implements OrderServiceInterface
 
       return $order;
     } catch (ModelNotFoundException $mex) {
-      throw new Exception('No order found with #' . $orderId . ' id');
+      throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch ( \Exception $ex) {
       throw new \Exception('Faied to update order #', $orderId);
     }
@@ -156,7 +156,7 @@ class OrderService implements OrderServiceInterface
   
       return $order;
     } catch (ModelNotFoundException $mex) {
-      throw new Exception('No order found with #' . $orderId . ' id');
+      throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch ( \Exception $ex) {
       throw new Exception('Failed to disable order');
     }
@@ -164,7 +164,6 @@ class OrderService implements OrderServiceInterface
 
   private function addItems(Order $order, array $items): Order 
   {
-
     foreach($items as $item) {
       $product = Product::findOrFail($item['id']);
       $order->products()->attach($item['id'], [

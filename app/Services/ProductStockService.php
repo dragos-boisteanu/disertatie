@@ -34,7 +34,7 @@ class ProductStockService implements ProductStockServiceInterface
 
   public function addBackToStock(Product $product, ?int $quantity = null ): void 
   {
-    $quantityToAdd = is_null($quantity) ? $this->pivot->quantity : $quantity;
+    $quantityToAdd = is_null($quantity) ? $product->pivot->quantity : $quantity;
     if($product->has_ingredients) {
       foreach($product->ingredients as $ingredient) {
         $ingredient->stock->quantity += $ingredient->pivot->quantity * $quantityToAdd;

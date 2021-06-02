@@ -2,23 +2,15 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
-use Exception;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderProduct;
 use App\Http\Resources\OrderCollection;
 use App\Http\Requests\OrderPatchRequest;
 use App\Http\Requests\OrderStoreRequest;
-use App\Http\Resources\ModalOrderProduct;
 use App\Http\Requests\OrderPatchStatusRequest;
 use App\Http\Resources\Order as OrderResource;
-use App\Http\Resources\ModalOrderProductCollection;
 use App\Interfaces\OrderServiceInterface;
-use App\Interfaces\ProductStockServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
