@@ -30,7 +30,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::filter($request);
+        $query = User::filter($request->all());
 
         if(!$request->has('orderBy')) {
             $orderByValue = 14;

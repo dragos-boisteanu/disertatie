@@ -72,12 +72,6 @@ class Product extends Model
         return number_format($finalPrice, 2, '.', '');
     }
 
-    private function calculateDiscount($basePrice, $discount) 
-    {
-        return $basePrice - $basePrice * ($discount / 100); 
-    }
-
-
     public function getQuantityAttribute() 
     {
         if($this->has_ingredients) {
@@ -102,6 +96,11 @@ class Product extends Model
         }
 
         return $quantity;
+    }
+
+    private function calculateDiscount($basePrice, $discount) 
+    {
+        return $basePrice - $basePrice * ($discount / 100); 
     }
 
    
@@ -135,46 +134,9 @@ class Product extends Model
         return $this->belongsToMany(Order::class);
     }
 
-    public function scopeFilter(Builder $builder, Request $request)
+    public function scopeFilter(Builder $builder, array $data)
     {
-        return (new ProductFilter($request))->filter($builder);
+        return (new ProductFilter($data))->filter($builder);
     }
 
-    public function removeFromStock($quantity)
-    {
-        if($this->has_ingredients) {
-            //modify ingredients quantity
-            foreach($this->ingredients as $ingredient) {
-                if($ingredient->stock->quantity >=  $ingredient->pivot->quantity * $quantity) {
-                    $ingredient->stock->quantity -= $ingredient->pivot->quantity * $quantity;
-                    $ingredient->stock->save();
-                } else {
-                    throw new  Exception('There are not enought ' . $this->name . ' in stock');
-                }
-            }
-        } else {
-            // modify stock quantity
-            if( $this->stock->quantity >= $quantity) {
-                $this->stock->quantity -= $quantity;
-                $this->stock->save();
-            } else {
-                throw new  Exception('There are not enought ' . $this->name . ' in stock');
-            }
-        }
-    }
-
-    public function addBackToStock($quantity = null)
-    {
-        $quantityToAdd = is_null($quantity) ? $this->pivot->quantity : $quantity;
-        if($this->has_ingredients)
-        {
-            forEach($this->ingredients as $ingredient) {
-                $ingredient->stock->quantity += $ingredient->pivot->quantity * $quantityToAdd;
-                $ingredient->stock->save();
-            }
-        } else {
-            $this->stock->quantity += $quantityToAdd;
-            $this->stock->save();
-        }
-    }
 }
