@@ -27,7 +27,7 @@ class Order extends Model
         'observations',
     ];
 
-    public $with = ['products', 'deliveryMethod'];
+    public $with = ['products', 'deliveryMethod', 'status', 'client', 'staff'];
 
     protected $appends = array('totalQuantity', 'totalValue');
 
@@ -85,9 +85,9 @@ class Order extends Model
         return $this->belongsToMany(Product::class)->withPivot('product_name', 'quantity', 'unit_price');
     }
 
-    public function scopeFilter(Builder $builder, Request $request)
+    public function scopeFilter(Builder $builder, array $data)
     {
-        return (new OrderFilter($request))->filter($builder);
+        return (new OrderFilter($data))->filter($builder);
     }
 
 }
