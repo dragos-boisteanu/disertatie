@@ -5,12 +5,11 @@ namespace App\Services;
 use Exception;
 use App\Models\Order;
 use App\Models\Product;
-use App\Jobs\SendOrderMail;
-use App\Jobs\SendOrderEmail;
+use App\Events\NewMessage;
 use App\Jobs\SendOrderEmailJob;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
 use App\Interfaces\OrderServiceInterface;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\ProductStockServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -100,6 +99,13 @@ class OrderService implements OrderServiceInterface
       $order = $this->addItems($order, $data['items']);
      
       DB::commit();
+
+      if(isset($order->email)) {
+        Queue::push(new SendOrderEmailJob($order));                
+      }
+
+      event(new NewMessage($order->id . " order created")); 
+    
       
       return $order;
 

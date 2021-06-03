@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use App\Events\NewMessage;
 use Illuminate\Http\Request;
 use App\Jobs\SendOrderEmailJob;
 use Illuminate\Support\Facades\DB;
@@ -49,10 +50,7 @@ class OrderController extends Controller
         try  {
             $order = $this->orderService->create($request->validated(), $request->user()->id);
             
-            if(isset($order->email)) {
-                Queue::push(new SendOrderEmailJob($order));                
-            }
-            
+           
             return response()->json(['message'=>'Order created succesfully'], 201 );
 
         } catch (\Exception $e ) {

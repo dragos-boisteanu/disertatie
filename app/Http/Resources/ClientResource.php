@@ -17,7 +17,7 @@ class ClientResource extends JsonResource
         return [
             'id' => $this->id,
             'firstName' => $this->first_name,
-            'name' => $this->name,
+            'lastName' => $this->last_name,
             'email' => $this->email,
             'addresses' => ClientAddress::collection($this->whenLoaded('addresses')),
         ];

@@ -45,25 +45,25 @@
                         </InputGroup>
 
                         <InputGroup
-                            id="clientName"
-                            label="Name"
-                            :hasError="$v.client.name.$error"
+                            id="clientLastName"
+                            label="Last name"
+                            :hasError="$v.client.lastName.$error"
                             :eclass="{'flex-1':true}"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.client.name.maxLength">
+                                <p v-if="!$v.client.lastName.maxLength">
                                     The client name must not be longer than 50 characters
                                 </p>
-                                <p v-if="!$v.client.name.alphaSpaces">
+                                <p v-if="!$v.client.lastName.alphaSpaces">
                                     The client name field must contain only letters and spaces
                                 </p>
                             </template>
                             <Input
-                                v-model="client.name"
-                                id="clientName"
-                                name="clientName"
-                                :class="{'border-red-600' : $v.client.name.$error, 'border-green-600': $v.client.name.$dirty && !$v.client.name.$error}"
-                                @blur.native="$v.client.name.$touch()"
+                                v-model="client.lastName"
+                                id="clientLastName"
+                                name="clientLastName"
+                                :class="{'border-red-600' : $v.client.lastName.$error, 'border-green-600': $v.client.lastName.$dirty && !$v.client.lastName.$error}"
+                                @blur.native="$v.client.lastName.$touch()"
                             ></Input>
                         </InputGroup>
                     </div>
@@ -324,7 +324,7 @@
             return {
                 client: {
                     firstName: '',
-                    name: '',
+                    lastName: '',
                     addresses: [],
                     id: ''
                 },
@@ -346,7 +346,7 @@
 
         validations: {           
             client: {
-                name: {
+                lastName: {
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
@@ -437,11 +437,12 @@
 
                     if(!this.$v.order.phoneNumber.$invalid) {
                         const response = await downloadClientByPhoneNumber(this.order.phoneNumber);
+                        
                         if(response.data.data) {
-                            client = response.data.data;
+                            const client = response.data.data;
 
                             this.client.firstName = client.firstName;
-                            this.client.name = client.name;
+                            this.client.lastName = client.lastName;
                             this.client.id = client.id;
                         
                             this.client.addresses = client.addresses;
@@ -452,7 +453,6 @@
                 } catch( error ) {
                     
                 }
-              
             },
 
             saveEdit(product) {    
@@ -542,7 +542,7 @@
 
                 this.client = {
                     firstName: '',
-                    name: '',
+                    lastName: '',
                     addresses: [],
                     id: ''
                 }
