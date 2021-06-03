@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-between text-xs md:justify-end">
+    <div class="mt-4 flex items-center justify-between text-xs md:justify-end">
             <div v-if="showNextAndPrevious">
                 <router-link 
                     :to="{name: route, query: {page:previousPage, ...query} }" 
