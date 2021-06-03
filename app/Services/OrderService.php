@@ -6,10 +6,12 @@ use Exception;
 use App\Models\Order;
 use App\Models\Product;
 use App\Events\NewMessage;
+use App\Events\OrderCreated;
 use App\Jobs\SendOrderEmailJob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use App\Interfaces\OrderServiceInterface;
+use App\Http\Resources\Order as OrderResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\ProductStockServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -104,8 +106,7 @@ class OrderService implements OrderServiceInterface
         Queue::push(new SendOrderEmailJob($order));                
       }
 
-      event(new NewMessage($order->id . " order created")); 
-    
+      broadcast(new OrderCreated($order->id))->toOthers();
       
       return $order;
 
