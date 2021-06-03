@@ -70,6 +70,11 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 
     });
 
+    Route::group(['prefix'=>'statuses'], function() {
+        Route::get('/orders', 'StatusesController@getOrdersStatuses');
+
+    });
+
     Route::group(['prefix'=>'clients'], function() {
         Route::get('phone-number/{phoneNumber}', 'ClientController@getClientByPhoneNumer');
         Route::get('addresses/{id}', 'ClientController@getClientAddresses');

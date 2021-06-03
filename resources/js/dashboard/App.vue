@@ -77,6 +77,7 @@
                     this.downloadIngredients(),
                     this.downloadDiscounts(),
                     this.fetchDeliveryMethods(),
+                    this.downloadOrdersStatuses(),
                 ]);
 
                 Echo.private('orders')
@@ -129,6 +130,7 @@
             ...mapActions('Ingredients', ['downloadIngredients']),
             ...mapActions('Discounts', ['downloadDiscounts']),
             ...mapActions('DeliveryMethods', ['fetchDeliveryMethods']),
+            ...mapActions('Statuses', ['downloadOrdersStatuses']),
             
             async downloadRoles() {
                 try {

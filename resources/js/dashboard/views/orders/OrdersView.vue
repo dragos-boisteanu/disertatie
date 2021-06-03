@@ -114,6 +114,7 @@
     import _findIndex from 'lodash/findIndex'
 
     import _isEqual from 'lodash/isEqual';
+    import _isEmpty from 'lodash/isEmpty';
     
     import {downloadOrders} from '../../api/orders.api';
 
@@ -127,6 +128,19 @@
             }
 
             next(vm => vm.setData(response.data));
+        },
+
+        mounted() {
+            Object.keys(this.$route.query).forEach(key => {
+                if(!_isEmpty(this.$route.query[key])) {
+                    this.filterData[key] = this.$route.query[key];
+                }
+
+                if(!_isEmpty(this.$route.query.statuses)) {
+                    this.filterData.statuses = [];
+                    this.filterData.statuses.push(...this.$route.query.statuses);
+                }
+            })
         },
 
         computed: {
@@ -151,6 +165,7 @@
                     phoneNumber: '',
                     staffFirstName: '',
                     staffLastName: '',
+                    statuses: []
                 },
                 pagination: {
                     currentPage: '',
@@ -180,7 +195,7 @@
                 const query = {};
 
                 Object.keys(this.filterData).forEach(key => {
-                    if(this.filterData[key] !== "") {
+                    if(!_isEmpty(this.filterData[key])) {
                         query[key] = this.filterData[key];
                     }
                 })
@@ -207,7 +222,6 @@
             },
 
             async callDownloadOrders(query) {
-                
                 const response = await downloadOrders(query);
                 this.setData(response.data);
             },
@@ -238,7 +252,7 @@
 
             updateFilterData(filterData) {
                 Object.keys(filterData).forEach(key => {
-                    if(filterData[key] !== "") {
+                    if(!_isEmpty(filterData[key])) {
                         this.filterData[key] = filterData[key]
                     }
                 })

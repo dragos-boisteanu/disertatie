@@ -50,6 +50,24 @@
                 v-model.trim.lazy="localFilterData.staffLastName"
                 @change="callFilter"
             />
+
+            <div class="my-2 flex items-center flex-wrap gap-1">
+                <div v-for="status in getOrdersStatuses" :key="status.id">
+                    <input 
+                        :id="status.id" 
+                        :name="status.name"
+                        :value="status.id" 
+                        type="checkbox" 
+                        v-model="localFilterData.statuses"
+                        class="mr-1 outline-none"
+                        @change="callFilter"
+                    />
+                    <label :for="status.id">
+                    {{ status.name }}</label>
+    
+                </div>
+
+            </div>
         </div>
 
         <template slot="header">
@@ -61,7 +79,9 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import FilterComponent from './FilterComponent'
+    import _isEmpty from 'lodash/isEmpty';
 
     export default {
 
@@ -79,6 +99,10 @@
                 required: true
             }
         },
+
+        computed: {
+            ...mapGetters('Statuses', ['getOrdersStatuses']),
+        },
         
         data() {
             return {
@@ -87,8 +111,7 @@
                     phoneNumber: this.filterData.phoneNumber,
                     staffLastName: this.filterData.staffLastName,
                     staffFirstName: this.filterData.staffFirstName,
-                    orderBy: this.filterData.orderBy,
-                    page: this.filterData.page,
+                    statuses: this.filterData.statuses,
                 }
             }
         },
@@ -100,7 +123,7 @@
                     const query = {};
 
                     Object.keys(this.localFilterData).forEach(key => {
-                        if(this.localFilterData[key] !== "") {
+                        if(!_isEmpty(this.localFilterData[key])) {
                             query[key] = this.localFilterData[key];
                         }
                     }) 

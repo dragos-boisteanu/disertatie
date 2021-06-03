@@ -35,7 +35,8 @@ class OrderController extends Controller
             $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all());
             return new OrderCollection($orders);
         } catch ( \Exception $ex )  {
-            return  response()->json(['message'=>'Something when wrong'], 500);
+            // return  response()->json(['message'=>'Something when wrong'], 500);
+            return  response()->json([ $ex->getMessage()], 500);
         }
     }
 

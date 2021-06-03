@@ -148,6 +148,20 @@
             next(vm => vm.setData(response.data));
         },
 
+        mounted() {
+            Object.keys(this.$route.query).forEach(key => {
+                if(!_isEmpty(this.$route.query[key])) {
+                    this.filterData[key] = this.$route.query[key];
+                }
+
+                if(!_isEmpty(this.$route.query.roles)) {
+                    this.filterData.roles = [];
+                    this.filterData.roles.push(...this.$route.query.roles);
+                }
+            })
+        },
+
+
         computed: {
             ...mapGetters('Users', ['isAdmin', 'isWaiter','isLocationManager']),
 

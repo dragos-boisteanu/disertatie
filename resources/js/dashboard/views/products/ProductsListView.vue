@@ -119,6 +119,19 @@
             next(vm => vm.setData(data));
         },
 
+        mounted() {
+            Object.keys(this.$route.query).forEach(key => {
+                if(!_isEmpty(this.$route.query[key])) {
+                    this.filterData[key] = this.$route.query[key];
+                }
+
+                if(!_isEmpty(this.$route.query.categories)) {
+                    this.filterData.categories = [];
+                    this.filterData.categories.push(...this.$route.query.categories);
+                }
+            })
+        },
+
         computed: {
             ...mapGetters('Categories', ['getCategories']),
 
