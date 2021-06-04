@@ -1,6 +1,6 @@
 <template>
     <tr 
-        class="transition-shadow duration-200 ease-in-out text-sm border-white transform
+        class="text-sm border-white
         hover:bg-warmGray-100 even:bg-gray-50"
     >
         <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>

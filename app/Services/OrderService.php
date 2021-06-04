@@ -91,7 +91,7 @@ class OrderService implements OrderServiceInterface
 
       if(array_key_exists('email', $data)) {
           $order->email = $data['email'];
-          //send email with order details
+          Queue::push(new SendOrderEmailJob($order));
       }
 
       $order->save();
@@ -101,10 +101,6 @@ class OrderService implements OrderServiceInterface
       $order = $this->addItems($order, $data['items']);
      
       DB::commit();
-
-      if(isset($order->email)) {
-        Queue::push(new SendOrderEmailJob($order));                
-      }
 
       broadcast(new OrderCreated($order->id))->toOthers();
       
