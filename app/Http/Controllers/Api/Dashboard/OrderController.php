@@ -12,6 +12,7 @@ use App\Http\Resources\OrderCollection;
 use App\Http\Requests\OrderPatchRequest;
 use App\Http\Requests\OrderStoreRequest;
 use App\Interfaces\OrderServiceInterface;
+use App\Http\Resources\OrderListCollection;
 use App\Http\Requests\OrderPatchStatusRequest;
 use App\Http\Resources\Order as OrderResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -33,7 +34,7 @@ class OrderController extends Controller
     {
         try {
             $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all());
-            return new OrderCollection($orders);
+            return new OrderListCollection($orders);
         } catch ( \Exception $ex )  {
             // return  response()->json(['message'=>'Something when wrong'], 500);
             return  response()->json([ $ex->getMessage()], 500);
