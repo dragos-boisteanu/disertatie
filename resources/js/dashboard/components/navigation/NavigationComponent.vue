@@ -27,7 +27,7 @@
             <router-link :to="{name: 'Dashboard'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Dashboard</router-link>
         </div>
         
-        <div class="overflow-y-auto max-h-96 md:max-h-full lg:max-h-80 2xl:max-h-full pb-8 md:pb-0">
+        <div class="overflow-y-auto max-h-96 md:max-h-full  pb-8 md:pb-0">
             <div class="pt-2">
                 <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
                     ORDERS

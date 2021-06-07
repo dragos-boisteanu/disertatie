@@ -1,4 +1,4 @@
-import {downloadLoggedUserData, downloadUsers, downloadUser, storeUser, patchUser,  disableUser, restoreUser, deleteUser } from '../../api/users.api';
+import {downloadLoggedUserData} from '../../api/users.api';
 import _orderBy from 'lodash/orderBy';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
