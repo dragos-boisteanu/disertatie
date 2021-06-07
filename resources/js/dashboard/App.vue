@@ -80,15 +80,6 @@
                     this.downloadOrdersStatuses(),
                 ]);
 
-                Echo.private('orders')
-                    .listen('OrderCreated', (e) => {
-                        this.openNotification({
-                            type: 'info',
-                            message: `New order was created with id #${e.orderId}`,
-                            show: true
-                        });
-                    });
-
                 this.$Progress.finish()
 
                 this.loaded = true;

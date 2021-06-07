@@ -69,6 +69,7 @@
     import _isEmpty from 'lodash/isEmpty';
     
     import {downloadOrders} from '../../api/orders.api';
+import { mapActions } from 'vuex';
 
     export default {
         async beforeRouteEnter(to, from, next) {
@@ -92,7 +93,9 @@
                     this.filterData.statuses = [];
                     this.filterData.statuses.push(...this.$route.query.statuses);
                 }
-            })
+            }),
+
+            this.subscribeToNewOrders();
         },
 
         computed: {
@@ -129,6 +132,8 @@
         },
 
         methods: {
+            ...mapActions('Notification', ['openNotification']),
+            
             async refresh() {
                 if(Object.keys(this.$route.query).length > 0) { 
                     this.$router.replace({name:'Orders', query: {}});
@@ -208,6 +213,20 @@
                         this.filterData[key] = filterData[key]
                     }
                 })
+            },
+
+            subscribeToNewOrders() {
+                 Echo.private('orders')
+                    .listen('OrderCreated', (e) => {
+                        const newOrder = e.order;
+                        this.orders.unshift(newOrder);
+
+                        this.openNotification({
+                            type: 'info',
+                            message: `New order was created with id #${newOrder.id}`,
+                            show: true
+                        });
+                    });
             }
         },
         
