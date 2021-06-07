@@ -73,13 +73,16 @@ class OrderService implements OrderServiceInterface
       $order->delivery_method_id = $data['deliveryMethodId'];
 
       $order->address = $data['address'];
-      $order->phone_number =  $data['phoneNumber'];
 
       $order->status_id = 2; // recieved
       $order->staff_id = $userId;
 
       if (array_key_exists('name', $data)) {
         $order->name = $data['name'];
+      }
+
+      if (array_key_exists('phoneNumber', $data)) {
+        $order->phone_number = $data['phoneNumber'];
       }
 
       if (array_key_exists('observations', $data)) {

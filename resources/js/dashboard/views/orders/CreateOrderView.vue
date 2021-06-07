@@ -23,7 +23,7 @@
                             label="First name"
                             :hasError="$v.client.firstName.$error"
                             :eclass="{'flex-1':true}"
-                            :required="true"
+                            :required="!isTableOrder"
                         >
                             <template v-slot:errors>
                                 <p v-if="!$v.client.firstName.required">
@@ -74,7 +74,7 @@
                             label="Phone number"
                             :hasError="$v.order.phoneNumber.$error"
                             :eclass="{'flex-1':true}"
-                            :required="true"
+                            :required="!isTableOrder"
                         >
                             <template v-slot:errors>
                                 <p v-if="!$v.order.phoneNumber.required">
@@ -123,6 +123,7 @@
                             </p>
                         </template>
                         <Select 
+                            @change="deliveryMethodChanged"
                             v-model="$v.order.deliveryMethodId.$model"
                             id="orderDeliveryMethod"
                             name="orderDeliveryMethod"
@@ -133,37 +134,64 @@
                         </Select>
                     </InputGroup>
 
-                    <div class="flex flex-col gap-2 md:flex-row md:items-center" v-if="showAddressFields">
-                        <InputGroup
-                            v-if="client.addresses.length > 0"
-                            id="clientAddresses"
-                            label="Adrress"
-                            :eclass="{'flex-1':true}"
-                        >
-                            <Select
-                                v-model="order.address"
+                    <div class="flex flex-col gap-2 md:flex-row md:items-center" v-if="isTableOrder || showAddressFields">
+                        <div class="w-full" v-if="showAddressFields">
+                            <InputGroup
+                                v-if="client.addresses.length > 0"
                                 id="clientAddresses"
-                                name="clientAddresses"
+                                label="Adrress"
+                                :eclass="{'flex-1':true}"
                             >
-                                <option value="" selected disabled>Select client address</option>
-                                <option v-for="(address, index) in client.addresses" :key="index" :value="address.address">{{address.address}}</option>
-                            </Select>
-                        </InputGroup>
+                                <Select
+                                    v-model="order.address"
+                                    id="clientAddresses"
+                                    name="clientAddresses"
+                                >
+                                    <option value="" selected disabled>Select client address</option>
+                                    <option v-for="(address, index) in client.addresses" :key="index" :value="address.address">{{address.address}}</option>
+                                </Select>
+                            </InputGroup>
 
+                            <InputGroup
+                                v-if="showAddressFields"
+                                id="clientAddress"
+                                label="Adrress"
+                                :hasError="$v.order.address.$error"
+                                :eclass="{'flex-1':true}"
+                                :required="true"
+                            >
+                                <template v-slot:errors>
+                                    <p v-if="!$v.order.address.required">
+                                        The address field is required 
+                                    </p>
+                                    <p v-if="!$v.order.address.alphaNumSpaces">
+                                        The address field must contain only letters, spaces or numbers
+                                    </p>
+                                </template>
+                                <Input
+                                    v-model="order.address"
+                                    id="orderAddress"
+                                    name="clientAddress"
+                                    :class="{'border-red-600' : $v.order.address.$error, 'border-green-600': $v.order.address.$dirty && !$v.order.address.$error}"
+                                    @blur.native="$v.order.address.$touch()"
+                                ></Input>
+                            </InputGroup>
+                        </div>
+                        
                         <InputGroup
-                            v-if="showAddressFields"
-                            id="clientAddress"
-                            label="Adrress"
+                            v-if="isTableOrder"
+                            id="tableId"
+                            label="Table"
                             :hasError="$v.order.address.$error"
                             :eclass="{'flex-1':true}"
                             :required="true"
                         >
                             <template v-slot:errors>
                                 <p v-if="!$v.order.address.required">
-                                    The address field is required 
+                                    The table number field is required 
                                 </p>
                                 <p v-if="!$v.order.address.alphaNumSpaces">
-                                    The address field must contain only letters, spaces or numbers
+                                    The  table numbe must contain only letters, spaces or numbers
                                 </p>
                             </template>
                             <Input
@@ -317,6 +345,10 @@
 
             showAddressFields() {
                 return parseInt(this.order.deliveryMethodId) === 1;
+            },
+
+            isTableOrder() {
+                return  parseInt(this.order.deliveryMethodId) === 3;
             }
         },
         
@@ -351,7 +383,9 @@
                     alphaSpaces
                 },
                 firstName: {
-                    required,
+                    required: requiredIf(function () {
+                        return !this.isTableOrder
+                    }),
                     maxLength: maxLength(50),
                     alphaSpaces
                 },
@@ -359,7 +393,9 @@
 
             order: {
                 phoneNumber: {
-                    required
+                    required: requiredIf(function () {
+                        return !this.isTableOrder
+                    }),
                 },
 
                 email: {
@@ -367,8 +403,8 @@
                 },
 
                 address: {
-                    requiredIf: requiredIf(function () {
-                    return this.showAddressFields
+                    required: requiredIf(function () {
+                        return this.isTableOrder || this.showAddressFields
                     }),
                     alphaNumSpaces
                 },
@@ -398,21 +434,40 @@
 
                     if(!this.$v.$invalid) {
 
+                        const payload = {}
+
                         if(this.client.id) {
-                            this.order.clientId = this.client.id;
+                            payload.clientId = this.client.id;
                         } 
                         
-                        this.order.name = this.client.firstName
-
-                        if(this.order.email === "") {
-                            delete this.order.email
+                        if(this.client.firstName) {
+                            payload.name = this.client.firstName
+                        }
+                        
+                        if(this.order.email) {
+                            payload.email = this.order.email;
                         }
 
-                        if(this.order.deliveryMethodId == 2) {
-                            this.order.address = "Local"
+                        if(this.order.address) {
+                            payload.address =  this.order.address;
                         }
-  
-                        await storeOrder(this.order)
+
+                        if(this.order.observations) {
+                            payload.observations = this.order.observations;
+                        }
+
+                        if(parseInt(this.order.deliveryMethodId) === 2 ) {
+                            payload.address = 'Local';
+                        }
+
+                        if(this.order.phoneNumber) {
+                            payload.phoneNumber = this.order.phoneNumber;
+                        }
+
+                        payload.deliveryMethodId = this.order.deliveryMethodId;
+                        payload.items = this.order.items;
+
+                        await storeOrder(payload)
 
                         this.openNotification({
                             type: 'ok',
@@ -423,6 +478,7 @@
                         this.resetForm();
                     }
                 } catch ( error ) {
+                    console.log(error)
                     this.openNotification({
                         type: 'err',
                         show: true,
@@ -534,6 +590,10 @@
                 if(index > -1) {
                     this.order.items.splice(index, 1);
                 }
+            },
+
+            deliveryMethodChanged() {
+                this.$v.$reset();
             },
 
             resetForm() {

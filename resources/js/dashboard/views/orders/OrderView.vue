@@ -55,6 +55,9 @@
                         <div class="my-1">
                             <span class="font-semibold">Delivery method: </span> <span>{{ order.deliveryMethod.name}} ({{ order.deliveryMethod.price}} Ron)</span>
                         </div>
+                        <div class="my-1" v-if="order.deliveryMethod.name === 'Table'">
+                            <span class="font-semibold">Table: </span> <span>{{ order.address}}</span>
+                        </div>
                         <div class="my-1" v-if="showAddressForDelivery">
                             <span class="font-semibold">Address: </span> <span>{{ order.address}}</span>
                         </div>
@@ -64,45 +67,48 @@
                     </div>
                 </div>
             </div>
-            <div class="flex-1 bg-white shadow rounded p-4">
-                <div class="text-xl font-semibold my-3">Client</div>
-                <div class="text-sm">
-                    <div class="my-1">
-                        <div v-if="order.client">
-                            <div>
-                                <span class="font-semibold">ID: </span> <span>{{ order.client.id}}</span>
-                            </div>
-                            <div>
-                                <span class="font-semibold">Name: </span> <span>{{ order.client.name}}</span>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <span class="font-semibold">Name: </span> <span>{{ order.name }}</span>
-                        </div>
-                    </div>
-                    <div class="my-1">
+            <div class="w-full flex flex-col md:flex-row gap-4">
+                <div class="flex-1 bg-white shadow rounded p-4" v-if="order.client || order.name">
+                    <div class="text-xl font-semibold my-3">Client</div>
+                    <div class="text-sm">
                         <div class="my-1">
-                            <span class="font-semibold">Phone number: </span> <span>{{ order.phoneNumber}}</span>
+                            <div v-if="order.client">
+                                <div>
+                                    <span class="font-semibold">ID: </span> <span>{{ order.client.id}}</span>
+                                </div>
+                                <div>
+                                    <span class="font-semibold">Name: </span> <span>{{ order.client.name}}</span>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <span class="font-semibold">Name: </span> <span>{{ order.name }}</span>
+                            </div>
                         </div>
-                        <div v-if="order.email">
-                            <span class="font-semibold">Email: </span> <span>{{ order.email }}</span>
+                        <div class="my-1">
+                            <div class="my-1">
+                                <span class="font-semibold">Phone number: </span> <span>{{ order.phoneNumber}}</span>
+                            </div>
+                            <div v-if="order.email">
+                                <span class="font-semibold">Email: </span> <span>{{ order.email }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex-initial border-b pb-4 bg-white shadow rounded p-4">
+                    <div class="text-xl font-semibold my-3">Staff</div>
+                    <div class="text-sm">
+                        <div class="my-1">
+                            <div>
+                                <span class="font-semibold">ID: </span> <span>{{ order.staff.id }}</span>
+                            </div>
+                            <div>
+                                <span class="font-semibold">Name: </span> <span>{{ order.staff.name}}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="flex-1 border-b pb-4 bg-white shadow rounded p-4">
-                <div class="text-xl font-semibold my-3">Staff</div>
-                <div class="text-sm">
-                    <div class="my-1">
-                        <div>
-                            <span class="font-semibold">ID: </span> <span>{{ order.staff.id }}</span>
-                        </div>
-                        <div>
-                            <span class="font-semibold">Name: </span> <span>{{ order.staff.name}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <div class="w-full overflow-y-auto lg:w-1/2">   
