@@ -63,7 +63,8 @@
           class="
             flex
             items-center
-            justify-between
+            justify-center
+            gap-x-4
             w-full
             px-4
             py-1
@@ -296,6 +297,11 @@ export default {
           this.filterData[key] = filterData[key];
         }
       });
+
+       if (!_isEmpty(filterData.statuses)) {
+        this.filterData.statuses = [];
+        this.filterData.statuses.push(...filterData.statuses);
+      }
     },
 
     toggleSubscribeState() {
