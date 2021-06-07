@@ -96,15 +96,15 @@ class OrderService implements OrderServiceInterface
 
       $order->save();
 
-      if(isset($order->email)) {
-        Queue::push(new SendOrderEmailJob($order));
-      }
-
       // add each item into order products table
       // link each item to the order
       $order = $this->addItems($order, $data['items']);
 
       DB::commit();
+
+      if(isset($order->email)) {
+        Queue::push(new SendOrderEmailJob($order));
+      }
 
       broadcast(new OrderCreated($order))->toOthers();
 
