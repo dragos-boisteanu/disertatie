@@ -243,18 +243,27 @@ export default {
     },
 
     async order() {
-      const query = {};
+      try {
+        const query = {};
 
-      Object.keys(this.filterData).forEach((key) => {
-        if (!_isEmpty(this.filterData[key])) {
-          query[key] = this.filterData[key];
+        Object.keys(this.filterData).forEach((key) => {
+          if (!_isEmpty(this.filterData[key])) {
+            query[key] = this.filterData[key];
+          }
+        });
+
+        query.orderBy = this.orderBy;
+
+        const response = await downloadOrders(query);
+        this.setOrders(response.data.data);
+
+        if (!_isEqual(this.$route.query, query)) {
+          console.log(query);
+          this.$router.replace({ name: "Orders", query });
         }
-      });
-
-      const response = await downloadOrders(query);
-      this.setOrders(response.data.data);
-
-      this.$router.replace({ name: "Orders", query });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     async filter(query) {
@@ -320,7 +329,7 @@ export default {
     subscribeToNewOrders() {
       Echo.private("orders").listen("OrderCreated", (e) => {
         const newOrder = e.order;
-        if(this.orders) {
+        if (this.orders) {
           this.orders.unshift(newOrder);
         }
 
