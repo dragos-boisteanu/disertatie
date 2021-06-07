@@ -76,7 +76,7 @@
             md:w-60
             md:mt-0
           "
-          @click="toggleSubscribeState"
+          @click="toggleSubscribedToNewOrders"
         >
           <div class="flex items-center justify-center w-4 h-4 bg-white border">
             <svg
@@ -85,7 +85,7 @@
               viewBox="0 0 24 24"
               width="12px"
               fill="#000000"
-              v-if="subscribe"
+              v-if="getSubscribedToNewOrders"
             >
               <path d="M0 0h24v24H0V0z" fill="none" />
               <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
@@ -93,7 +93,7 @@
           </div>
           <div>Subscribe to new orders</div>
         </button>
-        <input hidden type="checkbox" v-model="subscribe" />
+        <input hidden type="checkbox" :checked="getSubscribedToNewOrders" />
       </div>
 
       <select
@@ -144,7 +144,7 @@ import _isEqual from "lodash/isEqual";
 import _isEmpty from "lodash/isEmpty";
 
 import { downloadOrders } from "../../api/orders.api";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   async beforeRouteEnter(to, from, next) {
@@ -169,9 +169,17 @@ export default {
         this.filterData.statuses.push(...this.$route.query.statuses);
       }
     });
+
+    if (this.getSubscribedToNewOrders) {
+      this.subscribeToNewOrders();
+    } else {
+      this.unsubscribeFromNewOrders();
+    }
   },
 
   computed: {
+    ...mapGetters("Users", ["getSubscribedToNewOrders"]),
+
     query() {
       const query = {};
 
@@ -207,17 +215,18 @@ export default {
   },
 
   watch: {
-    subscribe(newValue) {
-        if(newValue) {
-            this.subscribeToNewOrders();
-        } else {
-            this.unsubscribeFromNewOrders();
-        }
+    getSubscribedToNewOrders(newValue) {
+      if (newValue) {
+        this.subscribeToNewOrders();
+      } else {
+        this.unsubscribeFromNewOrders();
+      }
     },
   },
 
   methods: {
     ...mapActions("Notification", ["openNotification"]),
+    ...mapActions("Users", ["toggleSubscribedToNewOrders"]),
 
     async refresh() {
       if (Object.keys(this.$route.query).length > 0) {
@@ -298,20 +307,22 @@ export default {
         }
       });
 
-       if (!_isEmpty(filterData.statuses)) {
+      if (!_isEmpty(filterData.statuses)) {
         this.filterData.statuses = [];
         this.filterData.statuses.push(...filterData.statuses);
       }
     },
 
-    toggleSubscribeState() {
-        this.subscribe = !this.subscribe;
-    },
+    // toggleSubscribeState() {
+    //   this.subscribe = !this.subscribe;
+    // },
 
     subscribeToNewOrders() {
       Echo.private("orders").listen("OrderCreated", (e) => {
         const newOrder = e.order;
-        this.orders.unshift(newOrder);
+        if(this.orders) {
+          this.orders.unshift(newOrder);
+        }
 
         this.openNotification({
           type: "info",
