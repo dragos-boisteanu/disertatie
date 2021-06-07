@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use App\Events\NewMessage;
 use Illuminate\Http\Request;
+use App\Jobs\SendOrderEmailJob;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Queue;
 use App\Http\Resources\OrderCollection;
 use App\Http\Requests\OrderPatchRequest;
 use App\Http\Requests\OrderStoreRequest;
+use App\Interfaces\OrderServiceInterface;
+use App\Http\Resources\OrderListCollection;
 use App\Http\Requests\OrderPatchStatusRequest;
 use App\Http\Resources\Order as OrderResource;
-use App\Interfaces\OrderServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
@@ -30,9 +34,10 @@ class OrderController extends Controller
     {
         try {
             $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all());
-            return new OrderCollection($orders);
+            return new OrderListCollection($orders);
         } catch ( \Exception $ex )  {
-            return  response()->json(['message'=>'Something when wrong'], 500);
+            // return  response()->json(['message'=>'Something when wrong'], 500);
+            return  response()->json([ $ex->getMessage()], 500);
         }
     }
 
@@ -45,8 +50,9 @@ class OrderController extends Controller
     public function store(OrderStoreRequest $request)
     {
         try  {
-            $this->orderService->create($request->validated(), $request->user()->id);
+            $order = $this->orderService->create($request->validated(), $request->user()->id);
             
+           
             return response()->json(['message'=>'Order created succesfully'], 201 );
 
         } catch (\Exception $e ) {

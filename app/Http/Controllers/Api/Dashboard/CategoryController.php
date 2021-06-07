@@ -22,6 +22,7 @@ class CategoryController extends Controller
 
         return new CategoryCollection($categories);
     }
+    
     /**
      * Store a newly created resource in storage.
      *

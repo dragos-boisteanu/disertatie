@@ -50,7 +50,7 @@ class Product extends Model
     public function getPriceAttribute()
     {
         if($this->category->discount && $this->discount) {
-            if($this->category->discount > $this->discount) {
+            if($this->category->discount > $this->discount ){
                 $finalPrice = $this->calculateDiscount($this->base_price, $this->category->discount->value);
 
             } else if ($this->category->discount == $this->discount) {
