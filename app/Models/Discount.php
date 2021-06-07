@@ -26,7 +26,7 @@ class Discount extends Model
 
     public function categories() 
     {
-        return $this->belongsToMany('App\Models\Category');
+        return $this->hasMany('App\Models\Category');
     }
 
     public function products()

@@ -12,6 +12,7 @@ use App\Events\AccountCreated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\ClientResource;
 use App\Http\Resources\UserCollection;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\UserPatchRequest;
@@ -29,7 +30,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::filter($request);
+        $query = User::filter($request->all());
 
         if(!$request->has('orderBy')) {
             $orderByValue = 14;
@@ -40,10 +41,10 @@ class UserController extends Controller
       
         switch($orderByValue) {
             case 1:
-                $query->orderBy('name', 'asc');
+                $query->orderBy('last_name', 'asc');
                 break;
             case 2: 
-                $query->orderBy('name', 'desc');
+                $query->orderBy('last_name', 'desc');
                 break;
             case 3:
                 $query->orderBy('first_name', 'asc');
@@ -56,12 +57,6 @@ class UserController extends Controller
                 break;
             case 6:
                 $query->orderBy('emal', 'desc');
-                break;
-            case 7:        
-                $query->orderBy('role_id', 'asc');
-                break;
-            case 8:
-                $query->orderBy('role_id', 'desc');
                 break;
             // TO DO: special order by for orders and reservations count
             // case 9:
@@ -86,7 +81,7 @@ class UserController extends Controller
 
         $query->orderBy('id', 'asc');
         
-        $users = $query->withTrashed()->simplePaginate(16);
+        $users = $query->withTrashed()->paginate(2);
 
         return new UserCollection($users);
     }
@@ -99,25 +94,29 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-         
         $request->user()->can('create');
         
-        $userInputData = $request->input('data.user');
-        $userInputData['password'] = Hash::make(Str::random(8));
-
         try {
             DB::beginTransaction();
 
-            $user = User::create($userInputData);
+            $user = new User();
+
+            $user->first_name = $request->firstName;
+            $user->last_name = $request->lastName;
+            $user->phone_number = $request->phoneNumber;
+            $user->email = $request->email;
+            $user->role_id = $request->roleId;
+            $user->password = Hash::make(Str::random(18));
     
-            if($request->has('data.address')) {
-                $addressInputData = $request->input('data.address');
+            if($request->has('address')) {
+                $addressInputData['address'] = $request->address;
                 $addressInputData['user_id'] = $user->id;
+                
                 Address::create($addressInputData); 
             }
 
-            if($request->has('data.user.avatar')) {
-                $requestPath = $request->input('data.user.avatar');
+            if($request->has('avatar')) {
+                $requestPath = $request->avatar;
                 $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
                 $filename = 'avatar_'.$user->id . '_' . now()->timestamp;
                 $newPath = '/public/avatars/' . $user->id . '/' . $filename . '.' . $extension;
@@ -131,9 +130,10 @@ class UserController extends Controller
                 Storage::delete($requestPath);
             }
 
-            event(new AccountCreated($user));
+            // event(new AccountCreated($user));
             DB::commit();
-            return ['user' => ['id'=>$user->id, 'created_at'=>$user->created_at]];
+
+            return response()->json(['user' => ['id'=>$user->id, 'craetedAt'=>$user->created_at]], 201);
            
         } catch (\Illuminate\Database\QueryException $ex) {
             DB::rollBack();
@@ -169,8 +169,32 @@ class UserController extends Controller
 
         $request->user()->can('update', $user);
 
-        $user->update($request->validated());
-        
+        if($request->has('avatar')) {
+            $user->avatar = $request->avatar;
+        }
+
+        if($request->has('firstName')) {
+            $user->first_name = $request->firstName;
+        }
+
+        if($request->has('lastName')) {
+            $user->last_name = $request->lastName;
+        }
+
+        if($request->has('phoneNumber')) {
+            $user->phone_number = $request->phoneNumber;
+        }
+
+        if($request->has('email')) {
+            $user->email = $request->email;
+        }
+
+        if($request->has('role.id')) {
+            $user->role_id = $request->input('role.id');
+        }
+
+
+
         if($request->has('email')) {
             $user->email_verified_at = null;  
             event( new Registered($user));
@@ -223,7 +247,7 @@ class UserController extends Controller
 
         $user->refresh();
 
-        return response()->json(['message'=>'User account disabled', 'deleted_at'=>$user->deleted_at ], 200);
+        return response()->json(['message'=>'User account disabled', 'deletedAt'=>$user->deleted_at ], 200);
     }
 
     public function restore(Request $request, $id) 
@@ -236,7 +260,7 @@ class UserController extends Controller
 
         $user->refresh();
 
-        return response()->json(['message'=>'User account restored', 'deleted_at'=>$user->deleted_at], 200);
+        return response()->json(['message'=>'User account restored', 'deletedAt'=>$user->deleted_at], 200);
     }
 
     /**
@@ -260,4 +284,6 @@ class UserController extends Controller
     public function getLoggedUser(Request $request) {
         return new UserResource($request->user());
     }
+
+    
 }

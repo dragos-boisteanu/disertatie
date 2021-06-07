@@ -1,59 +1,15 @@
-import { extend } from 'vee-validate'
-import { required, alpha_spaces, email, integer, double, alpha_num, max  } from 'vee-validate/dist/rules';
-import { setInteractionMode } from 'vee-validate';
-
-import {validateBarcode} from './rules/barcode.js'
-
-setInteractionMode('eager');
-
-extend('required', {
-    ...required,
-    message: 'The {_field_} field is required.'
-});
-
-extend('integer', {
-    ...integer,
-    message: 'The {_field_} must be an integer'
-});
-
-extend('double', {
-  ...double,
-  message: 'The {_field_} must be an double with 2 decimals separated by a dot'
-});
-
-extend('email', {
-    ...email, 
-    message: 'The {_field_} must be a valid email address.'
-});
-
-extend('alpha_spaces', {
-    ...alpha_spaces,
-    message: 'The {_field_} must only contain letters.'
-});
-
-extend('alpha_num', {
-  ...alpha_num,
-  message: 'The {_field_} must only contain letters and numbers'
-});
+import { helpers } from 'vuelidate/lib/validators';
+import validbarcode from "barcode-validator";
 
 
-extend('max', {
-    ...max,
-    message: 'The {_field_} must not be greater than {length} characters.',
-    params: ['length']
-});
+const validateBarcode = (value) => !helpers.req(value) || validbarcode(value); 
+const alphaSpaces = (value) =>    !helpers.req(value) || /^[a-zA-Z\ \s]+$/.test(value);
+const alphaNumSpaces = (value) => !helpers.req(value) || /^[\w\-\s]+$/.test(value);
+const phoneNumber = (value) => !helpers.req(value) || /^(?:(?:(?:00\s?|\+)40\s?|0)(?:7\d{2}\s?\d{3}\s?\d{3}|(21|31)\d{1}\s?\d{3}\s?\d{3}|((2|3)[3-7]\d{1})\s?\d{3}\s?\d{3}|(8|9)0\d{1}\s?\d{3}\s?\d{3}))$/.test(value)
 
-extend('max_value', {
-    validate(value, { max }) {
-        return value <= max;
-    },
-    params: ['max'],
-    message: 'The {_field_} value must not be greater than {max}',
-});
-
-extend('barcode', {
-    validate: (value) => {
-        return validateBarcode(value);
-    },
-    message: 'The {_field_} must be a valid barcode of EAN-13, EAN-8, UPC-A, or UPC-E type'
-});
+export {
+    alphaSpaces,
+    alphaNumSpaces,
+    validateBarcode,
+    phoneNumber
+}

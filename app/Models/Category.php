@@ -15,11 +15,21 @@ class Category extends Model
     protected $fillable = [
         'name',
         'vat',
-        'color'
+        'color',
+        'discount_id',
+        'discounted_from_date',
+        'discounted_until_date'
     ];
+
+    public $with = ['discount'];
 
     public function products() 
     {
-        return $this->hasMany('App\Models\Products');
+        return $this->hasMany(Product::class);
+    }
+
+    public function discount()
+    {
+        return $this->belongsTo(Discount::class);
     }
 }

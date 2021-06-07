@@ -21,8 +21,8 @@ class Discount extends JsonResource
             'createdBy' => $this->user_id,
             'deletedAt' => $this->deleted_at,
             'createdAt' => $this->created_at,
-            'products' => new DiscountProductCollection($this->whenLoaded('products')),
-            'categories' => new DiscountCategoryCollection($this->whenLoaded('categories')),
+            'productsCount' => $this->products()->count(),
+            'categoriesCount'=> $this->categories()->count()
         ];
     }
 }

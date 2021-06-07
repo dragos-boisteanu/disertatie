@@ -25,12 +25,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'first_name',
-        'name',
+        'last_name',
         'phone_number',
         'email',
         'password',
         'role_id',
-        'birthdate'
     ];
 
     /**
@@ -52,7 +51,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public $with = ['role'];
+    public $with = ['role', 'addresses'];
+
+    // protected $appends = array('isAdmin', 'isLocationManager', 'isWaiter', 'isKitchenManager', 'isDelivery', 'isKitchen');
     
     public function role()
     {
@@ -69,8 +70,8 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Discount');
     }
 
-    public function scopeFilter(Builder $builder, Request $request)
+    public function scopeFilter(Builder $builder, array $data)
     {
-        return (new UserFilter($request))->filter($builder);
+        return (new UserFilter($data))->filter($builder);
     }
 }

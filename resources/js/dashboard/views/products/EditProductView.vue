@@ -4,224 +4,230 @@
             Edit product #{{ product.id }}
         </template>
 
-        <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-            <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
-                <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-9/12 2xl:w-2/4">
-                    <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
-                        <!-- <div>
-                            <file-pond
-                                name="image"
-                                ref="pond"
-                                label-idle="Upload product image image..."
-                                v-bind:allow-multiple="false"
-                                accepted-file-types="image/jpeg"
-                                :server="{
-                                    url: '/api/dashboard/images',
-                                    process: { 
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrf
-                                        },
-                                        onload: (response) =>  addImagePathToProduct(response) ,
-                                    },
-                                    revert: {
-                                        url: '/delete',
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrf
-                                        },
-                                    }
-                                }"
-                                :files="files"
-                                :onaddfilestart="waitForFiletoUpload"
-                                :onprocessfileabort="stopWaitingForFileToUpload"
+        <form @submit.prevent="submit" class="flex flex-col">
+            <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-2/3">
+                <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
+
+                    <!-- IMAGE UPLOAD -->
+                    <div class="flex items-center gap-x-5">
+                        <div class="w-32 h-32 rounded-md md:mr-4">
+                            <img v-if="product.image" :src="product.image" class="w-full h-full rounded-md object-cover"/>
+                            <svg v-else class="bg-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="128px" height="128px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+                        </div>
+
+                        <div class="flex-1">
+                            <ImageUploadComponent
+                                :disabled="waiting || waitForFileUpload"
+                                :clear="clearImage"
+                                @waitForFileToUpload="toggleWaitForFileUpload"
+                                @setImagePath="setImagePath"
+                            ></ImageUploadComponent>
+                            <button v-if="product.image" @click.prevent="removeImage">
+                                Remove image
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
+                        <InputGroup
+                            id="barcode"
+                            label="Barcode"
+                            :hasError="$v.localProduct.barcode.$error"
+                            :eclass="{'flex-1': true}"
+                        >
+                            <template v-slot:errors>
+                                <p v-if="!$v.localProduct.barcode.required">
+                                    The barcode field is required
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="localProduct.barcode" 
+                                id="barcode"
+                                name="barcode"   
+                                :class="{'border-red-600' : $v.localProduct.barcode.$error, 'border-green-600': $v.localProduct.barcode.$dirty && !$v.localProduct.barcode.$error}"
+                                :disabled="waiting"
+                                @input.native="$v.localProduct.barcode.$touch()"  
                             />
-                            
-                            <div class="text-right mt-6">
-                                <button 
-                                    :disabled="waitForFileUpload"
-                                    class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                                    @click.prevent="clearImage"
-                                >
-                                    Clear image
-                                </button>
-                                <button 
-                                    v-if="this.product.image"
-                                    :disabled="waitForFileUpload"
-                                    class="ml-4 border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                                    @click.prevent="removeImage"
-                                >
-                                    Remove image
-                                </button>
-                            </div>
-                        </div> -->
-                   
-                        <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                            
-                            <ValidationProvider 
-                                vid="barcode" 
-                                rules="required" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="w-full mt-2"
-                            >
-                                <label for="name" class="text-sm font-semibold">Barcode</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <div class="flex gap-x-1 items-center relative">
-                                    <input 
-                                        id="barcode"
-                                        name="barcode" 
-                                        type="text" 
-                                        v-model="localProduct.barcode" 
-                                        :disabled="waiting"   
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                        :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                    />
-                                </div>
-                            </ValidationProvider>
-                            <ValidationProvider 
-                                vid="name" 
-                                rules="required|alpha_spaces|max:255" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="w-full mt-2"
-                            >
-                                <label for="name" class="text-sm font-semibold">Name</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="firstName"
-                                    name="first name" 
-                                    type="text" 
-                                    v-model="localProduct.name" 
-                                    :disabled="waiting || locked"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-                        </div>
-
-                        <ValidationProvider 
-                            vid="description" 
-                            rules="required|alpha_spaces|max:255" 
-                            v-slot="{ errors, failed, passed }" 
-                            class="w-full mt-2"
-                        >       
-                            <label for="name" class="text-sm font-semibold">Description</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                            <textarea 
-                                id="description"
-                                name="description" 
-                                type="text" 
-                                v-model="localProduct.description" 
-                                :disabled="waiting || locked"   
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                        </InputGroup>
+                        <InputGroup
+                            id="name"
+                            label="Label"
+                            :hasError="$v.localProduct.name.$error"
+                            :eclass="{'flex-1': true}"
+                        >
+                            <template v-slot:errors> 
+                                <p v-if="!$v.localProduct.name.required">
+                                    The name field is required
+                                </p>
+                                <p v-if="!$v.localProduct.name.maxLength">
+                                    The first name field should not be longer than 50 characters
+                                </p>
+                                <p v-if="!$v.localProduct.name.alphaSpaces">
+                                    The name field must contain only letters and spaces
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="localProduct.name" 
+                                id="name"
+                                name="name"   
+                                :class="{'border-red-600' : $v.localProduct.name.$error, 'border-green-600': $v.localProduct.name.$dirty && !$v.localProduct.name.$error}"
+                                :disabled="waiting || locked"
+                                @input.native="$v.localProduct.name.$touch()"
                             />
-                        </ValidationProvider>
+                        </InputGroup>
+                    </div>
 
-                        <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
+                    <InputGroup
+                        id="description"
+                        label="Description"
+                        :hasErrors="$v.localProduct.description.$error"
+                    >  
+                        <template v-slot:errors>
+                            <p v-if="!$v.localProduct.description.required">
+                                The description field is required
+                            </p>
+                            <p v-if="!$v.localProduct.description.alphaNumSpaces">
+                                The description field must contain only letters, numbers and spaces
+                            </p>
+                        </template>
+                        <Textarea 
+                            v-model="localProduct.description"
+                            id="description"
+                            name="description"
+                            :class="{'border-red-600' : $v.localProduct.description.$error, 'border-green-600': $v.localProduct.description.$dirty && !$v.localProduct.description.$error}"
+                            :disabled="waiting || locked"
+                            @input.native="$v.localProduct.description.$touch()"
+                        />
+                    </InputGroup>
 
-                            <ValidationProvider 
-                                vid="base_price" 
-                                rules="required|double:2,dot" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="w-full mt-2"
+                    <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
+                        <InputGroup
+                            id="basePrice"
+                            label="Base price"
+                            :hasError="$v.localProduct.base_price.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
+                                <p v-if="!$v.localProduct.base_price.required">
+                                    The base price field is required
+                                </p>
+                                <p v-if="!$v.localProduct.base_price.decimal">
+                                    The base price must be in decimal format
+                                </p>
+                                <p v-if="!$v.localProduct.base_price.minValue">
+                                    The base price field must be at least 1
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="localProduct.base_price"
+                                id="basePrice"
+                                name="base price" 
+                                type="text"    
+                                :class="{'border-red-600' : $v.localProduct.base_price.$error, 'border-green-600': $v.localProduct.base_price.$dirty && !$v.localProduct.base_price.$error}"
+                                :disabled="waiting || locked" 
+                                @input.native="$v.localProduct.base_price.$touch()"
+                            />
+                        </InputGroup>
+                        <InputGroup
+                            id="category"
+                            label="Category"
+                            :hasError="$v.localProduct.category_id.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:error> 
+                                <p v-if="!$v.localProduct.category_id.required">
+                                    The category field is mandatory
+                                </p>
+                            </template>
+                            <Select 
+                                v-model="localProduct.category_id"
+                                id="category"
+                                name="category" 
+                                :class="{'border-red-600' : $v.localProduct.category_id.$error, 'border-green-600': $v.localProduct.category_id.$dirty && !$v.localProduct.category_id.$error}"
+                                :disabled="waiting || locked"
+                                @change.native="$v.localProduct.category_id.$touch()"
                             >
-                                <label for="name" class="text-sm font-semibold">Base price</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="basePrice"
-                                    name="base price" 
-                                    type="text" 
-                                    v-model="localProduct.base_price" 
-                                    :disabled="waiting || locked"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-                            <ValidationProvider 
-                                vid="category_id" 
-                                rules="required|integer" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="w-full mt-2"
+                                <option value="" disabled>Select category</option>
+                                <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }} ({{ category.vat}}% VAT)</option>
+                            </Select>
+                        </InputGroup>
+                    </div>
+
+                    <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
+                        <InputGroup
+                            id="weight"
+                            label="Weight"
+                            :hasError="$v.localProduct.weight.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
+                                <p v-if="!$v.localProduct.weight.required">
+                                    The weight field is required
+                                </p>
+                                <p v-if="!$v.localProduct.weight.integer">
+                                    The weight field must be an integer
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="localProduct.weight" 
+                                id="weight"
+                                name="weight"  
+                                :class="{'border-red-600' : $v.localProduct.weight.$error, 'border-green-600': $v.localProduct.weight.$dirty && !$v.localProduct.weight.$error}"
+                                :disabled="waiting || locked" 
+                                @input.native="$v.localProduct.weight.$touch()"
+                            />
+                        </InputGroup>
+                        <InputGroup
+                            id="weightUnit"
+                            label="Weight unit"
+                        >
+                            <template v-slot:errors>
+                                <p v-if="!$v.localProduct.unit_id.required">
+                                    The weight unit field is required
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="localProduct.unit_id"
+                                id="unit_id"
+                                name="weight units"  
+                                :class="{'border-red-600' : $v.localProduct.unit_id.$error, 'border-green-600': $v.localProduct.unit_id.$dirty && !$v.localProduct.unit_id.$error}"
+                                :disabled="waiting || locked"  
+                                @change.native="$v.localProduct.unit_id.$touch()"
                             >
-                                <label for="name" class="text-sm font-semibold">Category</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <select 
-                                    id="unit_id"
-                                    name="category"
-                                    v-model="localProduct.category_id" 
-                                    :disabled="waiting || locked"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                >
-                                    <option value="" disabled>Select category</option>
-                                    <option :value="category.id" v-for="category in getCategories" :key="category.id">{{ category.name }} ({{ category.vat}}% VAT)</option>
-                                </select>
-                            </ValidationProvider>
-                        </div>
+                                <option value="" disabled>Select unit</option>
+                                <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
+                            </Input>
+                        </InputGroup>
+                    </div>
 
-                        <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                            <ValidationProvider vid="weight" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
-                                <label for="name" class="text-sm font-semibold">Weight</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="weight"
-                                    name="weight" 
-                                    type="number" 
-                                    v-model="localProduct.weight" 
-                                    :disabled="waiting || locked"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-                            <ValidationProvider vid="unit_id" rules="required|integer" v-slot="{ errors, failed, passed }" class="w-full mt-2">
-                                <label for="name" class="text-sm font-semibold">Weight units</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <select 
-                                    id="unit_id"
-                                    name="weight units" 
-                                    type="text" 
-                                    v-model="localProduct.unit_id" 
-                                    :disabled="waiting || locked"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                >
-                                    <option value="" disabled>Select unit</option>
-                                    <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
-                                </select>
-                            </ValidationProvider>
-                        </div>
+                    <DiscountComponent 
+                        :discount="localProduct.discount" 
+                        @saved="addDiscount" 
+                        @removed="removeDiscount"
+                        :beginsAt="localProduct.discountStartsAt"
+                        :endsAt="localProduct.discountEndsAt"
+                    ></DiscountComponent>
 
-                        <DiscountComponent 
-                            :discount="localProduct.discount" 
-                            @saved="addDiscount" 
-                            @removed="removeDiscount"
-                        ></DiscountComponent>
+                    <IngredientsComponent
+                        :ingredients="localProduct.ingredients"
+                        @saved="saveIngredient"
+                        @removed="removeIngredient"
+                    ></IngredientsComponent>
 
-                        <IngredientsComponent
-                            :ingredients="localProduct.ingredients"
-                            @saved="saveIngredient"
-                            @removed="removeIngredient"
-                        ></IngredientsComponent>
-
-                     </div>
                 </div>
+            </div>
 
-                <div class="mt-5 flex md:justify-start">
-                    <button 
-                        type="submit"
-                        :disabled="waiting || waitForFileUpload"  
-                        class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
-                    >
-                        <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-              
-                        <span>
-                            Submit
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </ValidationObserver>
+            <div class="mt-5 flex md:justify-start">
+                <Button 
+                    type="primary"
+                    :disabled="waiting || waitForFileUpload"  
+                    :waiting="waiting"
+                    @click.native.prevent="submit"
+                >
+                    Submit
+                </Button>
+            </div>
+        </form>
     </ViewContainer>
 </template>
 
@@ -231,49 +237,37 @@
 
     import ViewContainer from '../ViewContainer'
 
+    import ImageUploadComponent from '../../components/ImageUploadComponent';
     import IngredientsComponent from '../../components/products/IngredientsComponent';
     import DiscountComponent from '../../components/discounts/DiscountComponent';
 
-    import vueFilePond from "vue-filepond";
-    import "filepond/dist/filepond.min.css";
-    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+    import Input from '../../components/inputs/TextInputComponent';
+    import Select from '../../components/inputs/SelectInputComponent';
+    import Textarea from '../../components/inputs/TextareaInputComponent';
+    import InputGroup from '../../components/inputs/InputGroupComponent';
+
+    import Button from '../../components/buttons/ButtonComponent';
 
     import _find from 'lodash/find';
     import _filter from 'lodash/filter';
     import _findIndex from 'lodash/findIndex';
+    import _isEqual from 'lodash/isEqual';
 
-    const FilePond = vueFilePond(
-        FilePondPluginFileValidateType,
-    );
-
+    import { required, integer, decimal, maxLength, minValue } from 'vuelidate/lib/validators'
+    import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
+    import { patchProduct, downloadProduct } from '../../api/products.api';
+    
     export default {
 
         async beforeRouteEnter (to, from, next) {
-            const id = to.params.id;
-            try{
-                if(store.getters['Products/getProducts'].length > 0) {
-                    const product = await store.dispatch('Products/getProduct', id);
-                    next(vm => vm.setProduct(product));
-                } else {
-                    const product = await store.dispatch('Products/fetchProduct', id);
-                    next(vm => vm.setProduct(product));
-                }
-            } catch(error) {
-                store.dispatch('Notification/openNotification', {
-                    type: 'err',
-                    show: true,
-                    message: 'Something wrong happened'
-                })
-            }
-           
+            const response = await downloadProduct(to.params.id);
+            next(vm => vm.setProduct(response.data.data));
         },
 
         computed: {
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
-
         },
 
         data() {
@@ -300,125 +294,130 @@
                 },
                 
                 waitForFileUpload: false,
-                files: [],
-                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                clearImage: false,
+            }
+        },
+
+        validations: {
+            localProduct: {
+                barcode: {
+                    required,
+
+                },
+                name: {
+                    required,
+                    maxLength: maxLength(50),
+                    alphaSpaces,
+                },
+                description: {
+                    required,
+                    maxLength: maxLength(255),
+                    alphaNumSpaces
+                },
+                base_price: {
+                    required,
+                    decimal,
+                    minValue: minValue(1)
+                },
+                weight: {
+                    required,
+                    integer
+                },
+                unit_id: {
+                    required,
+                },
+                category_id: {
+                    required,
+                }
             }
         },
 
         methods: {
-            ...mapActions('Products', ['updateProduct']),
             ...mapActions('Notification', ['openNotification']),
 
             async submit() {
-                try {
-                    const payload = {
-                        vm: this,
-                        product: {
-                            id: this.localProduct.id,
+
+                this.$v.$touch();
+
+                if(!this.$v.$invalid) {
+                    try {
+                        const payload = {
+                            product: {
+                                id: this.localProduct.id,
+                            }
                         }
-                    }
 
-                    let counter = 0;
-                    
-                    Object.keys(this.localProduct).forEach(key => {
-                        if(key === 'ingredients') {
-
-                            // if one ingredient from local product differ in quantity to the same ingredient from product
-                            // sasve it to a new arraw
-                            // if the new array has items set the local product ingredients list in payload
-                            // and increment the counter so the update can be sent
-                            const modifiedIngredients = this.localProduct[key].filter(({ quantity: q1 }) => !this.product[key].some(({ quantity: q2 }) => q1 === q2));
-
-                            if(modifiedIngredients.length > 0 || this.localProduct[key].length !== this.product[key].length) {
+                        let counter = 0;
+                        
+                        Object.keys(this.localProduct).forEach(key => {
+                            if(key === 'discount') {
+                                if(!_isEqual(this.localProduct[key], this.product[key])) {
+                                    payload.product[key] = this.localProduct[key];
+                                    counter++;
+                                }
+                                
+                            } else if(key === 'ingredients') {
+                                if(!_isEqual(this.localProduct[key], this.product[key])) {
+                                    payload.product[key] = this.localProduct[key];
+                                    payload.product.hasIngredients = true;
+                                    counter++;
+                                }
+                                
+                            } else if (this.product[key] !== this.localProduct[key]) {
                                 payload.product[key] = this.localProduct[key];
                                 counter++;
                             }
+                        });
+                    
+                        if(counter > 0) {
 
-                        } else if (this.product[key] !== this.localProduct[key]) {
-                            payload.product[key] = this.localProduct[key];
-                            counter++;
+                            await patchProduct(payload.product);
+
+                            counter = 0;
+                            
+                            this.$router.push({name: 'Product', params: {id: this.product.id}})
+
+                            
+                            this.openNotification({
+                                type: 'ok',
+                                show: true,
+                                message: 'Product updated'
+                            })
+                        } else {
+                            this.openNotification({
+                                type: 'info',
+                                show: true,
+                                message: 'Nothing to update'
+                            })
                         }
-                    })
-
-                   
-                    if(counter > 0) {
-                        this.$Progress.start();
-
-                        if(payload.product.ingredients && payload.product.ingredients.length === 0) {
-                            delete payload.product.ingredients;
-                        }
-
-                        await this.updateProduct(payload);
-
-                        counter = 0;
-                        
-                        this.$router.push({name: 'Product', params: {id: this.product.id}})
-                        this.$Progress.finish()
-                        
+                    } catch ( error ) {
                         this.openNotification({
-                            type: 'ok',
+                            type: 'err',
                             show: true,
-                            message: 'Product updated'
+                            message: 'Something went wrong'
                         })
-                    } else {
-                        this.openNotification({
-                            type: 'info',
-                            show: true,
-                            message: 'Nothing to update'
-                        })
+                        this.$v.$touch();
+                        console.log(error);
                     }
-                } catch ( error ) {
-                    this.openNotification({
-                        type: 'err',
-                        show: true,
-                        message: 'Something went wrong'
-                    })
-                    this.$Progress.fail();
-                    console.log(error);
                 }
+                
             },
 
-            objectsEqual(o1, o2) {
-                return typeof o1 === 'object' && Object.keys(o1).length > 0  ? Object.keys(o1).length === Object.keys(o2).length   && Object.keys(o1).every(p => this.objectsEqual(o1[p], o2[p])) : o1 === o2
+            removeImage() {
+                this.product.image = "";
+                this.localProduct.image = "clear";
             },
 
-            waitForFiletoUpload() {
-                this.waitForFileUpload = true;
+            toggleWaitForFileUpload(waitForFileToUpload) {
+                console.log(waitForFileToUpload);
+                this.waitForFileUpload = waitForFileToUpload;
             },
 
-            addImagePathToProduct(value) {
-                this.localProduct.image = value;
-                this.waitForFileUpload = false;
+            setImagePath(imagePath) {
+                console.log(imagePath)
+                this.localProduct.image = imagePath;
             },
 
-            stopWaitingForFileToUpload() {
-                this.waitForFileUpload = false;
-            },
-
-            clearImage() {
-                this.$refs.pond.removeFile({revert: true});
-                this.localProduct.image = this.product.image
-            },
-
-            async removeImage() {
-                try {
-                    this.$Progress.start();
-                    this.$refs.pond.removeFile({revert: false});
-
-                    this.localProduct.image = 'clear';
-
-                    await this.submit();
-
-                    delete this.localProduct.image;
-                    this.$Progress.finish();
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    console.log(error)
-                    // notification
-                }               
-            },
-
-            
             setProduct(product){
                 this.product = product;
                 this.localProduct = JSON.parse(JSON.stringify(this.product))
@@ -453,9 +452,14 @@
 
         components: {
             ViewContainer,
+            ImageUploadComponent,
             IngredientsComponent,
             DiscountComponent,
-            FilePond
+            Input,
+            Select,
+            Textarea,
+            InputGroup,
+            Button
         }
     }
 </script>

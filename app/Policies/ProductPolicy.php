@@ -42,7 +42,7 @@ class ProductPolicy
      */
     public function create(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
             Response::allow();
         }
 
@@ -58,7 +58,7 @@ class ProductPolicy
      */
     public function update(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
             Response::allow();
         }
 
@@ -74,7 +74,7 @@ class ProductPolicy
      */
     public function delete(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
             Response::allow();
         }
 
@@ -90,7 +90,7 @@ class ProductPolicy
      */
     public function restore(User $user)
     {
-        if( $user->role_id === 6 || $user->role_id === 7) {
+        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
             Response::allow();
         }
 
@@ -106,7 +106,7 @@ class ProductPolicy
      */
     public function forceDelete(User $user)
     {
-        if( $user->role_id === 7) {
+        if( $user->role->name === "Administrator") {
             Response::allow();
         }
 

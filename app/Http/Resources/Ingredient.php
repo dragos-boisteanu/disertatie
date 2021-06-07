@@ -20,7 +20,8 @@ class Ingredient extends JsonResource
             'stockQuantity' => $this->stock->quantity, 
             'quantity' => $this->whenPivotLoaded('ingredient_product', function () {
                 return $this->pivot->quantity;
-            }),
+            }, ''),
+            'productsCount' => $this->products()->count(),
             'unit' => $this->unit,
         ];
     }

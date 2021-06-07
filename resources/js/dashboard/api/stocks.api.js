@@ -1,13 +1,12 @@
-import httpClient from '../api/httpClient'
+import httpClient from '../../api/httpClient';
 
-const BASE_URL = '/stocks';
+const BASE_URL = '/dashboard/stocks';
 
 const updateStock = (payload) => httpClient.patch(`${BASE_URL}/${payload.id}`, payload.data);
-const downloadProduct = (barcode) => httpClient.get(`${BASE_URL}/products/${barcode}`);
-const downloadIngredientById = (id) => httpClient.get(`${BASE_URL}/ingredients/${id}`);
-
+const downloadProductStockDetails = (barcode) => httpClient.get(`${BASE_URL}/products/${barcode}`);
+const downloadIngredientStockDetails = (input) => httpClient.get(`${BASE_URL}/ingredients/${input}`);
 export {
     updateStock,
-    downloadProduct,
-    downloadIngredientById
+    downloadProductStockDetails,
+    downloadIngredientStockDetails,
 }

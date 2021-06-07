@@ -24,25 +24,12 @@ class UserPatchRequest extends FormRequest
     public function rules()
     {
         return [
-            'avater' => 'sometimes|stirng',
-            'first_name' => 'sometimes|required|string|max:255',
-            'name' => 'sometimes|string|max:255',
-            'birthdate' => 'sometimes|date',
-            'phone_number' => 'sometimes|string|unique:users,phone_number',
+            'avatar' => 'sometimes|string',
+            'firstName' => 'sometimes|required|string|max:255',
+            'lastName' => 'sometimes|string|max:255',
+            'phoneNumber' => 'sometimes|string|unique:users,phone_number',
             'email' => 'sometimes|string|email|max:255|unique:users,email',
-            'role_id' => 'sometimes|integer|exists:roles,id',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'first_name' => 'first name',
-            'name' => 'name',
-            'birthdate' => 'birthdate',
-            'phone_number' => 'phone number',
-            'email' => 'email',
-            'role_id' => 'role',
+            'role.id' => 'sometimes|integer|exists:roles,id',
         ];
     }
 }

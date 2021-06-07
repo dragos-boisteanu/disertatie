@@ -26,7 +26,7 @@ class StockController extends Controller
         $quantity = 0;
         
         if($request->type === 'product') {
-            $product = Product::findOrFail($id);
+            $product = Product::withTrashed()->findOrFail($id);
             $product->stock->quantity += $request->newQuantity;
             $quantity = $product->stock->quantity;
             $product->stock->save();
@@ -52,15 +52,26 @@ class StockController extends Controller
 
     }
 
-    public function getIngredientStockDetailsById($id)
+    public function getIngredientStockDetails($input)
     {
-        $ingredient = Ingredient::where('id', $id)->first();
+        if(is_numeric($input)) {
+            $ingredient = Ingredient::where('id', $input)->first();
 
-        if(isset($ingredient)) {
-            return new IngredientStock($ingredient); 
+            if(isset($ingredient)) {
+                return new IngredientStock($ingredient); 
+            }
+
+            return response()->json(['message' => 'No ingredient found with this id'], 404);
+        } else {
+            $ingredient = Ingredient::where('name', $input)->first();
+
+            if(isset($ingredient)) {
+                return new IngredientStock($ingredient);
+            }
+    
+            return response()->json(['message' => 'No ingredient found with this name'], 404);
         }
-
-        return response()->json(['message' => 'No ingredient found with this id'], 404);
+        
     }
 
 }

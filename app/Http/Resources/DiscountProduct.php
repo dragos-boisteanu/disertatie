@@ -18,6 +18,8 @@ class DiscountProduct extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'value' => $this->value,
+            'fromDate' => $this->fromDate,
+            'toDate' => $this->fromDate
         ];
     }
 }

@@ -29,16 +29,25 @@ class Product extends JsonResource
             'unit_id' => $this->unit_id,
             'category_id' => $this->category_id,
             'quantity' => $this->quantity,
-            'hasIngredients' => $this->has_ingredients,
-            'ingredients' => new IngredientCollection($this->whenLoaded('ingredients')),
             'deleted_at' => $this->deleted_at
         ];
 
+        if($this->has_ingredients) {
+            $arrayData['hasIngredients'] = $this->has_ingredients;
+            $arrayData['ingredients'] = new IngredientCollection($this->ingredients);
+        }else {
+            $arrayData['ingredients'] = array();
+        }
+
 
         if(!is_null($this->discount)) {
-            $arrayData['discount'] = new DiscountProduct($this->discount);
-            $arrayData['discountStartsAt'] = $this->discounted_from_date;
-            $arrayData['discountEndsAt'] = $this->discounted_until_date;
+            $discount = $this->discount;
+            $discount['fromDate'] = $this->discounted_from_date;
+            $discount['toDate'] = $this->discounted_until_date;
+            
+            $arrayData['discount'] = new DiscountProduct($discount);
+        } else {
+            $arrayData['discount'] = null;
         }
 
         return $arrayData;

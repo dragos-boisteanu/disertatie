@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use App\Http\Resources\CategoryCollection;
 
 class CategoryController extends Controller
 {
@@ -17,10 +18,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::with('products')->get();
 
-        return $categories;
+        return new CategoryCollection($categories);
     }
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -31,7 +33,15 @@ class CategoryController extends Controller
     {
         $request->user()->can('create', Category::class);
 
-        $category = Category::create($request->validated());
+        $input = $request->validated();
+
+        if($request->has('discount')) {
+            $input['discount_id'] = $request->input('discount.id');
+            $input['discounted_from_date'] = $request->input('discount.fromDate');
+            $input['discounted_until_date'] = $request->input('discount.toDate');
+        }
+
+        $category = Category::create($input);
 
         return $category->id;
     }
@@ -47,7 +57,17 @@ class CategoryController extends Controller
     {
         $request->user()->can('update', Category::class);
 
-        Category::findOrFail($id)->update($request->validated());
+        $category = Category::findOrFail($id);
+
+        $input = $request->validated();
+
+        if($request->has('discount')) {
+            $input['discount_id'] = $request->input('discount.id');
+            $input['discounted_from_date'] = $request->input('discount.fromDate');
+            $input['discounted_until_date'] = $request->input('discount.toDate');
+        }
+        
+        $category->update($input);
 
         return response()->json(['message' => 'Category updated'], 200);
     }

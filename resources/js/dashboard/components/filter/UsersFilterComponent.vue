@@ -19,7 +19,7 @@
                 type="text"
                 class="w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="ID"
-                v-model="filterData.id"
+                v-model="localFilterData.id"
                 @keyup="callFilter"
             />
 
@@ -29,7 +29,7 @@
                 type="text" 
                 class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="First name"
-                v-model="filterData.firstName"
+                v-model="localFilterData.firstName"
                 @keyup="callFilter"    
             />
 
@@ -39,7 +39,7 @@
                 type="text" 
                 class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Name"
-                v-model="filterData.name"
+                v-model="localFilterData.name"
                 @keyup="callFilter"    
             />
 
@@ -49,7 +49,7 @@
                 type="text" 
                 class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Email"
-                v-model="filterData.email"
+                v-model="localFilterData.email"
                 @keyup="callFilter"    
             />
 
@@ -59,7 +59,7 @@
                 type="text" 
                 class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Phone number"
-                v-model="filterData.phoneNumber"
+                v-model="localFilterData.phoneNumber"
                 @keyup="callFilter"    
             />
 
@@ -74,7 +74,7 @@
                             :name="role.name"
                             :value="role.id" 
                             type="checkbox" 
-                            v-model="filterData.roles"
+                            v-model="localFilterData.roles"
                             class="mr-1 outline-none"
                             @click="callFilter"
                         />
@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+            <!-- <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
                 <div class="mb-2 text-base font-semibold">
                     Has email verified
                 </div>
@@ -93,7 +93,7 @@
                             id="isVerified"
                             name="verified" type="radio" 
                             value="1" 
-                            v-model="filterData.verified"
+                            v-model="localFilterData.verified"
                             class="mr-1 outline-none"
                             @click="callFilter"
                         />
@@ -104,7 +104,7 @@
                             id="isNotVerified"
                             name="verified" type="radio" 
                             value="2" 
-                            v-model="filterData.verified"
+                            v-model="localFilterData.verified"
                             class="mr-1 outline-none"
                             @click="callFilter"
                         />
@@ -117,7 +117,7 @@
                         Reset
                     </button>
                 </div>
-            </div>
+            </div> -->
 
             <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
                 <div class="mb-2 text-base font-semibold">
@@ -130,7 +130,7 @@
                             type="date" 
                             id="fromDate" 
                             name="from_date" 
-                            v-model="filterData.fromDate"
+                            v-model="localFilterData.fromDate"
                             class="py-1 px-2 text-sm text-center rounded-sm"
                             @change="callFilter"
                         />
@@ -141,7 +141,7 @@
                             type="date" 
                             id="toDate" 
                             name="to_date" 
-                            v-model="filterData.toDate"
+                            v-model="localFilterData.toDate"
                             class="py-1 px-2 text-sm text-center rounded-sm"
                             @change="callFilter"
                         />
@@ -151,26 +151,21 @@
         </div>
     </FilterComponent>
 </template>
-    
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import FilterComponent from './FilterComponent';
+
     import _debounce from 'lodash/debounce';
+    import _isEmpty from 'lodash/isEmpty';
 
     export default {
 
-        mounted() {
-            const routerQuery = this.$route.query;
-
-            Object.keys(routerQuery).forEach(key => {
-                if(key === 'roles') {
-                    this.filterData[key] = [];
-                    this.filterData[key].push(...routerQuery[key])
-                } 
-                 
-                this.filterData[key] = routerQuery[key];
-            })
+        props: {
+            filterData: {
+                type: Object,
+                required: true
+            }
         },
 
         computed: {
@@ -179,54 +174,36 @@
 
         data() {
             return {
-                filterData: {
-                    id: '',
-                    firstName: '',
-                    name: '',
-                    roles: [],
-                    email: '',
-                    phoneNumber: '',
-                    verified: '',
-                    fromDate: '',
-                    toDate: '',
-                    orderBy: ''
+                localFilterData: {
+                    id: this.filterData.id,
+                    firstName: this.filterData.firstName,
+                    lastName: this.filterData.lastName,
+                    roles: this.filterData.roles,
+                    email: this.filterData.email,
+                    phoneNumber: this.filterData.phoneNumber,
+                    verified: this.filterData.verified,
+                    fromDate: this.filterData.fromDate,
+                    toDate: this.filterData.toDate,
                 },
             }
         },
 
         methods: {
-            ...mapActions('Users', ['fetchFilteredUsers', 'fetchUsers', 'setFilteredState']),
             ...mapActions('Notification', ['openNotification']),
-
-
-            callFilter() {
-                this.$Progress.start()            
-
-                this.debouncedFilter();
-            },
-
-            debouncedFilter: _debounce( async function() {
+            
+            callFilter: _debounce( async function() {
                 try {
                     const query = {}
 
-                    Object.keys(this.filterData).forEach(key => {
-                        if(this.filterData[key] !== '') {
-                            query[key] = this.filterData[key];
+                    Object.keys(this.localFilterData).forEach(key => {
+                        if(!_isEmpty(this.localFilterData[key])) {
+                            query[key] = this.localFilterData[key];
                         }
                     })
-
-                    query.page = 1;
-                    
-                    await this.fetchUsers(query);
-
-                    this.setFilteredState(true);
-                    
-                    this.$router.replace({name:'Users', query: {...query}});
-            
-                    this.$Progress.finish()
-                
+                                        
+                  this.filter(query);
+    
                 } catch ( error ) {
-                    this.$Progress.fail()
                     console.log(error)
                 }
             }, 500),
@@ -235,9 +212,8 @@
                 this.$emit('closed')
             },
 
-            resetVerifiedFilter() {
-                this.filterData.verified = '';
-                this.callFilter();
+            filter(query) {
+                this.$emit('filter', query)
             }
         },
 

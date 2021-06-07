@@ -1,62 +1,72 @@
 <template>
-    <Modal>
+    <Modal
+        @close="close"
+    >
 
         <template slot="header">
             Ingredient
         </template>
 
         <template slot="body">
-            <ValidationObserver ref="observer">
-                <form class="flex flex-col gap-3">
-                    <ValidationProvider 
-                        vid="ingredient" 
-                        rules="required" 
-                        v-slot="{ errors, failed, passed }" 
-                        class="w-full"
+            <form class="flex flex-col gap-3">
+                <InputGroup
+                    id="ingredient"
+                    label="Ingredient"
+                    :hasError="$v.selectedIngredientId.$error"
+                >
+                    <template v-slot:errors>
+                        <p v-if="!$v.selectedIngredientId.required">
+                            Ingredient field is required
+                        </p> 
+                    </template>
+                    <Select 
+                        v-model="selectedIngredientId"
+                        id="ingredient"
+                        name="ingredient" 
+                        :disabled="isEditMode"
+                        :eclass="{'border-red-600': $v.selectedIngredientId.$error, 'border-green-600': $v.selectedIngredientId.$dirty && !$v.selectedIngredientId.$error}"
+                        @change.native="selectIngredient"
+                        @blur.native="$v.selectedIngredientId.$touch()"
                     >
-                        <label for="ingredient" class="text-sm font-semibold">Ingredient</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                            <select 
-                                id="ingredient"
-                                name="ingredient"
-                                v-model="selectedIngredientId" 
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                @change="selectIngredient"
-                                :disabled="isEditMode"
-                            >
-                                <option value="" disabled>Select ingredient</option>
-                                <option 
-                                    v-for="ingredient in ingredients" 
-                                    :key="ingredient.id"
-                                    :value="ingredient.id"
-                                    :disabled="ingredient.exists"
-                                    class="flex items-center gap-x-3 disabled:bg-gray-100"
-                                >
-                                    {{ingredient.name}}
-                                </option>
-                            </select>
-                    </ValidationProvider>
-                    
-                    <ValidationProvider 
-                        vid="quantity" 
-                        rules="required|integer" 
-                        v-slot="{ errors, failed, passed }" 
-                        class="w-full"
-                    >
-                        <label for="quantity" class="text-sm font-semibold">Quantity</label>
-                        <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                        <input 
-                            id="quantity"
-                            name="quantity" 
-                            type="quantity" 
-                            v-model="ingredient.quantity"  
-                            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                            :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                        />
-                    </ValidationProvider>
-                </form>
-            </ValidationObserver>
+                        <option value="" disabled>Select ingredient</option>
+                        <option 
+                            v-for="ingredient in ingredients" 
+                            :key="ingredient.id"
+                            :value="ingredient.id"
+                            :disabled="ingredient.exists"
+                            class="flex items-center gap-x-3 disabled:bg-gray-100"
+                        >
+                            {{ingredient.name}}
+                        </option>
+                    </Select>
+                </InputGroup>
+                
+                <InputGroup
+                    id="quantity"
+                    label="Quantity"
+                    :hasError="$v.ingredient.quantity.$error"
+                >
+                    <template v-slot:errors>
+                        <p v-if="!$v.ingredient.quantity.required">
+                            The quantity field is required
+                        </p>
+                        <p v-if="!$v.ingredient.quantity.integer">
+                            The quantity field must be an integer
+                        </p>
+                        <p v-if="!$v.ingredient.quantity.minValue">
+                            The quantity field must be at least 1
+                        </p>
+                    </template>
+                    <Input 
+                        v-model="ingredient.quantity"  
+                        id="quantity"
+                        name="quantity" 
+                        :disabled="selectedIngredientId === ''"
+                        :eclass="{'border-red-600': $v.ingredient.quantity.$error, 'border-green-600': $v.ingredient.quantity.$dirty && !$v.ingredient.quantity.$error}"
+                        @blur.native="$v.ingredient.quantity.$touch()"
+                    />
+                </InputGroup>
+            </form>
         </template>
 
         <template slot="footer">
@@ -87,9 +97,14 @@
 <script>
     import { mapGetters } from 'vuex'
     import Modal from './ModalComponent'
+    import Input from '../inputs/TextInputComponent';
+    import Select from '../inputs/SelectInputComponent';
+    import InputGroup from '../inputs/InputGroupComponent';
 
     import _find from 'lodash/find'
     import _findIndex from 'lodash/findIndex'
+
+    import { required, integer, minValue } from 'vuelidate/lib/validators'
 
     export default {
 
@@ -97,7 +112,6 @@
             propIngredients: {
                 type: Array,
                 required: true,
-                default: null,
             },
 
             selectedIngredient: {
@@ -117,7 +131,6 @@
             isEditMode(){
                 return this.selectedIngredient ? true : false
             }
-
         },
 
         mounted() {   
@@ -140,14 +153,25 @@
 
         data() {
             return {
-                // ingredients: [],
-
                 selectedIngredientId: '',
 
                 ingredient: {
                     id: '',
-                    qauantity: '',
+                    quantity: '',
                     unit: null
+                }
+            }
+        },
+        
+        validations: {
+            selectedIngredientId: {
+                required
+            },
+            ingredient: {
+                quantity: {
+                    required,
+                    integer,
+                    minValue: minValue(1)
                 }
             }
         },
@@ -159,10 +183,12 @@
             },
 
             async submit() {
-                const valid = await this.$refs.observer.validate()
-                if(valid) {
+                this.$v.$touch();
+
+                if(!this.$v.$invalid) {
                     this.$emit('saved', this.ingredient);
                 }
+                
             },
 
             remove() {
@@ -176,7 +202,10 @@
 
 
         components: {
-            Modal
+            Modal,
+            Input,
+            Select,
+            InputGroup
         }
     }
 </script>

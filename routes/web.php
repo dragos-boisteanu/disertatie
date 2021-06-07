@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -27,3 +28,9 @@ Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->wher
     // verified
 
 require __DIR__.'/auth.php';
+
+
+Route::get('/order-email/{id}', function($id) {
+    $order = Order::findOrFail($id);
+    return view('mails.order', compact('order'));
+});

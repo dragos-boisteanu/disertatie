@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Filters\Product\ProductFilter;
 use Illuminate\Database\Eloquent\Model;
@@ -33,19 +34,42 @@ class Product extends Model
 
     public $with = ['unit', 'stock', 'category', 'ingredients'];
 
-    protected $appends = array('price', 'quantity');
+    protected $appends = array('price', 'quantity', 'finalDiscount');
+
+    public function getFinalDiscountAttribute() 
+    {
+        if($this->discount != null) {
+            return $this->discount;
+        }
+
+        if($this->category->discount != null) {
+            return $this->category->discount;
+        }
+    }
 
     public function getPriceAttribute()
     {
-        if($this->discount) {
-            $finalPrice = $this->base_price - $this->base_price * ($this->discount->value / 100);
+        if($this->category->discount && $this->discount) {
+            if($this->category->discount > $this->discount ){
+                $finalPrice = $this->calculateDiscount($this->base_price, $this->category->discount->value);
+
+            } else if ($this->category->discount == $this->discount) {
+                $finalPrice = $this->calculateDiscount($this->base_price, $this->category->discount->value);
+
+            } else if ($this->category->discount < $this->discount) {
+                $finalPrice = $this->calculateDiscount($this->base_price, $this->discount->value); 
+            }
+        } else if($this->category->discount) {
+            $finalPrice = $this->calculateDiscount($this->base_price, $this->category->discount->value);
+        } else if($this->discount) {
+            $finalPrice = $this->calculateDiscount($this->base_price, $this->discount->value); 
         } else {
             $finalPrice = $this->base_price;
         }
 
         $finalPrice += $finalPrice * ($this->category->vat / 100);
 
-        return round($finalPrice, 2);
+        return number_format($finalPrice, 2, '.', '');
     }
 
     public function getQuantityAttribute() 
@@ -74,6 +98,12 @@ class Product extends Model
         return $quantity;
     }
 
+    private function calculateDiscount($basePrice, $discount) 
+    {
+        return $basePrice - $basePrice * ($discount / 100); 
+    }
+
+   
     public function category() 
     {
         return $this->belongsTo('App\Models\Category');
@@ -99,8 +129,14 @@ class Product extends Model
         return $this->belongsTo(Discount::class);
     }
 
-    public function scopeFilter(Builder $builder, Request $request)
+    public function orders() 
     {
-        return (new ProductFilter($request))->filter($builder);
+        return $this->belongsToMany(Order::class);
     }
+
+    public function scopeFilter(Builder $builder, array $data)
+    {
+        return (new ProductFilter($data))->filter($builder);
+    }
+
 }

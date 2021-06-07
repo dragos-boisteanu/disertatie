@@ -6,138 +6,151 @@
 
         <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2 ">
             <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-
-                <ul class="px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
-                    <li 
-                        v-for="(ingredient, index) in getIngredients" :key="ingredient.id"
-                        class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
-                    >
-                        <div 
+                <table class="px-2 w-full rounded-sm max-h-80 md:max-h-96">
+                    <thead class="w-full bg-gray-700 text-orange-500">
+                        <tr class="text-left text-sm">
+                            <th class="p-2 text-center">Index</th>
+                            <th class="p-2">Name</th>
+                            <th class="p-2">Quantity</th>
+                            <th class="p-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="overflow-y-auto">
+                        <tr 
+                            v-for="(ingredient, index) in getIngredients" :key="ingredient.id"
                             @click="selectIngredient(ingredient.id)"
-                            class="cursor-pointer flex items-center gap-x-2">
-                            <span>{{ index + 1 }}.</span>
-                            <span>{{ ingredient.name }}</span>
-                            <span>{{ ingredient.stockQuantity }} {{ ingredient.unit.name }}</span>
-                        </div>
-                        <div>
-                            <button @click="removeIngredient(ingredient.id)"> X</button>
-                        </div>
-                    </li>
-                </ul>
+                            class="transition-shadow transition-transform duration-500 ease-in-out text-sm rounded-md cursor-pointer border-white transform hover:scale-105
+                            hover:bg-gray-50 hover:shadow-md"
+                        >
+                            <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
+                            <td class="p-2">{{ ingredient.name }}</td>
+                            <td class="p-2">{{ ingredient.stockQuantity }} {{ ingredient.unit.name }}</td>
+                            <td class="p-2 flex items-center justify-center">
+                                <button v-if="allowRemoval(ingredient.productsCount)" @click="removeIngredient(ingredient.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <div class="mt-4 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 md:mt-0 md:flex-1 lg:flex-1">
-                <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-                    <form @submit.prevent="handleSubmit(submit)" class="flex flex-col items-stretch justify-items-start gap-y-3 md:pt-0 md:flex-auto">
+            <div class="mt-4 md:mt-0 lg:flex-1">
+                <form class="flex flex-col items-stretch justify-items-start gap-y-3 md:flex-auto">
+                    <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
+
                         <h2 class="mb-5 text-xl font-semibold">
                             Ingredient
                         </h2> 
 
-                        <div class="w-full flex-1 flex items-center gap-x-4">
-                            <ValidationProvider 
-                                vid="name" rules="required|alpha_spaces|max:50" 
-                                v-slot="{ errors, failed, passed }" 
-                                class="flex-grow flex-1"
+                        <div class="w-full flex-1 flex gap-x-4">
+                            <InputGroup 
+                                id="name"
+                                label="Name"
+                                :hasError="$v.ingredient.name.$error"
                             >
-                                <label for="name" class="text-sm font-semibold">Nane</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="name"
-                                    name="name" 
-                                    type="text" 
+                                <template v-slot:errors>
+                                    <p v-if="!$v.ingredient.name.required">
+                                        The name field is required
+                                    </p>
+                                    <p v-if="!$v.ingredient.name.alphaSpaces">
+                                        The name field must contain only letters or spaces
+                                    </p>
+                                    <p v-if="!$v.ingredient.name.maxLength">
+                                        The name field must be no longer than 50 characters
+                                    </p>
+                                </template>
+                                <Input 
                                     v-model="ingredient.name" 
-                                    :disabled="disabled"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider> 
+                                    id="name"
+                                    name="name"
+                                    :eclass="{'border-red-600' : $v.ingredient.name.$error, 'border-green-600': $v.ingredient.name.$dirty && !$v.ingredient.name.$error}"
+                                    :disabled="disabled"
+                                    @blur.native="$v.ingredient.name.$touch()"
+                                ></Input>
+                            </InputGroup> 
 
-                            <ValidationProvider 
-                                vid="unit_id" 
-                                rules="required" 
-                                v-slot="{  errors, failed, passed }" 
-                                class="flex-0"
+                            <InputGroup
+                                id="unitId"
+                                label="Unit"
+                                :hasError="$v.unitId.$error"
                             >
-                                <label for="vat" class="text-sm font-semibold">Unit</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <select 
-                                    id="unit_id"
-                                    name="weight units" 
-                                    type="text" 
-                                    v-model="ingredient.unit" 
-                                    :disabled="disabled"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
+                                <template v-slot:errors>
+                                    <p v-if="!$v.unitId.required">
+                                        The unit field is required
+                                    </p> 
+                                </template>
+                                <Select
+                                    v-model="unitId" 
+                                    id="unitId"
+                                    name="weight_units"
+                                    :eclass="{'border-red-600' : $v.unitId.$error, 'border-green-600': $v.unitId.$dirty && !$v.unitId.$error}"
+                                    :disabled="disabled" 
+                                    @blur.native="$v.unitId.$touch()"
+                                    @change.native="selectUnit"
                                 >
                                     <option value="" disabled>Select unit</option>
-                                    <option :value="unit" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
-                                </select>
-
-                            </ValidationProvider>
-                        </div>
-                        
-                        <div>
-                            <button 
-                                v-if="ingredientSelected"
-                                @click.prevent="clearSelection"
-                                class="mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
-                            >                       
-                                Clear selection
-                            </button>
-                            <button 
-                                type="submit"
-                                :disabled="disabled"  
-                                class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
-                            >
-                                <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                <span v-if="ingredientSelected">
-                                    Update
-                                </span>
-                                <span v-else>
-                                    Submit
-                                </span>
-                            </button>
-                        </div>                
-                    </form>
-                </ValidationObserver>
+                                    <option :value="unit.id" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
+                                </Select>
+                            </InputGroup>
+                        </div>    
+                    </div>
+                    <div>
+                        <Button 
+                            v-if="ingredientSelected"
+                            type="secondary"
+                            @click.native.prevent="clearSelection"
+                            :disabled="waiting"
+                        >                       
+                            Clear selection
+                        </Button>
+                        <Button 
+                            type="primary"
+                            :disabled="waiting"
+                            @click.native.prevent="submit"
+                            class="mt-2"
+                        >
+                            <span v-if="ingredientSelected">
+                                Update
+                            </span>
+                            <span v-else>
+                                Submit
+                            </span>
+                        </Button>
+                    </div>                              
+                </form>
             </div>
         </div>
-
     </ViewContainer>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex'
+
     import ViewContainer from '../ViewContainer'
+
+    import Input from '../../components/inputs/TextInputComponent';
+    import Select from '../../components/inputs/SelectInputComponent';
+    import Button from '../../components/buttons/ButtonComponent';
+    import InputGroup from '../../components/inputs/InputGroupComponent';
+
     import _find from 'lodash/find';
-    import store from '../../store';
+
+    import { required, maxLength, } from 'vuelidate/lib/validators'
+    import { alphaSpaces } from '../../validators/index';
 
     export default {
-
-        // async beforeRouteEnter (to, from, next) {
-        //     if(store.getters['Ingredients/getIngredients'].length > 0) {
-        //         next();
-        //     } else {
-        //         await store.dispatch('Ingredients/downloadIngredients');
-        //         next();
-        //     }
-        // },
-
         computed: {
             ...mapGetters('Ingredients', ['getIngredients']),
             ...mapGetters('Units', ['getUnits']),
-            ...mapGetters('Users',['getLoggedUser']),
+            ...mapGetters('Users',['getLoggedUser', 'isAdmin', 'isKitchenManager', 'isLocationManager']),
 
-            canNotCreate() {
-                return this.getLoggedUser.role_id !== 6 && this.getLoggedUser.role_id !== 7
+            canCreate() {
+                return this.isAdmin || this.isKitchenManager || this.isLocationManager
             },
 
             disabled() {
-                console.log(this.canNotCreate)
-                return this.waiting || this.canNotCreate
+                return this.waiting || !this.canCreate
             }
 
         },
@@ -146,6 +159,7 @@
             return {
                 waiting: false,
                 ingredientSelected: false,
+                unitId: '',
                 ingredient: {
                     id: '',
                     name: '',
@@ -157,13 +171,32 @@
             }
         },
 
+        validations: {
+            ingredient: {
+                name: {
+                    required,
+                    alphaSpaces,
+                    maxLength: maxLength(50),
+                },
+            },
+            unitId: { 
+                required 
+            }
+        },
+
         methods: {
             ...mapActions('Ingredients', ['postIngredient', 'patchIngredient', 'deleteIngredient']),
+            ...mapActions('Notification', ['openNotification']),
+
+            allowRemoval(productsCount) {
+                return parseInt(productsCount) !== 0
+            },
 
             selectIngredient(id) {
                 this.ingredientSelected = true;
                 this.ingredient = Object.assign(this.ingredient, _find(this.getIngredients, ['id', id]));
-                this.$refs.observer.reset();
+                this.unitId = String(this.ingredient.unit.id)
+                this.$v.$reset();
             },
 
             clearSelection() {
@@ -172,7 +205,10 @@
             },
 
             resetForm() {
-                this.$refs.observer.reset();
+                this.$v.$reset();
+                this.waiting = false;
+                this.ingredientSelected = false;
+                this.unitId = '';
                 this.ingredient = {
                     id: '',
                     name: '',
@@ -183,71 +219,92 @@
                 }
             },
 
+            selectUnit() {
+                this.ingredient.unit = _find(this.getUnits, ['id', parseInt(this.unitId)]);
+            },
+
             async submit() {
-                try {
-                    this.$Progress.start();
 
-                    if(this.ingredientSelected) {
+                this.$v.$touch()
 
-                        const originalIngredient = _find(this.getIngredients, ['id', this.ingredient.id]);
+                if(!this.$v.$invalid) {
+                    try {
+                        if(this.ingredientSelected) {
 
-                        const payload = {
-                            vm: this,
-                            ingredient: {
-                                id: this.ingredient.id,
+                            const originalIngredient = _find(this.getIngredients, ['id', this.ingredient.id]);
+
+                            const payload = {
+                                vm: this,
+                                ingredient: {
+                                    id: this.ingredient.id,
+                                }
                             }
-                        }
 
-                        let counter = 0;
+                            let counter = 0;
 
-                        Object.keys(this.ingredient).forEach(key => {
-                            if(originalIngredient[key] !== this.ingredient[key]) {
-                                payload.ingredient[key] = this.ingredient[key];
-                                counter++;
+                            Object.keys(this.ingredient).forEach(key => {
+                                if(originalIngredient[key] !== this.ingredient[key]) {
+                                    payload.ingredient[key] = this.ingredient[key];
+                                    counter++;
+                                }
+                            });
+
+                            if(counter > 0 ) {
+                                this.waiting = true;
+                                await this.patchIngredient(payload);
+
+                                this.resetForm();
+
+                            } else {
+                                this.openNotification({
+                                    type: 'info',
+                                    show: true,
+                                    message: 'Nothing to update'
+                                });
                             }
-                        });
-
-                        if(counter > 0 ) {
-                            await this.patchIngredient(payload);
+                            
                         } else {
-                            console.log('nothing to update')
+
+                            await this.postIngredient(this.ingredient);
+                            this.resetForm();
                         }
+
+                        this.waiting = false;
+
+                    } catch ( error ) {
+                        this.waiting = false;
+                        console.log(error);
                         
-                    } else {
-                        await this.postIngredient(this.ingredient);
-                        this.resetForm();
+                        if(error.response && error.response.data.errors) {
+                           this.$v.$touch()
+                        }  
                     }
-
-                    this.waiting = false;
-                    this.$Progress.finish()
-
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    this.waiting = false;
-                    console.log(error);
-                    
-                    if(error.response.data.errors) {
-                        this.$refs.observer.setErrors(error.response.data.errors)
-                    }  
                 }
+                
             },
 
             async removeIngredient(id) {
                 try {
-                    this.$Progress.start();
 
                     await this.deleteIngredient(id);
 
-                    this.$Progress.finish();
+                    if(this.selectIngredient) {
+                        this.clearSelection();
+                    }
+
                 } catch ( error ) {
-                    this.$Progress.fail();
                     console.log(error)
                 }
-            }
+            },
+
         },
 
         components: {
-            ViewContainer
+            ViewContainer,
+            Input,
+            Select,
+            Button,
+            InputGroup
         }
     }
 </script>

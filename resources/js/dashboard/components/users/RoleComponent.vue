@@ -1,27 +1,19 @@
 <template>
-    <div class="py-1 px-2 text-center text-xs text-white rounded-sm bg-lightBlue-600" v-if="role">
-        {{role.name}}
+    <div class="py-1 px-2 text-center text-xs text-white rounded-sm bg-lightBlue-600" v-if="roleName">
+        {{ roleName }}
     </div>
 </template>
 
 <script>
-    import { mapGetters } from "vuex";
     import _find from 'lodash/find';
 
     export default {
         props: {
-            roleId: {
-                type: Number,
+            roleName: {
+                type: String,
                 required: true,
             }
         },
 
-        computed: {
-            ...mapGetters('Roles', ['getRoles']),
-
-            role() {
-                return _find(this.getRoles, ['id', this.roleId]);
-           }
-        }
     }
 </script>

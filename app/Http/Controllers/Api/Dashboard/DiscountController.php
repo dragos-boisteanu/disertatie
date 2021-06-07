@@ -19,7 +19,7 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discounts = Discount::withTrashed()->get();
+        $discounts = Discount::withTrashed()->with('products','categories')->get();
 
         return new DiscountCollection($discounts);
     }

@@ -20,7 +20,7 @@ const actions = {
     async fetchCategories({commit}) {
         try {
             const response = await downloadCategories();
-            commit('SET_CATEGORIES', response.data);
+            commit('SET_CATEGORIES', response.data.data);
         } catch ( error ) {
             throw error;
         }
@@ -29,7 +29,8 @@ const actions = {
     async postCategory({commit}, payload) {
         try {
             const response = await postCategory(payload);
-            payload.id = response.data.id;
+            payload.id = response.data;
+            payload.productsCount = 0;
             commit('ADD_CATEGORY', payload);
         } catch ( error ) {
             throw error

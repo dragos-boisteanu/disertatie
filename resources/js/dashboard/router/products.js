@@ -13,7 +13,7 @@ export default [
         component: ProductsListView,
         meta: {
             breadcrumb: {
-                label: 'Product lists',
+                label: 'Products',
                 parent: 'Dashboard'
             }
         }
@@ -24,6 +24,8 @@ export default [
         name: 'AddProduct',
         component: AddProductView,
         meta: {
+            requireLocationManager: true,
+            requiredAdmin: true,
             breadcrumb: {
                 label: 'Add new product',
                 parent: 'Products'
@@ -35,10 +37,14 @@ export default [
         path: `${dashboardBaseUrl}/products/:id`,
         name: 'Product',
         component: ProductView,
-        meta: {
-            breadcrumb: {
-                label: 'Product',
-                parent: 'Products',
+        meta: { 
+            breadcrumb() {
+                const { params } = this.$route;
+        
+                return {
+                    label: `Product #${params.id}`,
+                    parent: "Products",
+                };
             }
         }
     },
@@ -48,8 +54,12 @@ export default [
         name: 'EditProduct',
         component: EditProductView,
         meta: {
+            requireLocationManager: true,
+            requiredAdmin: true,
+            requireKitchenManager: true,
+            requireWaiter: true,
             breadcrumb: {
-                label: 'Edit product',
+                label: 'Edit',
                 parent: 'Product'
             }
         }

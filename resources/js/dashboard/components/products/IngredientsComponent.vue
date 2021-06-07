@@ -43,7 +43,7 @@
         props: {
             ingredients: {
                 type: Array,
-                required: false,
+                required: true,
             },
         },
 

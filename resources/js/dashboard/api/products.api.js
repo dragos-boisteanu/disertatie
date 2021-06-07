@@ -1,6 +1,6 @@
-import httpClient from './httpClient';
+import httpClient from '../../api/httpClient';
 
-const END_POINT = '/products';
+const END_POINT = '/dashboard/products';
 
 const downloadProducts = (query) => httpClient.get(`${END_POINT}`, {params: query});
 const downloadProduct = (id) => httpClient.get(`${END_POINT}/${id}`);
@@ -22,5 +22,5 @@ export {
     disableProduct,
     restoreProduct,
     deleteProduct,
-    downloadProductByBarcode
+    downloadProductByBarcode,
 }

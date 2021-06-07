@@ -4,309 +4,194 @@
             Create user account
         </template>
 
-        <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-            <form @submit.prevent="handleSubmit(submit)" class="flex flex-col">
-                <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-full 2xl:w-3/4">
-                    <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
-                        <h2 class="mb-5 text-xl font-semibold">
-                            Account details
-                        </h2>
+        <form class="flex flex-col">
+            <div class="flex flex-col lg:items-start lg:flex-row lg:gap-x-6 lg:w-full 2xl:w-10/12">
+                <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
+                    <h2 class="mb-5 text-xl font-semibold">
+                        Account details
+                    </h2>
 
-                        <file-pond
-                            name="image"
-                            ref="pond"
-                            label-idle="Upload user profile image..."
-                            v-bind:allow-multiple="false"
-                            accepted-file-types="image/jpeg"
-                            :server="{
-                                url: '/api/dashboard/images',
-                                process: { 
-                                    headers: {
-                                        'X-CSRF-TOKEN': csrf
-                                    },
-                                    onload: (response) =>  addAvatarPathToUser(response) ,
-                                },
-                                revert: {
-                                    url: '/delete',
-                                    headers: {
-                                        'X-CSRF-TOKEN': csrf
-                                    },
-                                }
-                            }"
-                            :files="files"
-                            :onaddfilestart="waitForFiletoUpload"
-                            :onprocessfileabort="stopWaitingForFileToUpload"
-                        />
+                    <ImageUploadComponent
+                        :disabled="waiting || waitForFileUpload"
+                        :clear="clearImage"
+                        @waitForFileToUpload="toggleWaitForFileUpload"
+                        @setImagePath="setImagePath"
+                    ></ImageUploadComponent>
 
-                        <div class="text-right">
-                            <button 
-                                :disabled="waitForFileUpload"
-                                class="border border-gray-600 text-xs text-gray-700 px-4 py-1 rounded hover:border-gray-500 hover:text-gray-600" 
-                                @click.prevent="clearAvatar"
-                            >
-                                Clear avatar
-                            </button>
-                        </div>
-
-
-                        <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-                            <ValidationProvider 
-                                vid="data.user.first_name" 
-                                rules="required|alpha_spaces|max:50" 
-                                v-slot="{ errors, failed, passed }"
-                                class="flex-1"
-                            >
-                                <label for="firstName" class="text-sm font-semibold">First name</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="firstName"
-                                    name="first name" 
-                                    type="text" 
-                                    v-model="user.first_name" 
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-                            <ValidationProvider 
-                                vid="data.user.name" 
-                                rules="required|alpha_spaces|max:50" 
-                                v-slot="{ errors, failed, passed }"
-                                class="flex-1"
-                            >
-                                <label for="name" class="text-sm font-semibold">Name</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <input 
-                                        id="name" 
-                                        type="text" 
-                                        name="name"
-                                        v-model="user.name" 
-                                        :disabled="waiting"   
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                    />
-                            </ValidationProvider>
-                            <ValidationProvider 
-                                vid="data.user.birthdate" 
-                                rules="required" 
-                                v-slot="{ errors, failed, passed }"
-                                class="flex-1"
-                            >
-                                <label for="birthdate" class="text-sm font-semibold">Birthdate</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <input 
-                                        id="birthdate" 
-                                        type="date" 
-                                        name="birthdate"
-                                        v-model="user.birthdate"
-                                        :disabled="waiting"   
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"   
-                                    />
-                            </ValidationProvider>
-                        </div>
-                        
-                        <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:gap-x-4">
-                            <ValidationProvider 
-                                vid="data.user.email" 
-                                rules="required|email|max:100" 
-                                v-slot="{ errors, failed, passed }"
-                                class="flex-1"
-                            >
-                                <label for="email" class="text-sm font-semibold">Email</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="email" 
-                                    type="email" 
-                                    name="email"
-                                    v-model="user.email" 
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"   
-                                />
-                            </ValidationProvider>
-                            <ValidationProvider  
-                                vid="data.user.phone_number" 
-                                rules="required" 
-                                v-slot="{ errors, failed, passed }"
-                                class="flex-1"
-                            >
-                                <label for="phone_number" class="text-sm font-semibold">Phone number</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="phoneNumber" 
-                                    type="text" 
-                                    name="phone number"
-                                    v-model="user.phone_number"
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-                        </div>
-                        
-                        <ValidationProvider 
-                            vid="data.user.role" 
-                            rules="required|integer" 
-                            v-slot="{ errors, failed, passed }" 
+                    <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
+                        <InputGroup
+                            id="firstName"
+                            label="First name"
+                            :hasError="$v.user.firstName.$error"
+                            :eclass="{'flex-1':true}"
                         >
-                            <label for="role" class="text-sm font-semibold">Role</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <select 
-                                    id="role"
-                                    name="role"
-                                    v-model="user.role_id" 
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500 capitalize"
-                                   :class="{'border-red-600': failed, 'border-green-500' : passed}" 
-                                >
-                                    <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
-                                </select>
-                        </ValidationProvider>
+                            <template v-slot:errors>
+                                <p v-if="!$v.user.firstName.required">
+                                    The first name field is required
+                                </p>
+                                <p v-if="!$v.user.firstName.maxLength">
+                                    The first name field should not be longer than 50 characters
+                                </p>
+                                <p v-if="!$v.user.firstName.alphaSpaces">
+                                    The first name field must contain only letters and spaces
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="user.firstName"
+                                id="firstName"
+                                name="firstName" 
+                                :disabled="waiting"  
+                                :class="{'border-red-600' : $v.user.firstName.$error, 'border-green-600': $v.user.firstName.$dirty && !$v.user.firstName.$error}"
+                                @blur.native="$v.user.firstName.$touch()"
+                            />
+                        </InputGroup>
+                        <InputGroup
+                            id="lastName"
+                            label="Last name"
+                            :hasError="$v.user.lastName.$error"
+                            :class="{'flex-1':true}"
+                        > 
+                            <template v-slot:errors>
+                                <p v-if="!$v.user.lastName.required">
+                                    The last name field is required
+                                </p>    
+                                <p v-if="!$v.user.lastName.maxLength">
+                                    The last name field should not be longer than 50 characters
+                                </p>
+                                <p v-if="!$v.user.lastName.alphaSpaces">
+                                    The last name field must contain only letters and spaces
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="user.lastName" 
+                                id="lastName" 
+                                type="text"       
+                                :class="{'border-red-600' : $v.user.lastName.$error, 'border-green-600': $v.user.lastName.$dirty && !$v.user.lastName.$error}"
+                                :disabled="waiting"
+                                @blur.native="$v.user.lastName.$touch()"
+                            />
+                        </InputGroup>
                     </div>
-
-                    <div class="mt-5 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 border-b border-gray-200 lg:mt-0 lg:border-r lg:pr-5 lg:border-b-0 lg:flex-1">
-                        <h2 class="mb-5 text-xl font-semibold">
-                            <input id="addressToggle" type="checkbox" v-model="required" @click="toggleAddressState"> 
-                            <label for="addressToggle">Address (optional)</label>
-                        </h2>
-
-                        <ValidationObserver ref="addressForm" class="flex flex-col gap-y-4"> 
-                            <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">                  
-                                <ValidationProvider 
-                                    vid="data.address.first_name" 
-                                    :rules="{'required': required, 'alpha_spaces': true, max:50}" 
-                                    v-slot="{ errors, failed, passed }"
-                                    class="flex-1"
-                                >
-                                    <label for="addressFirstName" class="text-sm font-semibold">First name</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <input 
-                                        id="addressFirstName" 
-                                        name="first name"
-                                        type="text" 
-                                        v-model="address.first_name"
-                                        :disabled="waiting || !required"   
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed && required}"
-                                    />
-                                </ValidationProvider>      
-                                <ValidationProvider 
-                                    vid="data.address.name" 
-                                    :rules="{'required': required, 'alpha_spaces': true, max:50}" 
-                                    v-slot="{ errors, failed, passed }"
-                                    class="flex-1"
-                                >
-                                    <label for="addressName" class="text-sm font-semibold">Name</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <input 
-                                        id="addressName" 
-                                        type="text" 
-                                        name="name"
-                                        v-model="address.name" 
-                                        :disabled="waiting || !required"   
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                        :class="{'border-red-600': failed, 'border-green-500' : passed && required}"
-                                    />
-                                </ValidationProvider>
-                                <ValidationProvider 
-                                    vid="data.address.phone_number" 
-                                    :rules="{'required': required, max:50}" 
-                                    v-slot="{ errors, failed, passed }"
-                                    class="flex-1"
-                                >
-                                    <label for="addressPhoneNumber" class="text-sm font-semibold">Phone number</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <input 
-                                        id="addressPhoneNumber" 
-                                        type="text" 
-                                        name="phone number"
-                                        v-model="address.phone_number" 
-                                        :disabled="waiting || !required"   
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed && required}"
-                                    />
-                                </ValidationProvider>
-                            </div>
-
-                            <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">                  
-                                <ValidationProvider 
-                                    vid="data.address.county_id" 
-                                    :rules="{'required': required, 'integer': true}" 
-                                    v-slot="{ errors, failed, passed }"
-                                    class="flex-1"
-                                >    
-                                    <label for="addressCounty" class="text-sm font-semibold">County</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <select 
-                                        id="addressCounty"
-                                        name="country"
-                                        v-model="address.county_id"
-                                        @change="getCitites" 
-                                        :disabled="waiting || !required"   
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                        :class="{'border-red-600': failed, 'border-green-500' : passed && required}"
-                                    >
-                                        <option value="" disabled>Select user country</option>
-                                        <option v-for="county in getCounties" :key="county.id" :value="county.id"> {{county.name}} </option>
-                                    </select>
-                                </ValidationProvider>
-                                <ValidationProvider 
-                                    vid="data.address.city_id" 
-                                    :rules="{'required': required, 'integer': true}" 
-                                    v-slot="{ errors, failed, passed }"
-                                    class="flex-1"
-                                >
-                                    <label for="addressCity" class="text-sm font-semibold">City</label>
-                                    <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                    <select 
-                                        id="addressCity"
-                                        name="city"
-                                        v-model="address.city_id"
-                                        :disabled="citiesSelectState || waiting || !required"
-                                        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed && required}"               
-                                    >
-                                        <option value="" disabled>Select user city</option>
-                                        <option v-for="city in cities" :key="city.id" :value="city.id">{{city.name}}</option>
-                                    </select>
-                                </ValidationProvider>
-                            </div>
-                                
-                            <ValidationProvider vid="data.address.address" :rules="{'required': required, 'alpha_spaces': true, max:255}" v-slot="{ errors, failed, passed }">
-                                <label for="addressAddress" class="text-sm font-semibold">Address</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="addressAddress" 
-                                    name="address"
-                                    type="text" 
-                                    v-model="address.address"
-                                    :disabled="waiting || !required"
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
-                                :class="{'border-red-600': failed, 'border-green-500' : passed && required}"    
-                                />
-                            </ValidationProvider>
-                        </ValidationObserver>
+                    
+                    <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:gap-x-4">
+                        <InputGroup
+                            id="email"
+                            label="Email"
+                            :hasError="$v.user.email.$error"
+                            :eclass="{'felx-1':true}"
+                        >
+                            <template v-slot:errors>
+                                <p v-if="!$v.user.email.required">
+                                    The email field is required
+                                </p>
+                                <p v-if="!$v.user.email.email">
+                                    The email field must have valid email
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="user.email" 
+                                id="email"
+                                name="email"
+                                :class="{'border-red-600' : $v.user.email.$error, 'border-green-600': $v.user.email.$dirty && !$v.user.email.$error}"
+                                :disabled="waiting"
+                                @blur.native="$v.user.email.$touch()"
+                            />
+                        </InputGroup>
+                        <InputGroup 
+                            id="phoneNumber"
+                            label="Phone number"
+                            :hasError="$v.user.phoneNumber.$error"
+                            :eclass="{'flex-1':true}"
+                        >
+                            <template v-slot:errors>
+                                <p v-if="!$v.user.phoneNumb.required">
+                                    The phone number field is required
+                                </p>
+                                <p v-if="!$v.user.phoneNumb.phoneNumber">
+                                    The phone number is invalid
+                                </p>
+                            </template>
+                            <Input 
+                                v-model="user.phoneNumber"
+                                id="phoneNumber"
+                                name="phoneNumber"        
+                                :class="{'border-red-600' : $v.user.phoneNumber.$error, 'border-green-600': $v.user.phoneNumber.$dirty && !$v.user.phoneNumber.$error}"
+                                :disabled="waiting" 
+                                @blur.native="$v.user.phoneNumber.$touch()"
+                            />
+                        </InputGroup>
                     </div>
-                </div>
-
-                <div class="mt-5 flex md:justify-start">
-                    <button 
-                        type="submit"
-                        :disabled="waiting || waitForFileUpload"  
-                        class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
+                    
+                    <InputGroup
+                        id="role"
+                        label="Role"
+                        :hasError="$v.user.roleId.$error"
                     >
-                        <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span>
-                            Submit
-                        </span>
-                    </button>
+                        <template v-slot:errors>
+                            <p v-if="!$v.user.roleId.required">
+                                The role field is required
+                            </p>
+                        </template>
+                        <Select                         
+                            v-model="user.roleId" 
+                            id="role"
+                            name="role"   
+                            :class="{'border-red-600' : $v.user.roleId.$error, 'border-green-600': $v.user.roleId.$dirty && !$v.user.roleId.$error}"
+                            :disabled="waiting"
+                            @blur.native="$v.user.roleId.$touch()"
+                        >   
+                            <option value="" selected disabled>Select role</option>
+                            <option v-for="role in availableRoles" :key="role.id" :value="role.id">{{role.name}}</option>
+                        </Select>
+                    </InputGroup>
                 </div>
-            </form>
-        </ValidationObserver>
+
+                <div class="mt-5 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 border-b border-gray-200 lg:mt-0 lg:border-r lg:pr-5 lg:border-b-0 lg:flex-1">
+                    <h2 class="mb-5 text-xl font-semibold">
+                        <input id="addressToggle" type="checkbox" v-model="hasAddress" @click="toggleAddressState"> 
+                        <label for="addressToggle">Address (optional)</label>
+                    </h2>
+
+                    <div ref="addressForm" class="flex flex-col gap-y-4" v-show="hasAddress"> 
+                        <div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">                  
+                            <InputGroup
+                                id="addressAddress"
+                                label="Address"
+                                :hasError="$v.address.$error"
+                            >
+                                <template v-slot:errors> 
+                                    <p v-if="!$v.address.required">
+                                        The address field is required
+                                    </p>
+                                    <p v-if="!$v.address.alphaNumSpaces">
+                                        The address field must contain only letters, numbers and spaces
+                                    </p>
+                                </template>
+                                <Input 
+                                    v-model="address"
+                                    id="addressAddress" 
+                                    name="address" 
+                                    :class="{'border-red-600' : $v.address.$error, 'border-green-600': $v.address.$dirty && !$v.address.$error}"
+                                    :disabled="waiting || !hasAddress"
+                                    @blur.native="$v.address.$touch()"
+                                />
+                            </InputGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 flex md:justify-start">
+                <Button 
+                    type="primary"
+                    :disabled="waiting || waitForFileUpload"  
+                    :waiting="waiting"
+                    @click.native.prevent="submit"
+                >
+                    Submit
+                </Button>
+            </div>
+        </form>
     </ViewContainer>
 </template>
 
@@ -314,87 +199,134 @@
     import { mapActions, mapGetters } from 'vuex';
     import ViewContainer from '../ViewContainer';
     
-    import vueFilePond from "vue-filepond";
-    import "filepond/dist/filepond.min.css";
-    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+    import ImageUploadComponent from '../../components/ImageUploadComponent';
 
-    const FilePond = vueFilePond(
-        FilePondPluginFileValidateType,
-    );
+    import Input from '../../components/inputs/TextInputComponent';
+    import InputGroup from '../../components/inputs/InputGroupComponent';
+    import Select from '../../components/inputs/SelectInputComponent';
+    import Button from '../../components/buttons/ButtonComponent';
+    
+    import DatePicker from 'vue2-datepicker';
+
+    import { required, email, requiredIf, maxLength, } from 'vuelidate/lib/validators'
+    import { alphaSpaces, alphaNumSpaces, phoneNumber } from '../../validators/index';
+
+    import { storeUser } from '../../api/users.api';
 
     export default {
-
         computed: {
-            ...mapGetters('Counties', ['getCounties']),
-            ...mapGetters('Roles', ['getRoles']),
+            ...mapGetters('Roles', ["getRoles"]),
+            ...mapGetters('Users', ["isWaiter"]),
 
-            citiesSelectState() {
-                return this.address.county_id ? false : true;
-            }
+            availableRoles() {
+                if(this.isWaiter) {
+                    return this.getRoles.filter(role => role.name === "Client");
+                }
+
+                return this.getRoles;
+            },
         },
 
         data() {
             return {
                 waitForFileUpload: false,
                 waiting: false,
-                counties: [],
-                cities: [],
-                required: false,
+
+                clearImage: false,
+
+                hasAddress: false,
+
                 user: {
-                    first_name: '',
-                    name: '',
+                    image: '',
+                    firstName: '',
+                    lastName: '',
                     email: '',
-                    phone_number: '',
-                    birthdate: '',
-                    role_id: 1,
-                },
-                address: {
-                    first_name: '',
-                    name: '',
-                    phone_number: '',
-                    county_id: '',
-                    city_id: '',
-                    address: ''
+                    phoneNumber: '',
+                    roleId: '',
                 },
 
-                files: null,
-                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                address: ''
+            }
+        },
+
+        validations: {
+            user: {
+                firstName: {
+                    required,
+                    maxLength: maxLength(50),
+                    alphaSpaces
+                },
+                lastName: {
+                    required,
+                    maxLength: maxLength(50),
+                    alphaSpaces
+                },
+                email: {
+                    required,
+                    email
+                },
+                phoneNumber:{
+                    required,
+                    // phoneNumber
+                },
+                roleId: {
+                    required
+                }
+            },
+            address: {
+                required: requiredIf(function () {
+                    return this.hasAddress;
+                }),
+                alphaNumSpaces
             }
         },
 
         methods: {
-            ...mapActions('Users', ['addUser']),
-            ...mapActions('Counties', ['fetchCitites']),
+            ...mapActions('Notification', ["openNotification"]),
 
             async submit() {
-                try {
-                    this.$Progress.start()
+                this.$v.user.$touch();
 
-                    this.waiting = true;
-                    const payload = {
-                        user: this.user
-                    }
-
-                    if(this.required) {
-                        payload.address = this.address
-                    }
-
-                    await this.addUser(payload);
-                    this.restForm();
-                    this.waiting = false;
-
-                    this.$Progress.finish()
-
-                } catch ( error ) {  
-                    this.$Progress.fail()
-                    if(error.response.data.errors) {
-                        this.$refs.observer.setErrors(error.response.data.errors)
-                    }  
-                     console.log(error)       
-                
-                    this.waiting = false;
+                if(this.hasAddress) {
+                    this.$v.address.$touch()
                 }
+                
+                if(!this.$v.$invalid) {
+                    try {
+                        this.waiting = true;
+      
+                        const payload = {
+                            ...this.user
+                        };
+
+                        if(this.hasAddress) {
+                            payload.address = this.address
+                        }
+                    
+                        await storeUser(this.user);
+
+                        this.restForm();
+
+                        this.waiting = false;
+
+                        this.openNotification({
+                            type: "ok",
+                            message: "User account created",
+                            show: true,
+                        })
+
+                    } catch ( error ) {  
+
+                        if(error.response && error.response.data.errors) {
+                           this.$v.$touch();
+                        }  
+
+                        this.waiting = false;
+                         
+                        console.log(error)
+                    }
+                }
+                
             },
             
             async getCitites() {
@@ -406,68 +338,54 @@
             },
 
             restForm() {
-                this.$refs.observer.reset();
-
+                this.$v.$reset();
+                
                 this.cities = [];
                 this.files = [];
 
-                this.user = {
-                    first_name: '',
-                    name: '',
-                    email: '',
-                    phone_number: '',
-                    birthdate: '',
-                    role_id: 1,
+                if(this.user.avatar) {
+                    delete this.user.avatar
+                    this.clearImage = true;
                 }
 
-                this.address = {
-                    state: false,
-                    first_name: '',
-                    name: '',
-                    phone_number: '',
-                    county_id: '',
-                    city_id: '',
-                    address: ''
+                this.user = {
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phoneNumber: '',
+                    roleId: 1,
                 }
+
+                this.address  = ''
+                
             },
 
             toggleAddressState() {
                 if(this.required) {
-                    this.address = {
-                        first_name: '',
-                        name: '',
-                        phone_number: '',
-                        county_id: '',
-                        city_id: '',
-                        address: ''
-                    }
+                    this.address = ''
                 }
-                this.$refs.addressForm.reset();
+                this.$v.address.$reset()
                 this.required = !this.required
             },
 
-            waitForFiletoUpload() {
-                this.waitForFileUpload = true;
+            toggleWaitForFileUpload(waitForFileToUpload) {
+                console.log(waitForFileToUpload);
+                this.waitForFileUpload = waitForFileToUpload;
             },
 
-            stopWaitingForFileToUpload() {
-                this.waitForFileUpload = false;
+            setImagePath(imagePath) {
+                this.user.avatar = imagePath;
             },
-
-            addAvatarPathToUser(value) {
-                this.user.avatar = value;
-                this.waitForFileUpload = false;
-            },
-
-            clearAvatar() {
-                this.$refs.pond.removeFile({revert: true});
-                delete this.user.avatar;
-            }
         },
 
         components: {
-            FilePond,
-            ViewContainer
+            ViewContainer,
+            ImageUploadComponent,
+            Input,
+            Select,
+            InputGroup,
+            Button,
+            DatePicker
         }
     }
 </script>
