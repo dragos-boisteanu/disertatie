@@ -20,7 +20,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('users', 'UserController');
     Route::apiResource('roles', 'RoleController');
     Route::apiResource('products', 'ProductController');
-    Route::apiResource('categories', 'CategoryController');
+    Route::apiResource('categories', 'CategoryController')->except('show');
     Route::apiResource('units', 'UnitController');
     Route::apiResource('ingredients', 'IngredientController');
     Route::apiResource('stocks', 'StockController')->only('update');
