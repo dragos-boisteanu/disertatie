@@ -25,5 +25,9 @@ class TableStatusSeeder extends Seeder
         DB::table('table_statuses')->insert([
             'name' =>  'Waiting reservation'
         ]);
+
+        DB::table('table_statuses')->insert([
+            'name' =>  'Disabled'
+        ]);
     }
 }

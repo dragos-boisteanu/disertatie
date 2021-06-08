@@ -19,6 +19,8 @@ class CreateTablesTable extends Migration
 
             $table->unsignedBigInteger('status_id')->nullabe();
             $table->foreign('status_id')->references('id')->on('table_statuses');
+
+            $table->softDeletes();
         });
     }
 
