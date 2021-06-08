@@ -85,6 +85,11 @@ class Order extends Model
         return $this->belongsToMany(Product::class)->withPivot('product_name', 'quantity', 'unit_price');
     }
 
+    public function table()
+    {
+        return $this->hasOne(Table::class);
+    }
+
     public function scopeFilter(Builder $builder, array $data)
     {
         return (new OrderFilter($data))->filter($builder);
