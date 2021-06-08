@@ -162,13 +162,18 @@ export default {
     Object.keys(this.$route.query).forEach((key) => {
       if (!_isEmpty(this.$route.query[key])) {
         this.filterData[key] = this.$route.query[key];
-      }
-
-      if (!_isEmpty(this.$route.query.statuses)) {
-        this.filterData.statuses = [];
-        this.filterData.statuses.push(...this.$route.query.statuses);
-      }
+      }     
     });
+
+     if (!_isEmpty(this.$route.query.statuses)) {
+      this.filterData.statuses = [];
+      this.filterData.statuses.push(...this.$route.query.statuses);
+    }
+
+    if (!_isEmpty(this.$route.query.deliveryMethods)) {
+      this.filterData.deliveryMethods = [];
+      this.filterData.deliveryMethods.push(...this.$route.query.deliveryMethods);
+    }
 
     if (this.getSubscribedToNewOrders) {
       this.subscribeToNewOrders();
@@ -202,6 +207,7 @@ export default {
         staffFirstName: "",
         staffLastName: "",
         statuses: [],
+        deliveryMethods: []
       },
       pagination: {
         currentPage: "",
@@ -319,6 +325,11 @@ export default {
       if (!_isEmpty(filterData.statuses)) {
         this.filterData.statuses = [];
         this.filterData.statuses.push(...filterData.statuses);
+      }
+
+      if (!_isEmpty(filterData.deliveryMethods)) {
+        this.filterData.deliveryMethods = [];
+        this.filterData.deliveryMethods.push(...filterData.deliveryMethods);
       }
     },
 

@@ -52,21 +52,41 @@
             />
 
             <div class="my-2 flex items-center flex-wrap gap-1">
-                <div v-for="status in getOrdersStatuses" :key="status.id">
-                    <input 
-                        :id="status.id" 
-                        :name="status.name"
-                        :value="status.id" 
-                        type="checkbox" 
-                        v-model="localFilterData.statuses"
-                        class="mr-1 outline-none"
-                        @change="callFilter"
-                    />
-                    <label :for="status.id">
-                    {{ status.name }}</label>
-    
+                <div class="font-semibold">Status</div>
+                <div class="flex items-center flex-wrap gap-1">
+                    <div v-for="status in getOrdersStatuses" :key="status.id">
+                        <input 
+                            :id="status.id" 
+                            :name="status.name"
+                            :value="status.id" 
+                            type="checkbox" 
+                            v-model="localFilterData.statuses"
+                            class="mr-1 outline-none"
+                            @change="callFilter"
+                        />
+                        <label :for="status.id">
+                        {{ status.name }}</label>
+                    </div>
                 </div>
+            </div>
 
+            <div class="my-2">
+                <div class="font-semibold">Delivery method</div>
+                <div class="flex items-center flex-wrap gap-2">
+                    <div v-for="deliveryMethod in getDeliveryMethods" :key="deliveryMethod.id">
+                        <input 
+                            :id="`dm ${deliveryMethod.id}`" 
+                            :name="deliveryMethod.name"
+                            :value="deliveryMethod.id" 
+                            type="checkbox" 
+                            v-model="localFilterData.deliveryMethods"
+                            class="mr-1 outline-none"
+                            @change="callFilter"
+                        />
+                        <label :for="`dm ${deliveryMethod.id}`">
+                        {{ deliveryMethod.name }}</label>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -102,6 +122,7 @@
 
         computed: {
             ...mapGetters('Statuses', ['getOrdersStatuses']),
+            ...mapGetters('DeliveryMethods', ['getDeliveryMethods']),
         },
         
         data() {
@@ -112,6 +133,7 @@
                     staffLastName: this.filterData.staffLastName,
                     staffFirstName: this.filterData.staffFirstName,
                     statuses: this.filterData.statuses,
+                    deliveryMethods: this.filterData.deliveryMethods,
                 }
             }
         },
