@@ -22,7 +22,7 @@ class CreateOrdersTable extends Migration
             $table->string('name')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('email')->nullable();
-            $table->string('address');
+            $table->string('address')->nullable();
 
             $table->string('observations')->nullable();
 

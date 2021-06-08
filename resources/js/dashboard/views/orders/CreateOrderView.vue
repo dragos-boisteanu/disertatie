@@ -134,8 +134,8 @@
                         </Select>
                     </InputGroup>
 
-                    <div class="flex flex-col gap-2 md:flex-row md:items-center" v-if="isTableOrder || showAddressFields">
-                        <div class="w-full" v-if="showAddressFields">
+                    <div class="flex flex-col gap-2 md:flex-row md:items-center" v-if="isTableOrder || isDeliveryOrder">
+                        <div class="w-full" v-if="isDeliveryOrder">
                             <InputGroup
                                 v-if="client.addresses.length > 0"
                                 id="clientAddresses"
@@ -153,7 +153,7 @@
                             </InputGroup>
 
                             <InputGroup
-                                v-if="showAddressFields"
+                                v-if="isDeliveryOrder"
                                 id="clientAddress"
                                 label="Adrress"
                                 :hasError="$v.order.address.$error"
@@ -182,25 +182,28 @@
                             v-if="isTableOrder"
                             id="tableId"
                             label="Table"
-                            :hasError="$v.order.address.$error"
+                            :hasError="$v.order.tableId.$error"
                             :eclass="{'flex-1':true}"
                             :required="true"
                         >
                             <template v-slot:errors>
-                                <p v-if="!$v.order.address.required">
+                                <p v-if="!$v.order.tableId.required">
                                     The table number field is required 
                                 </p>
-                                <p v-if="!$v.order.address.alphaNumSpaces">
-                                    The  table numbe must contain only letters, spaces or numbers
+                                <p v-if="!$v.order.tableId.numeric">
+                                   The table ID must be numeric
                                 </p>
                             </template>
-                            <Input
-                                v-model="order.address"
-                                id="orderAddress"
-                                name="clientAddress"
-                                :class="{'border-red-600' : $v.order.address.$error, 'border-green-600': $v.order.address.$dirty && !$v.order.address.$error}"
-                                @blur.native="$v.order.address.$touch()"
-                            ></Input>
+                            <Select
+                                v-model="order.tableId"
+                                id="orderTableId"
+                                name="orderTableId"
+                                :class="{'border-red-600' : $v.order.tableId.$error, 'border-green-600': $v.order.tableId.$dirty && !$v.order.tableId.$error}"
+                                @blur.native="$v.order.tableId.$touch()"
+                            >
+                                <option value="" selected disabled>Select table</option>
+                                <option v-for="table in getTables" :key="table.id" :value="table.id">{{table.name}}</option>
+                            </Select>
                         </InputGroup>
                     </div>  
                     
@@ -320,6 +323,7 @@
     export default {
         computed: {
             ...mapGetters('DeliveryMethods', ['getDeliveryMethods']),
+            ...mapGetters('Tables', ['getTables']),
 
             orderTotalQuantity() {
                 let totalQuantity = 0
@@ -343,7 +347,7 @@
                 return totalPrice.toFixed(2);
             },
 
-            showAddressFields() {
+            isDeliveryOrder() {
                 return parseInt(this.order.deliveryMethodId) === 1;
             },
 
@@ -365,6 +369,7 @@
                     phoneNumber: '',
                     email: '',
                     address: '',
+                    tableId: '',
                     deliveryMethodId: '',
                     observations: '',
                     items: []
@@ -404,10 +409,18 @@
 
                 address: {
                     required: requiredIf(function () {
-                        return this.isTableOrder || this.showAddressFields
+                        return this.isDeliveryOrder;
                     }),
                     alphaNumSpaces
                 },
+
+                tableId: {
+                    requiredIf: requiredIf(function () {
+                        return this.isTableOrder;
+                    }),
+                    numeric
+                },
+
                 deliveryMethodId: {
                     required,
                     numeric
@@ -448,22 +461,24 @@
                             payload.email = this.order.email;
                         }
 
-                        if(this.order.address) {
-                            payload.address =  this.order.address;
-                        }
-
-                        if(this.order.observations) {
-                            payload.observations = this.order.observations;
+                        if(this.order.address && this.isDeliveryOrder) {
+                            payload.address = this.order.address;
                         }
 
                         if(parseInt(this.order.deliveryMethodId) === 2 ) {
                             payload.address = 'Local';
                         }
 
-                        if(this.order.phoneNumber) {
-                            payload.phoneNumber = this.order.phoneNumber;
+                        if(this.order.tableId && this.isTableOrder) {
+                            payload.tableId = this.order.tableId;
                         }
 
+                        if(this.order.observations) {
+                            payload.observations = this.order.observations;
+                        }
+
+
+                        payload.phoneNumber = this.order.phoneNumber;
                         payload.deliveryMethodId = this.order.deliveryMethodId;
                         payload.items = this.order.items;
 

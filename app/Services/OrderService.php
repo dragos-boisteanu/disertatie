@@ -72,17 +72,20 @@ class OrderService implements OrderServiceInterface
 
       $order->delivery_method_id = $data['deliveryMethodId'];
 
-      $order->address = $data['address'];
-
       $order->status_id = 2; // recieved
       $order->staff_id = $userId;
+      $order->phone_number = $data['phoneNumber'];
+
+      if (array_key_exists('name', $data) && $data['deliveryMethodId'] ===1) {
+        $order->address = $data['address'];
+      }     
+
+      if (array_key_exists('tableId', $data) && $data['deliveryMethodId'] == 3) {
+        $order->table_id = $data['tableId'];
+      }    
 
       if (array_key_exists('name', $data)) {
         $order->name = $data['name'];
-      }
-
-      if (array_key_exists('phoneNumber', $data)) {
-        $order->phone_number = $data['phoneNumber'];
       }
 
       if (array_key_exists('observations', $data)) {
@@ -114,7 +117,8 @@ class OrderService implements OrderServiceInterface
       return $order;
     } catch (\Exception $e) {
       DB::rollBack();
-      throw new \Exception("Error Creating Order");
+      // throw new \Exception("Error Creating Order");
+      throw new \Exception($e->getMessage());
     };
   }
 
