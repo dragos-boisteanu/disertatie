@@ -27,8 +27,10 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('discounts', 'DiscountController');
     Route::apiResource('orders', 'OrderController');
     Route::apiResource('delivery-methods', 'DeliveryMethodController');
-    Route::apiResource('order-statuses', 'OrderStatusController');
-   
+    // Route::apiResource('order-statuses', 'OrderStatusController');
+    Route::apiResource('tables', 'TableController');
+    Route::apiResource('table-statuses', 'TableStatusController');
+
     Route::group(['prefix'=>'categories'], function() {
         Route::get('/{catagoryName}', 'CategoryController@search');
     });
@@ -72,6 +74,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 
     Route::group(['prefix'=>'statuses'], function() {
         Route::get('/orders', 'StatusesController@getOrdersStatuses');
+        Route::get('/tables', 'StatusesController@getTableStatuses');
 
     });
 

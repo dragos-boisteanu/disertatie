@@ -78,6 +78,7 @@
                     this.downloadDiscounts(),
                     this.fetchDeliveryMethods(),
                     this.downloadOrdersStatuses(),
+                    this.downloadTableStatuses(),
                     this.downloadTables(),
                 ]);
 
@@ -86,6 +87,7 @@
                 this.loaded = true;
 
             } catch ( error ) {
+                console.log(error)
                 this.$Progress.fail()
                 this.openNotification({
                     type: 'error',
@@ -122,7 +124,7 @@
             ...mapActions('Ingredients', ['downloadIngredients']),
             ...mapActions('Discounts', ['downloadDiscounts']),
             ...mapActions('DeliveryMethods', ['fetchDeliveryMethods']),
-            ...mapActions('Statuses', ['downloadOrdersStatuses']),
+            ...mapActions('Statuses', ['downloadOrdersStatuses', 'downloadTableStatuses']),
             ...mapActions('Tables', ['downloadTables']),
             
             async downloadRoles() {
