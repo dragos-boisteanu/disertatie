@@ -19,6 +19,6 @@ class Table extends Model
 
     public function status()
     {
-        return $this->hasOne(TableStatus::class);
+        return $this->belongsTo(TableStatus::class);
     }
 }

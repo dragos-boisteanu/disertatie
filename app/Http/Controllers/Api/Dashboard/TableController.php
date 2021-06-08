@@ -17,7 +17,6 @@ class TableController extends Controller
     public function index()
     {
         $tables = Table::all();
-
         return new TableCollection($tables);
     }
 
