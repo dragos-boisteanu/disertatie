@@ -13,7 +13,7 @@ class TableService implements TableServiceInterface
   {
     try {
       
-      $table = Table::findOrFail($tableId);
+      $table = Table::withTrashed()->findOrFail($tableId);
 
       $table->status_id = $statusId;
 

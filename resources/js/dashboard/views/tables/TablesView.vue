@@ -1,11 +1,10 @@
 <template>
   <ViewContainer>
-
     <ConfirmTableDeleteModal
       v-if="showDeleteteConfirmationModal"
       :table-id="table.id"
       @delete="deleteTable"
-      @close="toggleModal"
+      @closed="toggleModal"
     ></ConfirmTableDeleteModal>
 
     <template slot="header"> Tables </template>
@@ -18,7 +17,6 @@
               <th class="p-2 text-center">Index</th>
               <th class="p-2">Name</th>
               <th class="p-2">Status</th>
-              <th class="p-2"></th>
             </tr>
           </thead>
           <tbody class="overflow-y-auto">
@@ -61,28 +59,26 @@
           <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
             <h2 class="mb-2 text-xl font-semibold">Table</h2>
             <InputGroup id="name" label="Name" class="w-full">
-              <TextInput
-                v-model="table.name"
-                id="name"
-                name="name"
-              ></TextInput>
+              <TextInput v-model="table.name" id="name" name="name"></TextInput>
             </InputGroup>
           </div>
           <div class="flex flex-wrap items-center gap-4">
-            <div v-if="isTableSelected" class=" w-full flex items-center gap-4">
-              <Button  type="secondary" @click.native="clearSelection">
+            <div v-if="isTableSelected" class="w-full flex items-center gap-4">
+              <Button type="secondary" @click.native="clearSelection">
                 Clear selection
               </Button>
 
-              <Button type="danger" v-if="canDelete" @click.native="toggleModal">
-                Delete
-              </Button>
+              <div v-if="canDelete && canRestore">
+                <Button type="danger" @click.native="toggleModal">
+                  Delete
+                </Button>
 
-              <Button v-else @click.native="disableTable">
-                Disable
-              </Button>
+                <Button @click.native="callRestoreTable"> Restore </Button>
+              </div>
+
+              <Button v-else @click.native="callDisableTable"> Disable </Button>
             </div>
-           
+
             <Button type="primary" @click.native="submitNewTable">
               <span v-if="isTableSelected"> Update </span>
               <span v-else> Submit </span>
@@ -95,11 +91,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import ViewContainer from "../ViewContainer";
 
-import ConfirmTableDeleteModal from '../../components/modals/ConfirmTableDeleteModalComponent';
+import ConfirmTableDeleteModal from "../../components/modals/ConfirmTableDeleteModalComponent";
 
 import InputGroup from "../../components/inputs/InputGroupComponent";
 import TextInput from "../../components/inputs/TextInputComponent";
@@ -116,12 +112,16 @@ export default {
     },
 
     canDelete() {
-      return this.table.status.name === "Disabled"
+      return this.table.status.name === "Disabled";
+    },
+
+    canRestore() {
+      return this.table.status.name === "Disabled";
     },
 
     showDeleteteConfirmationModal() {
       return this.isTableSelected && this.showDeleteModalState;
-    }
+    },
   },
 
   data() {
@@ -132,35 +132,56 @@ export default {
         id: "",
         name: "",
         status: {
-          id: '',
-          name: ''
-        }
+          id: "",
+          name: "",
+        },
       },
     };
   },
 
   methods: {
+    ...mapActions("Tables", ["disableTable", "restoreTable"]),
 
     async submitNewTable() {
       console.log(`new table with name ${this.table.name} was created`);
     },
 
-    async disableTable() {
-      console.log(`table ${this.table.id} was disabled`)
+    async callDisableTable() {
+      const payload = {
+        vm: this,
+        id: this.table.id,
+      };
+      const status = await this.disableTable(payload);
+      Object.keys(status).forEach((key) => {
+        this.$set(this.table.status, key, status[key]);
+      });
+    },
+
+    async callRestoreTable() {
+      const payload = {
+        vm: this,
+        id: this.table.id,
+      };
+      const status = await this.restoreTable(payload);
+      Object.keys(status).forEach((key) => {
+        this.$set(this.table.status, key, status[key]);
+      });
     },
 
     async deleteTable(tableId) {
       console.log(`table ${tableId} was deleted`);
 
       this.toggleModal();
-
     },
+
     selectTable(tableId) {
-      this.table = JSON.parse(JSON.stringify(_find(this.getTables, ["id", tableId])));
+      this.table = JSON.parse(
+        JSON.stringify(_find(this.getTables, ["id", tableId]))
+      );
     },
 
     toggleModal() {
-      this.showDeleteModalState = !this.showDeleteModalState
+      this.showDeleteModalState = !this.showDeleteModalState;
     },
 
     clearSelection() {
@@ -170,7 +191,7 @@ export default {
     resetForm() {
       this.table.id = "";
       this.table.name = "";
-    }
+    },
   },
 
   components: {

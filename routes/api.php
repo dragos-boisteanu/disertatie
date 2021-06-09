@@ -69,13 +69,16 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::patch('remove-item/{orderId}', 'OrderItemController@removeItem');
         Route::patch('add-item/{orderId}', 'OrderItemController@addItem');
         Route::patch('patch-item/{orderId}', 'OrderItemController@patchItem');
+    });
 
+    Route::group(['prefix'=>'tables'], function() {
+        Route::delete('{id}/disable', 'TableController@disable');
+        Route::post('{id}/restore', 'TableController@restore');
     });
 
     Route::group(['prefix'=>'statuses'], function() {
         Route::get('/orders', 'StatusesController@getOrdersStatuses');
         Route::get('/tables', 'StatusesController@getTableStatuses');
-
     });
 
     Route::group(['prefix'=>'clients'], function() {

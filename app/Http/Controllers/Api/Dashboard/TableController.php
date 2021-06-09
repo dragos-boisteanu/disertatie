@@ -4,11 +4,20 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Models\Table;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TableCollection;
+use App\Interfaces\TableServiceInterface;
 
 class TableController extends Controller
 {
+
+    private $tableService;
+
+    public function __construct(TableServiceInterface $tableService)
+    {   
+        $this->tableService = $tableService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +25,7 @@ class TableController extends Controller
      */
     public function index()
     {
-        $tables = Table::all();
+        $tables = Table::withTrashed()->with('status')->get();
         return new TableCollection($tables);
     }
 
@@ -52,6 +61,32 @@ class TableController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function disable(Request $request, int $tableId)
+    {
+        $table = Table::findOrFail($tableId);
+
+        $table->delete();
+
+        $this->tableService->setStatus($tableId, 4);
+
+        $table->refresh();
+
+        return response()->json(['status' => $table->status], 200);
+    }
+
+    public function restore(Request $request, int $tableId)
+    {
+        $table = Table::withTrashed()->findOrFail($tableId);
+
+        $table->restore();
+
+        $this->tableService->setStatus($tableId, 1);
+
+        $table->refresh();
+
+        return response()->json(['status' => $table->status], 200);
     }
 
     /**
