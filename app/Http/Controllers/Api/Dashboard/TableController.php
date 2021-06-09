@@ -8,6 +8,8 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TableCollection;
 use App\Interfaces\TableServiceInterface;
+use App\Http\Resources\Table as TableResource;
+
 
 class TableController extends Controller
 {
@@ -37,7 +39,14 @@ class TableController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $table = new Table();
+
+        $table->name = $request->name;
+        $table->status_id = 1;
+
+        $table->save();
+
+        return response()->json(new TableResource($table), 201);
     }
 
     /**
@@ -60,7 +69,13 @@ class TableController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $table = Table::withTrashed()->findOrFail($id);
+
+        $table->name = $request->name;
+
+        $table->save();
+
+        return response()->json(null, 204);
     }
 
     public function disable(Request $request, int $tableId)
@@ -106,7 +121,7 @@ class TableController extends Controller
 
         $table->forceDelete();
 
-        return response()->json(null, 200);
+        return response()->json(null, 204);
     
     }
 }

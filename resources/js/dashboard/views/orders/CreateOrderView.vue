@@ -202,7 +202,7 @@
                                 @blur.native="$v.order.tableId.$touch()"
                             >
                                 <option value="" selected disabled>Select table</option>
-                                <option v-for="table in getTables" :key="table.id" :value="table.id">{{table.name}}</option>
+                                <option v-for="table in getTables" :key="table.id" :value="table.id" :disabled="table.status.name === 'Busy' || table.status.name === 'Disabled'">{{table.name}}</option>
                             </Select>
                         </InputGroup>
                     </div>  

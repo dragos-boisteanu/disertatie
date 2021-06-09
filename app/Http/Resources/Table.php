@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TableResource extends JsonResource
+class Table extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +17,7 @@ class TableResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'status' => $this->whenLoaded('status', ['id'=>$this->status->id, 'name'=>$this->status->name]),
-            // 'orderId' => $this->whenLoaded('order', $this->order->id),
+            'status' => ['id'=>$this->status->id, 'name'=>$this->status->name],
         ];
     }
 }
