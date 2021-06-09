@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Models\Table;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Events\UpdateTableStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TableCollection;
 use App\Interfaces\TableServiceInterface;
@@ -85,6 +86,8 @@ class TableController extends Controller
         $table->delete();
 
         $this->tableService->setStatus($tableId, 4);
+        $tableStatus = $this->tableService->getStatusById(4);
+        broadcast(new UpdateTableStatus($tableStatus, $tableId));
 
         $table->refresh();
 
@@ -98,6 +101,8 @@ class TableController extends Controller
         $table->restore();
 
         $this->tableService->setStatus($tableId, 1);
+        $tableStatus = $this->tableService->getStatusById(1);
+        broadcast(new UpdateTableStatus($tableStatus, $tableId));
 
         $table->refresh();
 
