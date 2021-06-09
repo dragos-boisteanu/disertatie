@@ -97,6 +97,16 @@ class TableController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $table = Table::withTrashed()->with('orders')->findOrFail($id);
+        
+        foreach($table->orders as $order) {
+            $order->table_id = null;
+            $order->save();
+        }
+
+        $table->forceDelete();
+
+        return response()->json(null, 200);
+    
     }
 }
