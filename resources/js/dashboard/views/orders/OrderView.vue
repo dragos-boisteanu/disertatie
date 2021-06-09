@@ -105,11 +105,11 @@
                 Ron)</span
               >
             </div>
-            <div class="my-1" v-if="order.deliveryMethod.name === 'Table'">
+            <div class="my-1" v-if="isTableOrder">
               <span class="font-semibold">Table: </span>
-              <span>{{ order.address }}</span>
+              <span>{{ order.tableId }}</span>
             </div>
-            <div class="my-1" v-if="showAddressForDelivery">
+            <div class="my-1" v-if="isDeliveryOrder">
               <span class="font-semibold">Address: </span>
               <span>{{ order.address }}</span>
             </div>
@@ -378,8 +378,12 @@ export default {
       return this.order.client ? this.order.client.id : null;
     },
 
-    showAddressForDelivery() {
-      return this.order.deliveryMethod.name === "Delivery" ? true : false;
+    isDeliveryOrder() {
+      return this.order.deliveryMethod.name === "Delivery";
+    },
+
+    isTableOrder() {
+      return this.order.deliveryMethod.name === 'Table';
     },
 
     // showOrderDetailsEditButton() {
