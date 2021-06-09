@@ -3,7 +3,7 @@
     <ConfirmTableDeleteModal
       v-if="showDeleteteConfirmationModal"
       :table-id="table.id"
-      @delete="deleteTable"
+      @delete="callDeleteTable"
       @closed="toggleModal"
     ></ConfirmTableDeleteModal>
 
@@ -64,11 +64,11 @@
           </div>
           <div class="flex flex-wrap items-center gap-4">
             <div v-if="isTableSelected" class="w-full flex items-center gap-4">
-              <Button type="secondary" @click.native="clearSelection">
+              <Button type="secondary" @click.native="resetForm">
                 Clear selection
               </Button>
 
-              <div v-if="canDelete && canRestore">
+              <div v-if="canDelete && canRestore" class="flex items-center gap-2">
                 <Button type="danger" @click.native="toggleModal">
                   Delete
                 </Button>
@@ -140,7 +140,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("Tables", ["disableTable", "restoreTable"]),
+    ...mapActions("Tables", ["disableTable", "restoreTable", "deleteTable"]),
 
     async submitNewTable() {
       console.log(`new table with name ${this.table.name} was created`);
@@ -168,10 +168,10 @@ export default {
       });
     },
 
-    async deleteTable(tableId) {
-      console.log(`table ${tableId} was deleted`);
-
+    async callDeleteTable(tableId) {
+      await this.deleteTable(tableId);
       this.toggleModal();
+      this.resetForm();
     },
 
     selectTable(tableId) {
@@ -182,10 +182,6 @@ export default {
 
     toggleModal() {
       this.showDeleteModalState = !this.showDeleteModalState;
-    },
-
-    clearSelection() {
-      this.resetForm();
     },
 
     resetForm() {

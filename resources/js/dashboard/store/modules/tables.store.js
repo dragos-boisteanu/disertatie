@@ -41,6 +41,11 @@ const actions = {
     payload.status = response.data.status;
     commit('RESTORE_TABLE', payload);
     return payload.status;
+  },
+
+  async deleteTable({commit}, tableId) {
+    await deleteTable(tableId);
+    commit('DELETE_TABLE');
   }
 }
 
@@ -63,7 +68,11 @@ const mutations = {
     Object.keys(payload.status).forEach(key => {
       vm.$set(state.tables[tableIndex].status, key, payload.status[key]);
     })
-   
+  },
+
+  DELETE_TABLE(state, tableId) {
+    const tableIndex = _findIndex(state.tables, ['id', tableId]);
+    state.tables.splice(tableIndex,1);
   }
 }
 
