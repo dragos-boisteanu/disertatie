@@ -123,7 +123,7 @@
                             </p>
                         </template>
                         <Select 
-                            @change="deliveryMethodChanged"
+                            @change.native="deliveryMethodChanged"
                             v-model="$v.order.deliveryMethodId.$model"
                             id="orderDeliveryMethod"
                             name="orderDeliveryMethod"
@@ -609,6 +609,8 @@
 
             deliveryMethodChanged() {
                 this.$v.$reset();
+                this.order.address = "";
+                this.order.tableId = "";
             },
 
             resetForm() {

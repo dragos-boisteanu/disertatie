@@ -87,7 +87,7 @@ class Order extends Model
 
     public function table()
     {
-        return $this->hasOne(Table::class);
+        return $this->belongsTo(Table::class);
     }
 
     public function scopeFilter(Builder $builder, array $data)

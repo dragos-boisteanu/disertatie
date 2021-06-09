@@ -11,6 +11,7 @@ use App\Jobs\SendOrderEmailJob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use App\Interfaces\OrderServiceInterface;
+use App\Interfaces\TableServiceInterface;
 use App\Http\Resources\Order as OrderResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\ProductStockServiceInterface;
@@ -20,10 +21,12 @@ class OrderService implements OrderServiceInterface
 {
 
   private $productStockService;
+  private $tableService;
 
-  public function __construct(ProductStockServiceInterface $productStockService)
+  public function __construct(ProductStockServiceInterface $productStockService, TableServiceInterface $tableService)
   {
     $this->productStockService = $productStockService;
+    $this->tableService = $tableService;
   }
 
   public function getOrderById(int $orderId): Order
@@ -82,6 +85,7 @@ class OrderService implements OrderServiceInterface
 
       if (array_key_exists('tableId', $data) && $data['deliveryMethodId'] == 3) {
         $order->table_id = $data['tableId'];
+        $this->tableService->setStatus($data['tableId'], 2);
       }    
 
       if (array_key_exists('name', $data)) {
@@ -150,8 +154,11 @@ class OrderService implements OrderServiceInterface
   {
     try {
       $order = Order::findOrFail($orderId);
-      $order->status_id = $statusId;
 
+      $order->status_id = $statusId;
+      if($order->delivery_method_id == 3 && $statusId == 7) {
+        $this->tableService->setStatus($order->table_id, 1);
+      }
       $order->save();
       $order->refresh();
 
@@ -159,7 +166,9 @@ class OrderService implements OrderServiceInterface
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch (\Exception $ex) {
-      throw new \Exception('Faied to update order #', $orderId);
+      // throw new \Exception('Faied to update order #' . $orderId . ' status');
+      throw new \Exception($ex->getMessage());
+      
     }
   }
 
@@ -167,6 +176,8 @@ class OrderService implements OrderServiceInterface
   {
     try {
       $order = Order::findOrFail($orderId);
+
+      $this->tableService->setStatus($order->table_id, 1);
 
       $order = $this->removeItems($order);
 
