@@ -2,6 +2,7 @@
 
 use App\Broadcasting\OrderChannel;
 use App\Broadcasting\OrdersChannel;
+use App\Broadcasting\TablesChannel;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -22,3 +23,4 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('orders.{order}', OrderChannel::class);
 
 Broadcast::channel('orders', OrdersChannel::class);
+Broadcast::channel('tables', TablesChannel::class);

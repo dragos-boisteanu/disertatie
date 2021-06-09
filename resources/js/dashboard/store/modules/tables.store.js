@@ -53,6 +53,10 @@ const actions = {
   async deleteTable({commit}, tableId) {
     await deleteTable(tableId);
     commit('DELETE_TABLE');
+  },
+
+  updateTableStatus({commit}, payload) {
+    commit('UPDATE_TABLE_STATUS', payload);
   }
 }
 
@@ -84,6 +88,14 @@ const mutations = {
   DELETE_TABLE(state, tableId) {
     const tableIndex = _findIndex(state.tables, ['id', tableId]);
     state.tables.splice(tableIndex,1);
+  },
+
+  UPDATE_TABLE_STATUS(state, payload) {
+    const vm = payload.vm;
+    const tableIndex = _findIndex(state.tables, ['id', payload.id]);
+    Object.keys(payload.status).forEach(key => {
+      vm.$set(state.tables[tableIndex].status, key, payload.status[key]);
+    })
   }
 }
 
