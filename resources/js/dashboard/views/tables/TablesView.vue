@@ -68,7 +68,10 @@
                 Clear selection
               </Button>
 
-              <div v-if="canDelete && canRestore" class="flex items-center gap-2">
+              <div
+                v-if="canDelete && canRestore"
+                class="flex items-center gap-2"
+              >
                 <Button type="danger" @click.native="toggleModal">
                   Delete
                 </Button>
@@ -79,9 +82,9 @@
               <Button v-else @click.native="callDisableTable"> Disable </Button>
             </div>
 
-            <Button type="primary" @click.native="submitNewTable">
-              <span v-if="isTableSelected"> Update </span>
-              <span v-else> Submit </span>
+            <Button v-if="isTableSelected" type="primary"> Update </Button>
+            <Button v-else  type="primary" @click.native="createNewTable">
+              Submit
             </Button>
           </div>
         </form>
@@ -140,10 +143,18 @@ export default {
   },
 
   methods: {
-    ...mapActions("Tables", ["disableTable", "restoreTable", "deleteTable"]),
+    ...mapActions("Tables", [
+      "storeTable",
+      "disableTable",
+      "restoreTable",
+      "deleteTable",
+    ]),
 
-    async submitNewTable() {
-      console.log(`new table with name ${this.table.name} was created`);
+    async createNewTable() {
+      const table = await this.storeTable(this.table.name);
+      this.table.id = table.id;
+      this.table.status = table.status;
+      this.resetForm();
     },
 
     async callDisableTable() {

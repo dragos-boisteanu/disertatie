@@ -29,6 +29,13 @@ const actions = {
     commit('SET_TABLES', response.data.data);
   },
 
+  async storeTable({commit}, tableName) {
+    const response = await storeTable(tableName);
+    const table = response.data;
+    commit('ADD_TABLE', table)
+    return table;
+  },
+
   async disableTable({commit}, payload) {
     const response = await disableTable(payload.id);
     payload.status = response.data.status;
@@ -52,6 +59,10 @@ const actions = {
 const mutations = {
   SET_TABLES(state, tables) {
     state.tables = tables;
+  },
+
+  ADD_TABLE(state, table) {
+    state.tables.push(table);
   },
 
   DISABLE_TABLE(state, payload) {
