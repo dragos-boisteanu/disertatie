@@ -64,6 +64,7 @@
               <th class="p-2">Color</th>
               <th class="p-2">Name</th>
               <th class="p-2">Vat</th>
+              <th class="p-2">Discount</th>
               <th class="p-2">Count</th>
               <th></th>
             </tr>
@@ -96,6 +97,7 @@
               </td>
               <td class="p-2">{{ category.name }}</td>
               <td class="p-2">{{ category.vat }} %</td>
+              <td class="p-2"> <span v-if="category.discountId">{{ getDiscountForCategory(category.discountId) }}</span></td>
               <td class="p-2 max-w-4">{{ category.productsCount }}</td>
               <td class="p-2">
                 <button
@@ -223,26 +225,12 @@
               </InputGroup>
             </div>
 
-            <InputGroup id="discount" label="Discount">
-              <Select
-                v-model="category.discountId"
-                id="discount"
-                name="discount"
-              >
-                <option value="" selected>Select discount</option>
-                <option
-                  v-for="availableDiscount in availableDiscounts"
-                  :key="availableDiscount.id"
-                  :value="availableDiscount.id"
-                  class="flex items-center gap-x-3 disabled:bg-gray-100"
-                >
-                  <span>
-                    {{ availableDiscount.code }}
-                  </span>
-                  <span> {{ availableDiscount.value }}% </span>
-                </option>
-              </Select>
-            </InputGroup>
+            <DiscountComponent
+              v-if="categorySelected"
+              :discount-id="category.discountId"
+              @remove="removeDiscount"
+              @add="addDiscount"
+            ></DiscountComponent>
           </div>
 
           <div>
@@ -356,6 +344,11 @@ export default {
 
     allowRemoval(productsCount) {
       return parseInt(productsCount) === 0;
+    },
+
+    getDiscountForCategory(id) {
+      const discount = _find(this.getDiscounts, ['id', parseInt(id)]);
+      return `${discount.code} ${discount.id}%`;
     },
 
     selectCategory(id) {
@@ -497,6 +490,14 @@ export default {
         discount: null,
       };
     },
+
+    removeDiscount() {
+      this.category.discountId = "";
+    },
+
+    addDiscount(discountId) {
+      this.category.discountId = discountId;
+    }
   },
 
   components: {
