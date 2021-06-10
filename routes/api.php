@@ -29,7 +29,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('delivery-methods', 'DeliveryMethodController');
     // Route::apiResource('order-statuses', 'OrderStatusController');
     Route::apiResource('tables', 'TableController');
-    Route::apiResource('table-statuses', 'TableStatusController');
+
+    Route::get('products/{id}/edit', 'ProductController@edit');
 
     Route::group(['prefix'=>'categories'], function() {
         Route::get('/{catagoryName}', 'CategoryController@search');
