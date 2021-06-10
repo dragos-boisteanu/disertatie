@@ -79,10 +79,8 @@ class ProductService implements ProductServiceInterface
         $data['has_ingredients'] = false;
       }
   
-      if(array_key_exists('discount', $data)) {
-        $data['discount_id'] = $data['discount']['id'];
-        $data['discounted_from_date'] = $data['discount']['fromDate'];
-        $data['discounted_until_date'] = $data['discount']['toDate'];
+      if(array_key_exists('discountId', $data)) {
+        $data['discount_id'] = $data['discountId'];
       }
 
       DB::beginTransaction();
@@ -262,16 +260,11 @@ class ProductService implements ProductServiceInterface
 
   private function updateDiscount(Product $product, array $data): void
   {
-    if(array_key_exists('discount', $data)) { 
-      $product->discount_id =  $data['discount']['id'];
-      $product->discounted_from_date = $data['discount']['fromDate']; 
-      $product->discounted_until_date = $data['discount']['toDate'];
-    } else if(!array_key_exists('discount', $data) && !is_null($product->discount_id)) {
+    if(array_key_exists('discountId', $data)) { 
+      $product->discount_id =  $data['discountId'];
+    } else if(!array_key_exists('discountId', $data) && !is_null($product->discount_id)) {
       $product->discount_id = null;
-      $product->discounted_from_date = null;
-      $product->discounted_until_date = null;
     }
-
     $product->save();
   }
 }

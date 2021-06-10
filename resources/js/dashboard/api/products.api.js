@@ -4,6 +4,9 @@ const END_POINT = '/dashboard/products';
 
 const downloadProducts = (query) => httpClient.get(`${END_POINT}`, {params: query});
 const downloadProduct = (id) => httpClient.get(`${END_POINT}/${id}`);
+
+const downloadEdidProductData = (id) => httpClient.get(`${END_POINT}/${id}/edit`);
+
 const storeProduct = (data) => httpClient.post(`${END_POINT}`, data);
 const patchProduct = (data) => httpClient.patch(`${END_POINT}/${data.id}`, data);
 
@@ -17,6 +20,7 @@ const downloadProductByBarcode = (barcode) => httpClient.get(`${END_POINT}/check
 export {
     downloadProducts,
     downloadProduct,
+    downloadEdidProductData,
     storeProduct,
     patchProduct,
     disableProduct,

@@ -8,9 +8,12 @@ use App\Models\Product;
 use App\Events\NewMessage;
 use App\Events\OrderCreated;
 use App\Jobs\SendOrderEmailJob;
+use App\Events\UpdateTableStatus;
+use App\Events\OrderPlacedAtTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use App\Interfaces\OrderServiceInterface;
+use App\Interfaces\TableServiceInterface;
 use App\Http\Resources\Order as OrderResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\ProductStockServiceInterface;
@@ -20,10 +23,12 @@ class OrderService implements OrderServiceInterface
 {
 
   private $productStockService;
+  private $tableService;
 
-  public function __construct(ProductStockServiceInterface $productStockService)
+  public function __construct(ProductStockServiceInterface $productStockService, TableServiceInterface $tableService)
   {
     $this->productStockService = $productStockService;
+    $this->tableService = $tableService;
   }
 
   public function getOrderById(int $orderId): Order
@@ -72,11 +77,21 @@ class OrderService implements OrderServiceInterface
 
       $order->delivery_method_id = $data['deliveryMethodId'];
 
-      $order->address = $data['address'];
-      $order->phone_number =  $data['phoneNumber'];
-
       $order->status_id = 2; // recieved
       $order->staff_id = $userId;
+      $order->phone_number = $data['phoneNumber'];
+
+      if (array_key_exists('name', $data) && $data['deliveryMethodId'] ===1) {
+        $order->address = $data['address'];
+      }     
+
+      if (array_key_exists('tableId', $data) && $data['deliveryMethodId'] == 3) {
+        $order->table_id = $data['tableId'];
+        $this->tableService->setStatus($data['tableId'], 2);
+
+        $tableStatus = $this->tableService->getStatusById(2);
+        broadcast(new UpdateTableStatus($tableStatus, $data['tableId']));
+      }    
 
       if (array_key_exists('name', $data)) {
         $order->name = $data['name'];
@@ -111,7 +126,8 @@ class OrderService implements OrderServiceInterface
       return $order;
     } catch (\Exception $e) {
       DB::rollBack();
-      throw new \Exception("Error Creating Order");
+      // throw new \Exception("Error Creating Order");
+      throw new \Exception($e->getMessage());
     };
   }
 
@@ -143,8 +159,13 @@ class OrderService implements OrderServiceInterface
   {
     try {
       $order = Order::findOrFail($orderId);
-      $order->status_id = $statusId;
 
+      $order->status_id = $statusId;
+      if($order->delivery_method_id == 3 && $statusId == 7) {
+        $this->tableService->setStatus($order->table_id, 1);
+        $tableStatus = $this->tableService->getStatusById(1);
+        broadcast(new UpdateTableStatus($tableStatus, $order->table_id));
+      }
       $order->save();
       $order->refresh();
 
@@ -152,7 +173,9 @@ class OrderService implements OrderServiceInterface
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch (\Exception $ex) {
-      throw new \Exception('Faied to update order #', $orderId);
+      // throw new \Exception('Faied to update order #' . $orderId . ' status');
+      throw new \Exception($ex->getMessage());
+      
     }
   }
 
@@ -161,6 +184,12 @@ class OrderService implements OrderServiceInterface
     try {
       $order = Order::findOrFail($orderId);
 
+      if($order->table_id) {
+        $this->tableService->setStatus($order->table_id, 1);
+        $tableStatus = $this->tableService->getStatusById(1);
+        broadcast(new UpdateTableStatus($tableStatus, $order->table_id));
+      }
+      
       $order = $this->removeItems($order);
 
       return $order;

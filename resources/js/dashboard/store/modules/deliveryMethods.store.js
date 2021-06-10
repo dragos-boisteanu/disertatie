@@ -1,9 +1,8 @@
 import { fetchDeliveryMethods } from '../../api/deliveryMethods.api';
 
 const initialState = () => ({
-    deliveryMethods: null
+    deliveryMethods: []
 });
-
 
 const state = initialState();
 

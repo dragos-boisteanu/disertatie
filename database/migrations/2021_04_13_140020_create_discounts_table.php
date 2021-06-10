@@ -17,7 +17,10 @@ class CreateDiscountsTable extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->integer('value');
-            $table->foreignId('user_id')->constrained();
+
+            $table->dateTime('starts_at');
+            $table->dateTime('ends_at');
+
             $table->softDeletes();
             $table->timestamps();
         });

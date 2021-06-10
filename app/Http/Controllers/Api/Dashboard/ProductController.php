@@ -6,6 +6,7 @@ use App\Models\Stock;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\ProductEdit;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderProduct;
 use App\Http\Resources\ProductOrder;
@@ -71,6 +72,12 @@ class ProductController extends Controller
         $product = $this->productService->getById($id);
 
         return new ProductResource($product);
+    }
+
+    public function edit($id) {
+        $product = $this->productService->getById($id);
+
+        return new ProductEdit($product);
     }
 
     /**

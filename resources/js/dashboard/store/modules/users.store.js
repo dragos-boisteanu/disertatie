@@ -5,6 +5,7 @@ import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
     loggedUser: null,
+    subscribedToNewOrders: false,
 });
 
 const state = initialState();
@@ -12,6 +13,10 @@ const state = initialState();
 const getters = {
     getLoggedUser(state) {
         return state.loggedUser;
+    },
+
+    getSubscribedToNewOrders(state) {
+        return state.subscribedToNewOrders;
     },
 
     isAdmin(state) {
@@ -54,6 +59,10 @@ const actions = {
         } 
     },  
 
+    toggleSubscribedToNewOrders({commit}){
+        commit('TOGGLE_SUBSCRIBED_TO_NEW_ORDERS');
+    }
+
 }
 
 const mutations = {
@@ -67,6 +76,10 @@ const mutations = {
     SET_LOGGED_USER(state, payload) {
         state.loggedUser = payload;
     },
+
+    TOGGLE_SUBSCRIBED_TO_NEW_ORDERS(state) {
+        state.subscribedToNewOrders = !state.subscribedToNewOrders;
+    }
 }
 
 export default {

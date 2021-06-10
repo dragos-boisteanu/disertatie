@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="flex flex-col gap-y-1">
-          <div class="flex items-center">
+          <div class="flex items-center" v-if="order.phoneNumber">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="18px"

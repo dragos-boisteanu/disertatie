@@ -29,6 +29,7 @@ class Product extends JsonResource
             'unit_id' => $this->unit_id,
             'category_id' => $this->category_id,
             'quantity' => $this->quantity,
+            
             'deleted_at' => $this->deleted_at
         ];
 
@@ -39,15 +40,10 @@ class Product extends JsonResource
             $arrayData['ingredients'] = array();
         }
 
-
-        if(!is_null($this->discount)) {
-            $discount = $this->discount;
-            $discount['fromDate'] = $this->discounted_from_date;
-            $discount['toDate'] = $this->discounted_until_date;
-            
-            $arrayData['discount'] = new DiscountProduct($discount);
-        } else {
-            $arrayData['discount'] = null;
+        if($this->relationLoaded('discount')) {
+            $arrayData['discount'] = new DiscountProduct($this->discount);
+        } else if($this->category->relationLoaded('discount')) {
+            $arrayData['discount'] = new DiscountProduct($this->category->discount);
         }
 
         return $arrayData;

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDiscountDatesColumnsToProductsTable extends Migration
+class AddTableIdCollumnToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddDiscountDatesColumnsToProductsTable extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dateTime('discounted_from_date')->nullable()->after('discount_id');
-            $table->dateTime('discounted_until_date')->nullable()->after('discounted_from_date');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->foreignId('table_id')->after('address')->nullable()->constrained();
         });
     }
 
@@ -26,7 +25,7 @@ class AddDiscountDatesColumnsToProductsTable extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             //
         });
     }

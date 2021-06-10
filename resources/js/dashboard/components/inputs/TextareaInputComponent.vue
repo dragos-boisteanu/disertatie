@@ -34,7 +34,8 @@
             },
             value: {
                 type: [String, Number],
-                required: true,
+                required: false,
+                default: null
             },
             maxLength: {
                 type: Number,

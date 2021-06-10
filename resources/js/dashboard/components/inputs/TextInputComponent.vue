@@ -23,7 +23,8 @@
             },
             value: {
                 type: [String, Number],
-                required: true,
+                required: false,
+                default: null
             },
             eclass: {
                 type: Object,

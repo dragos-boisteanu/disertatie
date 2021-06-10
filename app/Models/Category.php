@@ -17,8 +17,6 @@ class Category extends Model
         'vat',
         'color',
         'discount_id',
-        'discounted_from_date',
-        'discounted_until_date'
     ];
 
     public $with = ['discount'];

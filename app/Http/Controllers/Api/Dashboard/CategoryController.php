@@ -35,10 +35,8 @@ class CategoryController extends Controller
 
         $input = $request->validated();
 
-        if($request->has('discount')) {
-            $input['discount_id'] = $request->input('discount.id');
-            $input['discounted_from_date'] = $request->input('discount.fromDate');
-            $input['discounted_until_date'] = $request->input('discount.toDate');
+        if($request->has('discountId')) {
+            $input['discount_id'] = $request->input('discountId');
         }
 
         $category = Category::create($input);
@@ -61,15 +59,15 @@ class CategoryController extends Controller
 
         $input = $request->validated();
 
-        if($request->has('discount')) {
-            $input['discount_id'] = $request->input('discount.id');
-            $input['discounted_from_date'] = $request->input('discount.fromDate');
-            $input['discounted_until_date'] = $request->input('discount.toDate');
+        if($request->has('discountId')) {
+            $input['discount_id'] = $request->discountId;
+        } else if( !$request->has('discountId') && !is_null($category->discount_id)){
+            $input['discount_id'] = null;
         }
-        
+
         $category->update($input);
 
-        return response()->json(['message' => 'Category updated'], 200);
+        return response()->json(null, 204);
     }
 
     /**

@@ -20,9 +20,9 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('staff_id');
 
             $table->string('name')->nullable();
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->string('email')->nullable();
-            $table->string('address');
+            $table->string('address')->nullable();
 
             $table->string('observations')->nullable();
 

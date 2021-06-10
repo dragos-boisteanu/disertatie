@@ -1,98 +1,133 @@
 <template>
-    <div class="w-full flex flex-col items-start gap-y-2">
-        <DiscountModal 
-            v-if="showModal" 
-            :prop-discount="discount" 
-            @saved="save" 
-            @closed="toggleModal"
-        >
-        </DiscountModal>
-
-        <label for="discount" class="text-sm font-semibold">Discount</label>
-        <div id="discount" v-if="hasDiscount" class="mb-2 flex items-center gap-x-2 my-1">
-            <div
-                class="text-xs p-1 px-2 bg-white rounded border flex items-center gap-x-1 cursor-pointer hover:border-gray-600"
-                @click="removeDiscount"
-            > 
-                <span> {{ discount.code }} </span>
-                <span> {{ discount.value }}% </span>
-                <span>
-                    |
-                </span>
-                <span>
-                    {{ discount.fromDate }} 
-                </span>
-                <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
-                </span>
-                <span>
-                    {{ discount.toDate }}
-                </span>
-                <span class="ml-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-                </span>
-            </div>
-        </div>
-
+  <div>
+    <div class="w-full md:w-1/2" v-if="discount">
+      <div class="text-sm font-semibold">Selected discount</div>
+      <div
+        @click="removeDiscount"
+        class="
+          flex
+          items-center
+          justify-between
+          text-xs
+          p-1
+          px-2
+          bg-white
+          rounded
+          border
+          gap-x-1
+          cursor-pointer
+          hover:border-gray-600
+        "
+      >
         <div>
-            <button
-                class="px-2 py-1 border rounded-sm text-sm hover:border-gray-600 active:shadow-inner disabled:pointer-events-none"
-                @click.prevent="toggleModal"   
-            >
-                <span v-if="hasDiscount">
-                    Edit discount
-                </span>
-                <span v-else>
-                    Add discount
-                </span>
-               
-            </button>
+          <div>
+            {{ discount.code }} - {{ discount.value }} %
+          </div>
+          <div>
+            {{ discount.startsAt }} >
+            {{ discount.endsAt }}
+          </div>
         </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 0 24 24"
+          width="18px"
+          fill="#000000"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+          />
+        </svg>
+      </div>
     </div>
+
+    <InputGroup id="discount" label="Discount">
+      <Select v-model="selectDiscountId" id="discount" name="discount" @change.native="selectDiscount">
+        <option value="" disabled selected>Select discount</option>
+        <option
+          v-for="discount in getDiscounts"
+          :key="discount.id"
+          :value="discount.id"
+          :disabled="discount.deletedAt"
+          :selected="discount.id === discountId"
+          class="flex items-center gap-x-3 disabled:bg-gray-100"
+        >
+          <span>
+            {{ discount.code }}
+          </span>
+          <span> {{ discount.value }}% </span>
+        </option>
+      </Select>
+    </InputGroup>
+  </div>
 </template>
 
+
 <script>
-    import DiscountModal from '../modals/DiscountModalComponent';
+import { mapGetters } from 'vuex'
+import  _find  from 'lodash/find'
 
-    export default {
+import InputGroup from '../inputs/InputGroupComponent.vue';
+import Select from '../inputs/SelectInputComponent.vue';
 
-        props: {
-            discount: {
-                type: Object,
-                require: true,
-                default: null
-            },
-        },
-
-        computed: {
-            hasDiscount() {
-                return this.discount ? true : false;
-            },
-        },
-
-        data() {
-            return {
-                showModal: false
-            }
-        },
-
-        methods: {
-            toggleModal() {
-                this.showModal = !this.showModal;
-            },
-            
-            save(discount) {
-                this.toggleModal();
-                this.$emit('saved', discount);
-            },
-
-            removeDiscount() {
-                this.$emit('removed');
-            }
-        },
-
-        components: {
-            DiscountModal
-        }
+export default {
+  props: {
+    discountId: {
+      type: [Number, String],
+      required: false,
+      default: null
     }
+  },
+
+  mounted () {
+    if(this.discountId) {
+      this.discount = _find(this.getDiscounts, ['id', parseInt(this.discountId)]);
+      this.selectDiscountId = this.discountId;
+    }
+  },
+
+  computed: {
+    ...mapGetters('Discounts', ['getDiscounts']),
+  },
+
+  data() {
+    return {
+      selectDiscountId: "",
+      discount: null,
+    }
+  },
+
+  watch: {
+    discountId(newValue, oldValue) {
+      if(newValue !== oldValue) {
+        this.discount = _find(this.getDiscounts, ['id', parseInt(newValue)]);
+        this.selectDiscountId = newValue;
+      }
+    },
+  },
+
+  methods: {
+    selectDiscount() {
+      this.discount = _find(this.getDiscounts, ['id', parseInt(this.selectDiscountId)]);
+      this.addDiscount();
+    },
+
+    removeDiscount() {
+      this.discount = null;
+      this.selectDiscountId = "";
+      this.$emit('remove');
+    },
+
+    addDiscount() {
+      this.$emit('add', this.selectDiscountId);
+    }
+  },
+
+  components: {
+    InputGroup,
+    Select
+  }
+}
 </script>

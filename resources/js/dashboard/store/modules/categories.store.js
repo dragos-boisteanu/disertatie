@@ -68,6 +68,10 @@ const actions = {
         } catch ( error ) {
             throw error;
         }
+    },
+
+    updateDiscount({commit}, payload) {
+        commit('UPDATE_DISCOUNT', payload);
     }
 }
 
@@ -99,6 +103,13 @@ const mutations = {
     DELETE_CATEGORY(state, payload) {
         const categoryIndex = _findIndex(state.categories, ['id', payload]);
         state.categories.splice(categoryIndex, 1);
+    },
+
+    UPDATE_DISCOUNT(state, payload) {
+        const vm = payload.vm;
+        const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
+
+        vm.$set(state.categories[categoryIndex], 'discountId', payload.category.discountId);
     }
 
 }
