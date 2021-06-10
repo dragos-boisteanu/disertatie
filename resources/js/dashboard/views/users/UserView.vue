@@ -198,8 +198,6 @@ export default {
   },
 
   methods: {
-    ...mapActions("Users", ["disableUser", "restoreUser", "deleteUser"]),
-
     updateUser(patchedUser) {
       Object.keys(patchedUser).forEach((key) => {
         this.user[key] = patchedUser[key];
@@ -217,7 +215,7 @@ export default {
 
     async restore() {
       const response = await restoreUser(this.user.id);
-      this.user.deteledAt = response.data.deletedAt;
+      this.user.deletedAt = response.data.deletedAt;
     },
 
     // async callDeleteUser() {
