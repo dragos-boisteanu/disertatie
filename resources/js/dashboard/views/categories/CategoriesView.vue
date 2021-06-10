@@ -226,7 +226,6 @@
             </div>
 
             <DiscountComponent
-              v-if="categorySelected"
               :discount-id="category.discountId"
               @remove="removeDiscount"
               @add="addDiscount"
@@ -339,6 +338,7 @@ export default {
       "postCategory",
       "patchCategory",
       "deleteCategory",
+      "updateDiscount",
     ]),
     ...mapActions("Notification", ["openNotification"]),
 
@@ -400,6 +400,9 @@ export default {
 
             if (counter > 0) {
               await this.patchCategory(payload);
+
+              payload.category.discountId = this.category.discountId;
+              this.updateDiscount(payload)
 
               this.openNotification({
                 type: "ok",
@@ -487,7 +490,7 @@ export default {
         name: "",
         vat: "",
         color: "",
-        discount: null,
+        discountId: "",
       };
     },
 
