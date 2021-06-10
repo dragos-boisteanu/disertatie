@@ -75,7 +75,6 @@ export default {
         this.downloadDiscounts(),
         this.fetchDeliveryMethods(),
         this.downloadOrdersStatuses(),
-        this.downloadTableStatuses(),
         this.downloadTables(),
       ]);
 
@@ -131,7 +130,6 @@ export default {
     ...mapActions("DeliveryMethods", ["fetchDeliveryMethods"]),
     ...mapActions("Statuses", [
       "downloadOrdersStatuses",
-      "downloadTableStatuses",
     ]),
     ...mapActions("Tables", ["downloadTables", "updateTableStatus"]),
 
