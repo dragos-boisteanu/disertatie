@@ -15,7 +15,7 @@
                     <span class="text-base">{{ product.weight}}<Unit :unit-id="product.unit_id"></Unit></span>
                 </div>
                 <div class="text-sm">
-                    {{product.base_price}} RON / <Vat :category-id="product.category_id"></Vat>
+                    {{product.base_price}} RON / <Vat :category-id="product.category_id"></Vat> <span v-if="hasDiscount"> / {{ product.discount.value}}% discount</span>
                 </div>
                 <div class="flex justify-center w-full mt-2 md:justify-start">
                     <Status :deleted-at="product.deleted_at"/>
@@ -64,10 +64,10 @@
                     <span class="font-semibold">Value:</span> {{product.discount.value}}%
                 </div>
                 <div>
-                   <span class="font-semibold">Begins on:</span> {{ product.discount.fromDate}}
+                   <span class="font-semibold">Starts at:</span> {{ product.discount.startsAt}}
                 </div>
                  <div>
-                   <span class="font-semibold">Ends on:</span> {{ product.discount.fromDate}} 
+                   <span class="font-semibold">Ends at:</span> {{ product.discount.endsAt}} 
                 </div>
             </div>
            

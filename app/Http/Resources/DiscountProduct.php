@@ -18,7 +18,7 @@ class DiscountProduct extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'value' => $this->value,
-            'startAt' => $this->starts_at,
+            'startsAt' => $this->starts_at,
             'endsAt' => $this->ends_at
         ];
     }

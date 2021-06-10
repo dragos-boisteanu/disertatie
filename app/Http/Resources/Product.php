@@ -29,7 +29,7 @@ class Product extends JsonResource
             'unit_id' => $this->unit_id,
             'category_id' => $this->category_id,
             'quantity' => $this->quantity,
-            'discount' => new DiscountProduct($this->whenLoaded('discount')),
+            
             'deleted_at' => $this->deleted_at
         ];
 
@@ -38,6 +38,12 @@ class Product extends JsonResource
             $arrayData['ingredients'] = new IngredientCollection($this->ingredients);
         }else {
             $arrayData['ingredients'] = array();
+        }
+
+        if($this->relationLoaded('discount')) {
+            $arrayData['discount'] = new DiscountProduct($this->discount);
+        } else if($this->category->relationLoaded('discount')) {
+            $arrayData['discount'] = new DiscountProduct($this->category->discount);
         }
 
         return $arrayData;

@@ -55,9 +55,25 @@ class DiscountController extends Controller
 
         $discount = Discount::withTrashed()->findOrFail($id);
 
-        $discount->update($request->validated());
+        if($request->has('code')) {
+            $discount->code = $request->code;
+        }
 
-        return response()->json(null, 200);
+        if($request->has('value')) {
+            $discount->value = $request->value;
+        }
+
+        if($request->has('startsAt')) {
+            $discount->starts_at = $request->startsAt;
+        }
+
+        if($request->has('endsAt')) {
+            $discount->ends_at = $request->endsAt;
+        }
+
+        $discount->save();
+
+        return response()->json(null, 204);
     }
 
     /**
