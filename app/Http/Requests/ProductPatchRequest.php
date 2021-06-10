@@ -37,10 +37,7 @@ class ProductPatchRequest extends FormRequest
             'ingregients.*.id' => 'required_with:ingredients|numeric',
             'ingredients.*.quantity' => 'required_with:ingredients|numeric',
             'ingredients.*.unit.id' => 'required_with:ingredients|numeric|exists:units,id',
-            'discount' => ['sometimes'],
-            'discount.id' => ['required_with:discount','numeric', 'exists:discounts,id'],
-            'discount.fromDate' => ['required_with:discount', 'date'],
-            'discount.toDate' => ['required_with:discount', 'date'],
+            'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
         ];
     }
 

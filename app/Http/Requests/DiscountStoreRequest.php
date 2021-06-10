@@ -26,6 +26,8 @@ class DiscountStoreRequest extends FormRequest
         return [
             'code' => ['required'],
             'value' => ['required', 'numeric'],
+            'starts_at' => ['required', 'date'],
+            'ends_at' => ['required_with:start_date', 'date']
         ];
     }
 

@@ -27,10 +27,7 @@ class CategoryUpdateRequest extends FormRequest
             'name' => 'sometimes|string|max:50',
             'vat' => 'sometimes|numeric',
             'color' => 'sometimes|string',
-            'discount' => ['sometimes'],
-            'discount.id' => ['required_with:discounts','numeric', 'exists:discounts,id'],
-            'discount.fromDate' => ['required_with:discounts', 'date'],
-            'discount.toDate' => ['required_with:discounts', 'date'],
+            'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
         ];
     }
 }

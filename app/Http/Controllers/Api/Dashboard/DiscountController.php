@@ -36,7 +36,9 @@ class DiscountController extends Controller
 
         $input = $request->validated();
         $input['user_id'] = $request->user()->id;
-
+        $input['starts_at'] = $request->startsAt;
+        $input['ends_at'] = $request->endsAt;
+        
         $discount = Discount::create($input);
 
         return $discount->id;

@@ -27,10 +27,7 @@ class CategoryStoreRequest extends FormRequest
             'name' => 'required|string|max:50',
             'vat' => 'required|numeric',
             'color' => 'required|string',
-            'discount' => ['sometimes'],
-            'discounts.id' => ['required_with:discounts','numeric', 'exists:discounts,id'],
-            'discount.fromDate' => ['required_with:discounts', 'date'],
-            'discount.toDate' => ['required_with:discounts', 'date'],
+            'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
         ];
     }
 }

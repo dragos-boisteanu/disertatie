@@ -28,8 +28,6 @@ class Product extends Model
         'stock_id',
         'has_ingredients',
         'discount_id',
-        'discounted_from_date',
-        'discounted_until_date',
     ];
 
     public $with = ['unit', 'stock', 'category', 'ingredients'];

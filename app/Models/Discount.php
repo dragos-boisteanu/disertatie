@@ -16,7 +16,9 @@ class Discount extends Model
     protected $fillable = [
         'code',
         'value',
-        'user_id'
+        'user_id',
+        'starts_date',
+        'ends_date'
     ];
 
     public function user() 
