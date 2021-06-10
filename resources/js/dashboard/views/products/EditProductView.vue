@@ -200,13 +200,31 @@
                         </InputGroup>
                     </div>
 
-                    <DiscountComponent 
-                        :discount="localProduct.discount" 
-                        @saved="addDiscount" 
-                        @removed="removeDiscount"
-                        :beginsAt="localProduct.discountStartsAt"
-                        :endsAt="localProduct.discountEndsAt"
-                    ></DiscountComponent>
+                    <InputGroup
+                        id="discount"
+                        label="Discount"
+                    >
+                        <Select 
+                            v-model="product.discountId" 
+                            id="discount"
+                            name="discount"
+                        >
+                            <option value="" selected>Select discount</option>
+                            <option 
+                                v-for="availableDiscount in availableDiscounts" 
+                                :key="availableDiscount.id"
+                                :value="availableDiscount.id"
+                                class="flex items-center gap-x-3 disabled:bg-gray-100"
+                            >
+                                <span>
+                                    {{ availableDiscount.code }}
+                                </span> 
+                                <span>
+                                    {{ availableDiscount.value }}%
+                                </span>
+                            </option>
+                        </Select>
+                    </InputGroup>
 
                     <IngredientsComponent
                         :ingredients="localProduct.ingredients"
@@ -233,7 +251,6 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
-    import store from '../../store/index'
 
     import ViewContainer from '../ViewContainer'
 
@@ -268,6 +285,11 @@
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
+            ...mapGetters('Discounts', ['getDiscounts']),
+
+            availableDiscounts() {
+                return this.getDiscounts.filter(discount => discount.deletedAt === null);
+            }
         },
 
         data() {
@@ -289,7 +311,7 @@
                     unit_id: '',
                     quantity: '',
                     category_id: '',
-                    discount: null,
+                    discountId: "",
                     ingredients: [],
                 },
                 
@@ -350,13 +372,14 @@
                         let counter = 0;
                         
                         Object.keys(this.localProduct).forEach(key => {
-                            if(key === 'discount') {
-                                if(!_isEqual(this.localProduct[key], this.product[key])) {
-                                    payload.product[key] = this.localProduct[key];
-                                    counter++;
-                                }
+                            // if(key === 'discount') {
+                            //     if(!_isEqual(this.localProduct[key], this.product[key])) {
+                            //         payload.product[key] = this.localProduct[key];
+                            //         counter++;
+                            //     }
                                 
-                            } else if(key === 'ingredients') {
+                            // } else
+                             if(key === 'ingredients') {
                                 if(!_isEqual(this.localProduct[key], this.product[key])) {
                                     payload.product[key] = this.localProduct[key];
                                     payload.product.hasIngredients = true;
@@ -439,15 +462,6 @@
                 const ingredientIndex = _findIndex(this.localProduct.ingredients, ['id', parseInt(ingredientId)]);
                 this.localProduct.ingredients.splice(ingredientIndex, 1);
             },
-
-            addDiscount(discount) {
-                this.localProduct.discount = discount;
-            },
-
-            removeDiscount() {
-                this.localProduct.discount = undefined; 
-            },
-
         },
 
         components: {

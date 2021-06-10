@@ -193,12 +193,31 @@
                         </InputGroup>
                     </div>
 
-                    <!-- DISCOUNT -->
-                    <DiscountComponent 
-                        :discount="product.discount" 
-                        @saved="addDiscount" 
-                        @removed="removeDiscount"
-                    ></DiscountComponent>
+                    <InputGroup
+                        id="discount"
+                        label="Discount"
+                    >
+                        <Select 
+                            v-model="product.discountId" 
+                            id="discount"
+                            name="discount"
+                        >
+                            <option value="" selected>Select discount</option>
+                            <option 
+                                v-for="availableDiscount in availableDiscounts" 
+                                :key="availableDiscount.id"
+                                :value="availableDiscount.id"
+                                class="flex items-center gap-x-3 disabled:bg-gray-100"
+                            >
+                                <span>
+                                    {{ availableDiscount.code }}
+                                </span> 
+                                <span>
+                                    {{ availableDiscount.value }}%
+                                </span>
+                            </option>
+                        </Select>
+                    </InputGroup>
 
                     <!-- INGREDIENTS -->
                     <IngredientsComponent
@@ -231,7 +250,6 @@
     
     import ImageUploadComponent from '../../components/ImageUploadComponent';
     import IngredientsComponent from '../../components/products/IngredientsComponent';
-    import DiscountComponent from '../../components/discounts/DiscountComponent'
 
     import Input from '../../components/inputs/TextInputComponent';
     import Select from '../../components/inputs/SelectInputComponent';
@@ -245,7 +263,7 @@
     import _filter from 'lodash/filter';
     import _findIndex from 'lodash/findIndex';
 
-    import { required, integer, decimal, maxLength, minValue } from 'vuelidate/lib/validators'
+    import { required, integer, decimal, maxLength } from 'vuelidate/lib/validators'
     import { alphaSpaces, alphaNumSpaces } from '../../validators/index';
 
     import { storeProduct } from '../../api/products.api';
@@ -256,6 +274,11 @@
             ...mapGetters('Categories', ['getCategories']),
             ...mapGetters('Units', ['getUnits']),
             ...mapGetters('Ingredients', ['getIngredients']),
+            ...mapGetters('Discounts', ['getDiscounts']),
+
+            availableDiscounts() {
+                return this.getDiscounts.filter(discount => discount.deletedAt === null);
+            }
         },
 
         data() {
@@ -266,7 +289,7 @@
 
                 ingredientInput: '',
                 foundIngredients: [],
-
+        
                 clearImage: false,
 
                 product: {
@@ -278,8 +301,8 @@
                     unit_id: '',
                     category_id: '',
                     ingredients: [],
-                    discount: null,
                     hasIngredients: false,
+                    discountId: ''
                 },
             }
         },
@@ -312,7 +335,7 @@
                 },
                 category_id: {
                     required,
-                }
+                },
             }
         },
 
@@ -433,22 +456,12 @@
                 const ingredientIndex = _findIndex(this.product.ingredients, ['id', parseInt(ingredientId)]);
                 this.product.ingredients.splice(ingredientIndex, 1);
             },
-
-            addDiscount(discount) {
-                this.product.discount = discount;
-            },
-
-            removeDiscount() {
-                this.product.discount = null; 
-            },
-
         },
 
         components: {
             ViewContainer,
             ImageUploadComponent,
             IngredientsComponent,
-            DiscountComponent,
             Input,
             Select,
             Textarea,

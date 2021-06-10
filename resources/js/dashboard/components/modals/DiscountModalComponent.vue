@@ -8,91 +8,9 @@
      
         <template slot="body">
             <div class="flex flex-col gap-3">
-                <InputGroup
-                    id="discount"
-                    label="Discount"
-                    :hasError="$v.selectedDiscountId.$error"
-                >
-                    <template v-slot:errors>
-                        <p v-if="!$v.selectedDiscountId.required">
-                            A discount must be selected
-                        </p>
-                    </template>
-                    <Select 
-                        v-model="selectedDiscountId" 
-                        id="discount"
-                        name="discount"
-                        :eclass="{'border-red-600' : $v.selectedDiscountId.$error, 'border-green-600': $v.selectedDiscountId.$dirty && !$v.selectedDiscountId.$error}"
-                        @change.native="selectDiscount"
-                        @blur.native="$v.selectedDiscountId.$touch()"
-                    >
-                        <option value="" selected disabled>Select discount</option>
-                        <option 
-                            v-for="availableDiscount in availableDiscounts" 
-                            :key="availableDiscount.id"
-                            :value="availableDiscount.id"
-                            class="flex items-center gap-x-3 disabled:bg-gray-100"
-                        >
-                            <span>
-                                {{ availableDiscount.code }}
-                            </span> 
-                            <span>
-                                {{ availableDiscount.value }}%
-                            </span>
-                        </option>
-                    </Select>
-                </InputGroup>
+                
 
-                <div class="flex flex-col gap-y-4 sm:flex-row items-center justify-between mt-3 gap-x-4">
-                    <InputGroup
-                        id="from"
-                        label="From"
-                        :hasError="$v.discount.fromDate.$error"
-                    >
-                        <template v-slot:errors> 
-                            <p v-if="!$v.discount.fromDate.required">
-                                From date is required
-                            </p>
-                        </template>
-                        <date-picker 
-                            v-model="discount.fromDate" 
-                            type="datetime"
-                            placeholder="Start date"
-                            confirm-text="Ok"
-                            valueType="format"
-                            :input-class="fromDateClass"
-                            :confirm="true"
-                            :disabled="enableFromDate"
-                            :disabled-date="disableDatesInterval"
-                            @input="$v.discount.fromDate.$touch()"
-                        >
-                        </date-picker>
-                    </InputGroup>
-                    <InputGroup
-                        id="to"
-                        label="To"
-                        :hasError="$v.discount.toDate.$error"
-                    >
-                        <template v-slot:errors> 
-                            <p v-if="!$v.discount.toDate.required">
-                                To date is required
-                            </p>
-                        </template>
-                        <date-picker 
-                            v-model="discount.toDate" 
-                            type="datetime"
-                            placeholder="End date"
-                            confirm-text="Ok"
-                            valueType="format"
-                            :input-class="toDateClass"
-                            :confirm="true"
-                            :disabled="enableToDate"
-                            :disabled-date="disableBeforeFromDate"
-                            @input="$v.discount.toDate.$touch()"
-                        >
-                        </date-picker>
-                    </InputGroup>
-                </div>
+                
 
             </div>
         </template>
@@ -193,14 +111,6 @@
             selectedDiscountId: {
                 required
             },
-            discount: {               
-                fromDate: {
-                    required
-                },
-                toDate: {
-                    required
-                }
-            }
         },
 
         methods: {
