@@ -104,48 +104,48 @@
                                 <InputGroup
                                     id="from"
                                     label="From"
-                                    :hasError="$v.discount.fromDate.$error"
+                                    :hasError="$v.discount.startsAt.$error"
                                 >
                                     <template v-slot:errors> 
-                                        <p v-if="!$v.discount.fromDate.required">
+                                        <p v-if="!$v.discount.startsAt.required">
                                             From date is required
                                         </p>
                                     </template>
                                     <date-picker 
-                                        v-model="discount.fromDate" 
+                                        v-model="discount.startsAt" 
                                         type="datetime"
                                         placeholder="Start date"
                                         confirm-text="Ok"
                                         valueType="format"
-                                        :input-class="fromDateClass"
+                                        :input-class="startsAtClass"
                                         :confirm="true"
                                         :disabled="enableFromDate"
                                         :disabled-date="disableDatesInterval"
-                                        @input="$v.discount.fromDate.$touch()"
+                                        @input="$v.discount.startsAt.$touch()"
                                     >
                                     </date-picker>
                                 </InputGroup>
                                 <InputGroup
                                     id="to"
                                     label="To"
-                                    :hasError="$v.discount.toDate.$error"
+                                    :hasError="$v.discount.endsAt.$error"
                                 >
                                     <template v-slot:errors> 
-                                        <p v-if="!$v.discount.toDate.required">
+                                        <p v-if="!$v.discount.endsAt.required">
                                             To date is required
                                         </p>
                                     </template>
                                     <date-picker 
-                                        v-model="discount.toDate" 
+                                        v-model="discount.endsAt" 
                                         type="datetime"
                                         placeholder="End date"
                                         confirm-text="Ok"
                                         valueType="format"
-                                        :input-class="toDateClass"
+                                        :input-class="endsAtClass"
                                         :confirm="true"
                                         :disabled="enableToDate"
                                         :disabled-date="disableBeforeFromDate"
-                                        @input="$v.discount.toDate.$touch()"
+                                        @input="$v.discount.endsAt.$touch()"
                                     >
                                     </date-picker>
                                 </InputGroup>
@@ -225,28 +225,28 @@
             },
 
             enableToDate(){
-                return this.discount.fromDate ? false : true
+                return this.discount.startsAt ? false : true
             },
 
             enableFromDate(){
                 return this.selectedDiscountId === '' 
             },
 
-            fromDateClass() {
+            startsAtClass() {
                 let customClass = "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
-                if(this.$v.discount.fromDate.$error) {
+                if(this.$v.discount.startsAt.$error) {
                     customClass = customClass.concat(' ', 'border-red-600')
-                } else if (this.$v.discount.fromDate.$dirty && !this.$v.discount.fromDate.$error) {
+                } else if (this.$v.discount.startsAt.$dirty && !this.$v.discount.startsAt.$error) {
                     customClass = customClass.concat(' ', 'border-green-600');
                 }
                 return customClass;
             },
 
-            toDateClass() {
+            endsAtClass() {
                 let customClass = "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
-                if(this.$v.discount.toDate.$error) {
+                if(this.$v.discount.endsAt.$error) {
                     customClass = customClass.concat(' ', 'border-red-600')
-                } else if (this.$v.discount.toDate.$dirty && !this.$v.discount.toDate.$error) {
+                } else if (this.$v.discount.endsAt.$dirty && !this.$v.discount.endsAt.$error) {
                     customClass = customClass.concat(' ', 'border-green-600');
                 }
                 return customClass;
@@ -260,8 +260,8 @@
                 discount: {
                     code: '',
                     value: '',
-                    fromDate: '',
-                    toDate: '',
+                    startsAt: '',
+                    endsAt: '',
                     deletedAt: null              
                 },
             }
@@ -279,10 +279,10 @@
                     integer,
                     minValue: minValue(1)
                 },
-                fromDate: {
+                startsAt: {
                     required
                 },
-                toDate: {
+                endsAt: {
                     required
                 }
             }
@@ -320,7 +320,7 @@
             },
 
             disableBeforeFromDate(date) {
-                return date < new Date(this.discount.fromDate)
+                return date < new Date(this.discount.startsAt)
             },
 
             async submit() {

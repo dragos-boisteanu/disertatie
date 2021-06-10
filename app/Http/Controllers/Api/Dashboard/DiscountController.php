@@ -35,7 +35,6 @@ class DiscountController extends Controller
         $request->user()->can('create', Discount::class);
 
         $input = $request->validated();
-        $input['user_id'] = $request->user()->id;
         $input['starts_at'] = $request->startsAt;
         $input['ends_at'] = $request->endsAt;
         
@@ -71,7 +70,17 @@ class DiscountController extends Controller
     {
         $request->user()->can('forceDelete', Discount::class);
 
-        Discount::withTrashed()->findOrFail($id)->forceDelete();
+        $discount = Discount::withTrashed()->with('products', 'categories')->findOrFail($id);
+
+        foreach($discount->products as $product) {
+            $product->discount_id = null;
+        }
+
+        foreach($discount->categories as $category) {
+            $category->discount_id = null;
+        }
+
+        $discount->forceDelete();
 
         return response()->json(null, 200);
     }
@@ -80,7 +89,19 @@ class DiscountController extends Controller
     {
         $request->user()->can('delete', Discount::class);
 
-        Discount::withTrashed()->findOrFail($id)->delete();
+        $discount = Discount::withTrashed()->with('products', 'categories')->findOrFail($id);
+
+        
+        foreach($discount->products as $product) {
+            $product->discount_id = null;
+        }
+
+        foreach($discount->categories as $category) {
+            $category->discount_id = null;
+        }
+
+        $discount->delete();
+
         return response()->json(['deletedAt' => Carbon::now()], 200);
     }
 

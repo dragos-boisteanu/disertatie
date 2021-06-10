@@ -26,8 +26,8 @@ class DiscountUpdateRequest extends FormRequest
         return [
             'code' => ['sometimes'],
             'value' => ['sometimes', 'numeric'],
-            'starts_at' => ['sometimes', 'date'],
-            'ends_at' => ['required_with:start_date', 'date']
+            'startsAt' => ['sometimes', 'date'],
+            'endsAt' => ['required_with:start_date', 'date']
         ];
     }
 

@@ -17,8 +17,8 @@ class Discount extends Model
         'code',
         'value',
         'user_id',
-        'starts_date',
-        'ends_date'
+        'starts_at',
+        'ends_at'
     ];
 
     public function user() 
