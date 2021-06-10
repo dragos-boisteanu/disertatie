@@ -24,7 +24,7 @@
             value: {
                 type: [String, Number],
                 required: false,
-                default: nullf
+                default: null
             },
             eclass: {
                 type: Object,
