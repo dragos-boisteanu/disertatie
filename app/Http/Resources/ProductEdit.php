@@ -28,7 +28,6 @@ class ProductEdit extends JsonResource
             'category_id' => $this->category_id,
             'quantity' => $this->quantity,
             'deleted_at' => $this->deleted_at,
-            'discountId' => $this->whenLoaded('discount', $this->discount->id)
         ];
 
         if($this->has_ingredients) {
@@ -36,6 +35,10 @@ class ProductEdit extends JsonResource
             $arrayData['ingredients'] = new IngredientCollection($this->ingredients);
         }else {
             $arrayData['ingredients'] = array();
+        }
+
+        if($this->disocunt) {
+            $arrayData['discountId'] = $this->discount->id;
         }
 
         return $arrayData;

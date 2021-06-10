@@ -261,7 +261,7 @@ class ProductService implements ProductServiceInterface
   private function updateDiscount(Product $product, array $data): void
   {
     if(array_key_exists('discountId', $data)) { 
-      $product->discount_id =  $data['discount']['id'];
+      $product->discount_id =  $data['discountId'];
     } else if(!array_key_exists('discountId', $data) && !is_null($product->discount_id)) {
       $product->discount_id = null;
     }

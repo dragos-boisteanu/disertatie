@@ -449,6 +449,10 @@ export default {
             }
           });
 
+          if(this.localProduct.discountId === "") {
+            delete payload.product.discountId;
+          }
+
           if (counter > 0) {
             await patchProduct(payload.product);
 
