@@ -287,67 +287,12 @@
             </InputGroup>
           </div>
 
-          <div class="w-full md:w-1/2" v-if="isDiscountSelected">
-            <div class="text-sm font-semibold">Selected discount</div>
-            <div
-              @click="removeDiscount"
-              class="
-                flex
-                items-center
-                justify-between
-                text-xs
-                p-1
-                px-2
-                bg-white
-                rounded
-                border
-                flex
-                items-center
-                gap-x-1
-                cursor-pointer
-                hover:border-gray-600
-              "
-            >
-              <div>
-                <div>
-                  {{ selectedDiscount.code }} - {{ selectedDiscount.value }} %
-                </div>
-                <div>
-                  {{ selectedDiscount.startsAt }} >
-                  {{ selectedDiscount.endsAt }}
-                </div>
-              </div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="18px"
-                viewBox="0 0 24 24"
-                width="18px"
-                fill="#000000"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path
-                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
-                />
-              </svg>
-            </div>
-          </div>
-
-          <InputGroup id="discount" label="Discount">
-            <Select v-model="product.discountId" id="discount" name="discount">
-              <option value="" selected disabled>Select discount</option>
-              <option
-                v-for="availableDiscount in availableDiscounts"
-                :key="availableDiscount.id"
-                :value="availableDiscount.id"
-                class="flex items-center gap-x-3 disabled:bg-gray-100"
-              >
-                <span>
-                  {{ availableDiscount.code }}
-                </span>
-                <span> {{ availableDiscount.value }}% </span>
-              </option>
-            </Select>
-          </InputGroup>
+          <DiscountComponent
+            v-if="product"
+            :discount-id="product.discountId"
+            @remove="removeDiscount"
+            @add="addDiscount"
+          ></DiscountComponent>
 
           <!-- INGREDIENTS -->
           <IngredientsComponent
@@ -379,6 +324,8 @@ import ViewContainer from "../ViewContainer";
 
 import ImageUploadComponent from "../../components/ImageUploadComponent";
 import IngredientsComponent from "../../components/products/IngredientsComponent";
+
+import DiscountComponent from "../../components/discounts/DiscountComponent.vue"
 
 import Input from "../../components/inputs/TextInputComponent";
 import Select from "../../components/inputs/SelectInputComponent";
@@ -432,8 +379,6 @@ export default {
 
       clearImage: false,
 
-      selectedDiscount: null,
-
       product: {
         barcode: "",
         name: "",
@@ -447,16 +392,6 @@ export default {
         discountId: "",
       },
     };
-  },
-
-  watch: {
-    "product.discountId"(newValue) {
-      if (newValue) {
-        this.selectDiscount();
-      } else {
-        this.selectedDiscount = null;
-      }
-    },
   },
 
   validations: {
@@ -614,22 +549,20 @@ export default {
       this.product.ingredients.splice(ingredientIndex, 1);
     },
 
-    selectDiscount() {
-      this.selectedDiscount = _find(this.availableDiscounts, [
-        "id",
-        parseInt(this.product.discountId),
-      ]);
-    },
-
     removeDiscount() {
       this.product.discountId = "";
     },
+
+    addDiscount(discountId) {
+      this.product.discountId = discountId
+    }
   },
 
   components: {
     ViewContainer,
     ImageUploadComponent,
     IngredientsComponent,
+    DiscountComponent,
     Input,
     Select,
     Textarea,

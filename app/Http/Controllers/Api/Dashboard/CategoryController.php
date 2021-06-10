@@ -60,12 +60,12 @@ class CategoryController extends Controller
         $input = $request->validated();
 
         if($request->has('discountId')) {
-            $input['discount_id'] = $request->input('discountId');
+            $input['discount_id'] = $request->discountId;
         }
         
         $category->update($input);
 
-        return response()->json(['message' => 'Category updated'], 200);
+        return response()->json(null, 204);
     }
 
     /**

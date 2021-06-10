@@ -288,7 +288,7 @@
           </div>
 
           <DiscountComponent
-          v-if="product"
+            v-if="product"
             :discount-id="product.discountId"
             @remove="removeDiscount"
             @add="addDiscount"
@@ -323,7 +323,7 @@ import ViewContainer from "../ViewContainer";
 
 import ImageUploadComponent from "../../components/ImageUploadComponent";
 import IngredientsComponent from "../../components/products/IngredientsComponent";
-import DiscountComponent from "../../components/products/DiscountComponent";
+import DiscountComponent from "../../components/discounts/DiscountComponent";
 
 import Input from "../../components/inputs/TextInputComponent";
 import Select from "../../components/inputs/SelectInputComponent";
