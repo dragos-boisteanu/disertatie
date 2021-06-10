@@ -15,8 +15,6 @@ class AddDiscountRelatedColumnsToCategoriesTable extends Migration
     {
         Schema::table('categories', function (Blueprint $table) {
             $table->foreignId('discount_id')->nullable()->after('color')->constrained();
-            $table->dateTime('discounted_from_date')->nullable()->after('discount_id');
-            $table->dateTime('discounted_until_date')->nullable()->after('discounted_from_date');
         });
     }
 
