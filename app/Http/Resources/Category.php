@@ -24,13 +24,9 @@ class Category extends JsonResource
         ];
 
         if(!is_null($this->discount)) {
-            $discount = $this->discount;
-            $discount['fromDate'] = $this->discounted_from_date;
-            $discount['toDate'] = $this->discounted_until_date;
-            
-            $arrayData['discount'] = new DiscountCategory($discount);
+            $arrayData['discountId'] = $this->discount->id;
         }else {
-            $arrayData['discount'] = null;
+            $arrayData['discountId'] = null;
         }
 
         return $arrayData;

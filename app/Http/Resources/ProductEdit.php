@@ -39,6 +39,8 @@ class ProductEdit extends JsonResource
 
         if($this->disocunt) {
             $arrayData['discountId'] = $this->discount->id;
+        }else {
+            $arrayData['discountId'] = null;
         }
 
         return $arrayData;

@@ -395,17 +395,15 @@ export default {
             let counter = 0;
 
             Object.keys(this.category).forEach((key) => {
-              if (
-                key === "discount" &&
-                !_isEqual(this.category[key], originalCategory[key])
-              ) {
-                payload.category[key] = this.category[key];
-                counter++;
-              } else if (originalCategory[key] !== this.category[key]) {
+              if (originalCategory[key] !== this.category[key]) {
                 payload.category[key] = this.category[key];
                 counter++;
               }
             });
+
+            if(this.category.discountId === "") {
+              delete payload.category.discountId
+            }
 
             if (counter > 0) {
               await this.patchCategory(payload);
