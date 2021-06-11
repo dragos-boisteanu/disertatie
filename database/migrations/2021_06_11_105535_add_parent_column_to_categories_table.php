@@ -14,7 +14,7 @@ class AddParentColumnToCategoriesTable extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->integer('parent_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('parent_id')->unsigned()->nullable();
 
             $table->foreign('parent_id')->references('id')->on('categories');
         });
