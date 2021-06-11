@@ -1,7 +1,13 @@
 <template>
-    <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="category" :style="{background: category.color}">
-        {{category.name}}
+    <div class="flex items-center">
+        <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="parentCategory" :style="{background: parentCategory.color}">
+            {{parentCategory.name}}
+        </div>
+        <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="category" :style="{background: category.color}">
+            {{category.name}}
+        </div>
     </div>
+    
 </template>
 
 <script>
@@ -21,6 +27,13 @@
 
             category() {
                 return _find(this.getCategories, ['id', this.categoryId]);
+            },
+
+            parentCategory() {
+                if(this.category.parentId) {
+                     return _find(this.getCategories, ['id', this.category.parentId])
+                }
+               
             }
         }
     }

@@ -204,12 +204,46 @@
                     !$v.product.category_id.$error,
                 }"
                 :disabled="waiting"
+                @change.native="getSubCategories"
                 @blur.native="$v.product.category_id.$touch()"
               >
                 <option value="" disabled>Select category</option>
                 <option
                   :value="category.id"
-                  v-for="category in getCategories"
+                  v-for="category in categories"
+                  :key="category.id"
+                >
+                  {{ category.name }} ({{ category.vat }}% VAT)
+                </option>
+              </Select>
+            </InputGroup>
+            <InputGroup
+              id="category"
+              label="Sub category"
+              :hasError="$v.product.parent_id.$error"
+              :eclass="{ 'flex-1': true }"
+            >
+              <template v-slot:errors>
+                <p v-if="!$v.product.parent_id.error">
+                  The category field is required
+                </p>
+              </template>
+              <Select
+                v-model="product.parent_id"
+                id="unit_id"
+                name="category"
+                :class="{
+                  'border-red-600': $v.product.parent_id.$error,
+                  'border-green-600':
+                    $v.product.parent_id.$dirty && !$v.product.parent_id.$error,
+                }"
+                :disabled="waiting || hasNoSubCategories"
+                @blur.native="$v.product.parent_id.$touch()"
+              >
+                <option value="" disabled selected>Select sub category</option>
+                <option
+                  :value="category.id"
+                  v-for="category in subCategories"
                   :key="category.id"
                 >
                   {{ category.name }} ({{ category.vat }}% VAT)
@@ -325,7 +359,7 @@ import ViewContainer from "../ViewContainer";
 import ImageUploadComponent from "../../components/ImageUploadComponent";
 import IngredientsComponent from "../../components/products/IngredientsComponent";
 
-import DiscountComponent from "../../components/discounts/DiscountComponent.vue"
+import DiscountComponent from "../../components/discounts/DiscountComponent.vue";
 
 import Input from "../../components/inputs/TextInputComponent";
 import Select from "../../components/inputs/SelectInputComponent";
@@ -357,6 +391,12 @@ export default {
     ...mapGetters("Ingredients", ["getIngredients"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
 
+    categories() {
+      return this.getCategories.filter(
+        (category) => category.parentId === null
+      );
+    },
+
     availableDiscounts() {
       return this.getDiscounts.filter(
         (discount) => discount.deletedAt === null
@@ -365,6 +405,10 @@ export default {
 
     isDiscountSelected() {
       return this.selectedDiscount ? true : false;
+    },
+
+    hasNoSubCategories() {
+      return this.subCategories.length === 0;
     },
   },
 
@@ -377,6 +421,7 @@ export default {
       ingredientInput: "",
       foundIngredients: [],
 
+      subCategories: [],
       clearImage: false,
 
       product: {
@@ -387,6 +432,7 @@ export default {
         weight: "",
         unit_id: "",
         category_id: "",
+        parent_id: "",
         ingredients: [],
         hasIngredients: false,
         discountId: "",
@@ -420,6 +466,9 @@ export default {
         required,
         integer,
       },
+      parent_id: {
+        integer,
+      },
       category_id: {
         required,
       },
@@ -439,13 +488,15 @@ export default {
 
           const payload = {};
 
-          if (this.checkingBarcode) {
-            payload.barcode = this.product.barcode;
-          } else {
-            Object.keys(this.product).forEach((key) => {
-              payload[key] = this.product[key];
-            });
-          }
+          // if (this.checkingBarcode) {
+          //   payload.barcode = this.product.barcode;
+          // } else {
+          //
+          // }
+
+          Object.keys(this.product).forEach((key) => {
+            payload[key] = this.product[key];
+          });
 
           if (payload.discountId === "") {
             delete payload.discountId;
@@ -453,6 +504,13 @@ export default {
 
           if (payload.ingredients.length === 0) {
             delete payload.ingredients;
+          }
+
+          if (payload.parent_id === "") {
+            delete payload.parent_id;
+          } else {
+            payload.category_id = payload.parent_id
+            delete payload.parent_id;
           }
 
           await storeProduct(payload);
@@ -489,6 +547,17 @@ export default {
             this.$v.$touch();
           }
         }
+      }
+    },
+
+    getSubCategories() {
+      console.log(this.product.category_id);
+      if (this.product.category_id) {
+        this.subCategories = this.getCategories.filter(
+          (category) => category.parentId == this.product.category_id
+        );
+      } else {
+        this.subCategories = [];
       }
     },
 
@@ -554,8 +623,8 @@ export default {
     },
 
     addDiscount(discountId) {
-      this.product.discountId = discountId
-    }
+      this.product.discountId = discountId;
+    },
   },
 
   components: {

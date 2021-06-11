@@ -97,7 +97,11 @@
               </td>
               <td class="p-2">{{ category.name }}</td>
               <td class="p-2">{{ category.vat }} %</td>
-              <td class="p-2"> <span v-if="category.discountId">{{ getDiscountForCategory(category.discountId) }}</span></td>
+              <td class="p-2">
+                <span v-if="category.discountId">{{
+                  getDiscountForCategory(category.discountId)
+                }}</span>
+              </td>
               <td class="p-2 max-w-4">{{ category.productsCount }}</td>
               <td class="p-2">
                 <button
@@ -170,6 +174,7 @@
 
             <div class="w-full flex items-center gap-x-4">
               <InputGroup
+                v-if="isParent"
                 id="vat"
                 label="VAT"
                 :hasError="$v.category.vat.$error"
@@ -225,24 +230,27 @@
               </InputGroup>
             </div>
 
-            <InputGroup
+            <InputGroup id="parentCategory" label="Parent category">
+              <Select
                 id="parentCategory"
-                label="Parent category"
+                name="Parent category"
+                type="color"
+                v-model="category.parentId"
+                class="p-1 rounded border order-gray-300 outline-none"
+                :disabled="waiting"
               >
-                <Select
-                  id="parentCategory"
-                  name="Parent category"
-                  type="color"
-                  v-model="category.parentId"
-                  class="p-1 rounded border order-gray-300 outline-none"
-                  :disabled="waiting"
+                <option value="" disabled selected>
+                  Select parent category
+                </option>
+                <option
+                  v-for="parent in parentCategories"
+                  :key="parent.id"
+                  :value="parent.id"
                 >
-                  <option value="" disabled selected>Select parent category</option>
-                  <option v-for="parent in parentCategories" :key="parent.id" :value="parent.id">
-                    {{ parent.name }}
-                  </option>
-                </Select>
-              </InputGroup>
+                  {{ parent.name }}
+                </option>
+              </Select>
+            </InputGroup>
 
             <DiscountComponent
               :discount-id="category.discountId"
@@ -318,7 +326,13 @@ export default {
     },
 
     parentCategories() {
-      return this.getCategories.filter(category => category.parentId === null);
+      return this.getCategories.filter(
+        (category) => category.parentId === null
+      );
+    },
+
+    isParent() {
+      return this.category.parentId === "";
     }
   },
 
@@ -331,6 +345,7 @@ export default {
         vat: "",
         color: "",
         discountId: "",
+        parentId: ""
       },
       searchInput: "",
     };
@@ -370,7 +385,7 @@ export default {
     },
 
     getDiscountForCategory(id) {
-      const discount = _find(this.getDiscounts, ['id', parseInt(id)]);
+      const discount = _find(this.getDiscounts, ["id", parseInt(id)]);
       return `${discount.code} ${discount.id}%`;
     },
 
@@ -417,15 +432,15 @@ export default {
               }
             });
 
-            if(this.category.discountId === "") {
-              delete payload.category.discountId
+            if (this.category.discountId === "") {
+              delete payload.category.discountId;
             }
 
             if (counter > 0) {
               await this.patchCategory(payload);
 
               payload.category.discountId = this.category.discountId;
-              this.updateDiscount(payload)
+              this.updateDiscount(payload);
 
               this.openNotification({
                 type: "ok",
@@ -444,8 +459,8 @@ export default {
               delete this.category.discount;
             }
 
-            if(this.category.discountId === "") {
-              delete this.category.discountId
+            if (this.category.discountId === "") {
+              delete this.category.discountId;
             }
 
             await this.postCategory(this.category);
@@ -527,7 +542,7 @@ export default {
 
     addDiscount(discountId) {
       this.category.discountId = discountId;
-    }
+    },
   },
 
   components: {
