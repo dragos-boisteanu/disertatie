@@ -225,6 +225,25 @@
               </InputGroup>
             </div>
 
+            <InputGroup
+                id="parentCategory"
+                label="Parent category"
+              >
+                <Select
+                  id="parentCategory"
+                  name="Parent category"
+                  type="color"
+                  v-model="category.parentId"
+                  class="p-1 rounded border order-gray-300 outline-none"
+                  :disabled="waiting"
+                >
+                  <option value="" disabled selected>Select parent category</option>
+                  <option v-for="parent in parentCategories" :key="parent.id">
+                    {{ parent.name }}
+                  </option>
+                </Select>
+              </InputGroup>
+
             <DiscountComponent
               :discount-id="category.discountId"
               @remove="removeDiscount"
@@ -297,6 +316,10 @@ export default {
         (discount) => discount.deletedAt === null
       );
     },
+
+    parentCategories() {
+      return this.getCategories.filter(category => category.parentId === null);
+    }
   },
 
   data() {

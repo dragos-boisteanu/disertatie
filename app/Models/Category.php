@@ -17,6 +17,7 @@ class Category extends Model
         'vat',
         'color',
         'discount_id',
+        'parent_id',
     ];
 
     public $with = ['discount'];
@@ -29,5 +30,10 @@ class Category extends Model
     public function discount()
     {
         return $this->belongsTo(Discount::class);
+    }
+
+    public function subCategories() 
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }
