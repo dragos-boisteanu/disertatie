@@ -28,6 +28,7 @@ class CategoryStoreRequest extends FormRequest
             'vat' => 'required|numeric',
             'color' => 'required|string',
             'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
+            'parentId' => ['sometimes', 'numeric', 'exists:categories,id']
         ];
     }
 }

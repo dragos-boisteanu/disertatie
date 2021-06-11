@@ -238,7 +238,7 @@
                   :disabled="waiting"
                 >
                   <option value="" disabled selected>Select parent category</option>
-                  <option v-for="parent in parentCategories" :key="parent.id">
+                  <option v-for="parent in parentCategories" :key="parent.id" :value="parent.id">
                     {{ parent.name }}
                   </option>
                 </Select>
@@ -442,6 +442,10 @@ export default {
           } else {
             if (this.category.discount === null) {
               delete this.category.discount;
+            }
+
+            if(this.category.discountId === "") {
+              delete this.category.discountId
             }
 
             await this.postCategory(this.category);

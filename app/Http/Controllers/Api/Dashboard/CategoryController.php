@@ -39,6 +39,10 @@ class CategoryController extends Controller
             $input['discount_id'] = $request->input('discountId');
         }
 
+        if($request->has('parentId')) {
+            $input['parent_id'] = $request->input('parentId');
+        }
+
         $category = Category::create($input);
 
         return $category->id;
@@ -63,6 +67,10 @@ class CategoryController extends Controller
             $input['discount_id'] = $request->discountId;
         } else if( !$request->has('discountId') && !is_null($category->discount_id)){
             $input['discount_id'] = null;
+        }
+
+        if($request->has('parentId')) {
+            $input['parent_id'] = $request->input('parentId');
         }
 
         $category->update($input);
