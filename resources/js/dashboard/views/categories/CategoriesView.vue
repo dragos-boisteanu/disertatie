@@ -436,6 +436,10 @@ export default {
               delete payload.category.discountId;
             }
 
+            if (this.category.parentId === "") {
+              delete payload.category.parentId;
+            }
+
             if (counter > 0) {
               await this.patchCategory(payload);
 
