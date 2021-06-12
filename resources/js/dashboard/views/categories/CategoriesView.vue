@@ -112,14 +112,6 @@ export default {
       }
     }, 250),
 
-
-    removeDiscount() {
-      this.category.discountId = "";
-    },
-
-    addDiscount(discountId) {
-      this.category.discountId = discountId;
-    },
   },
 
   components: {

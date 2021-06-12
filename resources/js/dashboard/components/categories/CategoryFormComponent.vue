@@ -114,6 +114,8 @@
 
         <DiscountComponent
           :discount-id="category.discountId"
+          @remove="removeDiscount"
+          @add="addDiscount"
         ></DiscountComponent>
       </div>
 
@@ -323,8 +325,8 @@ export default {
           if (counter > 0) {
             await this.patchCategory(payload);
 
-            // payload.category.discountId = this.category.discountId;
-            // this.updateDiscount(payload);
+            payload.category.discountId = this.category.discountId;
+            this.updateDiscount(payload);
 
              this.waiting = false;
 
@@ -378,6 +380,14 @@ export default {
       if (this.isCategorySelected) {
         this.$emit("resetCategory");
       }
+    },
+
+    removeDiscount() {
+      this.category.discountId = "";
+    },
+
+    addDiscount(discountId) {
+      this.category.discountId = discountId;
     },
   },
 
