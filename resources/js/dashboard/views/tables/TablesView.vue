@@ -38,39 +38,10 @@
 
     <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2">
       <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-        <table class="px-2 w-full rounded-sm max-h-80 md:max-h-96">
-          <thead class="w-full bg-gray-700 text-orange-500">
-            <tr class="text-left text-sm">
-              <th class="p-2 text-center">Index</th>
-              <th class="p-2">Name</th>
-              <th class="p-2">Status</th>
-            </tr>
-          </thead>
-          <tbody class="overflow-y-auto">
-            <tr
-              v-for="(table, index) in getTables"
-              :key="table.id"
-              @click="selectTable(table.id)"
-              class="
-                transition-shadow transition-transform
-                duration-500
-                ease-in-out
-                text-sm
-                rounded-md
-                cursor-pointer
-                border-white
-                transform
-                hover:scale-105
-                hover:bg-gray-50
-                hover:shadow-md
-              "
-            >
-              <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
-              <td class="p-2">{{ table.name }}</td>
-              <td class="p-2">{{ table.status.name }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <TablesList
+          :tables="getTables"
+          @selected="selectTable"
+        ></TablesList>
       </div>
 
       <div class="mt-4 md:mt-0 lg:flex-1">
@@ -125,6 +96,8 @@ import { mapActions, mapGetters } from "vuex";
 
 import ViewContainer from "../ViewContainer";
 
+import TablesList from "../../components/tables/TablesListComponent.vue";
+
 import ConfirmTableDeleteModal from "../../components/modals/ConfirmTableDeleteModalComponent";
 
 import InputGroup from "../../components/inputs/InputGroupComponent";
@@ -157,7 +130,7 @@ export default {
   data() {
     return {
       showDeleteModalState: false,
-
+      tableId: "",
       table: {
         id: "",
         name: "",
@@ -218,9 +191,10 @@ export default {
     },
 
     selectTable(tableId) {
-      this.table = JSON.parse(
-        JSON.stringify(_find(this.getTables, ["id", tableId]))
-      );
+      this.tableId = tableId;
+      // this.table = JSON.parse(
+      //   JSON.stringify(_find(this.getTables, ["id", tableId]))
+      // );
     },
 
     toggleModal() {
@@ -239,6 +213,7 @@ export default {
     InputGroup,
     TextInput,
     Button,
+    TablesList
   },
 };
 </script>
