@@ -36,11 +36,13 @@ class CategoryController extends Controller
         $input = $request->validated();
 
         if($request->has('discountId')) {
-            $input['discount_id'] = $request->input('discountId');
+            $input['discount_id'] = $request->discountId;
         }
 
         if($request->has('parentId')) {
-            $input['parent_id'] = $request->input('parentId');
+            $input['parent_id'] = $request->parentId;
+            $parentCategory = Category::findOrFail($request->parentId);
+            $input['vat'] = $parentCategory->vat;
         }
 
         $category = Category::create($input);

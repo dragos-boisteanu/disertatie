@@ -273,6 +273,10 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
+        if (this.category.vat === "") {
+          delete this.category.vat;
+        }
+
         if (this.category.parentId === null) {
           delete this.category.parentId;
         }
