@@ -27,18 +27,33 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        value: ""
-      }
-    },
+import _debounce from "lodash/debounce";
+import { mapActions } from 'vuex';
 
-    methods: {
-      search() {
-        this.$emit('search', this.value);
-      }
+export default {
+  data() {
+    return {
+      value: "",
+    };
+  },
+
+  methods: {
+    ...mapActions('Categories', ["fetchCategories", "searchCategory"]),
+    // search: _debounce(async function () {
+    //   try {
+    //     if (this.value.length > 0) {
+    //       await this.searchCategory(this.value);
+    //     } else {
+    //       await this.fetchCategories();
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }, 250),
+
+    search() {
+      this.$emit('search', this.value)
     }
-  }
-
+  },
+};
 </script>

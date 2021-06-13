@@ -29,13 +29,13 @@
       </div>
     </template>
 
-    <div class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-2/3">
+    <div
+      class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-2/3"
+    >
       <div class="flex flex-col gpa-y-4">
-        <Search
-          @search="search"
-        ></Search>
+        <Search @search="search"></Search>
         <CategoriesList
-          :categories="getCategories"
+          :categories="categories"
           @selected="selectCategory"
         ></CategoriesList>
       </div>
@@ -70,19 +70,23 @@ export default {
     },
   },
 
+  mounted() {
+    this.categories = this.getCategories;
+  },
+
   data() {
     return {
-      searchInput: "",
+      categories: [],
       categoryId: "",
     };
   },
 
   methods: {
-    ...mapActions("Categories", ["searchCategory", "fetchCategories"]),
+    ...mapActions("Categories", ["fetchCategories"]),
     ...mapActions("Notification", ["openNotification"]),
 
     selectCategory(id) {
-      const category = _find(this.getCategories, ["id", id]);
+      const category = _find(this.categories, ["id", id]);
       this.categoryId = category.id;
     },
 
@@ -98,17 +102,20 @@ export default {
       }
     },
 
-    search: _debounce(async function (value) {
-      try {
-        if (value.length > 0) {
-          await this.searchCategory(value);
-        } else {
-          await this.fetchCategories();
-        }
-      } catch (error) {
-        console.log(error);
+    search(value) {
+      if(value) {
+        this.categories = this.getCategories.filter(category => {
+          const regexRule = `${value.toLowerCase().trim()}*`
+          const regex = new RegExp(regexRule,"g");
+          if(category.name.toLowerCase().trim().match(regex)){
+            return true;
+          }
+        })
+      } else {
+        this.categories = this.getCategories;
       }
-    }, 250),
+    }
+    
   },
 
   components: {
