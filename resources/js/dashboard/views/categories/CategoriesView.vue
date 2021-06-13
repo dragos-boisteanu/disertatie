@@ -29,19 +29,23 @@
       </div>
     </template>
 
-    <div class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-1/2">
-      
-      <CategoriesList
-        :categories="getCategories"
-        @selected="selectCategory"
-      ></CategoriesList>
+    <div
+      class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-2/3"
+    >
+      <div class="flex flex-col gpa-y-4">
+        <Search
+          @search="search"
+        ></Search>
+        <CategoriesList
+          :categories="getCategories"
+          @selected="selectCategory"
+        ></CategoriesList>
+      </div>
 
       <CategoryForm
         :category-id="categoryId"
         @resetCategory="deselectCatgory"
       ></CategoryForm>
-
-      
     </div>
   </ViewContainer>
 </template>
@@ -53,6 +57,7 @@ import ViewContainer from "../ViewContainer";
 
 import CategoriesList from "../../components/categories/CategoriesListComponent.vue";
 import CategoryForm from "../../components/categories/CategoryFormComponent";
+import Search from "../../components/categories/SearchComponent.vue";
 
 import _find from "lodash/find";
 import _debounce from "lodash/debounce";
@@ -65,32 +70,27 @@ export default {
     showResetSearch() {
       return this.searchInput.length > 0;
     },
-
   },
 
   data() {
     return {
-      searchInput: '',
+      searchInput: "",
       categoryId: "",
-    }
+    };
   },
 
   methods: {
-    ...mapActions("Categories", [
-      "searchCategory",
-      "fetchCategories"
-    ]),
+    ...mapActions("Categories", ["searchCategory", "fetchCategories"]),
     ...mapActions("Notification", ["openNotification"]),
 
     selectCategory(id) {
-      const category = _find(this.getCategories, ["id", id])
+      const category = _find(this.getCategories, ["id", id]);
       this.categoryId = category.id;
     },
 
     deselectCatgory() {
-      this.categoryId = ""
+      this.categoryId = "";
     },
-
 
     async refresh() {
       try {
@@ -100,10 +100,10 @@ export default {
       }
     },
 
-    search: _debounce(async function () {
+    search: _debounce(async function (value) {
       try {
-        if (this.searchInput.length > 0) {
-          await this.searchCategory(this.searchInput);
+        if (value.length > 0) {
+          await this.searchCategory(value);
         } else {
           await this.fetchCategories();
         }
@@ -111,13 +111,13 @@ export default {
         console.log(error);
       }
     }, 250),
-
   },
 
   components: {
     ViewContainer,
     CategoriesList,
-    CategoryForm
+    CategoryForm,
+    Search
   },
 };
 </script>

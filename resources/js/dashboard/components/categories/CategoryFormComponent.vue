@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:flex-1">
+  <div class="">
     <form
       @submit.prevent="submit"
       class="
@@ -112,11 +112,13 @@
           </Select>
         </InputGroup>
 
-        <DiscountComponent
-          :discount-id="category.discountId"
-          @remove="removeDiscount"
-          @add="addDiscount"
-        ></DiscountComponent>
+        <div class="w-full">
+          <DiscountComponent
+            :discount-id="category.discountId"
+            @remove="removeDiscount"
+            @add="addDiscount"
+          ></DiscountComponent>
+        </div>
       </div>
 
       <div>
@@ -135,6 +137,7 @@
               Update
             </Button>
             <Button
+              v-if="canDelete"
               type="danger"
               :waiting="waiting"
               @click.native.prevent="remove"
@@ -195,6 +198,10 @@ export default {
       );
     },
 
+    canDelete() {
+      return this.category.productsCount === 0;
+    },
+
     parentCategories() {
       return this.getCategories.filter(
         (category) => category.parentId === null
@@ -246,7 +253,9 @@ export default {
   watch: {
     categoryId: function (value) {
       if (value) {
-        this.category = JSON.parse(JSON.stringify(_find(this.getCategories, ["id", value])));
+        this.category = JSON.parse(
+          JSON.stringify(_find(this.getCategories, ["id", value]))
+        );
       }
     },
   },
@@ -291,10 +300,9 @@ export default {
         if (!this.$v.$invalid) {
           this.waiting = true;
 
-          const originalCategory = JSON.parse(JSON.stringify(_find(this.getCategories, [
-            "id",
-            this.categoryId,
-          ])));
+          const originalCategory = JSON.parse(
+            JSON.stringify(_find(this.getCategories, ["id", this.categoryId]))
+          );
 
           const payload = {
             vm: this,
@@ -320,7 +328,7 @@ export default {
             delete payload.category.parentId;
           }
 
-          console.log(originalCategory)
+          console.log(originalCategory);
 
           if (counter > 0) {
             await this.patchCategory(payload);
@@ -328,7 +336,7 @@ export default {
             payload.category.discountId = this.category.discountId;
             this.updateDiscount(payload);
 
-             this.waiting = false;
+            this.waiting = false;
 
             this.openNotification({
               type: "ok",
@@ -346,7 +354,7 @@ export default {
         }
       } catch (error) {
         this.waiting = false;
-        console.log(error)
+        console.log(error);
       }
     },
 
