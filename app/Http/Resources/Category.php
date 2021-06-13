@@ -31,6 +31,12 @@ class Category extends JsonResource
             $arrayData['discountId'] = null;
         }
 
+        if(!is_null($this->parentCategory)){
+            $arrayData['parentName'] = $this->parentCategory->name;
+        } else {
+            $arrayData['parentName'] = "";
+        }
+
         return $arrayData;
     }
 }

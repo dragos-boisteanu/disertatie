@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
-use App\Http\Resources\CategoryCollection;
 
 class CategoryController extends Controller
 {
