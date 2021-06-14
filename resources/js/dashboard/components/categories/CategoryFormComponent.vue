@@ -259,15 +259,8 @@ export default {
         );
       }
     },
-
-    // 'category.parentId': function(newValue, oldValue) {
-    //   console.log(parseInt(newValue))
-    //   const parentCategory = _find(this.getCategories, ['id', parseInt(newValue)]);
-    //   console.log(parentCategory)
-    //   this.parentName = parentCategory.name; 
-    // }
   },
-
+  
   methods: {
     ...mapActions("Categories", [
       "postCategory",

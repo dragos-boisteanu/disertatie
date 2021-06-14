@@ -2,7 +2,7 @@
   <ViewContainer>
     <ConfirmTableDeleteModal
       v-if="showDeleteteConfirmationModal"
-      :table-id="table.id"
+      :table-id="tableId"
       @delete="callDeleteTable"
       @closed="toggleModal"
     ></ConfirmTableDeleteModal>
@@ -88,7 +88,7 @@ export default {
     async callDeleteTable(tableId) {
       await this.deleteTable(tableId);
       this.toggleModal();
-      this.resetForm();
+      this.clearSelection();
     },
 
     async refresh() {
