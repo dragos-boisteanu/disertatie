@@ -81,6 +81,15 @@ export default {
     };
   },
 
+  watch: {
+    getCategories: {
+      handler() {
+        this.categories = this.getCategories
+      },
+      deep: true
+    }
+  },
+
   methods: {
     ...mapActions("Categories", ["fetchCategories"]),
     ...mapActions("Notification", ["openNotification"]),
