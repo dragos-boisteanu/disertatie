@@ -101,10 +101,14 @@ class Product extends Model
         return $basePrice - $basePrice * ($discount / 100); 
     }
 
-   
     public function category() 
     {
         return $this->belongsTo('App\Models\Category');
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(Category::class, 'sub_category_id');
     }
 
     public function stock() 

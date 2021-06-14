@@ -55,10 +55,10 @@
                         <div class="flex-1">
                             <div class="font-semibold text-base">
                                 <span class="border-gray-200">{{ product.name}}</span> 
-                                <span>{{ product.weight}}<Unit :unit-id="product.unit_id"></Unit></span>
+                                <span>{{ product.weight}}<Unit :unit-id="product.unitId"></Unit></span>
                             </div>
                             <div class="text-sm">
-                               {{product.base_price}} RON / <Vat :category-id="product.category_id"></Vat>
+                               {{product.basePrice}} RON / <Vat :category-id="product.categoryId"></Vat>
                             </div>
                         </div>
                         <div>
@@ -66,13 +66,13 @@
                                 #{{product.id}}
                             </div>
                             <div class="mt-2">
-                               <Status :deleted-at="product.deleted_at"/>
+                               <Status :deleted-at="product.deletedAt"/>
                             </div>
                         </div>
                     </div>
                     <div class="mt-2">
                         <div class="flex justify-between items-center">
-                            <Category :category-id="product.category_id"></Category>
+                            <Category :category-id="product.categoryId"></Category>
                             <Stock :quantity="product.quantity"></Stock>
                         </div>
                     </div>

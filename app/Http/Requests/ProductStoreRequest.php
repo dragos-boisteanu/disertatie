@@ -30,24 +30,16 @@ class ProductStoreRequest extends FormRequest
             'barcode' => 'required|numeric|unique:products',
             'name' => 'required|string|max:150',
             'description' => 'required|string|max:255',
-            'base_price' => 'required|numeric',
+            'basePrice' => 'required|numeric',
             'weight' => 'required|numeric',
-            'category_id' => 'required|numeric|exists:categories,id',
-            'unit_id' => 'required|numeric|exists:units,id',
+            'categoryId' => 'required|numeric|exists:categories,id',
+            'subCategoryId' => ['sometimes', 'numeric', 'exists:categories,id'],
+            'unitId' => 'required|numeric|exists:units,id',
             'ingredients'=> 'sometimes|array|min:1',
             'ingregients.*.id' => 'required_with:ingregients|numeric',
             'ingredients.*.quantity' => 'required_with:ingregients|numeric',
             'ingredients.*.unit.id' => 'required_with:ingregients|numeric|exists:units,id',
             'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'base_price' => 'base price',
-            'category_id' => 'category',
-            'unit_id' => 'weight unit',
         ];
     }
 }

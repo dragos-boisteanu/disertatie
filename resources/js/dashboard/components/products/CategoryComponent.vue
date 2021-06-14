@@ -1,11 +1,12 @@
 <template>
     <div class="flex items-center">
-        <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="parentCategory" :style="{background: parentCategory.color}">
-            {{parentCategory.name}}
-        </div>
         <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="category" :style="{background: category.color}">
             {{category.name}}
         </div>
+        <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="subCategory" :style="{background: subCategory.color}">
+            {{subCategory.name}}
+        </div>
+        
     </div>
     
 </template>
@@ -19,7 +20,12 @@
             categoryId: {
                 type: Number,
                 required: true
-            }
+            },
+            subCategoryId: {
+                type: Number,
+                required: false,
+                default: null,
+            },
         },
 
         computed: {
@@ -29,9 +35,9 @@
                 return _find(this.getCategories, ['id', this.categoryId]);
             },
 
-            parentCategory() {
-                if(this.category.parentId) {
-                    return _find(this.getCategories, ['id', this.category.parentId])
+            subCategory() {
+                if(this.subCategoryId) {
+                   return _find(this.getCategories, ['id', this.subCategoryId]);
                 }
                
             }

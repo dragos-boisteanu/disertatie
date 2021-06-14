@@ -67,19 +67,19 @@
         <div class="flex gap-x-2 items-center font-semibold text-2xl mt-2">
           <h1 class="pr-2 border-r border-gray-200">{{ product.name }}</h1>
           <span class="text-base"
-            >{{ product.weight }}<Unit :unit-id="product.unit_id"></Unit
+            >{{ product.weight }}<Unit :unit-id="product.unitId"></Unit
           ></span>
         </div>
         <div class="text-sm">
           {{ product.base_price }} RON /
-          <Vat :category-id="product.category_id"></Vat>
+          <Vat :category-id="product.categoryId"></Vat>
           <span v-if="hasDiscount">
             / {{ product.discount.value }}% discount</span
           >
         </div>
         <div class="flex justify-center w-full mt-2 md:justify-start">
-          <Status :deleted-at="product.deleted_at" />
-          <Category :category-id="product.category_id"></Category>
+          <Status :deleted-at="product.deletedAt" />
+          <Category :category-id="product.categoryId" :sub-category-id="product.subCategoryId"></Category>
           <Stock :quantity="product.quantity"></Stock>
         </div>
         <div class="flex items-center gap-x-2">
@@ -103,7 +103,7 @@
           </button>
           <div v-if="canDisable">
             <button
-              v-if="product.deleted_at"
+              v-if="product.deltedAt"
               @click="restore"
               class="
                 bg-white
@@ -281,12 +281,12 @@ export default {
 
     async disable() {
       const response = await disableProduct(this.product.id);
-      this.product.deleted_at = response.data.deleted_at;
+      this.product.deletedAt = response.data.deletedAt;
     },
 
     async restore() {
       const response = await restoreProduct(this.product.id);
-      this.product.deleted_at = response.data.deleted_at;
+      this.product.deletedAt = response.data.deletedAt;
     },
 
     async refresh() {
