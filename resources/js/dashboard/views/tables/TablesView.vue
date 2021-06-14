@@ -38,55 +38,14 @@
 
     <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2">
       <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-        <TablesList
-          :tables="getTables"
-          @selected="selectTable"
-        ></TablesList>
+        <TablesList :tables="getTables" @selected="selectTable"></TablesList>
       </div>
 
-      <div class="mt-4 md:mt-0 lg:flex-1">
-        <form
-          class="
-            flex flex-col
-            items-stretch
-            justify-items-start
-            gap-y-3
-            md:flex-auto
-          "
-        >
-          <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
-            <h2 class="mb-2 text-xl font-semibold">Table</h2>
-            <InputGroup id="name" label="Name" class="w-full">
-              <TextInput v-model="table.name" id="name" name="name"></TextInput>
-            </InputGroup>
-          </div>
-          <div class="flex flex-wrap items-center gap-4">
-            <div v-if="isTableSelected" class="w-full flex items-center gap-4">
-              <Button type="secondary" @click.native="resetForm">
-                Clear selection
-              </Button>
-
-              <div
-                v-if="canDelete && canRestore"
-                class="flex items-center gap-2"
-              >
-                <Button type="danger" @click.native="toggleModal">
-                  Delete
-                </Button>
-
-                <Button @click.native="callRestoreTable"> Restore </Button>
-              </div>
-
-              <Button v-else @click.native="callDisableTable"> Disable </Button>
-            </div>
-
-            <Button v-if="isTableSelected" type="primary"> Update </Button>
-            <Button v-else type="primary" @click.native="createNewTable">
-              Submit
-            </Button>
-          </div>
-        </form>
-      </div>
+      <TablesForm
+        :table-id="tableId"
+        @clearSelection="clearSelection"
+        @toggleDeleteModal="toggleModal"
+      ></TablesForm>
     </div>
   </ViewContainer>
 </template>
@@ -97,6 +56,7 @@ import { mapActions, mapGetters } from "vuex";
 import ViewContainer from "../ViewContainer";
 
 import TablesList from "../../components/tables/TablesListComponent.vue";
+import TablesForm from "../../components/tables/TablesFormComponent";
 
 import ConfirmTableDeleteModal from "../../components/modals/ConfirmTableDeleteModalComponent";
 
@@ -110,79 +70,20 @@ export default {
   computed: {
     ...mapGetters("Tables", ["getTables"]),
 
-    isTableSelected() {
-      return this.table.id ? true : false;
-    },
-
-    canDelete() {
-      return this.table.status.name === "Disabled";
-    },
-
-    canRestore() {
-      return this.table.status.name === "Disabled";
-    },
-
     showDeleteteConfirmationModal() {
-      return this.isTableSelected && this.showDeleteModalState;
+      return this.showDeleteModalState;
     },
   },
 
   data() {
     return {
       showDeleteModalState: false,
-      tableId: "",
-      table: {
-        id: "",
-        name: "",
-        status: {
-          id: "",
-          name: "",
-        },
-      },
+      tableId: null,
     };
   },
 
   methods: {
-    ...mapActions("Tables", [
-      "downloadTables",
-      "storeTable",
-      "disableTable",
-      "restoreTable",
-      "deleteTable",
-    ]),
-
-    async refresh() {
-      await this.downloadTables();
-    },
-
-    async createNewTable() {
-      const table = await this.storeTable(this.table.name);
-      this.table.id = table.id;
-      this.table.status = table.status;
-      this.resetForm();
-    },
-
-    async callDisableTable() {
-      const payload = {
-        vm: this,
-        id: this.table.id,
-      };
-      const status = await this.disableTable(payload);
-      Object.keys(status).forEach((key) => {
-        this.$set(this.table.status, key, status[key]);
-      });
-    },
-
-    async callRestoreTable() {
-      const payload = {
-        vm: this,
-        id: this.table.id,
-      };
-      const status = await this.restoreTable(payload);
-      Object.keys(status).forEach((key) => {
-        this.$set(this.table.status, key, status[key]);
-      });
-    },
+    ...mapActions("Tables", ["downloadTables", "deleteTable"]),
 
     async callDeleteTable(tableId) {
       await this.deleteTable(tableId);
@@ -190,20 +91,20 @@ export default {
       this.resetForm();
     },
 
+    async refresh() {
+      await this.downloadTables();
+    },
+
+    clearSelection() {
+      this.tableId = null;
+    },
+
     selectTable(tableId) {
       this.tableId = tableId;
-      // this.table = JSON.parse(
-      //   JSON.stringify(_find(this.getTables, ["id", tableId]))
-      // );
     },
 
     toggleModal() {
       this.showDeleteModalState = !this.showDeleteModalState;
-    },
-
-    resetForm() {
-      this.table.id = "";
-      this.table.name = "";
     },
   },
 
@@ -213,7 +114,8 @@ export default {
     InputGroup,
     TextInput,
     Button,
-    TablesList
+    TablesList,
+    TablesForm,
   },
 };
 </script>
