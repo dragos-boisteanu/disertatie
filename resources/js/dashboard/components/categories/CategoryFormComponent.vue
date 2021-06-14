@@ -194,22 +194,22 @@ export default {
 
     availableDiscounts() {
       return this.getDiscounts.filter(
-        (discount) => discount.deletedAt === null
+        (discount) => discount.deletedAt === ""
       );
     },
 
     canDelete() {
-      return this.category.productsCount === 0;
+      return this.category.productsCount == 0;
     },
 
     parentCategories() {
       return this.getCategories.filter(
-        (category) => category.parentId === null
+        category => category.parentId === null
       );
     },
 
     isParent() {
-      return this.category.parentId === null;
+      return this.category.parentId === null
     },
 
     isCategorySelected() {
@@ -226,6 +226,7 @@ export default {
         color: "",
         discountId: "",
         parentId: null,
+        parentName: "",
       },
     };
   },
@@ -258,6 +259,13 @@ export default {
         );
       }
     },
+
+    // 'category.parentId': function(newValue, oldValue) {
+    //   console.log(parseInt(newValue))
+    //   const parentCategory = _find(this.getCategories, ['id', parseInt(newValue)]);
+    //   console.log(parentCategory)
+    //   this.parentName = parentCategory.name; 
+    // }
   },
 
   methods: {
@@ -386,7 +394,7 @@ export default {
         vat: "",
         color: "",
         discountId: "",
-        parentId: null,
+        parentId: null
       };
 
       if (this.isCategorySelected) {

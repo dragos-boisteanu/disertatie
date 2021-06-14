@@ -31,7 +31,7 @@
 
             parentCategory() {
                 if(this.category.parentId) {
-                     return _find(this.getCategories, ['id', this.category.parentId])
+                    return _find(this.getCategories, ['id', this.category.parentId])
                 }
                
             }
