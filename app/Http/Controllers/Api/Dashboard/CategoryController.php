@@ -76,8 +76,8 @@ class CategoryController extends Controller
 
         if($request->has('parentId')) {
             $input['parent_id'] = $request->parentId;
-            $category = Category::findOrFail($request->parentId);
-            $responseData['parentName'] = $category->name;
+            $parentCategory = Category::findOrFail($request->parentId);
+            $responseData['parentName'] = $parentCategory->name;
         }
 
         $category->update($input);
