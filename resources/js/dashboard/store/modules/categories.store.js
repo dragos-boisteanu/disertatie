@@ -29,7 +29,12 @@ const actions = {
     async postCategory({commit}, payload) {
         try {
             const response = await postCategory(payload);
-            payload.id = response.data;
+            payload.id = response.data.id;
+            if(payload.parentId) {
+                payload.vat = response.data.vat
+                payload.parentName = response.data.parentName
+            }
+            
             payload.productsCount = 0;
             commit('ADD_CATEGORY', payload);
         } catch ( error ) {

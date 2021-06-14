@@ -19,7 +19,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('products', 'subCategories')->get();
+        $categories = Category::with('products', 'subProducts', 'subCategories')->get();
 
         return new CategoryCollection($categories);
     }
@@ -36,6 +36,8 @@ class CategoryController extends Controller
 
         $input = $request->validated();
 
+        $response = [];
+
         if($request->has('discountId')) {
             $input['discount_id'] = $request->discountId;
         }
@@ -44,11 +46,16 @@ class CategoryController extends Controller
             $input['parent_id'] = $request->parentId;
             $parentCategory = Category::findOrFail($request->parentId);
             $input['vat'] = $parentCategory->vat;
+
+            $response['vat'] = $parentCategory->vat;
+            $response['parentName'] = $parentCategory->name;
         }
 
         $category = Category::create($input);
 
-        return $category->id;
+        $response['id'] = $category->id;
+
+        return response()->json($response, 201);
     }
 
     /**
