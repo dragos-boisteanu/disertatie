@@ -1,12 +1,5 @@
 <template>
   <ViewContainer>
-    <ConfirmTableDeleteModal
-      v-if="showDeleteteConfirmationModal"
-      :table-id="tableId"
-      @delete="callDeleteTable"
-      @closed="toggleModal"
-    ></ConfirmTableDeleteModal>
-
     <template slot="header">
       <div class="flex items-center justify-between md:justify-start gap-x-4">
         <span> Tables </span>
@@ -77,19 +70,12 @@ export default {
 
   data() {
     return {
-      showDeleteModalState: false,
       tableId: null,
     };
   },
 
   methods: {
-    ...mapActions("Tables", ["downloadTables", "deleteTable"]),
-
-    async callDeleteTable(tableId) {
-      await this.deleteTable(tableId);
-      this.toggleModal();
-      this.clearSelection();
-    },
+    ...mapActions("Tables", ["downloadTables"]),
 
     async refresh() {
       await this.downloadTables();

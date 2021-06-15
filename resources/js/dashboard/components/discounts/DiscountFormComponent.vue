@@ -1,11 +1,13 @@
 <template>
   <div class="mt-4 md:mt-0 lg:flex-1">
-    <ConfirmDiscountDeleteModalComponent
-      v-if="deleteConfirmationModalState"
-      :discount-code="discount.code"
-      @delete="callDeleteDiscount"
-      @closed="toggleDeleteConfirmationModal"
-    ></ConfirmDiscountDeleteModalComponent>
+    <ConfirmActionModal
+      v-if="confirmModalState"
+      title="Confirm action"
+      mainMessage="Are you sure you want to delete the selected discount ?"
+      secondaryMessage="By deleting the discount it will be removed from all products and categories"
+      @cancel="toggleConfirmModal"
+      @ok="callDeleteDiscount"
+    ></ConfirmActionModal>
     <form
       @submit.prevent="submit"
       class="
@@ -140,6 +142,7 @@
         <Button
           type="secondary"
           @click.native.prevent="resetForm"
+          :disabled="waiting"
           eclass="mb-3 md:mb-0"
         >
           Reset
@@ -150,6 +153,7 @@
           v-if="isDiscountSelected"
           type="primary"
           :waiting="waiting"
+          :disabled="waiting"
           @click.native.prevent="callPatchDiscount"
         >
           Update
@@ -158,6 +162,7 @@
           v-else
           type="primary"
           :waiting="waiting"
+          :disabled="waiting"
           @click.native.prevent="submit"
         >
           Submit
@@ -166,6 +171,7 @@
           <Button
             v-if="canRestore"
             :waiting="waiting"
+            :disabled="waiting"
             @click.native.prevent="callRestoreDiscount"
           >
             <span> Restore </span>
@@ -173,6 +179,7 @@
           <Button
             v-else
             :waiting="waiting"
+            :disabled="waiting"
             @click.native.prevent="callDisableDiscount"
           >
             <span> Disable </span>
@@ -181,7 +188,8 @@
             v-if="canDelete"
             type="danger"
             :waiting="waiting"
-            @click.native.prevent="toggleDeleteConfirmationModal"
+            :disabled="waiting"
+            @click.native.prevent="toggleConfirmModal"
           >
             <span> Delete </span>
           </Button>
@@ -197,7 +205,7 @@ import { mapActions, mapGetters } from "vuex";
 import Input from "../../components/inputs/TextInputComponent";
 import InputGroup from "../../components/inputs/InputGroupComponent";
 import Button from "../../components/buttons/ButtonComponent";
-import ConfirmDiscountDeleteModalComponent from "../../components/modals/ConfirmDiscountDeleteModalComponent.vue";
+import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue"
 import DatePicker from "vue2-datepicker";
 
 import _find from "lodash/find";
@@ -271,9 +279,8 @@ export default {
   },
   data() {
     return {
-      deleteConfirmationModalState: false,
+      confirmModalState: false,
       waiting: false,
-      discountSelected: false,
       discount: {
         code: "",
         value: "",
@@ -333,6 +340,10 @@ export default {
       return date < new Date(this.discount.startsAt);
     },
 
+    toggleConfirmModal() {
+      this.confirmModalState = !this.confirmModalState;
+    },
+
     async submit() {
       this.$v.$touch();
 
@@ -343,6 +354,7 @@ export default {
     },
 
     async callPatchDiscount() {
+      this.waiting = true;
       const originalDiscount = _find(this.getDiscounts, [
         "id",
         this.discount.id,
@@ -378,10 +390,14 @@ export default {
           message: "Nothing to update",
         });
       }
+
+      this.waiting = false;
     },
 
     async callDisableDiscount() {
       try {
+        this.waiting = true;
+
         const payload = {
           id: this.discount.id,
           vm: this,
@@ -395,13 +411,18 @@ export default {
           show: true,
           message: "Discount disabled",
         });
+
+        this.waiting = false;
       } catch (error) {
+        this.waiting = false;
         console.log(error);
       }
     },
 
     async callRestoreDiscount() {
       try {
+        this.waiting = true;
+
         const payload = {
           id: this.discount.id,
           vm: this,
@@ -415,28 +436,33 @@ export default {
           show: true,
           message: "Discount restored",
         });
+
+        this.waiting = false;
       } catch (error) {
+        this.waiting = false;
         console.log(error);
       }
     },
 
-    toggleDeleteConfirmationModal() {
-      this.deleteConfirmationModalState = !this.deleteConfirmationModalState;
-    },
-
     async callDeleteDiscount() {
       try {
+        this.waiting = true;
+
+        this.toggleConfirmModal();
+
         await this.deleteDiscount(this.discount.id);
 
         this.resetForm();
-        this.toggleDeleteConfirmationModal();
 
         this.openNotification({
           type: "ok",
           show: true,
           message: "Discount permanently removed",
         });
+
+        this.waiting = false;
       } catch (error) {
+        this.waiting = false;
         console.log(error);
       }
     },
@@ -458,7 +484,7 @@ export default {
     InputGroup,
     Button,
     DatePicker,
-    ConfirmDiscountDeleteModalComponent,
+    ConfirmActionModal,
   },
 };
 </script>

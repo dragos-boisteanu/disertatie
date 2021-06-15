@@ -1,5 +1,12 @@
 <template>
   <div class="">
+    <ConfirmActionModal
+      v-if="confirmModalState"
+      title="Confirm action"
+      mainMessage="Are you sure you want to delete the selected category ?"
+      @cancel="toggleConfirmModal"
+      @ok="remove"
+    ></ConfirmActionModal>
     <form
       @submit.prevent="submit"
       class="
@@ -12,7 +19,12 @@
     >
       <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
         <h2 class="mb-4 text-xl font-semibold">Category</h2>
-        <InputGroup id="name" label="Name" :hasError="$v.category.name.$error">
+        <InputGroup
+          id="name"
+          label="Name"
+          :hasError="$v.category.name.$error"
+          :required="true"
+        >
           <template v-slot:errors>
             <p v-if="!$v.category.name.required">The vat field is required</p>
             <p v-if="!$v.category.name.maxLength">
@@ -23,7 +35,7 @@
             </p>
           </template>
           <Input
-            v-model="category.name"
+            v-model="$v.category.name.$model"
             id="name"
             name="name"
             :eclass="{
@@ -32,7 +44,6 @@
                 $v.category.name.$dirty && !$v.category.name.$error,
             }"
             :disabled="waiting"
-            @blur.native="$v.category.name.$touch()"
           ></Input>
         </InputGroup>
 
@@ -42,6 +53,7 @@
             id="vat"
             label="VAT"
             :hasError="$v.category.vat.$error"
+            :required="true"
           >
             <template v-slot:errors>
               <p v-if="!$v.category.vat.required">The vat field is required</p>
@@ -53,7 +65,7 @@
               </p>
             </template>
             <Input
-              v-model="category.vat"
+              v-model="$v.category.vat.$model"
               id="vat"
               name="vat"
               :eclass="{
@@ -62,13 +74,13 @@
                   $v.category.vat.$dirty && !$v.category.vat.$error,
               }"
               :disabled="waiting"
-              @blur.native="$v.category.vat.$touch()"
             ></Input>
           </InputGroup>
           <InputGroup
             id="color"
             label="Color"
             :hasError="$v.category.color.$error"
+            :required="true"
           >
             <template slot="errors">
               <p v-if="!$v.category.color.required">
@@ -79,8 +91,7 @@
               id="color"
               name="color"
               type="color"
-              @change="$v.category.color.$touch()"
-              v-model="category.color"
+              v-model="$v.category.color.$model"
               class="p-1 rounded border order-gray-300 outline-none"
               :class="{
                 'border-red-600': $v.category.color.$error,
@@ -123,7 +134,11 @@
 
       <div>
         <div>
-          <Button type="secondary" @click.native.prevent="resetForm">
+          <Button
+            type="secondary"
+            @click.native.prevent="resetForm"
+            :disabled="waiting"
+          >
             Reset
           </Button>
         </div>
@@ -133,6 +148,7 @@
               type="primary"
               :waiting="waiting"
               @click.native.prevent="patch"
+              :disabled="waiting"
             >
               Update
             </Button>
@@ -140,7 +156,8 @@
               v-if="canDelete"
               type="danger"
               :waiting="waiting"
-              @click.native.prevent="remove"
+              :disabled="waiting"
+              @click.native.prevent="toggleConfirmModal"
             >
               Delete
             </Button>
@@ -149,6 +166,7 @@
             v-else
             type="primary"
             :waiting="waiting"
+            :disabled="waiting"
             @click.native.prevent="create"
           >
             Create
@@ -167,9 +185,13 @@ import Button from "../../components/buttons/ButtonComponent";
 import InputGroup from "../../components/inputs/InputGroupComponent";
 import DiscountComponent from "../../components/discounts/DiscountComponent";
 
+import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
+
 import { mapActions, mapGetters } from "vuex";
 
 import _find from "lodash/find";
+import _isEqual from "lodash/isEqual";
+
 import { alphaSpaces } from "../../validators/index";
 import {
   required,
@@ -193,9 +215,7 @@ export default {
     ...mapGetters("Discounts", ["getDiscounts"]),
 
     availableDiscounts() {
-      return this.getDiscounts.filter(
-        (discount) => discount.deletedAt === ""
-      );
+      return this.getDiscounts.filter((discount) => discount.deletedAt === "");
     },
 
     canDelete() {
@@ -204,12 +224,12 @@ export default {
 
     parentCategories() {
       return this.getCategories.filter(
-        category => category.parentId === null
+        (category) => category.parentId === null
       );
     },
 
     isParent() {
-      return this.category.parentId === null
+      return this.category.parentId === null;
     },
 
     isCategorySelected() {
@@ -219,6 +239,7 @@ export default {
 
   data() {
     return {
+      confirmModalState: false,
       waiting: false,
       category: {
         name: "",
@@ -260,7 +281,7 @@ export default {
       }
     },
   },
-  
+
   methods: {
     ...mapActions("Categories", [
       "postCategory",
@@ -319,7 +340,7 @@ export default {
           let counter = 0;
 
           Object.keys(this.category).forEach((key) => {
-            if (originalCategory[key] !== this.category[key]) {
+            if (!_isEqual(originalCategory[key], this.category[key])) {
               payload.category[key] = this.category[key];
               counter++;
             }
@@ -332,8 +353,6 @@ export default {
           if (this.category.parentId === "") {
             delete payload.category.parentId;
           }
-
-          console.log(originalCategory);
 
           if (counter > 0) {
             await this.patchCategory(payload);
@@ -365,8 +384,10 @@ export default {
 
     async remove() {
       try {
+        this.toggleConfirmModal();
+        this.waiting = true;
         await this.deleteCategory(this.categoryId);
-
+        this.waiting = false;
         this.resetForm();
 
         this.openNotification({
@@ -375,8 +396,13 @@ export default {
           message: "Category removed",
         });
       } catch (error) {
+        this.waiting = false;
         console.log(error);
       }
+    },
+
+    toggleConfirmModal() {
+      this.confirmModalState = !this.confirmModalState;
     },
 
     resetForm() {
@@ -387,7 +413,7 @@ export default {
         vat: "",
         color: "",
         discountId: "",
-        parentId: null
+        parentId: null,
       };
 
       if (this.isCategorySelected) {
@@ -410,6 +436,7 @@ export default {
     Button,
     InputGroup,
     DiscountComponent,
+    ConfirmActionModal,
   },
 };
 </script>

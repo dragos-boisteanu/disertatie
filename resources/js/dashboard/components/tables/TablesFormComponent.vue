@@ -1,5 +1,12 @@
 <template>
   <div class="mt-4 md:mt-0 lg:flex-1">
+    <ConfirmActionModal
+      v-if="confirmModalState"
+      title="Confirm action"
+      mainMessage="Are you sure you want to delete the selected table ?"
+      @cancel="toggleConfirmModal"
+      @ok="callDeleteTable"
+    ></ConfirmActionModal>
     <form
       class="
         flex flex-col
@@ -28,7 +35,8 @@
           </template>
           <TextInput
             v-model="$v.table.name.$model"
-            :disabled="isTableSelected"
+            :waiting="waiting"
+            :disabled="isTableSelected || waiting"
             :eclass="{
               'border-red-600': $v.table.name.$error,
               'border-green-600': $v.table.name.$dirty && !$v.table.name.$error,
@@ -40,24 +48,44 @@
       </div>
       <div class="flex flex-wrap items-center gap-4">
         <div v-if="tableId" class="w-full flex items-center gap-4">
-          <Button type="secondary" @click.native="resetForm">
-            Clear selection
+          <Button type="secondary" @click.native="resetForm" :waiting="waiting" :disabled="waiting">
+            Reset
           </Button>
 
           <div v-if="canDelete && canRestore" class="flex items-center gap-2">
-            <Button type="danger" @click.native="toggleModal"> Delete </Button>
-
-            <Button @click.native="callRestoreTable"> Restore </Button>
+            <Button
+              type="danger"
+              @click.native="toggleConfirmModal"
+              :waiting="waiting"
+              :disabled="waiting"
+            >
+              Delete
+            </Button>
+            <Button
+              @click.native="callRestoreTable"
+              :waiting="waiting"
+              :disabled="waiting"
+            >
+              Restore
+            </Button>
           </div>
 
-          <Button v-else @click.native="callDisableTable"> Disable </Button>
+          <Button
+            v-else
+            @click.native="callDisableTable"
+            :waiting="waiting"
+            :disabled="waiting"
+          >
+            Disable
+          </Button>
         </div>
 
-        <!-- <Button v-if="tableId" type="primary"> Update </Button> -->
         <Button
+          :waiting="waiting"
           v-if="!isTableSelected"
           type="primary"
           @click.native="createNewTable"
+          :disabled="waiting"
         >
           Submit
         </Button>
@@ -70,6 +98,8 @@
 import InputGroup from "../../components/inputs/InputGroupComponent";
 import TextInput from "../../components/inputs/TextInputComponent";
 import Button from "../../components/buttons/ButtonComponent";
+
+import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
 
 import _find from "lodash/find";
 
@@ -103,6 +133,8 @@ export default {
 
   data() {
     return {
+      waiting: false,
+      confirmModalState: false,
       table: {
         id: "",
         name: "",
@@ -137,7 +169,12 @@ export default {
   },
 
   methods: {
-    ...mapActions("Tables", ["storeTable", "disableTable", "restoreTable"]),
+    ...mapActions("Tables", [
+      "storeTable",
+      "disableTable",
+      "restoreTable",
+      "deleteTable",
+    ]),
 
     async createNewTable() {
       this.$v.$touch();
@@ -152,6 +189,7 @@ export default {
     },
 
     async callDisableTable() {
+      this.waiting = true;
       const payload = {
         vm: this,
         id: this.table.id,
@@ -160,9 +198,11 @@ export default {
       Object.keys(status).forEach((key) => {
         this.$set(this.table.status, key, status[key]);
       });
+      this.waiting = false;
     },
 
     async callRestoreTable() {
+      this.waiting = true;
       const payload = {
         vm: this,
         id: this.table.id,
@@ -171,6 +211,14 @@ export default {
       Object.keys(status).forEach((key) => {
         this.$set(this.table.status, key, status[key]);
       });
+      this.waiting = false;
+    },
+
+    async callDeleteTable() {
+      this.waiting = true;
+      this.toggleConfirmModal();
+      await this.deleteTable(this.tableId);
+      this.waiting = false;
     },
 
     resetForm() {
@@ -185,8 +233,8 @@ export default {
       this.$emit("clearSelection");
     },
 
-    toggleModal() {
-      this.$emit("toggleDeleteModal");
+    toggleConfirmModal() {
+      this.confirmModalState = !this.confirmModalState;
     },
   },
 
@@ -194,6 +242,7 @@ export default {
     InputGroup,
     TextInput,
     Button,
+    ConfirmActionModal,
   },
 };
 </script>
