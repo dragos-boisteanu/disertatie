@@ -33,7 +33,7 @@
           <td class="p-2">{{ discount.value }}%</td>
           <td class="p-2 text-center">
             <span
-              class="text-white rounded-sm px-2"
+              class="text-white rounded-sm px-2 py-1 text-xs"
               :class="{
                 'bg-red-600': discount.deletedAt,
                 'bg-green-600': !discount.deletedAt,
