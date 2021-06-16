@@ -13,7 +13,7 @@
           <template v-slot:errors>
             <p v-if="!$v.product.name.required">The name field is required</p>
             <p v-if="!$v.product.name.alphaSpaces">
-              Then ame field must contain only letters or spaces
+              Then name field must contain only letters or spaces
             </p>
           </template>
 
@@ -98,7 +98,6 @@
           label="Quantity"
           :hasError="$v.product.quantity.$error"
           :eclass="{ 'flex-1': true }"
-          ref="quantity"
         >
           <template v-slot:errors>
             <p v-if="!$v.product.quantity.required">
@@ -116,12 +115,44 @@
           </template>
 
           <Input
+            :disabled="edit"
             v-model="$v.product.quantity.$model"
             id="productQuantity"
+            ref="quantity"
             :class="{
               'border-red-600': $v.product.quantity.$error,
               'border-green-600':
                 $v.product.quantity.$dirty && !$v.product.quantity.$error,
+            }"
+          ></Input>
+        </InputGroup>
+
+        <InputGroup
+          id="productQuantity"
+          label="New Quantity"
+          :hasError="$v.newQuantity.$error"
+          :eclass="{ 'flex-1': true }"
+          ref="newQuantity"
+        >
+          <template v-slot:errors>
+            <p v-if="!$v.newQuantity.required">
+              The newQuantity field is required
+            </p>
+            <p v-if="!$v.newQuantity.integer">
+              Then newQuantity field must by an integer
+            </p>
+            <p v-if="!$v.newQuantity.maxValue">
+              Can't sell more products that are in stock
+            </p>
+          </template>
+
+          <Input
+            v-model="$v.newQuantity.$model"
+            id="productQuantity"
+            :class="{
+              'border-red-600': $v.newQuantity.$error,
+              'border-green-600':
+                $v.newQuantity.$dirty && !$v.newQuantity.$error,
             }"
           ></Input>
         </InputGroup>
@@ -188,6 +219,7 @@ import InputGroup from "../../components/inputs/InputGroupComponent";
 import Spinner from "vue-simple-spinner";
 
 import _debounce from "lodash/debounce";
+import requiredIf from "vuelidate/lib/validators/requiredIf";
 
 export default {
   props: {
@@ -215,19 +247,13 @@ export default {
       }
       this.searching = false;
       this.$nextTick(() => {
-        this.$refs.quantity.$el.focus();
+        this.$refs.newQuantity.$el.focus();
       });
     } else {
       this.$nextTick(() => {
         this.$refs.productName.$el.focus();
       });
     }
-  },
-
-  computed: {
-    maxQuantity() {
-      return this.product ? this.product.stock : 999;
-    },
   },
 
   data() {
@@ -238,6 +264,7 @@ export default {
         quantity: "",
         unitPrice: "",
       },
+      newQuantity: "",
       searching: false,
       edit: false,
       foundProducts: [],
@@ -252,11 +279,26 @@ export default {
           alphaSpaces,
         },
         quantity: {
-          required,
+          required: requiredIf(function () {
+            return !this.edit;
+          }),
           integer,
           minValue: minValue(1),
-          maxValue: maxValue(this.maxQuantity),
+          // maxValue: function() {
+          //   if(this.edit){
+          //     return false;
+          //   } else {
+          //     return this.product.quantity
+          //   }
+          // },
         },
+      },
+      newQuantity: {
+        required: requiredIf(function () {
+          return this.edit;
+        }),
+        integer,
+        maxValue: maxValue(this.product.stock),
       },
     };
   },
@@ -284,11 +326,21 @@ export default {
 
       if (!this.$v.$invalid) {
         if (this.edit) {
-          this.$emit("edit", this.product);
+          if (this.newQuantity != this.product.quantity) {
+            const payload = {
+              id: this.product.id,
+              newQuantity: this.newQuantity,
+            };
+            this.$emit("edit", payload);
+            this.$emit("closed");
+          } else {
+            // notificare
+            console.log("nothing to update");
+          }
         } else {
           this.$emit("add", this.product);
+          this.$emit("closed");
         }
-        this.$emit("closed");
       }
     },
 

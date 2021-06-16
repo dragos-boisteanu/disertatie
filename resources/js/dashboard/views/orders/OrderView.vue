@@ -510,33 +510,28 @@ export default {
     },
 
     async saveEdit(item) {
+      const payload = {
+        id: this.order.id,
+        itemId: item.id,
+        quantity: item.newQuantity,
+      };
+
+      const response = await patchItem(payload);
+      const responseData = response.data;
+
       const itemIndex = _findIndex(this.order.items, ["id", item.id]);
 
-      if (item.quantity !== this.order.items[itemIndex].quantity) {
-        const payload = {
-          id: this.order.id,
-          itemId: item.id,
-          quantity: item.quantity,
-        };
+      this.$set(this.order.items[itemIndex], "quantity", parseInt(this.order.items[itemIndex].quantity) + parseInt(item.newQuantity));
+      this.$set(
+        this.order.items[itemIndex],
+        "totalPrice",
+        responseData.itemTotalPrice
+      );
 
-        const response = await patchItem(payload);
-        const responseData = response.data;
-
-        const itemIndex = _findIndex(this.order.items, ["id", item.id]);
-
-        this.$set(this.order.items[itemIndex], "quantity", item.quantity);
-        this.$set(
-          this.order.items[itemIndex],
-          "totalPrice",
-          responseData.itemTotalPrice
-        );
-
-        this.order.totalQuantity = responseData.totalQuantity;
-        this.order.totalValue = responseData.totalValue;
-        this.order.updatedAt = responseData.updatedAt;
-      } else {
-        console.log("nothing to update");
-      }
+      this.order.totalQuantity = responseData.totalQuantity;
+      this.order.totalValue = responseData.totalValue;
+      this.order.updatedAt = responseData.updatedAt;
+  
     },
 
     async updateStatus(statusId) {
