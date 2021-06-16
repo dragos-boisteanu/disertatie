@@ -219,6 +219,7 @@ export default {
       this.toggleConfirmModal();
       await this.deleteTable(this.tableId);
       this.waiting = false;
+      this.resetForm();
     },
 
     resetForm() {

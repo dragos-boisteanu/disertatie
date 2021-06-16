@@ -51,8 +51,6 @@ import ViewContainer from "../ViewContainer";
 import TablesList from "../../components/tables/TablesListComponent.vue";
 import TablesForm from "../../components/tables/TablesFormComponent";
 
-import ConfirmTableDeleteModal from "../../components/modals/ConfirmTableDeleteModalComponent";
-
 import InputGroup from "../../components/inputs/InputGroupComponent";
 import TextInput from "../../components/inputs/TextInputComponent";
 import Button from "../../components/buttons/ButtonComponent";
@@ -96,7 +94,6 @@ export default {
 
   components: {
     ViewContainer,
-    ConfirmTableDeleteModal,
     InputGroup,
     TextInput,
     Button,
