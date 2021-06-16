@@ -30,7 +30,7 @@
     </template>
 
     <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2">
-      <div class="flex flex-col">
+      <div class="md:flex-1 flex flex-col">
         <Search @search="search"></Search>
         <IngredientsListComponent
           :ingredients="ingredients"
