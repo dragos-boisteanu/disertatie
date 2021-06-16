@@ -10,7 +10,7 @@
       </thead>
       <tbody class="overflow-y-auto">
         <tr
-          v-for="(ingredient, index) in getIngredients"
+          v-for="(ingredient, index) in ingredients"
           :key="ingredient.id"
           @click="selectIngredient(ingredient.id)"
           class="
@@ -39,13 +39,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
-  computed: {
-    ...mapGetters('Ingredients', ['getIngredients']),
+  props: {
+    ingredients: {
+      type: Array,
+      required: true
+    }
   },
 
-  methods: {
+methods: {
     selectIngredient(ingredientId) {
       this.$emit('selected', ingredientId)
     }
