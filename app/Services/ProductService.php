@@ -14,6 +14,8 @@ use App\Http\Resources\Product as ProductResource;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ProductService implements ProductServiceInterface
 {
 
@@ -88,7 +90,7 @@ class ProductService implements ProductServiceInterface
         $product->discount_id = $data['discountId'];
       }
       
-      if(array_key_exists('subCategoryId', $data)) {
+      if(!empty($data['subCategoryId'])) {
         $product->sub_category_id = $data['subCategoryId'];
       }
 
@@ -96,7 +98,7 @@ class ProductService implements ProductServiceInterface
         $this->setImage($product, $data['image']);
       }
 
-      if(array_key_exists('ingredients', $data)) {
+      if(array_key_exists('ingredients', $data) && count($data['ingredients'])) {
         $product->has_ingredients = true;
       } else {
         $product->has_ingredients = false;
@@ -158,10 +160,8 @@ class ProductService implements ProductServiceInterface
         $product->unit_id = $data['unitId'];
       } 
 
-      if(array_key_exists('hasIngredients', $data)) {
-        $this->updateIngredients($product, $data);
-      }       
-
+      $this->updateIngredients($product, $data);
+      
       $this->updateDiscount($product, $data);
 
       if(array_key_exists('image', $data)) {
@@ -280,8 +280,10 @@ class ProductService implements ProductServiceInterface
   }
 
   private function updateIngredients(Product $product, array $data): void
-  {
-    if($data['hasIngredients']) {
+  { 
+    
+    if(array_key_exists('ingredients', $data) && count($data['ingredients']) > 0 ) { 
+  
       $product->has_ingredients = true;
   
       $ingredientsArray = array();
@@ -308,9 +310,9 @@ class ProductService implements ProductServiceInterface
 
   private function updateDiscount(Product $product, array $data): void
   {
-    if(array_key_exists('discountId', $data)) { 
+    if(array_key_exists('discountId', $data) && !empty($data['discountId'])) { 
       $product->discount_id =  $data['discountId'];
-    } else if(!array_key_exists('discountId', $data) && !is_null($product->discount_id)) {
+    } else {
       $product->discount_id = null;
     }
     $product->save();

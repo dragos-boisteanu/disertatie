@@ -33,12 +33,11 @@ class ProductPatchRequest extends FormRequest
             'categoryId' => 'sometimes|numeric|exists:categories,id',
             'subCategoryId' => ['sometimes', 'numeric', 'exists:categories,id'],
             'unitId' => 'sometimes|numeric|exists:units,id',
-            'hasIngredients'=>['required', 'bool'],
-            'ingredients'=> ['required_if:hasIngredients,true', 'array', 'min:1'],
+            'ingredients'=> ['nullable', 'array'],
             'ingregients.*.id' => 'required_with:ingredients|numeric',
             'ingredients.*.quantity' => 'required_with:ingredients|numeric',
             'ingredients.*.unit.id' => 'required_with:ingredients|numeric|exists:units,id',
-            'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
+            'discountId' => ['nullable','numeric'],
         ];
     }
 

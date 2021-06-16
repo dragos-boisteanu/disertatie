@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
 
 class Product extends Model
 {
@@ -47,22 +48,18 @@ class Product extends Model
 
     public function getPriceAttribute()
     {
-        if($this->category->discount && $this->discount) {
-            if($this->category->discount > $this->discount ){
-                $finalPrice = $this->calculateDiscount($this->base_price, $this->category->discount->value);
+        // product discount
+        // sub category discount
+        // category discount
 
-            } else if ($this->category->discount == $this->discount) {
-                $finalPrice = $this->calculateDiscount($this->base_price, $this->category->discount->value);
-
-            } else if ($this->category->discount < $this->discount) {
-                $finalPrice = $this->calculateDiscount($this->base_price, $this->discount->value); 
-            }
-        } else if($this->category->discount) {
-            $finalPrice = $this->calculateDiscount($this->base_price, $this->category->discount->value);
-        } else if($this->discount) {
-            $finalPrice = $this->calculateDiscount($this->base_price, $this->discount->value); 
-        } else {
-            $finalPrice = $this->base_price;
+        if($this->discount_id && ($this->discount->starts_at >= Carbon::now() && Carbon::now() < $this->discount->ends_at)) {
+            $finalPrice = $this->calculateDiscount($this->base_price, $this->discount->value);
+        } else if ($this->subCategory && $this->subCategory->discount_id && ($this->subCategory->discount->starts_at >= Carbon::now() && Carbon::now() < $this->subCategory->discount->ends_at)) {
+            $finalPrice = $this->calculateDiscount($this->base_price, ($this->subCategory->discount->value));
+        } else if ($this->category && $this->category->discount_id && ($this->category->discount->starts_at >= Carbon::now() && Carbon::now() < $this->category->discount->ends_at)) {
+            $finalPrice = $this->calculateDiscount($this->base_price, ($this->category->discount->value));
+        }else {
+            $finalPrice = $this->base_price; 
         }
 
         $finalPrice += $finalPrice * ($this->category->vat / 100);

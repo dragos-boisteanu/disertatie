@@ -485,16 +485,6 @@ export default {
     },
   },
 
-  watch: {
-    "localProduct.ingredients": function (newValue) {
-      if (newValue.length === 0) {
-        this.localProduct.hasIngredients = false;
-      } else {
-        this.localProduct.hasIngredients = true;
-      }
-    },
-  },
-
   methods: {
     ...mapActions("Notification", ["openNotification"]),
 
@@ -512,37 +502,29 @@ export default {
           let counter = 0;
 
           Object.keys(this.localProduct).forEach((key) => {
-            if (key === "ingredients") {
-              if (
-                !_isEqual(
-                  this.localProduct.ingredients,
-                  this.product.ingredients
-                )
-              ) {
-                payload.product.ingredients = this.localProduct.ingredients;
-                console.log(payload.product.ingredients);
-                if (payload.product.ingredients.length === 0) {
-                  payload.product.hasIngredients = false;
-                  delete payload.product.ingredients;
-                } else {
-                  payload.product.hasIngredients = true;
-                }
-                counter++;
-              } else {
-                payload.product.hasIngredients = false;
-              }
-            } else if (this.product[key] !== this.localProduct[key]) {
+            if (this.product[key] !== this.localProduct[key]) {
               payload.product[key] = this.localProduct[key];
               counter++;
             }
           });
 
-          if (this.localProduct.discountId === "") {
-            delete payload.product.discountId;
+          if (
+            !_isEqual(this.localProduct.ingredients, this.product.ingredients)
+          ) {
+            payload.product.ingredients = this.localProduct.ingredients;
+            counter++;
           }
 
-          if (this.localProduct.subCategoryId === "") {
-            delete payload.product.subCategoryId;
+          if (payload.discountId === "") {
+            delete payload.discountId;
+          }
+
+          // if (payload.ingredients.length === 0) {
+          //   delete payload.ingredients;
+          // }
+
+          if (payload.subCategoryId === "") {
+            delete payload.subCategoryId;
           }
 
           if (counter > 0) {
