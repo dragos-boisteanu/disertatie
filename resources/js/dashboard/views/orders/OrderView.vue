@@ -341,31 +341,7 @@ export default {
     isTableOrder() {
       return this.order.deliveryMethod.name === 'Table';
     },
-
-    // showOrderDetailsEditButton() {
-    //     return this.order.deliveryMethod.name === 'Delivery' && this.canEdit ? true : false;
-    // },
-
-    // canMarkAsIsPreparing() {
-    //     return (this.isKitchenManager || this.isAdmin || this.isLocationManager) && this.order.status.name === 'Received' && this.order.deletedAt === null;
-    // },
-
-    // canMarkAsAwaitingDelivery() {
-    //     return (this.isKitchenManager || this.isAdmin || this.isLocationManager )&& this.order.status.name === 'Is preparing' && this.order.deletedAt === null;
-    // },
-
-    // canMarkAsInDelivery() {
-    //     return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === "Awaiting delivery" && this.order.deletedAt === null;
-    // },
-
-    // canMarkAsDelivered() {
-    //     return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === 'In delivery' && this.order.deletedAt === null;
-    // },
-
-    // canMarkAsAwaitingPayment() {
-    //     return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === "Delivered" && this.order.deletedAt === null;
-    // },
-
+  
     canMarkAsCompleted() {
       if (
         this.order.deletedAt === null &&

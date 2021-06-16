@@ -128,6 +128,7 @@
         </InputGroup>
 
         <InputGroup
+          v-if="edit"
           id="productQuantity"
           label="New Quantity"
           :hasError="$v.newQuantity.$error"
