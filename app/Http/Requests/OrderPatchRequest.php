@@ -25,7 +25,7 @@ class OrderPatchRequest extends FormRequest
     {
         return [
             'address' => ['sometimes', 'string'],
-            'observations' => ['sometimes', 'string'],
+            'observations' => ['nullable', 'string'],
         ];
     }
 }

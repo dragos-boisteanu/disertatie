@@ -27,6 +27,7 @@
         </InputGroup>
 
         <InputGroup
+          v-if="address"
           id="address"
           label="Adrress"
           :hasError="$v.localData.address.$error"
@@ -42,7 +43,7 @@
             </p>
           </template>
           <Input
-            v-model="localData.address"
+            v-model="$v.localData.address.$model"
             id="address"
             name="address"
             :class="{
@@ -50,7 +51,6 @@
               'border-green-600':
                 $v.localData.address.$dirty && !$v.localData.address.$error,
             }"
-            @blur.native="$v.localData.address.$touch()"
           ></Input>
         </InputGroup>
 
@@ -66,7 +66,7 @@
             </p>
           </template>
           <Textarea
-            v-model="localData.observations"
+            v-model="$v.localData.observations.$model"
             id="observations"
             name="observations"
             :class="{
@@ -75,7 +75,6 @@
                 $v.localData.observations.$dirty &&
                 !$v.localData.observations.$error,
             }"
-            @blur.native="$v.localData.observations.$touch()"
           ></Textarea>
         </InputGroup>
       </form>
@@ -135,7 +134,7 @@ import Select from "../../components/inputs/SelectInputComponent";
 
 import { downoloadClientAddress } from "../../api/client.api";
 
-import { required } from "vuelidate/lib/validators";
+import { requiredIf } from "vuelidate/lib/validators";
 import { alphaNumSpaces } from "../../validators/index";
 
 import { patchOrder } from "../../api/orders.api";
@@ -187,7 +186,9 @@ export default {
   validations: {
     localData: {
       address: {
-        required,
+        required: requiredIf(function () {
+          return this.address;
+        }),
         alphaNumSpaces,
       },
       observations: {
@@ -199,7 +200,6 @@ export default {
   methods: {
     async submit() {
       try {
-        
         this.$v.$touch();
 
         if (!this.$v.$invalid) {
@@ -233,6 +233,8 @@ export default {
           } else {
             console.log("nothing to update");
           }
+        } else {
+          console.log(this.$v);
         }
       } catch (error) {
         this.waiting = false;

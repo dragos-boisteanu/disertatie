@@ -253,50 +253,6 @@
         Cancel Order
       </Button>
 
-      <!-- <Button
-        v-if="canMarkAsIsPreparing"
-        id="isPreparing"
-        name="isPreparing"
-        type="secondary"
-        :waiting="waiting"
-        @click.native="markAsIsPreparing"
-      >
-        Is preparing
-      </Button> -->
-
-      <!-- <Button 
-                v-if="canMarkAsAwaitingDelivery"
-                id="awaitingDelivery"
-                name="awaitingDelivery"
-                type="secondary"
-                :waiting="waiting"
-                @click.native="markAsAwaitingDelivery"
-            >
-                Awaiting delivery
-            </Button> -->
-
-      <!-- <Button
-        v-if="canMarkAsInDelivery"
-        id="inDelivery"
-        name="inDelivery"
-        type="secondary"
-        :waiting="waiting"
-        @click.native="markAsInDelivery"
-      >
-        In delivery
-      </Button> -->
-
-      <!-- <Button 
-                v-if="canMarkAsDelivered"
-                id="delivered"
-                name="delivered"
-                type="secondary"
-                :waiting="waiting"
-                @click.native="markAsDelivered"
-            >
-                Delivered
-            </Button> -->
-
       <Button
         v-if="canMarkAsCompleted"
         id="completed"
