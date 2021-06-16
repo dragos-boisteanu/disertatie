@@ -11,7 +11,7 @@
       </thead>
       <tbody class="overflow-y-auto">
         <tr
-          v-for="(discount, index) in getDiscounts"
+          v-for="(discount, index) in discounts"
           :key="discount.id"
           @click="selectDiscount(discount.id)"
           class="
@@ -51,8 +51,11 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  computed: {
-    ...mapGetters("Discounts", ["getDiscounts"]),
+  props: {
+    discounts: {
+      type: Array,
+      required: true
+    }
   },
 
   methods: {

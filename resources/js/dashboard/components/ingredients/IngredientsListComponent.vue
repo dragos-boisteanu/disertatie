@@ -43,14 +43,14 @@ export default {
   props: {
     ingredients: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
-methods: {
+  methods: {
     selectIngredient(ingredientId) {
-      this.$emit('selected', ingredientId)
-    }
-  }
-}
+      this.$emit("selected", ingredientId);
+    },
+  },
+};
 </script>
