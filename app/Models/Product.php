@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Filters\Product\ProductFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
 
 class Product extends Model
 {
@@ -26,17 +28,43 @@ class Product extends Model
         'unit_id',
         'stock_id',
         'has_ingredients',
+        'discount_id',
     ];
 
     public $with = ['unit', 'stock', 'category', 'ingredients'];
 
-    protected $appends = array('price', 'quantity');
+    protected $appends = array('price', 'quantity', 'finalDiscount');
+
+    public function getFinalDiscountAttribute() 
+    {
+        if($this->discount != null) {
+            return $this->discount;
+        }
+
+        if($this->category->discount != null) {
+            return $this->category->discount;
+        }
+    }
 
     public function getPriceAttribute()
     {
-        $price = $this->base_price + $this->base_price * ($this->category->vat / 100);
+        // product discount
+        // sub category discount
+        // category discount
 
-        return $price;
+        if($this->discount_id && ($this->discount->starts_at >= Carbon::now() && Carbon::now() < $this->discount->ends_at)) {
+            $finalPrice = $this->calculateDiscount($this->base_price, $this->discount->value);
+        } else if ($this->subCategory && $this->subCategory->discount_id && ($this->subCategory->discount->starts_at >= Carbon::now() && Carbon::now() < $this->subCategory->discount->ends_at)) {
+            $finalPrice = $this->calculateDiscount($this->base_price, ($this->subCategory->discount->value));
+        } else if ($this->category && $this->category->discount_id && ($this->category->discount->starts_at >= Carbon::now() && Carbon::now() < $this->category->discount->ends_at)) {
+            $finalPrice = $this->calculateDiscount($this->base_price, ($this->category->discount->value));
+        }else {
+            $finalPrice = $this->base_price; 
+        }
+
+        $finalPrice += $finalPrice * ($this->category->vat / 100);
+
+        return number_format($finalPrice, 2, '.', '');
     }
 
     public function getQuantityAttribute() 
@@ -48,7 +76,7 @@ class Product extends Model
             $quantityArray = array();
             
             foreach($ingredients as $ingredient) {
-                $howManyProductsCanBeMadeFromThisIngredient =  floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
+                $howManyProductsCanBeMadeFromThisIngredient = floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
                 if($howManyProductsCanBeMadeFromThisIngredient === 0) {
                     $quantity = 0;
                     return $quantity;
@@ -65,9 +93,19 @@ class Product extends Model
         return $quantity;
     }
 
+    private function calculateDiscount($basePrice, $discount) 
+    {
+        return $basePrice - $basePrice * ($discount / 100); 
+    }
+
     public function category() 
     {
         return $this->belongsTo('App\Models\Category');
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(Category::class, 'sub_category_id');
     }
 
     public function stock() 
@@ -85,8 +123,19 @@ class Product extends Model
         return $this->belongsToMany('App\Models\Ingredient')->withPivot('quantity');
     }
 
-    public function scopeFilter(Builder $builder, Request $request)
+    public function discount() 
     {
-        return (new ProductFilter($request))->filter($builder);
+        return $this->belongsTo(Discount::class);
     }
+
+    public function orders() 
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
+    public function scopeFilter(Builder $builder, array $data)
+    {
+        return (new ProductFilter($data))->filter($builder);
+    }
+
 }

@@ -14,7 +14,7 @@ class AddColorColumnToCategoriesTable extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->string('color');
+            $table->string('color')->default('#292e51');
         });
     }
 

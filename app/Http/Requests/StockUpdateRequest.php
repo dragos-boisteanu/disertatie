@@ -13,7 +13,7 @@ class StockUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StockUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'data.type' => 'required|string',
+            'data.newQuantity' => 'required|numeric'
         ];
     }
 }

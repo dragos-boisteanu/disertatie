@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 
@@ -17,10 +19,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::with('products', 'subProducts', 'subCategories')->get();
 
-        return $categories;
+        return new CategoryCollection($categories);
     }
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -31,9 +34,28 @@ class CategoryController extends Controller
     {
         $request->user()->can('create', Category::class);
 
-        $category = Category::create($request->validated());
+        $input = $request->validated();
 
-        return $category->id;
+        $response = [];
+
+        if($request->has('discountId')) {
+            $input['discount_id'] = $request->discountId;
+        }
+
+        if($request->has('parentId')) {
+            $input['parent_id'] = $request->parentId;
+            $parentCategory = Category::findOrFail($request->parentId);
+            $input['vat'] = $parentCategory->vat;
+
+            $response['vat'] = $parentCategory->vat;
+            $response['parentName'] = $parentCategory->name;
+        }
+
+        $category = Category::create($input);
+
+        $response['id'] = $category->id;
+
+        return response()->json($response, 201);
     }
 
     /**
@@ -47,9 +69,27 @@ class CategoryController extends Controller
     {
         $request->user()->can('update', Category::class);
 
-        Category::findOrFail($id)->update($request->validated());
+        $category = Category::findOrFail($id);
 
-        return response()->json(['message' => 'Category updated'], 200);
+        $input = $request->validated();
+
+        $responseData = null;
+
+        if($request->has('discountId')) {
+            $input['discount_id'] = $request->discountId;
+        } else if( !$request->has('discountId') && !is_null($category->discount_id)){
+            $input['discount_id'] = null;
+        }
+
+        if($request->has('parentId')) {
+            $input['parent_id'] = $request->parentId;
+            $parentCategory = Category::findOrFail($request->parentId);
+            $responseData['parentName'] = $parentCategory->name;
+        }
+
+        $category->update($input);
+
+        return response()->json($responseData, 200);
     }
 
     /**
@@ -59,8 +99,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
-    {
-        
+    { 
         $request->user()->can('forceDelete', Category::class);
         
         try {
@@ -72,6 +111,15 @@ class CategoryController extends Controller
         } catch(\Illuminate\Database\QueryException $e) {
             return response()->json(['message'=>'Remove or copy category\'s ( ' .  $category->name . ' ) items before deleting'], 500);
         }
-       
+    }
+
+    public function search($catagoryName) 
+    {
+        $categories = Category::where('name', 'like', '%' . $catagoryName . '%')->get();
+        if($categories->isNotEmpty()) {
+            return response()->json(['categories'=>$categories], 200);
+        }
+
+        return response()->json(null, 404);
     }
 }

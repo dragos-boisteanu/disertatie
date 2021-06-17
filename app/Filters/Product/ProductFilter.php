@@ -9,9 +9,8 @@ use App\Filters\StatusFilter;
 use App\Filters\AbstractFilter;
 use App\Filters\Product\BarcodeFilter;
 use App\Filters\Product\PriceEndFilter;
-use App\Filters\Stock\QuantityEndFilter;
+use App\Filters\Product\SubCategoryFilter;
 use App\Filters\Product\PriceStartFilter;
-use App\Filters\Stock\QuantityStartFilter;
 
 class ProductFilter extends AbstractFilter
 {
@@ -23,7 +22,6 @@ class ProductFilter extends AbstractFilter
       'categories' => CategoryFilter::class,
       'priceStart' => PriceStartFilter::class,
       'priceEnd' => PriceEndFilter::class,
-      'quantityStart' => QuantityStartFilter::class,
-      'quantityEnd' => QuantityEndFilter::class,
+      'subCategories' => SubCategoryFilter::class,
    ];
 }

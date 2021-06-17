@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed px-2 py-1 bottom-8 left-1/2 transform -translate-x-1/2 rounded-3xl text-center shadow-sm z-20" style="min-width: 100px" v-bind:class="type">
+    <div class="fixed px-4 py-2 bottom-8 left-1/2 transform -translate-x-1/2 rounded-lg text-center shadow-md z-20 lg:top-36 lg:bottom-auto" style="min-width: 100px" v-bind:class="type">
         <span class="text-sm text-white">
             {{ notification.message}}
         </span>
@@ -17,19 +17,18 @@
             }
         },
 
+        mounted() {
+            if(this.notification.show) {
+                this.timerId = setTimeout( () => {
+                    this.closeNotification();
+                }, this.notification.activeTime);
+            }
+        },
+
         data() {
             return {
                 timerId: 0,
                 classType: this
-            }
-        },
-
-        created() {
-            
-            if(this.notification.show) {
-                    this.timerId = setTimeout( () => {
-                        this.closeNotification();
-                }, this.notification.activeTime);
             }
         },
 
@@ -43,7 +42,8 @@
 
                 switch(this.notification.type) {
                     case 'ok':  type = 'bg-green-600'; break;
-                    case 'err':   type =  'bg-red-600'; break;
+                    case 'err':  type =  'bg-red-600'; break;
+                    case 'info': type = 'bg-blue-800'; break;
                 }
 
                 return type;

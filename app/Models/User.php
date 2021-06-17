@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use App\Models\Role;
+use App\Models\Discount;
 use Illuminate\Http\Request;
 use App\Filters\User\UserFilter;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements MustVerifyEmail
+// implements MustVerifyEmail
+class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
@@ -23,12 +25,11 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'first_name',
-        'name',
+        'last_name',
         'phone_number',
         'email',
         'password',
         'role_id',
-        'birthdate'
     ];
 
     /**
@@ -50,7 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public $with = ['role'];
+    public $with = ['role', 'addresses'];
+
+    // protected $appends = array('isAdmin', 'isLocationManager', 'isWaiter', 'isKitchenManager', 'isDelivery', 'isKitchen');
     
     public function role()
     {
@@ -62,8 +65,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Address::class);
     }
 
-    public function scopeFilter(Builder $builder, Request $request)
+    public function discount()
     {
-        return (new UserFilter($request))->filter($builder);
+        return $this->belongsToMany('App\Models\Discount');
+    }
+
+    public function scopeFilter(Builder $builder, array $data)
+    {
+        return (new UserFilter($data))->filter($builder);
     }
 }

@@ -1,6 +1,6 @@
-import httpClient from './httpClient';
+import httpClient from '../../api/httpClient';
 
-const END_POINT = '/roles';
+const END_POINT = '/dashboard/roles';
 
 const downloadRoles = () => httpClient.get(`${END_POINT}`);
 

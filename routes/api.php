@@ -20,25 +20,75 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('users', 'UserController');
     Route::apiResource('roles', 'RoleController');
     Route::apiResource('products', 'ProductController');
-    Route::apiResource('categories', 'CategoryController');
+    Route::apiResource('categories', 'CategoryController')->except('show');
     Route::apiResource('units', 'UnitController');
     Route::apiResource('ingredients', 'IngredientController');
+    Route::apiResource('stocks', 'StockController')->only('update');
+    Route::apiResource('discounts', 'DiscountController');
+    Route::apiResource('orders', 'OrderController');
+    Route::apiResource('delivery-methods', 'DeliveryMethodController');
+    // Route::apiResource('order-statuses', 'OrderStatusController');
+    Route::apiResource('tables', 'TableController');
 
-    Route::delete('users/{id}/disable', 'UserController@disable');
-    Route::post('users/{id}/restore', 'UserController@restore');
+    Route::get('products/{id}/edit', 'ProductController@edit');
 
-    
-    Route::delete('products/{id}/disable', 'ProductController@disable');
-    Route::post('products/{id}/restore', 'ProductController@restore');
+    Route::group(['prefix'=>'categories'], function() {
+        Route::get('/{catagoryName}', 'CategoryController@search');
+    });
 
-    Route::get('/products/check-barcode/{barcode}', 'ProductController@getProductByBarcode');
+    Route::group(['prefix'=>'users'], function() {
+        Route::delete('{id}/disable', 'UserController@disable');
+        Route::post('{id}/restore', 'UserController@restore');
+    });
+  
+    Route::group(['prefix'=>'products'], function() {
+        Route::delete('{id}/disable', 'ProductController@disable');
+        Route::post('{id}/restore', 'ProductController@restore');
+        
+        Route::get('/check-barcode/{barcode}', 'ProductController@getProductByBarcode');
+    });
+
+    Route::group(['prefix'=>'stocks'], function() {
+        Route::get('products/{barcode}', 'StockController@getProductStockDetailsByBarcode');
+        Route::get('ingredients/{input}', 'StockController@getIngredientStockDetails');
+    });
+
+    Route::group(['prefix'=>'discounts'], function() {
+        Route::delete('{id}/disable', 'DiscountController@disable');
+        Route::post('{id}/restore', 'DiscountController@restore');
+    });
+
+    Route::group(['prefix'=>'orders'], function() {
+        Route::delete('{id}/disable', 'OrderController@disable');
+        // Route::post('{id}/restore', 'OrderController@restore');
+
+        Route::get('products/name/{name}', 'OrderItemController@getProductsByName');
+        Route::get('products/id/{id}', 'OrderItemController@getProductsById');
+
+        Route::patch('update-status/{orderId}', 'OrderController@updateStatus');
+
+        Route::patch('remove-item/{orderId}', 'OrderItemController@removeItem');
+        Route::patch('add-item/{orderId}', 'OrderItemController@addItem');
+        Route::patch('patch-item/{orderId}', 'OrderItemController@patchItem');
+    });
+
+    Route::group(['prefix'=>'tables'], function() {
+        Route::delete('{id}/disable', 'TableController@disable');
+        Route::post('{id}/restore', 'TableController@restore');
+    });
+
+    Route::group(['prefix'=>'statuses'], function() {
+        Route::get('/orders', 'StatusesController@getOrdersStatuses');
+        Route::get('/tables', 'StatusesController@getTableStatuses');
+    });
+
+    Route::group(['prefix'=>'clients'], function() {
+        Route::get('phone-number/{phoneNumber}', 'ClientController@getClientByPhoneNumer');
+        Route::get('addresses/{id}', 'ClientController@getClientAddresses');
+    });
 
     Route::apiResource('images', 'FileController')->only('store', 'destroy');
        
 });
 
-Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {
-    Route::get('counties', 'CountyController@index');
-    Route::get('cities/{id}','CityController@index');
-});
 

@@ -1,29 +1,26 @@
 require('../bootstrap');
 
 import Vue from 'vue';
-
 import App from './App.vue';
-
-import VueMq from 'vue-mq'
 
 import router from './router'
 import store from './store'
 
+import VueProgressBar from 'vue-progressbar'
 import VueBreadcrumbs from 'vue-2-breadcrumbs';
 import Breadcrumbs from './components/Breadcrumbs.vue';
 
+import ClickOutside from './directives/ClickOutside';
+
+import VueMq from 'vue-mq'
+
 import dayjs from 'dayjs';
+import 'vue2-datepicker/index.css';
 
-import { ValidationProvider } from 'vee-validate';
-import { ValidationObserver } from 'vee-validate'
+import Vuelidate from 'vuelidate'
 
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
-
-import './validators';
-
+Vue.use(Vuelidate)
 Vue.use(VueBreadcrumbs, Breadcrumbs);
-
 Vue.use(VueMq, {
   breakpoints: { // default breakpoints - customize this
     sm: 640,
@@ -42,30 +39,24 @@ Vue.filter("formatDate", date => {
   return dayjs(date).format('DD/MM/YYYY HH:mm');
 })
 
-
-import VueProgressBar from 'vue-progressbar'
-
 const options = {
   color: '#119b13',
   failedColor: '#ce0810',
   thickness: '4px',
   transition: {
     speed: '0.2s',
-    opacity: '0.7s',
+    opacity: '0.9s',
     termination: 300
   },
   autoRevert: true,
+  autoFinish: false,
   location: 'top',
   inverse: false
 }
 
-
 Vue.use(VueProgressBar, options)
 
-
-
-
-
+Vue.directive('click-outside', ClickOutside);
 
 new Vue({
     router,

@@ -9,7 +9,12 @@
 
 <script>
     export default {
-        props: ['deletedAt'],
+        props: {
+            deletedAt: {
+                typeof: String,
+                required: true
+            }
+        },
 
         computed: {
             status(){

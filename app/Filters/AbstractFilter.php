@@ -2,18 +2,19 @@
 
 namespace App\Filters;
 
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
 
 abstract class AbstractFilter 
 {
-    protected $request;
+    protected $data;
     protected $filters = [];
 
-    public function __construct(Request $request) 
+    public function __construct(array $data) 
     {
-        $this->request = $request;
+        $this->data = $data;
    }
 
     public function filter(Builder $builder)
@@ -28,7 +29,7 @@ abstract class AbstractFilter
 
     public function getFilters()
     {
-        return array_filter($this->request->only(array_keys($this->filters)));
+        return array_filter(Arr::only($this->data, array_keys($this->filters)));
     }
 
     public function resolveFilters($filter)

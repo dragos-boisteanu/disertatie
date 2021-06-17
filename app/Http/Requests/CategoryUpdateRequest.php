@@ -26,7 +26,9 @@ class CategoryUpdateRequest extends FormRequest
         return [
             'name' => 'sometimes|string|max:50',
             'vat' => 'sometimes|numeric',
-            'color' => 'sometimes|string'
+            'color' => 'sometimes|string',
+            'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
+            'parentId' => ['sometimes', 'numeric', 'exists:categories,id']
         ];
     }
 }

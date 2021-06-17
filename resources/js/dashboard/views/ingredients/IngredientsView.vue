@@ -1,267 +1,112 @@
 <template>
-    <ViewContainer>
-        <template slot="header">
-            Ingredients
-        </template>
+  <ViewContainer>
+    <template slot="header">
+      <div class="flex items-center justify-between md:justify-start gap-x-4">
+        <span> Ingredients </span>
+        <button
+          @click="refresh"
+          class="
+            p-1
+            bg-lightBlue-600
+            rounded-sm
+            active:shadow-inner
+            active:bg-lightBlue-500
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#ffffff"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+            />
+          </svg>
+        </button>
+      </div>
+    </template>
 
-        <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2 ">
-            <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
+    <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2">
+      <div class="md:flex-1 flex flex-col">
+        <Search @search="search"></Search>
+        <IngredientsListComponent
+          :ingredients="ingredients"
+          @selected="selectIngredient"
+        ></IngredientsListComponent>
+      </div>
 
-                <ul class="px-2 overflow-y-auto w-full max-h-80 md:flex-1 md:max-h-96 ">
-                    <li 
-                        v-for="(ingredient, index) in getIngredients" :key="ingredient.id"
-                        class="flex items-center justify-between border rounded-sm py-1 px-2 my-3 mr-2"
-                    >
-                        <div 
-                            @click="selectIngredient(ingredient.id)"
-                            class="cursor-pointer flex items-center gap-x-2">
-                            <span>{{ index + 1 }}.</span>
-                            <span>{{ ingredient.name }}</span>
-                            <span>{{ ingredient.stockQuantity }} {{ ingredient.unit.name }}</span>
-                        </div>
-                        <div>
-                            <button @click="removeIngredient(ingredient.id)"> X</button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="mt-4 flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 md:mt-0 md:flex-1 lg:flex-1">
-                <ValidationObserver v-slot="{ handleSubmit }" ref="observer">
-                    <form @submit.prevent="handleSubmit(submit)" class="flex flex-col items-stretch justify-items-start gap-y-3 md:pt-0 md:flex-auto">
-                        <h2 class="mb-5 text-xl font-semibold">
-                            Ingredient
-                        </h2> 
-
-                        <ValidationProvider vid="name" rules="required|alpha_spaces|max:50" v-slot="{ errors, failed, passed }" class="flex-grow flex-shrink-0">
-                            <label for="name" class="text-sm font-semibold">Nane</label>
-                            <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                            <input 
-                                id="name"
-                                name="name" 
-                                type="text" 
-                                v-model="ingredient.name" 
-                                :disabled="waiting || ingredientSelected"   
-                                class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                            />
-                        </ValidationProvider> 
-                        
-                        <div class="w-full flex-1 flex items-center gap-x-4">
-                            <ValidationProvider vid="quantity" rules="required|integer" v-slot="{ errors, failed, passed }" class="flex-1">
-                                <label for="vat" class="text-sm font-semibold">Quantity</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="quantity"
-                                    name="quantity" 
-                                    type="number" 
-                                    v-model="ingredient.stockQuantity" 
-                                    :disabled="waiting || ingredientSelected"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-
-                            <ValidationProvider vid="vat" rules="required|integer" v-slot="{ errors, failed, passed }" class="flex-1" v-if="ingredientSelected">
-                                <label for="vat" class="text-sm font-semibold">Add quantity</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <input 
-                                    id="vat"
-                                    name="vat" 
-                                    type="number" 
-                                    v-model="ingredient.addQuantity" 
-                                    :disabled="waiting"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                />
-                            </ValidationProvider>
-
-                            <ValidationProvider vid="unit_id" rules="required" v-slot="{  errors, failed, passed }" class="flex-1">
-                                <label for="vat" class="text-sm font-semibold">Unit</label>
-                                <div class="text-xs text-red-600 font-semibold mb-1"> {{ errors[0] }}</div>
-                                <select 
-                                    id="unit_id"
-                                    name="weight units" 
-                                    type="text" 
-                                    v-model="ingredient.unit" 
-                                    :disabled="waiting || ingredientSelected"   
-                                    class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"    
-                                    :class="{'border-red-600': failed, 'border-green-500' : passed}"
-                                >
-                                    <option value="" disabled>Select unit</option>
-                                    <option :value="unit" v-for="unit in getUnits" :key="unit.id">{{unit.name}} ({{ unit.description }})</option>
-                                </select>
-
-                            </ValidationProvider>
-                        </div>
-                        
-                        <div>
-                            <button 
-                                v-if="ingredientSelected"
-                                @click.prevent="clearSelection"
-                                class=" mb-3 inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-lightBlue-600 rounded-sm active:shadow-inner active:bg-lightBlue-500 md:w-auto"
-                            >                       
-                                Clear selection
-                            </button>
-                            <button 
-                                type="submit"
-                                :disabled="waiting"  
-                                class="inline-flex items-center justify-center px-2 py-1 w-full text-base text-white bg-green-600 rounded-sm active:shadow-inner active:bg-green-500 md:w-auto disabled:bg-gray-500 disabled:pointer-events-none"
-                            >
-                                <svg v-if="waiting" class="animate-spin mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                <span>
-                                    Submit
-                                </span>
-                            </button>
-                        </div>                
-                    </form>
-                </ValidationObserver>
-            </div>
-        </div>
-
-    </ViewContainer>
+      <IngredientFormComponent
+        :ingredient-id="ingredientId"
+        @reset="reset"
+      ></IngredientFormComponent>
+    </div>
+  </ViewContainer>
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex'
-    import ViewContainer from '../ViewContainer'
-    import _find from 'lodash/find';
-    import store from '../../store';
+import ViewContainer from "../ViewContainer";
 
-    export default {
+import IngredientsListComponent from "../../components/ingredients/IngredientsListComponent.vue";
+import IngredientFormComponent from "../../components/ingredients/IngredientsFormComponent.vue";
+import Search from "../../components/ingredients/IngredientsSearchComponent.vue";
 
-        async beforeRouteEnter (to, from, next) {
-            if(store.getters['Ingredients/getIngredients'].length > 0) {
-                next();
-            } else {
-                await store.dispatch('Ingredients/downloadIngredients');
-                next();
-            }
-        },
+import { mapActions, mapGetters } from "vuex";
 
-        computed: {
-            ...mapGetters('Ingredients', ['getIngredients']),
-            ...mapGetters('Units', ['getUnits']),
+export default {
+  mounted() {
+    this.ingredients = this.getIngredients;
+  },
 
-        },
+  computed: {
+    ...mapGetters("Ingredients", ["getIngredients"]),
+  },
 
-        data() {
-            return {
-                waiting: false,
-                ingredientSelected: false,
-                ingredient: {
-                    id: '',
-                    name: '',
-                    stockQuantity: '',
-                    addQuantity: '',
-                    unit: {
-                        id: '',
-                        name: '',
-                    }
-                }
-            }
-        },
+  data() {
+    return {
+      ingredients: [],
+      ingredientId: "",
+    };
+  },
 
-        methods: {
-            ...mapActions('Ingredients', ['postIngredient', 'patchIngredient', 'deleteIngredient']),
+  methods: {
+    ...mapActions("Ingredients", ["downloadIngredients"]),
 
-            selectIngredient(id) {
-                this.ingredientSelected = true;
-                this.ingredient = Object.assign(this.ingredient, _find(this.getIngredients, ['id', id]));
-                this.ingredient.addQuantity = '';
-                this.$refs.observer.reset();
-            },
+    reset() {
+      this.ingredientId = "";
+    },
 
-            clearSelection() {
-                this.ingredientSelected = false;
-                this.resetForm();
-            },
+    selectIngredient(ingredientId) {
+      this.ingredientId = ingredientId;
+    },
 
-            resetForm() {
-                this.$refs.observer.reset();
-                this.ingredient = {
-                    id: '',
-                    name: '',
-                    quantity: '',
-                    unit: {
-                        id: '',
-                        name: '',
-                    }
-                }
-            },
+    search(value) {
+      if (value) {
+        this.ingredients = this.getIngredients.filter((ingredient) => {
+          const regexRule = `${value.toLowerCase().trim()}*`;
+          const regex = new RegExp(regexRule, "g");
+          if (ingredient.name.toLowerCase().trim().match(regex)) {
+            return true;
+          }
+        });
+      } else {
+        this.ingredients = this.getIngredients;
+      }
+    },
 
-            async submit() {
-                try {
-                    this.$Progress.start();
+    async refresh() {
+      await this.downloadIngredients();
+      this.ingredients = this.getIngredients;
+    },
+  },
 
-                    if(this.ingredientSelected) {
-
-                        const originalIngredient = _find(this.getIngredients, ['id', this.ingredient.id]);
-
-                        const payload = {
-                            vm: this,
-                            ingredient: {
-                                id: this.ingredient.id,
-                            }
-                        }
-
-                        let counter = 0;
-
-                        Object.keys(this.ingredient).forEach(key => {
-                            if(originalIngredient[key] !== this.ingredient[key]) {
-                                payload.ingredient[key] = this.ingredient[key];
-                                counter++;
-                            }
-                        });
-
-                        console.log(this.ingredient)
-                        console.log(payload)
-
-                        if(counter > 0 ) {
-                            await this.patchIngredient(payload);
-                            this.ingredient.stockQuantity += parseInt(payload.ingredient.addQuantity); 
-                        } else {
-                            console.log('nothing to update')
-                        }
-                        
-                    } else {
-                        await this.postIngredient(this.ingredient);
-                        this.resetForm();
-                    }
-
-                    this.waiting = false;
-                    this.$Progress.finish()
-
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    this.waiting = false;
-                    console.log(error);
-                    
-                    if(error.response.data.errors) {
-                        this.$refs.observer.setErrors(error.response.data.errors)
-                    }  
-                }
-            },
-
-            async removeIngredient(id) {
-                try {
-                    this.$Progress.start();
-
-                    await this.deleteIngredient(id);
-
-                    this.$Progress.finish();
-                } catch ( error ) {
-                    this.$Progress.fail();
-                    console.log(error)
-                }
-            }
-        },
-
-        components: {
-            ViewContainer
-        }
-    }
+  components: {
+    ViewContainer,
+    IngredientsListComponent,
+    IngredientFormComponent,
+    Search,
+  },
+};
 </script>

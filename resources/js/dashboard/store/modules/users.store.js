@@ -1,43 +1,53 @@
-import {downloadLoggedUserData, downloadUsers, downloadUser, storeUser, patchUser,  disableUser, restoreUser, deleteUser } from '../../api/users.api';
+import {downloadLoggedUserData} from '../../api/users.api';
 import _orderBy from 'lodash/orderBy';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
-    users: [],
-    nextPage: 1,
     loggedUser: null,
-    filtered: false,
+    subscribedToNewOrders: false,
 });
 
 const state = initialState();
 
 const getters = {
-    getUsers (state) {
-        return state.users; 
-    },
-
     getLoggedUser(state) {
         return state.loggedUser;
     },
 
-    getNextPage(state) {
-        return state.nextPage;
+    getSubscribedToNewOrders(state) {
+        return state.subscribedToNewOrders;
     },
 
-    getFilteredState(state) {
-        return state.filtered;
-    }
+    isAdmin(state) {
+        return state.loggedUser.role.name === "Administrator";
+    },
+
+    isLocationManager(state) {
+        return state.loggedUser.role.name === "Location Manager";
+    },
+
+    isWaiter(state) {
+        return state.loggedUser.role.name === "Waiter";
+    },
+
+    isKitchenManager(state) {
+        return state.loggedUser.role.name === "Kitchen Manager";
+    },
+
+    isDelivery(state) {
+        return state.loggedUser.role.name === "Delivery";
+    },
+
+    isKitchen(state) {
+        return state.loggedUser.role.name === "Kitchen";
+    },
    
 }
 
 const actions = {
-    reset({ commit }) {
+    resetUser({ commit }) {
         commit('RESET');
-    },
-
-    setFilteredState({commit}, payload) {
-        commit('SET_FILTERED_STATE', payload);
     },
 
     async downloadLoggedUserData({commit}) {
@@ -47,147 +57,12 @@ const actions = {
         } catch (error) {
             throw error
         } 
-    },
+    },  
 
-    async fetchUsers({commit}, query) {
-        try {
-            const response = await downloadUsers(query);
-            const users = response.data.data.users;
-            const links = response.data.links;
-            commit('SET_USERS', users );
-
-            if(links.next) {
-                const lastIndex = links.next.indexOf('=');
-                commit('SAVE_NEXT_PAGE', links.next.substr(lastIndex+1));
-            }else {
-                commit('SAVE_NEXT_PAGE', null);
-            }
-
-        } catch (error) {
-            throw error; 
-        }
-    },
-
-    async fetchMoreUsers({commit}, query) {
-        try {
-            const response = await downloadUsers(query);
-
-            const users = response.data.data.users;
-            const links = response.data.links;
-
-            commit('ADD_USERS', users );
-
-            if(links.next) {
-                const lastIndex = links.next.indexOf('=');
-                commit('SAVE_NEXT_PAGE', links.next.substr(lastIndex+1));
-            }else {
-                commit('SAVE_NEXT_PAGE', null);
-            }
-            
-        } catch ( error ) {
-            throw error;
-        }
-    },
-    
-    async refreshUsers({commit}) {
-        try {
-            const response = await downloadUsers(1);
-            commit('REFRESH_USERS', response.data.data.users);
-
-            const links = response.data.links;
-
-            if(links.next) {
-                commit('SAVE_NEXT_PAGE', links.next.substr(links.next.length-1));
-            }else {
-                commit('SAVE_NEXT_PAGE', null);
-            }    
-            
-        } catch (error) {
-            throw error; 
-        }
-    },
-
-    async addUser({commit}, payload) {
-        try {
-            const response = await storeUser(payload);
-            payload.user.id = response.data.user.id;
-            payload.user.created_at = response.data.user.created_at;
-            payload.user.deleted_at = null;
-            commit('ADD_USER', payload.user)
-        } catch (error) {
-            throw error;
-        }
-    },
-
-    async updateUser({commit}, payload) {
-        try {
-            const response = await patchUser(payload.user);
-            payload.user.avatar = response.data.avatar;
-            commit('PATCH_USER', payload);
-            return response;
-        } catch (  error ) {
-            throw error
-        }
-    },
-
-    async fetchUser({}, id) {
-        try {
-            const response = await downloadUser(id);
-            return response.data.data;
-        } catch ( error ) {
-            throw error
-        }
-    },
-
-
-    async getUser({state}, id) {
-        try {
-            let user = _.find(state.users, ['id', id]);
-            if(user) {
-                return user;
-            }
-            return this.fetchUser(id);
-        } catch ( error ) {
-            throw error
-        }
-    },
-
-    async disableUser({commit}, payload) {
-        try {
-            const response = await disableUser(payload.id);
-            payload.deleted_at = response.data.deleted_at;
-            commit('UPDATE_USER_STATUS', payload);
-            return response.data;
-        } catch ( error ) {
-            throw error
-        }
-    },
-
-    async restoreUser({commit}, payload) {
-        try {
-            const response = await restoreUser(payload.id);
-            payload.deleted_at = response.data.deleted_at;
-            commit('UPDATE_USER_STATUS', payload);
-            return response.data;
-        } catch ( error ) {
-            throw error
-        }
-    },
-
-    async deleteUser({commit}, payload) {
-        try {
-            const response = await deleteUser(payload);
-            commit('DELETE_USER', payload);
-            return response.message;
-        } catch ( error ) {
-            throw error
-        }
-    },
-
-    sortUsersList({commit}, sortBy) {
-       commit('SORT_USERS', sortBy);
+    toggleSubscribedToNewOrders({commit}){
+        commit('TOGGLE_SUBSCRIBED_TO_NEW_ORDERS');
     }
-    
+
 }
 
 const mutations = {
@@ -198,108 +73,13 @@ const mutations = {
         })
     },
 
-    SET_FILTERED_STATE(state, payload) {
-        state.filtered = payload;
-    },
-
     SET_LOGGED_USER(state, payload) {
         state.loggedUser = payload;
     },
 
-    SET_USERS(state, users) {
-        state.users = users;
-    },
-
-    ADD_USERS(state, users) {
-        state.users.push(...users);
-    },
-
-    REFRESH_USERS(state, users) {
-        state.users = users;
-        state.nextPage = 2;
-    },
-
-    ADD_USER(state, user) {
-        state.users.unshift(user);
-    },
-    
-    PATCH_USER(state, payload) {
-        if(state.users.length > 0) {
-            const selectedUserIndex = _.findIndex(state.users, ['id', payload.user.id]);
-            const vm = payload.vm;
-            Object.keys(payload.user).forEach(key => {
-                vm.$set(state.users[selectedUserIndex], key, payload.user[key])
-            })
-        }
-        
-    },
-
-    UPDATE_USER_STATUS(state, payload) {
-        if(state.users.length > 0) {
-            const selectedUserIndex = _.findIndex(state.users, ['id', payload.id]);
-            const vm = payload.vm;
-            vm.$set(state.users[selectedUserIndex], 'deleted_at', payload.deleted_at);
-        }
-    },
-
-    DELETE_USER(state, payload) {
-        if(state.users.length > 0) {
-            const selectedUserIndex = _.findIndex(state.users, ['id', payload]);
-            state.users.splice(selectedUserIndex, 1);
-        }
-    },
-
-    SAVE_NEXT_PAGE(state, page) {
-        state.nextPage = page;
-    },
-
-    SORT_USERS(state, orderBy) {
-        switch(orderBy) {
-            case 1:
-                state.users = _orderBy(state.users, [user => user.name.toLowerCase()], ['asc']);
-                break;
-            case 2:
-                state.users = _orderBy(state.users, [user => user.name.toLowerCase()], ['desc']);
-                break;
-            case 3:
-                state.users = _orderBy(state.users, [user => user.first_name.toLowerCase()], ['asc']);
-                break;
-            case 4:
-                state.users = _orderBy(state.users, [user => user.first_name.toLowerCase()], ['desc']);
-                break;
-            case 5:
-                state.users = _orderBy(state.users, [user => user.email.toLowerCase()], ['asc']);
-                break;
-            case 6: 
-                state.users = _orderBy(state.users, [user => user.email.toLowerCase()], ['desc']);
-                break;
-            case 7: 
-                state.users = _orderBy(state.users, ['role_id'], ['desc']);
-                break;
-            case 8:
-                state.users = _orderBy(state.users, ['role_id'], ['asc']);
-                break;
-            case 9: 
-                state.users = _orderBy(state.users, ['orders'], ['desc']);
-                break;
-            case 10:
-                state.users = _orderBy(state.users, ['orders'], ['asc']);
-                break;
-            case 11: 
-                state.users = _orderBy(state.users, ['reservations'], ['desc']);
-                break;
-            case 12:
-                state.users = _orderBy(state.users, ['reservations'], ['asc']);
-                break;
-            case 13:
-                state.users = _orderBy(state.users, ['created_at'], ['asc']);
-                break;
-            case 14:
-                state.users = _orderBy(state.users, ['created_at'], ['desc']);
-                break;
-        }
+    TOGGLE_SUBSCRIBED_TO_NEW_ORDERS(state) {
+        state.subscribedToNewOrders = !state.subscribedToNewOrders;
     }
-
 }
 
 export default {

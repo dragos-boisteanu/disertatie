@@ -1,210 +1,251 @@
 <template>
-    <ViewContainer v-if="user" >
-        <EditUser 
-            v-if="editUserState" 
-            @close="toggleEditUserState"
-            @updated="updateUser"
-            :user="user"
+  <ViewContainer v-if="user">
+    <template slot="header">
+      <div class="flex items-center justify-between md:justify-start gap-x-4">
+        <span> User #{{ user.id }}</span>
+        <button
+          @click="refresh"
+          class="
+            p-1
+            bg-lightBlue-600
+            rounded-sm
+            active:shadow-inner
+            active:bg-lightBlue-500
+          "
         >
-        </EditUser>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#ffffff"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+            />
+          </svg>
+        </button>
+      </div>
+    </template>
 
-        <template slot="header">
-           User #{{user.id}}
-        </template>
-  
-        <div class="w-full pb-2 mb-2 flex flex-col justify-center items-center border-b border-gray-100 md:flex-row md:justify-start">
-            <div class="w-32 h-32 rounded-md md:mr-4">
-                <img v-if="user.avatar" :src="user.avatar" class="w-full h-full rounded-md object-cover"/>
-                <svg v-else class="bg-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="128px" height="128px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-            </div>
-            <div class="flex flex-col items-center justify-center md:items-start">
-                <div class="flex justify-center w-full mt-2 lg:justify-start">
-                    <Status :deleted-at="user.deleted_at"/>
-                    <Role :roleId="user.role_id"/>
-                </div>
-                <div class="font-semibold text-2xl mt-2">
-                    {{user.first_name}} {{user.name}}
-                </div>
-                <div class="text-sm mt-2">
-                    <a :href="`mailto:${user.email}`">{{user.email}}</a> <span class="mx-2">|</span> <a :href="`tel:${user.phone_number}`">{{user.phone_number}}</a>
-                </div>
-                <div class="flex items-baseline mt-2">
-                    <span class="font-semibold text-sm mr-2">
-                        Joined on:
-                    </span>
-                    <span class="text-xs">
-                        {{ user.created_at | formatDate }}
-                    </span>
-                </div>
-                <div class="flex items-center gap-x-2">   
-                     <button 
-                        @click="toggleEditUserState"
-                        class="bg-amber-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-amber-600 active:bg-amber-400 active:shadow-inner active:outline-none"
-                    >
-                        Edit
-                    </button>
-                    <div v-if="canDisable">
-                        <button 
-                            v-if="user.deleted_at"
-                            @click="restore"
-                            class="bg-white border border-green-500 rounded-sm text-xs py-1 px-4 text-black hover:border-green-400 mt-2 active:shadow-inner active:outline-none"
-                        >
-                            Restore
-                        </button>
-                        <button 
-                            v-else
-                            @click="disable"
-                            class="bg-white border border-red-500 rounded-sm text-xs py-1 px-4 text-black mt-2 hover:border-red-400 active:shadow-inner active:outline-none"
-                        >
-                            Disable
-                        </button>
-                    </div>
-                    <button 
+    <div
+      class="
+        w-full
+        pb-2
+        mb-2
+        flex flex-col
+        justify-center
+        items-center
+        border-b border-gray-100
+        md:flex-row
+        md:justify-start
+      "
+    >
+      <div class="w-32 h-32 rounded-md md:mr-4">
+        <img
+          v-if="user.avatar"
+          :src="user.avatar"
+          class="w-full h-full rounded-md object-cover"
+        />
+        <svg
+          v-else
+          class="bg-gray-500"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="white"
+          width="128px"
+          height="128px"
+        >
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+          />
+        </svg>
+      </div>
+      <div class="flex flex-col items-center justify-center md:items-start">
+        <div class="flex justify-center gap-x-3 w-full mt-2 lg:justify-start">
+          <Status :deleted-at="user.deletedAt" />
+          <Role :role-name="user.role.name" />
+        </div>
+        <div class="font-semibold text-2xl mt-2">
+          {{ user.firstName }} {{ user.lastName }}
+        </div>
+        <div class="text-sm mt-2">
+          <a :href="`mailto:${user.email}`">{{ user.email }}</a>
+          <span class="mx-2">|</span>
+          <a :href="`tel:${user.phoneNumber}`">{{ user.phoneNumber }}</a>
+        </div>
+        <div class="flex items-baseline mt-2">
+          <span class="font-semibold text-sm mr-2"> Joined on: </span>
+          <span class="text-xs">
+            {{ user.createdAt | formatDate }}
+          </span>
+        </div>
+        <div class="flex items-center gap-x-2">
+          <button
+            @click="editUser"
+            class="
+              bg-amber-700
+              rounded-sm
+              text-xs
+              py-1
+              px-4
+              text-white
+              mt-2
+              hover:bg-amber-600
+              active:bg-amber-400
+              active:shadow-inner
+              active:outline-none
+            "
+          >
+            Edit
+          </button>
+          <div v-if="canDisable">
+            <button
+              v-if="user.deletedAt"
+              @click="restore"
+              class="
+                bg-white
+                border border-green-500
+                rounded-sm
+                text-xs
+                py-1
+                px-4
+                text-black
+                hover:border-green-400
+                mt-2
+                active:shadow-inner
+                active:outline-none
+              "
+            >
+              Restore
+            </button>
+            <button
+              v-else
+              @click="disable"
+              class="
+                bg-white
+                border border-red-500
+                rounded-sm
+                text-xs
+                py-1
+                px-4
+                text-black
+                mt-2
+                hover:border-red-400
+                active:shadow-inner
+                active:outline-none
+              "
+            >
+              Disable
+            </button>
+          </div>
+          <!-- <button 
                         v-if="canDelete"
                         @click="callDeleteUser"
                         class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
                     >
                         Delete
-                    </button>
-                </div>
-               
-            </div>
+                    </button> -->
         </div>
-        <div>
-            Shifts
-        </div>
-        <div>
-            Orders (20)
-        </div>
-        <div>
-            Reservations
-        </div>
-    </ViewContainer>
-  
+      </div>
+    </div>
+    <div>Shifts</div>
+    <div>Orders (20)</div>
+    <div>Reservations</div>
+  </ViewContainer>
 </template>
 
 <script>
-    import store from '../../store/index';
-    import ViewContainer from '../ViewContainer';
-    import Status from '../../components/StatusComponent';
-    import Role from '../../components/users/RoleComponent';
-    import EditUser from '../../components/users/EditUserComponent';
-    import { mapActions, mapGetters } from 'vuex';
+import ViewContainer from "../ViewContainer";
+import Status from "../../components/StatusComponent";
+import Role from "../../components/users/RoleComponent";
+import { mapActions, mapGetters } from "vuex";
 
-    export default {
-        async beforeRouteEnter(to, from, next) {
-            try {
-                const id = to.params.id;
-                if(store.getters['Users/getUsers'].length > 0) {
-                    let user = await store.dispatch('Users/getUser', id);
-                    if(!user) {
-                        user = await store.dispatch('Users/fetchUser', id);
-                    }
-                    next(vm => vm.setUser(user));
-                } else {
-                    const user = await store.dispatch('Users/fetchUser', id);
-                    next(vm => vm.setUser(user));
-                }
-            } catch ( error ) {
-                console.log(error)
-            }
-        },
+import { downloadUser, disableUser, restoreUser } from "../../api/users.api";
 
-        computed: {
-            ...mapGetters('Users', ['getLoggedUser']),
+export default {
+  async beforeRouteEnter(to, from, next) {
+    const response = await downloadUser(to.params.id);
+    next((vm) => vm.setUser(response.data.data));
+  },
 
-            canDelete() {
-                if(this.getLoggedUser) {
-                    return this.getLoggedUser.role_id === 7 && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id
-                }
-            },
+  computed: {
+    ...mapGetters("Users", ["getLoggedUser", "isAdmin", "isLocationManager"]),
 
-            canDisable() {
-                if(this.getLoggedUser) {
-                    return (this.getLoggedUser.role_id === 6 || this.getLoggedUser.role_id === 7) && (this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id )               
-                }
-            },
-        },
-        
-        data() {
-            return {
-                editUserState: false,
-                user: null
-            }
-        },
+    // canDelete() {
+    //     if(this.getLoggedUser) {
+    //         return this.getLoggedUser.role_id === 7 && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id
+    //     }
+    // },
 
-        methods: {
-            ...mapActions('Users', ['disableUser', 'restoreUser', 'deleteUser']),
+    canDisable() {
+      if (this.getLoggedUser) {
+        return (
+          this.getLoggedUser.id !== this.user.id &&
+          (this.isAdmin || this.isLocationManager)
+        );
+      }
+    },
+  },
 
-            updateUser(patchedUser) {
-                Object.keys(patchedUser).forEach(key => {         
-                    this.user[key] = patchedUser[key];
-                })
-            },
+  data() {
+    return {
+      editUserState: false,
+      user: null,
+    };
+  },
 
-            async disable(){
-                try {
-                    this.$Progress.start()
-                    const payload = {
-                        vm: this,
-                        id: this.user.id
-                    }
+  methods: {
+    updateUser(patchedUser) {
+      Object.keys(patchedUser).forEach((key) => {
+        this.user[key] = patchedUser[key];
+      });
+    },
 
-                    const response = await this.disableUser(payload);
-                    this.user.deleted_at = response.deleted_at;
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.failed()
-                    console.log(error);
-                }
-            },
+    editUser() {
+      this.$router.push({ name: "EditUser", params: { id: this.user.id } });
+    },
 
-            async restore() {
-                try {
-                    this.$Progress.start()
-                    const payload = {
-                        vm: this,
-                        id: this.user.id
-                    }
+    async disable() {
+      const response = await disableUser(this.user.id);
+      this.user.deletedAt = response.data.deletedAt;
+    },
 
-                    const response = await this.restoreUser(payload);
-                    this.user.deleted_at = response.deleted_at;
+    async restore() {
+      const response = await restoreUser(this.user.id);
+      this.user.deletedAt = response.data.deletedAt;
+    },
 
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.failed()
-                    console.log(error);
-                }
-            },
+    // async callDeleteUser() {
+    //     try {
+    //         this.$Progress.start()
+    //         await this.deleteUser(this.user.id);
+    //         this.$router.push({name: 'Users'});
 
-            async callDeleteUser() {
-                try {
-                    this.$Progress.start()
-                    await this.deleteUser(this.user.id);
-                    this.$router.push({name: 'Users'});
+    //         this.$Progress.finish()
+    //     } catch ( error ) {
+    //         this.$Progress.failed()
+    //         console.log(error)
+    //     }
+    // },
 
-                    this.$Progress.finish()
-                } catch ( error ) {
-                    this.$Progress.failed()
-                    console.log(error)
-                }
-            },
+    setUser(user) {
+      this.user = user;
+    },
 
-            toggleEditUserState() {
-                this.editUserState = !this.editUserState;
-            },
-
-            setUser(user) {
-                this.user = user;
-            },
-
-        },
-        
-        components: {
-            ViewContainer,
-            Status,
-            Role,
-            EditUser
-        }
+    async refresh() {
+        const response = await downloadUser(this.user.id);
+        this.setUser(response.data.data);
     }
+  },
+
+  components: {
+    ViewContainer,
+    Status,
+    Role,
+    // EditUser
+  },
+};
 </script>

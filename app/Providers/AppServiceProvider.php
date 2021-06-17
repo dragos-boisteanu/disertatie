@@ -3,8 +3,18 @@
 namespace App\Providers;
 
 
-use App\Http\Resources\IngredientCollection;
+use App\Services\OrderService;
+use App\Services\TableService;
+use App\Services\ProductService;
+use App\Services\OrderItemService;
+use App\Services\ProductStockService;
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\OrderServiceInterface;
+use App\Interfaces\TableServiceInterface;
+use App\Interfaces\ProductServiceInterface;
+use App\Http\Resources\IngredientCollection;
+use App\Interfaces\OrderItemServiceInterface;
+use App\Interfaces\ProductStockServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(ProductStockServiceInterface::class, ProductStockService::class);
+        $this->app->bind(OrderServiceInterface::class, OrderService::class);
+        $this->app->bind(OrderItemServiceInterface::class, OrderItemService::class);
+        $this->app->bind(ProductServiceInterface::class, ProductService::class);
+        $this->app->bind(TableServiceInterface::class, TableService::class);
     }
 
     /**
