@@ -285,13 +285,13 @@ export default {
           }),
           integer,
           minValue: minValue(1),
-          // maxValue: function() {
-          //   if(this.edit){
-          //     return false;
-          //   } else {
-          //     return this.product.quantity
-          //   }
-          // },
+          maxValue: () => {
+            if(this.edit){
+              return false;
+            } else {
+              return this.product.quantity
+            }
+          },
         },
       },
       newQuantity: {
