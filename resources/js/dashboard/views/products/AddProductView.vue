@@ -330,7 +330,6 @@
         <Button
           type="primary"
           :disabled="waiting || waitForFileUpload"
-          :waiting="waiting"
           @click.native.prevent="submit"
         >
           Submit

@@ -146,7 +146,6 @@
           <div v-if="isCategorySelected" class="flex gap-x-4">
             <Button
               type="primary"
-              :waiting="waiting"
               @click.native.prevent="patch"
               :disabled="waiting"
             >
@@ -155,7 +154,6 @@
             <Button
               v-if="canDelete"
               type="danger"
-              :waiting="waiting"
               :disabled="waiting"
               @click.native.prevent="toggleConfirmModal"
             >
@@ -165,7 +163,6 @@
           <Button
             v-else
             type="primary"
-            :waiting="waiting"
             :disabled="waiting"
             @click.native.prevent="create"
           >

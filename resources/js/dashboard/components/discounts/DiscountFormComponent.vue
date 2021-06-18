@@ -161,7 +161,6 @@
         <Button
           v-else
           type="primary"
-          :waiting="waiting"
           :disabled="waiting"
           @click.native.prevent="submit"
         >
@@ -170,7 +169,6 @@
         <span v-if="isDiscountSelected">
           <Button
             v-if="canRestore"
-            :waiting="waiting"
             :disabled="waiting"
             @click.native.prevent="callRestoreDiscount"
           >
@@ -178,7 +176,6 @@
           </Button>
           <Button
             v-else
-            :waiting="waiting"
             :disabled="waiting"
             @click.native.prevent="callDisableDiscount"
           >
@@ -187,7 +184,6 @@
           <Button
             v-if="canDelete"
             type="danger"
-            :waiting="waiting"
             :disabled="waiting"
             @click.native.prevent="toggleConfirmModal"
           >
