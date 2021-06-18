@@ -90,10 +90,12 @@ class DiscountController extends Controller
 
         foreach($discount->products as $product) {
             $product->discount_id = null;
+            $product->save();
         }
 
         foreach($discount->categories as $category) {
             $category->discount_id = null;
+            $category->save();
         }
 
         $discount->forceDelete();
@@ -106,14 +108,16 @@ class DiscountController extends Controller
         $request->user()->can('delete', Discount::class);
 
         $discount = Discount::withTrashed()->with('products', 'categories')->findOrFail($id);
-
         
         foreach($discount->products as $product) {
             $product->discount_id = null;
+            $product->save();
         }
+
 
         foreach($discount->categories as $category) {
             $category->discount_id = null;
+            $category->save();
         }
 
         $discount->delete();
