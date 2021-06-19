@@ -42,7 +42,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css
 
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
-  FilePondPluginImagePreview
+  // FilePondPluginImagePreview
 );
 
 export default {
@@ -54,7 +54,7 @@ export default {
     },
     clear: {
       type: Boolean,
-      required: true,
+      required: false,
       default: false,
     },
   },
