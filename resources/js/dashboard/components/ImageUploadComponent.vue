@@ -3,7 +3,7 @@
     <file-pond
       name="image"
       ref="pond"
-      label-idle="Upload image"      
+      label-idle="Upload image"
       accepted-file-types="image/jpeg"
       :allow-multiple="false"
       :server="{
@@ -23,9 +23,17 @@
         },
       }"
       :files="files"
-      @addfile="toggleWaitingForFileToUpload"
-      @processfileabort="toggleWaitingForFileToUpload"
-      @processfile="toggleWaitingForFileToUpload"
+      @addfile="fileAdded"
+      @processfileabort="processFileAbort"
+      @processfile="fileProcessed"
+
+      :allowImageValidateSize="true"
+      :imageValidateSizeMinWidth="imageSize"
+      :imageValidateSizeMaxWidth="imageSize"
+      :imageValidateSizeMinHeight="imageSize"
+      :imageValidateSizeMaxHeight="imageSize"
+      :allowFileSizeValidation="true"
+      maxFileSize="5MB"
     />
   </div>
 </template> 
@@ -34,14 +42,20 @@
 import vueFilePond from "vue-filepond";
 import "filepond/dist/filepond.min.css";
 
+import FilePondPluginImageValidateSize from "filepond-plugin-image-validate-size";
+
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
+
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+// import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
+  FilePondPluginImageValidateSize,
+  FilePondPluginFileValidateSize
   // FilePondPluginImagePreview
 );
 
@@ -69,6 +83,7 @@ export default {
 
   data() {
     return {
+      imageSize: "512",
       files: [],
       waitForFileToUpload: false,
       csrf: document
@@ -78,11 +93,20 @@ export default {
   },
 
   methods: {
-    toggleWaitingForFileToUpload() {
-      this.$emit("waitForFileToUpload");
+    fileAdded() {
+      this.$emit("fileAdded", true);
     },
 
-  addImagePath(imagePath) {
+    processFileAbort() {
+      this.$emit("processFileAborted", false);
+    },
+
+    fileProcessed() {
+      this.$emit("fileProcessed", false);
+    },
+
+    
+    addImagePath(imagePath) {
       this.$emit("setImagePath", imagePath);
     },
 

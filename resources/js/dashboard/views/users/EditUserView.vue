@@ -34,8 +34,10 @@
             <div class="flex-1">
               <ImageUploadComponent
                 :clear="clearImage"
-                @waitForFileToUpload="toggleWaitForFileUpload"
-                @setImagePath="setImagePath"
+                 @fileAdded="setWaiting"
+            @processFileAbort="setWaiting"
+            @fileProcessed="setWaiting"
+            @setImagePath="setImagePath"
               ></ImageUploadComponent>
               <button v-if="hasAvatar" @click.prevent="removeAvatar">
                 Remove avatar
@@ -371,8 +373,8 @@ export default {
       this.localUser.avatar = "clear";
     },
 
-    toggleWaitForFileUpload() {
-      this.waiting = !this.waiting;
+     setWaiting(value) {
+      this.waiting = value;
     },
 
     setImagePath(imagePath) {

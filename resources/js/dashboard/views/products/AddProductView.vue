@@ -17,7 +17,9 @@
           <!-- IMAGE UPLOAD -->
           <ImageUploadComponent
             :clear="clearImage"
-            @waitForFileToUpload="toggleWaitForFileUpload"
+            @fileAdded="setWaiting"
+            @processFileAborted="setWaiting"
+            @fileProcessed="setWaiting"
             @setImagePath="setImagePath"
           ></ImageUploadComponent>
 
@@ -534,8 +536,8 @@ export default {
       }
     },
 
-    toggleWaitForFileUpload() {
-      this.waiting = !this.waiting;
+    setWaiting(value) {
+      this.waiting = value;
     },
 
     setImagePath(imagePath) {

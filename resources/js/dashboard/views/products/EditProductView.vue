@@ -43,7 +43,9 @@
             <div class="flex-1">
               <ImageUploadComponent
                 :clear="clearImage"
-                @waitForFileToUpload="toggleWaitForFileUpload"
+                @fileAdded="setWaiting"
+                @processFileAbort="setWaiting"
+                @fileProcessed="setWaiting"
                 @setImagePath="setImagePath"
               ></ImageUploadComponent>
               <button v-if="hasImage" @click.prevent="removeImage">
@@ -409,8 +411,12 @@ export default {
     },
 
     hasImage() {
-      return this.localProduct.image !== null && this.localProduct.image !== "" && this.localProduct.image !== "clear" ;
-    }
+      return (
+        this.localProduct.image !== null &&
+        this.localProduct.image !== "" &&
+        this.localProduct.image !== "clear"
+      );
+    },
   },
 
   data() {
@@ -571,8 +577,8 @@ export default {
       this.localProduct.image = "clear";
     },
 
-    toggleWaitForFileUpload() {
-      this.waiting = !this.waiting;
+    setWaiting(value) {
+      this.waiting = value;
     },
 
     setImagePath(imagePath) {

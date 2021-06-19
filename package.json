@@ -25,8 +25,10 @@
         "barcode-validator": "1.0.2",
         "dayjs": "1.10.4",
         "filepond": "4.26.0",
+        "filepond-plugin-file-validate-size": "^2.2.4",
         "filepond-plugin-file-validate-type": "1.2.6",
         "filepond-plugin-image-preview": "4.6.6",
+        "filepond-plugin-image-validate-size": "^1.2.6",
         "laravel-echo": "^1.10.0",
         "lodash": "4.17.21",
         "pusher-js": "^7.0.3",
@@ -44,6 +46,5 @@
     },
     "engines": {
         "node": "14.5.x"
-    },
-    "name": "Disertatie"
+    }
 }
