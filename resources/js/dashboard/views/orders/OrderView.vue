@@ -253,50 +253,6 @@
         Cancel Order
       </Button>
 
-      <!-- <Button
-        v-if="canMarkAsIsPreparing"
-        id="isPreparing"
-        name="isPreparing"
-        type="secondary"
-        :waiting="waiting"
-        @click.native="markAsIsPreparing"
-      >
-        Is preparing
-      </Button> -->
-
-      <!-- <Button 
-                v-if="canMarkAsAwaitingDelivery"
-                id="awaitingDelivery"
-                name="awaitingDelivery"
-                type="secondary"
-                :waiting="waiting"
-                @click.native="markAsAwaitingDelivery"
-            >
-                Awaiting delivery
-            </Button> -->
-
-      <!-- <Button
-        v-if="canMarkAsInDelivery"
-        id="inDelivery"
-        name="inDelivery"
-        type="secondary"
-        :waiting="waiting"
-        @click.native="markAsInDelivery"
-      >
-        In delivery
-      </Button> -->
-
-      <!-- <Button 
-                v-if="canMarkAsDelivered"
-                id="delivered"
-                name="delivered"
-                type="secondary"
-                :waiting="waiting"
-                @click.native="markAsDelivered"
-            >
-                Delivered
-            </Button> -->
-
       <Button
         v-if="canMarkAsCompleted"
         id="completed"
@@ -385,31 +341,7 @@ export default {
     isTableOrder() {
       return this.order.deliveryMethod.name === 'Table';
     },
-
-    // showOrderDetailsEditButton() {
-    //     return this.order.deliveryMethod.name === 'Delivery' && this.canEdit ? true : false;
-    // },
-
-    // canMarkAsIsPreparing() {
-    //     return (this.isKitchenManager || this.isAdmin || this.isLocationManager) && this.order.status.name === 'Received' && this.order.deletedAt === null;
-    // },
-
-    // canMarkAsAwaitingDelivery() {
-    //     return (this.isKitchenManager || this.isAdmin || this.isLocationManager )&& this.order.status.name === 'Is preparing' && this.order.deletedAt === null;
-    // },
-
-    // canMarkAsInDelivery() {
-    //     return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === "Awaiting delivery" && this.order.deletedAt === null;
-    // },
-
-    // canMarkAsDelivered() {
-    //     return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === 'In delivery' && this.order.deletedAt === null;
-    // },
-
-    // canMarkAsAwaitingPayment() {
-    //     return (this.isDelivery || this.isWaiter || this.isAdmin || this.isLocationManager) && this.order.status.name === "Delivered" && this.order.deletedAt === null;
-    // },
-
+  
     canMarkAsCompleted() {
       if (
         this.order.deletedAt === null &&
@@ -554,33 +486,28 @@ export default {
     },
 
     async saveEdit(item) {
+      const payload = {
+        id: this.order.id,
+        itemId: item.id,
+        quantity: item.newQuantity,
+      };
+
+      const response = await patchItem(payload);
+      const responseData = response.data;
+
       const itemIndex = _findIndex(this.order.items, ["id", item.id]);
 
-      if (item.quantity !== this.order.items[itemIndex].quantity) {
-        const payload = {
-          id: this.order.id,
-          itemId: item.id,
-          quantity: item.quantity,
-        };
+      this.$set(this.order.items[itemIndex], "quantity", parseInt(this.order.items[itemIndex].quantity) + parseInt(item.newQuantity));
+      this.$set(
+        this.order.items[itemIndex],
+        "totalPrice",
+        responseData.itemTotalPrice
+      );
 
-        const response = await patchItem(payload);
-        const responseData = response.data;
-
-        const itemIndex = _findIndex(this.order.items, ["id", item.id]);
-
-        this.$set(this.order.items[itemIndex], "quantity", item.quantity);
-        this.$set(
-          this.order.items[itemIndex],
-          "totalPrice",
-          responseData.itemTotalPrice
-        );
-
-        this.order.totalQuantity = responseData.totalQuantity;
-        this.order.totalValue = responseData.totalValue;
-        this.order.updatedAt = responseData.updatedAt;
-      } else {
-        console.log("nothing to update");
-      }
+      this.order.totalQuantity = responseData.totalQuantity;
+      this.order.totalValue = responseData.totalValue;
+      this.order.updatedAt = responseData.updatedAt;
+  
     },
 
     async updateStatus(statusId) {

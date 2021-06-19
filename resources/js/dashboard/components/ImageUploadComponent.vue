@@ -1,107 +1,123 @@
 <template>
-    <div>
-        <file-pond
-            name="image"
-            ref="pond"
-            label-idle="Upload image"
-            v-bind:allow-multiple="false"
-            accepted-file-types="image/jpeg"
-            :disabled="disabled" 
-            :server="{
-                url: '/api/dashboard/images',
-                process: { 
-                    headers: {
-                        'X-CSRF-TOKEN': csrf
-                    },
-                    onload: (response) =>  addImagePath(response),
-                }, 
-                revert: {
-                    url: '/delete',
-                    headers: {
-                        'X-CSRF-TOKEN': csrf
-                    },
-                }
-            }"
-            :files="files"
-            :onaddfilestart="toggleWaitingForFileToUpload"
-            :onprocessfileabort="toggleWaitingForFileToUpload"
-            :onaddfile="toggleWaitingForFileToUpload"
-        />
+  <div>
+    <file-pond
+      name="image"
+      ref="pond"
+      label-idle="Upload image"
+      accepted-file-types="image/jpeg"
+      :allow-multiple="false"
+      :server="{
+        url: '/api/dashboard/images',
+        process: {
+          headers: {
+            'X-CSRF-TOKEN': csrf,
+          },
+          onload: (response) => addImagePath(response),
+        },
+        revert: {
+          url: '/delete',
+          headers: {
+            'X-CSRF-TOKEN': csrf,
+          },
+          onload: () => clearImage(),
+        },
+      }"
+      :files="files"
+      @addfile="fileAdded"
+      @processfileabort="processFileAbort"
+      @processfile="fileProcessed"
 
-    </div>
+      :allowImageValidateSize="true"
+      :imageValidateSizeMinWidth="imageSize"
+      :imageValidateSizeMaxWidth="imageSize"
+      :imageValidateSizeMinHeight="imageSize"
+      :imageValidateSizeMaxHeight="imageSize"
+      :allowFileSizeValidation="true"
+      maxFileSize="5MB"
+    />
+  </div>
 </template> 
 
 <script>
-    import vueFilePond from "vue-filepond";
-    import "filepond/dist/filepond.min.css";
+import vueFilePond from "vue-filepond";
+import "filepond/dist/filepond.min.css";
 
-    import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+import FilePondPluginImageValidateSize from "filepond-plugin-image-validate-size";
 
-    import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-    import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
 
-    const FilePond = vueFilePond(
-        FilePondPluginFileValidateType,
-        FilePondPluginImagePreview
-    ); 
- 
-    export default {
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
-        props: {
-            disabled: {
-                type: Boolean,
-                required: true,
-                default: false,
-            },
-            clear: {
-                type: Boolean,
-                required: true,
-                default: false,
-            }
-        },
+// import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
+const FilePond = vueFilePond(
+  FilePondPluginFileValidateType,
+  FilePondPluginImageValidateSize,
+  FilePondPluginFileValidateSize
+  // FilePondPluginImagePreview
+);
 
-        watch: {
-            clear: function(newVal, oldVal) {
-                if(newVal) {
-                    this.$refs.pond.removeFile({revert: true});
-                }
-            }
-        },
+export default {
+  props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    clear: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
 
-        data() {
-            return {
-                files: [],
-                waitForFileToUpload: false,
-                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            }
-        },
+  watch: {
+    clear: function (newVal, oldVal) {
+      if (newVal) {
+        this.$refs.pond.removeFile({ revert: true });
+      }
+    },
+  },
 
-        methods: {
-            toggleWaitingForFileToUpload() { 
-                this.waitForFileToUpload = !this.waitForFileToUpload;
+  data() {
+    return {
+      imageSize: "512",
+      files: [],
+      waitForFileToUpload: false,
+      csrf: document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content"),
+    };
+  },
 
-                this.$emit('waitForFileToUpload', this.waitForFileToUpload);
-            },
+  methods: {
+    fileAdded() {
+      this.$emit("fileAdded", true);
+    },
 
-            stopWaitingForFileToUpload() {
-                this.waitForFileUpload = false;
-            },
+    processFileAbort() {
+      this.$emit("processFileAborted", false);
+    },
 
-            addImagePath(imagePath) {
-                this.$emit('setImagePath', imagePath);
-            },
+    fileProcessed() {
+      this.$emit("fileProcessed", false);
+    },
 
-            clearImage() {
-                this.$refs.pond.removeFile({revert: true});
-                this.$emit('setImagePath', '');
-            },
-        },
-        
-        components: {
-            FilePond
-        }
-    } 
+    
+    addImagePath(imagePath) {
+      this.$emit("setImagePath", imagePath);
+    },
 
+    clearImage() {
+      this.$refs.pond.removeFile({ revert: true });
+      this.$emit("setImagePath", "");
+    },
+  },
+
+  components: {
+    FilePond,
+  },
+};
 </script>

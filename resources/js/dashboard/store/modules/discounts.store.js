@@ -53,6 +53,7 @@ const actions = {
             const response = await disableDiscount(payload.id);
             payload.deletedAt = response.data.deletedAt;
             commit('DISABLE_DISCOUNT', payload);
+            return response.data.deletedAt;
         } catch ( error ) {
             throw error;
         }

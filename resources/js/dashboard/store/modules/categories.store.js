@@ -29,7 +29,12 @@ const actions = {
     async postCategory({commit}, payload) {
         try {
             const response = await postCategory(payload);
-            payload.id = response.data;
+            payload.id = response.data.id;
+            if(payload.parentId) {
+                payload.vat = response.data.vat
+                payload.parentName = response.data.parentName
+            }
+            
             payload.productsCount = 0;
             commit('ADD_CATEGORY', payload);
         } catch ( error ) {
@@ -40,7 +45,10 @@ const actions = {
     async patchCategory({commit}, payload) {
         try {
             const category = payload.category;
-            await patchCategory(category);
+            const response = await patchCategory(category);
+            if(response.data.parentName) {
+                payload.category.parentName = response.data.parentName;
+            }
             commit('PATCH_CATEGORY', payload);
             return category
         } catch ( error){
@@ -95,6 +103,7 @@ const mutations = {
         const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
         const vm = payload.vm;
 
+        console.log(payload.category)
         Object.keys(payload.category).forEach(key => {
             vm.$set(state.categories[categoryIndex], key, payload.category[key]);
         });

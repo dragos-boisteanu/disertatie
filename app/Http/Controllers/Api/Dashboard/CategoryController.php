@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
-use App\Http\Resources\CategoryCollection;
 
 class CategoryController extends Controller
 {
@@ -18,7 +19,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('products')->get();
+        $categories = Category::with('products', 'subProducts', 'subCategories')->get();
 
         return new CategoryCollection($categories);
     }
@@ -35,13 +36,26 @@ class CategoryController extends Controller
 
         $input = $request->validated();
 
+        $response = [];
+
         if($request->has('discountId')) {
-            $input['discount_id'] = $request->input('discountId');
+            $input['discount_id'] = $request->discountId;
+        }
+
+        if($request->has('parentId')) {
+            $input['parent_id'] = $request->parentId;
+            $parentCategory = Category::findOrFail($request->parentId);
+            $input['vat'] = $parentCategory->vat;
+
+            $response['vat'] = $parentCategory->vat;
+            $response['parentName'] = $parentCategory->name;
         }
 
         $category = Category::create($input);
 
-        return $category->id;
+        $response['id'] = $category->id;
+
+        return response()->json($response, 201);
     }
 
     /**
@@ -59,15 +73,23 @@ class CategoryController extends Controller
 
         $input = $request->validated();
 
+        $responseData = null;
+
         if($request->has('discountId')) {
             $input['discount_id'] = $request->discountId;
         } else if( !$request->has('discountId') && !is_null($category->discount_id)){
             $input['discount_id'] = null;
         }
 
+        if($request->has('parentId')) {
+            $input['parent_id'] = $request->parentId;
+            $parentCategory = Category::findOrFail($request->parentId);
+            $responseData['parentName'] = $parentCategory->name;
+        }
+
         $category->update($input);
 
-        return response()->json(null, 204);
+        return response()->json($responseData, 200);
     }
 
     /**

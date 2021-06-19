@@ -28,16 +28,16 @@ class ProductPatchRequest extends FormRequest
             'barcode' => 'sometimes|numeric|unique:products',
             'name' => 'sometimes|string|max:150',
             'description' => 'sometimes|string|max:255',
-            'base_price' => 'sometimes|numeric',
+            'basePrice' => 'sometimes|numeric',
             'weight' => 'sometimes|numeric',
-            'category_id' => 'sometimes|numeric|exists:categories,id',
-            'unit_id' => 'sometimes|numeric|exists:units,id',
-            'hasIngredients'=>['sometimes', 'bool'],
-            'ingredients'=> ['required_if:hasIngredients,true', 'array', 'min:1'],
+            'categoryId' => 'sometimes|numeric|exists:categories,id',
+            'subCategoryId' => ['sometimes', 'numeric', 'exists:categories,id'],
+            'unitId' => 'sometimes|numeric|exists:units,id',
+            'ingredients'=> ['nullable', 'array'],
             'ingregients.*.id' => 'required_with:ingredients|numeric',
             'ingredients.*.quantity' => 'required_with:ingredients|numeric',
             'ingredients.*.unit.id' => 'required_with:ingredients|numeric|exists:units,id',
-            'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
+            'discountId' => ['nullable','numeric'],
         ];
     }
 

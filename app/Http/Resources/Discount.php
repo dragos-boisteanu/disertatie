@@ -23,7 +23,7 @@ class Discount extends JsonResource
             'deletedAt' => $this->deleted_at,
             'createdAt' => $this->created_at,
             'productsCount' => $this->products()->count(),
-            'categoriesCount'=> $this->categories()->count()
+            'categoriesCount'=> $this->categories()->count(),
         ];
     }
 }

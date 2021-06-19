@@ -13,14 +13,13 @@
           2xl:w-2/4
         "
       >
-        <div
-          class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
-        >
+        <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
           <!-- IMAGE UPLOAD -->
           <ImageUploadComponent
-            :disabled="waiting || waitForFileUpload"
             :clear="clearImage"
-            @waitForFileToUpload="toggleWaitForFileUpload"
+            @fileAdded="setWaiting"
+            @processFileAborted="setWaiting"
+            @fileProcessed="setWaiting"
             @setImagePath="setImagePath"
           ></ImageUploadComponent>
 
@@ -47,7 +46,7 @@
               </template>
               <div class="flex gap-x-3 items-center relative flex-1">
                 <Input
-                  v-model="product.barcode"
+                  v-model="$v.product.barcode.$model"
                   id="barcode"
                   name="barcode"
                   :class="{
@@ -55,9 +54,6 @@
                     'border-green-600':
                       $v.product.barcode.$dirty && !$v.product.barcode.$error,
                   }"
-                  :disabled="waiting"
-                  @blur.native="getProduct"
-                  @input.native="$v.product.barcode.$touch()"
                 />
                 <svg
                   v-show="checkingBarcode"
@@ -101,7 +97,7 @@
                 </p>
               </template>
               <Input
-                v-model="product.name"
+                v-model="$v.product.name.$model"
                 id="firstName"
                 name="first name"
                 :class="{
@@ -109,8 +105,6 @@
                   'border-green-600':
                     $v.product.name.$dirty && !$v.product.name.$error,
                 }"
-                :disabled="waiting"
-                @input.native="$v.product.name.$touch()"
               />
             </InputGroup>
           </div>
@@ -133,7 +127,7 @@
               </p>
             </template>
             <Textarea
-              v-model="product.description"
+              v-model="$v.product.description.$model"
               id="description"
               name="description"
               :eclass="{
@@ -142,8 +136,6 @@
                   $v.product.description.$dirty &&
                   !$v.product.description.$error,
               }"
-              :disabled="waiting"
-              @input.native="$v.product.description.$touch()"
             />
           </InputGroup>
 
@@ -160,56 +152,85 @@
             <InputGroup
               id="name"
               label="Base price"
-              :hasError="$v.product.base_price.$error"
+              :hasError="$v.product.basePrice.$error"
               :eclass="{ 'flex-1': true }"
             >
               <template v-slot:errors>
-                <p v-if="!$v.product.base_price.required">
+                <p v-if="!$v.product.basePrice.required">
                   The base price field is required
                 </p>
               </template>
               <Input
-                v-model="product.base_price"
+                v-model="$v.product.basePrice.$model"
                 id="basePrice"
                 name="base price"
                 :class="{
-                  'border-red-600': $v.product.base_price.$error,
+                  'border-red-600': $v.product.basePrice.$error,
                   'border-green-600':
-                    $v.product.base_price.$dirty &&
-                    !$v.product.base_price.$error,
+                    $v.product.basePrice.$dirty && !$v.product.basePrice.$error,
                 }"
-                :disabled="waiting"
-                @input.native="$v.product.base_price.$touch()"
               />
             </InputGroup>
             <InputGroup
               id="category"
               label="Category"
-              :hasError="$v.product.category_id.$error"
+              :hasError="$v.product.categoryId.$error"
               :eclass="{ 'flex-1': true }"
             >
               <template v-slot:errors>
-                <p v-if="!$v.product.category_id.error">
+                <p v-if="!$v.product.categoryId.error">
                   The category field is required
                 </p>
               </template>
               <Select
-                v-model="product.category_id"
-                id="unit_id"
+                v-model="$v.product.categoryId.$model"
+                id="unitId"
                 name="category"
                 :class="{
-                  'border-red-600': $v.product.category_id.$error,
+                  'border-red-600': $v.product.categoryId.$error,
                   'border-green-600':
-                    $v.product.category_id.$dirty &&
-                    !$v.product.category_id.$error,
+                    $v.product.categoryId.$dirty &&
+                    !$v.product.categoryId.$error,
                 }"
-                :disabled="waiting"
-                @blur.native="$v.product.category_id.$touch()"
+                @change.native="getSubCategories"
               >
                 <option value="" disabled>Select category</option>
                 <option
                   :value="category.id"
-                  v-for="category in getCategories"
+                  v-for="category in categories"
+                  :key="category.id"
+                >
+                  {{ category.name }} ({{ category.vat }}% VAT)
+                </option>
+              </Select>
+            </InputGroup>
+            <InputGroup
+              id="category"
+              label="Sub category"
+              :hasError="$v.product.subCategoryId.$error"
+              :eclass="{ 'flex-1': true }"
+            >
+              <template v-slot:errors>
+                <p v-if="!$v.product.subCategoryId.error">
+                  The category field is required
+                </p>
+              </template>
+              <Select
+                v-model="$v.product.subCategoryId.$model"
+                id="unitId"
+                name="category"
+                :class="{
+                  'border-red-600': $v.product.subCategoryId.$error,
+                  'border-green-600':
+                    $v.product.subCategoryId.$dirty &&
+                    !$v.product.subCategoryId.$error,
+                }"
+                :disabled="hasNoSubCategories"
+              >
+                <option value="" disabled selected>Select sub category</option>
+                <option
+                  :value="category.id"
+                  v-for="category in subCategories"
                   :key="category.id"
                 >
                   {{ category.name }} ({{ category.vat }}% VAT)
@@ -240,7 +261,7 @@
                 </p>
               </template>
               <Input
-                v-model="product.weight"
+                v-model="$v.product.weight.$model"
                 id="weight"
                 name="weight"
                 :eclass="{
@@ -248,32 +269,28 @@
                   'border-green-600':
                     $v.product.weight.$dirty && !$v.product.weight.$error,
                 }"
-                :disabled="waiting"
-                @input.native="$v.product.weight.$touch()"
               />
             </InputGroup>
             <InputGroup
               id="unitId"
               label="Weight units"
-              :hasError="$v.product.unit_id.$error"
+              :hasError="$v.product.unitId.$error"
               :eclass="{ 'flex-1': true }"
             >
               <template v-slot:errors>
-                <p v-if="!$v.product.unit_id.required">
+                <p v-if="!$v.product.unitId.required">
                   The weight unit field is required
                 </p>
               </template>
               <Select
-                v-model="product.unit_id"
-                id="unit_id"
+                v-model="$v.product.unitId.$model"
+                id="unitId"
                 name="unitId"
                 :eclass="{
-                  'border-red-600': $v.product.unit_id.$error,
+                  'border-red-600': $v.product.unitId.$error,
                   'border-green-600':
-                    $v.product.unit_id.$dirty && !$v.product.unit_id.$error,
+                    $v.product.unitId.$dirty && !$v.product.unitId.$error,
                 }"
-                :disabled="waiting"
-                @blur.native="$v.product.unit_id.$touch()"
               >
                 <option value="" disabled>Select unit</option>
                 <option
@@ -306,8 +323,7 @@
       <div class="mt-5 flex md:justify-start">
         <Button
           type="primary"
-          :disabled="waiting || waitForFileUpload"
-          :waiting="waiting"
+          :disabled="waiting"
           @click.native.prevent="submit"
         >
           Submit
@@ -325,7 +341,7 @@ import ViewContainer from "../ViewContainer";
 import ImageUploadComponent from "../../components/ImageUploadComponent";
 import IngredientsComponent from "../../components/products/IngredientsComponent";
 
-import DiscountComponent from "../../components/discounts/DiscountComponent.vue"
+import DiscountComponent from "../../components/discounts/DiscountComponent.vue";
 
 import Input from "../../components/inputs/TextInputComponent";
 import Select from "../../components/inputs/SelectInputComponent";
@@ -357,6 +373,12 @@ export default {
     ...mapGetters("Ingredients", ["getIngredients"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
 
+    categories() {
+      return this.getCategories.filter(
+        (category) => category.parentId === null
+      );
+    },
+
     availableDiscounts() {
       return this.getDiscounts.filter(
         (discount) => discount.deletedAt === null
@@ -366,16 +388,21 @@ export default {
     isDiscountSelected() {
       return this.selectedDiscount ? true : false;
     },
+
+    hasNoSubCategories() {
+      return this.subCategories.length === 0;
+    },
   },
 
   data() {
     return {
       checkingBarcode: false,
       waiting: false,
-      waitForFileUpload: false,
 
       ingredientInput: "",
       foundIngredients: [],
+
+      subCategories: [],
 
       clearImage: false,
 
@@ -383,10 +410,11 @@ export default {
         barcode: "",
         name: "",
         description: "",
-        base_price: "",
+        basePrice: "",
         weight: "",
-        unit_id: "",
-        category_id: "",
+        unitId: "",
+        categoryId: "",
+        subCategoryId: "",
         ingredients: [],
         hasIngredients: false,
         discountId: "",
@@ -409,19 +437,22 @@ export default {
         maxLength: maxLength(255),
         alphaNumSpaces,
       },
-      base_price: {
+      basePrice: {
         required,
         decimal,
       },
       weight: {
         required,
       },
-      unit_id: {
+      unitId: {
         required,
         integer,
       },
-      category_id: {
+      categoryId: {
         required,
+      },
+      subCategoryId: {
+        integer,
       },
     },
   },
@@ -439,13 +470,9 @@ export default {
 
           const payload = {};
 
-          if (this.checkingBarcode) {
-            payload.barcode = this.product.barcode;
-          } else {
-            Object.keys(this.product).forEach((key) => {
-              payload[key] = this.product[key];
-            });
-          }
+          Object.keys(this.product).forEach((key) => {
+            payload[key] = this.product[key];
+          });
 
           if (payload.discountId === "") {
             delete payload.discountId;
@@ -455,21 +482,27 @@ export default {
             delete payload.ingredients;
           }
 
+          if (payload.subCategoryId === "") {
+            delete payload.subCategoryId;
+          }
+
           await storeProduct(payload);
 
-          (this.product = {
+          this.product = {
             barcode: "",
             name: "",
             description: "",
-            base_price: "",
+            basePrice: "",
             weight: "",
-            unit_id: "",
+            unitId: "",
             quantity: "",
-            category_id: "",
+            categoryId: "",
+            subCategoryId: "",
             discountId: "",
             ingredients: [],
-          }),
-            (this.waiting = false);
+          }
+            
+          this.waiting = false;
 
           this.clearImage = true;
 
@@ -492,30 +525,19 @@ export default {
       }
     },
 
-    getProduct: _debounce(async function () {
-      try {
-        // this.checkingBarcode = true;
-        // if(this.$refs.observer.errors['barcode'].length === 0) {
-        //     this.waiting = true;
-        //     const response = await this.getProductByBarcode(this.product.barcode);
-        //     if(response.data) {
-        //         this.product = response.data.data;
-        //     } else {
-        //         this.waiting = false;
-        //     }
-        //     this.checkingBarcode = false;
-        // } else {
-        //     this.checkingBarcode = false;
-        //     this.waiting = false;
-        // }
-      } catch (error) {
-        console.log(error);
+    getSubCategories() {
+      this.product.subCategoryId = "";
+      if (this.product.categoryId) {
+        this.subCategories = this.getCategories.filter(
+          (category) => category.parentId == this.product.categoryId
+        );
+      } else {
+        this.subCategories = [];
       }
-    }, 500),
+    },
 
-    toggleWaitForFileUpload(waitForFileToUpload) {
-      console.log(waitForFileToUpload);
-      this.waitForFileUpload = waitForFileToUpload;
+    setWaiting(value) {
+      this.waiting = value;
     },
 
     setImagePath(imagePath) {
@@ -554,8 +576,8 @@ export default {
     },
 
     addDiscount(discountId) {
-      this.product.discountId = discountId
-    }
+      this.product.discountId = discountId;
+    },
   },
 
   components: {

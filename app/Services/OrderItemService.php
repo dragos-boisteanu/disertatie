@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 
 namespace App\Services;
@@ -14,7 +14,7 @@ use App\Interfaces\OrderItemServiceInterface;
 use App\Interfaces\ProductStockServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class OrderItemService implements OrderItemServiceInterface 
+class OrderItemService implements OrderItemServiceInterface
 {
 
   private $productStockService;
@@ -23,7 +23,7 @@ class OrderItemService implements OrderItemServiceInterface
   {
     $this->productStockService = $productStockService;
   }
-  
+
   public function getProductsByName(string $productName): Collection
   {
     $products = Product::where('name', 'like', '%' . $productName . '%')->get();
@@ -31,14 +31,14 @@ class OrderItemService implements OrderItemServiceInterface
     return $products;
   }
 
-  public function getProductsById(int $productId): Product 
+  public function getProductsById(int $productId): Product
   {
     try {
       $product = Product::findOrFail($productId);
       return $product;
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $productId . ' id');
-    } catch ( \Exception $ex) {
+    } catch (\Exception $ex) {
       throw new \Exception('Something went wrong');
     }
   }
@@ -49,24 +49,24 @@ class OrderItemService implements OrderItemServiceInterface
       $order = Order::findOrFail($orderId);
 
       DB::transaction(function () use ($order, $itemId) {
-  
+
         $product = $order->products()->where('product_id', $itemId)->first();
 
         $this->productStockService->addBackToStock($product);
-  
+
         $order->products()->detach($itemId);
-  
+
         $order->touch();
-        
-        $order->save(); 
+
+        $order->save();
       });
 
-      $order->refresh();  
+      $order->refresh();
 
       return $order->updated_at;
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
-    } catch ( \Exception $ex) {
+    } catch (\Exception $ex) {
       throw new \Exception('Something went wrong');
     }
   }
@@ -78,16 +78,16 @@ class OrderItemService implements OrderItemServiceInterface
 
       DB::transaction(function () use ($order, $item) {
         $product = $order->products()->where('product_id',  $item['id'])->first();
-        if(isset($product)) {
-            $newQuantity = $product->pivot->quantity + $item['quantity'];
-            $order->products()->updateExistingPivot($item['id'], ['quantity'=>$newQuantity]);
+        if (isset($product)) {
+          $newQuantity = $product->pivot->quantity + $item['quantity'];
+          $order->products()->updateExistingPivot($item['id'], ['quantity' => $newQuantity]);
         } else {
-            $product = Product::findOrFail($item['id']);
-            $order->products()->attach($item['id'], [
-                "product_name"=>$product->name, 
-                "quantity"=>$item['quantity'], 
-                "unit_price"=>$product['price'],              
-            ]);
+          $product = Product::findOrFail($item['id']);
+          $order->products()->attach($item['id'], [
+            "product_name" => $product->name,
+            "quantity" => $item['quantity'],
+            "unit_price" => $product['price'],
+          ]);
         }
 
         $order->touch();
@@ -106,32 +106,35 @@ class OrderItemService implements OrderItemServiceInterface
         'totalQuantity' => $order->getTotalQuantityAttribute(),
         'updatedAt' => $order->updated_at
       ];
-    }catch (ModelNotFoundException $mex) {
+    } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
-    } catch ( \Exception $ex) {
+    } catch (\Exception $ex) {
       throw new \Exception('Something went wrong');
     }
-    
   }
 
-  public function patchOrderItem(array $data, int $orderId): array 
+  public function patchOrderItem(array $data, int $orderId): array
   {
     try {
       $order = Order::findOrFail($orderId);
 
-      DB::transaction(function () use($data, $order) {
+      DB::transaction(function () use ($data, $order) {
         $product = $order->products()->where('product_id', $data['itemId'])->first();
-        $order->products()->updateExistingPivot($data['itemId'], ['quantity' => $data['quantity']]);
+        if ($product->stock->quantity >= $data['quantity']) {
 
-        if($data['quantity']> $product->pivot->quantity) {
-            $this->productStockService->removeFromStock($product, $data['quantity'] - $product->pivot->quantity);
-        } else if ($data['quantity'] < $product->pivot->quantity) {
-            $this->productStockService->addBackToStock($product, $product->pivot->quantity - $data['quantity']);
+          if($data['quantity'] > 0) {
+            $newQuantity = $product->pivot->quantity + abs($data['quantity']);
+            $this->productStockService->removeFromStock($product, abs($data['quantity']));
+          } else {
+            $newQuantity = $product->pivot->quantity - abs($data['quantity']);
+            $this->productStockService->addBackToStock($product, abs($data['quantity']));
+          }
+          $order->products()->updateExistingPivot($data['itemId'], ['quantity' => $newQuantity]);
+
+          $order->touch();
+
+          $order->save();
         }
-
-        $order->touch();
-
-        $order->save();
       });
 
       $order->refresh();
@@ -146,10 +149,9 @@ class OrderItemService implements OrderItemServiceInterface
         'totalQuantity' => $order->getTotalQuantityAttribute(),
         'updatedAt' => $order->updated_at
       ];
-
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
-    } catch ( \Exception $ex) {
+    } catch (\Exception $ex) {
       throw new \Exception('Something went wrong');
     }
   }

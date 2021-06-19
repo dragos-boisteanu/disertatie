@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-full md:w-1/2" v-if="discount">
+    <div class="w-full" v-if="discount">
       <div class="text-sm font-semibold">Selected discount</div>
       <div
         @click="removeDiscount"

@@ -3,7 +3,16 @@
     <template slot="header"> Edit product #{{ localProduct.id }} </template>
 
     <form @submit.prevent="submit" class="flex flex-col">
-      <div class="flex flex-col lg:flex-row lg:items-start lg:gap-x-6 xl:w-2/3">
+      <div
+        class="
+          flex flex-col
+          lg:flex-row
+          lg:items-start
+          lg:gap-x-6
+          xl:w-9/12
+          2xl:w-2/4
+        "
+      >
         <div
           class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
         >
@@ -11,7 +20,7 @@
           <div class="flex items-center gap-x-5">
             <div class="w-32 h-32 rounded-md md:mr-4">
               <img
-                v-if="localProduct.image"
+                v-if="hasImage"
                 :src="localProduct.image"
                 class="w-full h-full rounded-md object-cover"
               />
@@ -33,12 +42,13 @@
 
             <div class="flex-1">
               <ImageUploadComponent
-                :disabled="waiting || waitForFileUpload"
                 :clear="clearImage"
-                @waitForFileToUpload="toggleWaitForFileUpload"
+                @fileAdded="setWaiting"
+                @processFileAbort="setWaiting"
+                @fileProcessed="setWaiting"
                 @setImagePath="setImagePath"
               ></ImageUploadComponent>
-              <button v-if="localProduct.image" @click.prevent="removeImage">
+              <button v-if="hasImage" @click.prevent="removeImage">
                 Remove image
               </button>
             </div>
@@ -75,7 +85,6 @@
                     $v.localProduct.barcode.$dirty &&
                     !$v.localProduct.barcode.$error,
                 }"
-                :disabled="waiting"
                 @input.native="$v.localProduct.barcode.$touch()"
               />
             </InputGroup>
@@ -105,7 +114,6 @@
                   'border-green-600':
                     $v.localProduct.name.$dirty && !$v.localProduct.name.$error,
                 }"
-                :disabled="waiting || locked"
                 @input.native="$v.localProduct.name.$touch()"
               />
             </InputGroup>
@@ -135,7 +143,6 @@
                   $v.localProduct.description.$dirty &&
                   !$v.localProduct.description.$error,
               }"
-              :disabled="waiting || locked"
               @input.native="$v.localProduct.description.$touch()"
             />
           </InputGroup>
@@ -153,63 +160,93 @@
             <InputGroup
               id="basePrice"
               label="Base price"
-              :hasError="$v.localProduct.base_price.$error"
+              :hasError="$v.localProduct.basePrice.$error"
               :eclass="{ 'flex-1': true }"
             >
               <template v-slot:errors>
-                <p v-if="!$v.localProduct.base_price.required">
+                <p v-if="!$v.localProduct.basePrice.required">
                   The base price field is required
                 </p>
-                <p v-if="!$v.localProduct.base_price.decimal">
+                <p v-if="!$v.localProduct.basePrice.decimal">
                   The base price must be in decimal format
                 </p>
-                <p v-if="!$v.localProduct.base_price.minValue">
+                <p v-if="!$v.localProduct.basePrice.minValue">
                   The base price field must be at least 1
                 </p>
               </template>
               <Input
-                v-model="localProduct.base_price"
+                v-model="$v.localProduct.basePrice.$model"
                 id="basePrice"
                 name="base price"
                 type="text"
                 :class="{
-                  'border-red-600': $v.localProduct.base_price.$error,
+                  'border-red-600': $v.localProduct.basePrice.$error,
                   'border-green-600':
-                    $v.localProduct.base_price.$dirty &&
-                    !$v.localProduct.base_price.$error,
+                    $v.localProduct.basePrice.$dirty &&
+                    !$v.localProduct.basePrice.$error,
                 }"
-                :disabled="waiting || locked"
-                @input.native="$v.localProduct.base_price.$touch()"
               />
             </InputGroup>
             <InputGroup
               id="category"
               label="Category"
-              :hasError="$v.localProduct.category_id.$error"
+              :hasError="$v.localProduct.categoryId.$error"
               :eclass="{ 'flex-1': true }"
             >
               <template v-slot:error>
-                <p v-if="!$v.localProduct.category_id.required">
+                <p v-if="!$v.localProduct.categoryId.required">
                   The category field is mandatory
                 </p>
               </template>
               <Select
-                v-model="localProduct.category_id"
+                v-model="$v.localProduct.categoryId.$model"
                 id="category"
                 name="category"
                 :class="{
-                  'border-red-600': $v.localProduct.category_id.$error,
+                  'border-red-600': $v.localProduct.categoryId.$error,
                   'border-green-600':
-                    $v.localProduct.category_id.$dirty &&
-                    !$v.localProduct.category_id.$error,
+                    $v.localProduct.categoryId.$dirty &&
+                    !$v.localProduct.categoryId.$error,
                 }"
-                :disabled="waiting || locked"
-                @change.native="$v.localProduct.category_id.$touch()"
+                @change.native="getSubCategories"
               >
                 <option value="" disabled>Select category</option>
                 <option
                   :value="category.id"
-                  v-for="category in getCategories"
+                  v-for="category in categories"
+                  :key="category.id"
+                >
+                  {{ category.name }} ({{ category.vat }}% VAT)
+                </option>
+              </Select>
+            </InputGroup>
+            <InputGroup
+              id="category"
+              label="Sub category"
+              :hasError="$v.localProduct.subCategoryId.$error"
+              :eclass="{ 'flex-1': true }"
+            >
+              <template v-slot:errors>
+                <p v-if="!$v.localProduct.subCategoryId.error">
+                  The category field is required
+                </p>
+              </template>
+              <Select
+                v-model="$v.localProduct.subCategoryId.$model"
+                id="sub_category_id"
+                name="category"
+                :class="{
+                  'border-red-600': $v.localProduct.subCategoryId.$error,
+                  'border-green-600':
+                    $v.localProduct.subCategoryId.$dirty &&
+                    !$v.localProduct.subCategoryId.$error,
+                }"
+                :disabled="waiting || hasNoSubCategories"
+              >
+                <option value="" disabled selected>Select sub category</option>
+                <option
+                  :value="category.id"
+                  v-for="category in subCategories"
                   :key="category.id"
                 >
                   {{ category.name }} ({{ category.vat }}% VAT)
@@ -243,7 +280,7 @@
                 </p>
               </template>
               <Input
-                v-model="localProduct.weight"
+                v-model="$v.localProduct.weight.$model"
                 id="weight"
                 name="weight"
                 :class="{
@@ -252,28 +289,28 @@
                     $v.localProduct.weight.$dirty &&
                     !$v.localProduct.weight.$error,
                 }"
-                :disabled="waiting || locked"
-                @input.native="$v.localProduct.weight.$touch()"
               />
             </InputGroup>
-            <InputGroup id="weightUnit" label="Weight unit">
+            <InputGroup
+              id="weightUnit"
+              label="Weight unit"
+              :eclass="{ 'flex-1': true }"
+            >
               <template v-slot:errors>
-                <p v-if="!$v.localProduct.unit_id.required">
+                <p v-if="!$v.localProduct.unitId.required">
                   The weight unit field is required
                 </p>
               </template>
-              <Input
-                v-model="localProduct.unit_id"
+              <Select
+                v-model="$v.localProduct.unitId.$model"
                 id="unit_id"
                 name="weight units"
                 :class="{
-                  'border-red-600': $v.localProduct.unit_id.$error,
+                  'border-red-600': $v.localProduct.unitId.$error,
                   'border-green-600':
-                    $v.localProduct.unit_id.$dirty &&
-                    !$v.localProduct.unit_id.$error,
+                    $v.localProduct.unitId.$dirty &&
+                    !$v.localProduct.unitId.$error,
                 }"
-                :disabled="waiting || locked"
-                @change.native="$v.localProduct.unit_id.$touch()"
               >
                 <option value="" disabled>Select unit</option>
                 <option
@@ -283,7 +320,7 @@
                 >
                   {{ unit.name }} ({{ unit.description }})
                 </option>
-              </Input>
+              </Select>
             </InputGroup>
           </div>
 
@@ -305,8 +342,7 @@
       <div class="mt-5 flex md:justify-start">
         <Button
           type="primary"
-          :disabled="waiting || waitForFileUpload"
-          :waiting="waiting"
+          :disabled="waiting"
           @click.native.prevent="submit"
         >
           Submit
@@ -353,19 +389,44 @@ export default {
     next((vm) => vm.setProduct(response.data.data));
   },
 
+  mounted() {
+    this.subCategories = this.getCategories.filter(
+      (category) => category.parentId == this.localProduct.categoryId
+    );
+  },
+
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Units", ["getUnits"]),
     ...mapGetters("Ingredients", ["getIngredients"]),
+
+    categories() {
+      return this.getCategories.filter(
+        (category) => category.parentId === null
+      );
+    },
+
+    hasNoSubCategories() {
+      return this.subCategories.length === 0;
+    },
+
+    hasImage() {
+      return (
+        this.localProduct.image !== null &&
+        this.localProduct.image !== "" &&
+        this.localProduct.image !== "clear"
+      );
+    },
   },
 
   data() {
     return {
-      locked: false,
       waiting: false,
 
       ingredientInput: "",
       foundIngredients: [],
+
+      subCategories: [],
 
       product: null,
 
@@ -373,11 +434,12 @@ export default {
         barcode: "",
         name: "",
         description: "",
-        base_price: "",
+        basePrice: "",
         weight: "",
-        unit_id: "",
+        unitId: "",
         quantity: "",
-        category_id: "",
+        categoryId: "",
+        subCategoryId: "",
         discountId: "",
         ingredients: [],
       },
@@ -402,7 +464,7 @@ export default {
         maxLength: maxLength(255),
         alphaNumSpaces,
       },
-      base_price: {
+      basePrice: {
         required,
         decimal,
         minValue: minValue(1),
@@ -411,11 +473,14 @@ export default {
         required,
         integer,
       },
-      unit_id: {
+      unitId: {
         required,
       },
-      category_id: {
+      categoryId: {
         required,
+      },
+      subCategoryId: {
+        integer,
       },
     },
   },
@@ -437,20 +502,29 @@ export default {
           let counter = 0;
 
           Object.keys(this.localProduct).forEach((key) => {
-            if (key === "ingredients") {
-              if (!_isEqual(this.localProduct[key], this.product[key])) {
-                payload.product[key] = this.localProduct[key];
-                payload.product.hasIngredients = true;
-                counter++;
-              }
-            } else if (this.product[key] !== this.localProduct[key]) {
+            if (this.product[key] !== this.localProduct[key]) {
               payload.product[key] = this.localProduct[key];
               counter++;
             }
           });
 
-          if(this.localProduct.discountId === "") {
-            delete payload.product.discountId;
+          if (
+            !_isEqual(this.localProduct.ingredients, this.product.ingredients)
+          ) {
+            payload.product.ingredients = this.localProduct.ingredients;
+            counter++;
+          }
+
+          if (payload.discountId === "") {
+            delete payload.discountId;
+          }
+
+          // if (payload.ingredients.length === 0) {
+          //   delete payload.ingredients;
+          // }
+
+          if (payload.subCategoryId === "") {
+            delete payload.subCategoryId;
           }
 
           if (counter > 0) {
@@ -487,13 +561,24 @@ export default {
       }
     },
 
+    getSubCategories() {
+      this.localProduct.subCategoryId = "";
+      if (this.product.categoryId) {
+        this.subCategories = this.getCategories.filter(
+          (category) => category.parentId == this.localProduct.categoryId
+        );
+      } else {
+        this.subCategories = [];
+      }
+    },
+
     removeImage() {
       this.product.image = "";
       this.localProduct.image = "clear";
     },
 
-    toggleWaitForFileUpload(waitForFileToUpload) {
-      this.waitForFileUpload = waitForFileToUpload;
+    setWaiting(value) {
+      this.waiting = value;
     },
 
     setImagePath(imagePath) {
@@ -539,7 +624,6 @@ export default {
       this.product = product;
       this.localProduct = JSON.parse(JSON.stringify(this.product));
     },
-
   },
 
   components: {
