@@ -103,7 +103,7 @@
           </button>
           <div v-if="canDisable">
             <button
-              v-if="product.deltedAt"
+              v-if="canRestore"
               @click="restore"
               class="
                 bg-white
@@ -250,6 +250,10 @@ export default {
       }
     },
 
+    canRestore() {
+      return this.product.deletedAt !== "" && this.product.deletedAt !== null
+    },
+
     hasDiscount() {
       return this.product.discount ? true : false;
     },
@@ -281,12 +285,12 @@ export default {
 
     async disable() {
       const response = await disableProduct(this.product.id);
-      this.product.deletedAt = response.data.deletedAt;
+      this.product.deletedAt = response.data.deleted_at;
     },
 
     async restore() {
       const response = await restoreProduct(this.product.id);
-      this.product.deletedAt = response.data.deletedAt;
+      this.product.deletedAt = response.data.deleted_at;
     },
 
     async refresh() {

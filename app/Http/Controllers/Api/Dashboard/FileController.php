@@ -11,31 +11,30 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    public function store(FileStoreRequest $request) 
+    public function store(FileStoreRequest $request)
     {
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
-            if($file->extension() === 'jpg' || $file->extension() === 'png') {
-                $img = Image::make($file)->resize(256,256)->encode('jpg', 100);
+            if ($file->extension() === 'jpg' || $file->extension() === 'png') {
+                $img = Image::make($file)->resize(256, 256)->encode('jpg', 100);
 
-                if(Storage::put('temp/'.$file->hashName(), $img)) {
-                    $path = 'temp/'.$file->hashName();
+                if (Storage::put('temp/' . $file->hashName(), $img)) {
+                    $path = 'temp/' . $file->hashName();
                 };
-               
             } else {
                 $path = $request->file('image')->store('temp');
-            }   
-            
+            }
+
             return $path;
         }
     }
 
-    public function destroy(Request $request, $image) 
+    public function destroy(Request $request, $image)
     {
 
         $image = $request->getContent();
         Storage::disk('local')->delete($image);
 
-        return response()->json(['message'=>'File deleted'], 200);
+        return response()->json(['message' => 'File deleted'], 200);
     }
 }

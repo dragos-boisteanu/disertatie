@@ -16,7 +16,6 @@
         <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
           <!-- IMAGE UPLOAD -->
           <ImageUploadComponent
-            :disabled="waiting || waitForFileUpload"
             :clear="clearImage"
             @waitForFileToUpload="toggleWaitForFileUpload"
             @setImagePath="setImagePath"
@@ -53,7 +52,6 @@
                     'border-green-600':
                       $v.product.barcode.$dirty && !$v.product.barcode.$error,
                   }"
-                  :disabled="waiting"
                 />
                 <svg
                   v-show="checkingBarcode"
@@ -105,7 +103,6 @@
                   'border-green-600':
                     $v.product.name.$dirty && !$v.product.name.$error,
                 }"
-                :disabled="waiting"
               />
             </InputGroup>
           </div>
@@ -137,7 +134,6 @@
                   $v.product.description.$dirty &&
                   !$v.product.description.$error,
               }"
-              :disabled="waiting"
             />
           </InputGroup>
 
@@ -171,7 +167,6 @@
                   'border-green-600':
                     $v.product.basePrice.$dirty && !$v.product.basePrice.$error,
                 }"
-                :disabled="waiting"
               />
             </InputGroup>
             <InputGroup
@@ -195,7 +190,6 @@
                     $v.product.categoryId.$dirty &&
                     !$v.product.categoryId.$error,
                 }"
-                :disabled="waiting"
                 @change.native="getSubCategories"
               >
                 <option value="" disabled>Select category</option>
@@ -229,7 +223,7 @@
                     $v.product.subCategoryId.$dirty &&
                     !$v.product.subCategoryId.$error,
                 }"
-                :disabled="waiting || hasNoSubCategories"
+                :disabled="hasNoSubCategories"
               >
                 <option value="" disabled selected>Select sub category</option>
                 <option
@@ -273,7 +267,6 @@
                   'border-green-600':
                     $v.product.weight.$dirty && !$v.product.weight.$error,
                 }"
-                :disabled="waiting"
               />
             </InputGroup>
             <InputGroup
@@ -296,7 +289,6 @@
                   'border-green-600':
                     $v.product.unitId.$dirty && !$v.product.unitId.$error,
                 }"
-                :disabled="waiting"
               >
                 <option value="" disabled>Select unit</option>
                 <option
@@ -329,7 +321,7 @@
       <div class="mt-5 flex md:justify-start">
         <Button
           type="primary"
-          :disabled="waiting || waitForFileUpload"
+          :disabled="waiting"
           @click.native.prevent="submit"
         >
           Submit
@@ -404,7 +396,6 @@ export default {
     return {
       checkingBarcode: false,
       waiting: false,
-      waitForFileUpload: false,
 
       ingredientInput: "",
       foundIngredients: [],
@@ -543,9 +534,8 @@ export default {
       }
     },
 
-    toggleWaitForFileUpload(waitForFileToUpload) {
-      console.log(waitForFileToUpload);
-      this.waitForFileUpload = waitForFileToUpload;
+    toggleWaitForFileUpload() {
+      this.waiting = !this.waiting;
     },
 
     setImagePath(imagePath) {

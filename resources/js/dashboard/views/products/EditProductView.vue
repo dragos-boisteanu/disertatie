@@ -20,7 +20,7 @@
           <div class="flex items-center gap-x-5">
             <div class="w-32 h-32 rounded-md md:mr-4">
               <img
-                v-if="localProduct.image"
+                v-if="hasImage"
                 :src="localProduct.image"
                 class="w-full h-full rounded-md object-cover"
               />
@@ -42,12 +42,11 @@
 
             <div class="flex-1">
               <ImageUploadComponent
-                :disabled="waiting || waitForFileUpload"
                 :clear="clearImage"
                 @waitForFileToUpload="toggleWaitForFileUpload"
                 @setImagePath="setImagePath"
               ></ImageUploadComponent>
-              <button v-if="localProduct.image" @click.prevent="removeImage">
+              <button v-if="hasImage" @click.prevent="removeImage">
                 Remove image
               </button>
             </div>
@@ -84,7 +83,6 @@
                     $v.localProduct.barcode.$dirty &&
                     !$v.localProduct.barcode.$error,
                 }"
-                :disabled="waiting"
                 @input.native="$v.localProduct.barcode.$touch()"
               />
             </InputGroup>
@@ -114,7 +112,6 @@
                   'border-green-600':
                     $v.localProduct.name.$dirty && !$v.localProduct.name.$error,
                 }"
-                :disabled="waiting"
                 @input.native="$v.localProduct.name.$touch()"
               />
             </InputGroup>
@@ -144,7 +141,6 @@
                   $v.localProduct.description.$dirty &&
                   !$v.localProduct.description.$error,
               }"
-              :disabled="waiting"
               @input.native="$v.localProduct.description.$touch()"
             />
           </InputGroup>
@@ -187,7 +183,6 @@
                     $v.localProduct.basePrice.$dirty &&
                     !$v.localProduct.basePrice.$error,
                 }"
-                :disabled="waiting"
               />
             </InputGroup>
             <InputGroup
@@ -211,7 +206,6 @@
                     $v.localProduct.categoryId.$dirty &&
                     !$v.localProduct.categoryId.$error,
                 }"
-                :disabled="waiting"
                 @change.native="getSubCategories"
               >
                 <option value="" disabled>Select category</option>
@@ -293,7 +287,6 @@
                     $v.localProduct.weight.$dirty &&
                     !$v.localProduct.weight.$error,
                 }"
-                :disabled="waiting"
               />
             </InputGroup>
             <InputGroup
@@ -316,8 +309,6 @@
                     $v.localProduct.unitId.$dirty &&
                     !$v.localProduct.unitId.$error,
                 }"
-                :disabled="waiting"
-                @change.native="$v.localProduct.unitId.$touch()"
               >
                 <option value="" disabled>Select unit</option>
                 <option
@@ -349,7 +340,7 @@
       <div class="mt-5 flex md:justify-start">
         <Button
           type="primary"
-          :disabled="waiting || waitForFileUpload"
+          :disabled="waiting"
           @click.native.prevent="submit"
         >
           Submit
@@ -416,6 +407,10 @@ export default {
     hasNoSubCategories() {
       return this.subCategories.length === 0;
     },
+
+    hasImage() {
+      return this.localProduct.image !== null && this.localProduct.image !== "clear" ;
+    }
   },
 
   data() {
@@ -576,8 +571,8 @@ export default {
       this.localProduct.image = "clear";
     },
 
-    toggleWaitForFileUpload(waitForFileToUpload) {
-      this.waitForFileUpload = waitForFileToUpload;
+    toggleWaitForFileUpload() {
+      this.waiting = !this.waiting;
     },
 
     setImagePath(imagePath) {
