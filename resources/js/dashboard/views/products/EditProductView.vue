@@ -409,7 +409,7 @@ export default {
     },
 
     hasImage() {
-      return this.localProduct.image !== null && this.localProduct.image !== "clear" ;
+      return this.localProduct.image !== null && this.localProduct.image !== "" && this.localProduct.image !== "clear" ;
     }
   },
 
