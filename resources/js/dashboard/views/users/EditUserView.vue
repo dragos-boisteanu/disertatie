@@ -11,18 +11,17 @@
                     <!-- IMAGE UPLOAD -->
                     <div class="flex items-center gap-x-5">
                         <div class="w-32 h-32 rounded-md md:mr-4">
-                            <img v-if="user.avatar" :src="user.avatar" class="w-full h-full rounded-md object-cover"/>
+                            <img v-if="hasAvatar" :src="user.avatar" class="w-full h-full rounded-md object-cover"/>
                             <svg v-else class="bg-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="128px" height="128px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
                         </div>
 
                         <div class="flex-1">
                             <ImageUploadComponent
-                                :disabled="waiting || waitForFileUpload"
                                 :clear="clearImage"
                                 @waitForFileToUpload="toggleWaitForFileUpload"
                                 @setImagePath="setImagePath"
                             ></ImageUploadComponent>
-                            <button v-if="user.avatar" @click.prevent="removeAvatar">
+                            <button v-if="hasAvatar" @click.prevent="removeAvatar">
                                 Remove avatar
                             </button>
                         </div>
@@ -47,12 +46,10 @@
                                 </p>
                             </template>
                             <Input 
-                                v-model="localUser.firstName"
+                                v-model="$v.localUser.firstName.$model"
                                 id="firstName" 
-                                name="first name" 
-                                :disabled="waiting"  
+                                name="first name"  
                                 :class="{'border-red-600' : $v.localUser.firstName.$error, 'border-green-600': $v.localUser.firstName.$dirty && !$v.localUser.firstName.$error}"
-                                @blur.native="$v.localUser.firstName.$touch()" 
                             />
                         </InputGroup>
                         <InputGroup
@@ -73,12 +70,10 @@
                                     </p>
                                 </template>
                             <Input 
-                                v-model="localUser.lastName"
+                                v-model="$v.localUser.lastName.$model"
                                 id="lastName" 
                                 name="lastName" 
                                 :class="{'border-red-600' : $v.localUser.lastName.$error, 'border-green-600': $v.localUser.lastName.$dirty && !$v.localUser.lastName.$error}"
-                                :disabled="waiting"
-                                @blur.native="$v.localUser.lastName.$touch()"
                             />
                         </InputGroup>
                     </div>
@@ -99,12 +94,10 @@
                                 </p>
                             </template>
                             <Input 
-                                v-model="localUser.email"
+                                v-model="$v.localUser.email.$model"
                                 id="email" 
                                 name="email"   
                                 :class="{'border-red-600' : $v.localUser.email.$error, 'border-green-600': $v.localUser.email.$dirty && !$v.localUser.email.$error}"
-                                :disabled="waiting"
-                                @blur.native="$v.localUser.email.$touch()"
                             />
                         </InputGroup>
                         <InputGroup
@@ -122,12 +115,10 @@
                                 </p>
                             </template>
                             <Input 
-                                v-model="localUser.phoneNumber"
+                                v-model="$v.localUser.phoneNumber.$model"
                                 id="phone" 
                                 name="phone number" 
                                 :class="{'border-red-600' : $v.localUser.phoneNumber.$error, 'border-green-600': $v.localUser.phoneNumber.$dirty && !$v.localUser.phoneNumber.$error}"
-                                :disabled="waiting" 
-                                @blur="$v.localUser.phoneNumber.$touch()"
                             />
                         </InputGroup>
                     </div>
@@ -142,12 +133,10 @@
                             </p>
                         </template>
                         <Select 
-                            v-model="localUser.role.id"
+                            v-model="$v.localUser.role.id.$model"
                             id="role" 
                             name="role"
                             :class="{'border-red-600' : $v.localUser.role.id.$error, 'border-green-600': $v.localUser.role.id.$dirty && !$v.localUser.role.id.$error}"
-                            :disabled="waiting || disableRoleChange"
-                            @blur.native="$v.localUser.role.id.$touch()"   
                         >
                             <option v-for="role in getRoles" :key="role.id" :value="role.id">{{role.name}}</option>
                         </Select>
@@ -157,7 +146,7 @@
                 <div class="mt-5 flex md:justify-start">
                     <Button 
                         type="primary"
-                        :disabled="waiting || waitForFileUpload"  
+                        :disabled="waiting"  
                         :waiting="waiting"
                         @click.native.prevent="submit"
                     >
@@ -203,6 +192,10 @@
             disableRoleChange() {
                 return !(this.isAdmin || this.isLocationManager)
             },
+
+            hasAvatar() {
+                return this.localUser.avatar !== null && this.localUser.avatar !== "clear";
+            }
         },
 
         data() {
@@ -210,7 +203,6 @@
                 clearImage: false,
 
                 waiting: false,
-                waitForFileUpload: false,
 
                 user: {},
                 localUser: {

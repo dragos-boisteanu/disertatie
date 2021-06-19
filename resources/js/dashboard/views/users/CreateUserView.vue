@@ -12,7 +12,6 @@
                     </h2>
 
                     <ImageUploadComponent
-                        :disabled="waiting || waitForFileUpload"
                         :clear="clearImage"
                         @waitForFileToUpload="toggleWaitForFileUpload"
                         @setImagePath="setImagePath"
@@ -37,12 +36,10 @@
                                 </p>
                             </template>
                             <Input 
-                                v-model="user.firstName"
+                                v-model="$v.user.firstName.$model"
                                 id="firstName"
                                 name="firstName" 
-                                :disabled="waiting"  
                                 :class="{'border-red-600' : $v.user.firstName.$error, 'border-green-600': $v.user.firstName.$dirty && !$v.user.firstName.$error}"
-                                @blur.native="$v.user.firstName.$touch()"
                             />
                         </InputGroup>
                         <InputGroup
@@ -63,12 +60,10 @@
                                 </p>
                             </template>
                             <Input 
-                                v-model="user.lastName" 
+                                v-model="$v.user.lastName.$model" 
                                 id="lastName" 
                                 type="text"       
                                 :class="{'border-red-600' : $v.user.lastName.$error, 'border-green-600': $v.user.lastName.$dirty && !$v.user.lastName.$error}"
-                                :disabled="waiting"
-                                @blur.native="$v.user.lastName.$touch()"
                             />
                         </InputGroup>
                     </div>
@@ -89,12 +84,10 @@
                                 </p>
                             </template>
                             <Input 
-                                v-model="user.email" 
+                                v-model="$v.user.email.$model" 
                                 id="email"
                                 name="email"
                                 :class="{'border-red-600' : $v.user.email.$error, 'border-green-600': $v.user.email.$dirty && !$v.user.email.$error}"
-                                :disabled="waiting"
-                                @blur.native="$v.user.email.$touch()"
                             />
                         </InputGroup>
                         <InputGroup 
@@ -112,12 +105,10 @@
                                 </p>
                             </template>
                             <Input 
-                                v-model="user.phoneNumber"
+                                v-model="$v.user.phoneNumber.$model"
                                 id="phoneNumber"
                                 name="phoneNumber"        
                                 :class="{'border-red-600' : $v.user.phoneNumber.$error, 'border-green-600': $v.user.phoneNumber.$dirty && !$v.user.phoneNumber.$error}"
-                                :disabled="waiting" 
-                                @blur.native="$v.user.phoneNumber.$touch()"
                             />
                         </InputGroup>
                     </div>
@@ -133,12 +124,10 @@
                             </p>
                         </template>
                         <Select                         
-                            v-model="user.roleId" 
+                            v-model="$v.user.roleId.$model" 
                             id="role"
                             name="role"   
                             :class="{'border-red-600' : $v.user.roleId.$error, 'border-green-600': $v.user.roleId.$dirty && !$v.user.roleId.$error}"
-                            :disabled="waiting"
-                            @blur.native="$v.user.roleId.$touch()"
                         >   
                             <option value="" selected disabled>Select role</option>
                             <option v-for="role in availableRoles" :key="role.id" :value="role.id">{{role.name}}</option>
@@ -168,12 +157,11 @@
                                     </p>
                                 </template>
                                 <Input 
-                                    v-model="address"
+                                    v-model="$v.address.$model"
                                     id="addressAddress" 
                                     name="address" 
                                     :class="{'border-red-600' : $v.address.$error, 'border-green-600': $v.address.$dirty && !$v.address.$error}"
-                                    :disabled="waiting || !hasAddress"
-                                    @blur.native="$v.address.$touch()"
+                                    :disabled="!hasAddress"
                                 />
                             </InputGroup>
                         </div>
@@ -184,7 +172,7 @@
             <div class="mt-5 flex md:justify-start">
                 <Button 
                     type="primary"
-                    :disabled="waiting || waitForFileUpload"  
+                    :disabled="waiting"  
                     :waiting="waiting"
                     @click.native.prevent="submit"
                 >
@@ -229,7 +217,6 @@
 
         data() {
             return {
-                waitForFileUpload: false,
                 waiting: false,
 
                 clearImage: false,
@@ -368,9 +355,8 @@
                 this.required = !this.required
             },
 
-            toggleWaitForFileUpload(waitForFileToUpload) {
-                console.log(waitForFileToUpload);
-                this.waitForFileUpload = waitForFileToUpload;
+            toggleWaitForFileUpload() {
+                this.waiting = !this.waiting;
             },
 
             setImagePath(imagePath) {
