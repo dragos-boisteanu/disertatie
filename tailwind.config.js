@@ -2,6 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors')
 
 module.exports = {
+    mode: 'jit',
     purge: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
@@ -25,17 +26,20 @@ module.exports = {
                 xxs: ['10.4px', ' 1.063rem'],
             },        
         },
-        colors,
+        colors: {
+            ...colors,
+            transparent: 'transparent',
+        },
     },
 
     variants: {
-        extend: {
-            opacity: ['disabled'],
-            pointerEvents: ['hover', 'disabled'],
-            boxShadow: ['active'],
-            backgroundColor: ['active', 'disabled', 'even'],
+        // extend: {
+        //     opacity: ['disabled'],
+        //     pointerEvents: ['hover', 'disabled'],
+        //     boxShadow: ['active'],
+        //     backgroundColor: ['active', 'disabled', 'even'],
 
-        },
+        // },
     },
     plugins: [
         require('tailwindcss-ripple')()

@@ -74,7 +74,7 @@
         <div class=" flex items-center justify-between gap-x-10">
             <ul class="flex items-start">
                 <li>
-                    <a class="text-white text-lg pb-0.5 border-b-4 border-orange-600 hover:border-black hover:text-black"
+                    <a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black"
                         href="/">
                         Meniu
                     </a>

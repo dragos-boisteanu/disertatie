@@ -17,13 +17,21 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 */
 
 Route::get('/', function () {
-    return view('store.menu');
+    return view('store.menu.index');
 })->name('home');
 
 
 Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->where('any', '.*')
     ->middleware(['auth', 'dashboard.access'])->name('dashboard');
     // verified
+
+
+Route::group(['namespace'=>'Web\Client'], function() {  
+    Route::get('/menu', 'MenuController@index')->name('menu-index');
+    Route::get('/menu/{id}', 'MenuController@show')->name('menu-show');
+});
+// verified
+
 
 require __DIR__.'/auth.php';
 
