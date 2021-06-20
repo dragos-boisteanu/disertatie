@@ -23,7 +23,7 @@
 
 <body class="h-full flex flex-col">
     @include('includes.header')
-    <main class="flex-1 bg-gray-900">
+    <main class="flex-1 bg-gray-800">
         @yield('content')
     </main>
     @include('includes.footer')
