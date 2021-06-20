@@ -32,6 +32,10 @@ class MenuController extends Controller
         $categories = Category::all();
         $category = Category::with('subCategories')->findOrFail($id);
 
+        $category->subCategories->each( function($subCategory) {
+            $subCategory->load('subProducts');
+        });
+
         return view('store.menu.category', ['category'=>$category, 'categories' => $categories]);
     }
 
