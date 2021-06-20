@@ -1,5 +1,5 @@
-<footer class="flex-initial bg-gray-900 p-6">
-    <div class="flex items-start justify-around">
+<footer class="flex-initia  bg-gray-900 p-6">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4 2xl:grid-cols-5">
         <div>
             <h4 class="text-trueGray-400 text-lg font-semibold">
                 Link-uri
@@ -147,7 +147,7 @@
                 </li>
             </ul>
         </div>
-        <div class="h-64 w-64 rounded hover:shadow-md">
+        <div class="h-64 w-64 rounded col-span-2 justify-self-center hover:shadow-md md:col-span-4 2xl:col-span-1">
             <a target="_blank"
                 href="https://www.google.com/maps/place/Strada+%C8%98colilor+47,+Br%C4%83ila+817181/@45.265571,27.9567674,17z/data=!3m1!4b1!4m5!3m4!1s0x40b729e5525ba093:0xf4695bc61a90a23!8m2!3d45.265571!4d27.9589561">
                 <img class="w-full h-full rounded"src="{{asset('storage/images/map.png')}}">

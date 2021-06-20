@@ -1,14 +1,14 @@
-<header class="flex-initial h-80 bg-gray-800">
+<header class="flex-initial h-auto bg-gray-800">
     <div id="backdrop" class="fixed z-20 top-0 left-0 h-full w-full bg-black bg-opacity-75 hidden"></div>
-    <div class="splide">
+    {{-- <div class="splide">
         <div class="splide__track">
             <ul class="splide__list">
-                <li class="splide__slide"><img src="{{ asset('storage/images/pizza-2.jpg') }}" alt="pizza"></li>
-                <li class="splide__slide">Slide 02</li>
-                <li class="splide__slide">Slide 03</li>
+                <li class="splide__slide"><img class="object-cover" src="{{ asset('storage/images/slider1.jpg') }}" alt="pizza"></li>
+                <li class="splide__slide"><img class="object-cover" src="{{ asset('storage/images/hot-dishes-2.jpg')}}"></li>
+                <li class="splide__slide"><img class="object-cover" src="{{ asset('storage/images/wine.jpg') }}"></li>
             </ul>
         </div>
-    </div>
+    </div> --}}
     {{-- mobile nav --}}
     <nav class="h-10 bg-orange-600 flex items-center justify-between px-4 lg:hidden">
         <div id="mobileMenuToggler" class="p-3 cursor-pointer">
@@ -66,6 +66,7 @@
             @endauth
         </ul>
     </nav>
+    
     {{-- desktop nav --}}
     <nav class=" h-10 bg-orange-600 px-4 hidden lg:flex lg:items-center lg:justify-between">
         <div>
@@ -293,18 +294,18 @@
 </header>
 
 @push('scripts')
-    <script>
+    {{-- <script>
         new Splide('.splide', {
             type: 'loop',
             speed: 400,
-            height: '240px',
+            height: '250px',
             widht: 'full',
             rewind: true,
             arrows: false,
             pagination: false,
             autoplay: true
         }).mount();
-    </script>
+    </script> --}}
 
     <script>
         const mobileMenuToggler = document.getElementById("mobileMenuToggler");
