@@ -3,8 +3,6 @@
 @import 'tailwindcss/utilities';
 
 
-
-
 .breadcrumbs .breadcrumb-item:after {
     content: '/';
     @apply text-sm ml-2 text-orange-700;

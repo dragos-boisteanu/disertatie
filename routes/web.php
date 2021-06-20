@@ -17,10 +17,8 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('store.menu');
 })->name('home');
-
-
 
 
 Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->where('any', '.*')
