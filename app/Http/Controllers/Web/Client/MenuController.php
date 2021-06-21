@@ -15,7 +15,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::where('parent_id', null)->get();
 
         return view('store.menu.index', ['categories'=>$categories]);
     }
@@ -29,7 +29,7 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        $categories = Category::all();
+        $categories = Category::where('parent_id', null)->get();
         $category = Category::with('subCategories')->findOrFail($id);
 
         $category->subCategories->each( function($subCategory) {
