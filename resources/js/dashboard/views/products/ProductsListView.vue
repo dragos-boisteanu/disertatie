@@ -136,7 +136,7 @@
           </div>
           <div class="mt-2">
             <div class="flex justify-between items-center">
-              <Category :category-id="product.categoryId"></Category>
+              <Category :category-id="product.categoryId" :sub-category-id="product.subCategoryId"></Category>
               <Stock :quantity="product.quantity"></Stock>
             </div>
           </div>

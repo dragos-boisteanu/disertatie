@@ -19,7 +19,7 @@ class IngredientController extends Controller
      */
     public function index()
     {
-        $ingredients = Ingredient::all();
+        $ingredients = Ingredient::orderBy('name', 'asc')->get();
 
         return new IngredientCollection($ingredients);
     }

@@ -7,14 +7,14 @@
       shadow
       rounded-sm
       p-5
-      md:flex-0
+      md:flex-
+      max-h-96
     "
   >
     <table class="px-2 w-full table-auto rounded-sm max-h-80 md:max-h-96">
       <thead class="w-full bg-gray-700 text-orange-500">
         <tr class="text-left text-sm">
           <th class="p-2 text-center">Index</th>
-          <th class="p-2">Color</th>
           <th class="p-2">Name</th>
           <th class="p-2">Vat</th>
           <th class="p-2">Discount</th>
@@ -42,12 +42,6 @@
           "
         >
           <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
-          <td class="p-2">
-            <div
-              class="rounded w-4 h-4"
-              :style="{ background: category.color }"
-            ></div>
-          </td>
           <td class="p-2">{{ category.name }}</td>
           <td class="p-2">{{ category.vat }} %</td>
           <td class="p-2">
@@ -75,12 +69,6 @@
           "
         >
           <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
-          <td class="p-2">
-            <div
-              class="rounded w-4 h-4"
-              :style="{ background: category.color }"
-            ></div>
-          </td>
           <td class="p-2">{{ category.name }}</td>
           <td class="p-2">{{ category.vat }} %</td>
           <td class="p-2">

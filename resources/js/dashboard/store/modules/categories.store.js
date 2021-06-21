@@ -9,7 +9,7 @@ const initialState = () => ({
 const state = initialState();
 
 const getters = {
-    getCategories: (state) => state.categories 
+    getCategories: (state) => state.categories
 }
 
 const actions = {
@@ -17,68 +17,80 @@ const actions = {
         commit('RESET');
     },
 
-    async fetchCategories({commit}) {
+    async fetchCategories({ commit }) {
         try {
             const response = await downloadCategories();
             commit('SET_CATEGORIES', response.data.data);
-        } catch ( error ) {
+        } catch (error) {
             throw error;
         }
     },
 
-    async postCategory({commit}, payload) {
+    async postCategory({ commit }, payload) {
         try {
             const response = await postCategory(payload);
             payload.id = response.data.id;
-            if(payload.parentId) {
-                payload.vat = response.data.vat
+            payload.color = response.data.color;
+
+            if (payload.parentId) {
                 payload.parentName = response.data.parentName
+
+
+                payload.vat = response.data.vat
+
+
+            } else {
+                payload.parentName = null;
+                payload.parentId = null;
             }
-            
+
+            console.log(payload);
+
             payload.productsCount = 0;
+
             commit('ADD_CATEGORY', payload);
-        } catch ( error ) {
+        } catch (error) {
             throw error
         }
     },
 
-    async patchCategory({commit}, payload) {
+    async patchCategory({ commit }, payload) {
         try {
             const category = payload.category;
             const response = await patchCategory(category);
-            if(response.data.parentName) {
+            if (response.data.parentName) {
                 payload.category.parentName = response.data.parentName;
             }
             commit('PATCH_CATEGORY', payload);
             return category
-        } catch ( error){
+        } catch (error) {
             throw error;
         }
     },
 
-    async deleteCategory({commit}, payload) {
+    async deleteCategory({ commit }, payload) {
         try {
             await deleteCategory(payload);
             commit('DELETE_CATEGORY', payload);
-        } catch ( error ) {
+        } catch (error) {
             throw error
         }
     },
 
-    async searchCategory({commit}, categoryName) {
+    async searchCategory({ commit }, categoryName) {
         // const regex = new RegExp(`${categoryName}+`, 'i')
         // return _filter(state.categories, (category) => regex.test(category.name))
         try {
             const response = await searchCategory(categoryName);
-            if(response.status === 200) {
+            if (response.status === 200) {
                 commit('SET_CATEGORIES', response.data.categories);
             }
-        } catch ( error ) {
+        } catch (error) {
             throw error;
         }
     },
 
-    updateDiscount({commit}, payload) {
+    updateDiscount({ commit }, payload) {
         commit('UPDATE_DISCOUNT', payload);
     }
 }

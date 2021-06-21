@@ -45,9 +45,15 @@ class CategoryController extends Controller
         if($request->has('parentId')) {
             $input['parent_id'] = $request->parentId;
             $parentCategory = Category::findOrFail($request->parentId);
-            $input['vat'] = $parentCategory->vat;
 
-            $response['vat'] = $parentCategory->vat;
+            if($request->has('vat')) {
+                $input['vat'] = $request->vat;
+                $response['vat'] = $request->vat;
+            }else {
+                $input['vat'] = $parentCategory->vat;
+                $response['vat'] = $parentCategory->vat;
+            }
+           
             $response['parentName'] = $parentCategory->name;
         }
 

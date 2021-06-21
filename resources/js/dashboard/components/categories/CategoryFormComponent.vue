@@ -26,12 +26,12 @@
           :required="true"
         >
           <template v-slot:errors>
-            <p v-if="!$v.category.name.required">The vat field is required</p>
+            <p v-if="!$v.category.name.required">The name field is required</p>
             <p v-if="!$v.category.name.maxLength">
-              The vat field must be no longer than 50 characters
+              The name field must be no longer than 50 characters
             </p>
             <p v-if="!$v.category.name.alphaSpaces">
-              The vat field must contain only letters or spaces
+              The name field must contain only letters or spaces
             </p>
           </template>
           <Input
@@ -49,11 +49,10 @@
 
         <div class="w-full flex items-center gap-x-4">
           <InputGroup
-            v-if="isParent"
             id="vat"
             label="VAT"
             :hasError="$v.category.vat.$error"
-            :required="true"
+            :required="isParent"
           >
             <template v-slot:errors>
               <p v-if="!$v.category.vat.required">The vat field is required</p>
@@ -75,31 +74,6 @@
               }"
               :disabled="waiting"
             ></Input>
-          </InputGroup>
-          <InputGroup
-            id="color"
-            label="Color"
-            :hasError="$v.category.color.$error"
-            :required="true"
-          >
-            <template slot="errors">
-              <p v-if="!$v.category.color.required">
-                The color field is required
-              </p>
-            </template>
-            <input
-              id="color"
-              name="color"
-              type="color"
-              v-model="$v.category.color.$model"
-              class="p-1 rounded border order-gray-300 outline-none"
-              :class="{
-                'border-red-600': $v.category.color.$error,
-                'border-green-600':
-                  $v.category.color.$dirty && !$v.category.color.$error,
-              }"
-              :disabled="waiting"
-            />
           </InputGroup>
         </div>
 
@@ -241,7 +215,6 @@ export default {
       category: {
         name: "",
         vat: "",
-        color: "",
         discountId: "",
         parentId: null,
         parentName: "",
@@ -262,9 +235,6 @@ export default {
         }),
         integer,
         minValue: minValue(0),
-      },
-      color: {
-        required,
       },
     },
   },
@@ -292,19 +262,22 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        if (this.category.vat === "") {
-          delete this.category.vat;
+
+        const payload = this.category;
+
+        if (payload.vat === "") {
+          delete payload.vat;
         }
 
-        if (this.category.parentId === null) {
-          delete this.category.parentId;
+        if (payload.parentId === null) {
+          delete payload.parentId;
         }
 
-        if (this.category.discountId === "") {
-          delete this.category.discountId;
+        if (payload.discountId === "") {
+          delete payload.discountId;
         }
 
-        await this.postCategory(this.category);
+        await this.postCategory(payload);
 
         this.openNotification({
           type: "ok",

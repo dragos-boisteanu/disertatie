@@ -1,5 +1,6 @@
 import { downloadIngredients, postIngredient, patchIngredient, deleteIngredient } from '../../api/ingreditents.api.js'
 import _findIndex from 'lodash/findIndex';
+import _orderBy from 'lodash/orderBy';
 
 const initialState = () => ({
     ingredients: [],
@@ -70,7 +71,8 @@ const mutations = {
     },
 
     ADD_INGREDIENT(state, payload) {
-        state.ingredients.push(payload)
+        state.ingredients.push(payload);
+        _.orderBy(state.ingredients, ['name'], ['asc']);
     },
 
     PATCH_INGREDIENT(state, payload) {

@@ -8,7 +8,7 @@
           <th class="p-2">Quantity</th>
         </tr>
       </thead>
-      <tbody class="overflow-y-auto">
+      <tbody class="overflow-y-scroll max-h-96">
         <tr
           v-for="(ingredient, index) in ingredients"
           :key="ingredient.id"
