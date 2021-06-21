@@ -123,16 +123,16 @@
         </div>
         <div id="authModal" class="fixed top-1/2 left-0 transform -translate-y-1/2 w-full md:left-1/2 md:-translate-x-1/2 md:w-3/4 lg:w-1/2 2xl:w-1/3 flex-col items-center justify-center z-30 hidden">
             <div
-                class="relative w-full rounded-md shadow-md flex flex-col items-stretch justify-start md:flex-row md:justify-between overflow-auto">
+                class="relative w-full md:rounded-md shadow-md flex flex-col items-stretch justify-start md:flex-row md:justify-between overflow-auto">
                 <button id="closeAuthModal" class="absolute top-0 right-0 cursor-pointer p-2">
-                    <svg class="fill-current text-white md:text-black" xmlns="http://www.w3.org/2000/svg" height="24px"
+                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" height="24px"
                         viewBox="0 0 24 24" width="24px">
                         <path d="M0 0h24v24H0V0z" fill="none" />
                         <path
                             d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
                     </svg>
                 </button>
-                <div class="bg-trueGray-800 text-white p-4 md:rounded-l-md">
+                {{-- <div class="bg-trueGray-800 text-white p-4 md:rounded-l-md">
                     <div class="font-semibold text-lg">
                         Advantajes of being a member
                     </div>
@@ -150,7 +150,7 @@
                             Save addresses
                         </li>
                     </ul>
-                </div>
+                </div> --}}
                 <form id="loginForm" method="POST" action="{{ route('login') }}"
                     class="bg-white p-6 md:flex-1 md:rounded-r-md hidden">
                     @csrf
