@@ -1,35 +1,44 @@
 @extends('layouts.store')
 
 @section('content')
-    <div class="w-full h-full flex items-start gap-x-10 justify-center">
+    <x-menu>
         @include('includes.menu-categories')
-        <ul class="text-gray-600 w-1/2">
-            {{-- <li>
-                <h1 class="font-bold text-3xl text-orange-600">{{ $category->name }}</h1>
-            </li> --}}
+        @include('includes.menu-categories-select')
+        <ul class="mt-4 text-gray-600 w-full lg:w-2/5">
             @foreach ($category->subCategories as $subCategory)
-                <li>
-                    <h2>{{ $subCategory->name }}</h2>
+                <li class="pb-2 border-b border-gray-600  mb-4 last:border-b-0 last:border-red-700">
+                    <h1 class="font-semibold text-xl mb-2 text-orange-600">{{ $subCategory->name }}</h1>
                     <ul>
                         @foreach ($subCategory->subProducts as $product)
-                            <div>
-                                {{ $product->name }}
-                            </div>
-                            <ul>
-                                <li class="">
-                                    @foreach ($product->ingredients as $ingredient)
-                                        {{ $ingredient->name }},
-                                    @endforeach
-                                </li>
-                            </ul>
-                            <div>
-                                Final price: {{$product->price}}
-                            </div>
-
+                            <li class="mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5">
+                                <div class="col-span-3 md:col-span-2">
+                                    <h2 class="text-gray-400 mb-1 justify-self-start self-center">
+                                        {{ $product->name }} - {{ $product->weight }}{{ $product->unit->name }}
+                                    </h2>
+                                    <ul class="">
+                                        <li class="text-sm text-gray-500">
+                                            @foreach ($product->ingredients as $ingredient)
+                                                {{ $ingredient->name }},
+                                            @endforeach
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="text-sm self-center px-4 md:px-8">
+                                    <input type="number" value="1" min-value="1"
+                                        class="w-full rounded-sm bg-white text-center ">
+                                </div>
+                                <div class="text-sm text-gray-300 self-center justify-self-center">
+                                    {{ $product->price }} Ron
+                                </div>
+                                <button id="{{ $product->id }}"
+                                    class="self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200">
+                                    Add to cart
+                                </button>
+                            </li>
                         @endforeach
                     </ul>
                 </li>
             @endforeach
         </ul>
-    </div>
+    </x-menu>
 @endsection

@@ -1,4 +1,4 @@
-<footer class="flex-initia  bg-gray-800 p-6">
+<footer class="flex-initial  bg-gray-800 p-6">
     <div class="grid grid-cols-2 gap-4 md:grid-cols-4 2xl:grid-cols-5">
         <div>
             <h4 class="text-trueGray-400 text-lg font-semibold">

@@ -23,7 +23,7 @@
 
 <body class="h-full flex flex-col">
     @include('includes.header')
-    <main class="flex-1 bg-gray-900 pt-10">
+    <main class="flex-1 bg-gray-900 px-4 py-8">
         @yield('content')
     </main>
     @include('includes.footer')

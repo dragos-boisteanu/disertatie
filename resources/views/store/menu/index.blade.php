@@ -1,10 +1,11 @@
 @extends('layouts.store')
 
 @section('content')
-    <div class="w-full h-full flex items-start gap-x-10 justify-center">
+    <x-menu>
         @include('includes.menu-categories')
-        <div class="w-1/2 text-orange-600 text-4xl  flex items-center justify-start font-semibold">
+        @include('includes.menu-categories-select')
+        <div class="w-full mt-4 text-coolGray-700 text-4xl flex items-center justify-center font-semibold">
             Choose a category
         </div>
-    </div>
+    </x-menu>
 @endsection
