@@ -60,7 +60,11 @@
                     productQuantity: productQuantity.value
                 }
 
-                console.log(product)
+                axios.post('/api/client/cart', product).then(response => {
+                    console.log(response)
+                }).catch(error => {
+                    console.log(error)
+                })
                 // ajax call to add product into user cart
             })
         })

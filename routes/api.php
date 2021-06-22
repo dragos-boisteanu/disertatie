@@ -92,3 +92,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 });
 
 
+Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {  
+    Route::apiResource('cart', 'CartController')->only('store', 'destroy');
+});
+
+

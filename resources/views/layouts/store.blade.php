@@ -12,12 +12,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-default.min.css">
 
     <!-- Scripts -->
-    <script src="{{ asset('js/client/app.js') }}" defer></script>
+    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 </head>
 
