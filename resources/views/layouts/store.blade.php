@@ -17,7 +17,7 @@
         href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-default.min.css">
 
     <!-- Scripts -->
-    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 </head>
 
@@ -28,10 +28,8 @@
     </main>
     @include('includes.footer')
 </body>
-<script>
+<script src="{{ asset(mix('js/app.js')) }}"></script>
 
-</script>
-@stack('scripts')
 <script>
     const backdrop = document.getElementById("backdrop");
 
@@ -43,12 +41,13 @@
             if (mobileSlider && !mobileSlider.classList.contains('hidden')) {
                 mobileSlider.classList.add('hidden');
             }
- 
+
             if (authModal && !authModal.classList.contains('hidden')) {
                 authModal.classList.add('hidden');
             }
         }
     })
 </script>
+@stack('scripts')
 
 </html>

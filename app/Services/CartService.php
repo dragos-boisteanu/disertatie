@@ -3,11 +3,11 @@
 
 namespace App\Services;
 
+use Exception;
 use App\Models\Cart;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use App\Interfaces\CartServiceInterface;
-use App\Models\User;
-use Exception;
 
 class CartService implements CartServiceInterface
 {
@@ -75,6 +75,7 @@ class CartService implements CartServiceInterface
       } else {
         $cart->items()->attach($productId, ['quantity' => 1]);
       }
+
     } catch (\Exception $e) {
       // throw new Exception('Something went wrong, try again !');
       throw new Exception($e->getMessage());

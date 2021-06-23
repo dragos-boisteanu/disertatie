@@ -61,11 +61,11 @@
                 }
 
                 axios.post('/api/client/cart', product).then(response => {
-                    console.log(response)
+                    const cartQuantity = document.getElementById('cartQuantity');
+                    cartQuantity.innerHTML = response.data.count;
                 }).catch(error => {
                     console.log(error)
                 })
-                // ajax call to add product into user cart
             })
         })
     </script>
