@@ -7,10 +7,10 @@
         @click="refresh"
         class="
           p-1
-          bg-lightBlue-600
+          bg-sky-600
           rounded-sm
           active:shadow-inner
-          active:bg-lightBlue-500
+          active:bg-sky-500
         "
       >
         <svg

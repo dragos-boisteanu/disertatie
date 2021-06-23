@@ -23,7 +23,7 @@
         type="text"
         class="
           w-full
-          border-b-2 border-lightBlue-600
+          border-b-2 border-sky-600
           p-2
           text-sm
           rounded-sm
@@ -41,7 +41,7 @@
         class="
           mt-3
           w-full
-          border-b-2 border-lightBlue-600
+          border-b-2 border-sky-600
           p-2
           text-sm
           rounded-sm
@@ -52,7 +52,7 @@
         @keyup="callFilter"
       />
 
-      <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+      <div class="mt-3 pb-2 border-b-2 border-sky-600">
         <div class="mb-2 text-base font-semibold">Categories</div>
         <div class="flex items-center flex-wrap gap-2">
           <div
@@ -77,7 +77,7 @@
       </div>
 
       <div
-        class="mt-3 pb-2 border-b-2 border-lightBlue-600"
+        class="mt-3 pb-2 border-b-2 border-sky-600"
         v-if="showSubCategories"
       >
         <div class="mb-2 text-base font-semibold">Sub categories</div>

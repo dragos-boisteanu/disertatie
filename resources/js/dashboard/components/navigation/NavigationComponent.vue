@@ -24,7 +24,7 @@
         </div>
         
         <div class="text-gray-300 hover:text-white pb-2 mb-2 border-b border-coolGray-500">
-            <router-link :to="{name: 'Dashboard'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Dashboard</router-link>
+            <router-link :to="{name: 'Dashboard'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact>Dashboard</router-link>
         </div>
         
         <div class="overflow-y-auto max-h-96 md:max-h-full  pb-8 md:pb-0">
@@ -34,10 +34,10 @@
                 </div>
                 <ul class="mt-1">
                     <li class="text-sm text-gray-300 hover:text-white tracking-wid">
-                        <router-link :to="{name: 'Orders'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Orders list</router-link>
+                        <router-link :to="{name: 'Orders'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Orders list</router-link>
                     </li>
                     <li class="text-sm text-gray-300 hover:text-white tracking-wid"  v-if="isAdmin || isLocationManager || isWaiter || isKitchenManager">
-                        <router-link :to="{name: 'CreateOrder'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Create order</router-link>
+                        <router-link :to="{name: 'CreateOrder'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Create order</router-link>
                     </li>
                 </ul>
             </div>
@@ -48,10 +48,10 @@
                 </div>
                 <ul class="mt-1">
                     <li class="text-sm text-gray-300 hover:text-white">
-                        <router-link :to="{name: 'Users'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Users List</router-link>
+                        <router-link :to="{name: 'Users'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact>Users List</router-link>
                     </li>
                     <li class="text-sm text-gray-300 hover:text-white" v-if="isAdmin || isLocationManager || isWaiter">
-                        <router-link :to="{name: 'CreateUser'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Create User Profile</router-link>
+                        <router-link :to="{name: 'CreateUser'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Create User Profile</router-link>
                     </li>
                 </ul>
             </div>
@@ -62,19 +62,19 @@
                 </div>
                 <ul class="mt-1">
                     <li class="text-sm text-gray-300 hover:text-white tracking-wid">
-                        <router-link :to="{name: 'Products'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Products list</router-link>
+                        <router-link :to="{name: 'Products'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Products list</router-link>
                     </li>
                     <li class="text-sm text-gray-300 hover:text-white tracking-wide" v-if="isAdmin || isLocationManager">
-                        <router-link :to="{name: 'AddProduct'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Add product</router-link>
+                        <router-link :to="{name: 'AddProduct'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact>Add product</router-link>
                     </li>
                     <li class="text-sm text-gray-300 hover:text-white tracking-wide" v-if="isAdmin || isLocationManager">
-                        <router-link :to="{name: 'Categories'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Categories</router-link>
+                        <router-link :to="{name: 'Categories'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact>Categories</router-link>
                     </li>
                     <li class="text-sm text-gray-300 hover:text-white tracking-wide" v-if="isAdmin || isLocationManager">
-                        <router-link :to="{name: 'Ingredients'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Ingredients</router-link>
+                        <router-link :to="{name: 'Ingredients'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact>Ingredients</router-link>
                     </li>
                     <li class="text-sm text-gray-300 hover:text-white tracking-wide" v-if="!isDelivery">
-                        <router-link :to="{name: 'Stocks'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact>Stocks</router-link>
+                        <router-link :to="{name: 'Stocks'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact>Stocks</router-link>
                     </li>
                 </ul>
             </div>
@@ -85,7 +85,7 @@
                 </div>
                 <ul class="mt-1">
                     <li class="text-sm text-gray-300 hover:text-white tracking-wid">
-                        <router-link :to="{name: 'Tables'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Tables list</router-link>
+                        <router-link :to="{name: 'Tables'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Tables list</router-link>
                     </li>
                 </ul>
             </div>  
@@ -96,7 +96,7 @@
                 </div>
                 <ul class="mt-1">
                     <li class="text-sm text-gray-300 hover:text-white tracking-wid">
-                        <router-link :to="{name: 'Discounts'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-lightBlue-400 hover:bg-lightBlue-400 hover:bg-opacity-20" exact >Discounts list</router-link>
+                        <router-link :to="{name: 'Discounts'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Discounts list</router-link>
                     </li>
                 </ul>
             </div>  
@@ -130,6 +130,6 @@
 <style scoped>
     .router-link-active,
     .router-link-exact-active {
-        @apply border-lightBlue-400 text-white;
+        @apply border-sky-400 text-white;
     }
 </style>

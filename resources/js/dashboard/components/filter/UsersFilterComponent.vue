@@ -17,7 +17,7 @@
                 id="id" 
                 name="id" 
                 type="text"
-                class="w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                class="w-full border-b-2 border-sky-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="ID"
                 v-model="localFilterData.id"
                 @keyup="callFilter"
@@ -27,7 +27,7 @@
                 id="name" 
                 name="id" 
                 type="text" 
-                class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                class="mt-3 w-full border-b-2 border-sky-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="First name"
                 v-model="localFilterData.firstName"
                 @keyup="callFilter"    
@@ -37,7 +37,7 @@
                 id="id" 
                 name="name" 
                 type="text" 
-                class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                class="mt-3 w-full border-b-2 border-sky-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Name"
                 v-model="localFilterData.name"
                 @keyup="callFilter"    
@@ -47,7 +47,7 @@
                 id="email" 
                 name="email" 
                 type="text" 
-                class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                class="mt-3 w-full border-b-2 border-sky-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Email"
                 v-model="localFilterData.email"
                 @keyup="callFilter"    
@@ -57,13 +57,13 @@
                 id="phoneNumber" 
                 name="phoneNumber" 
                 type="text" 
-                class="mt-3 w-full border-b-2 border-lightBlue-600 p-2 text-sm rounded-sm outline-none"
+                class="mt-3 w-full border-b-2 border-sky-600 p-2 text-sm rounded-sm outline-none"
                 placeholder="Phone number"
                 v-model="localFilterData.phoneNumber"
                 @keyup="callFilter"    
             />
 
-            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+            <div class="mt-3 pb-2 border-b-2 border-sky-600">
                 <div class="mb-2 text-base font-semibold">
                     Roles
                 </div>
@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            <!-- <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+            <!-- <div class="mt-3 pb-2 border-b-2 border-sky-600">
                 <div class="mb-2 text-base font-semibold">
                     Has email verified
                 </div>
@@ -111,7 +111,7 @@
                         <label for="isNotVerified" class="text-sm capitalize">Not verified</label>
                     </div>
                     <button 
-                        class="text-sm  border px-2 py-1 rounded border-gray-400 hover:border-lightBlue-600"
+                        class="text-sm  border px-2 py-1 rounded border-gray-400 hover:border-sky-600"
                         @click="resetVerifiedFilter"
                     >
                         Reset
@@ -119,7 +119,7 @@
                 </div>
             </div> -->
 
-            <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+            <div class="mt-3 pb-2 border-b-2 border-sky-600">
                 <div class="mb-2 text-base font-semibold">
                     Joined date
                 </div>

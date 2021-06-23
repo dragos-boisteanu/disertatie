@@ -123,7 +123,7 @@
                     </h5>
                     <ul class="ml-1 text-sm">
                         <li class="my-1">
-                            <span class="text-lightBlue-700">Digi</span> 1234567890
+                            <span class="text-sky-700">Digi</span> 1234567890
                         </li>
                         <li class="my-1">
                             <span class="text-orange-600">Orange</span> 1234567890

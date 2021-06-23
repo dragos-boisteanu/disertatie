@@ -235,7 +235,7 @@ export default {
 
     startsAtClass() {
       let customClass =
-        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
+        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-sky-500";
       if (this.$v.discount.startsAt.$error) {
         customClass = customClass.concat(" ", "border-red-600");
       } else if (
@@ -249,7 +249,7 @@ export default {
 
     endsAtClass() {
       let customClass =
-        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
+        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-sky-500";
       if (this.$v.discount.endsAt.$error) {
         customClass = customClass.concat(" ", "border-red-600");
       } else if (
