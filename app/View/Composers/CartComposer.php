@@ -31,6 +31,6 @@ class CartComposer
       $cart = $this->cartService->getCart(null, session()->getId());
     }
 
-    $view->with('cartItemsCount', $cart->itemsCount);
+    $view->with('cartItemsCount', $cart->itemsCount)->with('cartItems', $cart->items);
   }
 }
