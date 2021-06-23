@@ -3,7 +3,13 @@ const colors = require('tailwindcss/colors')
 
 module.exports = {
     mode: 'jit',
-    purge: ['./resources/**/*.{js,vue,blade.php}'],
+    // purge: ['./resources/**/*.{js,vue,blade.php}'],
+    purge: [
+        './storage/framework/views/*.php',
+        './resources/**/*.blade.php',
+        './resources/**/*.js',
+        './resources/**/*.vue',
+    ],
     // purge: [
     //     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
     //     './storage/framework/views/*.php',
