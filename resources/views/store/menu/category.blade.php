@@ -62,9 +62,8 @@
 
                 axios.post('/api/client/cart', product).then(response => {
                     const cartQuantities = Array.from(document.querySelectorAll('.cart-quantity'));
-
+                    
                     cartQuantities.forEach(cartQuantity => {
-                        console.log(cartQuantity)
                         cartQuantity.innerHTML = response.data.count;
                     })
                     

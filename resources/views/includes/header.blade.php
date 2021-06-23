@@ -164,7 +164,7 @@
                 </form>
 
                 <form id="registerForm" method="POST" action="{{ route('register') }}"
-                    class="bg-white p-6 md:flex-1 md:rounded-r-md hidden">
+                    class="bg-white p-6 md:flex-1 h-full md:rounded-r-md hidden">
                     @csrf
 
                     {{-- First name --}}
