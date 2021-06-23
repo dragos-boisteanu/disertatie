@@ -9,20 +9,15 @@
             </ul>
         </div>
     </div> --}}
+
     {{-- mobile nav --}}
-    <nav class="h-10 bg-orange-600 flex items-center justify-between px-4 lg:hidden">
+    <nav class="bg-orange-600 flex items-center justify-between px-4 lg:hidden">
         <div id="mobileMenuToggler" class="p-3 cursor-pointer">
             @for ($i = 0; $i < 3; $i++)
                 <div class="bg-black h-0.5 w-6 my-1.5"></div>
             @endfor
         </div>
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path
-                    d="M15.55 13c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.48-.87-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7l1.1-2h7.45zM6.16 6h12.15l-2.76 5H8.53L6.16 6zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
-            </svg>
-        </div>
+        <x-mobile-cart></x-mobile-cart>
         <ul id="mobileSlider" class="fixed z-40 top-0 left-0 h-full w-3/4 bg-gray-900 text-white hidden">
             <li>
                 <a href="">
@@ -66,7 +61,7 @@
             @endauth
         </ul>
     </nav>
-    
+
     {{-- desktop nav --}}
     <nav class=" h-10 bg-orange-600 px-4 hidden lg:flex lg:items-center lg:justify-between">
         <div>
@@ -95,9 +90,7 @@
                 </li>
             </ul>
         </div>
-
-        {{-- cart --}}
-        <x-cart></x-cart>
+        <x-desktop-cart></x-desktop-cart>
     </nav>
 
     @guest
@@ -112,7 +105,8 @@
                 Inregistrare
             </div>
         </div>
-        <div id="authModal" class="fixed top-1/2 left-0 transform -translate-y-1/2 w-full md:left-1/2 md:-translate-x-1/2 md:w-3/4 lg:w-1/2 2xl:w-1/4 flex-col items-center justify-center z-30 hidden">
+        <div id="authModal"
+            class="fixed top-1/2 left-0 transform -translate-y-1/2 w-full md:left-1/2 md:-translate-x-1/2 md:w-3/4 lg:w-1/2 2xl:w-1/4 flex-col items-center justify-center z-30 hidden">
             <div
                 class="relative w-full md:rounded-md shadow-md flex flex-col items-stretch justify-start md:flex-row md:justify-between overflow-auto">
                 <button id="closeAuthModal" class="absolute top-0 right-0 cursor-pointer p-2">
@@ -263,6 +257,16 @@
             </li>
         </ul>
     @endauth
+
+    <x-cart id="mobileCart">
+        <div id="closeCart" class="lg:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+            </svg>
+        </div>
+    </x-cart>
 </header>
 
 @push('scripts')
