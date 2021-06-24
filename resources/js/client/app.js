@@ -2,6 +2,7 @@ require('../bootstrap');
 
 
 Vue.component('init-cart-component', require('./components/cart/InitCartComponent').default);
+Vue.component('backdrop-component', require('./components/BackdropComponent.vue').default);
 
 Vue.component('add-to-cart-btn-component', require('./components/product/AddToCartBtnComponent.vue').default);
 

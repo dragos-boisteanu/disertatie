@@ -1,6 +1,6 @@
 <header class="flex-initial h-auto bg-gray-800">
     <init-cart-component :cart-items="{{ $cartItems }}"></init-cart-component>
-    <div id="backdrop" class="fixed z-20 top-0 left-0 h-full w-full bg-black bg-opacity-75 hidden"></div>
+    <backdrop-component></backdrop-component>
     {{-- <div class="splide">
         <div class="splide__track">
             <ul class="splide__list">
@@ -309,44 +309,59 @@
             const authModal = document.getElementById('authModal');
 
             const closeAuthModal = document.getElementById('closeAuthModal');
+
             const loginCaller = document.getElementById('loginCaller');
             const registerCaller = document.getElementById('registerCaller');
 
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm')
 
-            loginCaller.addEventListener('click', function() {
-                if (backdrop.classList.contains('hidden') && authModal.classList.contains('hidden')) {
-                    backdrop.classList.remove('hidden');
-                    authModal.classList.remove('hidden');
-                    authModal.classList.add('flex');
-                    loginForm.classList.remove('hidden');
 
-                    if (!registerForm.classList.contains('hidden')) {
-                        registerForm.classList.add('hidden');
-                    }
+            loginCaller.addEventListener('click', function() {
+                const backdrop = document.getElementById('backdrop');
+                backdrop.style.display = "block"
+                authModal.classList.remove('hidden');
+                loginForm.classList.remove('hidden');
+
+                if (!registerForm.classList.contains('hidden')) {
+                    registerForm.classList.add('hidden');
                 }
             })
 
             registerCaller.addEventListener('click', function() {
-                if (backdrop.classList.contains('hidden') && authModal.classList.contains('hidden')) {
-                    backdrop.classList.remove('hidden');
-                    authModal.classList.remove('hidden');
-                    authModal.classList.add('flex');
-                    if (!loginForm.classList.contains('hidden')) {
-                        loginForm.classList.add('hidden');
-                    }
-                    registerForm.classList.remove('hidden')
+                const backdrop = document.getElementById('backdrop');
+                backdrop.style.display = "block"
+                authModal.classList.remove('hidden');
+                registerForm.classList.remove('hidden');
+
+                if (!loginForm.classList.contains('hidden')) {
+                    loginForm.classList.add('hidden');
                 }
             })
 
+            // registerCaller.addEventListener('click', function() {
+            //     const backdrop = document.getElementById('backdrop');
+            //     if (backdrop.style.display == "" && authModal.classList.contains('hidden')) {
+            //         backdrop.style.display = "block"
+            //         authModal.classList.remove('hidden');
+            //         authModal.classList.add('flex');
+            //         if (!loginForm.classList.contains('hidden')) {
+            //             loginForm.classList.add('hidden');
+            //         }
+            //         registerForm.classList.remove('hidden')
+            //     }
+            // })
+
 
             closeAuthModal.addEventListener('click', function() {
-                if (!backdrop.classList.contains('hidden') && !authModal.classList.contains('hidden')) {
-                    backdrop.classList.add('hidden');
-                    authModal.classList.add('hidden');
-                    authModal.classList.remove('flex');
-                }
+                const backdrop = document.getElementById('backdrop');
+                backdrop.style.display = "none"
+                authModal.classList.add('hidden');
+                // if (!backdrop.classList.contains('hidden') && !authModal.classList.contains('hidden')) {
+                //     backdrop.classList.add('hidden');
+                //     authModal.classList.add('hidden');
+                //     authModal.classList.remove('flex');
+                // }
             })
         </script>
     @endguest

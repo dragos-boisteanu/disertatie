@@ -22,17 +22,35 @@
 </head>
 
 <body class="h-full">
-    <div id="store-app" class="flex flex-col">
+    <div id="store-app" class="h-full flex flex-col">
         @include('includes.header')
         <main class="flex-1 bg-gray-900 px-4 py-8">
             @yield('content')
-        </div>
+        </main>
         @include('includes.footer')
     </div>
-   
 </body>
 <script src="{{ asset(mix('js/app.js')) }}"></script>
+<script>
+    const backdrop = document.getElementById('backdrop');
 
+    backdrop.addEventListener('click', function() {
+        backdrop.style.display = "none"
+
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm')
+
+        if (!registerForm.classList.contains('hidden')) {
+            registerForm.classList.add('hidden');
+        }
+
+        if (!loginForm.classList.contains('hidden')) {
+            loginForm.classList.add('hidden');
+        }
+
+    })
+</script>
 @stack('scripts')
+
 
 </html>
