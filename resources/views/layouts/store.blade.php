@@ -21,33 +21,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 </head>
 
-<body class="h-full flex flex-col">
-    @include('includes.header')
-    <main class="flex-1 bg-gray-900 px-4 py-8">
-        @yield('content')
-    </main>
-    @include('includes.footer')
+<body class="h-full">
+    <div id="store-app" class="flex flex-col">
+        @include('includes.header')
+        <main class="flex-1 bg-gray-900 px-4 py-8">
+            @yield('content')
+        </div>
+        @include('includes.footer')
+    </div>
+   
 </body>
 <script src="{{ asset(mix('js/app.js')) }}"></script>
 
-<script>
-    const backdrop = document.getElementById("backdrop");
-
-    backdrop.addEventListener("click", function() {
-        if (!backdrop.classList.contains('hidden')) {
-            backdrop.classList.add('hidden');
-
-
-            if (mobileSlider && !mobileSlider.classList.contains('hidden')) {
-                mobileSlider.classList.add('hidden');
-            }
-
-            if (authModal && !authModal.classList.contains('hidden')) {
-                authModal.classList.add('hidden');
-            }
-        }
-    })
-</script>
 @stack('scripts')
 
 </html>

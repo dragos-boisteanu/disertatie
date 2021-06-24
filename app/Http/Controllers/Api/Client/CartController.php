@@ -51,7 +51,7 @@ class CartController extends Controller
                 $cart = $this->cartService->getCart(null, session()->getId());
             }
     
-            $this->cartService->addToCart($cart, $request->productId, $request->productQuantity);
+            $this->cartService->addToCart($cart, $request->id, $request->quantity);
 
             $cart->refresh();
             

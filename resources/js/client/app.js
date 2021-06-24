@@ -1,11 +1,41 @@
 require('../bootstrap');
 
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
+Vue.component('add-to-cart-btn-component', require('./components/product/AddToCartBtnComponent.vue').default);
 
- window.axios = require('axios');
- window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
- window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+
+import Vue from 'vue';
+
+import store from './store'
+
+// import ClickOutside from './directives/ClickOutside';
+
+import VueMq from 'vue-mq'
+
+import dayjs from 'dayjs';
+import 'vue2-datepicker/index.css';
+
+Vue.use(VueMq, {
+  breakpoints: { // default breakpoints - customize this
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+    xxl: 1536
+  },
+  defaultBreakpoint: 'sm' // customize this for SSR
+})
+
+Vue.filter("formatDate", date => {
+  if (!date){
+      return null;
+  }
+  return dayjs(date).format('DD/MM/YYYY HH:mm');
+})
+
+// Vue.directive('click-outside', ClickOutside);
+const app = new Vue({
+  el: '#store-app',    
+  store
+});
+
+

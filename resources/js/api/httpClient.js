@@ -15,32 +15,32 @@ const httpClient = axios.create({
 
 const requestInterceptor = (config) => {
   config.headers['X-Socket-ID'] = window.Echo.socketId() // Echo instance
-  Vue.prototype.$Progress.start();
+  // Vue.prototype.$Progress.start();
   return config;
 };
 
 // interceptor to catch errors
 const errorInterceptor = (error) => {
   if (!error.response) {
-    Vue.prototype.$Progress.fail();
+    // Vue.prototype.$Progress.fail();
     return Promise.reject(error);
   }
 
   switch (error.response.status) {
     case 404:
-      Vue.prototype.$Progress.fail();
+      // Vue.prototype.$Progress.fail();
       // console.error(error.response.status, error.message);
       break;
 
     case 401: // authentication error, logout the user
-      Vue.prototype.$Progress.fail();
+      // Vue.prototype.$Progress.fail();
       // notify.warn( 'Please login again', 'Session Expired');
       // localStorage.removeItem('token');
       // router.push('/auth');
       break;
 
     default:
-      Vue.prototype.$Progress.fail();
+      // Vue.prototype.$Progress.fail();
     // console.error(error.response.status, error.message);
   }
   return Promise.reject(error);
@@ -49,10 +49,10 @@ const errorInterceptor = (error) => {
 const responseInterceptor = (response) => {
   switch (response.status) {
     case 200:
-      Vue.prototype.$Progress.finish();
+      // Vue.prototype.$Progress.finish();
       break;
     default:
-      Vue.prototype.$Progress.finish();
+      // Vue.prototype.$Progress.finish();
 
     // default case
   }

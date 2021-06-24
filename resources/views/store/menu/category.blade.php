@@ -31,10 +31,11 @@
                                 <div class="text-sm text-gray-300 self-center justify-self-center">
                                     {{ $product->price }} Ron
                                 </div>
-                                <button id="{{ $product->id }}"
+                                <add-to-cart-btn-component :id="{{ $product->id }}" :quantity="2"></add-to-cart-btn-component>
+                                {{-- <button id="{{ $product->id }}"
                                     class="self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200 product-add-to-cart">
                                     Add to cart
-                                </button>
+                                </button> --}}
                             </li>
                         @endforeach
                     </ul>
@@ -43,34 +44,3 @@
         </ul>
     </x-menu>
 @endsection
-
-
-@push('scripts')
-    <script>
-        const productQuantities = Array.from(document.querySelectorAll('.product-quantity'))
-        const productAddToCartBtn = document.querySelectorAll('.product-add-to-cart')
-
-        productAddToCartBtn.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const productQuantity = productQuantities.filter(quantity => quantity.id.substring(2) == btn
-                    .id)[0];
-
-                const product = {
-                    productId: btn.id,
-                    productQuantity: productQuantity.value
-                }
-
-                axios.post('/api/client/cart', product).then(response => {
-                    const cartQuantities = Array.from(document.querySelectorAll('.cart-quantity'));
-                    
-                    cartQuantities.forEach(cartQuantity => {
-                        cartQuantity.innerHTML = response.data.count;
-                    })
-                    
-                }).catch(error => {
-                    console.log(error)
-                })
-            })
-        })
-    </script>
-@endpush
