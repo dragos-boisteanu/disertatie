@@ -43,8 +43,7 @@
           />
         </svg>
       </div>
-      <div class="absolute -bottom-24 right-0 hidden group-hover:block">
-
+      <div class="absolute bottom-0 right-0 hidden group-hover:block">
         <Cart></Cart>
       </div>
     </div>
@@ -56,7 +55,6 @@ import { mapGetters } from 'vuex';
 import Cart from "./CartComponent.vue";
 
 export default {
-
   computed: {
     ...mapGetters('Cart', ['getCartItemsCount']),
   },

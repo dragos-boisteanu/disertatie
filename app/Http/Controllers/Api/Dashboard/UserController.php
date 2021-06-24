@@ -81,7 +81,7 @@ class UserController extends Controller
 
         $query->orderBy('id', 'asc');
         
-        $users = $query->withTrashed()->paginate(2);
+        $users = $query->withTrashed()->paginate(1);
 
         return new UserCollection($users);
     }

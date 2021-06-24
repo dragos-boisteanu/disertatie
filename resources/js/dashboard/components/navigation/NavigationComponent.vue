@@ -36,7 +36,7 @@
                     <li class="text-sm text-gray-300 hover:text-white tracking-wid">
                         <router-link :to="{name: 'Orders'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Orders list</router-link>
                     </li>
-                    <li class="text-sm text-gray-300 hover:text-white tracking-wid"  v-if="isAdmin || isLocationManager || isWaiter || isKitchenManager">
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wid" v-if="isAdmin || isLocationManager || isWaiter || isKitchenManager">
                         <router-link :to="{name: 'CreateOrder'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Create order</router-link>
                     </li>
                 </ul>
