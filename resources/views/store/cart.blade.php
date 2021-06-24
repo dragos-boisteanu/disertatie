@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Cart</title>
+    <title>Cos cumparaturi</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -18,7 +18,7 @@
 </head>
 
 <body class="h-full">
-    <main id="store-app" class="bg-gray-900 px-4 py-8 w-full flex items-center justify-center">
+    <main id="store-app" class="bg-gray-800 px-4 py-8 w-full flex items-center justify-center">
         <div class="w-full  md:w-2/3 lg:w-1/4">
             <a href="{{ route('menu-index') }}" class="text-sm text-orange-600 flex items-center hover:underline">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24"
@@ -28,11 +28,11 @@
                 </svg>
                 Inapoi la meniu
             </a>
-            <h1 class="text-3xl text-trueGray-300 my-4 pl-2">Cart</h1>
+            <h1 class="text-3xl text-trueGray-300 my-4 pl-2">Cos cumparaturi</h1>
             <ul>
                 @foreach ($cart->items as $item)
-                    <li class="grid grid-cols-7 bg-white rounded shadow-md mt-3 first:mt-0">
-                        <div class="col-start-1 col-end-2  flex items-center justify-center border-r border-gray-300">
+                    <li class="grid grid-cols-7 bg-trueGray-50 rounded shadow-md mt-3 first:mt-0">
+                        <div class="col-start-1 col-end-2  text-sm flex items-center justify-center border-r border-gray-300">
                             {{ $loop->iteration }}
                         </div>
                         <div class="col-start-2 col-end-7 w-full">
@@ -46,10 +46,9 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div
-                                class="flex items-center justify-between gap-x-4 p-2 border-t border-b border-gray-300">
+                            <div class="flex items-center justify-between p-2 border-t border-b border-gray-300">
                                 <div class="flex-initial w-20">
-                                    <form method="POST" action="{{ route('cart-patch', ['id'=>$item->id]) }}" class="text-center flex flex-col justify-center gap-y-1">
+                                    <form method="POST" action="{{ route('cart-patch', ['id'=>$item->id]) }}" class="text-center flex flex-col justify-center gap-y-2">
                                         @csrf
                                         @method('PUT')
                                         <input type="number" value="{{ $item->pivot->quantity }}"
@@ -57,22 +56,22 @@
                                         <button class="text-sm text-sky-700 hover:text-sky-500">Actualizeaza</button>
                                     </form>
                                 </div>
-                                <div class="flex-1 text-sm text-center font-semibold">
+                                <div class="flex-initial text-sm text-center font-semibold">
                                     {{ $item->price }} Ron / buc.
                                 </div>
-                                <form class="flex-1" method="POST" action="/">
+                                <form class="flex-initial" method="POST" action="/">
                                     @csrf
-                                    <button class="w-full text-sm text-center text-red-600">
+                                    <button class="w-full text-sm text-center text-red-700 hover:text-red-500">
                                         Sterge
                                     </button>
                                 </form>
                             </div>
                             <div class="flex items-center justify-between p-2 text-sm">
-                                <div class="text-center">
+                                <div class="text-center flex-initial w-20">
                                     <div>
                                         {{ $item->base_price }} Ron
                                     </div>
-                                    <div class="font-bold">
+                                    <div class="font-bold text-xs">
                                         Pret initial
                                     </div>
                                 </div>
@@ -80,7 +79,7 @@
                                     <div>
                                         9 %
                                     </div>
-                                    <div class="font-bold">
+                                    <div class="font-bold text-xs">
                                         VAT
                                     </div>
                                 </div>
@@ -89,7 +88,7 @@
                                     <div>
                                         - 2 %
                                     </div>
-                                    <div class="font-bold">
+                                    <div class="font-bold text-xs">
                                         Reducere
                                     </div>
                                     {{-- @endif --}}
@@ -104,6 +103,14 @@
                     </li>
                 @endforeach
             </ul>
+            <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
+                <div class="font-semibold">
+                    TOTAL
+                </div>
+                <div>
+                    {{ $cart->totalValue }} Ron
+                </div>
+            </div>
             <form method="GET" action="/" class="pt-5">
                 <button class="
                         w-full

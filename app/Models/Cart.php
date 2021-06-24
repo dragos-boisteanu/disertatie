@@ -13,8 +13,20 @@ class Cart extends Model
 
     protected $with = ['items'];
 
-    protected $appends = array('itemsCount');
+    protected $appends = array('itemsCount', 'totalValue');
     
+    public function getTotalValueAttribute() 
+    {
+        $total = 0;
+
+        foreach($this->items as $item) {
+            $total += $item->pivot->quantity * $item->price;
+        }
+
+        return $total;
+
+    }
+
     public function getItemsCountAttribute()
     {
         $itemsCount = 0 ;
