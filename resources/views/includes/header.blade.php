@@ -1,4 +1,5 @@
 <header class="flex-initial h-auto bg-gray-800">
+    <init-cart-component :cart-items="{{ $cartItems }}"></init-cart-component>
     <div id="backdrop" class="fixed z-20 top-0 left-0 h-full w-full bg-black bg-opacity-75 hidden"></div>
     {{-- <div class="splide">
         <div class="splide__track">
@@ -17,7 +18,6 @@
                 <div class="bg-black h-0.5 w-6 my-1.5"></div>
             @endfor
         </div>
-        <x-mobile-cart></x-mobile-cart>
         <ul id="mobileSlider" class="fixed z-40 top-0 left-0 h-full w-3/4 bg-gray-900 text-white hidden">
             <li>
                 <a href="">
@@ -60,8 +60,8 @@
                 </li>
             @endauth
         </ul>
+        <mobile-cart-button-component></mobile-cart-button-component>
     </nav>
-
     {{-- desktop nav --}}
     <nav class=" h-10 bg-orange-600 px-4 hidden lg:flex lg:items-center lg:justify-between">
         <div>
@@ -80,7 +80,6 @@
                     <img class="rounded-full w-full h-full" src="{{ asset('storage/logo/logo.png') }}">
                 </div>
             </div>
-
             <ul class="flex items-start">
                 <li>
                     <a class="text-white text-lg pb-0.5 border-b-4 border-orange-600 hover:border-black hover:text-black"
@@ -90,7 +89,6 @@
                 </li>
             </ul>
         </div>
-        <x-desktop-cart></x-desktop-cart>
     </nav>
 
     @guest
@@ -258,7 +256,10 @@
         </ul>
     @endauth
 
-    <x-cart id="mobileCart">
+    <mobile-cart-component></mobile-cart-component>
+
+
+    {{-- <x-cart id="mobileCart">
         <div id="closeCart" class="lg:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
                 <path d="M0 0h24v24H0V0z" fill="none" />
@@ -266,7 +267,7 @@
                     d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
             </svg>
         </div>
-    </x-cart>
+    </x-cart> --}}
 </header>
 
 @push('scripts')

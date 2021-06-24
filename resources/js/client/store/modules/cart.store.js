@@ -10,7 +10,6 @@ const initialState = () => ({
   showCart: false,
   cart: {
     id: 0,
-    itemsCount: 0,
     items: [],
   }
 })
@@ -20,7 +19,14 @@ const state = initialState();
 const getters = {
   getCartItems: (state) => state.cart.items,
   getCartId: (state) => state.cart.id,
-  getCartItemsCount: (state) => state.cart.itemsCount,
+  getCartItemsCount: (state) =>{
+    let count = 0;
+    state.cart.items.forEach(item => {
+      count += item.quantity;
+    });
+
+    return count;
+  },
   getShowCart: (state) => state.showCart
 }
 
@@ -46,6 +52,10 @@ const actions = {
 
   setCartItems({commit}, items) {
     commit('SET_ITEMS', items);
+  },
+
+  toggleCartState({commit}) {
+    commit('TOGLE_STATE');
   }
 
 }
@@ -69,6 +79,10 @@ const mutations = {
 
   SET_ITEMS(state, items) {
     state.cart.items = items;
+  },
+
+  TOGLE_STATE(state) {
+    state.showCart = !state.showCart;
   }
 }
 

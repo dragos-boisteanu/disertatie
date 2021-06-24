@@ -1,4 +1,4 @@
-<div id="{{ $id }}"
+{{-- <div id="{{ $id }}"
     class="relative w-full bg-white p-2 group-hover:block hidden lg:absolute lg:-bottom-24 lg:min-w-[300px] lg:right-0 lg:rounded-sm">
     <div class="flex items-center justify-between border-b border-gray-800 pb-1 mb-1">
         <h4 class="text-lg font-semibold ">Cart</h4>
@@ -34,4 +34,4 @@
             </button>
         </form>
     </div>
-</div>
+</div> --}}

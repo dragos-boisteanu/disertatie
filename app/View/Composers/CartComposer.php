@@ -2,10 +2,11 @@
 
 namespace App\View\Composers;
 
-use App\Interfaces\CartServiceInterface;
 use App\Models\Cart;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use App\Interfaces\CartServiceInterface;
+use App\Http\Resources\CartItemCollection;
 
 class CartComposer
 {
@@ -31,6 +32,6 @@ class CartComposer
       $cart = $this->cartService->getCart(null, session()->getId());
     }
 
-    $view->with('cartItemsCount', $cart->itemsCount)->with('cartItems', $cart->items);
+    $view->with('cartItems', json_encode(new CartItemCollection($cart->items)));
   }
 }

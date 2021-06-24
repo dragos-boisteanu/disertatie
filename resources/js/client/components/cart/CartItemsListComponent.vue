@@ -6,13 +6,11 @@
 
 <script>
 import CartItem from './CartItemComponent.vue';
-
+import { mapGetters } from 'vuex';
 export default {
-  props: {
-    items: {
-      type: Array,
-      required: true,
-    }
+ 
+  computed: {
+    ...mapGetters("Cart", ["getCartItems"]),
   },
   components: {
     CartItem

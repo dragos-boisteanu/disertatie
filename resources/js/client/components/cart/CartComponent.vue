@@ -6,11 +6,7 @@
       bg-white
       p-2
       group-hover:block
-      hidden
-      lg:absolute
-      lg:-bottom-24
       lg:min-w-[300px]
-      lg:right-0
       lg:rounded-sm
     "
   >
@@ -26,7 +22,7 @@
     >
       <h4 class="text-lg font-semibold">Cart</h4>
     </div>
-    <CartItemsList :items="items"></CartItemsList>
+    <CartItemsList></CartItemsList>
     <div class="w-full text-center mt-2 flex justify-between text-sm">
       <form method="GET" action="/">
         <button
@@ -67,26 +63,8 @@
 
 <script>
 import CartItemsList from "./CartItemsListComponent.vue";
-import { mapGetters, mapActions } from "vuex";
 
 export default {
-  props: {
-    items: {
-      type: Array,
-      requried: true,
-    },
-  },
-
-  mounted() {},
-
-  computed: {
-    ...mapGetters("Cart", ["getCartItems"]),
-  },
-
-  methods: {
-    ...mapActions("Cart", ["setCartItems"]),
-  },
-
   components: {
     CartItemsList,
   },
