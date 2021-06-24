@@ -65,7 +65,7 @@ class CartService implements CartServiceInterface
     return $cart->items;
   }
 
-  public function addToCart(Cart $cart, int $productId, int $quantity): void
+  public function addToCart(Cart $cart, int $productId, int $quantity): int
   {
     try {
       if ($cart->items->contains('id', $productId)) {
@@ -73,8 +73,11 @@ class CartService implements CartServiceInterface
         $newQuantity = $item->pivot->quantity + $quantity;
         $this->patchCartItemQuantity($cart, $productId, $newQuantity);
       } else {
-        $cart->items()->attach($productId, ['quantity' => 1]);
+        $newQuantity = $quantity;
+        $cart->items()->attach($productId, ['quantity' => $newQuantity]);
       }
+
+      return $newQuantity;
 
     } catch (\Exception $e) {
       // throw new Exception('Something went wrong, try again !');

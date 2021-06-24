@@ -89,6 +89,7 @@
                 </li>
             </ul>
         </div>
+        <desktop-cart-component></desktop-cart-component>
     </nav>
 
     @guest

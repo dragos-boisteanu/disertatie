@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CartServiceInterface;
 use App\Http\Resources\CartItemCollection;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CartController extends Controller
@@ -51,17 +52,17 @@ class CartController extends Controller
                 $cart = $this->cartService->getCart(null, session()->getId());
             }
     
-            $this->cartService->addToCart($cart, $request->id, $request->quantity);
+            $newQuantity =  $this->cartService->addToCart($cart, $request->id, $request->quantity);
 
-            $cart->refresh();
-            
-            $cartItemsCount = 0;
+            $product = Product::find($request->id);
 
-            foreach($cart->items as $item) {
-                $cartItemsCount += $item->pivot->quantity;
-            }
             DB::commit();
-            return response()->json(['message' => 'Product added to cart', 'count' => $cartItemsCount], 200);
+            return response()->json([
+                'message' => 'Product added to cart',
+                'newQuantity' => $newQuantity,
+                'name' => $product->name,
+                'price' => $product->price,
+            ], 200);
         } catch ( ModelNotFoundException $mdfe ) {
             DB::rollBack();
             return response()->json(['message'=> 'Cart not found'], 404);

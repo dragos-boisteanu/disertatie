@@ -4,8 +4,11 @@ require('../bootstrap');
 Vue.component('init-cart-component', require('./components/cart/InitCartComponent').default);
 
 Vue.component('add-to-cart-btn-component', require('./components/product/AddToCartBtnComponent.vue').default);
+
 Vue.component('mobile-cart-button-component', require('./components/cart/MobileCartButtonComponent.vue').default);
 Vue.component('mobile-cart-component',  require('./components/cart/MobileCartComponent.vue').default);
+
+Vue.component('desktop-cart-component', require('./components/cart/DesktopCartComponent.vue').default);
 
 import Vue from 'vue';
 

@@ -17,15 +17,19 @@ const initialState = () => ({
 const state = initialState();
 
 const getters = {
-  getCartItems: (state) => state.cart.items,
+  getCartItems: (state) => {
+    console.log('here');
+    return state.cart.items;
+  },
+
   getCartId: (state) => state.cart.id,
-  getCartItemsCount: (state) =>{
+  getCartItemsCount: (state) => {
     let count = 0;
     state.cart.items.forEach(item => {
       count += item.quantity;
     });
 
-    return count;
+    return parseInt(count);
   },
   getShowCart: (state) => state.showCart
 }
@@ -34,8 +38,10 @@ const actions = {
   async addItemToCart({ commit }, payload) {
     const response = await addItemTocart(payload.item);
 
-    payload.item.id = response.data.productId;
-
+    payload.item.quantity = response.data.newQuantity;
+    payload.item.name = response.data.name;
+    payload.item.price = response.data.price;
+    
     commit('ADD_ITEM', payload);
   },
   async pathItem({ commit }, payload) {
@@ -44,25 +50,31 @@ const actions = {
     commit('PATCH_ITEM', payload.item.id)
   },
 
-  async removeItem({commit}, payload) {
+  async removeItem({ commit }, payload) {
     await removeItemFromCart(payload.item);
 
     commit('REMOVE_ITEM', payload)
   },
 
-  setCartItems({commit}, items) {
+  setCartItems({ commit }, items) {
     commit('SET_ITEMS', items);
   },
 
-  toggleCartState({commit}) {
+  toggleCartState({ commit }) {
     commit('TOGLE_STATE');
   }
 
 }
 
 const mutations = {
-  ADD_ITEM(state, item) {
-    state.cart.items.push(item);
+  ADD_ITEM(state, payload) {
+    const itemIndex = _findIndex(state.cart.items, ['id', payload.item.id]);
+    if (itemIndex > -1) {
+      payload.vm.$set(state.cart.items[itemIndex], 'quantity', payload.item.quantity)
+    } else { 
+      
+      state.cart.items.push(payload.item); 
+    }
   },
 
   PATCH_ITEM(state, payload) {

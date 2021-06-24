@@ -42,8 +42,9 @@ export default {
         const payload = {
           item: {
             id: this.id,
-            quantity: this.id
-          }
+            quantity: this.quantity
+          },
+          vm:this,
         }
         await this.addItemToCart(payload);
       } catch ( error ) {

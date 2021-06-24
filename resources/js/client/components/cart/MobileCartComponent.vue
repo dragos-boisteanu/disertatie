@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <button class="absolute right-2 top-2 z-10" @click="toggleCartState">
+    <button class="absolute right-2 top-2 z-10 lg:hidden" @click="toggleCartState">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         height="24px"
