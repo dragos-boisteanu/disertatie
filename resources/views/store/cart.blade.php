@@ -1,7 +1,7 @@
 @extends('layouts.store')
 
 @section('content')
-    <div class="w-full">
+    <div class="w-full  md:w-2/3 lg:w-1/4">
         <h1 class="text-3xl text-trueGray-300 mb-4 pl-2">Cart</h1>
         <ul>
             @foreach ($cart->items as $item)
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-between gap-x-4 p-2 border-t border-b border-black">
-                            <div class="flex-auto w-9">
+                            <div class="flex-initial w-20">
                                 <update-quantity-component :prop-quantity="{{ $item->pivot->quantity }}"
                                     :id="{{ $item->id }}"></update-quantity-component>
                             </div>

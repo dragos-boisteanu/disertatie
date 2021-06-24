@@ -1,6 +1,6 @@
 <template>
   <div class="text-center flex flex-col justify-center gap-y-1">
-    <input type="number" :value="quantity" class="text-center bg-gray-100 rounded-sm border text-sm " />
+    <input type="number" :value="quantity" class="text-center bg-white rounded-sm border border-trueGray-400 text-sm " />
     <button  @click="updateQuantity" class="text-sm text-sky-700 hover:text-sky-500">Actualizeaza</button>
   </div>
 </template>
