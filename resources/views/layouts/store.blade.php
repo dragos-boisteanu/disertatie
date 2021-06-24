@@ -24,7 +24,7 @@
 <body class="h-full">
     <div id="store-app" class="h-full flex flex-col">
         @include('includes.header')
-        <main class="flex-1 bg-gray-900 px-4 py-8 w-full flex items-start justify-center">
+        <main class="flex-1 bg-gray-800 px-4 py-8 w-full flex items-start justify-center">
             @yield('content')
         </main>
         @include('includes.footer')

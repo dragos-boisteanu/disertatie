@@ -8,8 +8,11 @@
       px-2
       text-sm
       rounded
-      border border-gray-400
-      text-gray-400
+      border 
+      border-gray-200
+      text-gray-200
+      lg:border-gray-400
+      lg:text-gray-400
       hover:text-gray-200
       hover:border-gray-200
       product-add-to-cart

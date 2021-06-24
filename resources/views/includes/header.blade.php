@@ -1,4 +1,4 @@
-<header class="flex-initial h-auto bg-gray-800">
+<header class="flex-initial h-auto bg-gray-900">
     <init-cart-component :cart-items="{{ $cartItems }}"></init-cart-component>
     <backdrop-component></backdrop-component>
     {{-- <div class="splide">

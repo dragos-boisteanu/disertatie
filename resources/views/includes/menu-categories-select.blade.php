@@ -1,5 +1,5 @@
 
-<form id="categorySelectForm" method="GET" class="w-full px-4 text-center  lg:hidden">
+<form id="categorySelectForm" method="GET" class="w-full px-4 text-center lg:hidden">
   <select id="categorySelect" class="w-full rounded-sm p-2">
     <option value="" selected disabled>Alege o categorie</option>
     @foreach($categories as $category)

@@ -12,7 +12,7 @@
                         @foreach ($subCategory->subProducts as $product)
                             <li class="mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5 product-form">
                                 <div class="col-span-3 md:col-span-2">
-                                    <h2 class="text-gray-400 mb-1 justify-self-start self-center">
+                                    <h2 class="text-gray-300 mb-1 justify-self-start self-center">
                                         {{ $product->name }} - {{ $product->weight }}{{ $product->unit->name }}
                                     </h2>
                                     <ul class="">
