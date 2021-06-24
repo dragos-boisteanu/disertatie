@@ -1,6 +1,6 @@
 import {
   addItemTocart,
-  patchItem,
+  updateQuantity,
   removeItemFromCart
 } from "../../api/cart.api.js"
 
@@ -44,10 +44,11 @@ const actions = {
     
     commit('ADD_ITEM', payload);
   },
-  async pathItem({ commit }, payload) {
-    await patchItem(payload.item);
+  
+  async updateQuantity({ commit }, payload) {
+    await updateQuantity(payload.item);
 
-    commit('PATCH_ITEM', payload.item.id)
+    commit('UPDATE_QUANTITY', payload.item.id)
   },
 
   async removeItem({ commit }, payload) {
@@ -77,7 +78,7 @@ const mutations = {
     }
   },
 
-  PATCH_ITEM(state, payload) {
+  UPDATE_QUANTITY(state, payload) {
     const itemIndex = _findIndex(state.cart.items, ['id', payload.item.id]);
 
     payload.vm.$set(state.cart.items[itemIndex], 'quantity', payload.item.quantity);

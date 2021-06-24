@@ -41,7 +41,7 @@
         </button>
       </form>
 
-      <form method="GET" action="/">
+      <form method="GET" action="/cart">
         <button
           class="
             w-full

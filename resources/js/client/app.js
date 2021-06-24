@@ -11,11 +11,10 @@ Vue.component('mobile-cart-component',  require('./components/cart/MobileCartCom
 
 Vue.component('desktop-cart-component', require('./components/cart/DesktopCartComponent.vue').default);
 
+Vue.component('update-quantity-component', require('./components/cart/UpdateQuantityComponent.vue').default);
+
 import Vue from 'vue';
-
 import store from './store'
-
-// import ClickOutside from './directives/ClickOutside';
 
 import VueMq from 'vue-mq'
 

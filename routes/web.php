@@ -30,6 +30,7 @@ Route::group(['namespace'=>'Web\Client'], function() {
     Route::get('/', 'MenuController@index')->name('home');
     Route::get('/menu', 'MenuController@index')->name('menu-index');
     Route::get('/menu/{id}', 'MenuController@show')->name('menu-show');
+    Route::get('/cart', 'CartController@index')->name('cart-index');
 });
 // verified
 
