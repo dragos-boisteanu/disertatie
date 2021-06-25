@@ -17,9 +17,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 </head>
 
-<body class="h-full">
-    <main id="store-app" class="bg-gray-800 px-4 py-8 w-full flex items-center justify-center">
-        <div class="w-full  md:w-2/3 lg:w-1/4">
+<body class="h-full flex flex-col">
+    <main id="store-app" class="flex-1 bg-gray-800 px-4 py-8 w-full flex items-center justify-center">
+        <div class="h-full w-full  md:w-2/3 lg:w-1/4">
             <a href="{{ route('menu-index') }}" class="text-sm text-orange-600 flex items-center hover:underline">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24"
                     width="18px">
@@ -59,8 +59,9 @@
                                 <div class="flex-initial text-sm text-center font-semibold">
                                     {{ $item->price }} Ron / buc.
                                 </div>
-                                <form class="flex-initial" method="POST" action="/">
+                                <form class="flex-initial" method="POST" action="{{ route('cart-delete', ['id'=>$item->id])}}">
                                     @csrf
+                                    @method("DELETE")
                                     <button class="w-full text-sm text-center text-red-700 hover:text-red-500">
                                         Sterge
                                     </button>

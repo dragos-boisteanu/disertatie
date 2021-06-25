@@ -28,10 +28,13 @@ Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->wher
 
 Route::group(['namespace'=>'Web\Client'], function() {  
     Route::get('/', 'MenuController@index')->name('home');
+
     Route::get('/menu', 'MenuController@index')->name('menu-index');
     Route::get('/menu/{id}', 'MenuController@show')->name('menu-show');
+
     Route::get('/cart', 'CartController@index')->name('cart-index');
     Route::put('/cart/{id}', 'CartController@update')->name('cart-patch');
+    Route::delete('/cart/{id}', 'CartController@destroy')->name('cart-delete');
 });
 // verified
 

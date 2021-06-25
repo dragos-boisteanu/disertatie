@@ -48,6 +48,15 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+
+            $this->cartService->removeItemFromCart($cart, $id);
+    
+            return redirect()->back()->with('cart', $cart);  
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong, try again later');
+        }
+      
     }
 }

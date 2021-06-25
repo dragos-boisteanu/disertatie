@@ -99,7 +99,7 @@ class CartService implements CartServiceInterface
     }
   }
 
-  public function removeItemFroMCart(Cart $cart, int $productId): void
+  public function removeItemFromCart(Cart $cart, int $productId): void
   {
     try {
       $cart->items()->detach($productId);
