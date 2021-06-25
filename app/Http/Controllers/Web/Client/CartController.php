@@ -15,7 +15,7 @@ class CartController extends Controller
     {
         $this->cartService = $cartService;
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +37,16 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        try {
+            $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+
+            $this->cartService->patchCartItemQuantity($cart, $id, $request->quantity);
+
+            return redirect()->back()->with('message', 'Cantitatea produsului a fost actualizata');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong, try again later');
+        }
     }
 
     /**
@@ -49,15 +58,14 @@ class CartController extends Controller
     public function destroy($id)
     {
         try {
-            // $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+            $cart = $this->cartService->getCart(Auth::user(), session()->getId());
 
-            // $this->cartService->removeItemFromCart($cart, $id);
-    
-          
-            return redirect()->back()->with('message', 'Produsul a fost scos din cos');  
+            $this->cartService->removeItemFromCart($cart, $id);
+
+
+            return redirect()->back()->with('message', 'Produsul a fost scos din cos');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Something went wrong, try again later');
         }
-      
     }
 }

@@ -35,11 +35,10 @@
                     class="w-full animate__animated bg-blue-500 font-medium text-sm text-white rounded p-4 my-2">
                     {{ session('message') }}
                 </div>
-
             @endif
             <h1 class="text-3xl text-trueGray-300 my-4 pl-2">Cos cumparaturi</h1>
             <ul>
-                @foreach ($cart->items as $item)
+                @forelse ($cart->items as $item)
                     <li class="grid grid-cols-7 bg-trueGray-50 rounded shadow-md mt-3 first:mt-0">
                         <div
                             class="col-start-1 col-end-2  text-sm flex items-center justify-center border-r border-gray-300">
@@ -62,7 +61,7 @@
                                         class="text-center flex flex-col justify-center gap-y-2">
                                         @csrf
                                         @method('PUT')
-                                        <input type="number" value="{{ $item->pivot->quantity }}"
+                                        <input type="number" name="quantity" value="{{ $item->pivot->quantity }}"
                                             class="text-center bg-white rounded-sm border border-trueGray-400 text-sm " />
                                         <button class="text-sm text-sky-700 hover:text-sky-500">Actualizeaza</button>
                                     </form>
@@ -114,30 +113,36 @@
                             <div class="text-center">{{ $item->price * $item->pivot->quantity }} Ron</div>
                         </div>
                     </li>
-                @endforeach
+                @empty
+                    <div class="w-full bg-blue-500 font-medium text-sm text-white rounded p-4 my-2">
+                        Cosul de cumparaturi este gol
+                    </div>
+                @endforelse
             </ul>
-            <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
-                <div class="font-semibold">
-                    TOTAL
+            @if($cart->items->count() > 0)
+                <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
+                    <div class="font-semibold">
+                        TOTAL
+                    </div>
+                    <div>
+                        {{ $cart->totalValue }} Ron
+                    </div>
                 </div>
-                <div>
-                    {{ $cart->totalValue }} Ron
-                </div>
-            </div>
-            <form method="GET" action="/" class="pt-5">
-                <button class="
-                        w-full
-                        rounded-sm
-                        text-white
-                        bg-green-600
-                        px-4
-                        py-1
-                        active:shadow-inner
-                        hover:bg-green-500
-                      ">
-                    Checkout
-                </button>
-            </form>
+                <form method="GET" action="/" class="pt-5">
+                    <button class="
+                            w-full
+                            rounded-sm
+                            text-white
+                            bg-green-600
+                            px-4
+                            py-1
+                            active:shadow-inner
+                            hover:bg-green-500
+                          ">
+                        Checkout
+                    </button>
+                </form>
+            @endif
         </div>
     </main>
 </body>
@@ -146,9 +151,12 @@
     $(document).ready(function() {
         const notificaiton = $('#notification');
 
-        setTimeout(function() {
-            notificaiton.fadeOut('slow');
-        }, 2000)
+        if (notificaiton) {
+            setTimeout(function() {
+                notificaiton.fadeOut('slow');
+            }, 2000)
+        }
+
     })
 </script>
 

@@ -36,8 +36,6 @@ Route::group(['namespace'=>'Web\Client'], function() {
     Route::put('/cart/{id}', 'CartController@update')->name('cart-patch');
     Route::delete('/cart/{id}', 'CartController@destroy')->name('cart-delete');
 });
-// verified
-
 
 require __DIR__.'/auth.php';
 
