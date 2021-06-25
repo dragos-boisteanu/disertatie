@@ -11,6 +11,7 @@
     "
   >
     <div
+      v-if="hasItems"
       class="
         flex
         items-center

@@ -1,7 +1,9 @@
 <template>
   <div class="relative">
-    <button class="absolute right-2 top-2 z-10 lg:hidden" @click="toggleCartState">
+    <button class="absolute right-2 top-2 z-10 lg:hidden" v-if="getShowCart" @click="toggleCartState">
       <svg
+        class="fill-current"
+        :class="{'text-white': !hasItems}"
         xmlns="http://www.w3.org/2000/svg"
         height="24px"
         viewBox="0 0 24 24"
@@ -23,7 +25,10 @@ import { mapGetters, mapActions } from "vuex";
 import Cart from "./CartComponent.vue";
 export default {
   computed: {
-    ...mapGetters("Cart", ["getShowCart"]),
+    ...mapGetters("Cart", ["getShowCart", 'getCartItemsCount']),
+     hasItems() {
+      return this.getCartItemsCount > 0
+    }
   },
 
   methods: {

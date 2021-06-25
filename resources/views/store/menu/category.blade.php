@@ -30,7 +30,7 @@
                                 <div class="text-sm text-gray-300 self-center justify-self-center">
                                     {{ $product->price }} Ron
                                 </div>
-                                <add-to-cart-btn-component :id="{{ $product->id }}" :quantity="1"></add-to-cart-btn-component>
+                                <add-to-cart-btn-component :id="{{ $product->id }}" :quantity="1" :stock={{ $product->quantity }}></add-to-cart-btn-component>
                                 {{-- <button id="{{ $product->id }}"
                                     class="self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200 product-add-to-cart">
                                     Add to cart
