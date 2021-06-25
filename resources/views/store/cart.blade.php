@@ -14,7 +14,9 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
 
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
+    {{-- Scripts --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 
 <body class="h-full flex flex-col">
@@ -28,11 +30,19 @@
                 </svg>
                 Inapoi la meniu
             </a>
+            @if (session('message'))
+                <div id="notification"
+                    class="w-full animate__animated bg-blue-500 font-medium text-sm text-white rounded p-4 my-2">
+                    {{ session('message') }}
+                </div>
+
+            @endif
             <h1 class="text-3xl text-trueGray-300 my-4 pl-2">Cos cumparaturi</h1>
             <ul>
                 @foreach ($cart->items as $item)
                     <li class="grid grid-cols-7 bg-trueGray-50 rounded shadow-md mt-3 first:mt-0">
-                        <div class="col-start-1 col-end-2  text-sm flex items-center justify-center border-r border-gray-300">
+                        <div
+                            class="col-start-1 col-end-2  text-sm flex items-center justify-center border-r border-gray-300">
                             {{ $loop->iteration }}
                         </div>
                         <div class="col-start-2 col-end-7 w-full">
@@ -48,7 +58,8 @@
                             </div>
                             <div class="flex items-center justify-between p-2 border-t border-b border-gray-300">
                                 <div class="flex-initial w-20">
-                                    <form method="POST" action="{{ route('cart-patch', ['id'=>$item->id]) }}" class="text-center flex flex-col justify-center gap-y-2">
+                                    <form method="POST" action="{{ route('cart-patch', ['id' => $item->id]) }}"
+                                        class="text-center flex flex-col justify-center gap-y-2">
                                         @csrf
                                         @method('PUT')
                                         <input type="number" value="{{ $item->pivot->quantity }}"
@@ -59,7 +70,8 @@
                                 <div class="flex-initial text-sm text-center font-semibold">
                                     {{ $item->price }} Ron / buc.
                                 </div>
-                                <form class="flex-initial" method="POST" action="{{ route('cart-delete', ['id'=>$item->id])}}">
+                                <form class="flex-initial" method="POST"
+                                    action="{{ route('cart-delete', ['id' => $item->id]) }}">
                                     @csrf
                                     @method("DELETE")
                                     <button class="w-full text-sm text-center text-red-700 hover:text-red-500">
@@ -130,7 +142,14 @@
     </main>
 </body>
 <script src="{{ asset(mix('js/app.js')) }}"></script>
+<script>
+    $(document).ready(function() {
+        const notificaiton = $('#notification');
 
-@stack('scripts')
+        setTimeout(function() {
+            notificaiton.fadeOut('slow');
+        }, 2000)
+    })
+</script>
 
 </html>
