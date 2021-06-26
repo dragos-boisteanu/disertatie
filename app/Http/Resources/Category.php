@@ -23,6 +23,8 @@ class Category extends JsonResource
           
             'parentId' => $this->parent_id,
             'subCategories' => $this->whenLoaded('subCategories', $this->subCategories),
+
+            'deletedAt' => $this->deleted_at,
         ];
 
         if(!is_null($this->discount)) {

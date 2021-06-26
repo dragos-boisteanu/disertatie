@@ -19,7 +19,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('products', 'subProducts', 'subCategories')->get();
+        $categories = Category::withTrashed()->with('products', 'subProducts', 'subCategories')->get();
 
         return new CategoryCollection($categories);
     }
@@ -75,7 +75,7 @@ class CategoryController extends Controller
     {
         $request->user()->can('update', Category::class);
 
-        $category = Category::findOrFail($id);
+        $category = Category::withTrashed()->findOrFail($id);
 
         $input = $request->validated();
 
@@ -111,12 +111,29 @@ class CategoryController extends Controller
         try {
             $category = Category::findOrFail($id);
         
-            $category->delete();
+            $category->forceDelete();
     
             return response()->json(['message'=>'Category ' . $category->name . ' was deleted'], 200);
         } catch(\Illuminate\Database\QueryException $e) {
             return response()->json(['message'=>'Remove or copy category\'s ( ' .  $category->name . ' ) items before deleting'], 500);
         }
+    }
+
+    public function disable(Request $request, $id)
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+
+        $category->delete();
+        return response()->json(['message'=>'Category ' . $category->name . ' was disabled', 'deletedAt' => $category->deleted_at], 200);
+    }
+
+    public function restore(Request $request, $id)
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+
+        $category->restore();
+
+        return response()->json(['message'=>'Category ' . $category->name . ' was restored'], 200);
     }
 
     public function search($catagoryName) 

@@ -126,6 +126,22 @@
               Update
             </Button>
             <Button
+              v-if="canDisable"
+              type="danger"
+              :disabled="waiting"
+              @click.native.prevent="callDisableCategory"
+            >
+              Disable
+            </Button>
+            <Button
+              v-if="canRestore"
+              type="secondary"
+              :disabled="waiting"
+              @click.native.prevent="callRestoreCategory"
+            >
+              Restore
+            </Button>
+            <Button
               v-if="canDelete"
               type="danger"
               :disabled="waiting"
@@ -193,6 +209,14 @@ export default {
       return this.category.productsCount == 0;
     },
 
+    canDisable() {
+      return this.category.deletedAt === null;
+    },
+
+    canRestore() {
+      return this.category.deletedAt !== null;
+    },
+
     parentCategories() {
       return this.getCategories.filter(
         (category) => category.parentId === null
@@ -254,6 +278,8 @@ export default {
       "postCategory",
       "patchCategory",
       "deleteCategory",
+      "disableCategory",
+      "restoreCategory",
       "updateDiscount",
     ]),
     ...mapActions("Notification", ["openNotification"]),
@@ -262,7 +288,6 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-
         const payload = this.category;
 
         if (payload.vat === "") {
@@ -367,6 +392,32 @@ export default {
         });
       } catch (error) {
         this.waiting = false;
+        console.log(error);
+      }
+    },
+
+    async callDisableCategory() {
+      try {
+        const payload = {
+          id: this.category.id,
+          vm: this,
+        };
+        const response = await this.disableCategory(payload);
+        this.category.deletedAt = response;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async callRestoreCategory() {
+      try {
+        const payload = {
+          id: this.category.id,
+          vm: this,
+        };
+        await this.restoreCategory(payload);
+         this.category.deletedAt = null;
+      } catch (error) {
         console.log(error);
       }
     },

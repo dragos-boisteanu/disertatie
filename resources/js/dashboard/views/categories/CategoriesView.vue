@@ -36,6 +36,7 @@
         <Search @search="search"></Search>
         <CategoriesList
           :categories="categories"
+          :selected-id="categoryId"
           @selected="selectCategory"
         ></CategoriesList>
       </div>

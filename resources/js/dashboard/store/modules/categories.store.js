@@ -1,4 +1,4 @@
-import { searchCategory, downloadCategories, postCategory, patchCategory, deleteCategory } from '../../api/categories.api';
+import { searchCategory, downloadCategories, postCategory, patchCategory, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
 
@@ -68,6 +68,20 @@ const actions = {
         }
     },
 
+    async disableCategory({commit}, payload) {
+        const response = await disableCategory(payload.id);
+        payload.deletedAt = response.data.deletedA;
+        commit('SET_CATEGORY_DELETED_AT', payload);
+        return response.data.deletedAt;
+    },
+
+    async restoreCategory({commit}, payload)
+    {
+        await restoreCategory(payload.id);
+        payload.deletedAt = null
+        commit('SET_CATEGORY_DELETED_AT', payload);
+    },
+
     async deleteCategory({ commit }, payload) {
         try {
             await deleteCategory(payload);
@@ -131,6 +145,13 @@ const mutations = {
         const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
 
         vm.$set(state.categories[categoryIndex], 'discountId', payload.category.discountId);
+    },
+
+    SET_CATEGORY_DELETED_AT(state, payload) {
+        const vm = payload.vm;
+        const categoryIndex = _findIndex(state.categories, ['id', payload.id]);
+
+        vm.$set(state.categories[categoryIndex], 'deletedAt', payload.deletedAt);
     }
 
 }

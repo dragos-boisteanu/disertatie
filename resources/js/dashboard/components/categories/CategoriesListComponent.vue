@@ -29,17 +29,15 @@
           :key="category.id"
           @click="selectCategory(category.id)"
           class="
-            duration-500
-            ease-in-out
+            my-1
             text-sm
             rounded-md
             cursor-pointer
             border-white
-            transform
-            hover:scale-105
             hover:bg-gray-50
             hover:shadow-md
           "
+          :class="{'bg-gray-50 shadow-md': category.id == selectedId}"
         >
           <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
           <td class="p-2">{{ category.name }}</td>
@@ -50,23 +48,22 @@
             }}</span>
           </td>
           <td class="p-2 max-w-4">{{ category.productsCount }}</td>
+          <td></td>
         </tr>
         <tr
           v-for="(category, index) in subCategories"
           :key="category.id"
           @click="selectCategory(category.id)"
           class="
-            duration-500
-            ease-in-out
+            my-1
             text-sm
             rounded-md
             cursor-pointer
             border-white
-            transform
-            hover:scale-105
             hover:bg-gray-50
             hover:shadow-md
           "
+          :class="{'bg-gray-50 shadow-md': category.id == selectedId}"
         >
           <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
           <td class="p-2">{{ category.name }}</td>
@@ -95,6 +92,11 @@ export default {
       type: Array,
       required: true,
     },
+    selectedId: {
+      type: [Number, String],
+      required: false,
+      default: ''
+    }
   },
 
   computed: {
