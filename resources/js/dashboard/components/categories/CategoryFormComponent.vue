@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="flex-auto">
     <ConfirmActionModal
       v-if="confirmModalState"
       title="Confirm action"
@@ -83,7 +83,7 @@
             name="Parent category"
             type="color"
             v-model="category.parentId"
-            class="p-1 rounded border order-gray-300 outline-none"
+
             :disabled="waiting"
           >
             <option value="" disabled selected>Select parent category</option>

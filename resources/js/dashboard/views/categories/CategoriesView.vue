@@ -30,7 +30,7 @@
     </template>
 
     <div
-      class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-2/3"
+      class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-3/4"
     >
       <div class="flex flex-col">
         <Search @search="search"></Search>
