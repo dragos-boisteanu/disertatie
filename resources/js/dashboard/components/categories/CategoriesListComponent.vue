@@ -1,15 +1,15 @@
 <template>
-  <div class="overflow-x-auto bg-white shadow rounded-sm p-5 max-h-96">
+  <div class="overflow-x-auto bg-white shadow rounded-sm p-5 max-h-[500px]">
     <div style="min-width: 450px">
       <div
         class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-6"
       >
         <div class="p-2 text-center">Index</div>
-        <div class="p-2">Name</div>
-        <div class="p-2">Vat</div>
-        <div class="p-2">Discount</div>
-        <div class="p-2">Products Count</div>
-        <div class="p-2">Parent</div>
+        <div class="p-2 self-center justify-self-center">Name</div>
+        <div class="p-2 self-center justify-self-center">Vat</div>
+        <div class="p-2 self-center justify-self-center">Discount</div>
+        <div class="p-2 self-center justify-self-center">Products Count</div>
+        <div class="p-2 self-center justify-self-center">Parent</div>
       </div>
       <ul class="w-full px-2 rounded-sm">
         <li
@@ -18,62 +18,64 @@
           :key="category.id"
         >
           <div
-            @click="selectCategory(category.id)"
+            @click="selectCategory(category)"
             class="
               w-full
               text-sm
               rounded-md
               cursor-pointer
               border-white
-              hover:bg-gray-50
+              hover:bg-gray-100
               hover:shadow-md
               grid grid-cols-6
             "
-            :class="{ 'bg-gray-50 shadow-md': category.id == selectedId }"
+            :class="{
+              'bg-gray-100 shadow-md font-semibold': category.id == selectedId,
+              'bg-gray-50': isEven(index),
+            }"
           >
             <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
             <div class="p-2">{{ category.name }}</div>
-            <div class="p-2">{{ category.vat }} %</div>
+            <div class="p-2 self-center justify-self-center">{{ category.vat }} %</div>
             <div class="p-2">
               <span v-if="category.discountId">{{
                 getDiscountForCategory(category.discountId)
               }}</span>
             </div>
-            <div class="p-2 max-w-4">{{ category.productsCount }}</div>
+            <div class="p-2 self-center justify-self-center">{{ category.productsCount }}</div>
           </div>
 
-          <ul>
+          <ul class="border-b border-gray" v-if="category.id == selectedParentCategoryId">
             <li
-              class="w-full min-w-min my-1"
-              @click="selectCategory(subCategory.id)"
-              v-for="(subCategory, index) in getSubCategories(category.id)"
+              class="
+                w-full
+                min-w-min
+                my-1
+                text-sm
+                rounded-md
+                cursor-pointer
+                border-white
+                hover:bg-gray-50
+                hover:shadow-md
+                grid grid-cols-6
+              "
+              :class="{
+                'bg-gray-50 shadow-md font-semibold':
+                  subCategory.id == selectedId,
+              }"
+              @click="selectCategory(subCategory)"
+              v-for="(subCategory, index) in selectedSubCategories"
               :key="index"
             >
-              <div
-                class="
-                  w-full
-                  text-sm
-                  rounded-md
-                  cursor-pointer
-                  border-white
-                  hover:bg-gray-50
-                  hover:shadow-md
-                  grid grid-cols-6
-                "
-                :class="{
-                  'bg-gray-50 shadow-md': subCategory.id == selectedId,
-                }"
-              >
-                <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
-                <div class="p-2">{{ subCategory.name }}</div>
-                <div class="p-2">{{ subCategory.vat }} %</div>
-                <div class="p-2">
-                  <span v-if="subCategory.discountId">{{
-                    getDiscountForCategory(subCategory.discountId)
-                  }}</span>
-                </div>
-                <div class="p-2 max-w-4">{{ subCategory.productsCount }}</div>
+              <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
+              <div class="p-2">{{ subCategory.name }}</div>
+              <div class="p-2 self-center justify-self-center">{{ subCategory.vat }} %</div>
+              <div class="p-2">
+                <span v-if="subCategory.discountId">{{
+                  getDiscountForCategory(subCategory.discountId)
+                }}</span>
               </div>
+              <div class="p-2 self-center justify-self-center">{{ subCategory.productsCount }}</div>
             </li>
           </ul>
         </li>
@@ -82,6 +84,7 @@
   </div>
 </template>
 
+
 <script>
 import { mapGetters } from "vuex";
 
@@ -89,10 +92,6 @@ import _find from "lodash/find";
 
 export default {
   props: {
-    categories: {
-      type: Array,
-      required: true,
-    },
     selectedId: {
       type: [Number, String],
       required: false,
@@ -102,24 +101,52 @@ export default {
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
+    ...mapGetters('Categories', ['getCategories']),
 
     parentCategories() {
-      return this.categories.filter((category) => category.parentId === null);
+      return this.getCategories.filter((category) => category.parentId === null);
     },
 
     subCategories() {
-      return this.categories.filter((category) => category.parentId !== null);
+      return this.getCategories.filter((category) => category.parentId !== null);
+    },
+  },
+
+  data() {
+    return {
+      selectedParentCategoryId: '',
+      selectedSubCategories: [],
+    }
+  },
+
+  watch: {
+    selectedId(newValue) {
+      if(newValue == "") {
+        this.selectedParentCategoryId = '';
+      }
     },
   },
 
   methods: {
-    selectCategory(categoryId) {
-      this.$emit("selected", categoryId);
+    selectCategory(category) {
+      if(category.parentId == null) {
+        this.selectedParentCategoryId = category.id;
+        this.getSubCategories(category.id);
+      }
+      this.$emit("selected", category.id);
+    },
+
+    isEven(index) {
+      if (index % 2 === 0) {
+        return true;
+      }
+
+      return false;
     },
 
     getSubCategories(categoryId) {
-      return this.categories.filter(
-        (category) => category.parentId === categoryId
+      this.selectedSubCategories = this.getCategories.filter(
+        (category) => category.parentId == categoryId
       );
     },
 

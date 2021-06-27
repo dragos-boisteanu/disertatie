@@ -31,21 +31,15 @@ const actions = {
             const response = await postCategory(payload);
             payload.id = response.data.id;
             payload.color = response.data.color;
-
             if (payload.parentId) {
                 payload.parentName = response.data.parentName
-
-
                 payload.vat = response.data.vat
-
-
             } else {
                 payload.parentName = null;
                 payload.parentId = null;
             }
 
-            console.log(payload);
-
+            payload.deletedAt = null;
             payload.productsCount = 0;
 
             commit('ADD_CATEGORY', payload);
@@ -122,6 +116,7 @@ const mutations = {
     },
 
     ADD_CATEGORY(state, payload) {
+        console.log(payload);
         state.categories.push(payload);
     },
 

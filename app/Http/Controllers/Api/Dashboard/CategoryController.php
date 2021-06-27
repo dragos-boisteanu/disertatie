@@ -109,7 +109,14 @@ class CategoryController extends Controller
         $request->user()->can('forceDelete', Category::class);
         
         try {
-            $category = Category::findOrFail($id);
+            $category = Category::with('subCategories')->findOrFail($id);
+
+            if($category->subCategories->count() > 0) {
+                foreach($category->subCategories as $subCategory) {
+                    $subCategory->forceDelete();
+                }
+            }
+
         
             $category->forceDelete();
     
