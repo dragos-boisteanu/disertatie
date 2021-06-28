@@ -83,7 +83,6 @@
             name="Parent category"
             type="color"
             v-model="category.parentId"
-
             :disabled="waiting"
           >
             <option value="" disabled selected>Select parent category</option>
@@ -285,32 +284,36 @@ export default {
     ...mapActions("Notification", ["openNotification"]),
 
     async create() {
-      this.$v.$touch();
+      try {
+        this.$v.$touch();
 
-      if (!this.$v.$invalid) {
-        const payload = this.category;
+        if (!this.$v.$invalid) {
+          const payload = this.category;
 
-        if (payload.vat === "") {
-          delete payload.vat;
+          if (payload.vat === "") {
+            delete payload.vat;
+          }
+
+          if (payload.parentId === null) {
+            delete payload.parentId;
+          }
+
+          if (payload.discountId === "") {
+            delete payload.discountId;
+          }
+
+          await this.postCategory(payload);
+
+          this.$toast.success("Category created");
+
+          this.resetForm();
         }
+      } catch (error) {
+        console.log(error);
 
-        if (payload.parentId === null) {
-          delete payload.parentId;
+        if (error.response) {
+          this.$toast.error(error.response.data.error);
         }
-
-        if (payload.discountId === "") {
-          delete payload.discountId;
-        }
-
-        await this.postCategory(payload);
-
-        this.openNotification({
-          type: "ok",
-          show: true,
-          message: "Category created",
-        });
-
-        this.resetForm();
       }
     },
 
@@ -416,7 +419,7 @@ export default {
           vm: this,
         };
         await this.restoreCategory(payload);
-         this.category.deletedAt = null;
+        this.category.deletedAt = null;
       } catch (error) {
         console.log(error);
       }
