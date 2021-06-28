@@ -281,7 +281,6 @@ export default {
       "restoreCategory",
       "updateDiscount",
     ]),
-    ...mapActions("Notification", ["openNotification"]),
 
     async create() {
       try {
@@ -302,9 +301,9 @@ export default {
             delete payload.discountId;
           }
 
-          await this.postCategory(payload);
+          const response = await this.postCategory(payload);
 
-          this.$toast.success("Category created");
+          this.$toast.success(response);
 
           this.resetForm();
         }
@@ -353,47 +352,50 @@ export default {
           }
 
           if (counter > 0) {
+            this.$Progress.start();
+
             await this.patchCategory(payload);
 
             payload.category.discountId = this.category.discountId;
             this.updateDiscount(payload);
 
             this.waiting = false;
+            this.$Progress.finish();
 
-            this.openNotification({
-              type: "ok",
-              show: true,
-              message: "Category updated",
-            });
+            this.$toast.success("Category updated");
           } else {
             this.waiting = false;
-            this.openNotification({
-              type: "info",
-              show: true,
-              message: "Nothing to update",
-            });
+            this.$toast.info("Nothing to update");
           }
         }
       } catch (error) {
+        this.$Progress.fail();
         this.waiting = false;
         console.log(error);
+
+        if (error.response) {
+          this.$toast.error(error.response.data.error);
+        }
       }
     },
 
     async remove() {
       try {
         this.toggleConfirmModal();
+        this.$Progress.start();
         this.waiting = true;
-        await this.deleteCategory(this.categoryId);
+
+        const response = await this.deleteCategory(this.categoryId);
+
         this.waiting = false;
+
+        this.$Progress.finish();
+
         this.resetForm();
 
-        this.openNotification({
-          type: "ok",
-          show: true,
-          message: "Category removed",
-        });
+        this.$toast.success(response);
       } catch (error) {
+        this.$Progress.fail();
         this.waiting = false;
         console.log(error);
       }
@@ -401,26 +403,34 @@ export default {
 
     async callDisableCategory() {
       try {
+        this.$Progress.start();
         const payload = {
           id: this.category.id,
           vm: this,
         };
         const response = await this.disableCategory(payload);
-        this.category.deletedAt = response;
+        this.category.deletedAt = response.deletedAt;
+        this.$toast.success(response.message);
+        this.$Progress.finish();
       } catch (error) {
+        this.$Progress.fail();
         console.log(error);
       }
     },
 
     async callRestoreCategory() {
       try {
+        this.$Progress.start();
         const payload = {
           id: this.category.id,
           vm: this,
         };
-        await this.restoreCategory(payload);
+        const response = await this.restoreCategory(payload);
         this.category.deletedAt = null;
+        this.$toast.success(response);
+        this.$Progress.finish();
       } catch (error) {
+        this.$Progress.finish();
         console.log(error);
       }
     },

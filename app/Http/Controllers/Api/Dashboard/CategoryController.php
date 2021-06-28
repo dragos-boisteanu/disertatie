@@ -62,6 +62,7 @@ class CategoryController extends Controller
             $category = Category::create($input);
 
             $response['id'] = $category->id;
+            $response['message'] = 'Category ' . $category->name . ' created sucessfuly';
 
             return response()->json($response, 201);
         } catch (QueryException $qex) {
@@ -105,6 +106,8 @@ class CategoryController extends Controller
 
         $category->update($input);
 
+        $responseData['message'] = "Category updated";
+
         return response()->json($responseData, 200);
     }
 
@@ -126,7 +129,6 @@ class CategoryController extends Controller
                     $subCategory->forceDelete();
                 }
             }
-
 
             $category->forceDelete();
 

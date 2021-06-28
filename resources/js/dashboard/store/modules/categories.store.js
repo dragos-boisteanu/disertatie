@@ -43,6 +43,8 @@ const actions = {
             payload.productsCount = 0;
 
             commit('ADD_CATEGORY', payload);
+
+            return response.data.message;
         } catch (error) {
             throw error
         }
@@ -56,7 +58,7 @@ const actions = {
                 payload.category.parentName = response.data.parentName;
             }
             commit('PATCH_CATEGORY', payload);
-            return category
+            return {category, message: response.data.message}
         } catch (error) {
             throw error;
         }
@@ -66,20 +68,22 @@ const actions = {
         const response = await disableCategory(payload.id);
         payload.deletedAt = response.data.deletedA;
         commit('SET_CATEGORY_DELETED_AT', payload);
-        return response.data.deletedAt;
+        return {deletedAt:  response.data.deletedAt, message: response.data.message};
     },
 
     async restoreCategory({commit}, payload)
     {
-        await restoreCategory(payload.id);
+        const response = await restoreCategory(payload.id);
         payload.deletedAt = null
         commit('SET_CATEGORY_DELETED_AT', payload);
+        return response.data.message;
     },
 
     async deleteCategory({ commit }, payload) {
         try {
-            await deleteCategory(payload);
+            const response = await deleteCategory(payload);
             commit('DELETE_CATEGORY', payload);
+            return response.data.message;
         } catch (error) {
             throw error
         }
