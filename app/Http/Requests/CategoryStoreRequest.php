@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UniqueCategoryName;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryStoreRequest extends FormRequest
@@ -24,7 +25,7 @@ class CategoryStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:50',
+            'name' => ['required', 'string', 'max:50'],
             'vat' => ['sometimes', 'numeric'],
             'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
             'parentId' => ['sometimes', 'numeric', 'exists:categories,id']
