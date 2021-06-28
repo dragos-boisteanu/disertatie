@@ -1,6 +1,6 @@
 <footer class="flex-initial  bg-gray-900 p-6">
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-4 2xl:grid-cols-5">
-        <div>
+    <div class="w-full grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div class="md:justify-self-center">
             <h4 class="text-trueGray-400 text-lg font-semibold">
                 Link-uri
             </h4>
@@ -27,7 +27,7 @@
                 </li>
             </ul>
         </div>
-        <div>
+        <div class="md:justify-self-center">
             <h4 class="text-trueGray-400 text-lg font-semibold">
                 Socializare
             </h4>
@@ -95,7 +95,7 @@
                 </li>
             </ul>
         </div>
-        <div>
+        <div class="md:justify-self-center">
             <h4 class="text-trueGray-400 text-lg font-semibold">
                 Program
             </h4>
@@ -107,12 +107,12 @@
                 </li>
                 <li class="my-2">
                     <span class="font-semibold text-trueGray-700">S - D:</span> <span
-                        class="text-trueGray-300"">12:00</span> <span class=" text-red-700"> / </span> <span
+                        class="text-trueGray-300">12:00</span> <span class="text-red-700"> / </span> <span
                         class="text-trueGray-300">24:00</span>
                 </li>
             </ul>
         </div>
-        <div class="contact">
+        <div class="contact md:justify-self-center">
             <h4 class="text-trueGray-400 text-lg font-semibold">
                 Contanct
             </h4>
@@ -146,12 +146,6 @@
                     </p>
                 </li>
             </ul>
-        </div>
-        <div class="h-64 w-64 rounded col-span-2 justify-self-center hover:shadow-md md:col-span-4 2xl:col-span-1">
-            <a target="_blank"
-                href="https://www.google.com/maps/place/Strada+%C8%98colilor+47,+Br%C4%83ila+817181/@45.265571,27.9567674,17z/data=!3m1!4b1!4m5!3m4!1s0x40b729e5525ba093:0xf4695bc61a90a23!8m2!3d45.265571!4d27.9589561">
-                <img class="w-full h-full rounded"src="{{asset('storage/images/map.png')}}">
-            </a>
         </div>
     </div>
     <div class="w-full text-xs text-center mt-10 text-trueGray-200">

@@ -13,52 +13,26 @@
 
     {{-- mobile nav --}}
     <nav class="bg-orange-600 flex items-center justify-between px-4 lg:hidden">
-        <div id="mobileMenuToggler" class="p-3 cursor-pointer">
-            @for ($i = 0; $i < 3; $i++)
-                <div class="bg-black h-0.5 w-6 my-1.5"></div>
-            @endfor
-        </div>
-        <ul id="mobileSlider" class="fixed z-40 top-0 left-0 h-full w-3/4 bg-gray-900 text-white hidden">
+        <ul class="flex items-center gap-x-4 py-4">
             <li>
-                <a href="">
+                <a class="text-white text-sm px-2 py-1 rounded bg-trueGray-800 bg-opacity-90"
+                    href="/">
                     Meniu
                 </a>
+               
             </li>
             <li>
-                <a href="">
+                <a class="text-white text-sm px-2 py-1 rounded bg-trueGray-800 bg-opacity-90"
+                    href="/">
                     Contanct
                 </a>
             </li>
-            @auth
-                <li>
-                    <a href="/">
-                        Account
-                    </a>
-                </li>
-                <li>
-                    <a href="/">
-                        Comenzi
-                    </a>
-                </li>
-                <li>
-                    <a href="/">
-                        Rezervari
-                    </a>
-                </li>
-                <li>
-                    <a href="/">
-                        Adrese
-                    </a>
-                </li>
-                <li>
-                    <form method="post" action="{{ route('logout') }}">
-                        @csrf
-                        <button>
-                            Logout
-                        </button>
-                    </form>
-                </li>
-            @endauth
+            <li>
+                <a class="text-white text-sm px-2 py-1 rounded bg-trueGray-800 bg-opacity-90"
+                    href="/">
+                    About us
+                </a>
+            </li>
         </ul>
         <mobile-cart-button-component></mobile-cart-button-component>
     </nav>
@@ -70,7 +44,7 @@
             <ul class="flex items-start">
                 <li>
                     <a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black"
-                        href="/">
+                        href="{{ route('menu-index')}}">
                         Meniu
                     </a>
                 </li>
@@ -225,28 +199,28 @@
     @endguest
 
     @auth
-        <ul>
+        <ul class="w-full flex items-center justify-end gap-x-2 px-2 py-2 text-sm">
             <li>
-                <a href="/">
+                <a href="/" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
                     Account
                 </a>
             </li>
             <li>
-                <a href="/">
+                <a href="/" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
                     Orders
                 </a>
             </li>
             <li>
-                <a href="/">
+                <a href="/" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
                     Reservations
                 </a>
             </li>
             <li>
-                <a href="/">
+                <a href="/" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
                     Addresses
                 </a>
             </li>
-            <li class="bg-orange-600 py-4 text-center">
+            <li class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
                 <form method="post" action="{{ route('logout') }}">
                     @csrf
                     <button>
@@ -284,25 +258,6 @@
             autoplay: true
         }).mount();
     </script> --}}
-
-    <script>
-        const mobileMenuToggler = document.getElementById("mobileMenuToggler");
-        const mobileSlider = document.getElementById("mobileSlider");
-
-        mobileMenuToggler.addEventListener("click", function() {
-            toggleMenu();
-        })
-
-        function toggleMenu() {
-            if (backdrop.classList.contains('hidden') && mobileSlider.classList.contains('hidden')) {
-                backdrop.classList.remove('hidden');
-                mobileSlider.classList.remove('hidden')
-            } else {
-                backdrop.classList.add('hidden');
-                mobileSlider.classList.add('hidden');
-            }
-        }
-    </script>
 
     @guest
         <script>
