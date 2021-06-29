@@ -149,7 +149,7 @@
                 </svg>
             </button>
 
-            <form id="registerForm" method="POST" action="{{ route('register') }}" class="bg-white p-6 md:flex-1">
+            <form id="registerForm" method="POST" action="{{ route('register') }}" class="bg-white p-6 md:flex-1 md:rounded">
                 @csrf
 
                 <div>
@@ -262,23 +262,23 @@
         <script>
             $('#auth').click(function() {
                 $('#backdrop').fadeIn();
-                $('#loginModal').show();
+                $('#loginModal').fadeIn();
             })
 
 
             $('#register').click(function() {
                 $('#backdrop').fadeIn();
-                $('#registerModal').show();
+                $('#registerModal').fadeIn();
             })
 
             $('#closeAuthModal').click(function() {
                 $('#backdrop').fadeOut();
-                $('#loginModal').hide();
+                $('#loginModal').fadeOut();
             })
 
             $('#closeRegisterModal').click(function() {
                 $('#backdrop').fadeOut();
-                $('#registerModal').hide();
+                $('#registerModal').fadeOut();
             })
         </script>
     @endguest

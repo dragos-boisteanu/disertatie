@@ -41,6 +41,8 @@
 <script>
     $('#backdrop').click(function() {
         $('#backdrop').fadeOut();
+        $('#loginModal').fadeOut();
+        $('#registerModal').fadeOut();
     })
 </script>
 @stack('scripts')
