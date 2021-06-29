@@ -28,6 +28,7 @@
 
 <body class="h-full">
     {!! Toastr::message() !!}
+    <div id="backdrop" class="fixed top-0 left-0 z-10 w-full h-full bg-black bg-opacity-75" style="display: none"></div>
     <div id="store-app" class="h-full flex flex-col">
         @include('includes.header')
         <main class="flex-1 bg-gray-800 px-4 py-8 w-full flex items-start justify-center">
@@ -38,22 +39,8 @@
 </body>
 
 <script>
-    const backdrop = document.getElementById('backdrop');
-
-    backdrop.addEventListener('click', function() {
-        backdrop.style.display = "none"
-
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm')
-
-        if (!registerForm.classList.contains('hidden')) {
-            registerForm.classList.add('hidden');
-        }
-
-        if (!loginForm.classList.contains('hidden')) {
-            loginForm.classList.add('hidden');
-        }
-
+    $('#backdrop').click(function() {
+        $('#backdrop').fadeOut();
     })
 </script>
 @stack('scripts')
