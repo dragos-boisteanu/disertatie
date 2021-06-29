@@ -23,24 +23,39 @@ Route::get('/', function () {
 
 Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->where('any', '.*')
     ->middleware(['auth', 'dashboard.access'])->name('dashboard');
-    // verified
+// verified
 
+Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function () {
+    Route::group(['prefix'=>'account'], function() {
+        Route::get('/', 'AccountController@index')->name('account.index');
+        Route::put('/', 'AccountController@update')->name('account.update');
+        Route::delete('/'. 'AccountController@destroy')->name('account.delete');
 
-Route::group(['namespace'=>'Web\Client'], function() {  
-    Route::get('/', 'MenuController@index')->name('home');
+    });
 
-    Route::get('/menu', 'MenuController@index')->name('menu-index');
-    Route::get('/menu/{id}', 'MenuController@show')->name('menu-show');
-
-    Route::get('/cart', 'CartController@index')->name('cart-index');
-    Route::put('/cart/{id}', 'CartController@update')->name('cart-patch');
-    Route::delete('/cart/{id}', 'CartController@destroy')->name('cart-delete');
+    Route::group(['prefix'=>'addressess'], function() {
+        Route::get('/', 'AddressController@index')->name('address.index');
+        Route::post('/', 'AddressController@store')->name('address.store');
+        Route::put('/{id}', 'AddressController@update')->name('address.update');
+        Route::delete('/{id}'. 'AddressController@destroy')->name('address.delete');
+    });
 });
 
-require __DIR__.'/auth.php';
+Route::group(['namespace' => 'Web\Client'], function () {
+    Route::get('/', 'MenuController@index')->name('home');
+
+    Route::get('/menu', 'MenuController@index')->name('menu.index');
+    Route::get('/menu/{id}', 'MenuController@show')->name('menu.show');
+
+    Route::get('/cart', 'CartController@index')->name('cart.index');
+    Route::put('/cart/{id}', 'CartController@update')->name('cart.patch');
+    Route::delete('/cart/{id}', 'CartController@destroy')->name('cart.delete');
+});
+
+require __DIR__ . '/auth.php';
 
 
-Route::get('/order-email/{id}', function($id) {
+Route::get('/order-email/{id}', function ($id) {
     $order = Order::findOrFail($id);
     return view('mails.order', compact('order'));
 });

@@ -22,7 +22,7 @@
 <body class="h-full flex flex-col">
     <main id="store-app" class="flex-1 bg-gray-800 px-4 py-8 w-full flex items-center justify-center">
         <div class="h-full w-full  md:w-2/3 lg:w-1/4">
-            <a href="{{ route('menu-index') }}" class="text-sm text-orange-600 flex items-center hover:underline">
+            <a href="{{ route('menu.index') }}" class="text-sm text-orange-600 flex items-center hover:underline">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24"
                     width="18px">
                     <path d="M0 0h24v24H0V0z" fill="none" />
@@ -57,7 +57,7 @@
                             </div>
                             <div class="flex items-center justify-between p-2 border-t border-b border-gray-300">
                                 <div class="flex-initial w-20">
-                                    <form method="POST" action="{{ route('cart-patch', ['id' => $item->id]) }}"
+                                    <form method="POST" action="{{ route('cart.patch', ['id' => $item->id]) }}"
                                         class="text-center flex flex-col justify-center gap-y-2">
                                         @csrf
                                         @method('PUT')
@@ -70,7 +70,7 @@
                                     {{ $item->price }} Ron / buc.
                                 </div>
                                 <form class="flex-initial" method="POST"
-                                    action="{{ route('cart-delete', ['id' => $item->id]) }}">
+                                    action="{{ route('cart.delete', ['id' => $item->id]) }}">
                                     @csrf
                                     @method("DELETE")
                                     <button class="w-full text-sm text-center text-red-700 hover:text-red-500">

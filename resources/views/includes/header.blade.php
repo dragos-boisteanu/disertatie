@@ -1,4 +1,4 @@
-<header class="flex-initial h-auto bg-gray-900">
+<header class="flex-none bg-gray-900">
     <init-cart-component :cart-items="{{ $cartItems }}"></init-cart-component>
     <backdrop-component></backdrop-component>
     {{-- <div class="splide">
@@ -44,7 +44,7 @@
             <ul class="flex items-start">
                 <li>
                     <a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black"
-                        href="{{ route('menu-index')}}">
+                        href="{{ route('menu.index')}}">
                         Meniu
                     </a>
                 </li>
@@ -201,7 +201,7 @@
     @auth
         <ul class="w-full flex items-center justify-end gap-x-2 px-2 py-2 text-sm">
             <li>
-                <a href="/" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
+                <a href="{{ route('account.index') }}" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
                     Account
                 </a>
             </li>
@@ -216,7 +216,7 @@
                 </a>
             </li>
             <li>
-                <a href="/" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
+                <a href="{{ route('address.index') }}" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
                     Addresses
                 </a>
             </li>
