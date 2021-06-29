@@ -78,6 +78,7 @@
                 Inregistrare
             </div>
         </div>
+
         <div id="authModal"
             class="fixed top-1/2 left-0 transform -translate-y-1/2 w-full md:left-1/2 md:-translate-x-1/2 md:w-3/4 lg:w-1/2 2xl:w-1/4 flex-col items-center justify-center z-30 hidden">
             <div
@@ -137,7 +138,7 @@
                 </form>
 
                 <form id="registerForm" method="POST" action="{{ route('register') }}"
-                    class="bg-white p-6 md:flex-1 h-full md:rounded-r-md hidden">
+                    class="bg-white p-6 md:flex-1 h-screen md:rounded-r-md hidden">
                     @csrf
 
                     {{-- First name --}}
