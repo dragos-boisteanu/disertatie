@@ -10,31 +10,42 @@
                     <h1 class="font-semibold text-xl mb-2 text-orange-600">{{ $subCategory->name }}</h1>
                     <ul>
                         @foreach ($subCategory->subProducts as $product)
-                            <li class="mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5 product-form">
-                                <div class="col-span-3 md:col-span-2">
-                                    <h2 class="text-gray-300 mb-1 justify-self-start self-center">
-                                        {{ $product->name }} - {{ $product->weight }}{{ $product->unit->name }}
-                                    </h2>
-                                    <ul class="">
-                                        <li class="text-sm text-gray-500">
-                                            @foreach ($product->ingredients as $ingredient)
-                                                {{ $ingredient->name }},
-                                            @endforeach
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="text-sm self-center px-4 md:px-8">
-                                    <input id="pq{{ $product->id }}" type="number" value="1" min-value="1"
-                                        class="w-full rounded-sm bg-white text-center product-quantity ">
-                                </div>
-                                <div class="text-sm text-gray-300 self-center justify-self-center">
-                                    {{ $product->price }} Ron
-                                </div>
-                                <add-to-cart-btn-component :id="{{ $product->id }}" :quantity="1" :stock={{ $product->quantity }}></add-to-cart-btn-component>
-                                {{-- <button id="{{ $product->id }}"
-                                    class="self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200 product-add-to-cart">
-                                    Add to cart
-                                </button> --}}
+                            <li>
+                                <form method="POST" action="{{ route('cart.store', ['productId' => $product->id]) }}"
+                                    class="class=mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5">
+                                    @csrf
+
+                                    <div class="col-span-3 md:col-span-2">
+                                        <h2 class="text-gray-300 mb-1 justify-self-start self-center">
+                                            {{ $product->name }} - {{ $product->weight }}{{ $product->unit->name }}
+                                        </h2>
+                                        <ul class="">
+                                            <li class="text-sm text-gray-500">
+                                                @foreach ($product->ingredients as $ingredient)
+                                                    {{ $ingredient->name }},
+                                                @endforeach
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-sm self-center px-4 md:px-8">
+                                        <input id="pq{{ $product->id }}" type="number" value="1" min="1" name="quantity"
+                                            class="w-full rounded-sm bg-white text-center product-quantity ">
+                                    </div>
+                                    <div class="text-sm text-gray-300 self-center justify-self-center">
+                                        {{ $product->price }} Ron
+                                    </div>
+                                    @if ($product->quantity > 0)
+                                        <button
+                                            class="self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200 product-add-to-cart">
+                                            Add to cart
+                                        </button>
+                                    @else
+                                        <div
+                                            class="text-center self-center py-1 px-2 text-sm rounded border border-red-600 text-red-600 ">
+                                            Out of stock
+                                        </div>
+                                    @endif
+                                </form>
                             </li>
                         @endforeach
                     </ul>

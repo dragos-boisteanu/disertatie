@@ -1,6 +1,4 @@
 <header class="flex-none bg-gray-900">
-    <init-cart-component :cart-items="{{ $cartItems }}"></init-cart-component>
-    <backdrop-component></backdrop-component>
     {{-- <div class="splide">
         <div class="splide__track">
             <ul class="splide__list">
@@ -34,8 +32,9 @@
                 </a>
             </li>
         </ul>
-        <mobile-cart-button-component></mobile-cart-button-component>
+        <x-mobile-cart-button></x-mobile-cart-button>
     </nav>
+
     {{-- desktop nav --}}
     <nav class=" h-10 bg-orange-600 px-4 hidden lg:flex lg:items-center lg:justify-between">
         <div>
@@ -63,7 +62,8 @@
                 </li>
             </ul>
         </div>
-        <desktop-cart-component></desktop-cart-component>
+       {{-- desktop cart --}}
+       <x-desktop-cart></x-desktop-cart>
     </nav>
 
     @guest
@@ -232,7 +232,7 @@
         </ul>
     @endauth
 
-    <mobile-cart-component></mobile-cart-component>
+    <x-mobile-cart></x-mobile-cart>
 
 
     {{-- <x-cart id="mobileCart">

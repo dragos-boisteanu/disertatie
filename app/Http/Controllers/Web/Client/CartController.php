@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Client;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CartServiceInterface;
 
@@ -28,6 +29,21 @@ class CartController extends Controller
         return view('store.cart', ['cart' => $cart]);
     }
 
+    public function store(Request $request, $productId)
+    {
+        try {
+            $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+
+            $this->cartService->addToCart($cart, $productId, $request->quantity);
+            Toastr::success('Produsul a fost adaugat in cos', 'Succes');
+            return redirect()->back();
+        } catch ( \Exception $ex) {
+            Toastr::error('Something went wrong, try again later', 'Error');
+            return redirect()->back();
+        }
+      
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -43,9 +59,11 @@ class CartController extends Controller
 
             $this->cartService->patchCartItemQuantity($cart, $id, $request->quantity);
 
-            return redirect()->back()->with('message', 'Cantitatea produsului a fost actualizata');
+            Toastr::info('Cantitatea produsului a fost actualizata', 'Notification');
+            return redirect()->back();
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Something went wrong, try again later');
+            Toastr::info('Something went wrong, try again later', 'Error');
+            return redirect()->back();
         }
     }
 
@@ -62,10 +80,11 @@ class CartController extends Controller
 
             $this->cartService->removeItemFromCart($cart, $id);
 
-
-            return redirect()->back()->with('message', 'Produsul a fost scos din cos');
+            Toastr::success('Produsul a fost scos din cos', 'Success');
+            return redirect()->back();
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Something went wrong, try again later');
+            Toastr::success('Something went wrong, try again later', 'Error');
+            return redirect()->back();
         }
     }
 }

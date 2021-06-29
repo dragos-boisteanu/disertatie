@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Web\Client;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AccountUpdateRequest;
 
 class AccountController extends Controller
 {
@@ -27,7 +30,22 @@ class AccountController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request->all());
+
+        $user = User::find(Auth::user()->id);
+
+        $user->first_name = $request->firstName;
+        $user->last_name = $request->lastName;
+        $user->phone_number = $request->phoneNumber;
+
+        if(isset($request->newEmail)) {
+            $user->email = $request->newEmail;
+        }
+
+        $user->save();
+
+        Toastr::success('Account updated', 'Success');
+
+        return view('store.user.account', ['user'=>$user]);
     }
 
     /**

@@ -13,16 +13,19 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     {{-- Scripts --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </head>
 
 <body class="h-full flex flex-col">
+    {!! Toastr::message() !!}
     <main id="store-app" class="flex-1 bg-gray-800 px-4 py-8 w-full flex items-center justify-center">
         <div class="h-full w-full  md:w-2/3 lg:w-1/4">
-            <a href="{{ route('menu.index') }}" class="text-sm text-orange-600 flex items-center hover:underline">
+            <a href=" {{ url()->previous() }}" class="text-sm text-orange-600 flex items-center hover:underline">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24"
                     width="18px">
                     <path d="M0 0h24v24H0V0z" fill="none" />
@@ -30,12 +33,6 @@
                 </svg>
                 Inapoi la meniu
             </a>
-            @if (session('message'))
-                <div id="notification"
-                    class="w-full animate__animated bg-blue-500 font-medium text-sm text-white rounded p-4 my-2">
-                    {{ session('message') }}
-                </div>
-            @endif
             <h1 class="text-3xl text-trueGray-300 my-4 pl-2">Cos cumparaturi</h1>
             <ul>
                 @forelse ($cart->items as $item)
@@ -119,7 +116,7 @@
                     </div>
                 @endforelse
             </ul>
-            @if($cart->items->count() > 0)
+            @if ($cart->items->count() > 0)
                 <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
                     <div class="font-semibold">
                         TOTAL
@@ -147,17 +144,5 @@
     </main>
 </body>
 <script src="{{ asset(mix('js/app.js')) }}"></script>
-<script>
-    $(document).ready(function() {
-        const notificaiton = $('#notification');
-
-        if (notificaiton) {
-            setTimeout(function() {
-                notificaiton.fadeOut('slow');
-            }, 2000)
-        }
-
-    })
-</script>
 
 </html>

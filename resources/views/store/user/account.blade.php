@@ -6,6 +6,12 @@
         <h1 class="text-4xl mb-4 pl-2 font-semibold text-trueGray-300 ">Account details</h1>
         <div>
             <h2 class="mb-4 pl-1 text-3xl font-semibold text-trueGray-300">General</h2>
+            @if (session('message'))
+                <div id="notification"
+                    class="w-full animate__animated bg-blue-500 font-medium text-sm text-white rounded p-4 my-2">
+                    {{ session('message') }}
+                </div>
+            @endif
             <form method="POST" action="{{ route('account.update') }}" class="text-sm">
                 @csrf
                 @method('PUT')
@@ -14,7 +20,8 @@
                     <div class="w-full">
                         <label for="firstName" class="block text-trueGray-400 font-semibold mb-2">First Name</label>
                         {{-- error zone --}}
-                        <input type="text" id="firstName" name="firstName" value="{{ old('firstName', $user->first_name) }}"
+                        <input type="text" id="firstName" name="firstName"
+                            value="{{ old('firstName', $user->first_name) }}"
                             class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
                     </div>
                     <div class="w-full">
@@ -83,7 +90,15 @@
                 </div>
             </form>
         </div>
-
     </div>
-
 @endsection
+
+@push('scripts')
+
+<script>
+    $(document).ready(function() {
+        
+
+    })
+</script>
+@endpush

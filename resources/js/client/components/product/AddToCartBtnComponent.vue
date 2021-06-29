@@ -78,6 +78,8 @@ export default {
           vm: this,
         };
         await this.addItemToCart(payload);
+
+        this.$toastr.s('Produsul a fost adaugat in cos');
       } catch (error) {
         console.log(error);
       }

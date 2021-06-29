@@ -47,9 +47,13 @@ Route::group(['namespace' => 'Web\Client'], function () {
     Route::get('/menu', 'MenuController@index')->name('menu.index');
     Route::get('/menu/{id}', 'MenuController@show')->name('menu.show');
 
-    Route::get('/cart', 'CartController@index')->name('cart.index');
-    Route::put('/cart/{id}', 'CartController@update')->name('cart.patch');
-    Route::delete('/cart/{id}', 'CartController@destroy')->name('cart.delete');
+    Route::group(['prefix'=>'cart'], function() { 
+        Route::get('/', 'CartController@index')->name('cart.index');
+        Route::post('/{productId}', 'CartController@store')->name('cart.store');
+        Route::put('/{id}', 'CartController@update')->name('cart.patch');
+        Route::delete('/{id}', 'CartController@destroy')->name('cart.delete');
+    });
+  
 });
 
 require __DIR__ . '/auth.php';

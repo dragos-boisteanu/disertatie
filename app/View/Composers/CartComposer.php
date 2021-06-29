@@ -26,12 +26,9 @@ class CartComposer
    */
   public function compose(View $view)
   {
-    if(Auth::check()) {
-      $cart = $this->cartService->getCart(Auth::user(), session()->getId());
-    } else {
-      $cart = $this->cartService->getCart(null, session()->getId());
-    }
 
-    $view->with('cartItems', json_encode(new CartItemCollection($cart->items)));
+    $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+
+    $view->with('cart', $cart);
   }
 }
