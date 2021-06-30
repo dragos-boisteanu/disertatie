@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserLogged;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -37,13 +38,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
+        $sesionIdBeforLogin = session()->getId();
+
         $request->authenticate();
+        
+        UserLogged::dispatch(Auth::id(), $sesionIdBeforLogin);
 
         $request->session()->regenerate();
-
-        // $userCart = $this->cartService->getCart(Auth::user(), session()->getId());
-        
-        // $userCart->items()->sync([1 => ['quantity'], 2, 3]);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
