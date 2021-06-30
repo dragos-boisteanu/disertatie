@@ -27,7 +27,11 @@ class CartComposer
   public function compose(View $view)
   {
     
-    $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+    $cart = $this->cartService->getCart(Auth::id(), session()->getId());
+    
+    if(is_null($cart)) {
+      $cart = new Cart();
+    }
 
     $view->with('cart', $cart);
   }

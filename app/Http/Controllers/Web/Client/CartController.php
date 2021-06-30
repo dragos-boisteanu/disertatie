@@ -25,7 +25,7 @@ class CartController extends Controller
     public function index()
     
     {
-        $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+        $cart = $this->cartService->getCart(Auth::id(), session()->getId());
 
         return view('store.cart', ['cart' => $cart]);
     }
@@ -33,8 +33,11 @@ class CartController extends Controller
     public function store(Request $request, $productId)
     {
         try {
-            $cart = $this->cartService->getCart(Auth::user(), session()->getId());
-
+            $cart = $this->cartService->getCart(Auth::id(), session()->getId());
+            
+            if(is_null($cart)) {
+                $cart = $this->cartService->createCart(Auth::id(), session()->getId());
+            }
             $this->cartService->addToCart($cart, $productId, $request->quantity);
             Toastr::success('Produsul a fost adaugat in cos', 'Succes');
             return redirect()->back();
@@ -56,7 +59,7 @@ class CartController extends Controller
     {
 
         try {
-            $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+            $cart = $this->cartService->getCart(Auth::id(), session()->getId());
 
             $this->cartService->patchCartItemQuantity($cart, $id, $request->quantity);
 
@@ -77,7 +80,7 @@ class CartController extends Controller
     public function destroy($id)
     {
         try {
-            $cart = $this->cartService->getCart(Auth::user(), session()->getId());
+            $cart = $this->cartService->getCart(Auth::id(), session()->getId());
 
             $this->cartService->removeItemFromCart($cart, $id);
 

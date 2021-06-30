@@ -11,19 +11,13 @@ use App\Interfaces\CartServiceInterface;
 
 class CartService implements CartServiceInterface
 {
-  public function getCart(User $user = null, string $sessionId): Cart
+  public function getCart(int $userId = null, string $sessionId)
   {
     try {
-      $cart = new Cart;
-
-      if (isset($user)) {
-        $cart = $user->cart;
+      if(isset($userId)) {
+        $cart = Cart::where('user_id', $userId)->first();
       }else {
         $cart = Cart::where('session_id', $sessionId)->first();
-      }
-
-      if(is_null($cart)) {
-        $cart = $this->createCart($user, $sessionId);
       }
 
       return $cart;
@@ -61,13 +55,18 @@ class CartService implements CartServiceInterface
     // }
   }
 
-  public function createCart(User $user = null, string $sessionId): Cart 
+  public function createCart(int $userId = null, string $sessionId): Cart 
   {
     try {
+
+      if($this->getCart($userId, $sessionId) !== null) {
+        throw new Exception('Cart already exists');
+      }
+
       $cart = new Cart();
 
-      if(isset($user)) {
-        $cart->user_id = $user->id;
+      if(isset($userId)) {
+        $cart->user_id = $userId;
       } else {
         $cart->session_id = $sessionId;
       }
