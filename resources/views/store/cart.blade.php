@@ -125,7 +125,7 @@
                         {{ $cart->totalValue }} Ron
                     </div>
                 </div>
-                <form method="GET" action="/" class="pt-5">
+                <form method="GET" action="{{ route('checkout.create') }}" class="pt-5">
                     <button class="
                             w-full
                             rounded-sm

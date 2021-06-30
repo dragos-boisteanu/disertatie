@@ -53,6 +53,10 @@ Route::group(['namespace' => 'Web\Client'], function () {
         Route::put('/{id}', 'CartController@update')->name('cart.patch');
         Route::delete('/{id}', 'CartController@destroy')->name('cart.delete');
     });
+
+    Route::group(['prefix'=>'checkout'], function() { 
+        Route::get('/', 'OrderController@create')->name('checkout.create');
+    });
   
 });
 

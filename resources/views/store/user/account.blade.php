@@ -22,13 +22,13 @@
                         {{-- error zone --}}
                         <input type="text" id="firstName" name="firstName"
                             value="{{ old('firstName', $user->first_name) }}"
-                            class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
+                            class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600">
                     </div>
                     <div class="w-full">
                         <label for="lastName" class="block text-trueGray-400 font-semibold mb-2">Last Name</label>
                         {{-- error zone --}}
                         <input type="text" id="lastName" name="lastName" value="{{ old('lastName', $user->last_name) }}"
-                            class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
+                            class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600">
                     </div>
                 </div>
 
@@ -38,19 +38,19 @@
                         {{-- error zone --}}
                         <input type="text" id="phoneNumber" name="phoneNumber"
                             value={{ old('phoneNumber', $user->phone_number) }}
-                            class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600" />
+                            class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600" />
                     </div>
                     <div class="w-full">
                         <label for="email" class="block text-trueGray-400 font-semibold mb-2">Email</label>
                         {{-- error zone --}}
                         <input type="text" id="email" name="email" value="{{ $user->email }}" disabled
-                            class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
+                            class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600">
                     </div>
                     <div class="w-full">
                         <label for="newEmail" class="block text-trueGray-400 font-semibold mb-2">New email</label>
                         {{-- error zone --}}
                         <input type="text" id="newEmail" name="newEmail" value="{{ old('newEmail') }}"
-                            class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
+                            class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600">
                     </div>
                 </div>
 
@@ -72,14 +72,14 @@
                         <label for="phoneNumber" class="block text-trueGray-400 font-semibold mb-2">Password</label>
                         {{-- error zone --}}
                         <input type="password" id="password" name="password"
-                            class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600" />
+                            class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600" />
                     </div>
                     <div class="w-full">
                         <label for="repeatPassword" class="block text-trueGray-400 font-semibold mb-2">Repeat
                             password</label>
                         {{-- error zone --}}
                         <input type="password" id="repeatPassword" name="repeatPassword"
-                            class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
+                            class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600">
                     </div>
                 </div>
 

@@ -20,6 +20,10 @@ class CartService implements CartServiceInterface
         $cart = Cart::where('session_id', $sessionId)->first();
       }
 
+      if(isset($cart)) {
+        session(['cartId' =>$cart->id ]);
+      }
+
       return $cart;
 
     } catch (\Exception $e) {
@@ -58,8 +62,7 @@ class CartService implements CartServiceInterface
   public function createCart(int $userId = null, string $sessionId): Cart 
   {
     try {
-
-      if($this->getCart($userId, $sessionId) !== null) {
+      if(session()->has('cartId') ) {
         throw new Exception('Cart already exists');
       }
 

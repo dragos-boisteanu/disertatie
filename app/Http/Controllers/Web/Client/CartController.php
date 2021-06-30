@@ -37,7 +37,9 @@ class CartController extends Controller
             
             if(is_null($cart)) {
                 $cart = $this->cartService->createCart(Auth::id(), session()->getId());
+                session(['cartId' =>$cart->id ]);
             }
+
             $this->cartService->addToCart($cart, $productId, $request->quantity);
             Toastr::success('Produsul a fost adaugat in cos', 'Succes');
             return redirect()->back();
@@ -83,6 +85,12 @@ class CartController extends Controller
             $cart = $this->cartService->getCart(Auth::id(), session()->getId());
 
             $this->cartService->removeItemFromCart($cart, $id);
+            $cart->refresh();
+            if(count($cart->items) == 0) {
+               
+                Toastr::info('Cosul este gol', 'Info');
+                return redirect()->route('menu.index');
+            }
 
             Toastr::success('Produsul a fost scos din cos', 'Success');
             return redirect()->back();
