@@ -1,14 +1,14 @@
 <?php
 
-namespace App\View\Composers;
+namespace App\Http\Composers;
+
 
 use App\Models\Cart;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CartServiceInterface;
-use App\Http\Resources\CartItemCollection;
 
-class CartComposer
+class CartItemsCountComposer
 {
 
   private $cartService;
@@ -26,7 +26,7 @@ class CartComposer
    */
   public function compose(View $view)
   {
-
+    
     $cart = $this->cartService->getCart(Auth::user(), session()->getId());
 
     $view->with('cart', $cart);

@@ -23,6 +23,7 @@ class CartController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+    
     {
         $cart = $this->cartService->getCart(Auth::user(), session()->getId());
 

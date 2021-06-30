@@ -14,7 +14,7 @@ class CartService implements CartServiceInterface
   public function getCart(User $user = null, string $sessionId): Cart
   {
     try {
-      $cart = null;
+      $cart = new Cart;
 
       if (isset($user)) {
         $cart = $user->cart;
@@ -33,6 +33,32 @@ class CartService implements CartServiceInterface
       // throw new Exception('Something went wrong, try again !');
       throw new Exception($e->getMessage());
     }
+  }
+
+  public function getCartItemsCount(User $user = null, string $sessionId): int 
+  {
+    return 0;
+    // try {
+
+    //   $itemsCount = 0;
+
+    //   if (isset($user)) {
+    //     $cart = $user->cart->itemsCount;
+    //   }else {
+    //     $cart = Cart::select('');
+    //   }
+
+    //   if(is_null($cart)) {
+    //     $cart = $this->createCart($user, $sessionId);
+    //   }
+
+    //   return $itemsCount;
+
+    // } catch (\Exception $e) {
+    //   //log exception
+    //   // throw new Exception('Something went wrong, try again !');
+    //   throw new Exception($e->getMessage());
+    // }
   }
 
   public function createCart(User $user = null, string $sessionId): Cart 

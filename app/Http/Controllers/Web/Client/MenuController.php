@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers\Web\Client;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Interfaces\CartServiceInterface;
 
 class MenuController extends Controller
 {
+
+    private $cartService;
+
+    public function __construct(CartServiceInterface $cartService)
+    {
+        $this->cartService = $cartService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +25,7 @@ class MenuController extends Controller
     public function index()
     {
         $categories = Category::where('parent_id', null)->get();
-
+     
         return view('store.menu.index', ['categories'=>$categories]);
     }
 
