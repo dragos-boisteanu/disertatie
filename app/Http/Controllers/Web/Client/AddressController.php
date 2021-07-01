@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Web\Client;
 
 use App\Models\Address;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 
 class AddressController extends Controller
@@ -21,15 +23,7 @@ class AddressController extends Controller
         return view('store.user.addresses', compact('addresses'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -39,19 +33,23 @@ class AddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $address = new Address();
+
+        $address->user_id = Auth::id();
+        $address->address = $request->address;
+    
+        if(Address::where('user_id', Auth::check())->where('is_selected', 1)->doesntExist()) {
+            $address->is_selected = 1;
+        } else {
+            $address->is_selected = null;
+        }
+
+        $address->save();
+        
+        Toastr::success('Adresa a fost adaugata la lista', 'Succes');
+        return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -73,7 +71,18 @@ class AddressController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $address = Address::findOrFail($id);
+
+        $selectedAddress = Address::where('user_id', Auth::id())->where('is_selected', 1)->first();
+
+        $selectedAddress->is_selected = null;
+        $selectedAddress->save();
+
+        $address->is_selected = $request->isSelected;
+
+        $address->save();
+        Toastr::success('Adresa a fost selectata ca adresa principala', 'Succes');
+        return redirect()->back();
     }
 
     /**
@@ -84,6 +93,11 @@ class AddressController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $address = Address::findOrFail($id);
+
+        $address->delete();
+
+        Toastr::success('Adresa a fost stearsa', 'Succes');
+        return redirect()->back();
     }
 }

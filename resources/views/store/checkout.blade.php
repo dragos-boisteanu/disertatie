@@ -116,6 +116,14 @@
                         </li>
                     @endforeach
                 </ul>
+                <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
+                    <div class="font-semibold">
+                        Total produse
+                    </div>
+                    <div>
+                        444 Ron
+                    </div>
+                </div>
             </div>
 
             <div>
@@ -139,7 +147,6 @@
                             if new address is selected from the select --}}
                     <div class="p-4 border-t border-gray-800">
                         @auth
-
                             <div class="w-full">
                                 <label for="phoneNumber" class="block text-trueGray-400 font-semibold mb-2">Nr.
                                     Telefon</label>
@@ -174,9 +181,6 @@
                                     class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 shadow-inner">
                             </div>
                         @endguest
-
-
-
                     </div>
                 </div>
             </div>
@@ -198,6 +202,20 @@
                         <label for="p3">Card online</label>
                     </li>
                 </ul>
+            </div>
+
+            <div>
+                <h2 class="text-lg text-trueGray-300 my-4 pl-2">Observatii</h2>
+                <textarea class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600"></textarea>
+            </div>
+
+            <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
+                <div class="font-semibold">
+                    Total comanda
+                </div>
+                <div>
+                    600 Ron
+                </div>
             </div>
         </div>
     </main>

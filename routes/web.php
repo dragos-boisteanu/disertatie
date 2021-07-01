@@ -36,8 +36,9 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
     Route::group(['prefix'=>'addressess'], function() {
         Route::get('/', 'AddressController@index')->name('address.index');
         Route::post('/', 'AddressController@store')->name('address.store');
+        Route::put('/{id}/edit', 'AddressController@edit')->name('address.edit');
         Route::put('/{id}', 'AddressController@update')->name('address.update');
-        Route::delete('/{id}'. 'AddressController@destroy')->name('address.delete');
+        Route::delete('/{id}', 'AddressController@destroy')->name('address.delete');
     });
 });
 
