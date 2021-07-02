@@ -137,7 +137,7 @@
         </div>
 
         <div id="registerModal"
-            class="fixed top-1/2 left-0 transform -translate-y-1/2 w-full h-full md:left-1/2 md:-translate-x-1/2 md:w-3/4  md:h-auto lg:w-1/2 2xl:w-1/4 flex-col items-center justify-center z-30 bg-white md:rounded"
+            class="fixed top-0 left-0 w-full h-full md:left-1/2 md:-translate-x-1/2 md:w-3/4  md:h-auto lg:w-1/2 2xl:w-1/4 flex-col items-center justify-center z-30 bg-white md:rounded"
             style="display: none">
 
             <button id="closeRegisterModal" class="absolute top-0 right-0 cursor-pointer p-2">
