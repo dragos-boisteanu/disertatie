@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-auto">
+  <div>
     <ConfirmActionModal
       v-if="confirmModalState"
       title="Confirm action"

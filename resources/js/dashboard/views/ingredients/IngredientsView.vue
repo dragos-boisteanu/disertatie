@@ -33,7 +33,7 @@
       <div class="md:flex-1 flex flex-col">
         <Search @search="search"></Search>
         <IngredientsListComponent
-          :ingredients="ingredients"
+          :selected-id="ingredientId"
           @selected="selectIngredient"
         ></IngredientsListComponent>
       </div>

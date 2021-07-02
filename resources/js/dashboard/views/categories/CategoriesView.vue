@@ -32,19 +32,20 @@
     <div
       class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-3/4"
     >
-      <div class="flex flex-col">
+      <div class="flex flex-col lg:flex-auto">
         <Search @search="search"></Search>
         <CategoriesList
-          :categories="categories"
           :selected-id="categoryId"
           @selected="selectCategory"
         ></CategoriesList>
       </div>
 
-      <CategoryForm
-        :category-id="categoryId"
-        @resetCategory="deselectCatgory"
-      ></CategoryForm>
+      <div>
+        <CategoryForm
+          :category-id="categoryId"
+          @resetCategory="deselectCatgory"
+        ></CategoryForm>
+      </div>
     </div>
   </ViewContainer>
 </template>
@@ -85,10 +86,10 @@ export default {
   watch: {
     getCategories: {
       handler() {
-        this.categories = this.getCategories
+        this.categories = this.getCategories;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -113,26 +114,25 @@ export default {
     },
 
     search(value) {
-      if(value) {
-        this.categories = this.getCategories.filter(category => {
-          const regexRule = `${value.toLowerCase().trim()}*`
-          const regex = new RegExp(regexRule,"g");
-          if(category.name.toLowerCase().trim().match(regex)){
+      if (value) {
+        this.categories = this.getCategories.filter((category) => {
+          const regexRule = `${value.toLowerCase().trim()}*`;
+          const regex = new RegExp(regexRule, "g");
+          if (category.name.toLowerCase().trim().match(regex)) {
             return true;
           }
-        })
+        });
       } else {
         this.categories = this.getCategories;
       }
-    }
-    
+    },
   },
 
   components: {
     ViewContainer,
     CategoriesList,
     CategoryForm,
-    Search
+    Search,
   },
 };
 </script>
