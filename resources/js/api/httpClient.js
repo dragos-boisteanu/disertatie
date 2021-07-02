@@ -15,14 +15,14 @@ const httpClient = axios.create({
 
 const requestInterceptor = (config) => {
   config.headers['X-Socket-ID'] = window.Echo.socketId() // Echo instance
-  // Vue.prototype.$Progress.start();
+  Vue.prototype.$Progress.start();
   return config;
 };
 
 // interceptor to catch errors
 const errorInterceptor = (error) => {
   if (!error.response) {
-    // Vue.prototype.$Progress.fail();
+    Vue.prototype.$Progress.fail();
     return Promise.reject(error);
   }
 

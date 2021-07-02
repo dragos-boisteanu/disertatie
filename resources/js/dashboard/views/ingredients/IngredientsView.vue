@@ -31,7 +31,7 @@
 
     <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2">
       <div class="md:flex-1 flex flex-col">
-        <Search @search="search"></Search>
+        <Search></Search>
         <IngredientsListComponent
           :selected-id="ingredientId"
           @selected="selectIngredient"
@@ -56,9 +56,6 @@ import Search from "../../components/ingredients/IngredientsSearchComponent.vue"
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  mounted() {
-    this.ingredients = this.getIngredients;
-  },
 
   computed: {
     ...mapGetters("Ingredients", ["getIngredients"]),
@@ -66,7 +63,6 @@ export default {
 
   data() {
     return {
-      ingredients: [],
       ingredientId: "",
     };
   },
@@ -82,23 +78,8 @@ export default {
       this.ingredientId = ingredientId;
     },
 
-    search(value) {
-      if (value) {
-        this.ingredients = this.getIngredients.filter((ingredient) => {
-          const regexRule = `${value.toLowerCase().trim()}*`;
-          const regex = new RegExp(regexRule, "g");
-          if (ingredient.name.toLowerCase().trim().match(regex)) {
-            return true;
-          }
-        });
-      } else {
-        this.ingredients = this.getIngredients;
-      }
-    },
-
     async refresh() {
       await this.downloadIngredients();
-      this.ingredients = this.getIngredients;
     },
   },
 
