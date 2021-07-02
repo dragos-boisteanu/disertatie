@@ -20,13 +20,15 @@
         placeholder="Search category by name"
         class="w-full outline-none px-2 rounded bg-gray-50"
         v-model="value"
-        @input="search"
+        @input="callSearch"
       />
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import _debounce from 'lodash/debounce';
 
 export default {
   data() {
@@ -36,9 +38,15 @@ export default {
   },
 
   methods: {
-    search() {
-      this.$emit('search', this.value)
-    }
+    ...mapActions('Categories', ['searchCategories', 'fetchCategories']),
+
+    callSearch: _debounce(async function () {
+      if (this.value) {
+        await this.searchCategories(this.value);
+      } else {
+        await this.fetchCategories();
+      }
+    }, 350),
   },
 };
 </script>

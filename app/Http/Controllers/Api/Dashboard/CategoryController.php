@@ -157,9 +157,11 @@ class CategoryController extends Controller
 
     public function search($catagoryName)
     {
-        $categories = Category::where('name', 'like', '%' . $catagoryName . '%')->get();
+        $categories = Category::with('products', 'subProducts', 'subCategories')->where('name', 'like', $catagoryName . '%')->get();
+        
         if ($categories->isNotEmpty()) {
-            return response()->json(['categories' => $categories], 200);
+            return  new CategoryCollection($categories);
+            // return response()->json(['categories' => $categories], 200);
         }
 
         return response()->json(null, 404);

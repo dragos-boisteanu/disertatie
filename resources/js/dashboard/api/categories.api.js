@@ -2,7 +2,7 @@ import httpClient from '../../api/httpClient';
 
 const BASE_URL = '/dashboard/categories'
 
-const searchCategory = (catagoryName) => httpClient.get(`${BASE_URL}/${catagoryName}`);
+const searchCategories = (value) => httpClient.get(`${BASE_URL}/${value}`);
 
 const downloadCategories = () => httpClient.get(`${BASE_URL}`);
 
@@ -14,7 +14,7 @@ const restoreCategory = (id) => httpClient.post(`${BASE_URL}/${id}/restore`);
 const deleteCategory = (id) => httpClient.delete(`${BASE_URL}/${id}`, {data:id});
 
 export {
-    searchCategory,
+    searchCategories,
     downloadCategories,
     postCategory,
     patchCategory,

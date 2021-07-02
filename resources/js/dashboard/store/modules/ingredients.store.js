@@ -58,7 +58,6 @@ const actions = {
     },
 
     searchIngredients({ commit, state }, value) {
-        console.log(value)
         const foundIngredients = state.ingredients.filter((ingredient) => {
             const regexRule = `${value.toLowerCase().trim()}*`;
             const regex = new RegExp(regexRule, "g");

@@ -1,4 +1,4 @@
-import { searchCategory, downloadCategories, postCategory, patchCategory, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
+import { searchCategories, downloadCategories, postCategory, patchCategory, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
 
@@ -89,18 +89,28 @@ const actions = {
         }
     },
 
-    async searchCategory({ commit }, categoryName) {
-        // const regex = new RegExp(`${categoryName}+`, 'i')
-        // return _filter(state.categories, (category) => regex.test(category.name))
+    async searchCategories({ commit }, value) {
         try {
-            const response = await searchCategory(categoryName);
-            if (response.status === 200) {
-                commit('SET_CATEGORIES', response.data.categories);
-            }
+            const response = await searchCategories(value);
+
+            commit('SET_CATEGORIES', response.data.data);
+    
         } catch (error) {
             throw error;
         }
     },
+
+    // searchCategories({ commit, state }, value) {
+    //     const foundCategory = state.categories.filter((category) => {
+    //         const regexRule = `${value.toLowerCase().trim()}*`;
+    //         const regex = new RegExp(regexRule, "g");
+    //         if (category.name.toLowerCase().trim().match(regex)) {
+    //             return true;
+    //         }
+    //     });
+
+    //     commit('SET_FOUND_CATEGORIES', foundCategory);
+    // },
 
     updateDiscount({ commit }, payload) {
         commit('UPDATE_DISCOUNT', payload);
@@ -120,7 +130,6 @@ const mutations = {
     },
 
     ADD_CATEGORY(state, payload) {
-        console.log(payload);
         state.categories.push(payload);
     },
 
@@ -151,6 +160,10 @@ const mutations = {
         const categoryIndex = _findIndex(state.categories, ['id', payload.id]);
 
         vm.$set(state.categories[categoryIndex], 'deletedAt', payload.deletedAt);
+    },
+
+    SET_FOUND_CATEGORIES(state, foundCategories) {
+        state.categories = foundCategories
     }
 
 }

@@ -24,7 +24,7 @@
               border-white
               hover:bg-gray-100
               hover:shadow-md
-              grid grid-cols-6
+              grid grid-cols-5
             "
             :class="{
               'bg-gray-100 shadow-md font-semibold': category.id == selectedId,
@@ -61,7 +61,7 @@
                   subCategory.id == selectedId,
               }"
               @click="selectCategory(subCategory)"
-              v-for="(subCategory, index) in selectedSubCategories"
+              v-for="(subCategory, index) in category.subCategories"
               :key="index"
             >
               <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
@@ -101,12 +101,12 @@ export default {
     ...mapGetters('Categories', ['getCategories']),
 
     parentCategories() {
-      return this.getCategories.filter((category) => category.parentId === null);
+      return this.getCategories.filter((category) => category.parentId == null);
     },
 
-    subCategories() {
-      return this.getCategories.filter((category) => category.parentId !== null);
-    },
+    // subCategories() {
+    //   return this.getCategories.filter((category) => category.parentId != null);
+    // },
   },
 
   data() {
@@ -126,10 +126,13 @@ export default {
 
   methods: {
     selectCategory(category) {
-      if(category.parentId == null) {
+      if(category.parentId === null) {
         this.selectedParentCategoryId = category.id;
-        this.getSubCategories(category.id);
+        this.selectedSubCategories = category.subCategories
+        // this.getSubCategories(category.id);
       }
+
+      console.log( this.selectedParentCategoryId)
       this.$emit("selected", category.id);
     },
 
@@ -141,11 +144,11 @@ export default {
       return false;
     },
 
-    getSubCategories(categoryId) {
-      this.selectedSubCategories = this.getCategories.filter(
-        (category) => category.parentId == categoryId
-      );
-    },
+    // getSubCategories(categoryId) {
+    //   this.selectedSubCategories = this.getCategories.filter(
+    //     (category) => category.parentId == categoryId
+    //   );
+    // },
 
     getDiscountForCategory(id) {
       const discount = _find(this.getDiscounts, ["id", parseInt(id)]);
