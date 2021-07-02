@@ -33,7 +33,7 @@
       class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-3/4"
     >
       <div class="flex flex-col lg:flex-auto">
-        <Search @search="search"></Search>
+        <Search></Search>
         <CategoriesList
           :selected-id="categoryId"
           @selected="selectCategory"
@@ -108,6 +108,7 @@ export default {
     async refresh() {
       try {
         await this.fetchCategories();
+        this.deselectCatgory();
       } catch (error) {
         console.log(error);
       }

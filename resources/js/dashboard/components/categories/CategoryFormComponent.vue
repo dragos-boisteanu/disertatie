@@ -268,6 +268,14 @@ export default {
         this.category = JSON.parse(
           JSON.stringify(_find(this.getCategories, ["id", value]))
         );
+      } else {
+        this.category = {
+          name: "",
+          vat: "",
+          color: "",
+          discountId: "",
+          parentId: null,
+        };
       }
     },
   },
@@ -441,14 +449,6 @@ export default {
 
     resetForm() {
       this.$v.$reset();
-
-      this.category = {
-        name: "",
-        vat: "",
-        color: "",
-        discountId: "",
-        parentId: null,
-      };
 
       if (this.isCategorySelected) {
         this.$emit("resetCategory");
