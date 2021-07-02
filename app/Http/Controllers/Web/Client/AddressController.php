@@ -18,7 +18,7 @@ class AddressController extends Controller
      */
     public function index()
     {
-        $addresses = Address::where('user_id', Auth::user()->id)->get();
+        $addresses = Address::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
         return view('store.user.addresses', compact('addresses'));
     }
@@ -75,9 +75,11 @@ class AddressController extends Controller
 
         $selectedAddress = Address::where('user_id', Auth::id())->where('is_selected', 1)->first();
 
-        $selectedAddress->is_selected = null;
-        $selectedAddress->save();
-
+        if(isset($selectedAddress)) {
+            $selectedAddress->is_selected = null;
+            $selectedAddress->save();
+        }
+       
         $address->is_selected = $request->isSelected;
 
         $address->save();
