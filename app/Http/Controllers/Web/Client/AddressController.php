@@ -18,7 +18,7 @@ class AddressController extends Controller
      */
     public function index()
     {
-        $addresses = Address::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        $addresses = Address::where('user_id', Auth::user()->id)->orderBy('created_at', 'asc')->get();
 
         return view('store.user.addresses', compact('addresses'));
     }
