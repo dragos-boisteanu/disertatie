@@ -25,6 +25,8 @@
         
         <div class="text-gray-300 hover:text-white pb-2 mb-2 border-b border-coolGray-500">
             <router-link :to="{name: 'Dashboard'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact>Dashboard</router-link>
+
+          
         </div>
         
         <div class="overflow-y-auto max-h-96 md:max-h-full  pb-8 md:pb-0">
@@ -90,7 +92,7 @@
                 </ul>
             </div>  
 
-            <div class="pt-2 md:pb-8" v-if="isAdmin || isLocationManager">
+            <div class="pt-2 pb-20 md:pb-8" v-if="isAdmin || isLocationManager">
                 <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
                     DISCOUNTS
                 </div>
