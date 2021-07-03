@@ -18,11 +18,11 @@
     export default {
         props: {
             categoryId: {
-                type: Number,
+                type: [Number, String],
                 required: true
             },
             subCategoryId: {
-                type: Number,
+                type: [Number, String],
                 required: false,
                 default: null,
             },
@@ -37,7 +37,7 @@
 
             subCategory() {
                 if(this.subCategoryId) {
-                   return _find(this.getCategories, ['id', this.subCategoryId]);
+                   return _find(this.category.subCategories, ['id', this.subCategoryId]);
                 }
                
             }
