@@ -1,7 +1,9 @@
 <template>
   <div class="overflow-x-auto bg-white shadow rounded-sm p-5 max-h-[500px]">
     <div style="min-width: 450px">
-      <div class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-5">
+      <div
+        class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-5"
+      >
         <div class="p-2 text-center">Index</div>
         <div class="p-2 self-center justify-self-center">Name</div>
         <div class="p-2 self-center justify-self-center">Vat</div>
@@ -33,16 +35,23 @@
           >
             <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
             <div class="p-2">{{ category.name }}</div>
-            <div class="p-2 self-center justify-self-center">{{ category.vat }} %</div>
+            <div class="p-2 self-center justify-self-center">
+              {{ category.vat }} %
+            </div>
             <div class="p-2">
               <span v-if="category.discountId">{{
                 getDiscountForCategory(category.discountId)
               }}</span>
             </div>
-            <div class="p-2 self-center justify-self-center">{{ category.productsCount }}</div>
+            <div class="p-2 self-center justify-self-center">
+              {{ category.productsCount }}
+            </div>
           </div>
 
-          <ul class="border-b border-gray" v-if="category.id == selectedParentCategoryId">
+          <ul
+            class="border-b border-gray"
+            v-if="category.id == selectedParentCategoryId"
+          >
             <li
               class="
                 w-full
@@ -66,13 +75,17 @@
             >
               <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
               <div class="p-2">{{ subCategory.name }}</div>
-              <div class="p-2 self-center justify-self-center">{{ subCategory.vat }} %</div>
+              <div class="p-2 self-center justify-self-center">
+                {{ subCategory.vat }} %
+              </div>
               <div class="p-2">
                 <span v-if="subCategory.discountId">{{
                   getDiscountForCategory(subCategory.discountId)
                 }}</span>
               </div>
-              <div class="p-2 self-center justify-self-center">{{ subCategory.productsCount }}</div>
+              <div class="p-2 self-center justify-self-center">
+                {{ subCategory.productsCount }}
+              </div>
             </li>
           </ul>
         </li>
@@ -89,40 +102,61 @@ import _find from "lodash/find";
 
 export default {
   props: {
-    selectedId: {
-      type: [Number, String],
+    selectedCategory: {
+      type: Object,
       required: false,
-      default: "",
+      default: null,
     },
   },
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
-    ...mapGetters('Categories', ['getCategories']),
+    ...mapGetters("Categories", ["getCategories"]),
+
+    selectedId() {
+      if (
+        this.selectedCategory !== null &&
+        this.selectedCategory !== undefined
+      ) {
+        return this.selectedCategory.id;
+      }
+      return -1;
+    },
   },
 
   data() {
     return {
-      selectedParentCategoryId: '',
+      selectedParentCategoryId: "",
       selectedSubCategories: [],
-    }
+    };
   },
 
   watch: {
-    selectedId(newValue) {
-      if(newValue === null || newValue === undefined ) {
-        this.selectedParentCategoryId = '';
+    selectedCategory(newValue) {
+      if (newValue !== null && newValue !== undefined) {
+        if (newValue.parentId === null || newValue.parentId === undefined) {
+          this.selectedParentCategoryId = newValue.id;
+          this.selectedSubCategories = newValue.subCategories;
+
+          if (newValue.selectedSubcateogryId) {
+            const selectedSubCategory = _find(newValue.subCategories, [
+              "id",
+              parseInt(newValue.selectedSubcateogryId),
+            ]);
+
+            this.selectCategory(selectedSubCategory);
+
+            delete newValue.selectedSubcateogryId;
+          }
+        }
+      } else {
+        this.selectedParentCategoryId = "";
       }
     },
   },
 
   methods: {
     selectCategory(category) {
-      if(category.parentId === null || category.parentId === undefined ) {
-        this.selectedParentCategoryId = category.id;
-        this.selectedSubCategories = category.subCategories         
-      }
-     
       this.$emit("selected", category);
     },
 

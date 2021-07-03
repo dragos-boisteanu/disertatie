@@ -360,6 +360,12 @@ export default {
 
             await this.patchCategory(payload);
 
+            if(!_isEqual(payload.category.originalParentId, payload.category.parentId)) {
+              const parentCategory = _find(this.getCategories, ['id', parseInt(payload.category.parentId)]);
+              parentCategory.selectedSubcateogryId = payload.category.id;
+              this.$emit('selectNewParentCategory', parentCategory);
+            }
+
             this.waiting = false;
             this.$Progress.finish();
 

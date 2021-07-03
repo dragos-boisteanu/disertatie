@@ -35,7 +35,7 @@
       <div class="flex flex-col lg:flex-auto">
         <Search :reset="resetSearchValue" @reseted="searchValueReseted"></Search>
         <CategoriesList
-          :selected-id="selectedCategoryId"
+          :selected-category="selectedCategory"
           @selected="selectCategory"
         ></CategoriesList>
       </div>
@@ -43,6 +43,7 @@
       <div>
         <CategoryForm
           :selected-category="selectedCategory"
+          @selectNewParentCategory="selectCategory"
           @resetCategory="deselectCatgory"
         ></CategoryForm>
       </div>
