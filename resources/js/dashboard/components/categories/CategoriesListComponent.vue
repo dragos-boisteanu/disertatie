@@ -68,6 +68,7 @@
               :class="{
                 'bg-gray-50 shadow-md font-semibold':
                   subCategory.id == selectedId,
+                'bg-gray-50': isOdd(index),
               }"
               @click="selectCategory(subCategory)"
               v-for="(subCategory, index) in category.subCategories"
@@ -166,6 +167,10 @@ export default {
       }
 
       return false;
+    },
+
+    isOdd(index) {
+      return !this.isEven(index)
     },
 
     getDiscountForCategory(id) {
