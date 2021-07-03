@@ -87,7 +87,7 @@
           >
             <option value="" disabled selected>Select parent category</option>
             <option
-              v-for="parent in parentCategories"
+              v-for="parent in getCategories"
               :key="parent.id"
               :value="parent.id"
             >
@@ -216,18 +216,14 @@ export default {
       return this.category.deletedAt !== null;
     },
 
-    parentCategories() {
-      return this.getCategories.filter(
-        (category) => category.parentId === null
-      );
-    },
-
     isParent() {
       return this.category.parentId === null;
     },
 
     isCategorySelected() {
-      return this.selectedCategory !== null || this.categoryId !== undefined ? true : false;
+      return this.selectedCategory !== null || this.categoryId !== undefined
+        ? true
+        : false;
     },
   },
 
@@ -265,8 +261,7 @@ export default {
   watch: {
     selectedCategory: function (value) {
       if (value) {
-        this.category = JSON.parse(
-          JSON.stringify(this.selectedCategory)) ;
+        this.category = JSON.parse(JSON.stringify(this.selectedCategory));
       } else {
         this.category = {
           name: "",
@@ -286,7 +281,6 @@ export default {
       "deleteCategory",
       "disableCategory",
       "restoreCategory",
-      "updateDiscount",
     ]),
 
     async create() {
@@ -331,12 +325,15 @@ export default {
           this.waiting = true;
 
           const originalCategory = JSON.parse(
-            JSON.stringify(this.selectedCategory));
+            JSON.stringify(this.selectedCategory)
+          );
 
           const payload = {
             vm: this,
             category: {
               id: originalCategory.id,
+              parentId: this.category.parentId,
+              originalParentId: originalCategory.parentId
             },
           };
 
@@ -349,11 +346,12 @@ export default {
             }
           });
 
+
           if (this.category.discountId === "") {
             delete payload.category.discountId;
           }
 
-          if (this.category.parentId === "") {
+          if (this.category.parentId === null) {
             delete payload.category.parentId;
           }
 
@@ -361,9 +359,6 @@ export default {
             this.$Progress.start();
 
             await this.patchCategory(payload);
-
-            payload.category.discountId = this.category.discountId;
-            this.updateDiscount(payload);
 
             this.waiting = false;
             this.$Progress.finish();
@@ -447,6 +442,14 @@ export default {
 
     resetForm() {
       this.$v.$reset();
+
+      this.category = {
+        name: "",
+        vat: "",
+        color: "",
+        discountId: "",
+        parentId: null,
+      };
 
       if (this.isCategorySelected) {
         this.$emit("resetCategory");
