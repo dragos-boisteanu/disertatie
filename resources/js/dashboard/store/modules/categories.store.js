@@ -180,22 +180,6 @@ const mutations = {
         state.categories.splice(categoryIndex, 1);
     },
 
-    // UPDATE_DISCOUNT(state, payload) {
-    //     const vm = payload.vm;
-
-    //     if(payload.category.parentId !== null && payload.category.parentId !== undefined) {
-    //         const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
-    //         const categoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.id)]);
-
-    //         vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'discountId', payload.category.discountId);
-    //     } else {
-    //         const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
-
-    //         vm.$set(state.categories[categoryIndex], 'discountId', payload.category.discountId);
-    //     }
-
-    // },
-
     SET_CATEGORY_DELETED_AT(state, payload) {
         const vm = payload.vm;
         const categoryIndex = _findIndex(state.categories, ['id', payload.id]);

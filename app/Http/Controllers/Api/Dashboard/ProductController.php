@@ -55,7 +55,7 @@ class ProductController extends Controller
         $request->user()->can('create');
         try {
             $productId = $this->productService->create($request->validated());
-            return response()->json(['id'=>$productId], 201);
+            return response()->json(['id'=>$productId, 'message' => 'Produsul a fost adaugat'], 201);
         } catch ( \Exception $e) {
             return  response()->json(['message'=>$e->getMessage()], 400 );
         }

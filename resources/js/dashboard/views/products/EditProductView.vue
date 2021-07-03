@@ -409,7 +409,7 @@ export default {
     ...mapGetters("Ingredients", ["getIngredients"]),
 
     hasNoSubCategories() {
-      return this.subCategories.length === 0;
+      return this.subCategories && this.subCategories.length === 0;
     },
 
     hasImage() {
@@ -504,15 +504,13 @@ export default {
           let counter = 0;
 
           Object.keys(this.localProduct).forEach((key) => {
-            if (this.product[key] !== this.localProduct[key]) {
+            if (!_isEqual(this.product[key], this.localProduct[key])) {
               payload.product[key] = this.localProduct[key];
               counter++;
             }
           });
 
-          if (
-            !_isEqual(this.localProduct.ingredients, this.product.ingredients)
-          ) {
+          if (!_isEqual(this.localProduct.ingredients, this.product.ingredients)) {
             payload.product.ingredients = this.localProduct.ingredients;
             counter++;
           }
@@ -521,16 +519,14 @@ export default {
             delete payload.discountId;
           }
 
-          // if (payload.ingredients.length === 0) {
-          //   delete payload.ingredients;
-          // }
-
           if (payload.subCategoryId === "") {
             delete payload.subCategoryId;
           }
 
           if (counter > 0) {
-            await patchProduct(payload.product);
+
+            console.log('here')
+            const response = await patchProduct(payload.product);
 
             counter = 0;
 
@@ -539,25 +535,19 @@ export default {
               params: { id: this.product.id },
             });
 
-            this.openNotification({
-              type: "ok",
-              show: true,
-              message: "Product updated",
-            });
+            this.$toast.success(response.data.message);
+
           } else {
-            this.openNotification({
-              type: "info",
-              show: true,
-              message: "Nothing to update",
-            });
+            this.$v.$reset();
+            this.$toast.info('Nothing to update');
           }
         } catch (error) {
-          this.openNotification({
-            type: "err",
-            show: true,
-            message: "Something went wrong",
-          });
-          this.$v.$touch();
+          if (error.response && error.response.data.errors) {
+            this.$toast.error(response.data.message);
+            
+            this.$v.$touch();
+          }
+
           console.log(error);
         }
       }

@@ -459,7 +459,6 @@ export default {
 
   methods: {
     ...mapActions("Products", ["addProduct", "getProductByBarcode"]),
-    ...mapActions("Notification", ["openNotification"]),
 
     async submit() {
       this.$v.$touch();
@@ -486,7 +485,7 @@ export default {
             delete payload.subCategoryId;
           }
 
-          await storeProduct(payload);
+          const response = await storeProduct(payload);
 
           this.product = {
             barcode: "",
@@ -506,11 +505,7 @@ export default {
 
           this.clearImage = true;
 
-          this.openNotification({
-            type: "ok",
-            show: true,
-            message: "Product added",
-          });
+          this.$toast.success(response.data.message);
 
           this.$v.$reset();
         } catch (error) {
@@ -519,6 +514,7 @@ export default {
           this.waiting = false;
 
           if (error.response && error.response.data.errors) {
+            this.$toast.error(response.data.message);
             this.$v.$touch();
           }
         }
