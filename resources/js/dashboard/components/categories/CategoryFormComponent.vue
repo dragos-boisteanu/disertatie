@@ -189,10 +189,10 @@ import {
 
 export default {
   props: {
-    categoryId: {
-      type: [Number, String],
+    selectedCategory: {
+      type: Object,
       required: false,
-      default: "",
+      default: null,
     },
   },
 
@@ -227,7 +227,7 @@ export default {
     },
 
     isCategorySelected() {
-      return this.categoryId ? true : false;
+      return this.selectedCategory !== null || this.categoryId !== undefined ? true : false;
     },
   },
 
@@ -263,11 +263,10 @@ export default {
   },
 
   watch: {
-    categoryId: function (value) {
+    selectedCategory: function (value) {
       if (value) {
         this.category = JSON.parse(
-          JSON.stringify(_find(this.getCategories, ["id", value]))
-        );
+          JSON.stringify(this.selectedCategory)) ;
       } else {
         this.category = {
           name: "",
@@ -332,8 +331,7 @@ export default {
           this.waiting = true;
 
           const originalCategory = JSON.parse(
-            JSON.stringify(_find(this.getCategories, ["id", this.categoryId]))
-          );
+            JSON.stringify(this.selectedCategory));
 
           const payload = {
             vm: this,
@@ -393,7 +391,7 @@ export default {
         this.$Progress.start();
         this.waiting = true;
 
-        const response = await this.deleteCategory(this.categoryId);
+        const response = await this.deleteCategory(this.selectedCategory.id);
 
         this.waiting = false;
 

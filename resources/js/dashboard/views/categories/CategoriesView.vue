@@ -35,14 +35,14 @@
       <div class="flex flex-col lg:flex-auto">
         <Search :reset="resetSearchValue" @reseted="searchValueReseted"></Search>
         <CategoriesList
-          :selected-id="categoryId"
+          :selected-id="selectedCategoryId"
           @selected="selectCategory"
         ></CategoriesList>
       </div>
 
       <div>
         <CategoryForm
-          :category-id="categoryId"
+          :selected-category="selectedCategory"
           @resetCategory="deselectCatgory"
         ></CategoryForm>
       </div>
@@ -66,11 +66,15 @@ import _isEqual from "lodash/isEqual";
 export default {
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
+
+    selectedCategoryId() {
+      return this.selectedCategory !== null && this.selectedCategory !== undefined ? this.selectedCategory.id : null
+    }
   },
 
   data() {
     return {
-      categoryId: "",
+      selectedCategory: null,
       resetSearchValue: false,
     };
   },
@@ -79,13 +83,13 @@ export default {
     ...mapActions("Categories", ["fetchCategories"]),
     ...mapActions("Notification", ["openNotification"]),
 
-    selectCategory(id) {
-      const category = _find(this.getCategories, ["id", id]);
-      this.categoryId = category.id;
+    selectCategory(category) {
+      // const category = _find(this.getCategories, ["id", parseInt(id)]);
+      this.selectedCategory = category;
     },
 
     deselectCatgory() {
-      this.categoryId = "";
+      this.selectedCategory = null;
     },
 
     async refresh() {

@@ -11,7 +11,7 @@
       <ul class="w-full px-2 rounded-sm">
         <li
           class="w-full min-w-min my-1"
-          v-for="(category, index) in parentCategories"
+          v-for="(category, index) in getCategories"
           :key="category.id"
         >
           <div
@@ -99,14 +99,6 @@ export default {
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
     ...mapGetters('Categories', ['getCategories']),
-
-    parentCategories() {
-      return this.getCategories.filter((category) => category.parentId == null);
-    },
-
-    // subCategories() {
-    //   return this.getCategories.filter((category) => category.parentId != null);
-    // },
   },
 
   data() {
@@ -118,7 +110,7 @@ export default {
 
   watch: {
     selectedId(newValue) {
-      if(newValue == "") {
+      if(newValue === null || newValue === undefined ) {
         this.selectedParentCategoryId = '';
       }
     },
@@ -126,14 +118,12 @@ export default {
 
   methods: {
     selectCategory(category) {
-      if(category.parentId === null) {
+      if(category.parentId === null || category.parentId === undefined ) {
         this.selectedParentCategoryId = category.id;
-        this.selectedSubCategories = category.subCategories
-        // this.getSubCategories(category.id);
+        this.selectedSubCategories = category.subCategories         
       }
-
-      console.log( this.selectedParentCategoryId)
-      this.$emit("selected", category.id);
+     
+      this.$emit("selected", category);
     },
 
     isEven(index) {
@@ -143,12 +133,6 @@ export default {
 
       return false;
     },
-
-    // getSubCategories(categoryId) {
-    //   this.selectedSubCategories = this.getCategories.filter(
-    //     (category) => category.parentId == categoryId
-    //   );
-    // },
 
     getDiscountForCategory(id) {
       const discount = _find(this.getDiscounts, ["id", parseInt(id)]);
