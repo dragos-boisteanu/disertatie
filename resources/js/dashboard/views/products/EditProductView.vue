@@ -1,5 +1,5 @@
 <template>
-  <ViewContainer v-if="localProduct">
+  <ViewContainer>
     <template slot="header"> Edit product #{{ localProduct.id }} </template>
 
     <form @submit.prevent="submit" class="flex flex-col">
@@ -213,7 +213,7 @@
                 <option value="" disabled>Select category</option>
                 <option
                   :value="category.id"
-                  v-for="category in categories"
+                  v-for="category in getCategories"
                   :key="category.id"
                 >
                   {{ category.name }} ({{ category.vat }}% VAT)
@@ -221,7 +221,7 @@
               </Select>
             </InputGroup>
             <InputGroup
-              id="category"
+              id="subCategory"
               label="Sub category"
               :hasError="$v.localProduct.subCategoryId.$error"
               :eclass="{ 'flex-1': true }"
@@ -234,7 +234,7 @@
               <Select
                 v-model="$v.localProduct.subCategoryId.$model"
                 id="sub_category_id"
-                name="category"
+                name="subCategory"
                 :class="{
                   'border-red-600': $v.localProduct.subCategoryId.$error,
                   'border-green-600':
@@ -243,13 +243,13 @@
                 }"
                 :disabled="waiting || hasNoSubCategories"
               >
-                <option value="" disabled selected>Select sub category</option>
+                <option value="" disabled>Select sub category</option>
                 <option
-                  :value="category.id"
-                  v-for="category in subCategories"
-                  :key="category.id"
+                  :value="subCategory.id"
+                  v-for="subCategory in subCategories"
+                  :key="subCategory.id"
                 >
-                  {{ category.name }} ({{ category.vat }}% VAT)
+                  {{ subCategory.name }} ({{ subCategory.vat }}% VAT)
                 </option>
               </Select>
             </InputGroup>
@@ -385,26 +385,28 @@ import { patchProduct, downloadEdidProductData } from "../../api/products.api";
 
 export default {
   async beforeRouteEnter(to, from, next) {
-    const response = await downloadEdidProductData(to.params.id);
-    next((vm) => vm.setProduct(response.data.data));
+    try {
+      const response = await downloadEdidProductData(to.params.id);
+      next((vm) => vm.setData(response.data.data));
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   mounted() {
-    this.subCategories = this.getCategories.filter(
-      (category) => category.parentId == this.localProduct.categoryId
-    );
+    this.subCategories = [];
+
+    this.getCategories.forEach((category) => {
+      if (category.id == this.localProduct.categoryId) {
+        this.subCategories.push(...category.subCategories);
+      }
+    });
   },
 
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Units", ["getUnits"]),
     ...mapGetters("Ingredients", ["getIngredients"]),
-
-    categories() {
-      return this.getCategories.filter(
-        (category) => category.parentId === null
-      );
-    },
 
     hasNoSubCategories() {
       return this.subCategories.length === 0;
@@ -426,7 +428,7 @@ export default {
       ingredientInput: "",
       foundIngredients: [],
 
-      subCategories: [],
+      subCategories: null,
 
       product: null,
 
@@ -563,13 +565,13 @@ export default {
 
     getSubCategories() {
       this.localProduct.subCategoryId = "";
-      if (this.product.categoryId) {
-        this.subCategories = this.getCategories.filter(
-          (category) => category.parentId == this.localProduct.categoryId
-        );
-      } else {
-        this.subCategories = [];
-      }
+      this.subCategories = [];
+
+      this.getCategories.forEach((category) => {
+        if (category.id == this.localProduct.categoryId) {
+          this.subCategories.push(...category.subCategories);
+        }
+      });
     },
 
     removeImage() {
@@ -620,9 +622,9 @@ export default {
       this.localProduct.discountId = "";
     },
 
-    setProduct(product) {
-      this.product = product;
-      this.localProduct = JSON.parse(JSON.stringify(this.product));
+    setData(data) {
+      this.product = data;
+      this.localProduct = JSON.parse(JSON.stringify(data));
     },
   },
 

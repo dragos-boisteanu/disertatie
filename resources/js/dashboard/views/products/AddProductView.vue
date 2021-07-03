@@ -526,11 +526,16 @@ export default {
     },
 
     getSubCategories() {
+      this.subCategories = [];
       this.product.subCategoryId = "";
+
       if (this.product.categoryId) {
-        this.subCategories = this.getCategories.filter(
-          (category) => category.parentId == this.product.categoryId
-        );
+        this.getCategories.forEach(category => {
+          if(category.id == this.product.categoryId) {
+            this.subCategories.push(...category.subCategories);
+          }
+        })
+
       } else {
         this.subCategories = [];
       }
