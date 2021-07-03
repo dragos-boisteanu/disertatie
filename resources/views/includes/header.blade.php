@@ -149,7 +149,7 @@
                 </svg>
             </button>
 
-            <form id="registerForm" method="POST" action="{{ route('register') }}" class="bg-white p-6 md:flex-1 md:rounded">
+            <form id="registerForm" method="POST" action="{{ route('register') }}" class="h-full overflow-y-auto bg-white p-6 md:flex-1 md:rounded">
                 @csrf
 
                 <div>
