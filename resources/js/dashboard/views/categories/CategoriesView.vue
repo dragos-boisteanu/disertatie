@@ -33,7 +33,7 @@
       class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-3/4"
     >
       <div class="flex flex-col lg:flex-auto">
-        <Search></Search>
+        <Search :reset="resetSearchValue" @reseted="searchValueReseted"></Search>
         <CategoriesList
           :selected-id="categoryId"
           @selected="selectCategory"
@@ -66,30 +66,13 @@ import _isEqual from "lodash/isEqual";
 export default {
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
-
-    showResetSearch() {
-      return this.searchInput.length > 0;
-    },
-  },
-
-  mounted() {
-    this.categories = this.getCategories;
   },
 
   data() {
     return {
-      categories: [],
       categoryId: "",
+      resetSearchValue: false,
     };
-  },
-
-  watch: {
-    getCategories: {
-      handler() {
-        this.categories = this.getCategories;
-      },
-      deep: true,
-    },
   },
 
   methods: {
@@ -97,7 +80,7 @@ export default {
     ...mapActions("Notification", ["openNotification"]),
 
     selectCategory(id) {
-      const category = _find(this.categories, ["id", id]);
+      const category = _find(this.getCategories, ["id", id]);
       this.categoryId = category.id;
     },
 
@@ -109,24 +92,16 @@ export default {
       try {
         await this.fetchCategories();
         this.deselectCatgory();
+        this.resetSearchValue = true;
       } catch (error) {
         console.log(error);
       }
     },
 
-    search(value) {
-      if (value) {
-        this.categories = this.getCategories.filter((category) => {
-          const regexRule = `${value.toLowerCase().trim()}*`;
-          const regex = new RegExp(regexRule, "g");
-          if (category.name.toLowerCase().trim().match(regex)) {
-            return true;
-          }
-        });
-      } else {
-        this.categories = this.getCategories;
-      }
+    searchValueReseted() {
+      this.resetSearchValue = false;
     },
+
   },
 
   components: {
