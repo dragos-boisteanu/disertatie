@@ -22,7 +22,7 @@ class Category extends JsonResource
             'color' => $this->color,
           
             'parentId' => $this->parent_id,
-            'subCategories' => $this->whenLoaded('subCategories', $this->subCategories),
+            'subCategories' => $this->whenLoaded('subCategories', new CategoryCollection($this->subCategories)),
 
             'deletedAt' => $this->deleted_at,
         ];
