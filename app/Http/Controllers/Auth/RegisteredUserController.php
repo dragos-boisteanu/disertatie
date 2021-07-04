@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -50,6 +51,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role_id' => 1,
         ]);
+
+        Toastr::success('Inregistrarea reusita. Verifica email-ul pentru activare contului', 'Succes');
 
         // event(new Registered($user));
 

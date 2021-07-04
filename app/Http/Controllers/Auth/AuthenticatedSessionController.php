@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Interfaces\CartServiceInterface;
+use Brian2694\Toastr\Facades\Toastr;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -45,6 +46,8 @@ class AuthenticatedSessionController extends Controller
         UserLogged::dispatch(Auth::id(), $sesionIdBeforLogin);
 
         $request->session()->regenerate();
+
+        Toastr::success('Authentificare reusita', 'Succes');
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

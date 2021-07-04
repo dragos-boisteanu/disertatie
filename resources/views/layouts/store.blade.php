@@ -32,7 +32,6 @@
 
 <body class="h-full">
     {!! Toastr::message() !!}
-    <div id="backdrop" class="fixed top-0 left-0 z-10 w-full h-full bg-black bg-opacity-75" style="display: none"></div>
     <div id="store-app" class="h-full flex flex-col">
         @include('includes.header')
         <main class="flex-1 bg-gray-800 px-4 py-8 w-full flex items-start justify-center">
@@ -41,15 +40,5 @@
         @include('includes.footer')
     </div>
 </body>
-
-<script>
-    $('#backdrop').click(function() {
-        $('#backdrop').fadeOut();
-        $('#loginModal').fadeOut();
-        $('#registerModal').fadeOut();
-    })
-</script>
 @stack('scripts')
-
-
 </html>

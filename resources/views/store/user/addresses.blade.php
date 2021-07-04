@@ -132,8 +132,8 @@
                 const addressInput = $(`#address${id}`)
 
                 form.modal({
-                    fadeDuration: 250,
-                    fadeDelay: 0.80
+                    fadeDuration: 150,
+                    fadeDelay: 0.50
                 });
 
                 addressInput.val(originalValueField.text());
