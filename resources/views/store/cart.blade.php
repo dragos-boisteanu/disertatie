@@ -24,7 +24,7 @@
 <body class="h-full flex flex-col">
     {!! Toastr::message() !!}
     <main id="store-app" class="flex-1 bg-gray-800 px-4 py-8 w-full flex items-center justify-center">
-        <div class="h-full w-full  md:w-2/3 lg:w-1/4">
+        <div class="h-full w-full md:w-4/5 lg:w-3/5 2xl:w-1/2">
             <a href=" {{ route('menu.index') }}" class="text-sm text-orange-600 flex items-center hover:underline">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24"
                     width="18px">
@@ -36,13 +36,13 @@
             <h1 class="text-3xl text-trueGray-300 my-4 pl-2">Cos cumparaturi</h1>
             <ul>
                 @forelse ($cart->items as $item)
-                    <li class="grid grid-cols-7 bg-trueGray-50 rounded shadow-md mt-3 first:mt-0">
+                    <li class="grid grid-cols-12 bg-trueGray-50 rounded shadow-md mt-3 first:mt-0">
                         <div
-                            class="col-start-1 col-end-2  text-sm flex items-center justify-center border-r border-gray-300">
+                            class="col-start-1 col-end-3 text-sm flex items-center justify-center border-r border-gray-300">
                             {{ $loop->iteration }}
                         </div>
-                        <div class="col-start-2 col-end-7 w-full">
-                            <div class="w-full p-2">
+                        <div class="col-start-3 col-end-11 w-full md:flex md:items-center">
+                            <div class="w-full p-2 md:flex-1 ">
                                 <div class="font-semibold">
                                     {{ $item->name }}
                                 </div>
@@ -52,60 +52,63 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="flex items-center justify-between p-2 border-t border-b border-gray-300">
-                                <div class="flex-initial w-20">
-                                    <form method="POST" action="{{ route('cart.patch', ['id' => $item->id]) }}"
-                                        class="text-center flex flex-col justify-center gap-y-2">
+                            <div class="md:border-l md:border-gray-30 md:flex-1">
+                                <div class="flex items-center justify-between p-2 border-t border-b border-gray-300">
+                                    <div class="flex-initial w-20">
+                                        <form method="POST" action="{{ route('cart.patch', ['id' => $item->id]) }}"
+                                            class="text-center flex flex-col justify-center gap-y-2">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="number" name="quantity" value="{{ $item->pivot->quantity }}"
+                                                class="text-center bg-white rounded-sm border border-trueGray-400 text-sm " />
+                                            <button
+                                                class="text-sm text-sky-700 hover:text-sky-500">Actualizeaza</button>
+                                        </form>
+                                    </div>
+                                    <div class="flex-initial text-sm text-center font-semibold">
+                                        {{ $item->price }} Ron / buc.
+                                    </div>
+                                    <form class="flex-initial" method="POST"
+                                        action="{{ route('cart.delete', ['id' => $item->id]) }}">
                                         @csrf
-                                        @method('PUT')
-                                        <input type="number" name="quantity" value="{{ $item->pivot->quantity }}"
-                                            class="text-center bg-white rounded-sm border border-trueGray-400 text-sm " />
-                                        <button class="text-sm text-sky-700 hover:text-sky-500">Actualizeaza</button>
+                                        @method("DELETE")
+                                        <button class="w-full text-sm text-center text-red-700 hover:text-red-500">
+                                            Sterge
+                                        </button>
                                     </form>
                                 </div>
-                                <div class="flex-initial text-sm text-center font-semibold">
-                                    {{ $item->price }} Ron / buc.
-                                </div>
-                                <form class="flex-initial" method="POST"
-                                    action="{{ route('cart.delete', ['id' => $item->id]) }}">
-                                    @csrf
-                                    @method("DELETE")
-                                    <button class="w-full text-sm text-center text-red-700 hover:text-red-500">
-                                        Sterge
-                                    </button>
-                                </form>
-                            </div>
-                            <div class="flex items-center justify-between p-2 text-sm">
-                                <div class="text-center flex-initial w-20">
-                                    <div>
-                                        {{ $item->base_price }} Ron
+                                <div class="flex items-center justify-between p-2 text-sm">
+                                    <div class="text-center flex-initial w-20">
+                                        <div>
+                                            {{ $item->base_price }} Ron
+                                        </div>
+                                        <div class="font-bold text-xs">
+                                            Pret initial
+                                        </div>
                                     </div>
-                                    <div class="font-bold text-xs">
-                                        Pret initial
+                                    <div class="text-center">
+                                        <div>
+                                            9 %
+                                        </div>
+                                        <div class="font-bold text-xs">
+                                            VAT
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="text-center">
-                                    <div>
-                                        9 %
+                                    <div class="text-center">
+                                        {{-- @if ($item->discount) --}}
+                                        <div>
+                                            - 2 %
+                                        </div>
+                                        <div class="font-bold text-xs">
+                                            Reducere
+                                        </div>
+                                        {{-- @endif --}}
                                     </div>
-                                    <div class="font-bold text-xs">
-                                        VAT
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    {{-- @if ($item->discount) --}}
-                                    <div>
-                                        - 2 %
-                                    </div>
-                                    <div class="font-bold text-xs">
-                                        Reducere
-                                    </div>
-                                    {{-- @endif --}}
                                 </div>
                             </div>
                         </div>
                         <div
-                            class="col-start-7 col-end-8 flex flex-col items-center justify-center font-semibold border-l border-gray-300 text-sm">
+                            class="col-start-11 col-end-13 flex flex-col items-center justify-center font-semibold border-l border-gray-300 text-sm">
                             <div>Total</div>
                             <div class="text-center">{{ $item->price * $item->pivot->quantity }} Ron</div>
                         </div>
@@ -126,18 +129,22 @@
                     </div>
                 </div>
                 <form method="GET" action="{{ route('checkout.create') }}" class="pt-5">
-                    <button class="
-                            w-full
-                            rounded-sm
-                            text-white
-                            bg-green-600
-                            px-4
-                            py-1
-                            active:shadow-inner
-                            hover:bg-green-500
-                          ">
-                        Checkout
-                    </button>
+                    <div class="w-full lg:text-right">
+                        <button class="
+                        w-full
+                        rounded-sm
+                        text-white
+                        bg-green-600
+                        px-4
+                        py-1
+                        active:shadow-inner
+                        hover:bg-green-500
+                        lg:w-auto
+                      ">
+                            Checkout
+                        </button>
+                    </div>
+
                 </form>
             @endif
         </div>
