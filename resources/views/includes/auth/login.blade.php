@@ -1,4 +1,4 @@
-<form id="loginForm" method="POST" action="{{ route('login') }}" class="modal">
+<form id="loginForm" method="POST" action="{{ route('login') }}" class="modal" autocomplete="off">
     @csrf
 
     <!-- Email Address -->
@@ -26,7 +26,9 @@
             <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
         </label>
     </div>
-    <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
+    <x-auth-validation-errors id="login-errors" class="mb-4" :errors="$errors" />
+
     <div class="flex items-center justify-end mt-4">
         <div class="flex flex-col">
             @if (Route::has('password.request'))
@@ -44,16 +46,24 @@
 
 
 @push('scripts')
-    @guest
-        <script>
-            $('#auth').click(function() {
-                $('#loginForm').modal({
-                    fadeDuration: 150,
-                    fadeDelay: 0.50
-                });
-            })
-        </script>
-    @endguest
+    <script>
+        const loginForm =  $('#loginForm');
+
+        $('#auth').click(function() {
+            loginForm.modal({
+                fadeDuration: 150,
+                fadeDelay: 0.50
+            });
+        })
+
+        loginForm.on($.modal.BEFORE_CLOSE, function(event, modal) {
+            $('#loginForm *').filter(":input").not(':button').not('input[type=hidden]').each(function(index, input) {
+                input.value = "";
+            });
+
+            $('#login-errors').html('')
+        });
+    </script>
 
     @if ($errors->has('email') || $errors->has('password'))
         <script>

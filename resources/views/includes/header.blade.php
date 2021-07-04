@@ -9,6 +9,7 @@
         </div>
     </div> --}}
 
+    {!! csrf_token() !!}
     {{-- mobile nav --}}
     <nav class="bg-orange-600 flex items-center justify-between px-4 lg:hidden">
         <ul class="flex items-center gap-x-4 py-4">
@@ -76,8 +77,8 @@
             </div>
         </div>
 
-        @include('includes.login')
-        @include('includes.register')
+        @include('includes.auth.login')
+        @include('includes.auth.register')
 
     @endguest
 
