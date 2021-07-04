@@ -72,6 +72,6 @@
                 fadeDelay: 0.50
             });
         </script>
-    @endif\
+    @endif
 
 @endpush

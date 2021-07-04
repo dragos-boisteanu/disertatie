@@ -97,7 +97,6 @@
                     </li>
                 @endforeach
             @endif
-
         </ul>
     </x-menu>
 @endsection

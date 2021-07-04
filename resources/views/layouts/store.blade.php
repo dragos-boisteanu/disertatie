@@ -26,8 +26,6 @@
     <script src="https://unpkg.com/vue-toastr/dist/vue-toastr.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <script src="{{ asset(mix('js/app.js')) }}" defer></script>
-    
-
 </head>
 
 <body class="h-full">
