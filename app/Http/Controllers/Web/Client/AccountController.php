@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\AccountUpdateRequest;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\Client\EmailUpdateRequest;
+use App\Http\Requests\Client\AccountUpdateRequest;
+use App\Http\Requests\Client\PasswordUpdateRequest;
 
 class AccountController extends Controller
 {
@@ -18,7 +21,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        return view('store.user.account', ['user'=>Auth::user()]);
+        return view('store.user.account', ['user' => Auth::user()]);
     }
 
     /**
@@ -28,24 +31,33 @@ class AccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(AccountUpdateRequest $request)
     {
-
         $user = User::find(Auth::user()->id);
 
         $user->first_name = $request->firstName;
         $user->last_name = $request->lastName;
         $user->phone_number = $request->phoneNumber;
-
-        if(isset($request->newEmail)) {
-            $user->email = $request->newEmail;
-        }
+        $user->email = $request->email;
 
         $user->save();
 
-        Toastr::success('Account updated', 'Success');
+        Toastr::success('Datele contului au fost actualizate', 'Success');
 
-        return view('store.user.account', ['user'=>$user]);
+        return redirect()->back()->with('user', $user);
+    }
+
+    public function updatePassword(PasswordUpdateRequest $request)
+    {
+        $user = User::find(Auth::user()->id);
+
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        Toastr::success('Parola a fost actualizata', 'Success');
+
+        return redirect()->back()->with('user', $user);
     }
 
     /**

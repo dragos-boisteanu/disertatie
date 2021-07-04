@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
     Route::group(['prefix'=>'account'], function() {
         Route::get('/', 'AccountController@index')->name('account.index');
         Route::put('/', 'AccountController@update')->name('account.update');
+        Route::put('/password/update', 'AccountController@updatePassword')->name('account.password.update');
         Route::delete('/'. 'AccountController@destroy')->name('account.delete');
 
     });

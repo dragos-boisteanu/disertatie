@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Client;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,10 +24,10 @@ class AccountUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'firstName' => ['required', 'string'],
-            'lastName' => ['required', 'string'],
-            'phoneNumber' => ['required'],
-            'newEmail' => ['sometimes', 'email']
+            'firstName' => ['required', 'string', 'max:255'],
+            'lastName' => ['required' , 'string', 'max:255'],
+            'phoneNumber' => ['required'],        
+         
         ];
     }
 }
