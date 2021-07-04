@@ -24,7 +24,6 @@ class AddressController extends Controller
     }
 
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -71,20 +70,30 @@ class AddressController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $address = Address::findOrFail($id);
 
-        $selectedAddress = Address::where('user_id', Auth::id())->where('is_selected', 1)->first();
+        $address = Address::where('user_id', Auth::id())->where('id', $id)->first();
 
-        if(isset($selectedAddress)) {
-            $selectedAddress->is_selected = null;
-            $selectedAddress->save();
+        if($request->has('address')) {
+            $address->address = $request->address;
+
+            $address->save();
+            Toastr::success('Adresa a fost modificata', 'Succes');
+            return redirect()->back();
+        } else {
+            $selectedAddress = Address::where('user_id', Auth::id())->where('is_selected', 1)->first();
+
+            if(isset($selectedAddress)) {
+                $selectedAddress->is_selected = null;
+                $selectedAddress->save();
+            }
+           
+            $address->is_selected = $request->isSelected;
+    
+            $address->save();
+            Toastr::success('Adresa a fost selectata ca adresa principala', 'Succes');
+            return redirect()->back();
         }
        
-        $address->is_selected = $request->isSelected;
-
-        $address->save();
-        Toastr::success('Adresa a fost selectata ca adresa principala', 'Succes');
-        return redirect()->back();
     }
 
     /**
