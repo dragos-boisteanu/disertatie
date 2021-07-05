@@ -33,7 +33,10 @@
       class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-3/4"
     >
       <div class="flex flex-col lg:flex-auto">
-        <Search :reset="resetSearchValue" @reseted="searchValueReseted"></Search>
+        <Search
+          :reset="resetSearchValue"
+          @reseted="searchValueReseted"
+        ></Search>
         <CategoriesList
           :selected-category="selectedCategory"
           @selected="selectCategory"
@@ -64,13 +67,17 @@ import _find from "lodash/find";
 import _debounce from "lodash/debounce";
 import _isEqual from "lodash/isEqual";
 
+
 export default {
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
 
     selectedCategoryId() {
-      return this.selectedCategory !== null && this.selectedCategory !== undefined ? this.selectedCategory.id : null
-    }
+      return this.selectedCategory !== null &&
+        this.selectedCategory !== undefined
+        ? this.selectedCategory.id
+        : null;
+    },
   },
 
   data() {
@@ -85,8 +92,11 @@ export default {
     ...mapActions("Notification", ["openNotification"]),
 
     selectCategory(category) {
-      // const category = _find(this.getCategories, ["id", parseInt(id)]);
-      this.selectedCategory = category;
+      if (_isEqual(category, this.selectedCategory) && (category.parentId === null || category.parentId === undefined)) {
+        this.selectedCategory = null;
+      } else {
+        this.selectedCategory = category;
+      }
     },
 
     deselectCatgory() {
@@ -106,7 +116,6 @@ export default {
     searchValueReseted() {
       this.resetSearchValue = false;
     },
-
   },
 
   components: {
