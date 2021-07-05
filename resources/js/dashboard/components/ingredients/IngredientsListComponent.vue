@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
+  <div class="overflow-x-auto flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
     <div style="min-width: 450px">
       <div
         class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-3"
