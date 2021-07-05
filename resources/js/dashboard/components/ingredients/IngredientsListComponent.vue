@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
+  <div class="overflow-x-auto bg-white shadow rounded-sm p-5">
     <div style="min-width: 450px">
       <div
         class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-3"
@@ -8,7 +8,7 @@
         <div class="p-2">Name</div>
         <div class="p-2 self-center justify-self-center">Unit</div>
       </div>
-      <ul class="w-full px-2 rounded-sm">
+      <ul class="overflow-y-auto max-h-[400px] w-full px-2 rounded-sm">
         <li
           class="
             min-w-min

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
+  <div class="overflow-x-auto bg-white shadow rounded-sm p-5 max-h-[400px]">
     <table class="px-2 w-full rounded-sm max-h-80 md:max-h-96">
       <thead class="w-full bg-gray-700 text-orange-500">
         <tr class="text-left text-sm">

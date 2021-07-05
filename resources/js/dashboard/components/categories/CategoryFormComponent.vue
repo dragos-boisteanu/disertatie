@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex-1">
     <ConfirmActionModal
       v-if="confirmModalState"
       title="Confirm action"
@@ -47,35 +47,33 @@
           ></Input>
         </InputGroup>
 
-        <div class="w-full flex items-center gap-x-4">
-          <InputGroup
+        <InputGroup
+          id="vat"
+          label="VAT"
+          :hasError="$v.category.vat.$error"
+          :required="isParent"
+        >
+          <template v-slot:errors>
+            <p v-if="!$v.category.vat.required">The vat field is required</p>
+            <p v-if="!$v.category.vat.integer">
+              The vat field must be an integer
+            </p>
+            <p v-if="!$v.category.vat.minValue">
+              The vat field must be equal or greater than 0
+            </p>
+          </template>
+          <Input
+            v-model="$v.category.vat.$model"
             id="vat"
-            label="VAT"
-            :hasError="$v.category.vat.$error"
-            :required="isParent"
-          >
-            <template v-slot:errors>
-              <p v-if="!$v.category.vat.required">The vat field is required</p>
-              <p v-if="!$v.category.vat.integer">
-                The vat field must be an integer
-              </p>
-              <p v-if="!$v.category.vat.minValue">
-                The vat field must be equal or greater than 0
-              </p>
-            </template>
-            <Input
-              v-model="$v.category.vat.$model"
-              id="vat"
-              name="vat"
-              :eclass="{
-                'border-red-600': $v.category.vat.$error,
-                'border-green-600':
-                  $v.category.vat.$dirty && !$v.category.vat.$error,
-              }"
-              :disabled="waiting"
-            ></Input>
-          </InputGroup>
-        </div>
+            name="vat"
+            :eclass="{
+              'border-red-600': $v.category.vat.$error,
+              'border-green-600':
+                $v.category.vat.$dirty && !$v.category.vat.$error,
+            }"
+            :disabled="waiting"
+          ></Input>
+        </InputGroup>
 
         <InputGroup id="parentCategory" label="Parent category">
           <Select
@@ -333,7 +331,7 @@ export default {
             category: {
               id: originalCategory.id,
               parentId: this.category.parentId,
-              originalParentId: originalCategory.parentId
+              originalParentId: originalCategory.parentId,
             },
           };
 
@@ -345,7 +343,6 @@ export default {
               counter++;
             }
           });
-
 
           if (this.category.discountId === "") {
             delete payload.category.discountId;
@@ -360,10 +357,18 @@ export default {
 
             await this.patchCategory(payload);
 
-            if(!_isEqual(payload.category.originalParentId, payload.category.parentId)) {
-              const parentCategory = _find(this.getCategories, ['id', parseInt(payload.category.parentId)]);
+            if (
+              !_isEqual(
+                payload.category.originalParentId,
+                payload.category.parentId
+              )
+            ) {
+              const parentCategory = _find(this.getCategories, [
+                "id",
+                parseInt(payload.category.parentId),
+              ]);
               parentCategory.selectedSubcateogryId = payload.category.id;
-              this.$emit('selectNewParentCategory', parentCategory);
+              this.$emit("selectNewParentCategory", parentCategory);
             }
 
             this.waiting = false;

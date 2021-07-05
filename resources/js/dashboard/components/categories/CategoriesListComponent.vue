@@ -1,16 +1,14 @@
 <template>
-  <div class="overflow-x-auto bg-white shadow rounded-sm p-5 max-h-[500px]">
-    <div style="min-width: 450px">
-      <div
-        class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-5"
-      >
-        <div class="p-2 text-center">Index</div>
+  <div class="overflow-x-auto bg-white shadow rounded-sm p-5">
+    <div class="min-w-[450px]">
+      <div class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-5">
+        <div class="p-2 self-center justify-self-center">Index</div>
         <div class="p-2 self-center justify-self-center">Name</div>
         <div class="p-2 self-center justify-self-center">Vat</div>
         <div class="p-2 self-center justify-self-center">Discount</div>
         <div class="p-2 self-center justify-self-center">Products Count</div>
       </div>
-      <ul class="w-full px-2 rounded-sm">
+      <ul class="overflow-y-auto max-h-[400px] w-full px-2 rounded-sm">
         <li
           class="w-full min-w-min my-1"
           v-for="(category, index) in getCategories"

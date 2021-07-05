@@ -29,10 +29,8 @@
       </div>
     </template>
 
-    <div
-      class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-3/4"
-    >
-      <div class="flex flex-col lg:flex-auto">
+    <div class="w-full lg:flex lg:gap-x-4 lg:w-4/5 2xl:w-1/2">
+      <div class="mb-4 flex flex-col lg:flex-1">
         <Search
           :reset="resetSearchValue"
           @reseted="searchValueReseted"
@@ -43,13 +41,11 @@
         ></CategoriesList>
       </div>
 
-      <div>
-        <CategoryForm
-          :selected-category="selectedCategory"
-          @selectNewParentCategory="selectCategory"
-          @resetCategory="deselectCatgory"
-        ></CategoryForm>
-      </div>
+      <CategoryForm
+        :selected-category="selectedCategory"
+        @selectNewParentCategory="selectCategory"
+        @resetCategory="deselectCatgory"
+      ></CategoryForm>
     </div>
   </ViewContainer>
 </template>
@@ -66,7 +62,6 @@ import Search from "../../components/categories/SearchComponent.vue";
 import _find from "lodash/find";
 import _debounce from "lodash/debounce";
 import _isEqual from "lodash/isEqual";
-
 
 export default {
   computed: {
@@ -92,7 +87,10 @@ export default {
     ...mapActions("Notification", ["openNotification"]),
 
     selectCategory(category) {
-      if (_isEqual(category, this.selectedCategory) && (category.parentId === null || category.parentId === undefined)) {
+      if (
+        _isEqual(category, this.selectedCategory) &&
+        (category.parentId === null || category.parentId === undefined)
+      ) {
         this.selectedCategory = null;
       } else {
         this.selectedCategory = category;

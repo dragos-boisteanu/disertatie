@@ -82,10 +82,10 @@
         <div class="flex-1 flex gap-x-4">
           <div
             class="
+              w-full
               flex flex-col
               gap-y-4
               sm:flex-row
-              items-center
               justify-between
               mt-3
               gap-x-4
@@ -201,7 +201,7 @@ import { mapActions, mapGetters } from "vuex";
 import Input from "../../components/inputs/TextInputComponent";
 import InputGroup from "../../components/inputs/InputGroupComponent";
 import Button from "../../components/buttons/ButtonComponent";
-import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue"
+import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
 import DatePicker from "vue2-datepicker";
 
 import _find from "lodash/find";
@@ -484,3 +484,10 @@ export default {
   },
 };
 </script>
+
+
+<style>
+  .mx-datepicker {
+    width: 100%;
+  }
+</style>
