@@ -527,8 +527,8 @@
             },
 
             saveEdit(product) {    
-                const existingProductIndex = _findIndex(this.order.items, ['name', product.name]);
-                this.$set(this.order.items[existingProductIndex], 'quantity', product.quantity);
+                const existingProductIndex = _findIndex(this.order.items, ['id', parseInt(product.id)]);
+                this.$set(this.order.items[existingProductIndex], 'quantity', parseInt(product.newQuantity));
             },
 
             addProductToOrder(product) {

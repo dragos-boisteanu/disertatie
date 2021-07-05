@@ -287,7 +287,7 @@ export default {
           minValue: minValue(1),
           maxValue: () => {
             if(this.edit){
-              return false;
+              return 9999999999;
             } else {
               return this.product.quantity
             }
