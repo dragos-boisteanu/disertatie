@@ -132,6 +132,7 @@ export default {
 
   watch: {
     selectedCategory(newValue) {
+      console.log(newValue)
       if (newValue !== null && newValue !== undefined) {
         if (newValue.parentId === null || newValue.parentId === undefined) {
           this.selectedParentCategoryId = newValue.id;

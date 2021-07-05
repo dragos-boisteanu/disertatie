@@ -119,7 +119,7 @@ const mutations = {
     },
 
     ADD_CATEGORY(state, payload) {
-        if (payload.parentId !== null || payload !== undefined) {
+        if (payload.parentId !== null && payload.parentId !== undefined) {
             const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.parentId)]);
             console.log(parentCategoryIndex)
             state.categories[parentCategoryIndex].subCategories.push(payload);
@@ -133,33 +133,43 @@ const mutations = {
         const vm = payload.vm;
 
         if (payload.category.parentId !== null && payload.category.parentId !== undefined) {
-            const originalParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.originalParentId)]);
-          
-            const subCategoryIndex = _findIndex(state.categories[originalParentCategoryIndex].subCategories, ['id', parseInt(payload.category.id)]);
+            if (payload.category.originalParentId !== null && payload.category.originalParentId !== undefined) {
+                const originalParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.originalParentId)]);
+                const subCategoryIndex = _findIndex(state.categories[originalParentCategoryIndex].subCategories, ['id', parseInt(payload.category.id)]);
 
-            Object.keys(payload.category).forEach(key => {
-                vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], key, payload.category[key]);
-            });
+                Object.keys(payload.category).forEach(key => {
+                    vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], key, payload.category[key]);
+                });
 
-            if (payload.category.discountId === null || payload.category.discountId === undefined) {
-                vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], 'discountId', null);
+                if (payload.category.discountId === null || payload.category.discountId === undefined) {
+                    vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], 'discountId', null);
+                }
+
+                // if the subCategory has a new parent
+                // remove the subCategory from the actula parent
+                // add the subCategory to the new parent
+                if (payload.category.originalParentId && !_isEqual(payload.category.originalParentId, payload.parentId)) {
+                    const subCategory = _find(state.categories[originalParentCategoryIndex].subCategories, ['id', payload.category.id]);
+                    const newParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
+
+                    delete subCategory.originalParentId;
+
+                    state.categories[originalParentCategoryIndex].subCategories.splice(subCategoryIndex, 1);
+
+                    state.categories[newParentCategoryIndex].subCategories.push(subCategory);
+                }
+            } else {
+                const newParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
+                const category = _find(state.categories, ['id', payload.category.id]);
+                const categoryIndex = _findIndex(state.categorie, ['id', parseInt(category.id)]);
+
+                category.parentId = payload.category.parentId;
+
+                state.categories.splice(categoryIndex, 1);
+
+                state.categories[newParentCategoryIndex].subCategories.push(category);
             }
 
-            // if the subCategory has a new parent
-            // remove the subCategory from the actula parent
-            // add the subCategory to the new parent
-            if (payload.category.originalParentId && !_isEqual(payload.category.originalParentId, payload.parentId)) {
-                const subCategory = _find(state.categories[originalParentCategoryIndex].subCategories, ['id', payload.category.id]);
-                const newParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
-
-                delete subCategory.originalParentId;
-
-                state.categories[originalParentCategoryIndex].subCategories.splice(subCategoryIndex, 1);
-
-  
-                state.categories[newParentCategoryIndex].subCategories.push(subCategory);
-
-            }            
 
         } else {
             const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
@@ -176,11 +186,15 @@ const mutations = {
     },
 
     DELETE_CATEGORY(state, payload) {
+        //if category doesn't have a parent remove it from main list
         const categoryIndex = _findIndex(state.categories, ['id', payload]);
         state.categories.splice(categoryIndex, 1);
+
+        //otherwise remove it from it's parent list
     },
 
     SET_CATEGORY_DELETED_AT(state, payload) {
+        //also do it for subcategories
         const vm = payload.vm;
         const categoryIndex = _findIndex(state.categories, ['id', payload.id]);
 

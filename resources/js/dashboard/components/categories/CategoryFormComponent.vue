@@ -85,7 +85,7 @@
           >
             <option value="" disabled selected>Select parent category</option>
             <option
-              v-for="parent in getCategories"
+              v-for="parent in parentCategories"
               :key="parent.id"
               :value="parent.id"
             >
@@ -198,6 +198,17 @@ export default {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
 
+    parentCategories() {
+      return this.getCategories.filter(category => {
+        if(this.selectedCategory) {
+          return category.id === this.selectedCategory.id ? false : true;
+        }else {
+          return true;
+        }
+       
+      });
+    },
+
     availableDiscounts() {
       return this.getDiscounts.filter((discount) => discount.deletedAt === "");
     },
@@ -223,6 +234,10 @@ export default {
         ? true
         : false;
     },
+
+    canHaveParent() {
+      //check sometimg to make sure that it can't be marked as a subcategory
+    }
   },
 
   data() {
@@ -261,6 +276,8 @@ export default {
       if (value) {
         this.category = JSON.parse(JSON.stringify(this.selectedCategory));
       } else {
+         this.$v.$reset();
+
         this.category = {
           name: "",
           vat: "",
@@ -357,18 +374,26 @@ export default {
 
             await this.patchCategory(payload);
 
+
             if (
-              !_isEqual(
-                payload.category.originalParentId,
-                payload.category.parentId
-              )
+              payload.category.parentId !== null &&
+              payload.category.parentId !== undefined
             ) {
-              const parentCategory = _find(this.getCategories, [
-                "id",
-                parseInt(payload.category.parentId),
-              ]);
-              parentCategory.selectedSubcateogryId = payload.category.id;
-              this.$emit("selectNewParentCategory", parentCategory);
+              if (
+                !_isEqual(
+                  payload.category.originalParentId,
+                  payload.category.parentId
+                )
+              ) {
+                let parentCategory = _find(this.parentCategories, [
+                  "id",
+                  parseInt(payload.category.parentId),
+                ]);
+
+                parentCategory.selectedSubcateogryId = payload.category.id;
+                this.$emit("selectNewParentCategory", parentCategory);
+
+              }
             }
 
             this.waiting = false;
