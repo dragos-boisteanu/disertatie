@@ -383,20 +383,19 @@ export default {
             payload.address = this.address;
           }
 
-          await storeUser(this.user);
+          const response = await storeUser(this.user);
 
           this.restForm();
 
           this.waiting = false;
 
-          this.openNotification({
-            type: "ok",
-            message: "User account created",
-            show: true,
-          });
+          this.$toast.success(response.data.message);
+          
         } catch (error) {
+
           if (error.response && error.response.data.errors) {
             this.$v.$touch();
+            this.$toast.success(response.data.message);
           }
 
           this.waiting = false;

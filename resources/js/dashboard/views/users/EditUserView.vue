@@ -34,10 +34,10 @@
             <div class="flex-1">
               <ImageUploadComponent
                 :clear="clearImage"
-                 @fileAdded="setWaiting"
-            @processFileAbort="setWaiting"
-            @fileProcessed="setWaiting"
-            @setImagePath="setImagePath"
+                @fileAdded="setWaiting"
+                @processFileAbort="setWaiting"
+                @fileProcessed="setWaiting"
+                @setImagePath="setImagePath"
               ></ImageUploadComponent>
               <button v-if="hasAvatar" @click.prevent="removeAvatar">
                 Remove avatar
@@ -341,29 +341,21 @@ export default {
 
             this.$router.push({ name: "User", params: { id: this.user.id } });
 
-            this.openNotification({
-              type: "ok",
-              show: true,
-              message: "User account updated",
-            });
+            this.$toast.success(response.data.message);
           } else {
-            this.openNotification({
-              type: "info",
-              show: true,
-              message: "Nothing to update",
-            });
+            this.$toast.info("Nothing to update");
           }
 
           this.waiting = false;
         } catch (error) {
           console.log(error);
+          
           this.$v.$touch();
           this.waiting = false;
-          this.openNotification({
-            type: "err",
-            show: true,
-            message: "Failed to update user account",
-          });
+
+          if (error.response && error.response.data.message) {
+            this.$toast.error(error.response.data.message);
+          }
         }
       }
     },
@@ -373,7 +365,7 @@ export default {
       this.localUser.avatar = "clear";
     },
 
-     setWaiting(value) {
+    setWaiting(value) {
       this.waiting = value;
     },
 
