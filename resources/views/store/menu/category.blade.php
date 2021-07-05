@@ -11,7 +11,7 @@
                         <h1 class="font-semibold text-xl mb-2 text-orange-600">{{ $subCategory->name }}</h1>
                         <ul>
                             @foreach ($subCategory->subProducts as $product)
-                                <li>
+                                <li class="mb-4 last:mb-0">
                                     <form method="POST" action="{{ route('cart.store', ['productId' => $product->id]) }}"
                                         class="class=mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5">
                                         @csrf
