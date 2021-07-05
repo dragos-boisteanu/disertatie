@@ -10,10 +10,13 @@
       </div>
       <ul class="overflow-y-auto max-h-[400px] w-full px-2 rounded-sm">
         <li
-          class="w-full min-w-min my-1"
+          class="w-full min-w-min my-1 relative"
           v-for="(category, index) in getCategories"
           :key="category.id"
         >
+          <div class="absolute top-1 right-0 text-xs bg-red-600 text-white border border-white shadow p-0.5" v-if="category.deletedAt">
+            D
+          </div>
           <div
             @click="selectCategory(category)"
             class="
@@ -52,6 +55,7 @@
           >
             <li
               class="
+                relative
                 w-full
                 min-w-min
                 my-1
@@ -72,6 +76,9 @@
               v-for="(subCategory, index) in category.subCategories"
               :key="index"
             >
+              <div class="absolute top-1 right-0 text-xs bg-red-600 text-white border border-white shadow p-0.5" v-if="subCategory.deletedAt !== null & subCategory.deletedAt !== undefined">
+                D
+              </div>
               <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
               <div class="p-2">{{ subCategory.name }}</div>
               <div class="p-2 self-center justify-self-center">
@@ -132,7 +139,6 @@ export default {
 
   watch: {
     selectedCategory(newValue) {
-      console.log(newValue)
       if (newValue !== null && newValue !== undefined) {
         if (newValue.parentId === null || newValue.parentId === undefined) {
           this.selectedParentCategoryId = newValue.id;

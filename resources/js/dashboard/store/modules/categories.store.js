@@ -67,22 +67,22 @@ const actions = {
     },
 
     async disableCategory({ commit }, payload) {
-        const response = await disableCategory(payload.id);
-        payload.deletedAt = response.data.deletedA;
+        const response = await disableCategory(payload.category.id);
+        payload.category.deletedAt = response.data.deletedAt;
         commit('SET_CATEGORY_DELETED_AT', payload);
         return { deletedAt: response.data.deletedAt, message: response.data.message };
     },
 
     async restoreCategory({ commit }, payload) {
-        const response = await restoreCategory(payload.id);
-        payload.deletedAt = null
+        const response = await restoreCategory(payload.category.id);
+        payload.category.deletedAt = null
         commit('SET_CATEGORY_DELETED_AT', payload);
         return response.data.message;
     },
 
     async deleteCategory({ commit }, payload) {
         try {
-            const response = await deleteCategory(payload);
+            const response = await deleteCategory(payload.id);
             commit('DELETE_CATEGORY', payload);
             return response.data.message;
         } catch (error) {
@@ -169,8 +169,6 @@ const mutations = {
 
                 state.categories[newParentCategoryIndex].subCategories.push(category);
             }
-
-
         } else {
             const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
 
@@ -182,23 +180,34 @@ const mutations = {
                 vm.$set(state.categories[categoryIndex], 'discountId', null);
             }
         }
-
     },
 
     DELETE_CATEGORY(state, payload) {
-        //if category doesn't have a parent remove it from main list
-        const categoryIndex = _findIndex(state.categories, ['id', payload]);
-        state.categories.splice(categoryIndex, 1);
-
-        //otherwise remove it from it's parent list
+        if (payload.parentId) {
+            const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.parentId)]);
+            const categoryIndex = _findIndex(state.categories[parentCategoryIndex].subCategories, ['id', parseInt(payload.id)]);
+            state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
+        } else {
+            const categoryIndex = _findIndex(state.categories, ['id', payload]);
+            state.categories.splice(categoryIndex, 1);
+        }
     },
 
     SET_CATEGORY_DELETED_AT(state, payload) {
-        //also do it for subcategories
         const vm = payload.vm;
-        const categoryIndex = _findIndex(state.categories, ['id', payload.id]);
 
-        vm.$set(state.categories[categoryIndex], 'deletedAt', payload.deletedAt);
+        if (payload.category.parentId) {
+            const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
+            const categoryIndex = _findIndex(state.categories[parentCategoryIndex].subCategories, ['id', parseInt(payload.category.id)]);
+
+            console.log(payload.category.deletedA);
+
+            vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'deletedAt', payload.category.deletedAt);
+        } else {
+            const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
+            vm.$set(state.categories[categoryIndex], 'deletedAt', payload.category.deletedAt);
+        }
+
     },
 
     SET_FOUND_CATEGORIES(state, foundCategories) {

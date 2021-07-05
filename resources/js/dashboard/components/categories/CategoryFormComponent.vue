@@ -199,13 +199,12 @@ export default {
     ...mapGetters("Discounts", ["getDiscounts"]),
 
     parentCategories() {
-      return this.getCategories.filter(category => {
-        if(this.selectedCategory) {
+      return this.getCategories.filter((category) => {
+        if (this.selectedCategory) {
           return category.id === this.selectedCategory.id ? false : true;
-        }else {
+        } else {
           return true;
         }
-       
       });
     },
 
@@ -237,7 +236,7 @@ export default {
 
     canHaveParent() {
       //check sometimg to make sure that it can't be marked as a subcategory
-    }
+    },
   },
 
   data() {
@@ -276,7 +275,7 @@ export default {
       if (value) {
         this.category = JSON.parse(JSON.stringify(this.selectedCategory));
       } else {
-         this.$v.$reset();
+        this.$v.$reset();
 
         this.category = {
           name: "",
@@ -374,7 +373,6 @@ export default {
 
             await this.patchCategory(payload);
 
-
             if (
               payload.category.parentId !== null &&
               payload.category.parentId !== undefined
@@ -392,7 +390,6 @@ export default {
 
                 parentCategory.selectedSubcateogryId = payload.category.id;
                 this.$emit("selectNewParentCategory", parentCategory);
-
               }
             }
 
@@ -422,7 +419,7 @@ export default {
         this.$Progress.start();
         this.waiting = true;
 
-        const response = await this.deleteCategory(this.selectedCategory.id);
+        const response = await this.deleteCategory(this.category);
 
         this.waiting = false;
 
@@ -442,11 +439,14 @@ export default {
       try {
         this.$Progress.start();
         const payload = {
-          id: this.category.id,
+          category: this.category,
           vm: this,
         };
+        
         const response = await this.disableCategory(payload);
+
         this.category.deletedAt = response.deletedAt;
+
         this.$toast.success(response.message);
         this.$Progress.finish();
       } catch (error) {
@@ -459,7 +459,7 @@ export default {
       try {
         this.$Progress.start();
         const payload = {
-          id: this.category.id,
+          category: this.category,
           vm: this,
         };
         const response = await this.restoreCategory(payload);

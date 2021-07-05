@@ -20,7 +20,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withTrashed()->with('products', 'subProducts', 'subCategories')->whereNull('parent_id')->get();
+        $categories = Category::withTrashed()->with(['products', 'subProducts', 'subCategories'=> function($query) {
+            $query->withTrashed();
+        }])->whereNull('parent_id')->get();
 
         return new CategoryCollection($categories);
     }
