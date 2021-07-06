@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <ul class="mb-2 pb-2 border-b border-gray"  v-if="isParentSelected">
+    <ul class="mb-2 pb-2 border-b border-gray"  v-if="showSubcategories">
       <SubCategoryComponent
         v-for="(subcategory, index) in getSubCategories" :key="subcategory.id"
           :subcategory="subcategory"
@@ -85,8 +85,8 @@ export default {
       return false;
     },
 
-    isParentSelected() {
-      return this.category.id === parseInt(this.selectedParentCategoryId);
+    showSubcategories() {
+      return this.category.id === parseInt(this.selectedParentCategoryId) && this.category.subCategories.length > 0;
     },
 
     isSelected() {
@@ -94,6 +94,7 @@ export default {
     },
 
     isDisabled() {
+      console.log('category: ', this.category);
       return (
         this.category.deletedAt !== null &&
         this.category.deletedAt !== undefined

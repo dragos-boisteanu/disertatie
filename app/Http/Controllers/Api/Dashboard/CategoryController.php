@@ -48,7 +48,7 @@ class CategoryController extends Controller
 
             if ($request->has('parentId')) {
                 $input['parent_id'] = $request->parentId;
-                $parentCategory = Category::findOrFail($request->parentId);
+                $parentCategory = Category::withTrashed()->findOrFail($request->parentId);
 
                 if ($request->has('vat')) {
                     $input['vat'] = $request->vat;
@@ -159,7 +159,10 @@ class CategoryController extends Controller
 
     public function search($catagoryName)
     {
-        $categories = Category::with('products', 'subProducts', 'subCategories')->where('name', 'like', $catagoryName . '%')->whereNull('parent_id')->get();
+
+        $categories = Category::with(['products', 'subProducts', 'subCategories'=> function($query) {
+            $query->withTrashed();
+        }])->where('name', 'like', $catagoryName . '%')->whereNull('parent_id')->get();
         
         if ($categories->isNotEmpty()) {
             return  new CategoryCollection($categories);

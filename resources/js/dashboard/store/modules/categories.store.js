@@ -43,7 +43,8 @@ const actions = {
 
             payload.deletedAt = null;
             payload.productsCount = 0;
-
+            payload.subCategories = [];
+            
             commit('ADD_CATEGORY', payload);
 
             return response.data.message;
