@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Cos cumparaturi</title>
+    <title>Checkout</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -38,7 +38,7 @@
             <div>
                 <h2 class="text-lg text-trueGray-300 my-4 pl-2">Produse</h2>
                 <ul class="bg-trueGray-50 rounded shadow-md mb-3">
-                    @foreach ($items as $item)
+                    @foreach ($cart->items as $item)
                         <li class="grid grid-cols-12 border-b border-gray-400 last:border-0 ">
                             <div
                                 class="col-start-1 col-end-3 text-sm flex items-center justify-center border-r border-gray-300">
@@ -126,108 +126,193 @@
                         Total produse
                     </div>
                     <div>
-                        444 Ron
+                        {{ $cart->totalValue }} Ron
                     </div>
                 </div>
             </div>
 
-            <div class="w-full md:flex md:items-start md:gap-x-4">
-                <div class="flex-1">
-                    <h2 class="text-lg text-trueGray-300 my-4 pl-2">Adresa</h2>
-                    <div class="bg-trueGray-50 rounded shadow-md mb-3">
-                        <ul class="flex items-center justify-between py-2 px-4 text-sm text-trueGray-700">
-                            @foreach ($deliveryMethods as $deliveryMethod)
+            <form method="POST" action="{{ route('order.store') }}">
+                @csrf
+
+                <div class="w-full md:flex md:items-start md:gap-x-4">
+                    <div class="flex-1">
+                        <h2 class="text-lg text-trueGray-300 my-4 pl-2">Adresa</h2>
+                        <div id="deliveryMethod" class="bg-trueGray-50 rounded shadow-md mb-3 md:mb-0">
+                            <ul class="flex items-center justify-between gap-x-2 py-2 px-4 text-sm text-trueGray-700">
+                                @foreach ($deliveryMethods as $deliveryMethod)
+                                    <li>
+                                        <input id="dm{{ $deliveryMethod->id }}" type="radio" name="deliveryMethod"
+                                            value="{{ $deliveryMethod->id }}" @if ($deliveryMethod->id === $selectedDeliveryMethodId) checked @endif @if ($deliveryMethod->isDisabled) disabled
+                                @endif
+                                />
+                                <label for="dm{{ $deliveryMethod->id }}">
+                                    {{ $deliveryMethod->name }}</label>
+                                <div>
+                                    ({{ $deliveryMethod->price }} Ron)
+                                </div>
+                                </li>
+                                @endforeach
+                            </ul>
+
+
+                        </div>
+                    </div>
+
+                    <div class="flex-1 flex flex-col">
+                        <h2 class="text-lg text-trueGray-300 my-4 pl-2">Metode de plata</h2>
+                        <ul
+                            class="flex items-center justify-between py-2 px-4 text-sm text-trueGray-700 bg-trueGray-50 rounded shadow-md mb-3">
+                            @foreach ($paymentMethods as $paymentMethod)
                                 <li>
-                                    <input id="d{{ $deliveryMethod->id }}" type="radio" name="deliveryMethod"
-                                        value="{{ $deliveryMethod->id }}" />
-                                    <label for="d{{ $deliveryMethod->id }}"> {{ $deliveryMethod->name }}</label>
-                                    <div>
-                                        ({{ $deliveryMethod->price }} Ron)
-                                    </div>
+                                    <input id="pm{{ $paymentMethod->id }}" type="radio" name="paymentMethod"
+                                        value="{{ $paymentMethod->id }}" @if ($paymentMethod->isDisabled) disabled @endif />
+                                    <label for="pm1">{{ $paymentMethod->name }}</label>
                                 </li>
                             @endforeach
                         </ul>
-                        {{-- if home delivery is selected 
-                                show option to select existing add 
-                                or fileds for a new address
-                                if new address is selected from the select --}}
-                        <div class="p-4 border-t border-gray-800">
-                            @auth
-                                <div class="w-full">
-                                    <label for="phoneNumber" class="block text-trueGray-400 font-semibold mb-2">Nr.
-                                        Telefon</label>
-                                    {{-- error zone --}}
-                                    <input type="text" id="phoneNumber" name="phoneNumber"
-                                        value="{{ old('phoneNumber', Auth::user()->phone_number) }}"
-                                        class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
-                                </div>
-
-                                <select name="deliveryAddress">
-                                    <option value="" selected disabled>Alege adresa de livrare</option>
-                                    @foreach ($addresses as $address)
-                                        <option value="{{ $address->id }}">{{ $address->address }}</option>
-                                    @endforeach
-                                </select>
-                            @endauth
-
-                            @guest
-                                <div class="w-full">
-                                    <label for="phoneNumber" class="block text-trueGray-700 text font-semibold mb-2">Nr.
-                                        Telefon</label>
-                                    {{-- error zone --}}
-                                    <input type="text" id="phoneNumber" name="phoneNumber"
-                                        value="{{ old('phoneNumber') }}"
-                                        class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600">
-                                </div>
-
-                                <div class="w-full mt-4">
-                                    <label for="email" class="block text-trueGray-700 text font-semibold mb-2">Adresa
-                                        email</label>
-                                    {{-- error zone --}}
-                                    <input type="text" id="email" name="email" value="{{ old('email') }}"
-                                        class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 shadow-inner">
-                                </div>
-                            @endguest
-                        </div>
                     </div>
                 </div>
 
-                <div class="flex-1">
-                    <h2 class="text-lg text-trueGray-300 my-4 pl-2">Metode de plata</h2>
-                    <ul
-                        class="flex items-center justify-between py-2 px-4 text-sm text-trueGray-700 bg-trueGray-50 rounded shadow-md mb-3">
-                        <li>
-                            <input id="p1" type="radio" name="paymentMethod" value="1" />
-                            <label for="p1">Cash</label>
-                        </li>
-                        <li>
-                            <input id="p2" type="radio" disabled name="paymentMethod" value="2" />
-                            <label for="p2">Card</label>
-                        </li>
-                        <li>
-                            <input id="p3" type="radio" disabled name="paymentMethod" value="3" />
-                            <label for="p3">Card online</label>
-                        </li>
-                    </ul>
+                <div class="">
+                    <h2 class="text-lg text-trueGray-300 my-4 pl-2">Observatii</h2>
+                    <textarea
+                        class="flex-1 w-full border p-2 text-sm rounded focus:ring focus:ring-orange-600" name="observations"></textarea>
                 </div>
-            </div>
 
-            <div>
-                <h2 class="text-lg text-trueGray-300 my-4 pl-2">Observatii</h2>
-                <textarea class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600"></textarea>
-            </div>
+                <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
+                    <div class="font-semibold">
+                        Total comanda
+                    </div>
+                    <div >
+                        <span id="orderTotalValue">{{ $orderTotalValue }}</span> Ron
+                    </div>
+                </div>
 
-            <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
-                <div class="font-semibold">
-                    Total comanda
+                <div class="w-full lg:text-right">
+                    <button type="submit" class="
+                    w-full
+                    rounded-sm
+                    text-white
+                    bg-green-600
+                    px-4
+                    py-1
+                    active:shadow-inner
+                    hover:bg-green-500
+                    lg:w-auto
+                  ">
+                        Trimite comanda
+                    </button>
                 </div>
-                <div>
-                    600 Ron
-                </div>
-            </div>
+            </form>
+
         </div>
+
     </main>
 </body>
 <script src="{{ asset(mix('js/app.js')) }}"></script>
+<script>
+
+    const auth = "{{ Auth::check() }}"
+   
+    @auth
+        const authAddress =
+            `   <select id="deliveryAddressSelect" name="deliveryAddress"
+            class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600">
+            <option value="" disabled>Alege adresa de livrare</option>
+            @foreach ($addresses as $address)
+                <option value="{{ $address->id }}" {{ $address->is_selected ? 'selected' : '' }}>
+                    {{ $address->address }}
+                </option>
+            @endforeach
+            <option value="new">Adresa noua</option>
+        </select>
+    `
+    @endauth
+
+
+    @guest
+        const guestAddress =
+        `
+            <div class="w-full">
+                <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
+                        class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600" placeholder="Numar telefon">
+            </div>
+                    
+            <div class="w-full mt-4">
+                <input type="text" id="email" name="email" value="{{ old('email') }}"
+                    class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600" placeholder="Email">
+            </div>
+        
+            <div class="w-full mt-4">
+                <input type="text" id="address" name="address" value="{{ old('address') }}"
+                    class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600" placeholder="Adresa">
+            </div>
+        `
+    @endguest
+
+
+    const deliveryMethodAddress =
+        `
+        <div id="deliveryMethodAddress" class="p-4 border-t border-gray-800">
+           @auth
+            ${authAddress}
+           @endauth
+
+
+           @guest
+             ${guestAddress}
+           @endguest
+        </div>
+    `
+
+    const deliveryMethod = $('input[name=deliveryMethod]');
+    const orderTotalValue= $('#orderTotalValue');
+
+
+    if ($('input[name=deliveryMethod]:checked').val() == 1) {
+        $('#deliveryMethod').append(deliveryMethodAddress);
+    }
+
+    $('input[name=deliveryMethod]').click(function(event) {
+
+        if ($(this).val() == 1) {
+
+            $('#deliveryMethod').append(deliveryMethodAddress);
+
+            if (auth) {
+                const deliveryMethodAddress = $('#deliveryMethodAddress');
+                const deliveryAddressSelect = $('#deliveryAddressSelect');
+
+                const newAddressField =
+                    `
+                    <div id="newAddressField">
+                        <div class="w-full">
+                            <div class="w-full mt-4">
+                                <input type="text" id="address" name="newAddress" value="{{ old('address') }}"
+                                    class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600"
+                                    placeholder="Adresa">
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                if (deliveryAddressSelect.val() === 'new') {
+                    deliveryMethodAddress.append(newAddressField);
+                }
+
+                deliveryAddressSelect.change(function() {
+                    console.log('dasd')
+                    if ($(this).val() === 'new') {
+                        deliveryMethodAddress.append(newAddressField);
+                    } else {
+                        $('#newAddressField').remove();
+                    }
+                })
+            }
+        } else {
+            $('#deliveryMethodAddress').remove();
+        }
+    });
+</script>
 
 </html>

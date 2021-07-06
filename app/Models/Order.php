@@ -57,7 +57,7 @@ class Order extends Model
 
     public function paymentMethod()
     {
-        return $this->hasOne(PaymentMethod::class);
+        return $this->belongsTo(PaymentMethod::class);
     }
 
     public function client()

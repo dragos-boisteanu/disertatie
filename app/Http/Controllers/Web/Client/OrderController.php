@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Web\Client;
 
 use App\Models\Order;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Interfaces\CartServiceInterface;
 use App\Models\Address;
+use Illuminate\Http\Request;
+use App\Models\PaymentMethod;
 use App\Models\DeliveryMethod;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Interfaces\CartServiceInterface;
 
 class OrderController extends Controller
 {
@@ -34,21 +35,30 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {        
-        // $paymentMethods = PaymentMethods::all();
+        $paymentMethods = PaymentMethod::withTrashed()->get();
+        $deliveryMethods = DeliveryMethod::withTrashed()->get();
 
-        $deliveryMethods = DeliveryMethod::all();
+        $cart = $this->cartService->getCart(Auth::id(), session()->getId());
 
-        $items = $this->cartService->getCatItems(session('cartId'));
+        $orderTotalValue = 0;
+        $orderTotalValue += $cart->totalValue;
 
+        $selectedDeliveryMethodId = "";
+
+        if($request->has('deliveryMethod')) {
+            $selectedDeliveryMethod = DeliveryMethod::findOrFail($request->deliveryMethod);
+            $orderTotalValue += $selectedDeliveryMethod->price;
+            $selectedDeliveryMethodId = $selectedDeliveryMethod->id;
+        } 
+            
         if(Auth::check()) {
             $addresses = Address::where('user_id', Auth::id())->get();
-            return view('store.checkout', compact('addresses', 'items', 'deliveryMethods'));
+            return view('store.checkout', compact('addresses', 'cart', 'deliveryMethods', 'paymentMethods', 'selectedDeliveryMethodId', 'orderTotalValue'));
         }
         
-        return view('store.checkout', compact('items', 'deliveryMethods'));
-       
+        return view('store.checkout', compact('cart', 'deliveryMethods', 'paymentMethods', 'selectedDeliveryMethodId', 'orderTotalValue'));
 
     }
 
@@ -60,7 +70,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

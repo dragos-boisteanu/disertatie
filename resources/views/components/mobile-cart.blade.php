@@ -28,7 +28,7 @@
                 @endforeach
             </ul>
             <div class="w-full text-center mt-2 flex justify-between text-sm" v-if="hasItems">
-                <form method="GET" action="{{ route('checkout.create') }}">
+                <form method="GET" action="{{ route('order.create') }}">
                     <button class="w-full rounded-sm text-white bg-green-600 px-4 py-1 active:shadow-inner hover:bg-green-500">
                         Go to checkout
                     </button>

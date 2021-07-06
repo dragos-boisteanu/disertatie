@@ -57,7 +57,8 @@ Route::group(['namespace' => 'Web\Client'], function () {
     });
 
     Route::group(['prefix'=>'checkout'], function() { 
-        Route::get('/', 'OrderController@create')->name('checkout.create');
+        Route::get('/', 'OrderController@create')->name('order.create');
+        Route::post('/', 'OrderController@store')->name('order.store');
     });
   
 });
