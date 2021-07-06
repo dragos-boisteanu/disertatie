@@ -175,15 +175,15 @@
 
                 <div class="">
                     <h2 class="text-lg text-trueGray-300 my-4 pl-2">Observatii</h2>
-                    <textarea
-                        class="flex-1 w-full border p-2 text-sm rounded focus:ring focus:ring-orange-600" name="observations"></textarea>
+                    <textarea class="flex-1 w-full border p-2 text-sm rounded focus:ring focus:ring-orange-600"
+                        name="observations"></textarea>
                 </div>
 
                 <div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
                     <div class="font-semibold">
                         Total comanda
                     </div>
-                    <div >
+                    <div>
                         <span id="orderTotalValue">{{ $orderTotalValue }}</span> Ron
                     </div>
                 </div>
@@ -211,12 +211,11 @@
 </body>
 <script src="{{ asset(mix('js/app.js')) }}"></script>
 <script>
-
     const auth = "{{ Auth::check() }}"
-   
+
     @auth
         const authAddress =
-            `   <select id="deliveryAddressSelect" name="deliveryAddress"
+        ` <select id="deliveryAddressSelect" name="deliveryAddress"
             class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600">
             <option value="" disabled>Alege adresa de livrare</option>
             @foreach ($addresses as $address)
@@ -226,27 +225,27 @@
             @endforeach
             <option value="new">Adresa noua</option>
         </select>
-    `
+        `
     @endauth
 
 
     @guest
         const guestAddress =
         `
-            <div class="w-full">
-                <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
-                        class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600" placeholder="Numar telefon">
-            </div>
-                    
-            <div class="w-full mt-4">
-                <input type="text" id="email" name="email" value="{{ old('email') }}"
-                    class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600" placeholder="Email">
-            </div>
-        
-            <div class="w-full mt-4">
-                <input type="text" id="address" name="address" value="{{ old('address') }}"
-                    class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600" placeholder="Adresa">
-            </div>
+        <div class="w-full">
+            <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
+                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600" placeholder="Numar telefon">
+        </div>
+    
+        <div class="w-full mt-4">
+            <input type="text" id="email" name="email" value="{{ old('email') }}"
+                class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600" placeholder="Email">
+        </div>
+    
+        <div class="w-full mt-4">
+            <input type="text" id="address" name="address" value="{{ old('address') }}"
+                class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600" placeholder="Adresa">
+        </div>
         `
     @endguest
 
@@ -255,18 +254,18 @@
         `
         <div id="deliveryMethodAddress" class="p-4 border-t border-gray-800">
            @auth
-            ${authAddress}
+               ${authAddress}
            @endauth
 
 
            @guest
-             ${guestAddress}
+               ${guestAddress}
            @endguest
         </div>
     `
 
     const deliveryMethod = $('input[name=deliveryMethod]');
-    const orderTotalValue= $('#orderTotalValue');
+    const orderTotalValue = $('#orderTotalValue');
 
 
     if ($('input[name=deliveryMethod]:checked').val() == 1) {
@@ -274,17 +273,16 @@
     }
 
     $('input[name=deliveryMethod]').click(function(event) {
-
         if ($(this).val() == 1) {
+            if ($('#deliveryMethod').find('#deliveryMethodAddress').length === 0) {
+                $('#deliveryMethod').append(deliveryMethodAddress);
 
-            $('#deliveryMethod').append(deliveryMethodAddress);
+                if (auth) {
+                    const deliveryMethodAddress = $('#deliveryMethodAddress');
+                    const deliveryAddressSelect = $('#deliveryAddressSelect');
 
-            if (auth) {
-                const deliveryMethodAddress = $('#deliveryMethodAddress');
-                const deliveryAddressSelect = $('#deliveryAddressSelect');
-
-                const newAddressField =
-                    `
+                    const newAddressField =
+                        `
                     <div id="newAddressField">
                         <div class="w-full">
                             <div class="w-full mt-4">
@@ -296,18 +294,20 @@
                     </div>
                 `;
 
-                if (deliveryAddressSelect.val() === 'new') {
-                    deliveryMethodAddress.append(newAddressField);
+                    if (deliveryAddressSelect.val() === 'new') {
+                        deliveryMethodAddress.append(newAddressField);
+                    }
+
+                    deliveryAddressSelect.change(function() {
+                        console.log('dasd')
+                        if ($(this).val() === 'new') {
+                            deliveryMethodAddress.append(newAddressField);
+                        } else {
+                            $('#newAddressField').remove();
+                        }
+                    })
                 }
 
-                deliveryAddressSelect.change(function() {
-                    console.log('dasd')
-                    if ($(this).val() === 'new') {
-                        deliveryMethodAddress.append(newAddressField);
-                    } else {
-                        $('#newAddressField').remove();
-                    }
-                })
             }
         } else {
             $('#deliveryMethodAddress').remove();
