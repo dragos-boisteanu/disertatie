@@ -142,19 +142,18 @@
                                 @foreach ($deliveryMethods as $deliveryMethod)
                                     <li>
                                         <input id="dm{{ $deliveryMethod->id }}" type="radio" name="deliveryMethod"
-                                            value="{{ $deliveryMethod->id }}" @if ($deliveryMethod->id === $selectedDeliveryMethodId) checked @endif @if ($deliveryMethod->isDisabled) disabled
-                                @endif
-                                />
-                                <label for="dm{{ $deliveryMethod->id }}">
-                                    {{ $deliveryMethod->name }}</label>
-                                <div>
-                                    ({{ $deliveryMethod->price }} Ron)
-                                </div>
-                                </li>
+                                            value="{{ $deliveryMethod->id }}" 
+                                            @if ($deliveryMethod->id === $selectedDeliveryMethodId) checked 
+                                            @endif @if ($deliveryMethod->isDisabled) disabled @endif
+                                        />
+                                        <label for="dm{{ $deliveryMethod->id }}">
+                                            {{ $deliveryMethod->name }}</label>
+                                        <div >
+                                            (<span id="dmp{{$deliveryMethod->id}}">{{ $deliveryMethod->price }}</span> Ron)
+                                        </div>
+                                    </li>
                                 @endforeach
                             </ul>
-
-
                         </div>
                     </div>
 
@@ -273,7 +272,13 @@
     }
 
     $('input[name=deliveryMethod]').click(function(event) {
-        if ($(this).val() == 1) {
+
+        const deliveryMethodRadioValue = $(this).val();
+        const deliveryMehtodPrice = $(`#dmp${deliveryMethodRadioValue}`);
+
+        orderTotalValue.html((parseFloat(deliveryMehtodPrice.html()) + 24.23).toFixed(2))
+
+        if (deliveryMethodRadioValue== 1) {
             if ($('#deliveryMethod').find('#deliveryMethodAddress').length === 0) {
                 $('#deliveryMethod').append(deliveryMethodAddress);
 
