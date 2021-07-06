@@ -9,92 +9,14 @@
         <div class="p-2 self-center justify-self-center">Products Count</div>
       </div>
       <ul class="overflow-y-auto max-h-[400px] w-full px-2 rounded-sm">
-        <li
-          class="w-full min-w-min my-1 relative"
-          v-for="(category, index) in getCategories"
-          :key="category.id"
-        >
-          <div class="absolute top-1 right-0 text-xs bg-red-600 text-white border border-white shadow p-0.5" v-if="category.deletedAt">
-            D
-          </div>
-          <div
-            @click="selectCategory(category)"
-            class="
-              w-full
-              text-sm
-              rounded-md
-              cursor-pointer
-              border-white
-              hover:bg-gray-100
-              hover:shadow-md
-              grid grid-cols-5
-            "
-            :class="{
-              'bg-gray-100 shadow-md font-semibold': category.id == selectedId,
-              'bg-gray-50': isEven(index),
-            }"
-          >
-            <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
-            <div class="p-2">{{ category.name }}</div>
-            <div class="p-2 self-center justify-self-center">
-              {{ category.vat }} %
-            </div>
-            <div class="p-2">
-              <span v-if="category.discountId">{{
-                getDiscountForCategory(category.discountId)
-              }}</span>
-            </div>
-            <div class="p-2 self-center justify-self-center">
-              {{ category.productsCount }}
-            </div>
-          </div>
-
-          <ul
-            class="border-b border-gray"
-            v-if="category.id == selectedParentCategoryId"
-          >
-            <li
-              class="
-                relative
-                w-full
-                min-w-min
-                my-1
-                text-sm
-                rounded-md
-                cursor-pointer
-                border-white
-                hover:bg-gray-50
-                hover:shadow-md
-                grid grid-cols-5
-              "
-              :class="{
-                'bg-gray-50 shadow-md font-semibold':
-                  subCategory.id == selectedId,
-                'bg-gray-50': isOdd(index),
-              }"
-              @click="selectCategory(subCategory)"
-              v-for="(subCategory, index) in category.subCategories"
-              :key="index"
-            >
-              <div class="absolute top-1 right-0 text-xs bg-red-600 text-white border border-white shadow p-0.5" v-if="subCategory.deletedAt !== null & subCategory.deletedAt !== undefined">
-                D
-              </div>
-              <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
-              <div class="p-2">{{ subCategory.name }}</div>
-              <div class="p-2 self-center justify-self-center">
-                {{ subCategory.vat }} %
-              </div>
-              <div class="p-2">
-                <span v-if="subCategory.discountId">{{
-                  getDiscountForCategory(subCategory.discountId)
-                }}</span>
-              </div>
-              <div class="p-2 self-center justify-self-center">
-                {{ subCategory.productsCount }}
-              </div>
-            </li>
-          </ul>
-        </li>
+        <CategoryComponent
+          v-for="(category, index) in getCategories" :key="category.id"
+          :category="category"
+          :selected-parent-category-id="selectedParentCategoryId"
+          :selected-id="selectedId"
+          :index="index"
+          @selected="selectCategory"
+        ></CategoryComponent>       
       </ul>
     </div>
   </div>
@@ -105,6 +27,8 @@
 import { mapGetters } from "vuex";
 
 import _find from "lodash/find";
+
+import CategoryComponent from './CategoryComponent.vue';
 
 export default {
   props: {
@@ -120,10 +44,7 @@ export default {
     ...mapGetters("Categories", ["getCategories"]),
 
     selectedId() {
-      if (
-        this.selectedCategory !== null &&
-        this.selectedCategory !== undefined
-      ) {
+      if (this.selectedCategory !== null && this.selectedCategory !== undefined ) {
         return this.selectedCategory.id;
       }
       return -1;
@@ -165,23 +86,10 @@ export default {
     selectCategory(category) {
       this.$emit("selected", category);
     },
-
-    isEven(index) {
-      if (index % 2 === 0) {
-        return true;
-      }
-
-      return false;
-    },
-
-    isOdd(index) {
-      return !this.isEven(index)
-    },
-
-    getDiscountForCategory(id) {
-      const discount = _find(this.getDiscounts, ["id", parseInt(id)]);
-      return `${discount.code} ${discount.id}%`;
-    },
   },
+
+  components: {
+    CategoryComponent
+  }
 };
 </script>

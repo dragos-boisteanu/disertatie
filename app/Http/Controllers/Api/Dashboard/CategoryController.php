@@ -102,7 +102,7 @@ class CategoryController extends Controller
 
         if ($request->has('parentId')) {
             $input['parent_id'] = $request->parentId;
-            $parentCategory = Category::findOrFail($request->parentId);
+            $parentCategory = Category::withTrashed()->findOrFail($request->parentId);
             $responseData['parentName'] = $parentCategory->name;
         }
 
