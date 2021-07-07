@@ -172,11 +172,13 @@
             <div class="my-1">
               <div>
                 <span class="font-semibold">ID: </span>
-                <span>{{ order.staff.id }}</span>
+                <span v-if="order.staff">{{ order.staff.id }}</span>
+                <span v-else class="italic">null</span>
               </div>
               <div>
                 <span class="font-semibold">Name: </span>
-                <span>{{ order.staff.name }}</span>
+                <span v-if="order.staff">{{ order.staff.name }}</span>
+                <span v-else class="italic">null</span>
               </div>
             </div>
           </div>
@@ -335,11 +337,11 @@ export default {
     },
 
     isDeliveryOrder() {
-      return this.order.deliveryMethod.name === "Delivery";
+      return this.order.deliveryMethod.isDelivery;
     },
 
     isTableOrder() {
-      return this.order.deliveryMethod.name === 'Table';
+      return this.order.deliveryMethod.isTable;
     },
   
     canMarkAsCompleted() {

@@ -12,7 +12,7 @@ class DeliveryMethod extends Model
 
     public $timestamps = false;
     
-    protected $appends = array('isDisabled');
+    protected $appends = array('isDisabled', 'isDelivery', 'isTable', 'isLocal');
 
     public function orders() 
     {
@@ -22,5 +22,20 @@ class DeliveryMethod extends Model
     public function getIsDisabledAttribute()
     {
         return $this->deleted_at !== null ? true : false;
+    }
+
+    public function getIsDeliveryAttribute()
+    {
+        return $this->name === 'Livrarea la adresa';
+    }
+
+    public function getIsTableAttribute()
+    {
+        return $this->name === 'Comanda la masa';
+    }
+
+    public function getIsLocalAttribute()
+    {
+        return $this->name === 'Ridicare din local';
     }
 }

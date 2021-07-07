@@ -25,9 +25,9 @@ class ClientOrderStoreRequest extends FormRequest
     public function rules()
     {
         $validaitonArray = [
-            'orbservations' => ['sometimes', 'string'],
+            'observations' => ['sometimes'],
             'tableId' => ['required_if:deliveryMethod,3', 'numeric', 'exists:tables,id'],
-            'deliveryMethod' => ['required', 'numeric', 'exists:delivery_methods,id'],
+            'deliveryMethodId' => ['required', 'numeric', 'exists:delivery_methods,id'],
             'paymentMethod' => ['required', 'numeric', 'exists:payment_methods,id'],
         ];
 
@@ -46,5 +46,6 @@ class ClientOrderStoreRequest extends FormRequest
         }
 
         return $validaitonArray;
+        // return [];
     }
 }

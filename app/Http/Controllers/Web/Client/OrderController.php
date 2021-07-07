@@ -11,14 +11,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CartServiceInterface;
 use App\Http\Requests\ClientOrderStoreRequest;
+use App\Interfaces\OrderServiceInterface;
 
 class OrderController extends Controller
 {
     private $cartService;
+    private $orderService;
 
-    public function __construct(CartServiceInterface $cartService)
+    public function __construct(CartServiceInterface $cartService, OrderServiceInterface $orderService)
     {
         $this->cartService = $cartService;
+        $this->orderService = $orderService;
     }
     /**
      * Display a listing of the resource.
@@ -37,7 +40,7 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {        
+    {
         $paymentMethods = PaymentMethod::withTrashed()->get();
         $deliveryMethods = DeliveryMethod::withTrashed()->get();
 
@@ -48,19 +51,18 @@ class OrderController extends Controller
 
         $selectedDeliveryMethodId = "";
 
-        if($request->has('deliveryMethod')) {
+        if ($request->has('deliveryMethod')) {
             $selectedDeliveryMethod = DeliveryMethod::findOrFail($request->deliveryMethod);
             $orderTotalValue += $selectedDeliveryMethod->price;
             $selectedDeliveryMethodId = $selectedDeliveryMethod->id;
-        } 
-            
-        if(Auth::check()) {
+        }
+
+        if (Auth::check()) {
             $addresses = Address::where('user_id', Auth::id())->get();
             return view('store.checkout', compact('addresses', 'cart', 'deliveryMethods', 'paymentMethods', 'selectedDeliveryMethodId', 'orderTotalValue'));
         }
-        
-        return view('store.checkout', compact('cart', 'deliveryMethods', 'paymentMethods', 'selectedDeliveryMethodId', 'orderTotalValue'));
 
+        return view('store.checkout', compact('cart', 'deliveryMethods', 'paymentMethods', 'selectedDeliveryMethodId', 'orderTotalValue'));
     }
 
     /**
@@ -71,7 +73,53 @@ class OrderController extends Controller
      */
     public function store(ClientOrderStoreRequest $request)
     {
-        dd($request->all());
+
+        $data = $request->validated();
+
+        if ($data['deliveryMethodId'] == 1) {
+            if (array_key_exists('deliveryAddress', $data)) {
+                $data['address'] = Address::where('user_id', Auth::id())->where('id', $data['deliveryAddress'])->pluck('address')->first();
+            }
+
+            if (array_key_exists('newAddress', $data)) {
+                $data['address'] = $data['newAddress'];
+            }
+
+            if (Auth::check()) {
+                $data['client_id'] = Auth::id();
+                $data['phoneNumber'] = Auth::user()->phone_number;
+                $data['name'] = Auth::user()->first_name;
+                $data['email'] = Auth::user()->email;
+            }
+        }
+
+        if ($data['deliveryMethodId'] == 2) {
+            if (Auth::check()) {
+                $data['client_id'] = Auth::id();
+                $data['phoneNumber'] = Auth::user()->phone_number;
+                $data['name'] = Auth::user()->first_name;
+                $data['email'] = Auth::user()->email;
+            }
+        }
+
+        $cartItems=  $this->cartService->getCatItems(session('cartId'));
+
+        $data['items'] = [];
+
+        foreach($cartItems as $item) {
+            $orderItem = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'quantity' => $item->pivot->quantity,
+                'price' => $item->price
+            ];
+            array_push($data['items'], $orderItem);
+        }
+
+        $this->orderService->create($data, null);
+
+
+        // return redirect()->route('orders.index');
     }
 
     /**

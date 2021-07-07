@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
 
             $table->unsignedBigInteger('client_id')->nullable();
-            $table->unsignedBigInteger('staff_id');
+            $table->unsignedBigInteger('staff_id')->nullable();
 
             $table->string('name')->nullable();
             $table->string('phone_number')->nullable();

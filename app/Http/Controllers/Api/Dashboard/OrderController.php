@@ -36,8 +36,8 @@ class OrderController extends Controller
             $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all());
             return new OrderListCollection($orders);
         } catch ( \Exception $ex )  {
-            // return  response()->json(['message'=>'Something when wrong'], 500);
-            return  response()->json([ $ex->getMessage()], 500);
+            return  response()->json(['message'=>'Something when wrong'], 500);
+            // return  response()->json([ $ex->getMessage()], 500);
         }
     }
 
@@ -50,9 +50,8 @@ class OrderController extends Controller
     public function store(OrderStoreRequest $request)
     {
         try  {
-            $order = $this->orderService->create($request->validated(), $request->user()->id);
-            
-           
+            $this->orderService->create($request->validated(), $request->user()->id);
+        
             return response()->json(['message'=>'Order created succesfully'], 201 );
 
         } catch (\Exception $e ) {

@@ -72,7 +72,7 @@ class Order extends Model
 
     public function deliveryMethod()
     {
-        return $this->belongsTo(DeliveryMethod::class);
+        return $this->belongsTo(DeliveryMethod::class)->withTrashed();
     }
 
     public function status() 

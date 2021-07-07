@@ -141,8 +141,8 @@
                             <ul class="flex items-center justify-between gap-x-2 py-2 px-4 text-sm text-trueGray-700">
                                 @foreach ($deliveryMethods as $deliveryMethod)
                                     <li>
-                                        <input id="dm{{ $deliveryMethod->id }}" type="radio" name="deliveryMethod"
-                                            value="{{ $deliveryMethod->id }}" @if ($deliveryMethod->id == old('deliveryMethod')) checked @endif @if ($deliveryMethod->isDisabled) disabled
+                                        <input id="dm{{ $deliveryMethod->id }}" type="radio" name="deliveryMethodId"
+                                            value="{{ $deliveryMethod->id }}" @if ($deliveryMethod->id == old('deliveryMethodId')) checked @endif @if ($deliveryMethod->isDisabled) disabled
                                 @endif
                                 />
                                 <label for="dm{{ $deliveryMethod->id }}">
@@ -168,11 +168,11 @@
                             @foreach ($paymentMethods as $paymentMethod)
                                 <li>
                                     <input id="pm{{ $paymentMethod->id }}" type="radio" name="paymentMethod"
-                                        value="{{ $paymentMethod->id }}" @if ($paymentMethod->id == old('paymentMethod')) checked @endif @if ($paymentMethod->isDisabled) disabled
-                            @endif
-                            />
-                            <label for="pm1">{{ $paymentMethod->name }}</label>
-                            </li>
+                                        value="{{ $paymentMethod->id }}"
+                                         @if ($paymentMethod->id == old('paymentMethod')) checked @endif 
+                                        @if ($paymentMethod->isDisabled) disabled @endif />
+                                    <label for="pm1">{{ $paymentMethod->name }}</label>
+                                </li>
                             @endforeach
                         </ul>
                         @if ($errors->has('paymentMethod'))
@@ -214,14 +214,15 @@
                 </div>
 
                 @if ($errors->any())
-                    <div class="bg-red-600 text-white text-sm rounded p-2">
-                        <ul class="list-disc p-1">
+                    <div class="text-red-600 text-sm font-semibold">
+                        <ul class="list-disc">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
-                @endif
+                @endif  
+
             </form>
 
         </div>
@@ -236,7 +237,7 @@
         const authAddress =
         `
         <select id="deliveryAddressSelect" name="deliveryAddress"
-            class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600">
+            class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('deliveryAddress')) !border-red-600 @endif">
             <option value="" selected disabled>Alege adresa de livrare</option>
             @foreach ($addresses as $address)
                 <option value="{{ $address->id }}"
@@ -262,7 +263,7 @@
                 <div class="w-full">
                     <div class="w-full mt-4">
                         <input type="text" id="newAddress" name="newAddress" value="{{ old('newAddress') }}"
-                            class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('newAddress')) !border-red-600 @endif""
+                            class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('newAddress')) !border-red-600 @endif"
                             placeholder="Adresa">
                             @if ($errors->has('newAddress'))
                                 <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('newAddress') }}</div>
@@ -278,7 +279,7 @@
         `
         <div class="w-full">
             <input type="text" id="name" name="name" value="{{ old('name') }}"
-                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600" placeholder="Nume">
+                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
             @if ($errors->has('name'))
                 <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('name') }}</div>
             @endif
@@ -332,7 +333,7 @@
     
         `
     
-        if($('input[name=deliveryMethod]:checked').val() == 2) {
+        if($('input[name=deliveryMethodId]:checked').val() == 2) {
             $('#deliveryMethod').append(localDeliveryData);
         }
     @endguest
@@ -350,10 +351,10 @@
         </div>
     `
 
-    const deliveryMethod = $('input[name=deliveryMethod]');
+    const deliveryMethod = $('input[name=deliveryMethodId]');
     const orderTotalValue = $('#orderTotalValue');
 
-    if ($('input[name=deliveryMethod]:checked').val() == 1) {
+    if ($('input[name=deliveryMethodId]:checked').val() == 1) {
 
         $('#deliveryMethod').append(deliveryMethodAddress);
         
@@ -370,7 +371,7 @@
         }
     }
 
-    $('input[name=deliveryMethod]').click(function(event) {
+    $('input[name=deliveryMethodId]').click(function(event) {
 
         const deliveryMethodRadioValue = $(this).val();
         const deliveryMehtodPrice = $(`#dmp${deliveryMethodRadioValue}`);

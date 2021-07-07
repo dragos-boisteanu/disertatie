@@ -28,17 +28,13 @@
                 @endforeach
             </ul>
             <div class="w-full text-center mt-2 flex justify-between text-sm" v-if="hasItems">
-                <form method="GET" action="{{ route('order.create') }}">
-                    <button class="w-full rounded-sm text-white bg-green-600 px-4 py-1 active:shadow-inner hover:bg-green-500">
-                        Go to checkout
-                    </button>
-                </form>
-    
-                <form method="GET" action="{{ route('cart.index') }}">
-                    <button class="w-full rounded-sm text-white bg-sky-600 px-4 py-1 active:shadow-innerhover:bg-sky-500">
-                        View Cart
-                    </button>
-                </form>
+                <a href="{{ route('order.create') }}" class="w-full rounded-sm text-white bg-green-600 px-4 py-1 active:shadow-inner hover:bg-green-500">
+                    Go to checkout
+                </a>
+        
+                <a href="{{ route('cart.index') }}" class="w-full rounded-sm text-white bg-sky-600 px-4 py-1 active:shadow-innerhover:bg-sky-500">
+                    View Cart
+                </a>
             </div>
         @else
             <div class="w-full bg-blue-500 font-medium text-xs text-white rounded py-1 px-2">

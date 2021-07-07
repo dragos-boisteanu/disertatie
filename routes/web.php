@@ -65,7 +65,6 @@ Route::group(['namespace' => 'Web\Client'], function () {
 
 require __DIR__ . '/auth.php';
 
-
 Route::get('/order-email/{id}', function ($id) {
     $order = Order::findOrFail($id);
     return view('mails.order', compact('order'));
