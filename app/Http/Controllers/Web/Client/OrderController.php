@@ -10,6 +10,7 @@ use App\Models\DeliveryMethod;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CartServiceInterface;
+use App\Http\Requests\ClientOrderStoreRequest;
 
 class OrderController extends Controller
 {
@@ -68,7 +69,7 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClientOrderStoreRequest $request)
     {
         dd($request->all());
     }
