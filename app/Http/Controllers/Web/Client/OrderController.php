@@ -118,6 +118,8 @@ class OrderController extends Controller
 
         $this->orderService->create($data, null);
 
+        $cart = $this->cartService->getCart(Auth::id(), session()->getId());
+        $cart->items()->detach();
 
         // return redirect()->route('orders.index');
     }
