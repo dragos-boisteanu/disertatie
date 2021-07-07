@@ -122,10 +122,8 @@ class OrderService implements OrderServiceInterface
       }
 
       $order->save();
-
      
       $order = $this->addItems($order, $data['items']);
-      
      
       DB::commit();
 
