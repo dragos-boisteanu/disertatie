@@ -2,7 +2,7 @@
   <div class="w-full mb-2 flex items-center gap-x-2">
     <div class="w-full p-2 flex items-center bg-gray-50">
       <svg
-        class="text-coolGray-300 fill-current"
+        class="text-coolGray-red fill-current"
         xmlns="http://www.w3.org/2000/svg"
         height="24px"
         viewBox="0 0 24 24"
@@ -20,25 +20,50 @@
         placeholder="Search category by name"
         class="w-full outline-none px-2 rounded bg-gray-50"
         v-model="value"
-        @input="search"
+        @input="callSearch"
       />
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import _debounce from "lodash/debounce";
 
 export default {
+
+  props: {
+    reset: {
+      type:Boolean,
+      requried: true
+    }
+  },
+
   data() {
     return {
       value: "",
     };
   },
 
-  methods: {
-    search() {
-      this.$emit('search', this.value)
+  watch: {
+    reset(newValue) {
+      if(newValue) {
+        this.value = ""
+        this.$emit('reseted')
+      }
     }
+  },
+
+  methods: {
+    ...mapActions("Categories", ["searchCategories", "fetchCategories"]),
+
+    callSearch: _debounce(async function () {
+      if (this.value) {
+        await this.searchCategories(this.value);
+      } else {
+        await this.fetchCategories();
+      }
+    }, 350),
   },
 };
 </script>

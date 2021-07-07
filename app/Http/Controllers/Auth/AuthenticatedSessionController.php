@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
+use App\Events\UserLogged;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Interfaces\CartServiceInterface;
+use Brian2694\Toastr\Facades\Toastr;
 
 class AuthenticatedSessionController extends Controller
 {
+
+    private $cartService;
+
+    public function __construct(CartServiceInterface $cartService)
+    {
+        $this->cartService = $cartService;
+    }
+    
     /**
      * Display the login view.
      *
@@ -28,9 +39,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
+        $sesionIdBeforLogin = session()->getId();
+
         $request->authenticate();
+        
+        UserLogged::dispatch(Auth::id(), $sesionIdBeforLogin);
 
         $request->session()->regenerate();
+
+        Toastr::success('Authentificare reusita', 'Succes');
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

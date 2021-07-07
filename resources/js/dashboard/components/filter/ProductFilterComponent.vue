@@ -23,7 +23,7 @@
         type="text"
         class="
           w-full
-          border-b-2 border-lightBlue-600
+          border-b-2 border-sky-600
           p-2
           text-sm
           rounded-sm
@@ -41,7 +41,7 @@
         class="
           mt-3
           w-full
-          border-b-2 border-lightBlue-600
+          border-b-2 border-sky-600
           p-2
           text-sm
           rounded-sm
@@ -52,7 +52,7 @@
         @keyup="callFilter"
       />
 
-      <div class="mt-3 pb-2 border-b-2 border-lightBlue-600">
+      <div class="mt-3 pb-2 border-b-2 border-sky-600">
         <div class="mb-2 text-base font-semibold">Categories</div>
         <div class="flex items-center flex-wrap gap-2">
           <div
@@ -76,28 +76,25 @@
         </div>
       </div>
 
-      <div
-        class="mt-3 pb-2 border-b-2 border-lightBlue-600"
-        v-if="showSubCategories"
-      >
+      <div class="mt-3 pb-2 border-b-2 border-sky-600" v-if="showSubCategories">
         <div class="mb-2 text-base font-semibold">Sub categories</div>
         <div class="flex items-center flex-wrap gap-2">
           <div
             class="flex justify-between items-center"
-            v-for="category in subCategories"
-            :key="category.id"
+            v-for="subCategory in subCategories"
+            :key="subCategory.id"
           >
             <input
-              :id="category.name"
-              :name="category.name"
-              :value="category.id"
+              :id="subCategory.name"
+              :name="subCategory.name"
+              :value="subCategory.id"
               type="checkbox"
               v-model="localFilterData.subCategories"
               class="mr-1 outline-none"
               @change="callFilter"
             />
-            <label :for="category.name" class="text-sm capitalize">{{
-              category.name
+            <label :for="subCategory.name" class="text-sm capitalize">{{
+              subCategory.name
             }}</label>
           </div>
         </div>
@@ -141,6 +138,7 @@ import FilterComponent from "./FilterComponent";
 import { mapActions, mapGetters } from "vuex";
 import _debounce from "lodash/debounce";
 import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
 import _find from "lodash/find";
 
 export default {
@@ -161,13 +159,19 @@ export default {
     },
 
     subCategories() {
-      return this.getCategories.filter((category) => {
-        return (
-          this.localFilterData.categories.filter((categoryId) => {
-            return parseInt(category.parentId) === parseInt(categoryId);
-          }).length > 0
-        );
+      const subCategoires = [];
+
+      this.localFilterData.categories.forEach((categoryId) => {
+        this.getCategories.forEach((category) => {
+          category.subCategories.forEach((subCategory) => {
+            if (parseInt(categoryId) === parseInt(subCategory.parentId)) {
+              subCategoires.push(subCategory);
+            }
+          });
+        });
       });
+
+      return subCategoires;
     },
 
     showSubCategories() {
@@ -194,25 +198,29 @@ export default {
       try {
         const query = {};
 
+        const subCategories = [];
+
+        this.getCategories.forEach(category => {
+          subCategories.push(...category.subCategories);
+        })
+
         const selectedSubCategories = [];
-        this.getCategories.forEach((category) => {
+
+        subCategories.forEach((subCategory) => {
           this.localFilterData.subCategories.forEach((subCategoryId) => {
-            if (category.id == subCategoryId)
-              selectedSubCategories.push(category);
+            if (subCategory.id == subCategoryId)
+              selectedSubCategories.push(subCategory);
           });
         });
-
-        // console.log(selectedSubCategories);
 
         const data = [];
-
+        
         selectedSubCategories.forEach((subCategory) => {
           this.localFilterData.categories.forEach((categoryId) => {
-            if(subCategory.parentId == categoryId)
-              data.push(subCategory.id)
+            if (subCategory.parentId == categoryId) data.push(subCategory.id);
           });
         });
-      
+
         this.localFilterData.subCategories = data;
 
         Object.keys(this.localFilterData).forEach((key) => {

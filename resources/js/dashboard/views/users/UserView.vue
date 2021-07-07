@@ -7,10 +7,10 @@
           @click="refresh"
           class="
             p-1
-            bg-lightBlue-600
+            bg-sky-600
             rounded-sm
             active:shadow-inner
-            active:bg-lightBlue-500
+            active:bg-sky-500
           "
         >
           <svg
@@ -161,7 +161,7 @@
 import ViewContainer from "../ViewContainer";
 import Status from "../../components/StatusComponent";
 import Role from "../../components/users/RoleComponent";
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 import { downloadUser, disableUser, restoreUser } from "../../api/users.api";
 
@@ -209,13 +209,27 @@ export default {
     },
 
     async disable() {
-      const response = await disableUser(this.user.id);
-      this.user.deletedAt = response.data.deletedAt;
+      try {
+        const response = await disableUser(this.user.id);
+        this.user.deletedAt = response.data.deletedAt;
+         this.$toast.success(response.data.message);
+      } catch (error) {
+         if (error.response && error.response.data) {
+          this.$toast.error(error.response.data);
+        }
+      }
     },
 
     async restore() {
-      const response = await restoreUser(this.user.id);
-      this.user.deletedAt = response.data.deletedAt;
+      try {
+        const response = await restoreUser(this.user.id);
+        this.user.deletedAt = response.data.deletedAt;
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.$toast.error(error.response.data);
+        }
+      }
     },
 
     // async callDeleteUser() {
@@ -236,9 +250,9 @@ export default {
     },
 
     async refresh() {
-        const response = await downloadUser(this.user.id);
-        this.setUser(response.data.data);
-    }
+      const response = await downloadUser(this.user.id);
+      this.setUser(response.data.data);
+    },
   },
 
   components: {

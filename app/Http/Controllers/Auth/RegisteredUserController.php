@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -36,7 +37,7 @@ class RegisteredUserController extends Controller
 
         $request->validate([
             'first_name' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'phone_number' => 'required|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
@@ -45,11 +46,13 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'first_name' => $request->first_name,
             'phone_number' => $request->phone_number,
-            'name' => $request->name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => 1,
         ]);
+
+        Toastr::success('Inregistrarea reusita. Verifica email-ul pentru activare contului', 'Succes');
 
         // event(new Registered($user));
 

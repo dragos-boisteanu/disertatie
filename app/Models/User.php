@@ -51,7 +51,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public $with = ['role', 'addresses'];
+    public $with = ['role', 'addresses', 'cart'];
 
     // protected $appends = array('isAdmin', 'isLocationManager', 'isWaiter', 'isKitchenManager', 'isDelivery', 'isKitchen');
     
@@ -70,8 +70,15 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Discount');
     }
 
+    public function cart() 
+    {
+        return $this->hasOne(Cart::class);
+    }
+
     public function scopeFilter(Builder $builder, array $data)
     {
         return (new UserFilter($data))->filter($builder);
     }
+
+  
 }

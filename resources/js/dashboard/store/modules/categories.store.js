@@ -1,6 +1,8 @@
-import { searchCategory, downloadCategories, postCategory, patchCategory, deleteCategory } from '../../api/categories.api';
+import { searchCategories, downloadCategories, postCategory, patchCategory, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
+import _isEqual from 'lodash/isEqual'
+import _find from 'lodash/find'
 
 const initialState = () => ({
     categories: []
@@ -9,7 +11,7 @@ const initialState = () => ({
 const state = initialState();
 
 const getters = {
-    getCategories: (state) => state.categories 
+    getCategories: (state) => state.categories
 }
 
 const actions = {
@@ -17,68 +19,90 @@ const actions = {
         commit('RESET');
     },
 
-    async fetchCategories({commit}) {
+    async fetchCategories({ commit }) {
         try {
             const response = await downloadCategories();
             commit('SET_CATEGORIES', response.data.data);
-        } catch ( error ) {
+        } catch (error) {
             throw error;
         }
     },
 
-    async postCategory({commit}, payload) {
+    async postCategory({ commit }, payload) {
         try {
             const response = await postCategory(payload);
             payload.id = response.data.id;
-            if(payload.parentId) {
-                payload.vat = response.data.vat
+            payload.color = response.data.color;
+            if (payload.parentId) {
                 payload.parentName = response.data.parentName
+                payload.vat = response.data.vat
+            } else {
+                payload.parentName = null;
+                payload.parentId = null;
             }
-            
+
+            payload.deletedAt = null;
             payload.productsCount = 0;
+            payload.subCategories = [];
+            
             commit('ADD_CATEGORY', payload);
-        } catch ( error ) {
+
+            return response.data.message;
+        } catch (error) {
             throw error
         }
     },
 
-    async patchCategory({commit}, payload) {
+    async patchCategory({ commit }, payload) {
         try {
             const category = payload.category;
             const response = await patchCategory(category);
-            if(response.data.parentName) {
+            if (response.data.parentName) {
                 payload.category.parentName = response.data.parentName;
             }
             commit('PATCH_CATEGORY', payload);
-            return category
-        } catch ( error){
+            return { category, message: response.data.message }
+        } catch (error) {
             throw error;
         }
     },
 
-    async deleteCategory({commit}, payload) {
+    async disableCategory({ commit }, payload) {
+        const response = await disableCategory(payload.category.id);
+        payload.category.deletedAt = response.data.deletedAt;
+        commit('SET_CATEGORY_DELETED_AT', payload);
+        return { deletedAt: response.data.deletedAt, message: response.data.message };
+    },
+
+    async restoreCategory({ commit }, payload) {
+        const response = await restoreCategory(payload.category.id);
+        payload.category.deletedAt = null
+        commit('SET_CATEGORY_DELETED_AT', payload);
+        return response.data.message;
+    },
+
+    async deleteCategory({ commit }, payload) {
         try {
-            await deleteCategory(payload);
+            const response = await deleteCategory(payload.id);
             commit('DELETE_CATEGORY', payload);
-        } catch ( error ) {
+            return response.data.message;
+        } catch (error) {
             throw error
         }
     },
 
-    async searchCategory({commit}, categoryName) {
-        // const regex = new RegExp(`${categoryName}+`, 'i')
-        // return _filter(state.categories, (category) => regex.test(category.name))
+    async searchCategories({ commit }, value) {
         try {
-            const response = await searchCategory(categoryName);
-            if(response.status === 200) {
-                commit('SET_CATEGORIES', response.data.categories);
-            }
-        } catch ( error ) {
+            const response = await searchCategories(value);
+
+            commit('SET_CATEGORIES', response.data.data);
+
+        } catch (error) {
             throw error;
         }
     },
 
-    updateDiscount({commit}, payload) {
+    updateDiscount({ commit }, payload) {
         commit('UPDATE_DISCOUNT', payload);
     }
 }
@@ -96,29 +120,99 @@ const mutations = {
     },
 
     ADD_CATEGORY(state, payload) {
-        state.categories.push(payload);
+        if (payload.parentId !== null && payload.parentId !== undefined) {
+            const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.parentId)]);
+            console.log(parentCategoryIndex)
+            state.categories[parentCategoryIndex].subCategories.push(payload);
+        } else {
+            state.categories.push(payload);
+        }
+
     },
 
     PATCH_CATEGORY(state, payload) {
-        const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
         const vm = payload.vm;
 
-        console.log(payload.category)
-        Object.keys(payload.category).forEach(key => {
-            vm.$set(state.categories[categoryIndex], key, payload.category[key]);
-        });
+        if (payload.category.parentId !== null && payload.category.parentId !== undefined) {
+            if (payload.category.originalParentId !== null && payload.category.originalParentId !== undefined) {
+                const originalParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.originalParentId)]);
+                const subCategoryIndex = _findIndex(state.categories[originalParentCategoryIndex].subCategories, ['id', parseInt(payload.category.id)]);
+
+                Object.keys(payload.category).forEach(key => {
+                    vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], key, payload.category[key]);
+                });
+
+                if (payload.category.discountId === null || payload.category.discountId === undefined) {
+                    vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], 'discountId', null);
+                }
+
+                // if the subCategory has a new parent
+                // remove the subCategory from the actula parent
+                // add the subCategory to the new parent
+                if (payload.category.originalParentId && !_isEqual(payload.category.originalParentId, payload.parentId)) {
+                    const subCategory = _find(state.categories[originalParentCategoryIndex].subCategories, ['id', payload.category.id]);
+                    const newParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
+
+                    delete subCategory.originalParentId;
+
+                    state.categories[originalParentCategoryIndex].subCategories.splice(subCategoryIndex, 1);
+
+                    state.categories[newParentCategoryIndex].subCategories.push(subCategory);
+                }
+            } else {
+                const newParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
+                const category = _find(state.categories, ['id', payload.category.id]);
+                const categoryIndex = _findIndex(state.categorie, ['id', parseInt(category.id)]);
+
+                category.parentId = payload.category.parentId;
+
+                state.categories.splice(categoryIndex, 1);
+
+                state.categories[newParentCategoryIndex].subCategories.push(category);
+            }
+        } else {
+            const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
+
+            Object.keys(payload.category).forEach(key => {
+                vm.$set(state.categories[categoryIndex], key, payload.category[key]);
+            });
+
+            if (payload.category.discountId === null || payload.category.discountId === undefined) {
+                vm.$set(state.categories[categoryIndex], 'discountId', null);
+            }
+        }
     },
 
     DELETE_CATEGORY(state, payload) {
-        const categoryIndex = _findIndex(state.categories, ['id', payload]);
-        state.categories.splice(categoryIndex, 1);
+        if (payload.parentId) {
+            const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.parentId)]);
+            const categoryIndex = _findIndex(state.categories[parentCategoryIndex].subCategories, ['id', parseInt(payload.id)]);
+            state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
+        } else {
+            const categoryIndex = _findIndex(state.categories, ['id', payload]);
+            state.categories.splice(categoryIndex, 1);
+        }
     },
 
-    UPDATE_DISCOUNT(state, payload) {
+    SET_CATEGORY_DELETED_AT(state, payload) {
         const vm = payload.vm;
-        const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
 
-        vm.$set(state.categories[categoryIndex], 'discountId', payload.category.discountId);
+        if (payload.category.parentId) {
+            const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
+            const categoryIndex = _findIndex(state.categories[parentCategoryIndex].subCategories, ['id', parseInt(payload.category.id)]);
+
+            console.log(payload.category.deletedA);
+
+            vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'deletedAt', payload.category.deletedAt);
+        } else {
+            const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
+            vm.$set(state.categories[categoryIndex], 'deletedAt', payload.category.deletedAt);
+        }
+
+    },
+
+    SET_FOUND_CATEGORIES(state, foundCategories) {
+        state.categories = foundCategories
     }
 
 }

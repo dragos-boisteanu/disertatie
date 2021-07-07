@@ -67,7 +67,7 @@ class OrderService implements OrderServiceInterface
     return $orders;
   }
 
-  public function create(array $data, int $userId): Order
+  public function create(array $data, int $userId = null): Order
   {
     $order = new Order();
 
@@ -76,14 +76,25 @@ class OrderService implements OrderServiceInterface
       $order = new Order;
 
       $order->delivery_method_id = $data['deliveryMethodId'];
-
+      
       $order->status_id = 2; // recieved
       $order->staff_id = $userId;
-      $order->phone_number = $data['phoneNumber'];
 
-      if (array_key_exists('name', $data) && $data['deliveryMethodId'] ===1) {
+      if(array_key_exists('paymentMethod', $data)) {
+        $order->payment_method_id = $data['paymentMethod'];
+      }
+
+      if(array_key_exists('phoneNumber', $data)) {
+        $order->phone_number = $data['phoneNumber'];
+      }
+  
+      if ($data['deliveryMethodId'] == 1) {
         $order->address = $data['address'];
-      }     
+      }    
+      
+      if ($data['deliveryMethodId'] == 2) {
+        $order->address = 'local';
+      } 
 
       if (array_key_exists('tableId', $data) && $data['deliveryMethodId'] == 3) {
         $order->table_id = $data['tableId'];
@@ -107,14 +118,13 @@ class OrderService implements OrderServiceInterface
 
       if (array_key_exists('email', $data)) {
         $order->email = $data['email'];
+        //send email
       }
 
       $order->save();
-
-      // add each item into order products table
-      // link each item to the order
+     
       $order = $this->addItems($order, $data['items']);
-
+     
       DB::commit();
 
       if(isset($order->email)) {
@@ -126,6 +136,7 @@ class OrderService implements OrderServiceInterface
       return $order;
     } catch (\Exception $e) {
       DB::rollBack();
+      dd($e);
       // throw new \Exception("Error Creating Order");
       throw new \Exception($e->getMessage());
     };

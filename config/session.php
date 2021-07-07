@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'encrypt' => false,
+    'encrypt' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -155,8 +155,8 @@ return [
     |
     */
 
-    // 'domain' => env('SESSION_DOMAIN', null),
-    'domain' => env('.disertatie.test'),
+    'domain' => env('SESSION_DOMAIN', null),
+    // 'domain' => env('.disertatie.test'),
 
     /*
     |--------------------------------------------------------------------------

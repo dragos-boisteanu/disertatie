@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColorColumnToCategoriesTable extends Migration
+class AddUniqueSelectedConstraintToAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColorColumnToCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('color')->default('#292e51');
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->unique(['user_id', 'is_selected']);
         });
     }
 
@@ -25,7 +25,7 @@ class AddColorColumnToCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
+        Schema::table('addresses', function (Blueprint $table) {
             //
         });
     }

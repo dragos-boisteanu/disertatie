@@ -56,7 +56,7 @@
                         result = 'text-white bg-green-600 hover:bg-green-800';
                         break;
                     case 'secondary': 
-                        result = 'text-white bg-lightBlue-600 hover:bg-lightBlue-800';
+                        result = 'text-white bg-sky-600 hover:bg-sky-800';
                         break;
                     case 'danger':
                         result = 'text-white bg-red-600 hover:bg-red-800'

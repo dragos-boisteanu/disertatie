@@ -57,7 +57,7 @@
                 />
                 <svg
                   v-show="checkingBarcode"
-                  class="animate-spin mr-3 h-5 w-5 text-lightBlue-600"
+                  class="animate-spin mr-3 h-5 w-5 text-sky-600"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -459,7 +459,6 @@ export default {
 
   methods: {
     ...mapActions("Products", ["addProduct", "getProductByBarcode"]),
-    ...mapActions("Notification", ["openNotification"]),
 
     async submit() {
       this.$v.$touch();
@@ -486,7 +485,7 @@ export default {
             delete payload.subCategoryId;
           }
 
-          await storeProduct(payload);
+          const response = await storeProduct(payload);
 
           this.product = {
             barcode: "",
@@ -506,11 +505,7 @@ export default {
 
           this.clearImage = true;
 
-          this.openNotification({
-            type: "ok",
-            show: true,
-            message: "Product added",
-          });
+          this.$toast.success(response.data.message);
 
           this.$v.$reset();
         } catch (error) {
@@ -519,6 +514,7 @@ export default {
           this.waiting = false;
 
           if (error.response && error.response.data.errors) {
+            this.$toast.error(response.data.message);
             this.$v.$touch();
           }
         }
@@ -526,11 +522,16 @@ export default {
     },
 
     getSubCategories() {
+      this.subCategories = [];
       this.product.subCategoryId = "";
+
       if (this.product.categoryId) {
-        this.subCategories = this.getCategories.filter(
-          (category) => category.parentId == this.product.categoryId
-        );
+        this.getCategories.forEach(category => {
+          if(category.id == this.product.categoryId) {
+            this.subCategories.push(...category.subCategories);
+          }
+        })
+
       } else {
         this.subCategories = [];
       }

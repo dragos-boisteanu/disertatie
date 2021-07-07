@@ -20,7 +20,7 @@
                     Filter
                 </button>
                 <button 
-                    class="w-full py-1 mt-2  text-base text-white ripple-bg-lightBlue-600 rounded-sm active:shadow-inner md:w-20 md:mt-0" 
+                    class="w-full py-1 mt-2  text-base text-white ripple-bg-sky-600 rounded-sm active:shadow-inner md:w-20 md:mt-0" 
                     @click="refreshUsersList">
                     Refresh
                 </button>

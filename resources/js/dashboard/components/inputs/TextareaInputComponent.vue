@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col items-end">
         <textarea
-            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+            class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-sky-500"
             type="text"
             :id="id"
             :value="value" 

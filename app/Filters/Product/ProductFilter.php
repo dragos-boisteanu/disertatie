@@ -19,9 +19,9 @@ class ProductFilter extends AbstractFilter
       'name' => NameFilter::class,
       'barcode' => BarcodeFilter::class,
       'status' => StatusFilter::class,
-      'categories' => CategoryFilter::class,
       'priceStart' => PriceStartFilter::class,
       'priceEnd' => PriceEndFilter::class,
+      'categories' => CategoryFilter::class,
       'subCategories' => SubCategoryFilter::class,
    ];
 }

@@ -1,9 +1,9 @@
 <template>
     <div class="flex items-center">
-        <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="category" :style="{background: category.color}">
+        <div class="py-1 px-2 text-xs ml-2 text-gray-800 bg-white rounded-sm border border-gray-800" v-if="category">
             {{category.name}}
         </div>
-        <div class="py-1 px-2 text-xs ml-2 text-white rounded-sm" v-if="subCategory" :style="{background: subCategory.color}">
+        <div class="py-1 px-2 text-xs ml-2 text-gray-200 bg-gray-800 rounded-sm " v-if="subCategory">
             {{subCategory.name}}
         </div>
         
@@ -18,11 +18,11 @@
     export default {
         props: {
             categoryId: {
-                type: Number,
+                type: [Number, String],
                 required: true
             },
             subCategoryId: {
-                type: Number,
+                type: [Number, String],
                 required: false,
                 default: null,
             },
@@ -37,7 +37,7 @@
 
             subCategory() {
                 if(this.subCategoryId) {
-                   return _find(this.getCategories, ['id', this.subCategoryId]);
+                   return _find(this.category.subCategories, ['id', this.subCategoryId]);
                 }
                
             }

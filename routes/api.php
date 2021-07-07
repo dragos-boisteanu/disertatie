@@ -34,6 +34,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 
     Route::group(['prefix'=>'categories'], function() {
         Route::get('/{catagoryName}', 'CategoryController@search');
+        Route::delete('/{id}/disable', 'CategoryController@disable');
+        Route::post('/{id}/restore', 'CategoryController@restore');
     });
 
     Route::group(['prefix'=>'users'], function() {
@@ -89,6 +91,11 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 
     Route::apiResource('images', 'FileController')->only('store', 'destroy');
        
+});
+
+
+Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {  
+    Route::apiResource('cart', 'CartController')->only('store', 'destroy');
 });
 
 

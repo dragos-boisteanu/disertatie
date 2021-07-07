@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="flex-1">
     <ConfirmActionModal
       v-if="confirmModalState"
       title="Confirm action"
@@ -26,12 +26,12 @@
           :required="true"
         >
           <template v-slot:errors>
-            <p v-if="!$v.category.name.required">The vat field is required</p>
+            <p v-if="!$v.category.name.required">The name field is required</p>
             <p v-if="!$v.category.name.maxLength">
-              The vat field must be no longer than 50 characters
+              The name field must be no longer than 50 characters
             </p>
             <p v-if="!$v.category.name.alphaSpaces">
-              The vat field must contain only letters or spaces
+              The name field must contain only letters or spaces
             </p>
           </template>
           <Input
@@ -47,61 +47,33 @@
           ></Input>
         </InputGroup>
 
-        <div class="w-full flex items-center gap-x-4">
-          <InputGroup
-            v-if="isParent"
+        <InputGroup
+          id="vat"
+          label="VAT"
+          :hasError="$v.category.vat.$error"
+          :required="isParent"
+        >
+          <template v-slot:errors>
+            <p v-if="!$v.category.vat.required">The vat field is required</p>
+            <p v-if="!$v.category.vat.integer">
+              The vat field must be an integer
+            </p>
+            <p v-if="!$v.category.vat.minValue">
+              The vat field must be equal or greater than 0
+            </p>
+          </template>
+          <Input
+            v-model="$v.category.vat.$model"
             id="vat"
-            label="VAT"
-            :hasError="$v.category.vat.$error"
-            :required="true"
-          >
-            <template v-slot:errors>
-              <p v-if="!$v.category.vat.required">The vat field is required</p>
-              <p v-if="!$v.category.vat.integer">
-                The vat field must be an integer
-              </p>
-              <p v-if="!$v.category.vat.minValue">
-                The vat field must be equal or greater than 0
-              </p>
-            </template>
-            <Input
-              v-model="$v.category.vat.$model"
-              id="vat"
-              name="vat"
-              :eclass="{
-                'border-red-600': $v.category.vat.$error,
-                'border-green-600':
-                  $v.category.vat.$dirty && !$v.category.vat.$error,
-              }"
-              :disabled="waiting"
-            ></Input>
-          </InputGroup>
-          <InputGroup
-            id="color"
-            label="Color"
-            :hasError="$v.category.color.$error"
-            :required="true"
-          >
-            <template slot="errors">
-              <p v-if="!$v.category.color.required">
-                The color field is required
-              </p>
-            </template>
-            <input
-              id="color"
-              name="color"
-              type="color"
-              v-model="$v.category.color.$model"
-              class="p-1 rounded border order-gray-300 outline-none"
-              :class="{
-                'border-red-600': $v.category.color.$error,
-                'border-green-600':
-                  $v.category.color.$dirty && !$v.category.color.$error,
-              }"
-              :disabled="waiting"
-            />
-          </InputGroup>
-        </div>
+            name="vat"
+            :eclass="{
+              'border-red-600': $v.category.vat.$error,
+              'border-green-600':
+                $v.category.vat.$dirty && !$v.category.vat.$error,
+            }"
+            :disabled="waiting"
+          ></Input>
+        </InputGroup>
 
         <InputGroup id="parentCategory" label="Parent category">
           <Select
@@ -109,7 +81,6 @@
             name="Parent category"
             type="color"
             v-model="category.parentId"
-            class="p-1 rounded border order-gray-300 outline-none"
             :disabled="waiting"
           >
             <option value="" disabled selected>Select parent category</option>
@@ -150,6 +121,22 @@
               :disabled="waiting"
             >
               Update
+            </Button>
+            <Button
+              v-if="canDisable"
+              type="danger"
+              :disabled="waiting"
+              @click.native.prevent="callDisableCategory"
+            >
+              Disable
+            </Button>
+            <Button
+              v-if="canRestore"
+              type="secondary"
+              :disabled="waiting"
+              @click.native.prevent="callRestoreCategory"
+            >
+              Restore
             </Button>
             <Button
               v-if="canDelete"
@@ -200,16 +187,26 @@ import {
 
 export default {
   props: {
-    categoryId: {
-      type: [Number, String],
+    selectedCategory: {
+      type: Object,
       required: false,
-      default: "",
+      default: null,
     },
   },
 
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
+
+    parentCategories() {
+      return this.getCategories.filter((category) => {
+        if (this.selectedCategory) {
+          return category.id === this.selectedCategory.id ? false : true;
+        } else {
+          return true;
+        }
+      });
+    },
 
     availableDiscounts() {
       return this.getDiscounts.filter((discount) => discount.deletedAt === "");
@@ -219,10 +216,12 @@ export default {
       return this.category.productsCount == 0;
     },
 
-    parentCategories() {
-      return this.getCategories.filter(
-        (category) => category.parentId === null
-      );
+    canDisable() {
+      return this.category.deletedAt === null;
+    },
+
+    canRestore() {
+      return this.category.deletedAt !== null;
     },
 
     isParent() {
@@ -230,7 +229,13 @@ export default {
     },
 
     isCategorySelected() {
-      return this.categoryId ? true : false;
+      return this.selectedCategory !== null || this.categoryId !== undefined
+        ? true
+        : false;
+    },
+
+    canHaveParent() {
+      //check sometimg to make sure that it can't be marked as a subcategory
     },
   },
 
@@ -241,7 +246,6 @@ export default {
       category: {
         name: "",
         vat: "",
-        color: "",
         discountId: "",
         parentId: null,
         parentName: "",
@@ -263,18 +267,23 @@ export default {
         integer,
         minValue: minValue(0),
       },
-      color: {
-        required,
-      },
     },
   },
 
   watch: {
-    categoryId: function (value) {
+    selectedCategory: function (value) {
       if (value) {
-        this.category = JSON.parse(
-          JSON.stringify(_find(this.getCategories, ["id", value]))
-        );
+        this.category = JSON.parse(JSON.stringify(this.selectedCategory));
+      } else {
+        this.$v.$reset();
+
+        this.category = {
+          name: "",
+          vat: "",
+          color: "",
+          discountId: "",
+          parentId: null,
+        };
       }
     },
   },
@@ -284,35 +293,41 @@ export default {
       "postCategory",
       "patchCategory",
       "deleteCategory",
-      "updateDiscount",
+      "disableCategory",
+      "restoreCategory",
     ]),
-    ...mapActions("Notification", ["openNotification"]),
 
     async create() {
-      this.$v.$touch();
+      try {
+        this.$v.$touch();
 
-      if (!this.$v.$invalid) {
-        if (this.category.vat === "") {
-          delete this.category.vat;
+        if (!this.$v.$invalid) {
+          const payload = this.category;
+
+          if (payload.vat === "") {
+            delete payload.vat;
+          }
+
+          if (payload.parentId === null) {
+            delete payload.parentId;
+          }
+
+          if (payload.discountId === "") {
+            delete payload.discountId;
+          }
+
+          const response = await this.postCategory(payload);
+
+          this.$toast.success(response);
+
+          this.resetForm();
         }
+      } catch (error) {
+        console.log(error);
 
-        if (this.category.parentId === null) {
-          delete this.category.parentId;
+        if (error.response) {
+          this.$toast.error(error.response.data.error);
         }
-
-        if (this.category.discountId === "") {
-          delete this.category.discountId;
-        }
-
-        await this.postCategory(this.category);
-
-        this.openNotification({
-          type: "ok",
-          show: true,
-          message: "Category created",
-        });
-
-        this.resetForm();
       }
     },
 
@@ -324,13 +339,15 @@ export default {
           this.waiting = true;
 
           const originalCategory = JSON.parse(
-            JSON.stringify(_find(this.getCategories, ["id", this.categoryId]))
+            JSON.stringify(this.selectedCategory)
           );
 
           const payload = {
             vm: this,
             category: {
               id: originalCategory.id,
+              parentId: this.category.parentId,
+              originalParentId: originalCategory.parentId,
             },
           };
 
@@ -347,53 +364,110 @@ export default {
             delete payload.category.discountId;
           }
 
-          if (this.category.parentId === "") {
+          if (this.category.parentId === null) {
             delete payload.category.parentId;
           }
 
           if (counter > 0) {
+            this.$Progress.start();
+
             await this.patchCategory(payload);
 
-            payload.category.discountId = this.category.discountId;
-            this.updateDiscount(payload);
+            if (
+              payload.category.parentId !== null &&
+              payload.category.parentId !== undefined
+            ) {
+              if (
+                !_isEqual(
+                  payload.category.originalParentId,
+                  payload.category.parentId
+                )
+              ) {
+                let parentCategory = _find(this.parentCategories, [
+                  "id",
+                  parseInt(payload.category.parentId),
+                ]);
+
+                parentCategory.selectedSubcateogryId = payload.category.id;
+                this.$emit("selectNewParentCategory", parentCategory);
+              }
+            }
 
             this.waiting = false;
+            this.$Progress.finish();
 
-            this.openNotification({
-              type: "ok",
-              show: true,
-              message: "Category updated",
-            });
+            this.$toast.success("Category updated");
           } else {
             this.waiting = false;
-            this.openNotification({
-              type: "info",
-              show: true,
-              message: "Nothing to update",
-            });
+            this.$toast.info("Nothing to update");
           }
         }
       } catch (error) {
+        this.$Progress.fail();
         this.waiting = false;
         console.log(error);
+
+        if (error.response) {
+          this.$toast.error(error.response.data.error);
+        }
       }
     },
 
     async remove() {
       try {
         this.toggleConfirmModal();
+        this.$Progress.start();
         this.waiting = true;
-        await this.deleteCategory(this.categoryId);
+
+        const response = await this.deleteCategory(this.category);
+
         this.waiting = false;
+
+        this.$Progress.finish();
+
         this.resetForm();
 
-        this.openNotification({
-          type: "ok",
-          show: true,
-          message: "Category removed",
-        });
+        this.$toast.success(response);
       } catch (error) {
+        this.$Progress.fail();
         this.waiting = false;
+        console.log(error);
+      }
+    },
+
+    async callDisableCategory() {
+      try {
+        this.$Progress.start();
+        const payload = {
+          category: this.category,
+          vm: this,
+        };
+        
+        const response = await this.disableCategory(payload);
+
+        this.category.deletedAt = response.deletedAt;
+
+        this.$toast.success(response.message);
+        this.$Progress.finish();
+      } catch (error) {
+        this.$Progress.fail();
+        console.log(error);
+      }
+    },
+
+    async callRestoreCategory() {
+      try {
+        this.$Progress.start();
+        const payload = {
+          category: this.category,
+          vm: this,
+        };
+        const response = await this.restoreCategory(payload);
+        this.category.deletedAt = null;
+        this.$toast.success(response);
+        this.$Progress.finish();
+      } catch (error) {
+        this.$Progress.finish();
         console.log(error);
       }
     },

@@ -60,8 +60,11 @@
       </div>
     </div>
     <div class="w-full flex justify-between items-center pt-1">
-      <div>
+      <div v-if="order.staff">
         {{ order.staff.name }}
+      </div>
+      <div class="italic">
+        null
       </div>
       <div class="text-sm">
         {{ order.createdAt | formatDate }}

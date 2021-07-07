@@ -1,5 +1,6 @@
 <template>
-  <table class="px-2 w-full rounded-sm max-h-80 md:max-h-96">
+<!-- max-h-80 md:max-h-96 -->
+  <table class="px-2 w-full rounded-sm max-h-[400px]">
     <thead class="w-full bg-gray-700 text-orange-500">
       <tr class="text-left text-sm">
         <th class="p-2 text-center">Index</th>

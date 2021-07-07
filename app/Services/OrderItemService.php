@@ -120,9 +120,10 @@ class OrderItemService implements OrderItemServiceInterface
 
       DB::transaction(function () use ($data, $order) {
         $product = $order->products()->where('product_id', $data['itemId'])->first();
-        if ($product->stock->quantity >= $data['quantity']) {
 
-          if($data['quantity'] > 0) {
+        if ($product->quantity >= $data['quantity']) {
+
+          if ($data['quantity'] > 0) {
             $newQuantity = $product->pivot->quantity + abs($data['quantity']);
             $this->productStockService->removeFromStock($product, abs($data['quantity']));
           } else {
@@ -152,7 +153,8 @@ class OrderItemService implements OrderItemServiceInterface
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch (\Exception $ex) {
-      throw new \Exception('Something went wrong');
+      throw new \Exception($ex);
+      // throw new \Exception('Something went wrong');
     }
   }
 }

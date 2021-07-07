@@ -15,10 +15,12 @@
       <span style="font-weight: bold;">Created at:</span>
       <span>{{ $order->created_at }}</span>
     </li>
-    <li style="padding-bottom: 0.5rem;">
-      <span style="font-weight: bold;">Staff:</span>
-      <span>{{ $order->staff->first_name }} {{ $order->staff->last_name }}</span>
-    </li>
+    @isset($order->staff)
+      <li style="padding-bottom: 0.5rem;">
+        <span style="font-weight: bold;">Staff:</span>
+        <span>{{ $order->staff->first_name }} {{ $order->staff->last_name }}</span>
+      </li>
+    @endisset
     <li>
       <span style="font-weight: bold;">Name:</span>
       @if(isset($order->client))

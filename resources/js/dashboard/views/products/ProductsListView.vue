@@ -31,7 +31,7 @@
             py-1
             mt-2
             text-base text-white
-            ripple-bg-lightBlue-600
+            ripple-bg-sky-600
             rounded-sm
             active:shadow-inner
             md:w-20
@@ -136,7 +136,10 @@
           </div>
           <div class="mt-2">
             <div class="flex justify-between items-center">
-              <Category :category-id="product.categoryId"></Category>
+              <Category
+                :category-id="product.categoryId"
+                :sub-category-id="product.subCategoryId"
+              ></Category>
               <Stock :quantity="product.quantity"></Stock>
             </div>
           </div>
