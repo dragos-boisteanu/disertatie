@@ -40,7 +40,7 @@ class ClientOrderStoreRequest extends FormRequest
             $validaitonArray += [
                 'phoneNumber' => ['required_if:deliveryMethod,1,2'],
                 'name' => ['required_if:deliveryMethod,1,2', 'string', 'max:100'],
-                'email' => ['required_if:deliveryMethod,1', 'email'],
+                'email' => ['required_if:deliveryMethod,1,2', 'email'],
                 'address' => ['required_if:deliveryMethod,1', 'string', 'max:255'],
             ];
         }

@@ -309,6 +309,14 @@
                     <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('name') }}</div>
                 @endif
             </div>
+
+            <div class="w-full mt-4">
+                <input type="text" id="email" name="email" value="{{ old('email') }}"
+                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
+                @if ($errors->has('email'))
+                    <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('email') }}</div>
+                @endif
+            </div>
     
             <div class="w-full mt-4">
                 <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
