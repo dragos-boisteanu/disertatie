@@ -142,16 +142,16 @@
                                 @foreach ($deliveryMethods as $deliveryMethod)
                                     <li>
                                         <input id="dm{{ $deliveryMethod->id }}" type="radio" name="deliveryMethod"
-                                            value="{{ $deliveryMethod->id }}" 
-                                            @if ($deliveryMethod->id === $selectedDeliveryMethodId) checked 
-                                            @endif @if ($deliveryMethod->isDisabled) disabled @endif
-                                        />
-                                        <label for="dm{{ $deliveryMethod->id }}">
-                                            {{ $deliveryMethod->name }}</label>
-                                        <div >
-                                            (<span id="dmp{{$deliveryMethod->id}}">{{ $deliveryMethod->price }}</span> Ron)
-                                        </div>
-                                    </li>
+                                            value="{{ $deliveryMethod->id }}" @if ($deliveryMethod->id === $selectedDeliveryMethodId) checked @endif @if ($deliveryMethod->isDisabled) disabled
+                                @endif
+                                />
+                                <label for="dm{{ $deliveryMethod->id }}">
+                                    {{ $deliveryMethod->name }}</label>
+                                <div>
+                                    (<span id="dmp{{ $deliveryMethod->id }}">{{ $deliveryMethod->price }}</span>
+                                    Ron)
+                                </div>
+                                </li>
                                 @endforeach
                             </ul>
                         </div>
@@ -232,6 +232,11 @@
         const guestAddress =
         `
         <div class="w-full">
+            <input type="text" id="name" name="name" value="{{ old('name') }}"
+                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600" placeholder="Nume">
+        </div>
+    
+        <div class="w-full mt-4">
             <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
                 class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600" placeholder="Numar telefon">
         </div>
@@ -246,6 +251,26 @@
                 class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600" placeholder="Adresa">
         </div>
         `
+    
+        const localDeliveryData =
+        `
+        <div id="localDeliveryData" class="p-4 border-t border-gray-800">
+            <div class="w-full">
+                <input type="text" id="name" name="name" value="{{ old('name') }}"
+                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600" placeholder="Nume">
+            </div>
+        
+            <div class="w-full mt-4">
+                <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
+                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600" placeholder="Numar telefon">
+            </div>
+        </div>
+        
+        `
+
+        if($('input[name=deliveryMethod]:checked').val() == 2) {
+            $('#deliveryMethod').append(localDeliveryData);
+        }
     @endguest
 
 
@@ -278,7 +303,8 @@
 
         orderTotalValue.html((parseFloat(deliveryMehtodPrice.html()) + 24.23).toFixed(2))
 
-        if (deliveryMethodRadioValue== 1) {
+        if (deliveryMethodRadioValue == 1) {
+            $('#localDeliveryData').remove();
             if ($('#deliveryMethod').find('#deliveryMethodAddress').length === 0) {
                 $('#deliveryMethod').append(deliveryMethodAddress);
 
@@ -287,17 +313,17 @@
                     const deliveryAddressSelect = $('#deliveryAddressSelect');
 
                     const newAddressField =
-                        `
-                    <div id="newAddressField">
-                        <div class="w-full">
-                            <div class="w-full mt-4">
-                                <input type="text" id="address" name="newAddress" value="{{ old('address') }}"
-                                    class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600"
-                                    placeholder="Adresa">
+                    `
+                        <div id="newAddressField">
+                            <div class="w-full">
+                                <div class="w-full mt-4">
+                                    <input type="text" id="address" name="newAddress" value="{{ old('address') }}"
+                                        class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600"
+                                        placeholder="Adresa">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
 
                     if (deliveryAddressSelect.val() === 'new') {
                         deliveryMethodAddress.append(newAddressField);
@@ -312,9 +338,14 @@
                         }
                     })
                 }
-
+            }
+        } else if ( deliveryMethodRadioValue == 2)  {
+            $('#deliveryMethodAddress').remove();
+            if ($('#deliveryMethod').find('#localDeliveryData').length === 0) {
+                $('#deliveryMethod').append(localDeliveryData);
             }
         } else {
+            $('#localDeliveryData').remove();
             $('#deliveryMethodAddress').remove();
         }
     });
