@@ -212,17 +212,6 @@
                         Trimite comanda
                     </button>
                 </div>
-
-                @if ($errors->any())
-                    <div class="text-red-600 text-sm font-semibold">
-                        <ul class="list-disc">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif  
-
             </form>
 
         </div>

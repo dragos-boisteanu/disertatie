@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
 use App\Models\DeliveryMethod;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CartServiceInterface;
-use App\Http\Requests\ClientOrderStoreRequest;
 use App\Interfaces\OrderServiceInterface;
+use App\Http\Requests\ClientOrderStoreRequest;
+use Exception;
 
 class OrderController extends Controller
 {
@@ -74,54 +76,63 @@ class OrderController extends Controller
     public function store(ClientOrderStoreRequest $request)
     {
 
-        $data = $request->validated();
+        try {
 
-        if ($data['deliveryMethodId'] == 1) {
-            if (array_key_exists('deliveryAddress', $data)) {
-                $data['address'] = Address::where('user_id', Auth::id())->where('id', $data['deliveryAddress'])->pluck('address')->first();
+            $data = $request->validated();
+
+            if ($data['deliveryMethodId'] == 1) {
+                if (array_key_exists('deliveryAddress', $data)) {
+                    $data['address'] = Address::where('user_id', Auth::id())->where('id', $data['deliveryAddress'])->pluck('address')->first();
+                }
+
+                if (array_key_exists('newAddress', $data)) {
+                    $data['address'] = $data['newAddress'];
+                }
+
+                if (Auth::check()) {
+                    $data['client_id'] = Auth::id();
+                    $data['phoneNumber'] = Auth::user()->phone_number;
+                    $data['name'] = Auth::user()->first_name;
+                    $data['email'] = Auth::user()->email;
+                }
             }
 
-            if (array_key_exists('newAddress', $data)) {
-                $data['address'] = $data['newAddress'];
+            if ($data['deliveryMethodId'] == 2) {
+                if (Auth::check()) {
+                    $data['client_id'] = Auth::id();
+                    $data['phoneNumber'] = Auth::user()->phone_number;
+                    $data['name'] = Auth::user()->first_name;
+                    $data['email'] = Auth::user()->email;
+                }
             }
 
-            if (Auth::check()) {
-                $data['client_id'] = Auth::id();
-                $data['phoneNumber'] = Auth::user()->phone_number;
-                $data['name'] = Auth::user()->first_name;
-                $data['email'] = Auth::user()->email;
+            $cartItems =  $this->cartService->getCatItems(session('cartId'));
+
+            $data['items'] = [];
+
+            foreach ($cartItems as $item) {
+                $orderItem = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'quantity' => $item->pivot->quantity,
+                    'price' => $item->price
+                ];
+                array_push($data['items'], $orderItem);
             }
+
+            $this->orderService->create($data, null);
+
+            $cart = $this->cartService->getCart(Auth::id(), session()->getId());
+            $cart->items()->detach();
+
+            Toastr::success('Comanda a fost plasata cu succes !', 'Succes');
+
+            return redirect()->route('menu.index');
+        } catch (\Exception $ex) {
+            Toastr::error('A aparut o problema in plasarea comenzi, incearca dimnou mai tarziu !', 'Eroare');
+
+            return redirect()->back()->withInput();
         }
-
-        if ($data['deliveryMethodId'] == 2) {
-            if (Auth::check()) {
-                $data['client_id'] = Auth::id();
-                $data['phoneNumber'] = Auth::user()->phone_number;
-                $data['name'] = Auth::user()->first_name;
-                $data['email'] = Auth::user()->email;
-            }
-        }
-
-        $cartItems=  $this->cartService->getCatItems(session('cartId'));
-
-        $data['items'] = [];
-
-        foreach($cartItems as $item) {
-            $orderItem = [
-                'id' => $item->id,
-                'name' => $item->name,
-                'quantity' => $item->pivot->quantity,
-                'price' => $item->price
-            ];
-            array_push($data['items'], $orderItem);
-        }
-
-        $this->orderService->create($data, null);
-
-        $cart = $this->cartService->getCart(Auth::id(), session()->getId());
-        $cart->items()->detach();
-
-        // return redirect()->route('orders.index');
     }
 
     /**
