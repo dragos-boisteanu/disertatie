@@ -32,7 +32,7 @@
             py-1
             mt-2
             text-base text-white
-            ripple-bg-lightBlue-600
+            ripple-bg-sky-600
             rounded-sm
             active:shadow-inner
             md:w-20
@@ -70,7 +70,7 @@
             py-1
             mt-2
             text-base text-white
-            ripple-bg-lightBlue-600
+            ripple-bg-sky-600
             rounded-sm
             active:shadow-inner
             md:w-60

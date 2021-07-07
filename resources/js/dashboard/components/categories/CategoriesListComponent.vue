@@ -1,136 +1,95 @@
 <template>
-  <div
-    class="
-      overflow-x-auto
-      flex flex-col
-      bg-white
-      shadow
-      rounded-sm
-      p-5
-      md:flex-0
-    "
-  >
-    <table class="px-2 w-full table-auto rounded-sm max-h-80 md:max-h-96">
-      <thead class="w-full bg-gray-700 text-orange-500">
-        <tr class="text-left text-sm">
-          <th class="p-2 text-center">Index</th>
-          <th class="p-2">Color</th>
-          <th class="p-2">Name</th>
-          <th class="p-2">Vat</th>
-          <th class="p-2">Discount</th>
-          <th class="p-2">Products Count</th>
-          <th class="p-2">Parent</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody class="max-h-36 overflow-y-auto">
-        <tr
-          v-for="(category, index) in parentCategories"
-          :key="category.id"
-          @click="selectCategory(category.id)"
-          class="
-            duration-500
-            ease-in-out
-            text-sm
-            rounded-md
-            cursor-pointer
-            border-white
-            transform
-            hover:scale-105
-            hover:bg-gray-50
-            hover:shadow-md
-          "
-        >
-          <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
-          <td class="p-2">
-            <div
-              class="rounded w-4 h-4"
-              :style="{ background: category.color }"
-            ></div>
-          </td>
-          <td class="p-2">{{ category.name }}</td>
-          <td class="p-2">{{ category.vat }} %</td>
-          <td class="p-2">
-            <span v-if="category.discountId">{{
-              getDiscountForCategory(category.discountId)
-            }}</span>
-          </td>
-          <td class="p-2 max-w-4">{{ category.productsCount }}</td>
-        </tr>
-        <tr
-          v-for="(category, index) in subCategories"
-          :key="category.id"
-          @click="selectCategory(category.id)"
-          class="
-            duration-500
-            ease-in-out
-            text-sm
-            rounded-md
-            cursor-pointer
-            border-white
-            transform
-            hover:scale-105
-            hover:bg-gray-50
-            hover:shadow-md
-          "
-        >
-          <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
-          <td class="p-2">
-            <div
-              class="rounded w-4 h-4"
-              :style="{ background: category.color }"
-            ></div>
-          </td>
-          <td class="p-2">{{ category.name }}</td>
-          <td class="p-2">{{ category.vat }} %</td>
-          <td class="p-2">
-            <span v-if="category.discountId">{{
-              getDiscountForCategory(category.discountId)
-            }}</span>
-          </td>
-          <td class="p-2 max-w-4">{{ category.productsCount }}</td>
-          <td class="p-2 max-w-4">{{ category.parentName }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="overflow-x-auto bg-white shadow rounded-sm p-5">
+    <div class="min-w-[450px]">
+      <div class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-5">
+        <div class="p-2 self-center justify-self-center">Index</div>
+        <div class="p-2 self-center justify-self-center">Name</div>
+        <div class="p-2 self-center justify-self-center">Vat</div>
+        <div class="p-2 self-center justify-self-center">Discount</div>
+        <div class="p-2 self-center justify-self-center">Products Count</div>
+      </div>
+      <ul class="overflow-y-auto max-h-[400px] w-full px-2 rounded-sm">
+        <CategoryComponent
+          v-for="(category, index) in getCategories" :key="category.id"
+          :category="category"
+          :selected-parent-category-id="selectedParentCategoryId"
+          :selected-id="selectedId"
+          :index="index"
+          @selected="selectCategory"
+        ></CategoryComponent>       
+      </ul>
+    </div>
   </div>
 </template>
+
 
 <script>
 import { mapGetters } from "vuex";
 
 import _find from "lodash/find";
 
+import CategoryComponent from './CategoryComponent.vue';
+
 export default {
   props: {
-    categories: {
-      type: Array,
-      required: true,
+    selectedCategory: {
+      type: Object,
+      required: false,
+      default: null,
     },
   },
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
+    ...mapGetters("Categories", ["getCategories"]),
 
-    parentCategories() {
-      return this.categories.filter(category => category.parentId === null)
+    selectedId() {
+      if (this.selectedCategory !== null && this.selectedCategory !== undefined ) {
+        return this.selectedCategory.id;
+      }
+      return -1;
     },
+  },
 
-    subCategories() {
-      return this.categories.filter(category => category.parentId !== null)
-    }
+  data() {
+    return {
+      selectedParentCategoryId: "",
+      selectedSubCategories: [],
+    };
+  },
 
+  watch: {
+    selectedCategory(newValue) {
+      if (newValue !== null && newValue !== undefined) {
+        if (newValue.parentId === null || newValue.parentId === undefined) {
+          this.selectedParentCategoryId = newValue.id;
+          this.selectedSubCategories = newValue.subCategories;
+
+          if (newValue.selectedSubcateogryId) {
+            const selectedSubCategory = _find(newValue.subCategories, [
+              "id",
+              parseInt(newValue.selectedSubcateogryId),
+            ]);
+
+            this.selectCategory(selectedSubCategory);
+
+            delete newValue.selectedSubcateogryId;
+          }
+        }
+      } else {
+        this.selectedParentCategoryId = "";
+      }
+    },
   },
 
   methods: {
-    selectCategory(categoryId) {
-      this.$emit("selected", categoryId);
-    },
-
-    getDiscountForCategory(id) {
-      const discount = _find(this.getDiscounts, ["id", parseInt(id)]);
-      return `${discount.code} ${discount.id}%`;
+    selectCategory(category) {
+      this.$emit("selected", category);
     },
   },
+
+  components: {
+    CategoryComponent
+  }
 };
 </script>

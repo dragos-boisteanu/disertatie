@@ -20,14 +20,15 @@
         placeholder="Search category by name"
         class="w-full outline-none px-2 rounded bg-gray-50"
         v-model="value"
-        @input="search"
+        @input="callSearch"
       />
     </div>
   </div>
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex';
+import  _debounce  from 'lodash/debounce';
 export default {
   data() {
     return {
@@ -35,10 +36,20 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters('Ingredients', ['getIngredients']),
+  },
+
   methods: {    
-    search() {
-      this.$emit('search', this.value)
-    }
+    ...mapActions('Ingredients', ['searchIngredients', 'downloadIngredients']),
+
+    callSearch: _debounce(function() {
+      if (this.value) {
+       this.searchIngredients(this.value);
+      } else {
+        this.downloadIngredients()
+      }
+    }, 250),
   },
 };
 </script>

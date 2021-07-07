@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Events\AccountCreated;
 use App\Events\EmailUpdated;
+use App\Events\UserLogged;
+use App\Listeners\InitUserCart;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\SendPasswordResetLink;
@@ -20,6 +22,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        UserLogged::class => [
+            InitUserCart::class,
         ],
 
         AccountCreated::class => [

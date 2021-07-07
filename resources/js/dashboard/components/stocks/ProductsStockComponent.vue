@@ -84,7 +84,7 @@
                     <ul>
                         <li v-for="ingredient in getProductStockDetails.ingredients" :key="ingredient.id">
                             <span>{{ ingredient.name}}</span> <span>{{ingredient.quantity}}</span> <span>{{ingredient.unit.name}}</span> 
-                            <router-link :to="{name: 'IngredientsStock', params: {id: ingredient.id}}"  class="ml-5 text-sm text-lightBlue-600 hover:underline hover:text-lightBlue-400">View</router-link>
+                            <router-link :to="{name: 'IngredientsStock', params: {id: ingredient.id}}"  class="ml-5 text-sm text-sky-600 hover:underline hover:text-sky-400">View</router-link>
                         </li>
                     </ul>
                 </div>

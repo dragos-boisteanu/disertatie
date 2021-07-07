@@ -7,10 +7,10 @@
           @click="refresh"
           class="
             p-1
-            bg-lightBlue-600
+            bg-sky-600
             rounded-sm
             active:shadow-inner
-            active:bg-lightBlue-500
+            active:bg-sky-500
           "
         >
           <svg
@@ -29,19 +29,21 @@
       </div>
     </template>
 
-    <div
-      class="w-full flex flex-col gap-4 lg:flex-row lg:flex xl:w-3/4 2xl:w-2/3"
-    >
-      <div class="flex flex-col">
-        <Search @search="search"></Search>
+    <div class="w-full lg:flex lg:gap-x-4 lg:w-4/5 2xl:w-1/2">
+      <div class="mb-4 flex flex-col lg:flex-1">
+        <Search
+          :reset="resetSearchValue"
+          @reseted="searchValueReseted"
+        ></Search>
         <CategoriesList
-          :categories="categories"
+          :selected-category="selectedCategory"
           @selected="selectCategory"
         ></CategoriesList>
       </div>
 
       <CategoryForm
-        :category-id="categoryId"
+        :selected-category="selectedCategory"
+        @selectNewParentCategory="selectCategory"
         @resetCategory="deselectCatgory"
       ></CategoryForm>
     </div>
@@ -65,73 +67,60 @@ export default {
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
 
-    showResetSearch() {
-      return this.searchInput.length > 0;
+    selectedCategoryId() {
+      return this.selectedCategory !== null &&
+        this.selectedCategory !== undefined
+        ? this.selectedCategory.id
+        : null;
     },
-  },
-
-  mounted() {
-    this.categories = this.getCategories;
   },
 
   data() {
     return {
-      categories: [],
-      categoryId: "",
+      selectedCategory: null,
+      resetSearchValue: false,
     };
-  },
-
-  watch: {
-    getCategories: {
-      handler() {
-        this.categories = this.getCategories
-      },
-      deep: true
-    }
   },
 
   methods: {
     ...mapActions("Categories", ["fetchCategories"]),
     ...mapActions("Notification", ["openNotification"]),
 
-    selectCategory(id) {
-      const category = _find(this.categories, ["id", id]);
-      this.categoryId = category.id;
+    selectCategory(category) {
+      if (
+        _isEqual(category, this.selectedCategory) &&
+        (category.parentId === null || category.parentId === undefined)
+      ) {
+        this.selectedCategory = null;
+      } else {
+        this.selectedCategory = category;
+      }
     },
 
     deselectCatgory() {
-      this.categoryId = "";
+      this.selectedCategory = null;
     },
 
     async refresh() {
       try {
         await this.fetchCategories();
+        this.deselectCatgory();
+        this.resetSearchValue = true;
       } catch (error) {
         console.log(error);
       }
     },
 
-    search(value) {
-      if(value) {
-        this.categories = this.getCategories.filter(category => {
-          const regexRule = `${value.toLowerCase().trim()}*`
-          const regex = new RegExp(regexRule,"g");
-          if(category.name.toLowerCase().trim().match(regex)){
-            return true;
-          }
-        })
-      } else {
-        this.categories = this.getCategories;
-      }
-    }
-    
+    searchValueReseted() {
+      this.resetSearchValue = false;
+    },
   },
 
   components: {
     ViewContainer,
     CategoriesList,
     CategoryForm,
-    Search
+    Search,
   },
 };
 </script>

@@ -48,7 +48,7 @@
                 switch (this.status) {
                     case 0: return 'bg-red-600';
                     case 1: return 'bg-orange-400';
-                    case 2: return 'bg-lightBlue-600';
+                    case 2: return 'bg-sky-600';
                     case 3: return 'bg-green-600'
                 }
             }

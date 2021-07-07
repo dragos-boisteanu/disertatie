@@ -5,7 +5,7 @@
         :value="value"
         :class="eclass"
         :disabled="disabled" 
-        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500"
+        class="w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-sky-500"
         @change="$emit('input', $event.target.value)"
     >
         <slot></slot>

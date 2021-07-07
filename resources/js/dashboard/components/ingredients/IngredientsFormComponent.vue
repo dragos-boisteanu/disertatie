@@ -74,7 +74,7 @@
       </div>
       <div>
         <div>
-           <Button
+          <Button
             type="secondary"
             :disabled="waiting"
             @click.native.prevent="resetForm"
@@ -103,7 +103,7 @@
           </Button>
           <Button
             v-if="canDelete"
-             type="danger"
+            type="danger"
             :disabled="waiting"
             @click.native.prevent="toggleConfirmModal"
             class="mt-2"
@@ -149,8 +149,8 @@ export default {
     },
 
     canDelete() {
-      return this.ingredient.productsCount === 0 
-    }
+      return this.ingredient.productsCount === 0;
+    },
   },
 
   data() {
@@ -203,13 +203,18 @@ export default {
     ...mapActions("Notification", ["openNotification"]),
 
     async submit() {
-      this.$v.$touch();
+      try {
+        this.$v.$touch();
 
-      if (!this.$v.$invalid) {
-        this.waiting = true;
-        await this.postIngredient(this.ingredient);
-        this.waiting = false;
-        this.resetForm();
+        if (!this.$v.$invalid) {
+          this.waiting = true;
+          await this.postIngredient(this.ingredient);
+          this.waiting = false;
+          this.resetForm();
+        }
+      } catch (error) {
+          this.waiting = false;
+
       }
     },
 
@@ -294,7 +299,7 @@ export default {
     Button,
     InputGroup,
 
-    ConfirmActionModalComponent
+    ConfirmActionModalComponent,
   },
 };
 </script>

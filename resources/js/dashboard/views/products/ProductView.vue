@@ -7,10 +7,10 @@
           @click="refresh"
           class="
             p-1
-            bg-lightBlue-600
+            bg-sky-600
             rounded-sm
             active:shadow-inner
-            active:bg-lightBlue-500
+            active:bg-sky-500
           "
         >
           <svg
@@ -103,7 +103,7 @@
           </button>
           <div v-if="canDisable">
             <button
-              v-if="product.deltedAt"
+              v-if="canRestore"
               @click="restore"
               class="
                 bg-white
@@ -148,15 +148,15 @@
             params: { barcode: this.product.barcode },
           }"
           class="
-            bg-lightBlue-700
+            bg-sky-700
             rounded-sm
             text-xs
             py-1
             px-4
             text-white
             mt-2
-            hover:bg-lightBlue-600
-            active:bg-lightBlue-400
+            hover:bg-sky-600
+            active:bg-sky-400
             active:shadow-inner
             active:outline-none
           "
@@ -250,6 +250,10 @@ export default {
       }
     },
 
+    canRestore() {
+      return this.product.deletedAt !== "" && this.product.deletedAt !== null
+    },
+
     hasDiscount() {
       return this.product.discount ? true : false;
     },
@@ -281,12 +285,12 @@ export default {
 
     async disable() {
       const response = await disableProduct(this.product.id);
-      this.product.deletedAt = response.data.deletedAt;
+      this.product.deletedAt = response.data.deleted_at;
     },
 
     async restore() {
       const response = await restoreProduct(this.product.id);
-      this.product.deletedAt = response.data.deletedAt;
+      this.product.deletedAt = response.data.deleted_at;
     },
 
     async refresh() {

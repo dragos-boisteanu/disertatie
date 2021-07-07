@@ -17,7 +17,10 @@ class DeliveryMethod extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'price' => $this->price
+            'price' => $this->price,
+            'isDelivery' => $this->isDelivery,
+            'isLocal' => $this->isLocal,
+            'isTable' => $this->isTable
         ];
     }
 }

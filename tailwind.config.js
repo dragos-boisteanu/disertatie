@@ -2,12 +2,20 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors')
 
 module.exports = {
+    mode: 'jit',
+    // purge: ['./resources/**/*.{js,vue,blade.php}'],
     purge: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
-        './resources/js/**/*.vue'
+        './resources/**/*.blade.php',
+        './resources/**/*.js',
+        './resources/**/*.vue',
     ],
+    // purge: [
+    //     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+    //     './storage/framework/views/*.php',
+    //     './resources/views/**/*.blade.php',
+    //     './resources/js/**/*.vue'
+    // ],
 
     theme: {
         ripple: theme => ({
@@ -25,17 +33,20 @@ module.exports = {
                 xxs: ['10.4px', ' 1.063rem'],
             },        
         },
-        colors,
+        colors: {
+            ...colors,
+            transparent: 'transparent',
+        },
     },
 
     variants: {
-        extend: {
-            opacity: ['disabled'],
-            pointerEvents: ['hover', 'disabled'],
-            boxShadow: ['active'],
-            backgroundColor: ['active', 'disabled', 'even'],
+        // extend: {
+        //     opacity: ['disabled'],
+        //     pointerEvents: ['hover', 'disabled'],
+        //     boxShadow: ['active'],
+        //     backgroundColor: ['active', 'disabled', 'even'],
 
-        },
+        // },
     },
     plugins: [
         require('tailwindcss-ripple')()

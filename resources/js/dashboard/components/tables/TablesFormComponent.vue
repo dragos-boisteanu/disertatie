@@ -56,14 +56,12 @@
             <Button
               type="danger"
               @click.native="toggleConfirmModal"
-              :waiting="waiting"
               :disabled="waiting"
             >
               Delete
             </Button>
             <Button
               @click.native="callRestoreTable"
-              :waiting="waiting"
               :disabled="waiting"
             >
               Restore
@@ -73,7 +71,6 @@
           <Button
             v-else
             @click.native="callDisableTable"
-            :waiting="waiting"
             :disabled="waiting"
           >
             Disable
@@ -81,7 +78,6 @@
         </div>
 
         <Button
-          :waiting="waiting"
           v-if="!isTableSelected"
           type="primary"
           @click.native="createNewTable"

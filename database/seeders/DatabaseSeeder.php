@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             OrderStatusSeeder::class,
             UserSeeder::class,
             TableStatusSeeder::class,
-            TableSeeder::class
+            TableSeeder::class,
+            PaymentMethodSeeder::class
         ]);
 
         // \App\Models\User::factory(10)->create();

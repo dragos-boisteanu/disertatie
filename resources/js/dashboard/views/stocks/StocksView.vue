@@ -54,6 +54,6 @@ import { mapActions } from 'vuex';
 <style scoped>
     .router-link-active,
     .router-link-exact-active {
-        @apply border-b-2 border-lightBlue-600 ;
+        @apply border-b-2 border-sky-600 ;
     }
 </style>

@@ -16,9 +16,10 @@
         <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
           <!-- IMAGE UPLOAD -->
           <ImageUploadComponent
-            :disabled="waiting || waitForFileUpload"
             :clear="clearImage"
-            @waitForFileToUpload="toggleWaitForFileUpload"
+            @fileAdded="setWaiting"
+            @processFileAborted="setWaiting"
+            @fileProcessed="setWaiting"
             @setImagePath="setImagePath"
           ></ImageUploadComponent>
 
@@ -53,11 +54,10 @@
                     'border-green-600':
                       $v.product.barcode.$dirty && !$v.product.barcode.$error,
                   }"
-                  :disabled="waiting"
                 />
                 <svg
                   v-show="checkingBarcode"
-                  class="animate-spin mr-3 h-5 w-5 text-lightBlue-600"
+                  class="animate-spin mr-3 h-5 w-5 text-sky-600"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -105,7 +105,6 @@
                   'border-green-600':
                     $v.product.name.$dirty && !$v.product.name.$error,
                 }"
-                :disabled="waiting"
               />
             </InputGroup>
           </div>
@@ -137,7 +136,6 @@
                   $v.product.description.$dirty &&
                   !$v.product.description.$error,
               }"
-              :disabled="waiting"
             />
           </InputGroup>
 
@@ -171,7 +169,6 @@
                   'border-green-600':
                     $v.product.basePrice.$dirty && !$v.product.basePrice.$error,
                 }"
-                :disabled="waiting"
               />
             </InputGroup>
             <InputGroup
@@ -195,7 +192,6 @@
                     $v.product.categoryId.$dirty &&
                     !$v.product.categoryId.$error,
                 }"
-                :disabled="waiting"
                 @change.native="getSubCategories"
               >
                 <option value="" disabled>Select category</option>
@@ -229,7 +225,7 @@
                     $v.product.subCategoryId.$dirty &&
                     !$v.product.subCategoryId.$error,
                 }"
-                :disabled="waiting || hasNoSubCategories"
+                :disabled="hasNoSubCategories"
               >
                 <option value="" disabled selected>Select sub category</option>
                 <option
@@ -273,7 +269,6 @@
                   'border-green-600':
                     $v.product.weight.$dirty && !$v.product.weight.$error,
                 }"
-                :disabled="waiting"
               />
             </InputGroup>
             <InputGroup
@@ -296,7 +291,6 @@
                   'border-green-600':
                     $v.product.unitId.$dirty && !$v.product.unitId.$error,
                 }"
-                :disabled="waiting"
               >
                 <option value="" disabled>Select unit</option>
                 <option
@@ -329,8 +323,7 @@
       <div class="mt-5 flex md:justify-start">
         <Button
           type="primary"
-          :disabled="waiting || waitForFileUpload"
-          :waiting="waiting"
+          :disabled="waiting"
           @click.native.prevent="submit"
         >
           Submit
@@ -405,7 +398,6 @@ export default {
     return {
       checkingBarcode: false,
       waiting: false,
-      waitForFileUpload: false,
 
       ingredientInput: "",
       foundIngredients: [],
@@ -467,7 +459,6 @@ export default {
 
   methods: {
     ...mapActions("Products", ["addProduct", "getProductByBarcode"]),
-    ...mapActions("Notification", ["openNotification"]),
 
     async submit() {
       this.$v.$touch();
@@ -494,7 +485,7 @@ export default {
             delete payload.subCategoryId;
           }
 
-          await storeProduct(payload);
+          const response = await storeProduct(payload);
 
           this.product = {
             barcode: "",
@@ -514,11 +505,7 @@ export default {
 
           this.clearImage = true;
 
-          this.openNotification({
-            type: "ok",
-            show: true,
-            message: "Product added",
-          });
+          this.$toast.success(response.data.message);
 
           this.$v.$reset();
         } catch (error) {
@@ -527,6 +514,7 @@ export default {
           this.waiting = false;
 
           if (error.response && error.response.data.errors) {
+            this.$toast.error(response.data.message);
             this.$v.$touch();
           }
         }
@@ -534,19 +522,23 @@ export default {
     },
 
     getSubCategories() {
+      this.subCategories = [];
       this.product.subCategoryId = "";
+
       if (this.product.categoryId) {
-        this.subCategories = this.getCategories.filter(
-          (category) => category.parentId == this.product.categoryId
-        );
+        this.getCategories.forEach(category => {
+          if(category.id == this.product.categoryId) {
+            this.subCategories.push(...category.subCategories);
+          }
+        })
+
       } else {
         this.subCategories = [];
       }
     },
 
-    toggleWaitForFileUpload(waitForFileToUpload) {
-      console.log(waitForFileToUpload);
-      this.waitForFileUpload = waitForFileToUpload;
+    setWaiting(value) {
+      this.waiting = value;
     },
 
     setImagePath(imagePath) {

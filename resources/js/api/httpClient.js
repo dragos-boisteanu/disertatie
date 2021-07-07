@@ -2,8 +2,8 @@ import axios from 'axios';
 import Vue from 'vue';
 
 const httpClient = axios.create({
-  baseURL: 'http://disertatie.test/api',
-  // baseURL: 'http://disertatie-app.herokuapp.com/api',
+  // baseURL: 'http://disertatie.test/api',
+  baseURL: 'http://disertatie-app.herokuapp.com/api',
   timeout: 60000, // indicates, 1000ms ie. 1 second
   withCredentials: true,
   headers: {
@@ -34,7 +34,6 @@ const errorInterceptor = (error) => {
 
     case 401: // authentication error, logout the user
       Vue.prototype.$Progress.fail();
-      // notify.warn( 'Please login again', 'Session Expired');
       // localStorage.removeItem('token');
       // router.push('/auth');
       break;

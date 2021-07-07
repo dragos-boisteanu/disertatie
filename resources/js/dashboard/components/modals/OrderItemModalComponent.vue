@@ -166,7 +166,7 @@
         class="
           flex
           items-center
-          bg-lightBlue-700
+          bg-sky-700
           rounded-sm
           text-xs
           py-1
@@ -174,8 +174,8 @@
           mr-2
           text-white
           mt-2
-          hover:bg-lightBlue-600
-          active:bg-lightBlue-500
+          hover:bg-sky-600
+          active:bg-sky-500
           active:shadow-inner
           disabled:bg-gray-500
           disabled:pointer-events-none
@@ -287,7 +287,7 @@ export default {
           minValue: minValue(1),
           maxValue: () => {
             if(this.edit){
-              return false;
+              return 9999999999;
             } else {
               return this.product.quantity
             }

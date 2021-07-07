@@ -1,5 +1,6 @@
 import { downloadIngredients, postIngredient, patchIngredient, deleteIngredient } from '../../api/ingreditents.api.js'
 import _findIndex from 'lodash/findIndex';
+import _orderBy from 'lodash/orderBy';
 
 const initialState = () => ({
     ingredients: [],
@@ -13,47 +14,59 @@ const getters = {
 
 const actions = {
 
-    reset({commit}) {
+    reset({ commit }) {
         commit('RESET');
     },
 
-    async downloadIngredients({commit}) {
+    async downloadIngredients({ commit }) {
         try {
             const response = await downloadIngredients();
 
             commit('SET_INGREDIENTS', response.data);
-        } catch ( error ) {
+        } catch (error) {
             throw error;
         }
     },
 
-    async postIngredient({commit}, payload) {
+    async postIngredient({ commit }, payload) {
         try {
             const response = await postIngredient(payload);
             payload.id = response.data;
             payload.stockQuantity = 0;
             commit('ADD_INGREDIENT', payload);
-        } catch ( error ) {
+        } catch (error) {
             throw error;
         }
     },
 
-    async patchIngredient({commit}, payload) {
+    async patchIngredient({ commit }, payload) {
         try {
             await patchIngredient(payload.ingredient);
             commit('PATCH_INGREDIENT', payload);
-        } catch ( error ) {
+        } catch (error) {
             throw error;
         }
     },
 
-    async deleteIngredient({commit}, payload) {
+    async deleteIngredient({ commit }, payload) {
         try {
             await deleteIngredient(payload);
             commit('REMOVE_INGREDIENT', payload);
-        } catch( error ) {
+        } catch (error) {
             throw error;
         }
+    },
+
+    searchIngredients({ commit, state }, value) {
+        const foundIngredients = state.ingredients.filter((ingredient) => {
+            const regexRule = `${value.toLowerCase().trim()}*`;
+            const regex = new RegExp(regexRule, "g");
+            if (ingredient.name.toLowerCase().trim().match(regex)) {
+                return true;
+            }
+        });
+
+        commit('SET_FOUND_INGREDIENTS', foundIngredients);
     }
 }
 
@@ -70,7 +83,8 @@ const mutations = {
     },
 
     ADD_INGREDIENT(state, payload) {
-        state.ingredients.push(payload)
+        state.ingredients.push(payload);
+        _.orderBy(state.ingredients, ['name'], ['asc']);
     },
 
     PATCH_INGREDIENT(state, payload) {
@@ -78,7 +92,7 @@ const mutations = {
         const vm = payload.vm;
 
         Object.keys(payload.ingredient).forEach(key => {
-            vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key] );
+            vm.$set(state.ingredients[ingredientIndex], key, payload.ingredient[key]);
         });
     },
 
@@ -86,8 +100,12 @@ const mutations = {
         const ingredientIndex = _findIndex(state.ingredients, ['id', payload]);
 
         state.ingredients.splice(ingredientIndex, 1);
+    },
+
+    SET_FOUND_INGREDIENTS(state, foundIngredients) {
+        state.ingredients = foundIngredients;
     }
-    
+
 }
 
 export default {

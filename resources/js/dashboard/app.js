@@ -19,6 +19,17 @@ import 'vue2-datepicker/index.css';
 
 import Vuelidate from 'vuelidate'
 
+import Toast from "vue-toastification";
+// Import the CSS or use your own!
+import "vue-toastification/dist/index.css";
+
+const toastOptions = {
+    // You can set your default options here
+};
+
+
+Vue.use(Toast, toastOptions);
+
 Vue.use(Vuelidate)
 Vue.use(VueBreadcrumbs, Breadcrumbs);
 Vue.use(VueMq, {

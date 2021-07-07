@@ -82,10 +82,10 @@
         <div class="flex-1 flex gap-x-4">
           <div
             class="
+              w-full
               flex flex-col
               gap-y-4
               sm:flex-row
-              items-center
               justify-between
               mt-3
               gap-x-4
@@ -161,7 +161,6 @@
         <Button
           v-else
           type="primary"
-          :waiting="waiting"
           :disabled="waiting"
           @click.native.prevent="submit"
         >
@@ -170,7 +169,6 @@
         <span v-if="isDiscountSelected">
           <Button
             v-if="canRestore"
-            :waiting="waiting"
             :disabled="waiting"
             @click.native.prevent="callRestoreDiscount"
           >
@@ -178,7 +176,6 @@
           </Button>
           <Button
             v-else
-            :waiting="waiting"
             :disabled="waiting"
             @click.native.prevent="callDisableDiscount"
           >
@@ -187,7 +184,6 @@
           <Button
             v-if="canDelete"
             type="danger"
-            :waiting="waiting"
             :disabled="waiting"
             @click.native.prevent="toggleConfirmModal"
           >
@@ -205,7 +201,7 @@ import { mapActions, mapGetters } from "vuex";
 import Input from "../../components/inputs/TextInputComponent";
 import InputGroup from "../../components/inputs/InputGroupComponent";
 import Button from "../../components/buttons/ButtonComponent";
-import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue"
+import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
 import DatePicker from "vue2-datepicker";
 
 import _find from "lodash/find";
@@ -239,7 +235,7 @@ export default {
 
     startsAtClass() {
       let customClass =
-        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
+        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-sky-500";
       if (this.$v.discount.startsAt.$error) {
         customClass = customClass.concat(" ", "border-red-600");
       } else if (
@@ -253,7 +249,7 @@ export default {
 
     endsAtClass() {
       let customClass =
-        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-lightBlue-500";
+        "w-full text-sm p-2 rounded border order-gray-300 outline-none focus:ring-1 focus:ring-sky-500";
       if (this.$v.discount.endsAt.$error) {
         customClass = customClass.concat(" ", "border-red-600");
       } else if (
@@ -488,3 +484,10 @@ export default {
   },
 };
 </script>
+
+
+<style>
+  .mx-datepicker {
+    width: 100%;
+  }
+</style>

@@ -15,32 +15,32 @@ class TableSeeder extends Seeder
     public function run()
     {
         DB::table('tables')->insert([
-            'name' => '1',
+            'name' => 'T1',
             'status_id' => 1
         ]);
 
         DB::table('tables')->insert([
-            'name' => '2',
+            'name' => 'T2',
             'status_id' => 1
         ]);
 
         DB::table('tables')->insert([
-            'name' => '3',
+            'name' => 'T3',
             'status_id' => 1
         ]);
 
         DB::table('tables')->insert([
-            'name' => '4',
+            'name' => 'T4',
             'status_id' => 1
         ]);
 
         DB::table('tables')->insert([
-            'name' => '5',
+            'name' => 'T5',
             'status_id' => 1
         ]);
 
         DB::table('tables')->insert([
-            'name' => '6',
+            'name' => 'T6',
             'status_id' => 1
         ]);
     }

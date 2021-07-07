@@ -14,7 +14,7 @@
   >
     <router-link
       v-if="showNextAndPrevious"
-      class="px-2 py-1 border hover:border-lightBlue-500"
+      class="px-2 py-1 border hover:border-sky-500"
       :to="{ name: route, query: { page: previousPage, ...query } }"
       :class="{
         'pointer-events-none': !canPrevious,
@@ -32,9 +32,9 @@
         <router-link
           @click.prevent.native="goTo(1)"
           :to="{ name: route, query: { page: 1, ...query } }"
-          class="px-2 py-1 border hover:border-lightBlue-500 rounded-sm"
+          class="px-2 py-1 border hover:border-sky-500 rounded-sm"
           :class="{
-            'border-lightBlue-500': 1 === currentPage,
+            'border-sky-500': 1 === currentPage,
             'border-gray-300': 1 !== currentPage,
           }"
         >
@@ -50,9 +50,9 @@
         <router-link
           @click.prevent.native="goTo(page)"
           :to="{ name: route, query: { page, ...query } }"
-          class="px-2 py-1 border hover:border-lightBlue-500 rounded-sm"
+          class="px-2 py-1 border hover:border-sky-500 rounded-sm"
           :class="{
-            'border-lightBlue-500': page === currentPage,
+            'border-sky-500': page === currentPage,
             'border-gray-300': page !== currentPage,
           }"
         >
@@ -68,9 +68,9 @@
         <router-link
           @click.prevent.native="goTo(lastPage)"
           :to="{ name: route, query: { page: lastPage, ...query } }"
-          class="px-2 py-1 border hover:border-lightBlue-500 rounded-sm"
+          class="px-2 py-1 border hover:border-sky-500 rounded-sm"
           :class="{
-            'border-lightBlue-500': lastPage === currentPage,
+            'border-sky-500': lastPage === currentPage,
             'border-gray-300': lastPage !== currentPage,
           }"
         >
@@ -81,7 +81,7 @@
 
     <router-link
       v-if="showNextAndPrevious"
-      class="px-2 py-1 border hover:border-lightBlue-500"
+      class="px-2 py-1 border hover:border-sky-500"
       :to="{ name: route, query: { page: nextPage, ...query } }"
       :class="{
         'pointer-events-none': !canNext,
