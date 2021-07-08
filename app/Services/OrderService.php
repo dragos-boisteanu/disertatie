@@ -43,9 +43,14 @@ class OrderService implements OrderServiceInterface
     }
   }
 
-  public function getOrders(int $perPage = 8, ?int $orderBy = null, ?array $data = null): LengthAwarePaginator
+  public function getOrders(int $perPage = 8, ?int $orderBy = null, ?array $data = null, ?int $authClientId = null): LengthAwarePaginator
   {
+
     $query = Order::withTrashed();
+
+    if(isset($authClientId)) {
+      $query->where('client_id', $authClientId);
+    }
 
     switch ($orderBy) {
       case 1:

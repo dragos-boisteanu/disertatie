@@ -38,7 +38,7 @@ class OrderController extends Controller
             $orderBy = $request->orderBy;
         }
 
-        $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all());
+        $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all(), Auth::id());
 
         return view('store.order.index', compact('orders', 'orderBy'));
     }
