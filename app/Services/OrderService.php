@@ -31,10 +31,17 @@ class OrderService implements OrderServiceInterface
     $this->tableService = $tableService;
   }
 
-  public function getOrderById(int $orderId): Order
+  public function getOrderById(int $orderId, ?int $authClientId = null): Order
   {
     try {
-      $order = Order::withTrashed()->findOrFail($orderId);
+      $query = Order::withTrashed();
+
+      if(isset($authClientId)) {
+        $query->where('client_id', $authClientId);
+      }
+
+      $order = $query->findOrFail($orderId);
+      
       return $order;
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');

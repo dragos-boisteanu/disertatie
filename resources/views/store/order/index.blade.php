@@ -24,14 +24,15 @@
                 @forelse($orders as $order)
                     <li
                         class="flex items-center bg-trueGray-50 rounded shadow-md mt-3 first:mt-0 border  hover:border-orange-600">
-                        <a href="" class="p-2 block w-full text-sm">
+                        <a href="{{ route('order.show', ['id' => $order->id]) }}" class="p-2 block w-full text-sm">
                             <div class="flex items-center justify-between">
                                 <div class="text-lg text-trueGray-800 font-semibold">
                                     #{{ $order->id }}
                                 </div>
                                 <div class="text-xs py-1 px-2 rounded-sm font-semibold
-                                    @if ($order->status->name == 'Canceled') bg-red-200 text-red-700 @endif
-                                    @if ($order->status->name == 'Received') bg-blue-300 text-blue-700 @endif
+                                    @if ($order->status->name == 'Canceled') bg-red-200 text-red-800 @endif
+                                    @if ($order->status->name == 'Received') bg-blue-300 text-blue-800 @endif
+                                    @if ($order->status->name == 'Completed') bg-green-300 text-green-800 @endif
                                     ">
                                     {{ $order->status->name }}
                                 </div>

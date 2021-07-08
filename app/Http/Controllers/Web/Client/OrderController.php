@@ -150,7 +150,9 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = $this->orderService->getOrderById($id, Auth::id());
+
+        return view('store.order.show', compact('order'));
     }
 
     /**
