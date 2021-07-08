@@ -109,8 +109,8 @@
           md:w-auto
         "
       >
-        <option :value="1">Created at asc</option>
-        <option :value="2">Created at desc</option>
+        <option :value="1">Created at desc</option>
+        <option :value="2">Created at asc</option>
       </select>
     </div>
     <CardsList>
@@ -213,7 +213,7 @@ export default {
         currentPage: "",
         lastPage: "",
       },
-      orderBy: 2,
+      orderBy: 1,
       showFilterState: false,
 
       subscribe: false,
@@ -239,7 +239,7 @@ export default {
         this.$router.replace({ name: "Orders", query: {} });
       }
 
-      this.orderBy = 2;
+      this.orderBy = 1;
 
       this.resetFilterData();
 

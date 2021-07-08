@@ -8,6 +8,7 @@ use App\Services\OrderService;
 use App\Services\TableService;
 use App\Services\ProductService;
 use App\Services\OrderItemService;
+use Illuminate\Pagination\Paginator;
 use App\Services\ProductStockService;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\CartServiceInterface;
@@ -42,7 +43,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // JsonResource::withoutWrapping();
+
         IngredientCollection::withoutWrapping();
+        Paginator::defaultView('vendor.pagination.custom-pagination');
     }
 }

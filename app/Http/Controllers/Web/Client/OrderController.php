@@ -30,10 +30,17 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::where('client_id', Auth::id())->paginatnate(10);
-        return view('store.order.index', compact('orders'));
+        $orderBy = 1;
+
+        if($request->has('orderBy')) {
+            $orderBy = $request->orderBy;
+        }
+
+        $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all());
+
+        return view('store.order.index', compact('orders', 'orderBy'));
     }
 
     /**
@@ -90,7 +97,7 @@ class OrderController extends Controller
                 }
 
                 if (Auth::check()) {
-                    $data['client_id'] = Auth::id();
+                    $data['clientId'] = Auth::id();
                     $data['phoneNumber'] = Auth::user()->phone_number;
                     $data['name'] = Auth::user()->first_name;
                     $data['email'] = Auth::user()->email;
@@ -99,7 +106,7 @@ class OrderController extends Controller
 
             if ($data['deliveryMethodId'] == 2) {
                 if (Auth::check()) {
-                    $data['client_id'] = Auth::id();
+                    $data['clientId'] = Auth::id();
                     $data['phoneNumber'] = Auth::user()->phone_number;
                     $data['name'] = Auth::user()->first_name;
                     $data['email'] = Auth::user()->email;

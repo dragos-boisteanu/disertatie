@@ -49,10 +49,10 @@ class OrderService implements OrderServiceInterface
 
     switch ($orderBy) {
       case 1:
-        $query->orderBy('created_at', 'asc');
+        $query->orderBy('created_at', 'desc');
         break;
       case 2:
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('created_at', 'asc');
         break;
       default: {
           $query->orderBy('created_at', 'desc');
