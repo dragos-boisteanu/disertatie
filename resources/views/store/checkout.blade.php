@@ -168,11 +168,10 @@
                             @foreach ($paymentMethods as $paymentMethod)
                                 <li>
                                     <input id="pm{{ $paymentMethod->id }}" type="radio" name="paymentMethod"
-                                        value="{{ $paymentMethod->id }}"
-                                         @if ($paymentMethod->id == old('paymentMethod')) checked @endif 
-                                        @if ($paymentMethod->isDisabled) disabled @endif />
-                                    <label for="pm1">{{ $paymentMethod->name }}</label>
-                                </li>
+                                        value="{{ $paymentMethod->id }}" @if ($paymentMethod->id == old('paymentMethod')) checked @endif @if ($paymentMethod->isDisabled) disabled
+                            @endif />
+                            <label for="pm1">{{ $paymentMethod->name }}</label>
+                            </li>
                             @endforeach
                         </ul>
                         @if ($errors->has('paymentMethod'))
@@ -226,40 +225,37 @@
         const authAddress =
         `
         <select id="deliveryAddressSelect" name="deliveryAddress"
-            class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('deliveryAddress')) !border-red-600 @endif">
+            class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('deliveryAddress')) !border-red-600 @endif">
             <option value="" selected disabled>Alege adresa de livrare</option>
             @foreach ($addresses as $address)
-                <option value="{{ $address->id }}"
-                    @if ($address->is_selected && old('deliveryAddress') == "") 
-                        selected
-                    @elseif (old('deliveryAddress') == $address->id && old('deliveryAddress') != 'new')
-                        selected
-                    @endif
-                >
+                <option value="{{ $address->id }}" @if ($address->is_selected && old('deliveryAddress') == '') selected
+                        @elseif (old('deliveryAddress') == $address->id && old('deliveryAddress') != 'new')
+                                selected @endif>
                     {{ $address->address }}
                 </option>
             @endforeach
-            <option value="new"  @if( old('deliveryAddress') == "new") selected @endif >Adresa noua</option>
+            <option value="new" @if (old('deliveryAddress') == 'new') selected @endif>Adresa noua</option>
         </select>
         @if ($errors->has('deliveryAddress'))
             <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('deliveryAddress') }}</div>
         @endif
         `
-
+    
         const newAddressField =
         `
-            <div id="newAddressField">
-                <div class="w-full">
-                    <div class="w-full mt-4">
-                        <input type="text" id="newAddress" name="newAddress" value="{{ old('newAddress') }}"
-                            class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('newAddress')) !border-red-600 @endif"
-                            placeholder="Adresa">
-                            @if ($errors->has('newAddress'))
-                                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('newAddress') }}</div>
-                            @endif
-                    </div>
+        <div id="newAddressField">
+            <div class="w-full">
+                <div class="w-full mt-4">
+                    <input type="text" id="newAddress" name="newAddress" value="{{ old('newAddress') }}"
+                        class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('newAddress')) !border-red-600 @endif"
+                    placeholder="Adresa">
+                    @if ($errors->has('newAddress'))
+                        <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                            {{ $errors->first('newAddress') }}</div>
+                    @endif
                 </div>
             </div>
+        </div>
         `;
     @endauth
 
@@ -268,9 +264,10 @@
         `
         <div class="w-full">
             <input type="text" id="name" name="name" value="{{ old('name') }}"
-                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
+                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
             @if ($errors->has('name'))
-                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('name') }}</div>
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('name') }}
+                </div>
             @endif
         </div>
     
@@ -278,15 +275,17 @@
             <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
                 class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
             @if ($errors->has('phoneNumber'))
-                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('phoneNumber') }}</div>
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                    {{ $errors->first('phoneNumber') }}</div>
             @endif
         </div>
     
         <div class="w-full mt-4">
-            <input type="text" id="email" name="email" value="{{ old('email') }}"
+            <input type="email" id="email" name="email" value="{{ old('email') }}"
                 class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
             @if ($errors->has('email'))
-                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('email') }}</div>
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('email') }}
+                </div>
             @endif
         </div>
     
@@ -294,7 +293,8 @@
             <input type="text" id="address" name="address" value="{{ old('address') }}"
                 class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('address')) !border-red-600 @endif" placeholder="Adresa">
             @if ($errors->has('address'))
-                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('address') }}</div>
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('address') }}
+                </div>
             @endif
         </div>
         `
@@ -306,15 +306,17 @@
                 <input type="text" id="name" name="name" value="{{ old('name') }}"
                     class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
                 @if ($errors->has('name'))
-                    <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('name') }}</div>
+                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                        {{ $errors->first('name') }}</div>
                 @endif
             </div>
-
+    
             <div class="w-full mt-4">
-                <input type="text" id="email" name="email" value="{{ old('email') }}"
+                <input type="email" id="email" name="email" value="{{ old('email') }}"
                     class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
                 @if ($errors->has('email'))
-                    <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('email') }}</div>
+                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                        {{ $errors->first('email') }}</div>
                 @endif
             </div>
     
@@ -322,7 +324,8 @@
                 <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
                     class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
                 @if ($errors->has('phoneNumber'))
-                    <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('phoneNumber') }}</div>
+                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                        {{ $errors->first('phoneNumber') }}</div>
                 @endif
             </div>
     
@@ -351,10 +354,23 @@
     const deliveryMethod = $('input[name=deliveryMethodId]');
     const orderTotalValue = $('#orderTotalValue');
 
+    $('input[name=deliveryMethodId]').change(function() {
+        $('.backend-validation-error').each( (index, element) => {
+            element.remove();
+        })
+
+        $('.\\!border-red-600').each( (index, element) => {
+            element.value = ""
+            element.classList.remove('!border-red-600');
+        })
+    });
+
+
+
     if ($('input[name=deliveryMethodId]:checked').val() == 1) {
 
         $('#deliveryMethod').append(deliveryMethodAddress);
-        
+
         $('#deliveryAddressSelect').change(function() {
             if ($(this).val() === 'new') {
                 $('#deliveryMethodAddress').append(newAddressField);
@@ -363,7 +379,7 @@
             }
         })
 
-        if ( $('#deliveryAddressSelect').val() == 'new' ) {
+        if ($('#deliveryAddressSelect').val() == 'new') {
             $('#deliveryMethodAddress').append(newAddressField);
         }
     }
