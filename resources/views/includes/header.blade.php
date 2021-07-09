@@ -91,7 +91,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('order.index') }}" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1 {{ (request()->is('account/orders*')) ? '!text-gray-100' : '' }}">
+                <a href="{{ route('orders.index') }}" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1 {{ (request()->is('account/orders*')) ? '!text-gray-100' : '' }}">
                     Comenzi
                 </a>
             </li>

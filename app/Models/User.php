@@ -53,7 +53,12 @@ class User extends Authenticatable
 
     public $with = ['role', 'addresses', 'cart'];
 
-    // protected $appends = array('isAdmin', 'isLocationManager', 'isWaiter', 'isKitchenManager', 'isDelivery', 'isKitchen');
+    protected $appends = array('fullName');
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
     
     public function role()
     {

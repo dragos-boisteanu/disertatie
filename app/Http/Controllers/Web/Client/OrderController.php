@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Client;
 
+use Exception;
 use App\Models\Order;
 use App\Models\Address;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CartServiceInterface;
 use App\Interfaces\OrderServiceInterface;
 use App\Http\Requests\ClientOrderStoreRequest;
-use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
 {
@@ -40,7 +41,7 @@ class OrderController extends Controller
 
         $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all(), Auth::id());
 
-        return view('store.order.index', compact('orders', 'orderBy'));
+        return view('store.orders.index', compact('orders', 'orderBy'));
     }
 
     /**
@@ -82,7 +83,6 @@ class OrderController extends Controller
      */
     public function store(ClientOrderStoreRequest $request)
     {
-
         try {
 
             $data = $request->validated();
@@ -148,44 +148,20 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $order = $this->orderService->getOrderById($id, Auth::id());
 
-        return view('store.order.show', compact('order'));
+        try {
+            $order = $this->orderService->getOrderById($id, Auth::id());
+
+            return view('store.orders.show', compact('order'));
+
+        } catch (ModelNotFoundException $e) {
+            Toastr::info('Nu exista o comanda pentru id-ul ' . $id . ' !', 'Info');
+
+            return redirect()->route('orders.index');
+        }
+       
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
