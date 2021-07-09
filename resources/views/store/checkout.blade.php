@@ -272,20 +272,20 @@
         </div>
     
         <div class="w-full mt-4">
-            <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
-                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
-            @if ($errors->has('phoneNumber'))
-                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
-                    {{ $errors->first('phoneNumber') }}</div>
-            @endif
-        </div>
-    
-        <div class="w-full mt-4">
             <input type="email" id="email" name="email" value="{{ old('email') }}"
                 class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
             @if ($errors->has('email'))
                 <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('email') }}
                 </div>
+            @endif
+        </div>
+
+        <div class="w-full mt-4">
+            <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
+                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
+            @if ($errors->has('phoneNumber'))
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                    {{ $errors->first('phoneNumber') }}</div>
             @endif
         </div>
     
