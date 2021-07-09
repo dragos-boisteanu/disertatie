@@ -17,26 +17,31 @@ class CategorySeeder extends Seeder
         
         DB::table('categories')->insert([
             'name' => 'Pizza',
+            'slug' => 'pizza',
             'vat' => 9
         ]);
 
         DB::table('categories')->insert([
             'name' => 'Deserturi',
+            'slug' => 'deserturi',
             'vat' => 19
         ]);
 
         DB::table('categories')->insert([
             'name' => 'Ceaiuri',
+            'slug' => 'ceaiuri',
             'vat' => 19
         ]);
 
         DB::table('categories')->insert([
-            'name' => 'Bauturi Alcoolice',
+            'name' => 'Bere',
+            'slug' => 'bere',
             'vat' => 19
         ]);
 
         DB::table('categories')->insert([
-            'name' => 'Bauturi Non-Alcolice',
+            'name' => 'Vinuri',
+            'slug' => 'vin',
             'vat' => 19
         ]);
     }

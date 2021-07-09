@@ -94,6 +94,10 @@ class CategoryController extends Controller
 
         $responseData = null;
 
+        if($request->has('name')) {
+            $category->slug = null;
+        }
+
         if ($request->has('discountId')) {
             $input['discount_id'] = $request->discountId;
         } else if (!$request->has('discountId') && !is_null($category->discount_id)) {
