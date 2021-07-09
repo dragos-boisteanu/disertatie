@@ -31,8 +31,8 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
         Route::put('/', 'AccountController@update')->name('account.update');
         Route::put('/password/update', 'AccountController@updatePassword')->name('account.password.update');
         Route::delete('/'. 'AccountController@destroy')->name('account.delete');
-        Route::get('/orders', 'OrderController@index')->name('order.index');
-        Route::get('/orders/{id}', 'OrderController@show')->name('order.show');
+        Route::get('/orders', 'OrderController@index')->name('orders.index');
+        Route::get('/orders/{id}', 'OrderController@show')->name('orders.show');
     });
 
     Route::group(['prefix'=>'addressess'], function() {
