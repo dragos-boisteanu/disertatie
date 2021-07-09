@@ -36,11 +36,11 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($categorySlug)
     {
         $categories = Category::where('parent_id', null)->get();
-        $category = Category::with('subCategories')->findOrFail($id);
-
+        $category = Category::findBySlugOrFail($categorySlug);
+        $category->load('subCategories');
         $category->subCategories->each( function($subCategory) {
             $subCategory->load('subProducts');
         });

@@ -130,7 +130,6 @@ class OrderService implements OrderServiceInterface
 
       if (array_key_exists('email', $data)) {
         $order->email = $data['email'];
-        //send email
       }
 
       $order->save();

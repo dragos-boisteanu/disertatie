@@ -31,8 +31,8 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
         Route::put('/', 'AccountController@update')->name('account.update');
         Route::put('/password/update', 'AccountController@updatePassword')->name('account.password.update');
         Route::delete('/'. 'AccountController@destroy')->name('account.delete');
-        Route::get('/orders', 'OrderController@index')->name('orders.index');
-        Route::get('/orders/{id}', 'OrderController@show')->name('orders.show');
+        Route::get('/comenzi', 'OrderController@index')->name('orders.index');
+        Route::get('/comenzi/{id}', 'OrderController@show')->name('orders.show');
     });
 
     Route::group(['prefix'=>'addressess'], function() {
@@ -47,8 +47,8 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
 Route::group(['namespace' => 'Web\Client'], function () {
     Route::get('/', 'MenuController@index')->name('home');
 
-    Route::get('/menu', 'MenuController@index')->name('menu.index');
-    Route::get('/menu/{id}', 'MenuController@show')->name('menu.show');
+    Route::get('/meniu', 'MenuController@index')->name('menu.index');
+    Route::get('/meniu/{categorySlug}', 'MenuController@show')->name('menu.show');
 
     Route::group(['prefix'=>'cart'], function() { 
         Route::get('/', 'CartController@index')->name('cart.index');

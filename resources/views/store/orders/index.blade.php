@@ -5,7 +5,7 @@
     <div class="w-full lg:w-2/4 2xl:w-1/3">
         <h1 class="text-4xl mb-4 pl-2 font-semibold text-trueGray-300 ">Comenzile mele</h1>
 
-        <div class="flex items-center justify-between">
+        <div class=" flex flex-col gap-y-4 md:flex-row md:gap-y-0 md:items-center md:justify-between">
             <div>
                 <div class="bg-white rounded-sm flex items-stretch">
                     <input id="searchInput"
@@ -27,7 +27,7 @@
 
             <form class="orderByForm" method="GET" action="{{ route('orders.index') }}">
                 <select id="orderBy" name="orderBy"
-                    class=" border border-r-0 p-2 rounded-sm rounded-r-none text-sm focus:ring focus:ring-orange-600">
+                    class="w-full border border-r-0 p-2 rounded-sm rounded-r-none text-sm focus:ring focus:ring-orange-600">
                     <option value="1" {{ $orderBy == 1 ? 'selected' : '' }}>Cele mai recente</option>
                     <option value="2" {{ $orderBy == 2 ? 'selected' : '' }}>Cele mai vechi</option>
                 </select>
@@ -83,11 +83,12 @@
                     </li>
                 @endif
             </ul>
-            {{ $orders->links() }}
+
+            <div class="mt-2">
+                {{ $orders->links() }}
+            </div>
         </div>
-
     </div>
-
 @endsection
 
 
