@@ -41,7 +41,8 @@
                     </div>
                 </li>
                 <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="isPreparingLine" class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
+                    <div id="isPreparingLine"
+                        class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
                     <div class="md:pr-1">
                         <div id="isPreparing"
                             class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
@@ -51,7 +52,8 @@
                 </li>
                 {{-- bg-orange-200 text-orange-800 --}}
                 <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="inDeliveryLine" class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
+                    <div id="inDeliveryLine"
+                        class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
                     <div class="md:pr-1">
                         <div id="inDelivery"
                             class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
@@ -61,7 +63,8 @@
                 </li>
                 {{-- bg-sky-200 text-sky-800 --}}
                 <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="deliveredLine" class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
+                    <div id="deliveredLine"
+                        class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
                     <div class="md:pr-1">
                         <div id="delivered"
                             class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
@@ -71,7 +74,8 @@
                 </li>
                 {{-- bg-yellow-200 text-yellow-800 --}}
                 <li class="h-6 flex items-start gap-x-2 md:w-1/5 md:h-14 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="completedLine" class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
+                    <div id="completedLine"
+                        class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
                     <div id="completed"
                         class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
                         Finalizata
@@ -213,8 +217,14 @@
 
 
 @push('scripts')
+
     <script>
         const setSatButton = $('#setSatButton');
+
+        window.Echo.private('App.User.{{ Auth::user()->id }}')
+            .notification((notification) => {
+                
+            });
 
         setSatButton.click(function() {
             setSatButtonValue = setSatButton.html().toLowerCase().replace(/\s/g, '');
@@ -229,7 +239,7 @@
                 case 'indelivery':
                     $('#inDeliveryLine').removeClass('bg-trueGray-700').addClass('bg-trueGray-100');
                     $('#inDelivery').removeClass('text-trueGray-700 bg-transparent border border-trueGray-700')
-                        .addClass('bg-yellow-200 text-yellow-800'); 
+                        .addClass('bg-yellow-200 text-yellow-800');
                     break;
 
                 case 'delivered':

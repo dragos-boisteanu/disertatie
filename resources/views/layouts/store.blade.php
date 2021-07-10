@@ -21,7 +21,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
+    
 </head>
 
 <body class="h-full">
@@ -34,5 +34,6 @@
         @include('includes.footer')
     </div>
 </body>
+<script src="{{ asset(mix('js/app.js')) }}"></script>
 @stack('scripts')
 </html>
