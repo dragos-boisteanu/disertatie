@@ -1,54 +1,61 @@
 <template>
-<!-- max-h-80 md:max-h-96 -->
-  <table class="px-2 w-full rounded-sm max-h-[400px]">
-    <thead class="w-full bg-gray-700 text-orange-500">
-      <tr class="text-left text-sm">
-        <th class="p-2 text-center">Index</th>
-        <th class="p-2">Name</th>
-        <th class="p-2">Status</th>
-      </tr>
-    </thead>
-    <tbody class="overflow-y-auto" v-if="tables">
-      <tr
-        v-for="(table, index) in tables"
-        :key="table.id"
-        @click="selectTable(table.id)"
-        class="
-          transition-shadow
-          duration-500
-          ease-in-out
-          text-sm
-          rounded-md
-          cursor-pointer
-          border-white
-          transform
-          hover:scale-105
-          hover:bg-gray-50
-          hover:shadow-md
-        "
+  <!-- max-h-80 md:max-h-96 -->
+  <div class="overflow-x-auto bg-white shadow rounded-sm p-5">
+    <div class="min-w-[450px]">
+      <div
+        class="bg-gray-700 text-orange-500 text-left text-sm grid grid-cols-3"
       >
-        <td class="p-2 text-center font-semibold">{{ index + 1 }}</td>
-        <td class="p-2">{{ table.name }}</td>
-        <td class="p-2">{{ table.status.name }}</td>
-      </tr>
-    </tbody>
-  </table>
+        <div class="p-2 self-center justify-self-center">Index</div>
+        <div class="p-2 self-center justify-self-center">Name</div>
+        <div class="p-2 self-center justify-self-center">Status</div>
+      </div>
+      <ul class="overflow-y-auto max-h-[400px] w-full px-2 rounded-sm">
+        <TableComponent
+          v-for="(table, index) in getTables"
+          :key="table.id"
+          :table="table"
+          :selected-id="selectedId"
+          :index="index"
+          @selected="selectTable"
+        ></TableComponent>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
+import TableComponent from "./TableComponent.vue";
+
 export default {
   props: {
-    tables: {
-      type: Array,
-      required: true,
-      default: null
-    }
+    selectedId: {
+      type: [Number, String],
+      required: false,
+      default: -1,
+    },
+  },
+
+  computed: {
+    ...mapGetters("Tables", ["getTables"]),
+
+    // selectedId() {
+    //   if (this.selectedTable !== null && this.selectedTable !== undefined) {
+    //     return this.selectedTable.id;
+    //   }
+    //   return -1;
+    // },
   },
 
   methods: {
     selectTable(tableId) {
-      this.$emit('selected', tableId);
-    } 
-  }
-}
+      this.$emit("selected", tableId);
+    },
+  },
+
+  components: {
+    TableComponent,
+  },
+};
 </script>
