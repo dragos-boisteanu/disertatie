@@ -100,7 +100,9 @@ class CategoryController extends Controller
 
         if ($request->has('discountId')) {
             $input['discount_id'] = $request->discountId;
-        } else if (!$request->has('discountId') && !is_null($category->discount_id)) {
+        }
+
+        if($request->has('removeDiscount') && $request->removeDiscount) {
             $input['discount_id'] = null;
         }
 

@@ -27,7 +27,8 @@ class CategoryUpdateRequest extends FormRequest
             'name' => 'sometimes|string|max:50',
             'vat' => 'sometimes|numeric',
             'discountId' => ['sometimes','numeric', 'exists:discounts,id'],
-            'parentId' => ['sometimes', 'numeric', 'exists:categories,id']
+            'parentId' => ['sometimes', 'numeric', 'exists:categories,id'],
+            'removeDiscount' => ['sometimes', 'boolean']
         ];
     }
 }

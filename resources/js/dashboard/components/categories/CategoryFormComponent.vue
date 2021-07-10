@@ -442,7 +442,7 @@ export default {
           category: this.category,
           vm: this,
         };
-        
+
         const response = await this.disableCategory(payload);
 
         this.category.deletedAt = response.deletedAt;
@@ -467,7 +467,7 @@ export default {
         this.$toast.success(response);
         this.$Progress.finish();
       } catch (error) {
-        this.$Progress.finish();
+        this.$Progress.fail();
         console.log(error);
       }
     },
@@ -492,8 +492,33 @@ export default {
       }
     },
 
-    removeDiscount() {
-      this.category.discountId = "";
+    async removeDiscount() {
+      try {
+        const payload = {
+          category: {
+            id: this.category.id,
+            removeDiscount: true,
+          },
+          vm: this,
+        };
+
+        this.$Progress.start();
+        this.waiting = true;
+
+        await this.patchCategory(payload);
+
+        this.$toast.success("Category updated");
+
+        this.$Progress.finish();
+        this.waiting = false;
+
+        this.category.discountId = "";
+      } catch (error) {
+        console.log(error);
+        this.$toast.error("Failed to update category");
+        this.$Progress.fail();
+        this.waiting = false;
+      }
     },
 
     addDiscount(discountId) {

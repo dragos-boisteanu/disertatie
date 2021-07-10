@@ -94,7 +94,6 @@ export default {
     },
 
     isDisabled() {
-      console.log('category: ', this.category);
       return (
         this.category.deletedAt !== null &&
         this.category.deletedAt !== undefined

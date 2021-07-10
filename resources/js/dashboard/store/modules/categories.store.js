@@ -142,10 +142,9 @@ const mutations = {
                     vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], key, payload.category[key]);
                 });
 
-                if (payload.category.discountId === null || payload.category.discountId === undefined) {
+                if (payload.category.removeDiscount !== null && payload.category.removeDiscount !== undefined && payload.category.removeDiscount) {
                     vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], 'discountId', null);
                 }
-
                 // if the subCategory has a new parent
                 // remove the subCategory from the actula parent
                 // add the subCategory to the new parent
@@ -177,10 +176,13 @@ const mutations = {
                 vm.$set(state.categories[categoryIndex], key, payload.category[key]);
             });
 
-            if (payload.category.discountId === null || payload.category.discountId === undefined) {
+            if (payload.category.removeDiscount !== null && payload.category.removeDiscount !== undefined && payload.category.removeDiscount) {
                 vm.$set(state.categories[categoryIndex], 'discountId', null);
             }
+
         }
+
+      
     },
 
     DELETE_CATEGORY(state, payload) {
