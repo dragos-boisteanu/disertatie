@@ -146,8 +146,6 @@ class CategoryController extends Controller
             $initialCategoryPosition = $selectedCategory->position;
             $targetCategoryInitialPosition = $targetCategory->position;
 
-            dump(abs($initialCategoryPosition - $targetCategoryInitialPosition));
-
             if (abs($initialCategoryPosition - $targetCategoryInitialPosition) != 1) {
                 $query = Category::where('id', '!=', $selectedCategory->id)->where('id', '!=', $targetCategory->id)->whereNull('parent_id');
 
