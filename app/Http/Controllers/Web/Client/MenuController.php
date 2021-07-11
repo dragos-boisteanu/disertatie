@@ -11,13 +11,7 @@ use App\Interfaces\CartServiceInterface;
 class MenuController extends Controller
 {
 
-    private $cartService;
-
-    public function __construct(CartServiceInterface $cartService)
-    {
-        $this->cartService = $cartService;
-    }
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -28,7 +22,6 @@ class MenuController extends Controller
      
         return view('store.menu.index', ['categories'=>$categories]);
     }
-
 
     /**
      * Display the specified resource.
