@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use Exception;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
 use App\Http\Resources\CategoryCollection;
@@ -20,9 +22,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withTrashed()->with(['products', 'subProducts', 'subCategories'=> function($query) {
+        $categories = Category::withTrashed()->with(['products', 'subProducts', 'subCategories' => function ($query) {
             $query->withTrashed();
-        }])->whereNull('parent_id')->get();
+            $query->orderBy('position', 'asc');
+        }])->whereNull('parent_id')->orderBy('position', 'asc')->get();
 
         return new CategoryCollection($categories);
     }
@@ -58,8 +61,22 @@ class CategoryController extends Controller
                     $response['vat'] = $parentCategory->vat;
                 }
 
+                $lastPosition = DB::select('select distinct position from categories
+                                            where position is not null
+                                            and parent_id IS not null
+                                            order by position desc 
+                                            limit 1');
+
                 $response['parentName'] = $parentCategory->name;
+            } else {
+                $lastPosition = DB::select('select position from categories
+                                            where position is not null
+                                            and parent_id is null
+                                            order by position desc 
+                                            limit 1');
             }
+
+            $input['position'] = $lastPosition + 1;
 
             $category = Category::create($input);
 
@@ -69,7 +86,7 @@ class CategoryController extends Controller
             return response()->json($response, 201);
         } catch (QueryException $qex) {
             $errorCode = $qex->errorInfo[1];
-            if ( $errorCode  == 1062) {
+            if ($errorCode  == 1062) {
                 return response()->json(['error' => 'Category already exists'], 500);
             }
         } catch (\Exception $ex) {
@@ -94,7 +111,7 @@ class CategoryController extends Controller
 
         $responseData = null;
 
-        if($request->has('name')) {
+        if ($request->has('name')) {
             $category->slug = null;
         }
 
@@ -102,7 +119,7 @@ class CategoryController extends Controller
             $input['discount_id'] = $request->discountId;
         }
 
-        if($request->has('removeDiscount') && $request->removeDiscount) {
+        if ($request->has('removeDiscount') && $request->removeDiscount) {
             $input['discount_id'] = null;
         }
 
@@ -117,6 +134,67 @@ class CategoryController extends Controller
         $responseData['message'] = "Category updated";
 
         return response()->json($responseData, 200);
+    }
+
+    public function updatePosition(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $selectedCategory = Category::findOrFail($request->categoryId);
+            $targetCategory = Category::findOrFail($request->targetCategoryId);
+
+            $initialCategoryPosition = $selectedCategory->position;
+            $targetCategoryInitialPosition = $targetCategory->position;
+
+            dump(abs($initialCategoryPosition - $targetCategoryInitialPosition));
+
+            if (abs($initialCategoryPosition - $targetCategoryInitialPosition) != 1) {
+                $query = Category::where('id', '!=', $selectedCategory->id)->where('id', '!=', $targetCategory->id)->whereNull('parent_id');
+
+                if ($initialCategoryPosition > $targetCategoryInitialPosition) {
+                    $query->whereBetween('position', [$targetCategoryInitialPosition, $initialCategoryPosition]);
+                    // moving from bottom to top
+                } else {
+                    $query->whereBetween('position', [$initialCategoryPosition, $targetCategoryInitialPosition]);
+                    // moving from top to bottom
+                }
+
+                $categoriesList =  $query->get();
+
+                if ($categoriesList->count()) {
+                    if ($initialCategoryPosition > $targetCategoryInitialPosition) {
+                        // moving from bottom to top
+                        foreach ($categoriesList as $category) {
+                            $category->position += 1;
+                            $category->save();
+                        }
+                    } else {
+                        // moving from top to bottom
+                        foreach ($categoriesList as $category) {
+                            $category->position -= 1;
+                            $category->save();
+                        }
+                    }
+                }
+            }
+
+            $selectedCategory->position = $targetCategory->position;
+
+            if ($targetCategory->position > $initialCategoryPosition) {
+                $targetCategory->position -= 1;
+            } else {
+                $targetCategory->position += 1;
+            }
+
+            $selectedCategory->save();
+            $targetCategory->save();
+
+            DB::commit();
+            return response()->json(['message' => 'Positon changed succesfull'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Failed to change position'], 500);
+        }
     }
 
     /**
@@ -166,10 +244,10 @@ class CategoryController extends Controller
     public function search($catagoryName)
     {
 
-        $categories = Category::with(['products', 'subProducts', 'subCategories'=> function($query) {
+        $categories = Category::with(['products', 'subProducts', 'subCategories' => function ($query) {
             $query->withTrashed();
         }])->where('name', 'like', $catagoryName . '%')->whereNull('parent_id')->get();
-        
+
         if ($categories->isNotEmpty()) {
             return  new CategoryCollection($categories);
             // return response()->json(['categories' => $categories], 200);

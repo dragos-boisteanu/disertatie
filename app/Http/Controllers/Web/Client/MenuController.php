@@ -24,7 +24,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('parent_id', null)->get();
+        $categories = Category::where('parent_id', null)->orderBy('position', 'asc')->get();
      
         return view('store.menu.index', ['categories'=>$categories]);
     }

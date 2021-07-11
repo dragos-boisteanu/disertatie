@@ -1,8 +1,9 @@
-import { searchCategories, downloadCategories, postCategory, patchCategory, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
+import { searchCategories, downloadCategories, postCategory, patchCategory, updatePosition, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
 import _isEqual from 'lodash/isEqual'
 import _find from 'lodash/find'
+import _sortBy from 'lodash/sortBy'
 
 const initialState = () => ({
     categories: []
@@ -104,7 +105,21 @@ const actions = {
 
     updateDiscount({ commit }, payload) {
         commit('UPDATE_DISCOUNT', payload);
-    }
+    },
+
+    async updatePosition({commit}, payload) {
+
+        try {
+            const response = await updatePosition(payload);
+      
+            commit('UPDATE_POSITION', payload);
+    
+            return response.data.message;
+        } catch ( error ) {
+            throw error;
+        }
+       
+    },
 }
 
 const mutations = {
@@ -161,7 +176,7 @@ const mutations = {
             } else {
                 const newParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
                 const category = _find(state.categories, ['id', payload.category.id]);
-                const categoryIndex = _findIndex(state.categorie, ['id', parseInt(category.id)]);
+                const categoryIndex = _findIndex(state.categories, ['id', parseInt(category.id)]);
 
                 category.parentId = payload.category.parentId;
 
@@ -215,6 +230,18 @@ const mutations = {
 
     SET_FOUND_CATEGORIES(state, foundCategories) {
         state.categories = foundCategories
+    },
+
+    UPDATE_POSITION(state, payload) {
+        const categoryIndex = state.categories.findIndex(category => category.id == payload.categoryId );
+        const targetCategoryIndex = state.categories.findIndex(targetCategoryIndex => targetCategoryIndex.id == payload.targetCategoryId );
+
+        const deleted = state.categories.splice(categoryIndex, 1);
+        state.categories.splice(targetCategoryIndex, 0, deleted[0]);
+
+        state.categories.forEach( (category, index) => {
+            category.position = index + 1;
+        })
     }
 
 }

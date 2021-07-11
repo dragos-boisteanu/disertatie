@@ -20,6 +20,7 @@ class Category extends Model
         'color',
         'discount_id',
         'parent_id',
+        'position',
     ];
 
     public $with = ['discount'];

@@ -17,6 +17,13 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     
     Route::get('users/logged-user', 'UserController@getLoggedUser');
      
+    Route::group(['prefix'=>'categories'], function() {
+        Route::get('/{catagoryName}', 'CategoryController@search');
+        Route::delete('/{id}/disable', 'CategoryController@disable');
+        Route::post('/{id}/restore', 'CategoryController@restore');
+        Route::patch('/update-position', 'CategoryController@updatePosition');
+    });
+
     Route::apiResource('users', 'UserController');
     Route::apiResource('roles', 'RoleController');
     Route::apiResource('products', 'ProductController');
@@ -31,12 +38,6 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('tables', 'TableController');
 
     Route::get('products/{id}/edit', 'ProductController@edit');
-
-    Route::group(['prefix'=>'categories'], function() {
-        Route::get('/{catagoryName}', 'CategoryController@search');
-        Route::delete('/{id}/disable', 'CategoryController@disable');
-        Route::post('/{id}/restore', 'CategoryController@restore');
-    });
 
     Route::group(['prefix'=>'users'], function() {
         Route::delete('{id}/disable', 'UserController@disable');
@@ -88,6 +89,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::get('phone-number/{phoneNumber}', 'ClientController@getClientByPhoneNumer');
         Route::get('addresses/{id}', 'ClientController@getClientAddresses');
     });
+
+
 
     Route::apiResource('images', 'FileController')->only('store', 'destroy');
        
