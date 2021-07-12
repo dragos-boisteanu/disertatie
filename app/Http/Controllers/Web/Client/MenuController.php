@@ -33,7 +33,9 @@ class MenuController extends Controller
     {
         $categories = Category::where('parent_id', null)->orderBy('position', 'asc')->get();
         $category = Category::findBySlugOrFail($categorySlug);
-        $category->load('subCategories');
+        $category->load(['subCategories' => function($query) {
+            $query->orderBY('position','asc');
+        }]);
         $category->subCategories->each( function($subCategory) {
             $subCategory->load('subProducts');
         });
