@@ -31,7 +31,7 @@ class MenuController extends Controller
      */
     public function show($categorySlug)
     {
-        $categories = Category::where('parent_id', null)->get();
+        $categories = Category::where('parent_id', null)->orderBy('position', 'asc')->get();
         $category = Category::findBySlugOrFail($categorySlug);
         $category->load('subCategories');
         $category->subCategories->each( function($subCategory) {
