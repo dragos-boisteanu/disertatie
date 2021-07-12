@@ -224,14 +224,23 @@ export default {
       return this.category.deletedAt !== null;
     },
 
-    isParent() {
-      return this.category.parentId === null;
-    },
+    // isParent() {
+    //   return this.category.parentId === null;
+    // },
 
     isCategorySelected() {
       return this.selectedCategory !== null || this.categoryId !== undefined
         ? true
         : false;
+    },
+
+    isParent() {
+      if(this.selectedCategory !== null && this.selectedCategory !== undefined) {
+        return this.selectedCategory.parentId === null || this.selectedCategory.parentId === undefined
+      } 
+
+      return false;
+     
     },
 
     canHaveParent() {
