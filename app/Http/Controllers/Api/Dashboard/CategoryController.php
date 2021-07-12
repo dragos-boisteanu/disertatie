@@ -195,6 +195,56 @@ class CategoryController extends Controller
         }
     }
 
+    // direction
+    // 1 - up
+    // 0 - down
+    public function updateSubCategoryPosition($id, $direction) 
+    {
+        try {
+            DB::beginTransaction();
+
+            $category = Category::withTrashed()->findOrFail($id);
+
+            $directionMessage = "";
+
+            if($direction == 1) {
+                $aboveCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '<', $category->position)->orderBy('position','desc')->first();
+
+                $initialCategoryPosition = $category->position;
+        
+                $category->position = $aboveCategory->position;
+        
+                $aboveCategory->position = $initialCategoryPosition;
+                
+                $directionMessage = 'up';
+
+                $aboveCategory->save();
+                
+            } else {
+                $bellowCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '>', $category->position)->orderBy('position','asc')->first();
+    
+                $initialCategoryPosition = $category->position;
+        
+                $category->position = $bellowCategory->position;
+        
+                $bellowCategory->position = $initialCategoryPosition;
+        
+                $directionMessage = 'down';
+
+                $bellowCategory->save();
+            }
+    
+            $category->save();
+            
+
+            DB::commit();
+            return response()->json(['message' => 'Category ' . $category->name .  ' moved ' . $directionMessage], 200);
+        } catch( \Exception $ex ) {
+            DB::rollBack();
+            return response()->json(['error' => 'Failed to move category up'], 500);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

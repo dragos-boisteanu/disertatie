@@ -140,21 +140,19 @@ export default {
           id: this.subcategory.id,
           parentId: this.subcategory.parentId,
           direction,
-          vm: this,
         };
 
         // payload = {
         //     id: 23,
         //     direction: 1/0, 1 -up, 0 - down
-        //     vm: this
         // }
         const response = await this.updateSubCategoryPosition(payload);
 
         this.$Progress.finish();
-        // this.$toast.success(response);
+        this.$toast.success(response);
       } catch (error) {
         console.log(error);
-        
+
         this.$Progress.fail();
 
         if (error.response) {

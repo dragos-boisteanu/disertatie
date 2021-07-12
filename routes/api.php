@@ -21,7 +21,9 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::get('/{catagoryName}', 'CategoryController@search');
         Route::delete('/{id}/disable', 'CategoryController@disable');
         Route::post('/{id}/restore', 'CategoryController@restore');
-        Route::patch('/update-position', 'CategoryController@updatePosition');
+        Route::patch('/position/{id}/{direction}', 'CategoryController@updateSubCategoryPosition');
+        Route::patch('/position', 'CategoryController@updatePosition');
+       
     });
 
     Route::apiResource('users', 'UserController');

@@ -121,7 +121,6 @@ const actions = {
     // payload = {
     //     id: 23,
     //     direction: 1/0, 1 -up, 0 - down
-    //     vm: this
     // }
     async updateSubCategoryPosition({ commit }, payload) {
         try {
@@ -129,10 +128,10 @@ const actions = {
                 id: payload.id,
                 direction: payload.direction
             }
-            // const response = await updateSubCategoryPosition(data);
+            const response = await updateSubCategoryPosition(data);
 
             commit('UPDATE_SUB_CATEGORY_POSITION', payload);
-            // return response.data.message;
+            return response.data.message;
         } catch (error) {
             throw error;
         }
@@ -211,10 +210,7 @@ const mutations = {
             if (payload.category.removeDiscount !== null && payload.category.removeDiscount !== undefined && payload.category.removeDiscount) {
                 vm.$set(state.categories[categoryIndex], 'discountId', null);
             }
-
         }
-
-
     },
 
     DELETE_CATEGORY(state, payload) {
@@ -265,9 +261,6 @@ const mutations = {
 
         try {
 
-
-            const vm = payload.vm;
-
             const parentCategoryIndex = state.categories.findIndex(parentCategory => parentCategory.id == payload.parentId);
 
             const categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id == payload.id);
@@ -275,9 +268,6 @@ const mutations = {
             let adjenctCategoryIndex = -1;
             let categoryNewPosition = -1;
             let adjenctCategoryNewPosition = -1;
-
-
-
 
             if (payload.direction == 1) {
                 console.log(payload);
@@ -297,14 +287,12 @@ const mutations = {
 
                 const deleted = state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
                 state.categories[parentCategoryIndex].subCategories.splice(adjenctCategoryIndex, 0, deleted[0]);
-
             }
 
         } catch (error) {
             console.log(error);
 
         }
-
     }
 
 }
