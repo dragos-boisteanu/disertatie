@@ -1,9 +1,8 @@
-import { searchCategories, downloadCategories, postCategory, patchCategory, updatePosition, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
+import { searchCategories, downloadCategories, postCategory, patchCategory, updatePosition, updateSubCategoryPosition, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
 import _isEqual from 'lodash/isEqual'
 import _find from 'lodash/find'
-import _sortBy from 'lodash/sortBy'
 
 const initialState = () => ({
     categories: []
@@ -45,7 +44,7 @@ const actions = {
             payload.deletedAt = null;
             payload.productsCount = 0;
             payload.subCategories = [];
-            
+
             commit('ADD_CATEGORY', payload);
 
             return response.data.message;
@@ -107,18 +106,36 @@ const actions = {
         commit('UPDATE_DISCOUNT', payload);
     },
 
-    async updatePosition({commit}, payload) {
-
+    async updatePosition({ commit }, payload) {
         try {
             const response = await updatePosition(payload);
-      
+
             commit('UPDATE_POSITION', payload);
-    
+
             return response.data.message;
-        } catch ( error ) {
+        } catch (error) {
             throw error;
         }
-       
+    },
+
+    // payload = {
+    //     id: 23,
+    //     direction: 1/0, 1 -up, 0 - down
+    //     vm: this
+    // }
+    async updateSubCategoryPosition({ commit }, payload) {
+        try {
+            const data = {
+                id: payload.id,
+                direction: payload.direction
+            }
+            // const response = await updateSubCategoryPosition(data);
+
+            commit('UPDATE_SUB_CATEGORY_POSITION', payload);
+            // return response.data.message;
+        } catch (error) {
+            throw error;
+        }
     },
 }
 
@@ -197,7 +214,7 @@ const mutations = {
 
         }
 
-      
+
     },
 
     DELETE_CATEGORY(state, payload) {
@@ -233,15 +250,61 @@ const mutations = {
     },
 
     UPDATE_POSITION(state, payload) {
-        const categoryIndex = state.categories.findIndex(category => category.id == payload.categoryId );
-        const targetCategoryIndex = state.categories.findIndex(targetCategoryIndex => targetCategoryIndex.id == payload.targetCategoryId );
+        const categoryIndex = state.categories.findIndex(category => category.id == payload.categoryId);
+        const targetCategoryIndex = state.categories.findIndex(targetCategoryIndex => targetCategoryIndex.id == payload.targetCategoryId);
 
         const deleted = state.categories.splice(categoryIndex, 1);
         state.categories.splice(targetCategoryIndex, 0, deleted[0]);
 
-        state.categories.forEach( (category, index) => {
+        state.categories.forEach((category, index) => {
             category.position = index + 1;
         })
+    },
+
+    UPDATE_SUB_CATEGORY_POSITION(state, payload) {
+
+        try {
+
+
+            const vm = payload.vm;
+
+            const parentCategoryIndex = state.categories.findIndex(parentCategory => parentCategory.id == payload.parentId);
+
+            const categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id == payload.id);
+
+            let adjenctCategoryIndex = -1;
+            let categoryNewPosition = -1;
+            let adjenctCategoryNewPosition = -1;
+
+
+
+
+            if (payload.direction == 1) {
+                console.log(payload);
+                adjenctCategoryIndex = categoryIndex - 1;
+
+                categoryNewPosition = state.categories[parentCategoryIndex].subCategories[categoryIndex].position - 1;
+                adjenctCategoryNewPosition = state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex].position + 1;
+
+                const deleted = state.categories[parentCategoryIndex].subCategories.splice(adjenctCategoryIndex, 1);
+                state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 0, deleted[0]);
+
+            } else {
+                adjenctCategoryIndex = categoryIndex + 1;
+
+                categoryNewPosition = state.categories[parentCategoryIndex].subCategories[categoryIndex].position + 1;
+                adjenctCategoryNewPosition = state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex].position - 1;
+
+                const deleted = state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
+                state.categories[parentCategoryIndex].subCategories.splice(adjenctCategoryIndex, 0, deleted[0]);
+
+            }
+
+        } catch (error) {
+            console.log(error);
+
+        }
+
     }
 
 }
