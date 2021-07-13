@@ -47,6 +47,7 @@
         :selected-parent-category-id="selectedParentCategoryId"
         :selected-id="selectedId"
         :index="index"
+        :last-position="lastPosition"
         @selected="selectCategory"
       ></SubCategoryComponent>
     </ul>
@@ -93,6 +94,11 @@ export default {
       return false;
     },
 
+    lastPosition() {
+      const categoryIndex = this.getCategories.findIndex(category => category.id == this.category.id);
+      return this.getCategories[categoryIndex].subCategories[this.getCategories[categoryIndex].subCategories.length - 1].position;
+    },
+
     showSubcategories() {
       return (
         this.category.id === parseInt(this.selectedParentCategoryId) &&
@@ -116,7 +122,12 @@ export default {
         "id",
         parseInt(this.category.discountId),
       ]);
-      return `${discount.code} ${discount.id}%`;
+
+      if (discount) {
+        return `${discount.code} ${discount.id}%`;
+      }
+
+      return "";
     },
 
     getSubCategories() {
@@ -146,7 +157,7 @@ export default {
 
         await this.changePosition(data);
       } else {
-        this.$toast.info('Can\'t change position with itself');
+        this.$toast.info("Can't change position with itself");
       }
     },
 

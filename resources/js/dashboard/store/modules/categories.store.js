@@ -260,6 +260,7 @@ const mutations = {
     UPDATE_SUB_CATEGORY_POSITION(state, payload) {
 
         try {
+            const vm = payload.vm;
 
             const parentCategoryIndex = state.categories.findIndex(parentCategory => parentCategory.id == payload.parentId);
 
@@ -270,7 +271,6 @@ const mutations = {
             let adjenctCategoryNewPosition = -1;
 
             if (payload.direction == 1) {
-                console.log(payload);
                 adjenctCategoryIndex = categoryIndex - 1;
 
                 categoryNewPosition = state.categories[parentCategoryIndex].subCategories[categoryIndex].position - 1;
@@ -288,6 +288,9 @@ const mutations = {
                 const deleted = state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
                 state.categories[parentCategoryIndex].subCategories.splice(adjenctCategoryIndex, 0, deleted[0]);
             }
+
+            vm.$set( state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex], 'position', categoryNewPosition);
+            vm.$set( state.categories[parentCategoryIndex].subCategories[categoryIndex], 'position', adjenctCategoryNewPosition);
 
         } catch (error) {
             console.log(error);

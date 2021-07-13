@@ -1,7 +1,7 @@
 <template>
   <li class="flex items-center">
     <div class="bg-black">
-      <button @click.capture="updatePosition(1)">
+      <button @click.capture="updatePosition(1)" v-if="canUp">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="18px"
@@ -15,7 +15,7 @@
           />
         </svg>
       </button>
-      <button @click.capture="updatePosition(0)">
+      <button @click.capture="updatePosition(0)" v-if="canDown">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="18px"
@@ -89,11 +89,23 @@ export default {
     index: {
       type: Number,
       required: true,
-    },
+    }, 
+    lastPosition: {
+      type: Number,
+      required: true,
+    }
   },
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
+
+    canUp() {
+      return this.subcategory.position > 1;
+    },
+
+    canDown() {
+      return this.subcategory.position < this.lastPosition;
+    },
 
     isOdd() {
       if (this.index % 2 !== 0) {
@@ -140,11 +152,13 @@ export default {
           id: this.subcategory.id,
           parentId: this.subcategory.parentId,
           direction,
+          vm: this,
         };
 
         // payload = {
         //     id: 23,
         //     direction: 1/0, 1 -up, 0 - down
+        //    vm: this
         // }
         const response = await this.updateSubCategoryPosition(payload);
 
