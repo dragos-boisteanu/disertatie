@@ -50,9 +50,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public $with = ['role', 'addresses', 'cart'];
-
+    
     protected $appends = array('fullName');
 
     public function getFullNameAttribute()
