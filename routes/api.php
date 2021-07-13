@@ -26,18 +26,18 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
        
     });
 
-    Route::apiResource('users', 'UserController');
-    Route::apiResource('roles', 'RoleController');
-    Route::apiResource('products', 'ProductController');
-    Route::apiResource('categories', 'CategoryController')->except('show');
-    Route::apiResource('units', 'UnitController');
-    Route::apiResource('ingredients', 'IngredientController');
-    Route::apiResource('stocks', 'StockController')->only('update');
-    Route::apiResource('discounts', 'DiscountController');
-    Route::apiResource('orders', 'OrderController');
-    Route::apiResource('delivery-methods', 'DeliveryMethodController');
+    Route::apiResource('users', 'UserController', ['as'=>'api']);
+    Route::apiResource('roles', 'RoleController', ['as'=>'api']);
+    Route::apiResource('products', 'ProductController', ['as'=>'api']);
+    Route::apiResource('categories', 'CategoryController', ['as'=>'api'])->except('show');
+    Route::apiResource('units', 'UnitController', ['as'=>'api']);
+    Route::apiResource('ingredients', 'IngredientController', ['as'=>'api']);
+    Route::apiResource('stocks', 'StockController', ['as'=>'api'])->only('update');
+    Route::apiResource('discounts', 'DiscountController', ['as'=>'api']);
+    Route::apiResource('orders', 'OrderController', ['as'=>'api']);
+    Route::apiResource('delivery-methods', 'DeliveryMethodController', ['as'=>'api']);
     // Route::apiResource('order-statuses', 'OrderStatusController');
-    Route::apiResource('tables', 'TableController');
+    Route::apiResource('tables', 'TableController', ['as'=>'api']);
 
     Route::get('products/{id}/edit', 'ProductController@edit');
 
@@ -94,13 +94,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
 
 
 
-    Route::apiResource('images', 'FileController')->only('store', 'destroy');
+    Route::apiResource('images', 'FileController', ['as'=>'api'])->only('store', 'destroy');
        
-});
-
-
-Route::group(['namespace'=>'Api\Client', 'prefix'=>'client'], function() {  
-    Route::apiResource('cart', 'CartController')->only('store', 'destroy');
 });
 
 

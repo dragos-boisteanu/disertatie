@@ -50,16 +50,16 @@ Route::group(['namespace' => 'Web\Client'], function () {
     Route::get('/meniu', 'MenuController@index')->name('menu.index');
     Route::get('/meniu/{categorySlug}', 'MenuController@show')->name('menu.show');
 
-    Route::group(['prefix'=>'cart'], function() { 
-        Route::get('/', 'CartController@index')->name('cart.index');
-        Route::post('/{productId}', 'CartController@store')->name('cart.store');
-        Route::put('/{id}', 'CartController@update')->name('cart.patch');
-        Route::delete('/{id}', 'CartController@destroy')->name('cart.delete');
+    Route::group(['prefix'=>'carts'], function() { 
+        Route::get('/', 'CartController@index')->name('carts.index');
+        Route::post('/{productId}', 'CartController@store')->name('carts.store');
+        Route::put('/{id}', 'CartController@update')->name('carts.patch');
+        Route::delete('/{id}', 'CartController@destroy')->name('carts.delete');
     });
 
     Route::group(['prefix'=>'checkout'], function() { 
-        Route::get('/', 'OrderController@create')->name('order.create');
-        Route::post('/', 'OrderController@store')->name('order.store');
+        Route::get('/', 'OrderController@create')->name('orders.create');
+        Route::post('/', 'OrderController@store')->name('orders.store');
     });
   
 });

@@ -34,11 +34,11 @@
                         @endforeach
                     </ul>
                     <div class="w-full text-center mt-2 flex justify-between text-sm" v-if="hasItems">
-                        <a href="{{ route('order.create') }}"
+                        <a href="{{ route('orders.create') }}"
                             class="rounded-sm text-white bg-green-600 px-4 py-1 active:shadow-inner hover:bg-green-500">
                             Go to checkout
                         </a>
-                        <a href="{{ route('cart.index') }}"
+                        <a href="{{ route('carts.index') }}"
                             class="rounded-sm text-white bg-sky-600 px-4 py-1 active:shadow-innerhover:bg-sky-500">
                             View Cart
                         </a>

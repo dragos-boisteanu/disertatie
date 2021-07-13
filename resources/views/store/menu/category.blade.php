@@ -12,7 +12,7 @@
                         <ul>
                             @foreach ($subCategory->subProducts as $product)
                                 <li class="mb-4 last:mb-0">
-                                    <form method="POST" action="{{ route('cart.store', ['productId' => $product->id]) }}"
+                                    <form method="POST" action="{{ route('carts.store', ['productId' => $product->id]) }}"
                                         class="class=mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5">
                                         @csrf
 
@@ -59,7 +59,7 @@
             @else
                 @foreach ($category->products as $product)
                     <li class="pb-4 border-b border-gray-600 mb-4 last:border-b-0 last:border-trueGray-700">
-                        <form method="POST" action="{{ route('cart.store', ['productId' => $product->id]) }}"
+                        <form method="POST" action="{{ route('carts.store', ['productId' => $product->id]) }}"
                             class="class=mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5">
                             @csrf
 
