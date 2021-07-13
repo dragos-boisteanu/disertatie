@@ -55,7 +55,7 @@
                             <div class="md:border-l md:border-gray-30 md:flex-1">
                                 <div class="flex items-center justify-between p-2 border-t border-b border-gray-300">
                                     <div class="flex-initial w-20">
-                                        <form method="POST" action="{{ route('cart.patch', ['id' => $item->id]) }}"
+                                        <form method="POST" action="{{ route('carts.patch', ['id' => $item->id]) }}"
                                             class="text-center flex flex-col justify-center gap-y-2">
                                             @csrf
                                             @method('PUT')
@@ -69,7 +69,7 @@
                                         {{ $item->price }} Ron / buc.
                                     </div>
                                     <form class="flex-initial" method="POST"
-                                        action="{{ route('cart.delete', ['id' => $item->id]) }}">
+                                        action="{{ route('carts.delete', ['id' => $item->id]) }}">
                                         @csrf
                                         @method("DELETE")
                                         <button class="w-full text-sm text-center text-red-700 hover:text-red-500">
