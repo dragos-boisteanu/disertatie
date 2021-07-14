@@ -35,11 +35,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductServiceInterface::class, ProductService::class);
         $this->app->bind(TableServiceInterface::class, TableService::class);
         $this->app->bind(CartServiceInterface::class, CartService::class);
-
-        if ($this->app->environment('local')) {
-            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
-            $this->app->register(TelescopeServiceProvider::class);
-        }
+     
     }
 
     /**
