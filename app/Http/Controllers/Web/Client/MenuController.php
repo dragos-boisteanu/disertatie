@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Interfaces\CartServiceInterface;
 
 class MenuController extends Controller
@@ -31,14 +32,19 @@ class MenuController extends Controller
      */
     public function show($categorySlug)
     {
-        $categories = Category::where('parent_id', null)->orderBy('position', 'asc')->get();
-        $category = Category::findBySlugOrFail($categorySlug);
-        $category->load(['subCategories' => function($query) {
-            $query->orderBY('position','asc');
-        }]);
-        $category->subCategories->each( function($subCategory) {
-            $subCategory->load('subProducts');
+        $categories = Cache::remember('categories', 60, function() {
+            return  Category::where('parent_id', null)->orderBy('position', 'asc')->get();
         });
+        $category = Category::with(
+            [
+                'subCategories' => function ($query) {
+                    $query->orderBy('position', 'asc');
+                    $query->with(['subProducts' => function($query) {
+                        $query->orderBy('name','asc');
+                    }]);
+                },
+            ])
+            ->whereSlug($categorySlug)->first();
 
         return view('store.menu.category', ['category'=>$category, 'categories' => $categories]);
     }

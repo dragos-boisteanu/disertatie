@@ -23,7 +23,7 @@ class Category extends Model
         'position',
     ];
 
-    public $with = ['discount'];
+    // public $with = ['discount'];
 
     public function sluggable(): array
     {

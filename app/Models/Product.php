@@ -31,7 +31,7 @@ class Product extends Model
         'discount_id',
     ];
 
-    public $with = ['unit', 'stock', 'category', 'ingredients'];
+    public $with = ['unit', 'stock', 'category', 'subCategory', 'ingredients', 'discount'];
 
     protected $appends = array('price', 'quantity', 'finalDiscount');
 
