@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
@@ -83,6 +84,8 @@ class CategoryController extends Controller
             $response['id'] = $category->id;
             $response['message'] = 'Category ' . $category->name . ' created sucessfuly';
 
+            Cache::forget('categories');
+
             return response()->json($response, 201);
         } catch (QueryException $qex) {
             $errorCode = $qex->errorInfo[1];
@@ -132,6 +135,8 @@ class CategoryController extends Controller
         $category->update($input);
 
         $responseData['message'] = "Category updated";
+
+        Cache::forget('categories');
 
         return response()->json($responseData, 200);
     }
@@ -187,6 +192,9 @@ class CategoryController extends Controller
             $selectedCategory->save();
             $targetCategory->save();
 
+
+            Cache::forget('categories');
+
             DB::commit();
             return response()->json(['message' => 'Positon changed succesfull'], 200);
         } catch (\Exception $e) {
@@ -198,7 +206,7 @@ class CategoryController extends Controller
     // direction
     // 1 - up
     // 0 - down
-    public function updateSubCategoryPosition($id, $direction) 
+    public function updateSubCategoryPosition($id, $direction)
     {
         try {
             DB::beginTransaction();
@@ -207,39 +215,39 @@ class CategoryController extends Controller
 
             $directionMessage = "";
 
-            if($direction == 1) {
-                $aboveCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '<', $category->position)->orderBy('position','desc')->first();
+            if ($direction == 1) {
+                $aboveCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '<', $category->position)->orderBy('position', 'desc')->first();
 
                 $initialCategoryPosition = $category->position;
-        
+
                 $category->position = $aboveCategory->position;
-        
+
                 $aboveCategory->position = $initialCategoryPosition;
-                
+
                 $directionMessage = 'up';
 
                 $aboveCategory->save();
-                
             } else {
-                $bellowCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '>', $category->position)->orderBy('position','asc')->first();
-    
+                $bellowCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '>', $category->position)->orderBy('position', 'asc')->first();
+
                 $initialCategoryPosition = $category->position;
-        
+
                 $category->position = $bellowCategory->position;
-        
+
                 $bellowCategory->position = $initialCategoryPosition;
-        
+
                 $directionMessage = 'down';
 
                 $bellowCategory->save();
             }
-    
+
             $category->save();
-            
+
+            Cache::forget('categories');
 
             DB::commit();
             return response()->json(['message' => 'Category ' . $category->name .  ' moved ' . $directionMessage], 200);
-        } catch( \Exception $ex ) {
+        } catch (\Exception $ex) {
             DB::rollBack();
             return response()->json(['error' => 'Failed to move category up'], 500);
         }
@@ -266,6 +274,9 @@ class CategoryController extends Controller
 
             $category->forceDelete();
 
+
+            Cache::forget('categories');
+
             return response()->json(['message' => 'Category ' . $category->name . ' was deleted'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['message' => 'Remove or copy category\'s ( ' .  $category->name . ' ) items before deleting'], 500);
@@ -285,6 +296,9 @@ class CategoryController extends Controller
         $category = Category::withTrashed()->findOrFail($id);
 
         $category->restore();
+
+
+        Cache::forget('categories');
 
         return response()->json(['message' => 'Category ' . $category->name . ' was restored'], 200);
     }

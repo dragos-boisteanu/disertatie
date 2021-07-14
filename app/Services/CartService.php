@@ -7,6 +7,7 @@ use Exception;
 use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use App\Interfaces\CartServiceInterface;
 
 class CartService implements CartServiceInterface
@@ -15,13 +16,17 @@ class CartService implements CartServiceInterface
   {
     try {
       if(isset($userId)) {
-        $cart = Cart::where('user_id', $userId)->first();
+        $query = Cart::where('user_id', $userId);
       }else {
-        $cart = Cart::where('session_id', $sessionId)->first();
+        $query = Cart::where('session_id', $sessionId);
       }
 
+      $cart = Cache::remember('cart', 60 * 30, function () use($query) {
+        return $query->first('id');
+      });
+
       if(isset($cart)) {
-        session(['cartId' =>$cart->id ]);
+        session(['cartId' => $cart->id ]);
       }
 
       return $cart;

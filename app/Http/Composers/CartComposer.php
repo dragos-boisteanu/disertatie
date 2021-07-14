@@ -6,6 +6,7 @@ namespace App\Http\Composers;
 use App\Models\Cart;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Interfaces\CartServiceInterface;
 
 class CartComposer
@@ -29,6 +30,7 @@ class CartComposer
     
     $cart = $this->cartService->getCart(Auth::id(), session()->getId());
     
+
     if(is_null($cart)) {
       $cart = new Cart();
     }

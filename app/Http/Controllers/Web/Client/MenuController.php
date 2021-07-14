@@ -12,7 +12,7 @@ use App\Interfaces\CartServiceInterface;
 class MenuController extends Controller
 {
 
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -20,8 +20,8 @@ class MenuController extends Controller
     public function index()
     {
         $categories = Category::where('parent_id', null)->orderBy('position', 'asc')->get();
-     
-        return view('store.menu.index', ['categories'=>$categories]);
+
+        return view('store.menu.index', ['categories' => $categories]);
     }
 
     /**
@@ -32,21 +32,22 @@ class MenuController extends Controller
      */
     public function show($categorySlug)
     {
-        $categories = Cache::remember('categories', 60, function() {
+        $categories = Cache::remember('categories', 60 * 30, function () {
             return  Category::where('parent_id', null)->orderBy('position', 'asc')->get();
         });
-        $category = Category::with(
+        $category =  Category::with(
             [
                 'subCategories' => function ($query) {
                     $query->orderBy('position', 'asc');
-                    $query->with(['subProducts' => function($query) {
-                        $query->orderBy('name','asc');
-                    }]);
+                    $query->with([
+                        'subProducts' => function ($query) {
+                            $query->orderBy('name', 'asc');
+                        },
+                    ]);
                 },
-            ])
-            ->whereSlug($categorySlug)->first();
+            ]
+        )->whereSlug($categorySlug)->first();
 
-        return view('store.menu.category', ['category'=>$category, 'categories' => $categories]);
+        return view('store.menu.category', ['category' => $category, 'categories' => $categories]);
     }
-
 }
