@@ -13,77 +13,72 @@
 
         <div class="flex flex-wrap items-center justify-between">
             <h1 class="text-4xl my-4 pl-2 font-semibold text-trueGray-300 ">Comanda #{{ $order->id }} </h1>
-            {{-- <div class="text-xs py-1 px-2 rounded-sm font-semibold
-                            @if ($order->status->name == 'Canceled') bg-red-300
-                text-red-900 @endif
-                @if ($order->status->name == 'Received') bg-blue-300 text-blue-900
-                @endif
-                @if ($order->status->name == 'Completed') bg-green-300 text-green-900
-                @endif
-                ">
-                {{ $order->status->name }}
-            </div> --}}
+            @if ($order->status->name == 'Canceled')
+                <div id="canceledStatus" class="text-xs py-1 px-2 rounded-sm font-semibold bg-red-300
+                text-red-900">
+                    Anulata
+                </div>
+            @endif
         </div>
 
-        <button id="setSatButton" class="px-2 py-1 bg-white">
-            Is preparing
-        </button>
+        @if ($order->status->name != 'Canceled')
+            <div>
+                <h2 class="text-lg text-trueGray-300 my-4 pl-2">Statut comanda</h2>
+                <ul class="flex flex-col md:flex-row md:w-full">
+                    <li class="relative h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
+                        <div class="h-full w-1 bg-trueGray-100 md:h-1 md:w-full"></div>
+                        <div class="md:pr-1">
+                            <div class="flex-grow-0 text-xs py-1 px-2 rounded-sm font-semibold bg-sky-200 text-sky-800">
+                                Primita
+                            </div>
+                        </div>
+                    </li>
+                    <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
+                        <div id="isPreparingLine"
+                            class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
+                        <div class="md:pr-1">
+                            <div id="isPreparing"
+                                class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
+                                Se pregateste
+                            </div>
+                        </div>
+                    </li>
+                    {{-- bg-orange-200 text-orange-800 --}}
+                    <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
+                        <div id="inDeliveryLine"
+                            class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
+                        <div class="md:pr-1">
+                            <div id="inDelivery"
+                                class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
+                                Se livreaza
+                            </div>
+                        </div>
+                    </li>
+                    {{-- bg-sky-200 text-sky-800 --}}
+                    <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
+                        <div id="deliveredLine"
+                            class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
+                        <div class="md:pr-1">
+                            <div id="delivered"
+                                class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
+                                Livrata
+                            </div>
+                        </div>
+                    </li>
+                    {{-- bg-yellow-200 text-yellow-800 --}}
+                    <li class="h-6 flex items-start gap-x-2 md:w-1/5 md:h-14 md:flex-col md:gap-x-0 md:gap-y-2">
+                        <div id="completedLine"
+                            class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
+                        <div id="completed"
+                            class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
+                            Finalizata
+                        </div>
+                    </li>
+                    {{-- bg-green-200 text-green-800 --}}
+                </ul>
+            </div>
+        @endif
 
-        <div>
-            <h2 class="text-lg text-trueGray-300 my-4 pl-2">Statut comanda</h2>
-            <ul class="flex flex-col md:flex-row md:w-full">
-                <li class="relative h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div class="h-full w-1 bg-trueGray-100 md:h-1 md:w-full"></div>
-                    <div class="md:pr-1">
-                        <div class="flex-grow-0 text-xs py-1 px-2 rounded-sm font-semibold bg-sky-200 text-sky-800">
-                            Primita
-                        </div>
-                    </div>
-                </li>
-                <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="isPreparingLine"
-                        class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
-                    <div class="md:pr-1">
-                        <div id="isPreparing"
-                            class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
-                            Se pregateste
-                        </div>
-                    </div>
-                </li>
-                {{-- bg-orange-200 text-orange-800 --}}
-                <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="inDeliveryLine"
-                        class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
-                    <div class="md:pr-1">
-                        <div id="inDelivery"
-                            class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
-                            Se livreaza
-                        </div>
-                    </div>
-                </li>
-                {{-- bg-sky-200 text-sky-800 --}}
-                <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="deliveredLine"
-                        class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
-                    <div class="md:pr-1">
-                        <div id="delivered"
-                            class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
-                            Livrata
-                        </div>
-                    </div>
-                </li>
-                {{-- bg-yellow-200 text-yellow-800 --}}
-                <li class="h-6 flex items-start gap-x-2 md:w-1/5 md:h-14 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="completedLine"
-                        class="h-full w-1 transition-colors !duration-700 bg-trueGray-700 md:h-1 md:w-full"></div>
-                    <div id="completed"
-                        class="text-xs py-1 px-2 rounded-sm transition-colors !duration-700 font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
-                        Finalizata
-                    </div>
-                </li>
-                {{-- bg-green-200 text-green-800 --}}
-            </ul>
-        </div>
 
         <div>
             <h2 class="text-lg text-trueGray-300 my-4 pl-2">Detalii comanda</h2>
@@ -219,17 +214,10 @@
 @push('scripts')
 
     <script>
-        const setSatButton = $('#setSatButton');
+        window.Echo.private('orders.{{ $order->id }}').listen("OrderStatusUpdate", (e) => {
+            const status = e.status.toLowerCase().replace(/\s/g, '');
 
-        window.Echo.private('App.User.{{ Auth::user()->id }}')
-            .notification((notification) => {
-                
-            });
-
-        setSatButton.click(function() {
-            setSatButtonValue = setSatButton.html().toLowerCase().replace(/\s/g, '');
-
-            switch (setSatButtonValue) {
+            switch (status) {
                 case 'ispreparing':
                     $('#isPreparingLine').removeClass('bg-trueGray-700').addClass('bg-trueGray-100');
                     $('#isPreparing').removeClass('text-trueGray-700 bg-transparent border border-trueGray-700')
@@ -254,7 +242,8 @@
                         .addClass('bg-green-200 text-green-800');
                     break;
             }
-        })
+
+        });
     </script>
 
 @endpush

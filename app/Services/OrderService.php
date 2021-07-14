@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Events\NewMessage;
 use App\Events\OrderCreated;
 use App\Jobs\SendOrderEmailJob;
+use App\Events\OrderStatusUpdate;
 use App\Events\UpdateTableStatus;
 use App\Events\OrderPlacedAtTable;
 use Illuminate\Support\Facades\DB;
@@ -191,6 +192,8 @@ class OrderService implements OrderServiceInterface
       $order->save();
       $order->refresh();
 
+      broadcast(new OrderStatusUpdate($order));
+
       return $order;
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
@@ -213,6 +216,8 @@ class OrderService implements OrderServiceInterface
       }
       
       $order = $this->removeItems($order);
+
+      broadcast(new OrderStatusUpdate($order));
 
       return $order;
     } catch (ModelNotFoundException $mex) {

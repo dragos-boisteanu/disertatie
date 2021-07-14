@@ -34,13 +34,12 @@ class OrderStatusUpdate implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('order'.$this->order->id);
+        return new PrivateChannel('orders'.$this->order->id);
     }
 
     public function broadcastWith()
     {
         return [
-            'id' => $this->order->id,
             'stauts' => $this->order->status,
         ];
     }
