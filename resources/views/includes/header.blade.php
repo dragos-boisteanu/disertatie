@@ -19,7 +19,7 @@
                 </a>
             </li>
         </ul>
-        <x-mobile-cart-button></x-mobile-cart-button>
+        <x-mobile-cart-button :cart="$cart"></x-mobile-cart-button>
     </nav>
 
     {{-- desktop nav --}}
@@ -44,7 +44,7 @@
                 </a>
             </li>
         </ul>
-        <x-desktop-cart></x-desktop-cart>
+        <x-desktop-cart :cart="$cart"></x-desktop-cart>
     </nav>
 
     @guest
@@ -103,7 +103,7 @@
         </ul>
     @endauth
 
-    <x-mobile-cart></x-mobile-cart>
+    <x-mobile-cart :cart="$cart"></x-mobile-cart>
 </header>
 
 @push('scripts')

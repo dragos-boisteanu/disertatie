@@ -1,3 +1,5 @@
+@props(['cart'])
+
 <div id="mobileCart" class="w-full lg:hidden" style="display: none">
     <div class="relative w-full bg-white p-2 group-hover:block lg:min-w-[300px] lg:rounded-sm">
         @if ($cart->itemsCount > 0)

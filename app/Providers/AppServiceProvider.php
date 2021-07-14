@@ -17,7 +17,6 @@ use App\Interfaces\TableServiceInterface;
 use App\Interfaces\ProductServiceInterface;
 use App\Http\Resources\IngredientCollection;
 use App\Interfaces\OrderItemServiceInterface;
-use Laravel\Telescope\TelescopeServiceProvider;
 use App\Interfaces\ProductStockServiceInterface;
 
 class AppServiceProvider extends ServiceProvider

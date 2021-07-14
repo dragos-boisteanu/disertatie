@@ -1,3 +1,5 @@
+@props(['cart'])
+
 <div class="hidden lg:block">
     <div class="relative group rounded bg-trueGray-800 shadow-sm group-hover:rounded-none hiden lg:block">
         <div class="relative block h-full w-full p-2">
