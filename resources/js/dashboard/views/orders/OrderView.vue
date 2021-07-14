@@ -5,13 +5,7 @@
       <OrderStatus :status="order.status"></OrderStatus>
       <button
         @click="refresh"
-        class="
-          p-1
-          bg-sky-600
-          rounded-sm
-          active:shadow-inner
-          active:bg-sky-500
-        "
+        class="p-1 bg-sky-600 rounded-sm active:shadow-inner active:bg-sky-500"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -259,11 +253,44 @@
         v-if="canMarkAsCompleted"
         id="completed"
         name="completed"
-        type="secondary"
+        type="primary"
         :waiting="waiting"
         @click.native="markAsCompleted"
       >
         Completed
+      </Button>
+
+      <Button
+        v-if="canMarkAsIsPreparing"
+        id="completed"
+        name="completed"
+        type="secondary"
+        :waiting="waiting"
+        @click.native="markAsIsPreparing"
+      >
+        Is preparing
+      </Button>
+
+      <Button
+        v-if="canMarkInDelivery"
+        id="completed"
+        name="completed"
+        type="secondary"
+        :waiting="waiting"
+        @click.native="markAsInDelivery"
+      >
+        In delivery
+      </Button>
+
+      <Button
+        v-if="canMarkAsDelivered"
+        id="completed"
+        name="completed"
+        type="secondary"
+        :waiting="waiting"
+        @click.native="markAsDelivered"
+      >
+        Delivered
       </Button>
     </div>
   </ViewContainer>
@@ -343,7 +370,7 @@ export default {
     isTableOrder() {
       return this.order.deliveryMethod.isTable;
     },
-  
+
     canMarkAsCompleted() {
       if (
         this.order.deletedAt === null &&
@@ -353,6 +380,18 @@ export default {
       } else {
         return false;
       }
+    },
+
+    canMarkAsIsPreparing() {
+      return this.order.status.name == 'Received' && this.order.status.name != 'In delivery' && this.order.status.name != 'Delivered' 
+    },
+
+    canMarkInDelivery() {
+      return this.order.status.name == 'Is preparing' && this.order.status.name != 'In delivery' && this.order.status.name != 'Delivered'
+    },
+
+    canMarkAsDelivered() {
+      return this.order.status.name == 'In delivery' && this.order.status.name != 'Delivered'
     },
   },
 
@@ -499,7 +538,12 @@ export default {
 
       const itemIndex = _findIndex(this.order.items, ["id", item.id]);
 
-      this.$set(this.order.items[itemIndex], "quantity", parseInt(this.order.items[itemIndex].quantity) + parseInt(item.newQuantity));
+      this.$set(
+        this.order.items[itemIndex],
+        "quantity",
+        parseInt(this.order.items[itemIndex].quantity) +
+          parseInt(item.newQuantity)
+      );
       this.$set(
         this.order.items[itemIndex],
         "totalPrice",
@@ -509,7 +553,6 @@ export default {
       this.order.totalQuantity = responseData.totalQuantity;
       this.order.totalValue = responseData.totalValue;
       this.order.updatedAt = responseData.updatedAt;
-  
     },
 
     async updateStatus(statusId) {

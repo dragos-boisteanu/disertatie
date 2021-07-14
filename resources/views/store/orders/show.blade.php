@@ -14,7 +14,7 @@
         <div class="flex flex-wrap items-center justify-between">
             <h1 class="text-4xl my-4 pl-2 font-semibold text-trueGray-300 ">Comanda #{{ $order->id }} </h1>
             <div id="finalStatus" class="text-xs py-1 px-2 rounded-sm font-semibold " style="display: none">
-                Anulata
+
             </div>
         </div>
 
@@ -307,35 +307,36 @@
                     completedLine.removeClass('bg-trueGray-700').addClass('bg-trueGray-100');
                     completed.removeClass('text-trueGray-700 bg-transparent border border-trueGray-700')
                         .addClass('bg-green-200 text-green-800');
+
                     break;
                 case 'canceled':
                     finalStatus.addClass('bg-red-300 text-red-900');
+                    finalStatus.html('Anulata')
                     finalStatus.fadeIn();
                     statusTracker.slideUp();
-
                     break;
             }
         }
 
         if (status == 'Canceled' || status == 'Completed') {
-
             finalStatus.show();
             statusTracker.hide();
 
             if (status == 'Canceled') {
                 finalStatus.addClass('bg-red-300 text-red-900');
             } else {
+                finalStatus.html('Finalizata')
                 finalStatus.addClass('bg-green-300 text-green-900');
             }
-        } else {
 
+        } else {
             finalStatus.hide();
             statusTracker.show();
 
             statusUpdate(status.toLowerCase().replace(/\s/g, ''), false);
 
-            window.Echo.private('orders.{{ $order->id }}').listen("OrderStatusUpdate", (e) => {
-                const status = e.status.toLowerCase().replace(/\s/g, '');
+            window.Echo.private('orders.{{ $order->id }}').listen(".OrderStatusUpdated", (e) => {
+                const status = e.status.name.toLowerCase().replace(/\s/g, '');
                 statusUpdate(status, true);
 
             });
