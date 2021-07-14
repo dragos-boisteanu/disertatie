@@ -155,9 +155,9 @@
                                 @endforeach
                             </ul>
                         </div>
-                        @if ($errors->has('deliveryMethod'))
+                        @if ($errors->has('deliveryMethodId'))
                             <div class="text-sm font-semibold text-red-600 mt-2">
-                                {{ $errors->first('deliveryMethod') }}</div>
+                                {{ $errors->first('deliveryMethodId') }}</div>
                         @endif
                     </div>
 

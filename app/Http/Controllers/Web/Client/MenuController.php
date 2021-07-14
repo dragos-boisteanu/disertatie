@@ -35,6 +35,7 @@ class MenuController extends Controller
         $categories = Cache::remember('categories', 60 * 30, function () {
             return  Category::where('parent_id', null)->orderBy('position', 'asc')->get();
         });
+        
         $category =  Category::with(
             [
                 'subCategories' => function ($query) {

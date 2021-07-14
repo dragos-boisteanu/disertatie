@@ -31,7 +31,7 @@
                     </div>
                 </li>
                 <li class="h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
-                    <div id="isPreparingLine" class="h-full w-1bg-trueGray-700 md:h-1 md:w-full"></div>
+                    <div id="isPreparingLine" class="h-full w-1 bg-trueGray-700 md:h-1 md:w-full"></div>
                     <div class="md:pr-1">
                         <div id="isPreparing"
                             class="text-xs py-1 px-2 rounded-sm font-semibold text-trueGray-700 bg-transparent border border-trueGray-700">
