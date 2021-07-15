@@ -9,6 +9,9 @@ const downloadCategories = () => httpClient.get(`${BASE_URL}`);
 const postCategory = (category) => httpClient.post(`${BASE_URL}`,  category);
 const patchCategory = (category) => httpClient.patch(`${BASE_URL}/${category.id}`, category);
 
+const addDiscount = (data) => httpClient.post(`${BASE_URL}/${data.id}/discounts/${data.discountId}`);
+const removeDiscount = (id) => httpClient.delete(`${BASE_URL}/${id}/discounts`, {data: id});
+
 const updatePosition = (data) => httpClient.patch(`${BASE_URL}/position`, data);
 const updateSubCategoryPosition = (data) => httpClient.patch(`${BASE_URL}/position/${data.id}/${data.direction}`);
 
@@ -23,6 +26,8 @@ export {
     patchCategory,
     updatePosition,
     updateSubCategoryPosition,
+    addDiscount,
+    removeDiscount,
     disableCategory,
     restoreCategory,
     deleteCategory

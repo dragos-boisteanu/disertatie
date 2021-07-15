@@ -96,9 +96,9 @@
 
         <div class="w-full">
           <DiscountComponent
-            :discount-id="category.discountId"
-            @remove="removeDiscount"
-            @add="addDiscount"
+            :discount-id="discountId"
+            @remove="callRemoveDiscount"
+            @add="callAddDiscount"
           ></DiscountComponent>
         </div>
       </div>
@@ -224,9 +224,9 @@ export default {
       return this.category.deletedAt !== null;
     },
 
-    // isParent() {
-    //   return this.category.parentId === null;
-    // },
+    isParent() {
+      return this.category.parentId === null;
+    },
 
     isCategorySelected() {
       return this.selectedCategory !== null || this.categoryId !== undefined
@@ -234,17 +234,12 @@ export default {
         : false;
     },
 
-    isParent() {
-      if(this.selectedCategory !== null && this.selectedCategory !== undefined) {
-        return this.selectedCategory.parentId === null || this.selectedCategory.parentId === undefined
-      } 
+    discountId() {
+      if (this.selectedCategory) {
+        return this.selectedCategory.discountId;
+      }
 
-      return false;
-     
-    },
-
-    canHaveParent() {
-      //check sometimg to make sure that it can't be marked as a subcategory
+      return this.category.discountId;
     },
   },
 
@@ -304,6 +299,8 @@ export default {
       "deleteCategory",
       "disableCategory",
       "restoreCategory",
+      "addDiscount",
+      "removeDiscount",
     ]),
 
     async create() {
@@ -501,39 +498,71 @@ export default {
       }
     },
 
-    async removeDiscount() {
+    async callRemoveDiscount() {
       try {
-        const payload = {
-          category: {
+        if (this.selectedCategory) {
+          this.$Progress.start();
+          this.waiting = true;
+
+          const payload = {
             id: this.category.id,
-            removeDiscount: true,
-          },
-          vm: this,
-        };
+            parentId: this.category.parentId,
+            vm: this,
+          };
 
-        this.$Progress.start();
-        this.waiting = true;
+          const response = await this.removeDiscount(payload);
 
-        await this.patchCategory(payload);
+          this.selectedCategory.discountId = "";
 
-        this.$toast.success("Discount removed");
-
-        this.category.discountId = "";
-
-        this.$Progress.finish();
-        this.waiting = false;
-
-        this.category.discountId = "";
+          this.$Progress.finish();
+          this.$toast.success(response.data.message);
+          this.waiting = false;
+        } else {
+          this.category.discountId = "";
+        }
       } catch (error) {
-        console.log(error);
-        this.$toast.error("Failed to update category");
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try agian later");
+        }
+
         this.$Progress.fail();
         this.waiting = false;
       }
     },
 
-    addDiscount(discountId) {
-      this.category.discountId = discountId;
+    async callAddDiscount(discountId) {
+      try {
+        if (this.selectedCategory) {
+          this.$Progress.start();
+          this.waiting = true;
+          const payload = {
+            id: this.category.id,
+            parentId: this.category.parentId,
+            discountId,
+            vm: this,
+          };
+
+          const response = await this.addDiscount(payload);
+
+          this.$toast.success(response.data.message);
+          this.$Progress.finish();
+
+          this.selectedCategory.discountId = discountId;
+        } else {
+          this.category.discountId = discountId;
+        }
+
+        this.waiting = false;
+      } catch (error) {
+        this.waiting = false;
+        this.$Progress.fail();
+
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        }
+      }
     },
   },
 

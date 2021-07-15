@@ -67,26 +67,15 @@ class CategoryController extends Controller
                     ->whereNotNull('parent_id')
                     ->orderBy('position', 'des')
                     ->first(['position'])->position;
-
-                // DB::select('select distinct position from categories
-                //                             where position is not null
-                //                             and parent_id IS not null
-                //                             order by position desc 
-                //                             limit 1');
-
+                
                 $response['parentName'] = $parentCategory->name;
+
             } else {
                 $lastPosition = DB::table('categories')
                     ->whereNotNull('position')
                     ->whereNull('parent_id')
                     ->orderBy('position', 'desc')
                     ->first(['position'])->position;
-
-                // $lastPosition = DB::select('select position from categories
-                //                             where position is not null
-                //                             and parent_id is null
-                //                             order by position desc 
-                //                             limit 1');
             }
 
             $input['position'] = $lastPosition + 1;
@@ -207,6 +196,7 @@ class CategoryController extends Controller
 
         $categories = Category::with(['products', 'subProducts', 'subCategories' => function ($query) {
             $query->withTrashed();
+            $query->orderBy('position', 'asc');
         }])->where('name', 'like', $catagoryName . '%')->whereNull('parent_id')->get();
 
         if ($categories->isNotEmpty()) {

@@ -1,8 +1,9 @@
-import { searchCategories, downloadCategories, postCategory, patchCategory, updatePosition, updateSubCategoryPosition, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
+import { searchCategories, downloadCategories, postCategory, patchCategory, updatePosition, updateSubCategoryPosition,addDiscount, removeDiscount, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
 import _isEqual from 'lodash/isEqual'
 import _find from 'lodash/find'
+import { remove } from 'lodash';
 
 const initialState = () => ({
     categories: []
@@ -44,6 +45,7 @@ const actions = {
             payload.deletedAt = null;
             payload.productsCount = 0;
             payload.subCategories = [];
+            payload.position = response.data.position;
 
             commit('ADD_CATEGORY', payload);
 
@@ -136,6 +138,35 @@ const actions = {
             throw error;
         }
     },
+
+    async addDiscount({commit}, payload) {
+        try {
+            const data = {
+                id: payload.id,
+                discountId: payload.discountId
+            }
+            const response = await addDiscount(data);
+
+            commit('ADD_DISCOUNT', payload);
+
+            return response;
+
+        } catch( error ) {
+            throw error;
+        }
+    },
+
+    async removeDiscount({commit}, payload) {
+        try {
+            const reponse = await removeDiscount(payload.id);
+            commit('REMOVE_DISCOUNT', payload);
+
+            return reponse;
+
+        } catch ( error ) {
+            throw error;
+        }
+    }
 }
 
 const mutations = {
@@ -173,9 +204,6 @@ const mutations = {
                     vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], key, payload.category[key]);
                 });
 
-                if (payload.category.removeDiscount !== null && payload.category.removeDiscount !== undefined && payload.category.removeDiscount) {
-                    vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], 'discountId', null);
-                }
                 // if the subCategory has a new parent
                 // remove the subCategory from the actula parent
                 // add the subCategory to the new parent
@@ -206,10 +234,6 @@ const mutations = {
             Object.keys(payload.category).forEach(key => {
                 vm.$set(state.categories[categoryIndex], key, payload.category[key]);
             });
-
-            if (payload.category.removeDiscount !== null && payload.category.removeDiscount !== undefined && payload.category.removeDiscount) {
-                vm.$set(state.categories[categoryIndex], 'discountId', null);
-            }
         }
     },
 
@@ -295,6 +319,38 @@ const mutations = {
         } catch (error) {
             console.log(error);
 
+        }
+    },
+
+    ADD_DISCOUNT(state, payload) {
+        let parentCategoryIndex = -1;
+        let categoryIndex = -1;
+        
+        if(payload.parentId) {
+            parentCategoryIndex = state.categories.findIndex(category => category.id === payload.parentId);
+            categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id === payload.id)
+
+            payload.vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'discountId', payload.discountId);
+        }else {
+            categoryIndex = state.categories.findIndex(category => category.id === payload.id);
+
+            payload.vm.$set(state.categories[categoryIndex], 'discountId', payload.discountId);
+        } 
+    },
+
+    REMOVE_DISCOUNT(state, payload) {
+        let parentCategoryIndex = -1;
+        let categoryIndex = -1;
+
+        if(payload.parentId) {
+            parentCategoryIndex = state.categories.findIndex(category => category.id === payload.parentId);
+            categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id === ayload.id)
+
+            payload.vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'discountId', "");
+        }else {
+            categoryIndex = state.categories.findIndex(category => category.id === payload.id);
+
+            payload.vm.$set(state.categories[categoryIndex], 'discountId', "");
         }
     }
 

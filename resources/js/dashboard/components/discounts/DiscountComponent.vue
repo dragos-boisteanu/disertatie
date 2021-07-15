@@ -84,16 +84,6 @@ export default {
     },
   },
 
-  // mounted() {
-  //   if (this.discountId) {
-  //     this.discount = _find(this.getDiscounts, [
-  //       "id",
-  //       parseInt(this.discountId),
-  //     ]);
-  //     this.selectDiscountId = this.discountId;
-  //   }
-  // },
-
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
   },
@@ -122,8 +112,6 @@ export default {
 
   methods: {
     removeDiscount() {
-      this.discount = null;
-      this.selectDiscountId = "";
       this.$emit("remove");
     },
 

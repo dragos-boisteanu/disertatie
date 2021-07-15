@@ -23,6 +23,9 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::post('/{id}/restore', 'CategoryController@restore');
         Route::patch('/position/{id}/{direction}', 'CategoryPositionController@updateSubCategoryPosition');
         Route::patch('/position', 'CategoryPositionController@updatePosition');
+
+        Route::post('/{id}/discounts/{discountId}', 'CategoryDiscountController@addDiscount');
+        Route::delete('/{id}/discounts', 'CategoryDiscountController@removeDiscount');
     });
     
     Route::group(['prefix'=>'products'], function() {
