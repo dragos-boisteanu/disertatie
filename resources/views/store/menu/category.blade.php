@@ -4,7 +4,7 @@
     <x-menu>
         @include('includes.menu-categories')
         @include('includes.menu-categories-select')
-        <ul class="mt-4 text-gray-600 w-full lg:w-2/5">
+        <ul class="mt-4 text-gray-600 w-full lg:w-1/2 xl:w-2/5">
             @if ($category->subCategories->count() > 0)
                 @foreach ($category->subCategories as $subCategory)
                     <li class="pb-4 border-b border-gray-600  mb-4 last:border-b-0 last:border-trueGray-700">
