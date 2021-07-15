@@ -14,7 +14,7 @@ class AddVatAndDiscountCollumnsToOrderProductTable extends Migration
     public function up()
     {
         Schema::table('order_product', function (Blueprint $table) {
-            $table->integer('discount');
+            $table->integer('discount')->nullable();
             $table->integer('vat');
         });
     }

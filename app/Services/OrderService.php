@@ -236,7 +236,9 @@ class OrderService implements OrderServiceInterface
       $order->products()->attach($item['id'], [
         "product_name" => $product->name,
         "quantity" => $item['quantity'],
-        "unit_price" => $product->price,
+        "base_unit_price" => $product->price,
+        "discount" => $product->finalDiscount,
+        "vat" => $product->vat
       ]);
 
       $this->productStockService->removeFromStock($product, $item['quantity']);
