@@ -172,27 +172,25 @@ class ProductService implements ProductServiceInterface
     }
   }
 
-  public function addDiscount(int $productId, int $discountId)
+  public function addDiscount(Product $product, int $discountId): Product
   {
     try {
-      $product = Product::withTrashed()->findOrFail($productId);
       $product->discount_id = $discountId;
-      $product->save();
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
-      throw new ModelNotFoundException('Product not found');
+      
+      return $product;
+    
     } catch (\Exception $ex) {
       throw new Exception('Something went wrong, try again later');
     }
   }
 
-  public function removeDiscount(int $productId)
+  public function removeDiscount(Product $product): Product
   {
     try {
-      $product = Product::withTrashed()->findOrFail($productId);
       $product->discount_id = null;
-      $product->save();
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
-      throw new ModelNotFoundException('Product not found');
+
+      return $product;
+
     } catch (\Exception $ex) {
       throw new Exception('Something went wrong, try again later');
     }

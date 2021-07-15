@@ -27,8 +27,8 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     
     Route::group(['prefix'=>'products'], function() {
         Route::get('/{id}/edit', 'ProductController@edit');
-        Route::post('/{id}/discounts/{discountId}', 'ProductController@addDiscount');
-        Route::delete('/{id}/discounts/remove', 'ProductController@removeDiscount');
+        Route::post('/{id}/discounts/{discountId}', 'ProductDiscountController@addDiscount');
+        Route::delete('/{id}/discounts/remove', 'ProductDiscountController@removeDiscount');
 
         Route::post('/{id}/ingredients/{ingredientId}/{quantity}', 'ProductIngredientController@addIngredient');
         Route::delete('/{id}/ingredients/{ingredientId}', 'ProductIngredientController@removeIngredient');

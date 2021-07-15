@@ -15,8 +15,8 @@ interface ProductServiceInterface
 
   public function patch(array $data, int $productId): void;
 
-  public function addDiscount(int $productId, int $discountId);
-  public function removeDiscount(int $productId);
+  public function addDiscount(Product $product, int $discountId): Product;
+  public function removeDiscount(Product $product): Product;
 
   public function addIngredient(Product $product, int $ingredientId, int $ingredientQuantity): Product;
   public function removeIngredient(Product $product, int $ingredientId): Product;

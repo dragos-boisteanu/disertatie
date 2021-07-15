@@ -102,36 +102,6 @@ class ProductController extends Controller
         }         
     }
 
-    public function addDiscount(Request $request, int $id, int $discountId)
-    {
-        $request->user()->can('update');
-
-        try {
-            $this->productService->addDiscount($id, $discountId);
-
-            return response()->json(['message'=>'Discount added'], 200);
-        } catch (ModelNotFoundException $me) {
-            return  response()->json(['message'=>$me->getMessage()], 404);
-        } catch (\Exception $e) {
-            return  response()->json(['message'=>$e->getMessage()], 500);
-        }    
-    }
-
-    public function removeDiscount(Request $request, int $id)
-    {
-        $request->user()->can('update');
-
-        try {
-            $this->productService->removeDiscount($id);
-
-            return response()->json(['message'=>'Discount removed'], 200);
-        } catch (ModelNotFoundException $me) {
-            return  response()->json(['message'=>$me->getMessage()], 404);
-        } catch (\Exception $e) {
-            return  response()->json(['message'=>$e->getMessage()], 500);
-        }    
-    }
-
     public function disable(Request $request, $id) 
     {
         $request->user()->can('delete', Product::class);
