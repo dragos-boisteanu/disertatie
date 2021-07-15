@@ -21,6 +21,11 @@ class Discount extends Model
         'ends_at'
     ];
 
+    protected $dates = [
+        'starts_at',
+        'ends_at',
+    ];
+
     public function user() 
     {
         return $this->belongsTo('App\Models\User');

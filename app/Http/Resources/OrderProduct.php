@@ -17,9 +17,9 @@ class OrderProduct extends JsonResource
         return [
             'id'=>$this->id,
             'name' => $this->pivot->product_name,
-            'unitPrice' => $this->price,
-            'vat' => $this->category->vat,
-            'discount' => $this->finalDiscount,
+            'unitPrice' => $this->getOrderProductFinalPrice($this->pivot->base_unit_price, $this->pivot->discount, $this->pivot->vat),
+            // 'vat' => $this->pivot->vat,
+            // 'discount' => $this->pivot->discount,
             'quantity' => $this->pivot->quantity,
             'totalPrice' => number_format($this->pivot->unit_price * $this->pivot->quantity, 2, '.', ''),
         ];

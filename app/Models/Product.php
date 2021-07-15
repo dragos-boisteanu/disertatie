@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Filters\Product\ProductFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Carbon;
+use Barryvdh\Debugbar\Facade as Debugbar;
+
 
 class Product extends Model
 {
@@ -37,15 +39,19 @@ class Product extends Model
 
     public function getFinalDiscountAttribute() 
     {
-        if($this->discount_id && ($this->discount->starts_at >= Carbon::now() && Carbon::now() < $this->discount->ends_at)) {
-            return $this->discount;
-        } else if ($this->subCategory && $this->subCategory->discount_id && ($this->subCategory->discount->starts_at >= Carbon::now() && Carbon::now() < $this->subCategory->discount->ends_at)) {
-            return $this->subCategory->discount;
-        } else if ($this->category && $this->category->discount_id && ($this->category->discount->starts_at >= Carbon::now() && Carbon::now() < $this->category->discount->ends_at)) {
-            return $this->category->discount;
-        }else {
-            return null;
-        }
+        $finalDiscount = null;
+
+        if(isset($this->discount) && ($this->discount->starts_at->lte(Carbon::now())  &&  $this->discount->ends_at->gte(Carbon::now()))) {
+            $finalDiscount = $this->discount->value;
+
+        } else if (isset($this->subCategory->discount) && ($this->subCategory->discount->starts_at->lte(Carbon::now())  &&  $this->subCategory->discount->ends_at->gte(Carbon::now()))) {
+            $finalDiscount = $this->subCategory->discount->value;
+        
+        } else  if(isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
+            $finalDiscount = $this->category->discount->value;
+        } 
+
+        return $finalDiscount;
     }
 
     public function getVatAttribute()
@@ -63,21 +69,21 @@ class Product extends Model
 
     public function getPriceAttribute()
     {
-        // product discount
-        // sub category discount
-        // category discount
+        $finalPrice = 0;
 
-        if($this->discount_id && ($this->discount->starts_at >= Carbon::now() && Carbon::now() < $this->discount->ends_at)) {
-            $finalPrice = $this->calculateDiscount($this->base_price, $this->discount->value);
-        } else if ($this->subCategory && $this->subCategory->discount_id && ($this->subCategory->discount->starts_at >= Carbon::now() && Carbon::now() < $this->subCategory->discount->ends_at)) {
+        if(isset($this->discount) && ($this->discount->starts_at->lte(Carbon::now())  &&  $this->discount->ends_at->gte(Carbon::now()))) {
+            $finalPrice = $this->calculateDiscount($this->base_price, ($this->discount->value));
+
+        } else if (isset($this->subCategory->discount) && ($this->subCategory->discount->starts_at->lte(Carbon::now())  &&  $this->subCategory->discount->ends_at->gte(Carbon::now()))) {
             $finalPrice = $this->calculateDiscount($this->base_price, ($this->subCategory->discount->value));
-        } else if ($this->category && $this->category->discount_id && ($this->category->discount->starts_at >= Carbon::now() && Carbon::now() < $this->category->discount->ends_at)) {
+        
+        } else  if(isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
             $finalPrice = $this->calculateDiscount($this->base_price, ($this->category->discount->value));
-        }else {
+        } else {
             $finalPrice = $this->base_price; 
         }
 
-        $finalPrice += $finalPrice * ($this->category->vat / 100);
+        $finalPrice += $finalPrice * ($this->vat / 100);
 
         return number_format($finalPrice, 2, '.', '');
     }
@@ -151,6 +157,21 @@ class Product extends Model
     public function scopeFilter(Builder $builder, array $data)
     {
         return (new ProductFilter($data))->filter($builder);
+    }
+
+    public function getOrderProductFinalPrice($baesUnitPrice, $discount, $vat) 
+    {
+        $finalPrice = 0;
+
+        $finalPrice = $this->calculateDiscount($baesUnitPrice, $discount);
+
+        DebugBar::info($finalPrice);
+
+        $finalPrice += $finalPrice * ($vat/ 100);
+
+        DebugBar::info($finalPrice);
+
+        return number_format($finalPrice, 2, '.', '');
     }
 
 }

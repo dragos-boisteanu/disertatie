@@ -142,15 +142,15 @@
                                     <div class="flex-1 text-sm text-center text-gray-800">x{{ $item->pivot->quantity }} buc.</div>
 
                                     <div class="flex-1 text-sm text-center">
-                                        <div>{{ $item->price }}</div>
+                                        <div>{{ $item->getOrderProductFinalPrice($item->pivot->base_unit_price, $item->pivot->discount, $item->pivot->vat)}}</div>
                                         <div class="font-semibold"> Ron / buc.</div>
                                     </div>
 
                                 </div>
-                                <div class="flex items-center p-2 text-sm @if ($item->finalDiscount)  justify-between @else justify-evenly @endif ">
+                                <div class="flex items-center p-2 text-sm @if ($item->finalDiscount) justify-between @else justify-evenly @endif ">
                                     <div class="text-center flex-initial w-20">
                                         <div>
-                                            {{ $item->base_price }} Ron
+                                            {{ $item->pivot->base_unit_price }} Ron
                                         </div>
                                         <div class="font-bold text-xs">
                                             Pret initial
@@ -158,16 +158,16 @@
                                     </div>
                                     <div class="text-center">
                                         <div>
-                                            {{ $item->vat }}
+                                            {{ $item->pivot->vat }} %
                                         </div>
                                         <div class="font-bold text-xs">
                                             VAT
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        @if ($item->finalDiscount)
+                                        @if ($item->pivot->discount)
                                             <div>
-                                                {{ $item->finalDiscount }} %
+                                                {{ $item->pivot->discount }} %
                                             </div>
                                             <div class="font-bold text-xs">
                                                 Reducere

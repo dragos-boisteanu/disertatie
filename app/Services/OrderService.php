@@ -19,6 +19,7 @@ use App\Http\Resources\Order as OrderResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\ProductStockServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Barryvdh\Debugbar\Facade as Debugbar;
 
 class OrderService implements OrderServiceInterface
 {
@@ -47,6 +48,7 @@ class OrderService implements OrderServiceInterface
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch (\Exception $ex) {
+      dd($ex);
       throw new \Exception('Something went wrong');
     }
   }
