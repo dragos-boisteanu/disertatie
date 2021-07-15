@@ -104,7 +104,7 @@ class ProductController extends Controller
 
     public function addDiscount(Request $request, int $id, int $discountId)
     {
-        // $request->user()->can('update');
+        $request->user()->can('update');
 
         try {
             $this->productService->addDiscount($id, $discountId);
@@ -119,7 +119,7 @@ class ProductController extends Controller
 
     public function removeDiscount(Request $request, int $id)
     {
-        // $$request->user()->can('update');
+        $request->user()->can('update');
 
         try {
             $this->productService->removeDiscount($id);
