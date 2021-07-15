@@ -1,6 +1,7 @@
 <?php
 
 use Barryvdh\Debugbar\Facade;
+use Barryvdh\Debugbar\ServiceProvider;
 
 return [
 
