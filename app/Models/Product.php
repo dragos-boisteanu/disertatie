@@ -33,7 +33,7 @@ class Product extends Model
 
     public $with = ['unit', 'stock', 'category', 'subCategory', 'ingredients', 'discount'];
 
-    protected $appends = array('price', 'quantity', 'finalDiscount');
+    protected $appends = array('price', 'quantity', 'finalDiscount', 'vat');
 
     public function getFinalDiscountAttribute() 
     {
@@ -44,6 +44,19 @@ class Product extends Model
         if($this->category->discount != null) {
             return $this->category->discount;
         }
+    }
+
+    public function getVatAttribute()
+    {
+        $vat = 0;
+
+        if($this->subCategory->vat) {
+            $vat = $this->subCategory->vat;
+        } else {
+            $vat = $this->category->vat;
+        }
+
+        return $vat;
     }
 
     public function getPriceAttribute()

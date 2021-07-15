@@ -65,8 +65,9 @@
                                                 class="text-sm text-sky-700 hover:text-sky-500">Actualizeaza</button>
                                         </form>
                                     </div>
-                                    <div class="flex-initial text-sm text-center font-semibold">
-                                        {{ $item->price }} Ron / buc.
+                                    <div class="flex-initial text-sm text-center">
+                                        <div>{{ $item->price }}</div>
+                                        <div class="font-semibold"> Ron / buc.</div>
                                     </div>
                                     <form class="flex-initial" method="POST"
                                         action="{{ route('carts.delete', ['id' => $item->id]) }}">
@@ -77,7 +78,7 @@
                                         </button>
                                     </form>
                                 </div>
-                                <div class="flex items-center justify-between p-2 text-sm">
+                                <div class="flex items-center p-2 text-sm @if ($item->finalDiscount)  justify-between @else justify-evenly @endif ">
                                     <div class="text-center flex-initial w-20">
                                         <div>
                                             {{ $item->base_price }} Ron
@@ -88,21 +89,21 @@
                                     </div>
                                     <div class="text-center">
                                         <div>
-                                            9 %
+                                            {{ $item->vat }}
                                         </div>
                                         <div class="font-bold text-xs">
                                             VAT
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        {{-- @if ($item->discount) --}}
-                                        <div>
-                                            - 2 %
-                                        </div>
-                                        <div class="font-bold text-xs">
-                                            Reducere
-                                        </div>
-                                        {{-- @endif --}}
+                                        @if ($item->finalDiscount)
+                                            <div>
+                                                {{ $item->finalDiscount }} %
+                                            </div>
+                                            <div class="font-bold text-xs">
+                                                Reducere
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

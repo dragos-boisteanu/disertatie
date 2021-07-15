@@ -18,7 +18,6 @@
             </div>
         </div>
 
-
         <div id="statusTracker">
             <h2 class="text-lg text-trueGray-300 my-4 pl-2">Statut comanda</h2>
             <ul class="flex flex-col md:flex-row md:w-full">
@@ -138,16 +137,17 @@
                                 </div>
                             </div>
                             <div class="h-full md:border-l md:border-gray-30 md:flex-1">
-                                <div class="flex items-center justify-between py-2 px-4 border-b border-gray-300">
+                                <div class="flex items-center justify-evenly py-2 px-4 border-b border-gray-300">
 
-                                    <div class="text-sm text-gray-800">x{{ $item->pivot->quantity }} buc.</div>
+                                    <div class="flex-1 text-sm text-center text-gray-800">x{{ $item->pivot->quantity }} buc.</div>
 
-                                    <div class="flex-initial text-sm text-center font-semibold">
-                                        {{ $item->price }} Ron / buc.
+                                    <div class="flex-1 text-sm text-center">
+                                        <div>{{ $item->price }}</div>
+                                        <div class="font-semibold"> Ron / buc.</div>
                                     </div>
 
                                 </div>
-                                <div class="flex items-center justify-between p-2 text-sm">
+                                <div class="flex items-center p-2 text-sm @if ($item->finalDiscount)  justify-between @else justify-evenly @endif ">
                                     <div class="text-center flex-initial w-20">
                                         <div>
                                             {{ $item->base_price }} Ron
@@ -158,21 +158,21 @@
                                     </div>
                                     <div class="text-center">
                                         <div>
-                                            9 %
+                                            {{ $item->vat }}
                                         </div>
                                         <div class="font-bold text-xs">
                                             VAT
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        {{-- @if ($item->discount) --}}
-                                        <div>
-                                            - 2 %
-                                        </div>
-                                        <div class="font-bold text-xs">
-                                            Reducere
-                                        </div>
-                                        {{-- @endif --}}
+                                        @if ($item->finalDiscount)
+                                            <div>
+                                                {{ $item->finalDiscount }} %
+                                            </div>
+                                            <div class="font-bold text-xs">
+                                                Reducere
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

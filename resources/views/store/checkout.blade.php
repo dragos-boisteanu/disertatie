@@ -71,8 +71,9 @@
                                                     class="text-sm text-sky-700 hover:text-sky-500">Actualizeaza</button>
                                             </form>
                                         </div>
-                                        <div class="flex-initial text-sm text-center font-semibold">
-                                            {{ $item->price }} Ron / buc.
+                                        <div class="flex-initial text-sm text-center">
+                                            <div>{{ $item->price }}</div>
+                                            <div class="font-semibold"> Ron / buc.</div>
                                         </div>
                                         <form class="flex-initial" method="POST"
                                             action="{{ route('carts.delete', ['id' => $item->id]) }}">
@@ -83,7 +84,7 @@
                                             </button>
                                         </form>
                                     </div>
-                                    <div class="flex items-center justify-between p-2 text-sm">
+                                    <div class="flex items-center p-2 text-sm @if ($item->finalDiscount)  justify-between @else justify-evenly @endif ">
                                         <div class="text-center flex-initial w-20">
                                             <div>
                                                 {{ $item->base_price }} Ron
@@ -94,22 +95,23 @@
                                         </div>
                                         <div class="text-center">
                                             <div>
-                                                9 %
+                                                {{ $item->vat }}
                                             </div>
                                             <div class="font-bold text-xs">
                                                 VAT
                                             </div>
                                         </div>
-                                        <div class="text-center">
-                                            {{-- @if ($item->discount) --}}
-                                            <div>
-                                                - 2 %
+                                        @if ($item->finalDiscount)
+                                            <div class="text-center">
+                                                <div>
+                                                    {{ $item->finalDiscount }} %
+                                                </div>
+                                                <div class="font-bold text-xs">
+                                                    Reducere
+                                                </div>
+
                                             </div>
-                                            <div class="font-bold text-xs">
-                                                Reducere
-                                            </div>
-                                            {{-- @endif --}}
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -229,8 +231,8 @@
             <option value="" selected disabled>Alege adresa de livrare</option>
             @foreach ($addresses as $address)
                 <option value="{{ $address->id }}" @if ($address->is_selected && old('deliveryAddress') == '') selected
-                        @elseif (old('deliveryAddress') == $address->id && old('deliveryAddress') != 'new')
-                                selected @endif>
+                                @elseif (old('deliveryAddress') == $address->id && old('deliveryAddress') != 'new')
+                                                selected @endif>
                     {{ $address->address }}
                 </option>
             @endforeach
@@ -279,7 +281,7 @@
                 </div>
             @endif
         </div>
-
+    
         <div class="w-full mt-4">
             <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
                 class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
@@ -322,7 +324,8 @@
     
             <div class="w-full mt-4">
                 <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
-                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
+                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar
+                telefon">
                 @if ($errors->has('phoneNumber'))
                     <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
                         {{ $errors->first('phoneNumber') }}</div>
@@ -334,7 +337,7 @@
         `
     
         if($('input[name=deliveryMethodId]:checked').val() == 2) {
-            $('#deliveryMethod').append(localDeliveryData);
+        $('#deliveryMethod').append(localDeliveryData);
         }
     @endguest
 
@@ -355,11 +358,11 @@
     const orderTotalValue = $('#orderTotalValue');
 
     $('input[name=deliveryMethodId]').change(function() {
-        $('.backend-validation-error').each( (index, element) => {
+        $('.backend-validation-error').each((index, element) => {
             element.remove();
         })
 
-        $('.\\!border-red-600').each( (index, element) => {
+        $('.\\!border-red-600').each((index, element) => {
             element.value = ""
             element.classList.remove('!border-red-600');
         })
