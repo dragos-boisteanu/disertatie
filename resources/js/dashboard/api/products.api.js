@@ -16,6 +16,8 @@ const restoreProduct = (id) => httpClient.post(`${END_POINT}/${id}/restore`);
 const addDiscount = (data) => httpClient.post(`${END_POINT}/${data.id}/discounts/${data.discountId}`);
 const removeDiscount = (id) => httpClient.delete(`${END_POINT}/${id}/discounts/remove`, {data: id});
 
+const addIngredient = (data) => httpClient.post(`${END_POINT}/${data.id}/ingredients/${data.ingredientId}/${data.quantity}`);
+
 const deleteProduct = (id) => httpClient.delete(`${END_POINT}/${id}`, {data: id});
 
 const downloadProductByBarcode = (barcode) => httpClient.get(`${END_POINT}/check-barcode/${barcode}`);
@@ -27,6 +29,7 @@ export {
     storeProduct,
     patchProduct,
     addDiscount,
+    addIngredient,
     removeDiscount,
     disableProduct,
     restoreProduct,

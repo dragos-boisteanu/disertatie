@@ -18,7 +18,7 @@ interface ProductServiceInterface
   public function addDiscount(int $productId, int $discountId);
   public function removeDiscount(int $productId);
 
-  // public function addIngredient(array $data, int $productId);
+  public function addIngredient(Product $product, int $ingredientId, int $ingredientQuantity): Product;
   // public function patchIngredient(array $data, int $productId);
   // public function removeIngredient(array $data, int $productId);
 

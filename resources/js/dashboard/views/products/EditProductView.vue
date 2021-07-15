@@ -333,7 +333,7 @@
 
           <IngredientsComponent
             :ingredients="localProduct.ingredients"
-            @saved="saveIngredient"
+            @saved="callAddIngredient"
             @removed="removeIngredient"
           ></IngredientsComponent>
         </div>
@@ -385,6 +385,7 @@ import {
   patchProduct,
   addDiscount,
   removeDiscount,
+  addIngredient,
   downloadEdidProductData,
 } from "../../api/products.api";
 
@@ -578,22 +579,45 @@ export default {
       this.localProduct.image = imagePath;
     },
 
-    saveIngredient(ingredient) {
-      const ingredientIndex = _findIndex(this.localProduct.ingredients, [
-        "id",
-        parseInt(ingredient.id),
-      ]);
+    async callAddIngredient(ingredient) {
+      try {
+        this.$Progress.start();
 
-      if (ingredientIndex > -1) {
-        Object.keys(ingredient).forEach((key) => {
-          this.$set(
-            this.localProduct.ingredients[ingredientIndex],
-            key,
-            ingredient[key]
-          );
-        });
-      } else {
-        this.localProduct.ingredients.push(ingredient);
+        const data = {
+          id: this.product.id,
+          ingredientId: ingredient.id,
+          quantity: ingredient.quantity,
+        };
+
+        const response = await addIngredient(data);
+
+        const ingredientIndex = _findIndex(this.localProduct.ingredients, [
+          "id",
+          parseInt(ingredient.id),
+        ]);
+
+        if (ingredientIndex > -1) {
+          Object.keys(ingredient).forEach((key) => {
+            this.$set(
+              this.localProduct.ingredients[ingredientIndex],
+              key,
+              ingredient[key]
+            );
+          });
+        } else {
+          this.localProduct.ingredients.push(ingredient);
+        }
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        this.$Progress.fail();
+
+        if (error.response) {
+          this.$toast.error(response.data.message);
+        } else {
+          this.$toast.error("Something went wrong");
+        }
       }
     },
 
@@ -633,7 +657,7 @@ export default {
         this.$Progress.start();
 
         const response = await removeDiscount(this.product.id);
-        
+
         this.localProduct.discountId = "";
 
         this.$Progress.finish();
