@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use Braintree\Configuration;
 use App\Services\CartService;
 use App\Services\OrderService;
 use App\Services\TableService;
@@ -34,7 +35,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductServiceInterface::class, ProductService::class);
         $this->app->bind(TableServiceInterface::class, TableService::class);
         $this->app->bind(CartServiceInterface::class, CartService::class);
-     
     }
 
     /**
@@ -44,6 +44,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        \Braintree\Configuration::environment(env('BRAINTREE_ENV'));
+        \Braintree\Configuration::environment(env('BRAINTREE_ENV'));
+        \Braintree\Configuration::merchantId(env('BRAINTREE_MERCHANT_ID'));
+        \Braintree\Configuration::publicKey(env('BRAINTREE_PUBLIC_KEY'));
+        \Braintree\Configuration::privateKey(env('BRAINTREE_PRIVATE_KEY'));
 
         IngredientCollection::withoutWrapping();
         Paginator::defaultView('vendor.pagination.custom-pagination');

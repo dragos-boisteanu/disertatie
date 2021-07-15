@@ -11,6 +11,7 @@
         "php": "^7.4",
         "ext-gd": "*",
         "beyondcode/laravel-websockets": "^1.12",
+        "braintree/braintree_php": "^6.3",
         "brian2694/laravel-toastr": "^5.56",
         "cviebrock/eloquent-sluggable": "^8.0",
         "doctrine/dbal": "^3.1",

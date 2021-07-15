@@ -70,3 +70,5 @@ Route::get('/order-email/{id}', function ($id) {
     $order = Order::findOrFail($id);
     return view('mails.order', compact('order'));
 });
+
+Route::get('/payment/make', 'PaymentsController@make')->name('payment.make');
