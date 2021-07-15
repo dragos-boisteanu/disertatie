@@ -516,7 +516,9 @@ export default {
 
         await this.patchCategory(payload);
 
-        this.$toast.success("Category updated");
+        this.$toast.success("Discount removed");
+
+        this.category.discountId = "";
 
         this.$Progress.finish();
         this.waiting = false;
