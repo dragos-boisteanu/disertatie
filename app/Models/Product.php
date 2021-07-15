@@ -51,6 +51,8 @@ class Product extends Model
             $finalDiscount = $this->category->discount->value;
         } 
 
+        DebugBar::info($finalDiscount);
+
         return $finalDiscount;
     }
 
@@ -63,6 +65,8 @@ class Product extends Model
         } else {
             $vat = $this->category->vat;
         }
+
+        DebugBar::info($vat);
 
         return $vat;
     }
@@ -83,7 +87,7 @@ class Product extends Model
             $finalPrice = $this->base_price; 
         }
 
-        $finalPrice += $finalPrice * ($this->vat / 100);
+        $finalPrice = $this->calculateVat($finalPrice, $this->vat);
 
         return number_format($finalPrice, 2, '.', '');
     }
@@ -112,6 +116,11 @@ class Product extends Model
         }
 
         return $quantity;
+    }
+
+    private function calculateVat($price, $vat) 
+    {
+        return $price + $price * $vat / 100;
     }
 
     private function calculateDiscount($basePrice, $discount) 
@@ -165,11 +174,7 @@ class Product extends Model
 
         $finalPrice = $this->calculateDiscount($baesUnitPrice, $discount);
 
-        DebugBar::info($finalPrice);
-
-        $finalPrice += $finalPrice * ($vat/ 100);
-
-        DebugBar::info($finalPrice);
+        $finalPrice = $this->calculateVat($finalPrice, $vat);
 
         return number_format($finalPrice, 2, '.', '');
     }

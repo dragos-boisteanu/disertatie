@@ -236,7 +236,7 @@ class OrderService implements OrderServiceInterface
       $order->products()->attach($item['id'], [
         "product_name" => $product->name,
         "quantity" => $item['quantity'],
-        "base_unit_price" => $product->price,
+        "base_unit_price" => $product->base_price,
         "discount" => $product->finalDiscount,
         "vat" => $product->vat
       ]);

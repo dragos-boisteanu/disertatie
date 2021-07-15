@@ -66,16 +66,12 @@
       <div class="flex flex-col items-center justify-center md:items-start">
         <div class="flex gap-x-2 items-center font-semibold text-2xl mt-2">
           <h1 class="pr-2 border-r border-gray-200">{{ product.name }}</h1>
-          <span class="text-base"
-            >{{ product.weight }}<Unit :unit-id="product.unitId"></Unit
-          ></span>
+          <span class="text-base">{{ product.weight }} {{ product.unit }}</span>
         </div>
         <div class="text-sm">
-          {{ product.base_price }} RON /
-          <Vat :category-id="product.categoryId"></Vat>
-          <span v-if="hasDiscount">
-            / {{ product.discount.value }}% discount</span
-          >
+          {{ product.basePrice }} RON /
+          <span> {{ product.vat }} % VAT</span>
+          <span v-if="hasDiscount"> / {{ product.discount }} % discount</span>
         </div>
         <div class="flex justify-center w-full mt-2 md:justify-start">
           <Status :deleted-at="product.deletedAt" />
@@ -214,9 +210,7 @@
 import ViewContainer from "../ViewContainer";
 import Status from "../../components/StatusComponent";
 import Stock from "../../components/StockComponent";
-import Category from "../../components/products/CategoryComponent";
-import Unit from "../../components/products/UnitComponent";
-import Vat from "../../components/products/VatComponent";
+import Category from "../../components/products/CategoryComponent";;
 
 import { mapGetters } from "vuex";
 
@@ -304,8 +298,6 @@ export default {
     Stock,
     Status,
     Category,
-    Unit,
-    Vat,
   },
 };
 </script>
