@@ -10,12 +10,6 @@ use Illuminate\Support\Facades\Cache;
 
 class CategoryPositionController extends Controller
 {
-    // private $categoryService;
-
-    // public function __construct(CategoryServiceInterface $categoryService)
-    // {
-
-    // }
 
     public function updatePosition(Request $request)
     {
@@ -28,32 +22,19 @@ class CategoryPositionController extends Controller
             $targetCategoryInitialPosition = $targetCategory->position;
 
             if (abs($initialCategoryPosition - $targetCategoryInitialPosition) != 1) {
-                $query = Category::where('id', '!=', $selectedCategory->id)->where('id', '!=', $targetCategory->id)->whereNull('parent_id');
+                $query = Category::withTrashed()->where('id', '!=', $selectedCategory->id)
+                    ->where('id', '!=', $targetCategory->id)
+                    ->whereNull('parent_id');
 
                 if ($initialCategoryPosition > $targetCategoryInitialPosition) {
                     $query->whereBetween('position', [$targetCategoryInitialPosition, $initialCategoryPosition]);
+                    $query->increment('position');
                     // moving from bottom to top
                 } else {
                     $query->whereBetween('position', [$initialCategoryPosition, $targetCategoryInitialPosition]);
+                    
+                    $query->decrement('position');
                     // moving from top to bottom
-                }
-
-                $categoriesList =  $query->get();
-
-                if ($categoriesList->count()) {
-                    if ($initialCategoryPosition > $targetCategoryInitialPosition) {
-                        // moving from bottom to top
-                        foreach ($categoriesList as $category) {
-                            $category->position += 1;
-                            $category->save();
-                        }
-                    } else {
-                        // moving from top to bottom
-                        foreach ($categoriesList as $category) {
-                            $category->position -= 1;
-                            $category->save();
-                        }
-                    }
                 }
             }
 
@@ -68,7 +49,6 @@ class CategoryPositionController extends Controller
             $selectedCategory->save();
             $targetCategory->save();
 
-
             Cache::forget('categories');
 
             DB::commit();
@@ -79,7 +59,7 @@ class CategoryPositionController extends Controller
         }
     }
 
-     // direction
+    // direction
     // 1 - up
     // 0 - down
     public function updateSubCategoryPosition($id, $direction)

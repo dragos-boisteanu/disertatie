@@ -62,19 +62,31 @@ class CategoryController extends Controller
                     $response['vat'] = $parentCategory->vat;
                 }
 
-                $lastPosition = DB::select('select distinct position from categories
-                                            where position is not null
-                                            and parent_id IS not null
-                                            order by position desc 
-                                            limit 1');
+                $lastPosition = DB::table('categories')
+                    ->whereNotNull('position')
+                    ->whereNotNull('parent_id')
+                    ->orderBy('position', 'des')
+                    ->first(['position'])->position;
+
+                // DB::select('select distinct position from categories
+                //                             where position is not null
+                //                             and parent_id IS not null
+                //                             order by position desc 
+                //                             limit 1');
 
                 $response['parentName'] = $parentCategory->name;
             } else {
-                $lastPosition = DB::select('select position from categories
-                                            where position is not null
-                                            and parent_id is null
-                                            order by position desc 
-                                            limit 1');
+                $lastPosition = DB::table('categories')
+                    ->whereNotNull('position')
+                    ->whereNull('parent_id')
+                    ->orderBy('position', 'desc')
+                    ->first(['position'])->position;
+
+                // $lastPosition = DB::select('select position from categories
+                //                             where position is not null
+                //                             and parent_id is null
+                //                             order by position desc 
+                //                             limit 1');
             }
 
             $input['position'] = $lastPosition + 1;
@@ -83,16 +95,19 @@ class CategoryController extends Controller
 
             $response['id'] = $category->id;
             $response['message'] = 'Category ' . $category->name . ' created sucessfuly';
+            $response['position'] = $category->position;
 
             Cache::forget('categories');
 
             return response()->json($response, 201);
         } catch (QueryException $qex) {
+            dd($qex);
             $errorCode = $qex->errorInfo[1];
             if ($errorCode  == 1062) {
                 return response()->json(['error' => 'Category already exists'], 500);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return response()->json(['error' => 'Something went wrong, try again later'], 500);
         }
     }
@@ -152,6 +167,10 @@ class CategoryController extends Controller
                 }
             }
 
+            DB::table('categories')->whereNull('parent_id')
+                ->where('position', '>', $category->position)
+                ->decrement('position');
+                
             $category->forceDelete();
 
 
