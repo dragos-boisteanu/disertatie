@@ -31,7 +31,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::delete('/{id}/discounts/remove', 'ProductController@removeDiscount');
 
         Route::post('/{id}/ingredients/{ingredientId}/{quantity}', 'ProductIngredientController@addIngredient');
-        // Route::delete('/{id}/discounts/remove', 'ProductIngredientController@removeIngredient');
+        Route::delete('/{id}/ingredients/{ingredientId}', 'ProductIngredientController@removeIngredient');
     });
 
     Route::apiResource('users', 'UserController', ['as'=>'api']);

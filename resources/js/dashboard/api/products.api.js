@@ -17,6 +17,7 @@ const addDiscount = (data) => httpClient.post(`${END_POINT}/${data.id}/discounts
 const removeDiscount = (id) => httpClient.delete(`${END_POINT}/${id}/discounts/remove`, {data: id});
 
 const addIngredient = (data) => httpClient.post(`${END_POINT}/${data.id}/ingredients/${data.ingredientId}/${data.quantity}`);
+const removeIngredient = (data) => httpClient.delete(`${END_POINT}/${data.id}/ingredients/${data.ingredientId}`, {data: data.ingredientId});
 
 const deleteProduct = (id) => httpClient.delete(`${END_POINT}/${id}`, {data: id});
 
@@ -30,6 +31,7 @@ export {
     patchProduct,
     addDiscount,
     addIngredient,
+    removeIngredient,
     removeDiscount,
     disableProduct,
     restoreProduct,

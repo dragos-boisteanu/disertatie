@@ -200,19 +200,39 @@ class ProductService implements ProductServiceInterface
 
   public function addIngredient(Product $product, int $ingredientId, int $ingredientQuantity): Product
   {
+    try {
+      $product->has_ingredients = true;
 
-    $product->has_ingredients = true;
-
-    $product->ingredients()->sync([$ingredientId => ['quantity' => $ingredientQuantity]], false);
-
-    if ($product->stock_id) {
-      $product->stock_id = null;
-      $product->stock()->delete();
-    }
-
-    return $product;
+      $product->ingredients()->sync([$ingredientId => ['quantity' => $ingredientQuantity]], false);
+  
+      if ($product->stock_id) {
+        $product->stock_id = null;
+        $product->stock()->delete();
+      }
+      return $product;
+    } catch (\Exception $ex) {
+      throw new Exception('Something went wrong, try again later');
+    }   
   }
 
+  public function removeIngredient(Product $product, int $ingredientId): Product 
+  {
+    try {
+
+      $product->ingredients()->detach($ingredientId);
+  
+      $product->load('ingredients');
+      if($product->ingredients->count() == 0) {
+        $stock = Stock::create(['quantity' => 0]);
+        $product->stock_id = $stock->id;
+        $product->has_ingredients = 0;
+      }
+        
+      return $product;
+    } catch (\Exception $ex) {
+      throw new Exception('Something went wrong, try again later');
+    }   
+  }
   public function disable(int $productId): Carbon
   {
     try {

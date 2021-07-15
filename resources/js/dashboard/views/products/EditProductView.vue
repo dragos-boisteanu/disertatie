@@ -334,7 +334,7 @@
           <IngredientsComponent
             :ingredients="localProduct.ingredients"
             @saved="callAddIngredient"
-            @removed="removeIngredient"
+            @removed="callRemoveIngredient"
           ></IngredientsComponent>
         </div>
       </div>
@@ -386,6 +386,7 @@ import {
   addDiscount,
   removeDiscount,
   addIngredient,
+  removeIngredient,
   downloadEdidProductData,
 } from "../../api/products.api";
 
@@ -621,12 +622,37 @@ export default {
       }
     },
 
-    removeIngredient(ingredientId) {
-      const ingredientIndex = _findIndex(this.localProduct.ingredients, [
-        "id",
-        parseInt(ingredientId),
-      ]);
-      this.localProduct.ingredients.splice(ingredientIndex, 1);
+    async callRemoveIngredient(ingredientId) {
+      try {
+        this.$Progress.start();
+
+        const data = {
+          id: this.product.id,
+          ingredientId
+        };
+
+        const response = await removeIngredient(data);
+
+        const ingredientIndex = _findIndex(this.localProduct.ingredients, [
+          "id",
+          parseInt(ingredientId),
+        ]);
+
+        this.localProduct.ingredients.splice(ingredientIndex, 1);
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+
+        console.log(error)
+        this.$Progress.fail();
+
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error('Something went wrong!');
+        }
+      }
     },
 
     async callAddDiscount(discountId) {

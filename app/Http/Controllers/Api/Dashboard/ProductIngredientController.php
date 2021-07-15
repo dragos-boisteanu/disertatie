@@ -21,7 +21,7 @@ class ProductIngredientController extends Controller
     public function addIngredient(Request $request, $id, $ingredientId, $ingredientQuantity)
     {
         $request->user()->can('update');
-        
+
         try {
             $product = Product::withTrashed()->findOrFail($id);
 
@@ -29,6 +29,24 @@ class ProductIngredientController extends Controller
 
             $product->save();
             return response()->json(['message'=>'Ingredient added'], 200);
+        } catch (ModelNotFoundException $me) {
+            return  response()->json(['message'=>$me->getMessage()], 404);
+        } catch (\Exception $e) {
+            return  response()->json(['message'=>$e->getMessage()], 500);
+        }    
+    }
+
+    public function removeIngredient(Request $request, $id, $ingredientId)
+    {
+        $request->user()->can('update');
+        
+        try {
+            $product = Product::withTrashed()->findOrFail($id);
+
+            $product = $this->productService->removeIngredient($product, $ingredientId);
+
+            $product->save();
+            return response()->json(['message'=>'Ingredient removed'], 200);
         } catch (ModelNotFoundException $me) {
             return  response()->json(['message'=>$me->getMessage()], 404);
         } catch (\Exception $e) {
