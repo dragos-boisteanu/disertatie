@@ -180,7 +180,7 @@
                         <div
                             class="col-start-11 col-end-13 flex flex-col items-center justify-center font-semibold border-l border-gray-300 text-sm">
                             <div>Total</div>
-                            <div class="text-center">{{ $item->price * $item->pivot->quantity }} Ron</div>
+                            <div class="text-center">{{ $item->getOrderProductFinalPrice($item->pivot->base_unit_price, $item->pivot->discount, $item->pivot->vat)}} Ron</div>
                         </div>
                     </li>
                 @endforeach
