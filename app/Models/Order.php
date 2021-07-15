@@ -49,7 +49,7 @@ class Order extends Model
         forEach($this->products as $item) {
             // $discountedPrice = $this->calculateDiscount($item->pivot->base_unit_price, $item->pivot->discount);
             // $totalValue += $item->pivot->quantity * ($discountedPrice + $this->calculateVat($discountedPrice, $item->pivot->vat));
-            $totalValue += $item->getOrderProductFinalPrice($item->pivot->base_unit_price, $item->pivot->discount, $item->pivot->vat);
+            $totalValue += $item->pivot->quantity * $item->getOrderProductFinalPrice($item->pivot->base_unit_price, $item->pivot->discount, $item->pivot->vat);
         }
 
         $totalValue += $this->deliveryMethod->price;
