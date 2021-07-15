@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Interfaces\ProductServiceInterface;
 use App\Models\Product;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductDiscountController extends Controller
@@ -23,11 +24,12 @@ class ProductDiscountController extends Controller
         $request->user()->can('update');
 
         try {
-
+            // throw new Exception('test exception');
             $product = Product::withTrashed()->findOrFail($id);
 
             $product = $this->productService->addDiscount($product, $discountId);
 
+            $product->save();
             return response()->json(['message' => 'Discount added'], 200);
         } catch (ModelNotFoundException $me) {
             return  response()->json(['message' => $me->getMessage()], 404);

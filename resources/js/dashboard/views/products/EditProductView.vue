@@ -325,8 +325,8 @@
           </div>
 
           <DiscountComponent
-            v-if="product"
-            :discount-id="product.discountId"
+            v-if="localProduct"
+            :discount-id="localProduct.discountId"
             @remove="callRemoveDiscount"
             @add="callAddDiscount"
           ></DiscountComponent>
@@ -522,6 +522,7 @@ export default {
           //   counter++;
           // }
 
+          delete payload.ingredients;
           delete payload.discountId;
 
           if (payload.subCategoryId === "") {
@@ -628,7 +629,7 @@ export default {
 
         const data = {
           id: this.product.id,
-          ingredientId
+          ingredientId,
         };
 
         const response = await removeIngredient(data);
@@ -643,14 +644,13 @@ export default {
         this.$Progress.finish();
         this.$toast.success(response.data.message);
       } catch (error) {
-
-        console.log(error)
+        console.log(error);
         this.$Progress.fail();
 
         if (error.response) {
           this.$toast.error(error.response.data.message);
         } else {
-          this.$toast.error('Something went wrong!');
+          this.$toast.error("Something went wrong!");
         }
       }
     },
@@ -669,10 +669,13 @@ export default {
         this.localProduct.discountId = discountId;
 
         this.$Progress.finish();
+
         this.$toast.success(response.data.message);
       } catch (error) {
         if (error.response && error.response.data) {
-          this.$toast.error(response.data.message);
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong");
         }
         this.$Progress.fail();
       }

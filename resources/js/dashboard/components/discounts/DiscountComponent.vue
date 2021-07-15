@@ -20,9 +20,7 @@
         "
       >
         <div>
-          <div>
-            {{ discount.code }} - {{ discount.value }} %
-          </div>
+          <div>{{ discount.code }} - {{ discount.value }} %</div>
           <div>
             {{ discount.startsAt }} >
             {{ discount.endsAt }}
@@ -44,7 +42,12 @@
     </div>
 
     <InputGroup id="discount" label="Discount">
-      <Select v-model="selectDiscountId" id="discount" name="discount" @change.native="selectDiscount">
+      <Select
+        v-model="selectDiscountId"
+        id="discount"
+        name="discount"
+        @change.native="addDiscount"
+      >
         <option value="" disabled selected>Select discount</option>
         <option
           v-for="discount in getDiscounts"
@@ -66,68 +69,72 @@
 
 
 <script>
-import { mapGetters } from 'vuex'
-import  _find  from 'lodash/find'
+import { mapGetters } from "vuex";
+import _find from "lodash/find";
 
-import InputGroup from '../inputs/InputGroupComponent.vue';
-import Select from '../inputs/SelectInputComponent.vue';
+import InputGroup from "../inputs/InputGroupComponent.vue";
+import Select from "../inputs/SelectInputComponent.vue";
 
 export default {
   props: {
     discountId: {
       type: [Number, String],
       required: false,
-      default: null
-    }
+      default: null,
+    },
   },
 
-  mounted () {
-    if(this.discountId) {
-      this.discount = _find(this.getDiscounts, ['id', parseInt(this.discountId)]);
-      this.selectDiscountId = this.discountId;
-    }
-  },
+  // mounted() {
+  //   if (this.discountId) {
+  //     this.discount = _find(this.getDiscounts, [
+  //       "id",
+  //       parseInt(this.discountId),
+  //     ]);
+  //     this.selectDiscountId = this.discountId;
+  //   }
+  // },
 
   computed: {
-    ...mapGetters('Discounts', ['getDiscounts']),
+    ...mapGetters("Discounts", ["getDiscounts"]),
   },
 
   data() {
     return {
       selectDiscountId: "",
       discount: null,
-    }
+    };
   },
 
   watch: {
-    discountId(newValue, oldValue) {
-      if(newValue !== oldValue) {
-        this.discount = _find(this.getDiscounts, ['id', parseInt(newValue)]);
-        this.selectDiscountId = newValue;
-      }
+    discountId: {
+      immediate: true,
+      handler(newValue) {
+        if ((newValue !== null) & (newValue !== undefined)) {
+          this.discount = _find(this.getDiscounts, ["id", parseInt(newValue)]);
+          this.selectDiscountId = newValue;
+        } else {
+          this.selectDiscountId = "";
+          this.discount = null;
+        }
+      },
     },
   },
 
   methods: {
-    selectDiscount() {
-      this.discount = _find(this.getDiscounts, ['id', parseInt(this.selectDiscountId)]);
-      this.addDiscount();
-    },
-
     removeDiscount() {
       this.discount = null;
       this.selectDiscountId = "";
-      this.$emit('remove');
+      this.$emit("remove");
     },
 
     addDiscount() {
-      this.$emit('add', this.selectDiscountId);
-    }
+      this.$emit("add", this.selectDiscountId);
+    },
   },
 
   components: {
     InputGroup,
-    Select
-  }
-}
+    Select,
+  },
+};
 </script>
