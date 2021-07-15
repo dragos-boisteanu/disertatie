@@ -160,9 +160,9 @@ class ProductService implements ProductServiceInterface
         $product->unit_id = $data['unitId'];
       } 
 
-      $this->updateIngredients($product, $data);
+      // $this->updateIngredients($product, $data);
       
-      $this->updateDiscount($product, $data);
+      // $this->updateDiscount($product, $data);
 
       if(array_key_exists('image', $data)) {
         $this->updateImage($product, $data);
@@ -173,6 +173,32 @@ class ProductService implements ProductServiceInterface
       throw new ModelNotFoundException('Product with id #' . $productId . ' was not found');
     } catch ( \Exception $e) {
       throw new \Exception('Something went wrong');
+    }
+  }
+
+  public function addDiscount(int $productId, int $discountId) 
+  {
+    try {
+      $product = Product::withTrashed()->findOrFail($productId);
+      $product->discount_id = $discountId;
+      $product->save();
+    } catch ( \Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+      throw new ModelNotFoundException('Product not found');
+    } catch ( \Exception $ex) {
+      throw new Exception('Something went wrong, try again later');
+    }
+  }
+
+  public function removeDiscount(int $productId) 
+  {
+    try {
+      $product = Product::withTrashed()->findOrFail($productId);
+      $product->discount_id = null;
+      $product->save();
+    } catch ( \Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+      throw new ModelNotFoundException('Product not found');
+    } catch ( \Exception $ex) {
+      throw new Exception('Something went wrong, try again later');
     }
   }
 
@@ -308,13 +334,4 @@ class ProductService implements ProductServiceInterface
     }
   }
 
-  private function updateDiscount(Product $product, array $data): void
-  {
-    if(array_key_exists('discountId', $data) && !empty($data['discountId'])) { 
-      $product->discount_id =  $data['discountId'];
-    } else {
-      $product->discount_id = null;
-    }
-    $product->save();
-  }
 }

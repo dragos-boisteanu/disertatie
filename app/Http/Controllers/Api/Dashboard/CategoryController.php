@@ -145,8 +145,8 @@ class CategoryController extends Controller
     {
         try {
             DB::beginTransaction();
-            $selectedCategory = Category::findOrFail($request->categoryId);
-            $targetCategory = Category::findOrFail($request->targetCategoryId);
+            $selectedCategory = Category::withTrashed()->findOrFail($request->categoryId);
+            $targetCategory = Category::withTrashed()->findOrFail($request->targetCategoryId);
 
             $initialCategoryPosition = $selectedCategory->position;
             $targetCategoryInitialPosition = $targetCategory->position;

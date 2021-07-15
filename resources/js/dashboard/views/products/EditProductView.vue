@@ -327,8 +327,8 @@
           <DiscountComponent
             v-if="product"
             :discount-id="product.discountId"
-            @remove="removeDiscount"
-            @add="addDiscount"
+            @remove="callRemoveDiscount"
+            @add="callAddDiscount"
           ></DiscountComponent>
 
           <IngredientsComponent
@@ -381,7 +381,12 @@ import {
   minValue,
 } from "vuelidate/lib/validators";
 import { alphaSpaces, alphaNumSpaces } from "../../validators/index";
-import { patchProduct, downloadEdidProductData } from "../../api/products.api";
+import {
+  patchProduct,
+  addDiscount,
+  removeDiscount,
+  downloadEdidProductData,
+} from "../../api/products.api";
 
 export default {
   async beforeRouteEnter(to, from, next) {
@@ -510,22 +515,19 @@ export default {
             }
           });
 
-          if (!_isEqual(this.localProduct.ingredients, this.product.ingredients)) {
-            payload.product.ingredients = this.localProduct.ingredients;
-            counter++;
-          }
+          // if (!_isEqual(this.localProduct.ingredients, this.product.ingredients)) {
+          //   payload.product.ingredients = this.localProduct.ingredients;
+          //   counter++;
+          // }
 
-          if (payload.discountId === "") {
-            delete payload.discountId;
-          }
+          delete payload.discountId;
 
           if (payload.subCategoryId === "") {
             delete payload.subCategoryId;
           }
 
           if (counter > 0) {
-
-            console.log('here')
+            console.log("here");
             const response = await patchProduct(payload.product);
 
             counter = 0;
@@ -536,15 +538,14 @@ export default {
             });
 
             this.$toast.success(response.data.message);
-
           } else {
             this.$v.$reset();
-            this.$toast.info('Nothing to update');
+            this.$toast.info("Nothing to update");
           }
         } catch (error) {
           if (error.response && error.response.data.errors) {
             this.$toast.error(response.data.message);
-            
+
             this.$v.$touch();
           }
 
@@ -604,12 +605,45 @@ export default {
       this.localProduct.ingredients.splice(ingredientIndex, 1);
     },
 
-    addDiscount(discountId) {
-      this.localProduct.discountId = discountId;
+    async callAddDiscount(discountId) {
+      try {
+        this.$Progress.start();
+
+        const data = {
+          id: this.product.id,
+          discountId,
+        };
+
+        const response = await addDiscount(data);
+
+        this.localProduct.discountId = discountId;
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.$toast.error(response.data.message);
+        }
+        this.$Progress.fail();
+      }
     },
 
-    removeDiscount() {
-      this.localProduct.discountId = "";
+    async callRemoveDiscount() {
+      try {
+        this.$Progress.start();
+
+        const response = await removeDiscount(this.product.id);
+        
+        this.localProduct.discountId = "";
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.$toast.error(response.data.message);
+        }
+        this.$Progress.fail();
+      }
     },
 
     setData(data) {

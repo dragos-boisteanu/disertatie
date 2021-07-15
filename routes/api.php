@@ -23,7 +23,12 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::post('/{id}/restore', 'CategoryController@restore');
         Route::patch('/position/{id}/{direction}', 'CategoryController@updateSubCategoryPosition');
         Route::patch('/position', 'CategoryController@updatePosition');
-       
+    });
+    
+    Route::group(['prefix'=>'products'], function() {
+        Route::get('/{id}/edit', 'ProductController@edit');
+        Route::post('/{id}/discounts/{discountId}', 'ProductController@addDiscount');
+        Route::delete('/{id}/discounts/remove', 'ProductController@removeDiscount');
     });
 
     Route::apiResource('users', 'UserController', ['as'=>'api']);
@@ -38,8 +43,6 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('delivery-methods', 'DeliveryMethodController', ['as'=>'api']);
     // Route::apiResource('order-statuses', 'OrderStatusController');
     Route::apiResource('tables', 'TableController', ['as'=>'api']);
-
-    Route::get('products/{id}/edit', 'ProductController@edit');
 
     Route::group(['prefix'=>'users'], function() {
         Route::delete('{id}/disable', 'UserController@disable');

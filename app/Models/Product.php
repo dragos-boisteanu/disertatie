@@ -37,12 +37,14 @@ class Product extends Model
 
     public function getFinalDiscountAttribute() 
     {
-        if($this->discount != null) {
+        if($this->discount_id && ($this->discount->starts_at >= Carbon::now() && Carbon::now() < $this->discount->ends_at)) {
             return $this->discount;
-        }
-
-        if($this->category->discount != null) {
+        } else if ($this->subCategory && $this->subCategory->discount_id && ($this->subCategory->discount->starts_at >= Carbon::now() && Carbon::now() < $this->subCategory->discount->ends_at)) {
+            return $this->subCategory->discount;
+        } else if ($this->category && $this->category->discount_id && ($this->category->discount->starts_at >= Carbon::now() && Carbon::now() < $this->category->discount->ends_at)) {
             return $this->category->discount;
+        }else {
+            return null;
         }
     }
 
