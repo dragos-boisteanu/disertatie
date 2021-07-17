@@ -95,12 +95,13 @@
                                         </div>
                                         <div class="text-center">
                                             <div>
-                                                {{ $item->vat }}
+                                                {{ $item->vat }} %
                                             </div>
                                             <div class="font-bold text-xs">
                                                 VAT
                                             </div>
                                         </div>
+                                        
                                         @if ($item->finalDiscount)
                                             <div class="text-center">
                                                 <div>
@@ -109,7 +110,6 @@
                                                 <div class="font-bold text-xs">
                                                     Reducere
                                                 </div>
-
                                             </div>
                                         @endif
                                     </div>

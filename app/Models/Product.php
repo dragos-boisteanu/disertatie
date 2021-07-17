@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\Debugbar\Facade as Debugbar;
-
+use DebugBar\DebugBar as DebugBarDebugBar;
 
 class Product extends Model
 {
@@ -41,18 +41,18 @@ class Product extends Model
     {
         $finalDiscount = null;
 
+        DebugBar::info($this->category->discount);
+    
         if(isset($this->discount) && ($this->discount->starts_at->lte(Carbon::now())  &&  $this->discount->ends_at->gte(Carbon::now()))) {
             $finalDiscount = $this->discount->value;
-
+          
         } else if (isset($this->subCategory->discount) && ($this->subCategory->discount->starts_at->lte(Carbon::now())  &&  $this->subCategory->discount->ends_at->gte(Carbon::now()))) {
             $finalDiscount = $this->subCategory->discount->value;
-        
-        } else  if(isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
+    
+        } else if(isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
             $finalDiscount = $this->category->discount->value;
         } 
-
-        DebugBar::info($finalDiscount);
-
+        // DebugBar::info('finalDiscount: ' . $finalDiscount . ' for product ' . $this->id);
         return $finalDiscount;
     }
 
@@ -65,8 +65,6 @@ class Product extends Model
         } else {
             $vat = $this->category->vat;
         }
-
-        DebugBar::info($vat);
 
         return $vat;
     }
