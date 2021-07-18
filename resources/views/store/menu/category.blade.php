@@ -4,16 +4,16 @@
     <x-menu>
         @include('includes.menu-categories')
         @include('includes.menu-categories-select')
-        <ul class="mt-4 text-gray-600 w-full lg:w-1/2 xl:w-2/5">
+        <ul class="mt-4 text-gray-600 w-full">
             @if ($category->subCategories->count() > 0)
                 @foreach ($category->subCategories as $subCategory)
-                    <li class="pb-4 border-b border-gray-600  mb-4 last:border-b-0 last:border-trueGray-700">
+                    <li class="w-full pb-4 border-b border-gray-600 mb-4 last:border-b-0 last:border-trueGray-700">
                         <h1 class="font-semibold text-xl mb-2 text-orange-600">{{ $subCategory->name }}</h1>
                         <ul>
                             @foreach ($subCategory->subProducts as $product)
                                 <li class="mb-4 last:mb-0">
                                     <form method="POST" action="{{ route('carts.store', ['productId' => $product->id]) }}"
-                                        class="class=mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5">
+                                        class="mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5">
                                         @csrf
 
                                         <div class="col-span-3 md:col-span-2">
@@ -58,7 +58,7 @@
                 @endforeach
             @else
                 @foreach ($category->products as $product)
-                    <li class="pb-4 border-b border-gray-600 mb-4 last:border-b-0 last:border-trueGray-700">
+                    <li class="w-full pb-4 border-b border-gray-600 mb-4 last:border-b-0 last:border-trueGray-700">
                         <form method="POST" action="{{ route('carts.store', ['productId' => $product->id]) }}"
                             class="class=mb-4 w-full grid grid-cols-3 gap-y-4 md:grid-cols-5">
                             @csrf

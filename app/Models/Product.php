@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\Debugbar\Facade as Debugbar;
-use DebugBar\DebugBar as DebugBarDebugBar;
 
 class Product extends Model
 {
@@ -37,21 +36,19 @@ class Product extends Model
 
     protected $appends = array('price', 'quantity', 'finalDiscount', 'vat');
 
-    public function getFinalDiscountAttribute() 
+    public function getFinalDiscountAttribute()
     {
         $finalDiscount = null;
 
         DebugBar::info($this->category->discount);
-    
-        if(isset($this->discount) && ($this->discount->starts_at->lte(Carbon::now())  &&  $this->discount->ends_at->gte(Carbon::now()))) {
+
+        if (isset($this->discount) && ($this->discount->starts_at->lte(Carbon::now())  &&  $this->discount->ends_at->gte(Carbon::now()))) {
             $finalDiscount = $this->discount->value;
-          
         } else if (isset($this->subCategory->discount) && ($this->subCategory->discount->starts_at->lte(Carbon::now())  &&  $this->subCategory->discount->ends_at->gte(Carbon::now()))) {
             $finalDiscount = $this->subCategory->discount->value;
-    
-        } else if(isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
+        } else if (isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
             $finalDiscount = $this->category->discount->value;
-        } 
+        }
         // DebugBar::info('finalDiscount: ' . $finalDiscount . ' for product ' . $this->id);
         return $finalDiscount;
     }
@@ -60,10 +57,12 @@ class Product extends Model
     {
         $vat = 0;
 
-        if($this->subCategory->vat) {
+        if (isset($this->sub_category_id)) {
             $vat = $this->subCategory->vat;
+
         } else {
             $vat = $this->category->vat;
+            
         }
 
         return $vat;
@@ -73,16 +72,14 @@ class Product extends Model
     {
         $finalPrice = 0;
 
-        if(isset($this->discount) && ($this->discount->starts_at->lte(Carbon::now())  &&  $this->discount->ends_at->gte(Carbon::now()))) {
+        if (isset($this->discount) && ($this->discount->starts_at->lte(Carbon::now())  &&  $this->discount->ends_at->gte(Carbon::now()))) {
             $finalPrice = $this->calculateDiscount($this->base_price, ($this->discount->value));
-
         } else if (isset($this->subCategory->discount) && ($this->subCategory->discount->starts_at->lte(Carbon::now())  &&  $this->subCategory->discount->ends_at->gte(Carbon::now()))) {
             $finalPrice = $this->calculateDiscount($this->base_price, ($this->subCategory->discount->value));
-        
-        } else  if(isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
+        } else  if (isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
             $finalPrice = $this->calculateDiscount($this->base_price, ($this->category->discount->value));
         } else {
-            $finalPrice = $this->base_price; 
+            $finalPrice = $this->base_price;
         }
 
         $finalPrice = $this->calculateVat($finalPrice, $this->vat);
@@ -90,20 +87,20 @@ class Product extends Model
         return number_format($finalPrice, 2, '.', '');
     }
 
-    public function getQuantityAttribute() 
+    public function getQuantityAttribute()
     {
-        if($this->has_ingredients) {
+        if ($this->has_ingredients) {
 
             $ingredients = $this->ingredients;
 
             $quantityArray = array();
-            
-            foreach($ingredients as $ingredient) {
+
+            foreach ($ingredients as $ingredient) {
                 $howManyProductsCanBeMadeFromThisIngredient = floor($ingredient->stock->quantity / $ingredient->pivot->quantity);
-                if($howManyProductsCanBeMadeFromThisIngredient === 0) {
+                if ($howManyProductsCanBeMadeFromThisIngredient === 0) {
                     $quantity = 0;
                     return $quantity;
-                }else {
+                } else {
                     array_push($quantityArray, $howManyProductsCanBeMadeFromThisIngredient);
                 }
             }
@@ -116,17 +113,17 @@ class Product extends Model
         return $quantity;
     }
 
-    private function calculateVat($price, $vat) 
+    private function calculateVat($price, $vat)
     {
         return $price + $price * $vat / 100;
     }
 
-    private function calculateDiscount($basePrice, $discount) 
+    private function calculateDiscount($basePrice, $discount)
     {
-        return $basePrice - $basePrice * ($discount / 100); 
+        return $basePrice - $basePrice * ($discount / 100);
     }
 
-    public function category() 
+    public function category()
     {
         return $this->belongsTo('App\Models\Category');
     }
@@ -136,7 +133,7 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'sub_category_id');
     }
 
-    public function stock() 
+    public function stock()
     {
         return $this->belongsTo('App\Models\Stock');
     }
@@ -146,17 +143,17 @@ class Product extends Model
         return $this->belongsTo('App\Models\Unit');
     }
 
-    public function ingredients() 
+    public function ingredients()
     {
         return $this->belongsToMany('App\Models\Ingredient')->withPivot('quantity');
     }
 
-    public function discount() 
+    public function discount()
     {
         return $this->belongsTo(Discount::class);
     }
 
-    public function orders() 
+    public function orders()
     {
         return $this->belongsToMany(Order::class);
     }
@@ -166,7 +163,7 @@ class Product extends Model
         return (new ProductFilter($data))->filter($builder);
     }
 
-    public function getOrderProductFinalPrice($baesUnitPrice, $discount, $vat) 
+    public function getOrderProductFinalPrice($baesUnitPrice, $discount, $vat)
     {
         $finalPrice = 0;
 
@@ -176,5 +173,4 @@ class Product extends Model
 
         return number_format($finalPrice, 2, '.', '');
     }
-
 }

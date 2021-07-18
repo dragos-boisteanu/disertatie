@@ -6,6 +6,7 @@ namespace App\Services;
 use Exception;
 use App\Models\Cart;
 use App\Models\User;
+use Barryvdh\Debugbar\Facade as Debugbar;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use App\Interfaces\CartServiceInterface;
@@ -109,6 +110,8 @@ class CartService implements CartServiceInterface
         $newQuantity = $quantity;
         $cart->items()->attach($productId, ['quantity' => $newQuantity]);
       }
+
+      DebugBar::info("added to cart");
 
       return $newQuantity;
 

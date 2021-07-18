@@ -29,7 +29,9 @@
     <div id="store-app" class="h-full flex flex-col">
         @include('includes.header')
         <main class="flex-1 bg-gray-800 px-4 py-8 w-full flex items-start justify-center">
-            @yield('content')
+            <div class="w-full lg:w-2/4 2xl:w-2/5">
+                @yield('content')
+            </div>
         </main>
         @include('includes.footer')
     </div>
