@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
         Route::put('/{id}', 'AddressController@update')->name('address.update');
         Route::delete('/{id}', 'AddressController@destroy')->name('address.delete');
     });
+
+    Route::resource('reservations', 'ReservationController')->except(['show']);
 });
 
 Route::group(['namespace' => 'Web\Client'], function () {

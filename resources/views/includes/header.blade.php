@@ -81,7 +81,7 @@
                 </a>
             </li>
             <li>
-                <a href="/"
+                <a href="{{ route('reservations.index') }}"
                     class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1 {{ request()->is('reservations*') ? '!text-gray-100' : '' }}">
                     Reservari
                 </a>
