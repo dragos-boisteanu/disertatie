@@ -78,7 +78,7 @@
                         </a>
                     </li>
                 @empty
-                    <li>
+                    <li class="w-full h-full mt-8 text-gray-700 text-opacity-75 text-4xl flex items-center justify-center font-semibold">
                         Nu ai facut nici o comanda pana acum.
                     </li>
                 @endif
