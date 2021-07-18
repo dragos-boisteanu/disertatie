@@ -92,10 +92,12 @@ class CartController extends Controller
 
             $this->cartService->removeItemFromCart($cart, $id);
             $cart->refresh();
+
             if(count($cart->items) == 0) {
-               
+                Cache::forget('cart');
                 Toastr::info('Cosul este gol', 'Info');
                 return redirect()->route('menu.index');
+
             }
 
             Cache::forget('cart');

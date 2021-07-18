@@ -69,7 +69,11 @@ class CartService implements CartServiceInterface
   {
     try {
       if(session()->has('cartId') ) {
-        throw new Exception('Cart already exists');
+        $userCartexists = Cart::where('id', session('cartId'))->where('user_id', $userId)->exists();
+
+        if($userCartexists) {
+          throw new Exception('Cart already exists');
+        }
       }
 
       $cart = new Cart();
