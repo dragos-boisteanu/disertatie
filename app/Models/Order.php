@@ -74,12 +74,12 @@ class Order extends Model
 
     public function client()
     {
-        return $this->hasOne(User::class, 'id', 'client_id');
+        return $this->belongsTo(User::class, 'client_id', 'id');
     }
 
     public function staff()
     {
-        return $this->hasOne(User::class, 'id', 'staff_id');
+        return $this->belongsTo(User::class, 'staff_id', 'id');
     }
 
     public function deliveryMethod()

@@ -26,11 +26,6 @@ class Discount extends Model
         'ends_at',
     ];
 
-    public function user() 
-    {
-        return $this->belongsTo('App\Models\User');
-    }
-
     public function categories() 
     {
         return $this->hasMany('App\Models\Category');

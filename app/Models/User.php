@@ -68,20 +68,23 @@ class User extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
-    public function discount()
-    {
-        return $this->belongsToMany('App\Models\Discount');
-    }
-
     public function cart() 
     {
         return $this->hasOne(Cart::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'client_id', 'id');
+    }
+
+    public function staffOrders()
+    {
+        return $this->hasMany(Order::class, 'staff_id');
+    }
+
     public function scopeFilter(Builder $builder, array $data)
     {
         return (new UserFilter($data))->filter($builder);
-    }
-
-  
+    }  
 }
