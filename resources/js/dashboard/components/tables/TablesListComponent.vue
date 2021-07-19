@@ -33,19 +33,12 @@ export default {
     selectedId: {
       type: [Number, String],
       required: false,
-      default: -1,
+      default: null,
     },
   },
 
   computed: {
     ...mapGetters("Tables", ["getTables"]),
-
-    // selectedId() {
-    //   if (this.selectedTable !== null && this.selectedTable !== undefined) {
-    //     return this.selectedTable.id;
-    //   }
-    //   return -1;
-    // },
   },
 
   methods: {

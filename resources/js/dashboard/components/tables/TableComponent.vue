@@ -36,7 +36,8 @@ export default {
     },
     selectedId: {
       type: [Number, String],
-      required: true,
+      required: false,
+      default: null
     },
     index: {
       type: Number,

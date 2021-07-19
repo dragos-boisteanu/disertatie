@@ -7,7 +7,7 @@ toastr.options.progressBar = false;
 toastr.options.positionClass = "toast-bottom-left"
 toastr.options.preventDuplicates = false;
 toastr.options.onclick = null,
-toastr.options.showDuration = "300"
+  toastr.options.showDuration = "300"
 toastr.options.hideDuration = "1000"
 toastr.options.timeOut = "5000"
 toastr.options.extendedTimeOut = "1000"
@@ -15,3 +15,10 @@ toastr.options.showEasing = "swing"
 toastr.options.hideEasing = "linear"
 toastr.options.showMethod = "fadeIn"
 toastr.options.hideMethod = "fadeOut"
+
+
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+  }
+});

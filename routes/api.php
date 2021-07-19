@@ -101,10 +101,14 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
         Route::get('addresses/{id}', 'ClientController@getClientAddresses');
     });
 
-
-
     Route::apiResource('images', 'FileController', ['as'=>'api'])->only('store', 'destroy');
-       
+
 });
+
+Route::group(['middleware'=>'auth:web', 'namespace'=>'Api\Client', 'prefix'=>'client'], function() {  
+    Route::get('reservations/available-tables', 'ReservationsController@getAvailableTables')->name('available-tables');
+});
+
+
 
 
