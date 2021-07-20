@@ -47,7 +47,7 @@
                             <div class="col-start-3 col-end-11 w-full md:flex md:items-center">
                                 <div class="w-full p-2 md:flex-1">
                                     <div class="font-semibold">
-                                        {{ $item->name }}
+                                        {{ $item->name }} {{ $item->weight }} {{ $item->unit->name}}
                                     </div>
                                     <div class="text-sm text-gray-800">
                                         @foreach ($item->ingredients as $ingredient)

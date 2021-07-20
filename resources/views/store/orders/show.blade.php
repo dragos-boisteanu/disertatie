@@ -18,7 +18,7 @@
     </div>
 
     <div id="statusTracker">
-        <h2 class="text-lg text-trueGray-300 my-4 pl-2">Statut comanda</h2>
+        <h2 class="text-lg text-trueGray-300 my-4 pl-2">Stare comanda</h2>
         <ul class="flex flex-col md:flex-row md:w-full">
             <li class="relative h-14 flex items-start gap-x-2 md:w-1/5 md:flex-col md:gap-x-0 md:gap-y-2">
                 <div class="h-full w-1 bg-trueGray-100 md:h-1 md:w-full"></div>
@@ -126,7 +126,7 @@
                     <div class="col-start-3 col-end-11 w-full md:flex md:items-center">
                         <div class="w-full p-2 md:flex-1 ">
                             <div class="font-semibold">
-                                {{ $item->name }}
+                                {{ $item->name }} {{ $item->weight }} {{ $item->unit->name}}
                             </div>
                             <div class="text-sm text-trueGray-700">
                                 @foreach ($item->ingredients as $ingredient)
