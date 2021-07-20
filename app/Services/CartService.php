@@ -22,9 +22,7 @@ class CartService implements CartServiceInterface
         $query = Cart::where('session_id', $sessionId);
       }
 
-      $cart = Cache::remember('cart', 60 * 30, function () use($query) {
-        return $query->first('id');
-      });
+      $cart = $query->first('id');
 
       if(isset($cart)) {
         session(['cartId' => $cart->id ]);
