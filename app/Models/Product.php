@@ -40,8 +40,6 @@ class Product extends Model
     {
         $finalDiscount = null;
 
-        DebugBar::info($this->category->discount);
-
         if (isset($this->discount) && ($this->discount->starts_at->lte(Carbon::now())  &&  $this->discount->ends_at->gte(Carbon::now()))) {
             $finalDiscount = $this->discount->value;
         } else if (isset($this->subCategory->discount) && ($this->subCategory->discount->starts_at->lte(Carbon::now())  &&  $this->subCategory->discount->ends_at->gte(Carbon::now()))) {
@@ -49,7 +47,7 @@ class Product extends Model
         } else if (isset($this->category->discount) && ($this->category->discount->starts_at->lte(Carbon::now())  &&  $this->category->discount->ends_at->gte(Carbon::now()))) {
             $finalDiscount = $this->category->discount->value;
         }
-        // DebugBar::info('finalDiscount: ' . $finalDiscount . ' for product ' . $this->id);
+
         return $finalDiscount;
     }
 

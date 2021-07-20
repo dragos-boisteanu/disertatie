@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers\Web\Client;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\Debugbar\Facade as Debugbar;
+use App\Interfaces\ReservationServiceInterface;
 
 class ReservationController extends Controller
 {
+
+    private $reservationService;
+
+    public function __construct(ReservationServiceInterface $reservatioService)
+    {
+        $this->reservationService = $reservatioService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,9 +49,33 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
 
-        return redirect()->back()->withInput();
+        try {
+            DB::beginTransaction();
+
+            $input = $request->all();
+
+            $input['client_name'] = Auth::user()->fullName;
+            $input['phone_number'] = Auth::user()->phone_number;
+
+            $input['begins_at'] = Carbon::createFromFormat('d-m-Y H:i', $request->date . ' ' . $request->time)->subMinutes(30);
+            $input['ends_at'] = Carbon::createFromFormat('d-m-Y H:i', $request->date . ' ' . $request->time)->addHours(3);
+
+            $input['status_id'] = 1;
+
+            $availableTables = $this->reservationService->getAvailableTables($request->date, $request->time, $request->seats);
+
+            $reservation = Reservation::create($input);
+
+            foreach($availableTables as $table) {
+                $reservation->tables()->attach($table->id);
+            }
+
+            DB::Commit();
+            return redirect()->back();
+        } catch (\Exception $ex) {
+            dd($ex);
+        }
     }
 
     /**

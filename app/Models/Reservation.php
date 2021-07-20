@@ -11,6 +11,18 @@ class Reservation extends Model
     use HasFactory, SoftDeletes;
 
 
+    protected $fillable = [
+        'client_id',
+        'seats',
+        'client_name',
+        'phone_number',
+        'email',
+        'begins_at',
+        'ends_at',
+        'status_id',
+    ];
+
+
     public function tables()
     {
         return $this->belongsToMany(Table::class);

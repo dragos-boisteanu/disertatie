@@ -13,14 +13,14 @@
                 <div class="flex-1 w-full flex flex-col gap-2">
                     <label for="datepicker" class="block text-trueGray-400 font-semibold">Data</label>
                     {{-- error zone --}}
-                    <input type="text" id="datepicker" name="datepicker" value="{{ old('datepicker') }}"
+                    <input type="text" id="datepicker" name="date" value="{{ old('datepicker') }}"
                         class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
                 </div>
 
                 <div class="flex-1 w-full flex flex-col gap-2">
                     <label for="timepicker" class="block text-trueGray-400 font-semibold">Ora</label>
                     {{-- error zone --}}
-                    <input type="text" id="timepicker" name="timepicker" disabled value="{{ old('timepicker') }}"
+                    <input type="text" id="timepicker" name="time" disabled value="{{ old('timepicker') }}"
                         class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">
                 </div>
 
@@ -37,7 +37,7 @@
             </div>
 
             <div class="w-full lg:text-right mt-4">
-                <button id="reserveBtn" disabled type="submit"
+                <button id="reserveBtn" type="submit"
                     class="w-full lg:w-auto bg-green-600 hover:bg-green-500 active:shadow-inner disabled:bg-gray-700 disabled:cursor-default transition-colors  text-white p-2 rounded-sm">
                     Rezerva
                 </button>
@@ -66,18 +66,18 @@
         datepicker.datepicker({
             showButtonPanel: false,
             dateFormat: 'dd-mm-yy',
-            minDate: 1
+            minDate: 1,
         });
 
         timepicker.timepicker({
             showButtonPanel: true,
             controlType: 'select',
             oneLine: false,
-            timeFormat: 'hh:mm tt',
+            timeFormat: 'HH:mm',
             stepHour: 1,
             stepMinute: 15,
-            minTime: "10:00 am",
-            maxTime: "11:00 pm"
+            minTime: "10:30",
+            maxTime: "21:00",
         });
 
         datepicker.change(function() {
@@ -129,8 +129,6 @@
             }
 
             return result;
-
-
         }
 
         const checkAvailableTables = function(date, time, seats, seatsInputErrors) {

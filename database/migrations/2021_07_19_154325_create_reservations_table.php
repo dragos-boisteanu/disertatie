@@ -15,14 +15,15 @@ class CreateReservationsTable extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->integer('seats');
-
+         
             $table->foreignId('client_id')->nullable();
-            $table->foreignId('staff_id');
+            $table->foreignId('staff_id')->nullable();
 
             $table->string('client_name');
             $table->string('phone_number');
             $table->string('email')->nullable();
+
+            $table->integer('seats');
 
             $table->dateTime('begins_at');
             $table->dateTime('ends_at');
