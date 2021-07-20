@@ -13,13 +13,14 @@ use App\Events\UpdateTableStatus;
 use App\Events\OrderPlacedAtTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
+use App\Exceptions\NotInStockException;
 use App\Interfaces\OrderServiceInterface;
 use App\Interfaces\TableServiceInterface;
+use Barryvdh\Debugbar\Facade as Debugbar;
 use App\Http\Resources\Order as OrderResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\ProductStockServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Barryvdh\Debugbar\Facade as Debugbar;
 
 class OrderService implements OrderServiceInterface
 {
@@ -148,11 +149,12 @@ class OrderService implements OrderServiceInterface
       broadcast(new OrderCreated($order))->toOthers();
 
       return $order;
+    } catch(NotInStockException $ex) {
+      throw new NotInStockException($ex->getMessage());
     } catch (\Exception $e) {
       DB::rollBack();
-      dd($e);
       // throw new \Exception("Error Creating Order");
-      throw new \Exception($e->getMessage());
+      // throw new \Exception($e->getMessage());
     };
   }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Client;
 
+use App\Exceptions\NotInStockException;
 use Exception;
 use App\Models\Order;
 use App\Models\Address;
@@ -35,7 +36,7 @@ class OrderController extends Controller
     {
         $orderBy = 1;
 
-        if($request->has('orderBy')) {
+        if ($request->has('orderBy')) {
             $orderBy = $request->orderBy;
         }
 
@@ -135,9 +136,12 @@ class OrderController extends Controller
             Toastr::success('Comanda a fost plasata cu succes !', 'Succes');
 
             return redirect()->route('menu.index');
+        } catch (NotInStockException $nise) {
+            Toastr::error($nise->getMessage(), 'Eroare');
+            return redirect()->back()->withInput();
+
         } catch (\Exception $ex) {
             Toastr::error('A aparut o problema in plasarea comenzi, incearca dimnou mai tarziu !', 'Eroare');
-
             return redirect()->back()->withInput();
         }
     }
@@ -155,13 +159,10 @@ class OrderController extends Controller
             $order = $this->orderService->getOrderById($id, Auth::id());
 
             return view('store.orders.show', compact('order'));
-
         } catch (ModelNotFoundException $e) {
             Toastr::info('Nu exista o comanda pentru id-ul ' . $id . ' !', 'Info');
 
             return redirect()->route('orders.index');
         }
-       
     }
-
 }
