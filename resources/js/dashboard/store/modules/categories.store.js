@@ -164,6 +164,7 @@ const actions = {
             return reponse;
 
         } catch ( error ) {
+            console.log(error);
             throw error;
         }
     }
@@ -344,7 +345,7 @@ const mutations = {
 
         if(payload.parentId) {
             parentCategoryIndex = state.categories.findIndex(category => category.id === payload.parentId);
-            categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id === ayload.id)
+            categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id === payload.id)
 
             payload.vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'discountId', "");
         }else {
