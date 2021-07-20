@@ -55,6 +55,7 @@ class CategoryPositionController extends Controller
             return response()->json(['message' => 'Positon changed succesfull'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
+            debug($e->getMessage());
             return response()->json(['error' => 'Failed to change position'], 500);
         }
     }

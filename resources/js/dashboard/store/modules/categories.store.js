@@ -243,7 +243,7 @@ const mutations = {
             const categoryIndex = _findIndex(state.categories[parentCategoryIndex].subCategories, ['id', parseInt(payload.id)]);
             state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
         } else {
-            const categoryIndex = _findIndex(state.categories, ['id', payload]);
+            const categoryIndex = _findIndex(state.categories, ['id', payload.id]);
             state.categories.splice(categoryIndex, 1);
         }
     },
