@@ -53,7 +53,7 @@ Route::group(['namespace' => 'Web\Client'], function () {
     Route::get('/meniu/{categorySlug}', 'MenuController@show')->name('menu.show');
 
     Route::group(['prefix'=>'carts'], function() { 
-        Route::get('/', 'CartController@index')->name('carts.index');
+        // Route::get('/', 'CartController@index')->name('carts.index');
         Route::post('/{productId}', 'CartController@store')->name('carts.store');
         Route::put('/{id}', 'CartController@update')->name('carts.patch');
         Route::delete('/{id}', 'CartController@destroy')->name('carts.delete');
