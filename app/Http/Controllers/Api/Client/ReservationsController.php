@@ -6,20 +6,26 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AvailableTablesRequest;
 use App\Interfaces\ReservationServiceInterface;
+use App\Exceptions\NoAvailabeTablesForReservationException;
 
 class ReservationsController extends Controller
 {
     private $reservationService;
 
-    public function __construct(ReservationServiceInterface $reservationService) 
+    public function __construct(ReservationServiceInterface $reservationService)
     {
         $this->reservationService = $reservationService;
     }
 
     public function getAvailableTables(AvailableTablesRequest $request)
     {
-        $this->reservationService->checkAvailableTables($request->date, $request->time, $request->seats);
-        
-        return response()->json(['date' => $request->date, 'time'=> $request->time, 'seats' => $request->seats], 200);
+        try {
+            $this->reservationService->checkAvailableTables($request->date, $request->time, $request->seats);
+            return response()->json(['tableMessage' => 'Exista mese disponobile pentru reservare'], 200);
+        } catch (NoAvailabeTablesForReservationException $ex) {
+            return response()->json(['tableMessage' => $ex->getMessage()], 400);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 400);
+        }
     }
 }

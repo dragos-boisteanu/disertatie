@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\Debugbar\Facade as Debugbar;
 use App\Interfaces\ReservationServiceInterface;
+use App\Exceptions\NoAvailabeTablesForReservationException;
+use Brian2694\Toastr\Facades\Toastr;
 
 class ReservationController extends Controller
 {
@@ -72,10 +74,22 @@ class ReservationController extends Controller
             }
 
             DB::Commit();
+
+            Toastr::success("Reservarea a fost inregistrata. V-a asteptam !", "Succes");
             return redirect()->back();
+
+        } catch ( NoAvailabeTablesForReservationException $ex) {
+            DB::rollBack();
+            Toastr::error($ex->getMessage(), "Eroare");
+
+            return redirect()->back()->withInput();
+
         } catch (\Exception $ex) {
-            dd($ex);
-        }
+            DB::rollBack();
+
+            Toastr::error('A aparut o problema. Incercati mai tarziu', "Eroare");
+            return redirect()->back()->withInput();
+        }  
     }
 
     /**

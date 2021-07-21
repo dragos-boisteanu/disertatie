@@ -153,7 +153,7 @@ class OrderService implements OrderServiceInterface
       throw new NotInStockException($ex->getMessage());
     } catch (\Exception $e) {
       DB::rollBack();
-      // throw new \Exception("Error Creating Order");
+      throw new \Exception("Error Creating Order");
       // throw new \Exception($e->getMessage());
     };
   }
@@ -236,7 +236,7 @@ class OrderService implements OrderServiceInterface
       $order->staff_id = $waiterId;
       $order->save();
       return $order;
-      
+
     } catch ( \Exception $ex) {
       throw new Exception('Failed to link waiter to order');
     }

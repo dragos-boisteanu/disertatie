@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\NoAvailabeTablesForReservationException;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Table;
@@ -45,7 +46,7 @@ class ReservationService implements ReservationServiceInterface
       }
 
       if ($totalSeats < $seats) {
-        throw new Exception('Numarul de locuri necesare depaseste numarul de locul disponibile');
+        throw new NoAvailabeTablesForReservationException('Nu sunt mese disponibile pentru rezervare. Alegeti alta zi sau ora');
       }
 
       debug('available tables ' . $availableTables);
@@ -65,11 +66,18 @@ class ReservationService implements ReservationServiceInterface
       }
 
       debug('seleted tables ' . json_encode($selectedTables));
+       
+      return false;
+
+    } catch ( NoAvailabeTablesForReservationException $ex) {
+      debug($ex->getMessage());
+      throw new NoAvailabeTablesForReservationException($ex->getMessage());
+
     } catch (\Exception $ex) {
       debug($ex->getMessage());
-    }
+      throw new Exception("Error Processing Request", 1);
 
-    return false;
+    }
   }
 
   public function getAvailableTables(string $date, string $time, int $seats)
@@ -105,7 +113,7 @@ class ReservationService implements ReservationServiceInterface
       }
 
       if ($totalSeats < $seats) {
-        throw new Exception('Numarul de locuri necesare depaseste numarul de locul disponibile');
+        throw new NoAvailabeTablesForReservationException('Nu s-au gasit mese disponibile pentru datele folosite');
       }
 
       debug('available tables ' . $availableTables);
@@ -127,9 +135,15 @@ class ReservationService implements ReservationServiceInterface
       debug('seleted tables ' . json_encode($selectedTables));
        
       return $selectedTables;
+
+    } catch ( NoAvailabeTablesForReservationException $ex) {
+      debug($ex->getMessage());
+      throw new NoAvailabeTablesForReservationException($ex->getMessage());
+
     } catch (\Exception $ex) {
       debug($ex->getMessage());
       throw new Exception("Error Processing Request", 1);
+
     }
   }
 }

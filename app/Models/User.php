@@ -51,11 +51,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    protected $appends = array('fullName');
+    protected $appends = array('fullName', 'isWaiter');
 
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getIsWaiterAttribute()
+    {
+        return $this->role->name === 'Waiter';
     }
     
     public function role()
