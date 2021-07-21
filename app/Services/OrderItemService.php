@@ -147,7 +147,7 @@ class OrderItemService implements OrderItemServiceInterface
 
       $product = $order->products()->where('product_id', $data['itemId'])->first();
 
-      $itemTotalPrice = number_format($product->pivot->unit_price * $product->pivot->quantity, 2, '.', '');
+      $itemTotalPrice =   $product->pivot->quantity * $product->getOrderProductFinalPrice($product->pivot->base_unit_price, $product->pivot->discount, $product->pivot->vat);
 
       return [
         'itemTotalPrice' => $itemTotalPrice,

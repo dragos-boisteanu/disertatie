@@ -15,6 +15,7 @@ class OrderProduct extends JsonResource
     public function toArray($request)
     {
         $unitPrice = $this->getOrderProductFinalPrice($this->pivot->base_unit_price, $this->pivot->discount, $this->pivot->vat);
+
         return [
             'id'=>$this->id,
             'name' => $this->pivot->product_name,
@@ -22,7 +23,7 @@ class OrderProduct extends JsonResource
             // 'vat' => $this->pivot->vat,
             // 'discount' => $this->pivot->discount,
             'quantity' => $this->pivot->quantity,
-            'totalPrice' => number_format($unitPrice* $this->pivot->quantity, 2, '.', ''),
+            'totalPrice' => number_format($unitPrice * $this->pivot->quantity, 2, '.', ''),
         ];
     }
 }
