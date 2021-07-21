@@ -30,17 +30,11 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        return view('store.reservations.index');
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $reservations = Reservation::withTrashed()->with('tables', 'status')->where('client_id', Auth::id())->orderBy('begins_at','desc')->paginate(5);
+        
+        debug($reservations);
+        return view('store.reservations.index', compact('reservations'));
     }
 
     /**
@@ -57,8 +51,10 @@ class ReservationController extends Controller
 
             $input = $request->all();
 
+            $input['client_id'] = Auth::id();
             $input['client_name'] = Auth::user()->fullName;
             $input['phone_number'] = Auth::user()->phone_number;
+            $input['email'] = Auth::user()->email;
 
             $input['begins_at'] = Carbon::createFromFormat('d-m-Y H:i', $request->date . ' ' . $request->time)->subMinutes(30);
             $input['ends_at'] = Carbon::createFromFormat('d-m-Y H:i', $request->date . ' ' . $request->time)->addHours(3);
@@ -67,11 +63,7 @@ class ReservationController extends Controller
 
             $availableTables = $this->reservationService->getAvailableTables($request->date, $request->time, $request->seats);
 
-            $reservation = Reservation::create($input);
-
-            foreach($availableTables as $table) {
-                $reservation->tables()->attach($table->id);
-            }
+            $this->reservationService->create($input, $availableTables);
 
             DB::Commit();
 

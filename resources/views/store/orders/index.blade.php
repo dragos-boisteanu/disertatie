@@ -35,19 +35,19 @@
     <div class="mt-4">
         <ul>
             @forelse($orders as $order)
-                <li
-                    class="flex items-center bg-trueGray-50 rounded shadow-md mt-3 first:mt-0 border  hover:border-orange-600">
+                <li class="flex items-center bg-trueGray-50 rounded shadow-md mt-3 first:mt-0 border  hover:border-orange-600">
                     <a href="{{ route('orders.show', ['id' => $order->id]) }}" class="p-2 block w-full text-sm">
                         <div class="flex items-center justify-between">
                             <div class="text-lg text-trueGray-800 font-semibold">
                                 #{{ $order->id }}
                             </div>
-                            <div class="text-xs py-1 px-2 rounded-sm font-semibold
-                                                @if ($order->status->name == 'Canceled') bg-red-200 text-red-800 @endif
-                                @if ($order->status->name == 'Received') bg-blue-300
-                                    text-blue-800 @endif
-                                @if ($order->status->name == 'Completed') bg-green-300
-                                    text-green-800 @endif
+                            <div class="text-xs py-1 px-2 rounded-sm font-semibold         
+                                @if ($order->status->name == 'Received') bg-blue-300 text-blue-800 @endif
+                                @if ($order->status->name == 'Is preparing') bg-orange-200 text-orange-800 @endif
+                                @if ($order->status->name == 'In delivery') bg-yellow-200 text-yellow-800 @endif
+                                @if ($order->status->name == 'Delivered') bg-teal-200 text-teal-800 @endif
+                                @if ($order->status->name == 'Completed') bg-green-300 text-green-800 @endif
+                                @if ($order->status->name == 'Canceled') bg-red-200 text-red-800 @endif
                                 ">
                                 {{ $order->status->name }}
                             </div>
@@ -72,12 +72,10 @@
                                 <span class="font-semibold">Total</span> {{ $order->totalValue }} Ron
                             </div>
                         </div>
-
                     </a>
                 </li>
             @empty
-                <li
-                    class="w-full h-full mt-8 text-gray-700 text-opacity-75 text-4xl flex items-center justify-center font-semibold">
+                <li class="w-full h-full mt-8 text-gray-700 text-opacity-75 text-4xl flex items-center justify-center font-semibold">
                     Nu ai facut nici o comanda pana acum.
                 </li>
             @endif

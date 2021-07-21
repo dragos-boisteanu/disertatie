@@ -3,12 +3,15 @@
 
 namespace App\Services;
 
-use App\Exceptions\NoAvailabeTablesForReservationException;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Table;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\SendReservationEmailJob;
+use Illuminate\Support\Facades\Queue;
 use App\Interfaces\ReservationServiceInterface;
+use App\Exceptions\NoAvailabeTablesForReservationException;
 
 class ReservationService implements ReservationServiceInterface
 {
@@ -76,11 +79,10 @@ class ReservationService implements ReservationServiceInterface
     } catch (\Exception $ex) {
       debug($ex->getMessage());
       throw new Exception("Error Processing Request", 1);
-
     }
   }
 
-  public function getAvailableTables(string $date, string $time, int $seats)
+  public function getAvailableTables(string $date, string $time, int $seats): array
   {
     try {
       $beginsAt = Carbon::createFromFormat('d-m-Y H:i', $date . ' ' . $time);
@@ -145,5 +147,19 @@ class ReservationService implements ReservationServiceInterface
       throw new Exception("Error Processing Request", 1);
 
     }
+  }
+
+  public function create(array $data, array $tables): Reservation
+  {
+    
+    $reservation = Reservation::create($data);
+
+    foreach($tables as $table) {
+        $reservation->tables()->attach($table->id);
+    }
+
+    Queue::push(new SendReservationEmailJob($reservation));
+
+    return $reservation;
   }
 }

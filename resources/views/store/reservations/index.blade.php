@@ -49,8 +49,61 @@
         </form>
     </div>
 
-    <div class="mb-4 pb-4 border-b">
+    <div class="mb-4">
         <h2 class="mb-4 pl-1 text-2xl font-semibold text-trueGray-300">Lista rezervari</h2>
+
+        <ul>
+            @forelse($reservations as $reservation)
+                <li class="flex items-center bg-trueGray-50 rounded shadow-md mt-3 first:mt-0 border  hover:border-orange-600">
+                    <a href="{{ route('reservations.show', ['reservation' => $reservation->id]) }}" class="p-2 block w-full text-sm">
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg text-trueGray-800 font-semibold">
+                                #{{ $reservation->id }}
+                            </div>
+                            <div class="text-xs py-1 px-2 rounded-sm font-semibold 
+                                @if ($reservation->status->name == 'Pending') bg-orange-300 text-orange-800 @endif
+                                @if ($reservation->status->name == 'Active') bg-blue-300 text-blue-800 @endif
+                                @if ($reservation->status->name == 'Completed') bg-green-300 text-green-800 @endif
+                                @if ($reservation->status->name == 'Canceled') bg-red-200 text-red-800 @endif"
+                            >
+                                {{ $reservation->status->name }}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between my-2">
+                            <div class="flex items-center">
+                               <span class="font-semibold mr-2">Mese: </span> 
+                               <ul class="flex items-center gap-x-1">
+                                   @foreach($reservation->tables as $table)
+                                    <li>{{$table->name}},</li>
+                                   @endforeach
+                               </ul>
+                            </div>
+                            <div>
+                                <span class="font-semibold">Plasata la </span> {{ $reservation->created_at }}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                {{ $reservation->seats }} <span class="font-semibold"> locuri</span>
+                            </div>
+
+                            <div>
+                                <span class="font-semibold">Incepand cu </span> {{ Carbon\Carbon::createFromDate($reservation->begins_at)->addMinutes(30) }}
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            @empty
+                <li class="w-full h-full mt-8 text-gray-700 text-opacity-75 text-4xl flex items-center justify-center font-semibold">
+                    Nu aveti nici o rezervare
+                </li>
+            @endforelse
+        </ul>
+        <div class="mt-2">
+            {{ $reservations->links() }}
+        </div>
     </div>
 @endsection
 

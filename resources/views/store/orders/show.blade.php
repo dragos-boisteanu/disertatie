@@ -82,9 +82,7 @@
             </div>
             <div>
                 <span class="font-semibold">Metoda livrare: </span>
-                <span>{{ $order->deliveryMethod->name }} <span
-                        class="italic tex-sm text-trueGray-700">({{ $order->deliveryMethod->price }}
-                        Ron)</span></span>
+                <span>{{ $order->deliveryMethod->name }} <span class="italic tex-sm text-trueGray-700">({{ $order->deliveryMethod->price }} Ron)</span></span>
             </div>
 
             @if ($order->deliveryMethod->isTable)
@@ -273,7 +271,7 @@
 
                     deliveredLine.removeClass('bg-trueGray-700').addClass('bg-trueGray-100');
                     delivered.removeClass('text-trueGray-700 bg-transparent border border-trueGray-700')
-                        .addClass('bg-teal-200 text-team-800');
+                        .addClass('bg-teal-200 text-teal-800');
                     break;
 
                 case 'completed':
@@ -304,7 +302,7 @@
 
                     deliveredLine.removeClass('bg-trueGray-700').addClass('bg-trueGray-100');
                     delivered.removeClass('text-trueGray-700 bg-transparent border border-trueGray-700')
-                        .addClass('bg-teal-200 text-team-800');
+                        .addClass('bg-teal-200 text-teal-800');
 
                     completedLine.removeClass('bg-trueGray-700').addClass('bg-trueGray-100');
                     completed.removeClass('text-trueGray-700 bg-transparent border border-trueGray-700')
