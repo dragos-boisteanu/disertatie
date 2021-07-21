@@ -39,12 +39,12 @@ class OrderService implements OrderServiceInterface
     try {
       $query = Order::withTrashed();
 
-      if(isset($authClientId)) {
+      if (isset($authClientId)) {
         $query->where('client_id', $authClientId);
       }
 
       $order = $query->findOrFail($orderId);
-      
+
       return $order;
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
@@ -59,7 +59,7 @@ class OrderService implements OrderServiceInterface
 
     $query = Order::withTrashed();
 
-    if(isset($authClientId)) {
+    if (isset($authClientId)) {
       $query->where('client_id', $authClientId);
     }
 
@@ -92,25 +92,25 @@ class OrderService implements OrderServiceInterface
       $order = new Order;
 
       $order->delivery_method_id = $data['deliveryMethodId'];
-      
+
       $order->status_id = 2; // recieved
       $order->staff_id = $userId;
 
-      if(array_key_exists('paymentMethod', $data)) {
+      if (array_key_exists('paymentMethod', $data)) {
         $order->payment_method_id = $data['paymentMethod'];
       }
 
-      if(array_key_exists('phoneNumber', $data)) {
+      if (array_key_exists('phoneNumber', $data)) {
         $order->phone_number = $data['phoneNumber'];
       }
-  
+
       if ($data['deliveryMethodId'] == 1) {
         $order->address = $data['address'];
-      }    
-      
+      }
+
       if ($data['deliveryMethodId'] == 2) {
         $order->address = 'local';
-      } 
+      }
 
       if (array_key_exists('tableId', $data) && $data['deliveryMethodId'] == 3) {
         $order->table_id = $data['tableId'];
@@ -118,7 +118,7 @@ class OrderService implements OrderServiceInterface
 
         $tableStatus = $this->tableService->getStatusById(2);
         broadcast(new UpdateTableStatus($tableStatus, $data['tableId']));
-      }    
+      }
 
       if (array_key_exists('name', $data)) {
         $order->name = $data['name'];
@@ -137,19 +137,19 @@ class OrderService implements OrderServiceInterface
       }
 
       $order->save();
-     
+
       $order = $this->addItems($order, $data['items']);
-     
+
       DB::commit();
 
-      if(isset($order->email)) {
+      if (isset($order->email)) {
         Queue::push(new SendOrderEmailJob($order));
       }
 
       broadcast(new OrderCreated($order))->toOthers();
 
       return $order;
-    } catch(NotInStockException $ex) {
+    } catch (NotInStockException $ex) {
       throw new NotInStockException($ex->getMessage());
     } catch (\Exception $e) {
       DB::rollBack();
@@ -188,7 +188,7 @@ class OrderService implements OrderServiceInterface
       $order = Order::findOrFail($orderId);
 
       $order->status_id = $statusId;
-      if($order->delivery_method_id == 3 && $statusId == 7) {
+      if ($order->delivery_method_id == 3 && $statusId == 7) {
         $this->tableService->setStatus($order->table_id, 1);
         $tableStatus = $this->tableService->getStatusById(1);
         broadcast(new UpdateTableStatus($tableStatus, $order->table_id));
@@ -204,7 +204,6 @@ class OrderService implements OrderServiceInterface
     } catch (\Exception $ex) {
       // throw new \Exception('Faied to update order #' . $orderId . ' status');
       throw new \Exception($ex->getMessage());
-      
     }
   }
 
@@ -213,12 +212,12 @@ class OrderService implements OrderServiceInterface
     try {
       $order = Order::findOrFail($orderId);
 
-      if($order->table_id) {
+      if ($order->table_id) {
         $this->tableService->setStatus($order->table_id, 1);
         $tableStatus = $this->tableService->getStatusById(1);
         broadcast(new UpdateTableStatus($tableStatus, $order->table_id));
       }
-      
+
       $order = $this->removeItems($order);
 
       broadcast(new OrderStatusUpdate($order));
@@ -230,6 +229,19 @@ class OrderService implements OrderServiceInterface
       throw new Exception('Failed to disable order');
     }
   }
+
+  public function linkWaiterWithOrder(int $waiterId, Order $order): Order
+  {
+    try {
+      $order->staff_id = $waiterId;
+      $order->save();
+      return $order;
+      
+    } catch ( \Exception $ex) {
+      throw new Exception('Failed to link waiter to order');
+    }
+  }
+
 
   private function addItems(Order $order, array $items): Order
   {

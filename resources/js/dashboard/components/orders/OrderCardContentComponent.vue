@@ -63,7 +63,7 @@
       <div v-if="order.staff">
         {{ order.staff.name }}
       </div>
-      <div class="italic">
+      <div v-else class="italic">
         null
       </div>
       <div class="text-sm">
