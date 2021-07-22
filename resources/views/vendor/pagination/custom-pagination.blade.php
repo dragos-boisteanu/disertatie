@@ -26,7 +26,7 @@
             @endif
         @endforeach
 
-        @if ($paginator->currentPage() <= $paginator->lastPage() - 2)
+        @if ($paginator->currentPage() < $paginator->lastPage() - 2)
             <li class="py-1"><span>...</span></li>
         @endif
 
