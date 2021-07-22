@@ -12,7 +12,7 @@
             </div>
 
             <div class="h-full flex-1 md:flex md:flex-col md:items-start md:justify-center md:gap-y-2">
-                <div class="flex items-center justify-between md:flex-col md:items-start md:gap-y-2">
+                <div class="my-2 flex items-center justify-between md:flex-col md:items-start md:gap-y-2">
                     @if ($product->quantity > 0)
                         <div class="text-sm text-green-600">In stoc</div>
                     @else
@@ -22,23 +22,22 @@
                     <div class="text-lg text-gray-300">{{ $product->price }} Ron</div>
                 </div>
 
-                <form method="post" action="{{ route('carts.store', ['productId' => $product->id]) }}" class="my-2 w-full flex items-center gap-x-6">
+                <form method="post" action="{{ route('carts.store', ['productId' => $product->id]) }}" 
+                    class="mt-4 mb-4 w-full flex items-center gap-6 md:flex-col md:items-start md:w-auto">
                     @csrf
 
+                    @if ($product->quantity > 0) 
                     <input id="pq{{ $product->id }}" type="number" value="1" min="1" name="quantity"
-                        class="w-1/4 flex-initial rounded-sm bg-white text-center" @if ($product->quantity == 0) disabled @endif>
+                        class="w-1/4 flex-initial rounded-sm bg-white text-center md:w-full">
+                    @endif
 
-                    <div class="w-full md:w-auto">
+                    <div class="w-full">
                         @if ($product->quantity > 0)
                             <button
-                                class="w-full self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200 product-add-to-cart md:w-auto">
+                                class="w-full self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200 product-add-to-cart">
                                 Adauga in cos
                             </button>
-                        @else
-                            <div
-                                class="w-full text-center self-center py-1 px-2 text-sm rounded border border-red-600 text-red-600 md:w-auto">
-                                Nu este in stock
-                            </div>
+                       
                         @endif
                     </div>
 
@@ -74,7 +73,7 @@
             <ul id="ingredients" class="w-full text-sm text-gray-400 list-disc" style="display: none">
                 @foreach ($product->ingredients as $ingredient)
                     <li>
-                        {{ $ingredient->pivot->quantity }} {{ $ingredient->name }}
+                        {{ $ingredient->pivot->quantity }}{{ $ingredient->unit->name }} {{ $ingredient->name }}
                     </li>
                 @endforeach
 
