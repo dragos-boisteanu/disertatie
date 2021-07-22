@@ -49,8 +49,14 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
 Route::group(['namespace' => 'Web\Client'], function () {
     Route::get('/', 'MenuController@index')->name('home');
 
-    Route::get('/meniu', 'MenuController@index')->name('menu.index');
-    Route::get('/meniu/{categorySlug}', 'MenuController@show')->name('menu.show');
+    Route::group(['prefix'=>'meniu'], function() {
+       
+
+        Route::get('/', 'MenuController@index')->name('menu.index');
+        Route::get('/{categorySlug}', 'MenuController@show')->name('menu.show');
+        Route::get('/{categorySlug}/{subCategorySlug}/{productSlug}', 'ProductController@show')->name('products.show');
+    });
+  
 
     Route::group(['prefix'=>'carts'], function() { 
         // Route::get('/', 'CartController@index')->name('carts.index');

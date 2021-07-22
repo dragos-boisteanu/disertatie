@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Filters\Product\ProductFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Barryvdh\Debugbar\Facade as Debugbar;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Sluggable, SluggableScopeHelpers;
 
     public $timestamps = false;
 
@@ -35,6 +34,15 @@ class Product extends Model
     public $with = ['unit', 'stock', 'category', 'subCategory', 'ingredients', 'discount'];
 
     protected $appends = array('price', 'quantity', 'finalDiscount', 'vat');
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => ['name', 'weight', 'unit.name']
+            ]
+        ];
+    }
 
     public function getFinalDiscountAttribute()
     {

@@ -131,6 +131,7 @@ class ProductService implements ProductServiceInterface
       }
 
       if (array_key_exists('name', $data)) {
+        $product->slug = null;
         $product->name = $data['name'];
       }
 
@@ -143,6 +144,7 @@ class ProductService implements ProductServiceInterface
       }
 
       if (array_key_exists('weight', $data)) {
+        $product->slug = null;
         $product->weight = $data['weight'];
       }
 
@@ -155,6 +157,7 @@ class ProductService implements ProductServiceInterface
       }
 
       if (array_key_exists('unitId', $data)) {
+        $product->slug = null;
         $product->unit_id = $data['unitId'];
       }
 
