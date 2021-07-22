@@ -33,7 +33,7 @@ class Product extends Model
 
     public $with = ['unit', 'stock', 'category', 'subCategory', 'ingredients', 'discount'];
 
-    protected $appends = array('price', 'quantity', 'finalDiscount', 'vat');
+    protected $appends = array('price', 'priceWithoutDiscount', 'quantity', 'finalDiscount', 'vat');
 
     public function sluggable(): array
     {
@@ -89,6 +89,13 @@ class Product extends Model
         }
 
         $finalPrice = $this->calculateVat($finalPrice, $this->vat);
+
+        return number_format($finalPrice, 2, '.', '');
+    }
+
+    public function getPriceWithoutDiscountAttribute()
+    {
+        $finalPrice = $this->calculateVat($this->base_price, $this->vat);
 
         return number_format($finalPrice, 2, '.', '');
     }
