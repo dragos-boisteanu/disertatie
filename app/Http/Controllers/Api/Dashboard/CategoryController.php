@@ -62,20 +62,33 @@ class CategoryController extends Controller
                     $response['vat'] = $parentCategory->vat;
                 }
 
+
                 $lastPosition = DB::table('categories')
+                    ->where('parent_id', $request->parentId)
                     ->whereNotNull('position')
                     ->whereNotNull('parent_id')
                     ->orderBy('position', 'desc')
-                    ->first(['position'])->position;
-                
-                $response['parentName'] = $parentCategory->name;
+                    ->first(['position']);
 
+                if (isset($lastPosition)) {
+                    $lastPosition = $lastPosition->position;
+                } else {
+                    $lastPosition = 0;
+                }
+
+                $response['parentName'] = $parentCategory->name;
             } else {
                 $lastPosition = DB::table('categories')
                     ->whereNotNull('position')
                     ->whereNull('parent_id')
                     ->orderBy('position', 'desc')
-                    ->first(['position'])->position;
+                    ->first(['position']);
+
+                if (isset($lastPosition)) {
+                    $lastPosition = $lastPosition->position;
+                } else {
+                    $lastPosition = 0;
+                }
             }
 
             $input['position'] = $lastPosition + 1;
@@ -161,7 +174,7 @@ class CategoryController extends Controller
             DB::table('categories')->whereNull('parent_id')
                 ->where('position', '>', $category->position)
                 ->decrement('position');
-                
+
             $category->forceDelete();
 
 
