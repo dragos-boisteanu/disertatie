@@ -6,9 +6,16 @@
             {{ $product->unit->name }}</h1>
 
         <div class="md:flex md:justify-between md:items-center md:gap-x-10">
-            <div class="w-full h-64 p-2 md:w-auto">
+            <div class="relative w-full h-64 p-2 md:w-auto">
                 <img src="https://www.fullhouse.ro/images/thumbnails/15968120771633_4STAGIONI.jpg"
                     class="w-full h-full rounded-sm shadow-sm" />
+
+                @isset($product->finalDiscount)
+                    <div class="absolute top-5 right-5 text-xs bg-red-600 rounded-sm shadow text-white py-1 px-2">
+                        -{{ $product->finalDiscount }} %
+                    </div>
+                @endisset
+
             </div>
 
             <div class="h-full flex-1 md:flex md:flex-col md:items-start md:justify-center md:gap-y-2">
@@ -19,16 +26,24 @@
                         <div class="text-red-600">Nu este in stoc</div>
                     @endif
 
-                    <div class="text-lg text-gray-300">{{ $product->price }} Ron</div>
+                    @isset($product->finalDiscount)
+                        <div>
+                            <div class="text-lg text-gray-300">{{ $product->price }} Ron</div>
+                            <div class="text-xs text-gray-300 line-through">{{ $product->priceWithoutDiscount }} Ron</div>
+                        </div>
+
+                    @else
+                        <div class="text-lg text-gray-300">{{ $product->price }} Ron</div>
+                    @endisset
                 </div>
 
-                <form method="post" action="{{ route('carts.store', ['productId' => $product->id]) }}" 
+                <form method="post" action="{{ route('carts.store', ['productId' => $product->id]) }}"
                     class="mt-4 mb-4 w-full flex items-center gap-6 md:flex-col md:items-start md:w-auto">
                     @csrf
 
-                    @if ($product->quantity > 0) 
-                    <input id="pq{{ $product->id }}" type="number" value="1" min="1" name="quantity"
-                        class="w-1/4 flex-initial rounded-sm bg-white text-center md:w-full">
+                    @if ($product->quantity > 0)
+                        <input id="pq{{ $product->id }}" type="number" value="1" min="1" name="quantity"
+                            class="w-1/4 flex-initial rounded-sm bg-white text-center md:w-full">
                     @endif
 
                     <div class="w-full">
@@ -37,7 +52,7 @@
                                 class="w-full self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200 product-add-to-cart">
                                 Adauga in cos
                             </button>
-                       
+
                         @endif
                     </div>
 
