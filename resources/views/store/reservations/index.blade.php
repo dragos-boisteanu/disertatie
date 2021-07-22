@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="flex-1 w-full flex flex-col gap-2">
-                    <label for="seatsInput" class="block text-trueGray-400 font-semibold">Numar persoane</label>
+                    <label for="seatsInput" class="block text-trueGray-400 font-semibold">Locuri</label>
                     {{-- error zone --}}
                     <input id="seatsInput" type="text" id="seats" name="seats" disabled value="{{ old('seats') }}" min="1"
                         step="1" class="w-full border p-2 rounded-sm focus:ring focus:ring-orange-600">

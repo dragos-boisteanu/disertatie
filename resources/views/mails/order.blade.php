@@ -65,7 +65,7 @@
         <td style="text-align:center; padding: 8px; border: 1px solid black;">{{ $product->pivot->unit_price }} Ron </td>
         <td style="text-align:center; padding: 8px; border: 1px solid black;">{{ $product->pivot->quantity * $product->pivot->unit_price }} Ron</td>
       </tr>
-      @endforeach
+    @endforeach
       
       <tr>
         <td style="text-align:center; padding: 8px; border: 1px solid black;"> {{ $order->products->count() + 1}}</td>

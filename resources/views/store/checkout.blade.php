@@ -56,8 +56,7 @@
                                     </div>
                                 </div>
                                 <div class="md:border-l md:border-gray-30 md:flex-1">
-                                    <div
-                                        class="flex items-center justify-between p-2 border-t border-b border-gray-300">
+                                    <div class="flex items-center justify-between p-2 border-gray-300">
                                         <div class="flex-initial w-20">
                                             <form method="POST"
                                                 action="{{ route('carts.patch', ['id' => $item->id]) }}"
@@ -84,7 +83,7 @@
                                             </button>
                                         </form>
                                     </div>
-                                    <div class="flex items-center p-2 text-sm @if ($item->finalDiscount)  justify-between @else justify-evenly @endif ">
+                                    <div class="flex items-center border-t p-2 text-sm @if ($item->finalDiscount)  justify-between @else justify-evenly @endif ">
                                         <div class="text-center flex-initial w-20">
                                             <div>
                                                 {{ $item->base_price }} Ron
