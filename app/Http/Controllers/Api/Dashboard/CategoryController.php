@@ -65,7 +65,7 @@ class CategoryController extends Controller
                 $lastPosition = DB::table('categories')
                     ->whereNotNull('position')
                     ->whereNotNull('parent_id')
-                    ->orderBy('position', 'des')
+                    ->orderBy('position', 'desc')
                     ->first(['position'])->position;
                 
                 $response['parentName'] = $parentCategory->name;
@@ -81,6 +81,8 @@ class CategoryController extends Controller
             $input['position'] = $lastPosition + 1;
 
             $category = Category::create($input);
+
+            debug($category);
 
             $response['id'] = $category->id;
             $response['message'] = 'Category ' . $category->name . ' created sucessfuly';
