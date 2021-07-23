@@ -85,7 +85,7 @@
           >
             <option value="" disabled selected>Select parent category</option>
             <option
-              v-for="parent in parentCategories"
+              v-for="parent in getCategories"
               :key="parent.id"
               :value="parent.id"
             >
@@ -199,15 +199,15 @@ export default {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
 
-    parentCategories() {
-      return this.getCategories.filter((category) => {
-        if (this.selectedCategory) {
-          return category.id === this.selectedCategory.id ? false : true;
-        } else {
-          return true;
-        }
-      });
-    },
+    // parentCategories() {
+    //   return this.getCategories.filter((category) => {
+    //     if (this.selectedCategory) {
+    //       return category.id === this.selectedCategory.id ? false : true;
+    //     } else {
+    //       return true;
+    //     }
+    //   });
+    // },
 
     availableDiscounts() {
       return this.getDiscounts.filter((discount) => discount.deletedAt === "");
@@ -276,15 +276,15 @@ export default {
   },
 
   watch: {
-    'category.parentId': async function (value, oldVaue) {
-       if(parseInt(value) == -1 ) {
+    "category.parentId": async function (value, oldVaue) {
+      if (parseInt(value) == -1) {
         await this.callRemoveParent(oldVaue);
       }
     },
 
     selectedCategory: function (value) {
       if (value) {
-        this.category = JSON.parse(JSON.stringify(this.selectedCategory));
+        this.category = JSON.parse(JSON.stringify(value));
       } else {
         this.$v.$reset();
 
@@ -397,10 +397,10 @@ export default {
                   payload.category.parentId
                 )
               ) {
-                let parentCategory = _find(this.parentCategories, [
-                  "id",
-                  parseInt(payload.category.parentId),
-                ]);
+                let parentCategory = this.getCategories.find(
+                  (category) =>
+                    category.id === parseInt(payload.category.parentId)
+                );
 
                 parentCategory.selectedSubcateogryId = payload.category.id;
                 this.$emit("selectNewParentCategory", parentCategory);
@@ -490,47 +490,26 @@ export default {
       try {
         this.$Progress.start();
 
-        const payload =  {
+        const payload = {
           vm: this,
           id: this.category.id,
-          parentId: parentId
+          parentId: parentId,
         };
 
         const response = await this.removeParent(payload);
 
         this.$toast.success(response.data.message);
         this.$Progress.finish();
-
-      } catch ( error ) {
-        if(error.response && error.response.data.message) {
+      } catch (error) {
+        if (error.response && error.response.data.message) {
           this.$toast.error(error.response.data.message);
         } else {
-          this.$toast.error('Something went wrong. Try again later');
+          this.$toast.error("Something went wrong. Try again later");
         }
 
         this.$Progress.fail();
 
         console.log(error);
-      }
-    },
-
-    toggleConfirmModal() {
-      this.confirmModalState = !this.confirmModalState;
-    },
-
-    resetForm() {
-      this.$v.$reset();
-
-      this.category = {
-        name: "",
-        vat: "",
-        color: "",
-        discountId: "",
-        parentId: null,
-      };
-
-      if (this.isCategorySelected) {
-        this.$emit("resetCategory");
       }
     },
 
@@ -598,6 +577,26 @@ export default {
         if (error.response) {
           this.$toast.error(error.response.data.message);
         }
+      }
+    },
+
+    toggleConfirmModal() {
+      this.confirmModalState = !this.confirmModalState;
+    },
+
+    resetForm() {
+      this.$v.$reset();
+
+      this.category = {
+        name: "",
+        vat: "",
+        color: "",
+        discountId: "",
+        parentId: null,
+      };
+
+      if (this.isCategorySelected) {
+        this.$emit("resetCategory");
       }
     },
   },

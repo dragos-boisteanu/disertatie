@@ -89,11 +89,11 @@ export default {
     index: {
       type: Number,
       required: true,
-    }, 
+    },
     lastPosition: {
       type: Number,
       required: true,
-    }
+    },
   },
 
   computed: {
@@ -127,11 +127,14 @@ export default {
     },
 
     getDiscount() {
-      const discount = _find(this.getDiscounts, [
-        "id",
-        parseInt(this.subcategory.discountId),
-      ]);
-      return `${discount.code} ${discount.id}%`;
+      const discount = this.getDiscounts.find(
+        (discount) => discount.id === parseInt(this.subcategory.discountId)
+      );
+      if (discount) {
+        return `${discount.code} ${discount.id}%`;
+      } else {
+        return null;
+      }
     },
   },
 
@@ -163,7 +166,7 @@ export default {
         const response = await this.updateSubCategoryPosition(payload);
 
         this.$Progress.finish();
-        this.$toast.success(response);
+        this.$toast.success(response.data.message);
       } catch (error) {
         console.log(error);
 

@@ -122,6 +122,7 @@ class CategoryController extends Controller
             $parentCategory = Category::withTrashed()->findOrFail($request->parentId);
             $responseData['parentName'] = $parentCategory->name;
             $lastPosition =  $this->getLastPosition($request->parentId);
+
         } else {
             $lastPosition =  $this->getLastPosition();
         }
@@ -213,8 +214,8 @@ class CategoryController extends Controller
 
             $category->parent_id = null;
 
-            $category->position =  $this->getLastPosition() + 1
-            ;
+            $category->position =  $this->getLastPosition() + 1;
+
             $category->save();
 
             return response()->json(['message' => 'Parent category removed'], 200);
@@ -247,6 +248,8 @@ class CategoryController extends Controller
             $lastPosition = 0;
         }
 
+        debug($lastPosition);
+        
         return $lastPosition;
     }
 }

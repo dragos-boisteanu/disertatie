@@ -103,7 +103,7 @@ class CategoryPositionController extends Controller
             Cache::forget('categories');
 
             DB::commit();
-            return response()->json(['message' => 'Category ' . $category->name .  ' moved ' . $directionMessage], 200);
+            return response()->json(['message' => 'Category ' . $category->name .  ' moved ' . $directionMessage, 'position' => $category->position], 200);
         } catch (\Exception $ex) {
             DB::rollBack();
             return response()->json(['error' => 'Failed to move category up'], 500);

@@ -3,7 +3,7 @@ import { searchCategories, downloadCategories, postCategory, removeParent, patch
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
 import _isEqual from 'lodash/isEqual'
-import _find from 'lodash/find'
+
 
 
 const initialState = () => ({
@@ -133,8 +133,11 @@ const actions = {
             }
             const response = await updateSubCategoryPosition(data);
 
+            payload.position = response.data.position;
+
             commit('UPDATE_SUB_CATEGORY_POSITION', payload);
-            return response.data.message;
+
+            return response;
         } catch (error) {
             throw error;
         }
@@ -195,13 +198,11 @@ const mutations = {
 
     ADD_CATEGORY(state, payload) {
         if (payload.parentId !== null && payload.parentId !== undefined) {
-            const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.parentId)]);
-            console.log(parentCategoryIndex)
+            const parentCategoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.parentId));
             state.categories[parentCategoryIndex].subCategories.push(payload);
         } else {
             state.categories.push(payload);
         }
-
     },
 
     PATCH_CATEGORY(state, payload) {
@@ -209,8 +210,8 @@ const mutations = {
 
         if (payload.category.parentId !== null && payload.category.parentId !== undefined) {
             if (payload.category.originalParentId !== null && payload.category.originalParentId !== undefined) {
-                const originalParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.originalParentId)]);
-                const subCategoryIndex = _findIndex(state.categories[originalParentCategoryIndex].subCategories, ['id', parseInt(payload.category.id)]);
+                const originalParentCategoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.originalParentId));
+                const subCategoryIndex = state.categories[originalParentCategoryIndex].subCategories.findIndex(category => category.id === parseInt(payload.category.id));
 
                 Object.keys(payload.category).forEach(key => {
                     vm.$set(state.categories[originalParentCategoryIndex].subCategories[subCategoryIndex], key, payload.category[key]);
@@ -295,7 +296,6 @@ const mutations = {
     },
 
     UPDATE_SUB_CATEGORY_POSITION(state, payload) {
-
         try {
             const vm = payload.vm;
 
@@ -304,13 +304,12 @@ const mutations = {
             const categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id == payload.id);
 
             let adjenctCategoryIndex = -1;
-            let categoryNewPosition = -1;
+            // let categoryNewPosition = -1;
             let adjenctCategoryNewPosition = -1;
 
             if (payload.direction == 1) {
                 adjenctCategoryIndex = categoryIndex - 1;
 
-                categoryNewPosition = state.categories[parentCategoryIndex].subCategories[categoryIndex].position - 1;
                 adjenctCategoryNewPosition = state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex].position + 1;
 
                 const deleted = state.categories[parentCategoryIndex].subCategories.splice(adjenctCategoryIndex, 1);
@@ -319,14 +318,13 @@ const mutations = {
             } else {
                 adjenctCategoryIndex = categoryIndex + 1;
 
-                categoryNewPosition = state.categories[parentCategoryIndex].subCategories[categoryIndex].position + 1;
                 adjenctCategoryNewPosition = state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex].position - 1;
 
                 const deleted = state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
                 state.categories[parentCategoryIndex].subCategories.splice(adjenctCategoryIndex, 0, deleted[0]);
             }
 
-            vm.$set( state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex], 'position', categoryNewPosition);
+            vm.$set( state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex], 'position', payload.position);
             vm.$set( state.categories[parentCategoryIndex].subCategories[categoryIndex], 'position', adjenctCategoryNewPosition);
 
         } catch (error) {
