@@ -63,33 +63,12 @@ class CategoryController extends Controller
                     $response['vat'] = $parentCategory->vat;
                 }
 
-
-                $lastPosition = DB::table('categories')
-                    ->where('parent_id', $request->parentId)
-                    ->whereNotNull('position')
-                    ->whereNotNull('parent_id')
-                    ->orderBy('position', 'desc')
-                    ->first(['position']);
-
-                if (isset($lastPosition)) {
-                    $lastPosition = $lastPosition->position;
-                } else {
-                    $lastPosition = 0;
-                }
+                $lastPosition = $this->getLastPosition($request->parentId);
 
                 $response['parentName'] = $parentCategory->name;
-            } else {
-                $lastPosition = DB::table('categories')
-                    ->whereNotNull('position')
-                    ->whereNull('parent_id')
-                    ->orderBy('position', 'desc')
-                    ->first(['position']);
 
-                if (isset($lastPosition)) {
-                    $lastPosition = $lastPosition->position;
-                } else {
-                    $lastPosition = 0;
-                }
+            } else {
+               $lastPosition = $this->getLastPosition();
             }
 
             $input['position'] = $lastPosition + 1;
@@ -142,11 +121,12 @@ class CategoryController extends Controller
             $input['parent_id'] = $request->parentId;
             $parentCategory = Category::withTrashed()->findOrFail($request->parentId);
             $responseData['parentName'] = $parentCategory->name;
+            $lastPosition =  $this->getLastPosition($request->parentId);
+        } else {
+            $lastPosition =  $this->getLastPosition();
         }
 
-        // TO DO
-        // asign last + 1 position from the new pareten category
-
+        $input['position'] =  $lastPosition + 1;
         $category->update($input);
 
         $responseData['message'] = "Category updated";
@@ -226,27 +206,47 @@ class CategoryController extends Controller
         return response()->json(null, 404);
     }
 
-    public function removeParent($id) 
+    public function removeParent($id)
     {
         try {
             $category = Category::withTrashed()->findOrFail($id);
 
             $category->parent_id = null;
 
-            //asign new position
+            $category->position =  $this->getLastPosition() + 1
+            ;
             $category->save();
 
-            return response()->json(['message'=>'Parent category removed'], 200);
-        } catch ( ModelNotFoundException $mnfe) {
+            return response()->json(['message' => 'Parent category removed'], 200);
+        } catch (ModelNotFoundException $mnfe) {
             debug($mnfe);
             return response()->json(['message' => 'Category not found'], 404);
-
-        } catch ( \Exception $e) {
+        } catch (\Exception $e) {
             debug($e);
-            return response()->json(['message'=>'Failed to remove parent category'], 500);
+            return response()->json(['message' => 'Failed to remove parent category'], 500);
         }
-        
+    }
 
-        
+
+    private function getLastPosition(?int $parentId = null): int
+    {
+        $query = DB::table('categories')
+            ->whereNotNull('position');
+
+        if (isset($parentId)) {
+            $query->where('parent_id', $parentId);
+        } else {
+            $query->whereNull('parent_id');
+        }
+
+        $lastPosition = $query->orderBy('position', 'desc')->first(['position']);
+
+        if (isset($lastPosition)) {
+            $lastPosition = $lastPosition->position;
+        } else {
+            $lastPosition = 0;
+        }
+
+        return $lastPosition;
     }
 }
