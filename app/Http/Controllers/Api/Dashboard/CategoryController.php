@@ -13,6 +13,7 @@ use Illuminate\Database\QueryException;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CategoryController extends Controller
 {
@@ -220,5 +221,27 @@ class CategoryController extends Controller
         }
 
         return response()->json(null, 404);
+    }
+
+    public function removeParent($id) 
+    {
+        try {
+            $category = Category::withTrashed()->findOrFail($id);
+
+            $category->parent_id = null;
+            $category->save();
+
+            return response()->json(['message'=>'Parent category removed'], 200);
+        } catch ( ModelNotFoundException $mnfe) {
+            debug($mnfe);
+            return response()->json(['message' => 'Category not found'], 404);
+
+        } catch ( \Exception $e) {
+            debug($e);
+            return response()->json(['message'=>'Failed to remove parent category'], 500);
+        }
+        
+
+        
     }
 }

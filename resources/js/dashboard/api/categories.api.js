@@ -15,6 +15,8 @@ const removeDiscount = (id) => httpClient.delete(`${BASE_URL}/${id}/discounts`, 
 const updatePosition = (data) => httpClient.patch(`${BASE_URL}/position`, data);
 const updateSubCategoryPosition = (data) => httpClient.patch(`${BASE_URL}/position/${data.id}/${data.direction}`);
 
+const removeParent = (id) => httpClient.patch(`${BASE_URL}/parent-removal/${id}`);
+
 const disableCategory = (id) => httpClient.delete(`${BASE_URL}/${id}/disable`, {data:id});
 const restoreCategory = (id) => httpClient.post(`${BASE_URL}/${id}/restore`);
 const deleteCategory = (id) => httpClient.delete(`${BASE_URL}/${id}`, {data:id});
@@ -30,5 +32,6 @@ export {
     removeDiscount,
     disableCategory,
     restoreCategory,
-    deleteCategory
+    deleteCategory,
+    removeParent,
 }

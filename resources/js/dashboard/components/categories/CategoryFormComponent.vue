@@ -91,6 +91,7 @@
             >
               {{ parent.name }}
             </option>
+            <option value="-1">Remove parent</option>
           </Select>
         </InputGroup>
 
@@ -275,6 +276,12 @@ export default {
   },
 
   watch: {
+    'category.parentId': async function(value) {
+      if(parseInt(value) === -1) {
+        await this.callRemoveParent();
+      }
+    },
+
     selectedCategory: function (value) {
       if (value) {
         this.category = JSON.parse(JSON.stringify(this.selectedCategory));
@@ -301,6 +308,7 @@ export default {
       "restoreCategory",
       "addDiscount",
       "removeDiscount",
+      "removeParent",
     ]),
 
     async create() {
@@ -474,6 +482,34 @@ export default {
         this.$Progress.finish();
       } catch (error) {
         this.$Progress.fail();
+        console.log(error);
+      }
+    },
+
+    async callRemoveParent() {
+      try {
+        this.$Progress.start();
+
+        const payload =  {
+          vm: this,
+          id: this.category.id,
+          parentId: this.category.parentId
+        };
+
+        const response = await this.removeParent(payload);
+
+        this.$toast.success(response.data.message);
+        this.$Progress.finish();
+
+      } catch ( error ) {
+        if(error.response && error.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error('Something went wrong. Try again later');
+        }
+
+        this.$Progress.fail();
+
         console.log(error);
       }
     },
