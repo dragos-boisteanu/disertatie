@@ -220,8 +220,8 @@ const mutations = {
                 // remove the subCategory from the actula parent
                 // add the subCategory to the new parent
                 if (payload.category.originalParentId && !_isEqual(payload.category.originalParentId, payload.parentId)) {
-                    const subCategory = _find(state.categories[originalParentCategoryIndex].subCategories, ['id', payload.category.id]);
-                    const newParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
+                    const subCategory = state.categories[originalParentCategoryIndex].subCategories.find(subCategory => subCategory.id === parseInt(payload.category.id));
+                    const newParentCategoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.parentId));
 
                     delete subCategory.originalParentId;
 
@@ -230,18 +230,19 @@ const mutations = {
                     state.categories[newParentCategoryIndex].subCategories.push(subCategory);
                 }
             } else {
-                const newParentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
-                const category = _find(state.categories, ['id', payload.category.id]);
-                const categoryIndex = _findIndex(state.categories, ['id', parseInt(category.id)]);
+                const newParentCategoryIndex = state.categories.findIndex( category => category.id === parseInt(payload.category.parentId));
+                const category = state.categories.find(category => category.id === parseInt(payload.category.id));
+                const categoryIndex = state.categories.findIndex(category => category.id === parseInt(category.id));
 
                 category.parentId = payload.category.parentId;
 
                 state.categories.splice(categoryIndex, 1);
 
+                // problem here, to be checked
                 state.categories[newParentCategoryIndex].subCategories.push(category);
             }
         } else {
-            const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
+            const categoryIndex = state.categories.findIndex(category => category.id === payload(payload.category.id));
 
             Object.keys(payload.category).forEach(key => {
                 vm.$set(state.categories[categoryIndex], key, payload.category[key]);
@@ -372,13 +373,16 @@ const mutations = {
         const categoryId = payload.id;
 
         const parentIndex = state.categories.findIndex(category => category.id == parentId);
-
-        console.log(parentIndex);
-        
         const categoryIndex = state.categories[parentIndex].subCategories.findIndex(category => category.id == categoryId);
 
-
+        const category = state.categories[parentIndex].subCategories[categoryIndex];
+        
         vm.$set(state.categories[parentIndex].subCategories[categoryIndex], 'parentId', null);
+
+        state.categories[parentIndex].subCategories.splice(categoryIndex, 1);
+
+        // problem here, to be checked
+        state.categories.push(category);
     }
 
 }

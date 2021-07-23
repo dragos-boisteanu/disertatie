@@ -276,9 +276,9 @@ export default {
   },
 
   watch: {
-    'category.parentId': async function(value) {
-      if(parseInt(value) === -1) {
-        await this.callRemoveParent();
+    'category.parentId': async function (value, oldVaue) {
+       if(parseInt(value) == -1 ) {
+        await this.callRemoveParent(oldVaue);
       }
     },
 
@@ -486,14 +486,14 @@ export default {
       }
     },
 
-    async callRemoveParent() {
+    async callRemoveParent(parentId) {
       try {
         this.$Progress.start();
 
         const payload =  {
           vm: this,
           id: this.category.id,
-          parentId: this.category.parentId
+          parentId: parentId
         };
 
         const response = await this.removeParent(payload);

@@ -144,6 +144,9 @@ class CategoryController extends Controller
             $responseData['parentName'] = $parentCategory->name;
         }
 
+        // TO DO
+        // asign last + 1 position from the new pareten category
+
         $category->update($input);
 
         $responseData['message'] = "Category updated";
@@ -229,6 +232,8 @@ class CategoryController extends Controller
             $category = Category::withTrashed()->findOrFail($id);
 
             $category->parent_id = null;
+
+            //asign new position
             $category->save();
 
             return response()->json(['message'=>'Parent category removed'], 200);
