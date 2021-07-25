@@ -206,6 +206,7 @@ const mutations = {
     },
 
     PATCH_CATEGORY(state, payload) {
+        console.log(payload);
         const vm = payload.vm;
 
         if (payload.category.parentId !== null && payload.category.parentId !== undefined) {
@@ -231,16 +232,19 @@ const mutations = {
                     state.categories[newParentCategoryIndex].subCategories.push(subCategory);
                 }
             } else {
+                //problem when changing category from parent to sub
                 const newParentCategoryIndex = state.categories.findIndex( category => category.id === parseInt(payload.category.parentId));
-                const category = state.categories.find(category => category.id === parseInt(payload.category.id));
-                const categoryIndex = state.categories.findIndex(category => category.id === parseInt(category.id));
+                const categoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.id));
 
+                const category = state.categories.find(category => category.id === parseInt(payload.category.id));
+                
                 category.parentId = payload.category.parentId;
 
                 state.categories.splice(categoryIndex, 1);
 
                 // problem here, to be checked
                 state.categories[newParentCategoryIndex].subCategories.push(category);
+                
             }
         } else {
             const categoryIndex = state.categories.findIndex(category => category.id === payload(payload.category.id));
@@ -379,7 +383,6 @@ const mutations = {
 
         state.categories[parentIndex].subCategories.splice(categoryIndex, 1);
 
-        // problem here, to be checked
         state.categories.push(category);
     }
 

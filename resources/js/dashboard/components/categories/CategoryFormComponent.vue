@@ -91,7 +91,7 @@
             >
               {{ parent.name }}
             </option>
-            <option value="-1">Remove parent</option>
+            <option value="-1" v-if="isSubcategory">Remove parent</option>
           </Select>
         </InputGroup>
 
@@ -174,7 +174,6 @@ import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
 
 import { mapActions, mapGetters } from "vuex";
 
-import _find from "lodash/find";
 import _isEqual from "lodash/isEqual";
 
 import { alphaSpaces } from "../../validators/index";
@@ -199,16 +198,6 @@ export default {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
 
-    // parentCategories() {
-    //   return this.getCategories.filter((category) => {
-    //     if (this.selectedCategory) {
-    //       return category.id === this.selectedCategory.id ? false : true;
-    //     } else {
-    //       return true;
-    //     }
-    //   });
-    // },
-
     availableDiscounts() {
       return this.getDiscounts.filter((discount) => discount.deletedAt === "");
     },
@@ -227,6 +216,10 @@ export default {
 
     isParent() {
       return this.category.parentId === null;
+    },
+
+    isSubcategory() {
+      return !this.isParent;
     },
 
     isCategorySelected() {
@@ -497,6 +490,8 @@ export default {
         };
 
         const response = await this.removeParent(payload);
+
+        this.category.parentId = null;
 
         this.$toast.success(response.data.message);
         this.$Progress.finish();
