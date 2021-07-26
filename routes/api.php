@@ -99,7 +99,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     });
 
     Route::group(['prefix'=>'clients'], function() {
-        Route::get('phone-number/{phoneNumber}', 'ClientController@getClientByPhoneNumer');
+        Route::get('phone-number/{phoneNumber}', 'FindUserByPhoneNumber');
         Route::get('addresses/{id}', 'ClientController@getClientAddresses');
     });
 
