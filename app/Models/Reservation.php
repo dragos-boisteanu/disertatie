@@ -20,6 +20,7 @@ class Reservation extends Model
         'begins_at',
         'ends_at',
         'status_id',
+				'staff_id',
     ];
 
 
