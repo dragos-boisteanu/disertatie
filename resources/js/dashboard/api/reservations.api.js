@@ -7,5 +7,6 @@ const checkForAvailableTables = (data) =>
 	httpClient.get("client/reservations/available-tables", {
 		params: { date: data.date, time: data.time, seats: data.seats },
 	});
+const storeReservation = (data) => httpClient.post(`${BASE_URL}`, data);
 
-export { findUserByPhoneNumber, checkForAvailableTables };
+export { findUserByPhoneNumber, checkForAvailableTables, storeReservation };

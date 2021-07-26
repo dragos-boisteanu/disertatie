@@ -158,8 +158,10 @@ class ReservationService implements ReservationServiceInterface
         $reservation->tables()->attach($table->id);
     }
 
-    Queue::push(new SendReservationEmailJob($reservation));
-
+		if(in_array('email', $data)) {
+ 			Queue::push(new SendReservationEmailJob($reservation));
+		}
+		
     return $reservation;
   }
 }

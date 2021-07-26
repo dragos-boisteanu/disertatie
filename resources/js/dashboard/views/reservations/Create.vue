@@ -119,7 +119,7 @@ import Button from "../../components/buttons/ButtonComponent.vue";
 
 import DatePicker from "vue2-datepicker";
 
-import { findUserByPhoneNumber, checkForAvailableTables } from "../../api/reservations.api";
+import { findUserByPhoneNumber, checkForAvailableTables, storeReservation } from "../../api/reservations.api";
 
 import { required, email, maxLength, numeric } from "vuelidate/lib/validators";
 
@@ -164,10 +164,8 @@ export default {
 			},
 			phoneNumber: {
 				required,
-				// phoneNumber,
 			},
 			email: {
-				required,
 				email,
 			},
 		},
@@ -188,37 +186,42 @@ export default {
 
 	methods: {
 		async submit() {
-			const payload = {
-				payload: this.reservation,
-			};
+			this.$v.$touch();
 
-			if (this.clientId) {
-				payload.clientId = this.clientId;
-			} else {
-				payload.client = this.client;
-			}
+			if (!this.$v.$invalid) {
+				const payload = {
+					firstName: this.client.firstName,
+					lastName: this.client.lastName,
+					phoneNumber: this.client.phoneNumber,
+					email: this.client.email,
 
-			console.log(payload);
-
-			try {
-				this.$Progress.start();
-
-				const response = {
-					data: {
-						message: "Reservation created successfuly",
-					},
+					date: this.reservation.date,
+					time: this.reservation.time,
+					seats: this.reservation.seats,
 				};
 
-				this.$Progress.finish();
-				this.$toast.success(response.data.message);
-			} catch (error) {
-				this.$Progress.fail();
+				if (this.clientId) {
+					payload.clientId = this.clientId;
+				}
 
-				if (error.response) {
-					this.toast.error(error.response.data.message);
-				} else {
-					console.log(error);
-					this.$toast.error("Something went wrong, try again later");
+				try {
+					this.$Progress.start();
+
+					const response = await storeReservation(payload);
+
+					this.$Progress.finish();
+					this.$toast.success(response.data.message);
+
+					this.$router.replace({ name: "Reservations" });
+				} catch (error) {
+					this.$Progress.fail();
+
+					if (error.response) {
+						this.toast.error(error.response.data.message);
+					} else {
+						console.log(error);
+						this.$toast.error("Something went wrong, try again later");
+					}
 				}
 			}
 		},
@@ -245,7 +248,15 @@ export default {
 					this.$Progress.fail();
 
 					if (error.response) {
-						this.$toast.error(error.response.data.message);
+						if (error.response.status === 404) {
+							this.$toast.info(error.response.data.message);
+							this.clientId = "";
+							this.client.firstName = "";
+							this.client.lastName = "";
+							this.client.email = "";
+						} else {
+							this.$toast.error(error.response.data.message);
+						}
 					} else {
 						this.$toast.error("Something went wrong, try again later");
 					}

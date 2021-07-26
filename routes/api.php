@@ -51,6 +51,7 @@ Route::group(['middleware'=>'auth:sanctum', 'namespace'=>'Api\Dashboard', 'prefi
     Route::apiResource('delivery-methods', 'DeliveryMethodController', ['as'=>'api']);
     // Route::apiResource('order-statuses', 'OrderStatusController');
     Route::apiResource('tables', 'TableController', ['as'=>'api']);
+		Route::apiResource('reservations', 'ReservationController', ['as' => 'api'])->only(['index', 'show', 'store']);
 
     Route::group(['prefix'=>'users'], function() {
         Route::delete('{id}/disable', 'UserController@disable');
