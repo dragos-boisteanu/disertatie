@@ -1,0 +1,8 @@
+{
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.tabSize": 2,
+	"prettier.useEditorConfig": false,
+	"prettier.useTabs": true,
+	"prettier.printWidth": 120
+}
