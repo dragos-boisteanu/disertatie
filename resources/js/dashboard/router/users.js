@@ -1,9 +1,9 @@
 import { dashboardBaseUrl } from './baseUrls'
 
-const UsersListView = () => import(/* webpackChunkName: "group-users" */ '../views/users/UsersListView.vue');
-const UserView = () => import(/* webpackChunkName: "group-users" */ '../views/users/UserView.vue');
-const CreateUserView = () => import (/* webpackChunkName: "group-users" */ '../views/users/CreateUserView.vue');
-const EditUserView = () => import (/* webpackChunkName: "group-users" */ '../views/users/EditUserView.vue');
+const UsersListView = () => import(/* webpackChunkName: "users-list" */ '../views/users/UsersListView.vue');
+const UserView = () => import(/* webpackChunkName: "users-show" */ '../views/users/UserView.vue');
+const CreateUserView = () => import (/* webpackChunkName: "users-create" */ '../views/users/CreateUserView.vue');
+const EditUserView = () => import (/* webpackChunkName: "users-edit" */ '../views/users/EditUserView.vue');
 
 export default [
     {

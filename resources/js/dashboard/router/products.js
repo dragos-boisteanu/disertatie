@@ -1,9 +1,9 @@
 import { dashboardBaseUrl } from './baseUrls'
 
-const ProductsListView = () => import(/* webpackChunkName: "group-products" */ '../views/products/ProductsListView.vue');
-const AddProductView = () => import(/* webpackChunkName: "group-products" */ '../views/products/AddProductView.vue');
-const EditProductView = () => import(/* webpackChunkName: "group-products" */ '../views/products/EditProductView.vue');
-const ProductView = () => import(/* webpackChunkName: "group-products" */ '../views/products/ProductView.vue');
+const ProductsListView = () => import(/* webpackChunkName: "products-list" */ '../views/products/ProductsListView.vue');
+const AddProductView = () => import(/* webpackChunkName: "products-create" */ '../views/products/AddProductView.vue');
+const EditProductView = () => import(/* webpackChunkName: "products-edit" */ '../views/products/EditProductView.vue');
+const ProductView = () => import(/* webpackChunkName: "products-view" */ '../views/products/ProductView.vue');
 
 
 export default [ 

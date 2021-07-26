@@ -3,9 +3,7 @@ import VueRouter from 'vue-router';
 
 import store from '../store/index'
 
-
 const Home = () => import('../views/HomeView.vue');
-
 
 import usersRoutes from './users'
 import productsRoutes from './products'
@@ -15,6 +13,7 @@ import ingredientsRoutes from './ingredients'
 import discountsRoutes from './discounts'
 import ordersRoutes from './orders'
 import tablesRoutes from './tables'
+import reservations from './reservations';
 
 import { dashboardBaseUrl } from './baseUrls'
 
@@ -34,7 +33,8 @@ const routes = [
     ...ingredientsRoutes,
     ...discountsRoutes,    
     ...ordersRoutes,    
-    ...tablesRoutes
+    ...tablesRoutes,
+    ...reservations
 ];
 
 const router = new VueRouter({
