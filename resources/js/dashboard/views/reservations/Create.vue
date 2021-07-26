@@ -66,7 +66,9 @@
 									placeholder="Reservation date"
 									confirm-text="Ok"
 									valueType="format"
+									format="D-MM-YYYY"
 									:confirm="true"
+									@input="callCheckForAvailableTables"
 								>
 								</date-picker>
 							</InputGroup>
@@ -77,9 +79,23 @@
 									placeholder="Reservation time"
 									confirm-text="Ok"
 									valueType="format"
+									format="HH:mm"
 									:confirm="true"
+									@input="callCheckForAvailableTables"
 								>
 								</date-picker>
+							</InputGroup>
+							<InputGroup id="seats" label="Seats" :hasError="$v.reservation.seats.$error" class="flex-1">
+								<Input
+									v-model="$v.reservation.seats.$model"
+									id="seats"
+									name="seats"
+									:class="{
+										'border-red-600': $v.reservation.seats.$error,
+										'border-green-600': $v.reservation.seats.$dirty && !$v.reservation.seats.$error,
+									}"
+									@blur.native="callCheckForAvailableTables"
+								/>
 							</InputGroup>
 						</div>
 					</div>
@@ -103,9 +119,9 @@ import Button from "../../components/buttons/ButtonComponent.vue";
 
 import DatePicker from "vue2-datepicker";
 
-import { findUserByPhoneNumber } from "../../api/reservations.api";
+import { findUserByPhoneNumber, checkForAvailableTables } from "../../api/reservations.api";
 
-import { required, email, maxLength } from "vuelidate/lib/validators";
+import { required, email, maxLength, numeric } from "vuelidate/lib/validators";
 
 import { alphaSpaces, phoneNumber } from "../../validators/index";
 
@@ -125,6 +141,11 @@ export default {
 				date: "",
 				time: "",
 				seats: "",
+			},
+
+			tablesAvailabilityMessage: {
+				type: "",
+				text: "",
 			},
 		};
 	},
@@ -160,6 +181,7 @@ export default {
 			},
 			seats: {
 				required,
+				numeric,
 			},
 		},
 	},
@@ -227,6 +249,32 @@ export default {
 					} else {
 						this.$toast.error("Something went wrong, try again later");
 					}
+				}
+			}
+		},
+
+		async callCheckForAvailableTables() {
+			this.$v.reservation.$touch();
+
+			if (!this.$v.reservation.$invalid) {
+				try {
+					this.$Progress.start();
+
+					console.log(this.reservation);
+					const response = await checkForAvailableTables(this.reservation);
+
+					this.$Progress.finish();
+					this.$toast.success(response.data.tableMessage);
+				} catch (error) {
+					console.log(error);
+
+					if (error.response) {
+						this.$toast.error(error.response.data.tableMessage);
+					} else {
+						this.$toast.error("Something went wrong, try again later");
+					}
+
+					this.$Progress.fail();
 				}
 			}
 		},
