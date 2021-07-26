@@ -1,13 +1,13 @@
 <template>
 	<ViewContainer>
 		<template slot="header"> Create reservation </template>
-		<form class="flex flex-col ">
-			<div class="flex flex-col lg:items-start lg:flex-row lg:gap-x-6 w-full lg:w-1/2 2xl:w-1/5">
+		<form class="flex flex-col">
+			<div class="flex flex-col lg:items-start lg:flex-row lg:gap-x-6 w-full lg:w-1/2 2xl:w-1/3">
 				<div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
 					<div>
 						<h2 class="mb-5 text-xl font-semibold">Client Data</h2>
 						<div class="flex flex-col gap-4 md:flex md:flex-row md:items-center md:justify-between">
-							<InputGroup id="firstName" label="First name" :hasError="$v.client.firstName.$error" class="flex-1">
+							<form-group :validator="$v.client.firstName" label="First name" :showSingleError="true" class="flex-1">
 								<Input
 									v-model="$v.client.firstName.$model"
 									id="firstName"
@@ -17,8 +17,8 @@
 										'border-green-600': $v.client.firstName.$dirty && !$v.client.firstName.$error,
 									}"
 								/>
-							</InputGroup>
-							<InputGroup id="lastName" label="Last name" :hasError="$v.client.lastName.$error" class="flex-1">
+							</form-group>
+							<form-group :validator="$v.client.lastName" label="Last name" attribute="Last name" class="flex-1">
 								<Input
 									v-model="$v.client.lastName.$model"
 									id="lastName"
@@ -28,10 +28,15 @@
 										'border-green-600': $v.client.lastName.$dirty && !$v.client.lastName.$error,
 									}"
 								/>
-							</InputGroup>
+							</form-group>
 						</div>
 						<div class="flex flex-col gap-4 mt-4 md:flex md:flex-row md:items-center md:justify-between">
-							<InputGroup id="phoneNumber" label="Phone number" :hasError="$v.client.phoneNumber.$error" class="flex-1">
+							<form-group
+								:validator="$v.client.phoneNumber"
+								label="Phone number"
+								attribute="Phone number"
+								class="flex-1"
+							>
 								<Input
 									v-model="$v.client.phoneNumber.$model"
 									id="phoneNumber"
@@ -42,8 +47,8 @@
 									}"
 									@blur.native="callCheckForUser"
 								/>
-							</InputGroup>
-							<InputGroup id="email" label="Email" :hasError="$v.client.email.$error" class="flex-1">
+							</form-group>
+							<form-group :validator="$v.client.email" label="Email" attribute="Email address" class="flex-1">
 								<Input
 									v-model="$v.client.email.$model"
 									id="email"
@@ -53,39 +58,66 @@
 										'border-green-600': $v.client.email.$dirty && !$v.client.email.$error,
 									}"
 								/>
-							</InputGroup>
+							</form-group>
 						</div>
 					</div>
 					<div class="mt-4">
 						<h2 class="mb-5 text-xl font-semibold">Reservation details</h2>
 						<div class="flex flex-col gap-y-4 md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
-							<InputGroup id="reservationDate" label="Date" :hasError="$v.reservation.date.$error" class="flex-1">
+							<form-group
+								:validator="$v.reservation.date"
+								label="Reservation date"
+								attribute="Reservation date"
+								class="flex-1"
+							>
 								<date-picker
 									v-model="$v.reservation.date.$model"
 									type="date"
-									placeholder="Reservation date"
 									confirm-text="Ok"
 									valueType="format"
 									format="D-MM-YYYY"
+									:disabled-date="disableBeforeToday"
 									:confirm="true"
+									:input-class="{
+										'mx-input': true,
+										'!border-red-600': $v.reservation.date.$error,
+										'!border-green-600': $v.reservation.date.$dirty && !$v.reservation.date.$error,
+									}"
 									@input="callCheckForAvailableTables"
 								>
 								</date-picker>
-							</InputGroup>
-							<InputGroup id="time" label="Time" :hasError="$v.reservation.time.$error" class="flex-1">
+							</form-group>
+							<form-group
+								:validator="$v.reservation.time"
+								label="Reservation time"
+								attribute="Reservation time"
+								class="flex-1"
+							>
 								<date-picker
 									v-model="$v.reservation.time.$model"
 									type="time"
-									placeholder="Reservation time"
 									confirm-text="Ok"
 									valueType="format"
 									format="HH:mm"
+									:time-picker-options="{ start: '10:00', step: '00:15', end: '21:00' }"
+									:show-second="false"
+									:show-minute="false"
 									:confirm="true"
+									:input-class="{
+										'mx-input': true,
+										'!border-red-600': $v.reservation.time.$error,
+										'!border-green-600': $v.reservation.time.$dirty && !$v.reservation.time.$error,
+									}"
 									@input="callCheckForAvailableTables"
 								>
 								</date-picker>
-							</InputGroup>
-							<InputGroup id="seats" label="Seats" :hasError="$v.reservation.seats.$error" class="flex-1">
+							</form-group>
+							<form-group
+								:validator="$v.reservation.seats"
+								label="Reservation Seats"
+								attribute="Reservation Seats"
+								class="flex-1"
+							>
 								<Input
 									v-model="$v.reservation.seats.$model"
 									id="seats"
@@ -96,7 +128,7 @@
 									}"
 									@blur.native="callCheckForAvailableTables"
 								/>
-							</InputGroup>
+							</form-group>
 						</div>
 					</div>
 				</div>
@@ -126,8 +158,12 @@ import { required, email, maxLength, numeric } from "vuelidate/lib/validators";
 import { alphaSpaces, phoneNumber } from "../../validators/index";
 
 export default {
+	created() {},
+
 	data() {
 		return {
+			loaded: false,
+
 			clientId: "",
 
 			client: {
@@ -262,6 +298,13 @@ export default {
 					}
 				}
 			}
+		},
+
+		disableBeforeToday(date) {
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+
+			return date <= today;
 		},
 
 		async callCheckForAvailableTables() {
