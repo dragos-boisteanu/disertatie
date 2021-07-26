@@ -178,11 +178,6 @@ export default {
 				time: "",
 				seats: "",
 			},
-
-			tablesAvailabilityMessage: {
-				type: "",
-				text: "",
-			},
 		};
 	},
 
@@ -253,7 +248,7 @@ export default {
 					this.$Progress.fail();
 
 					if (error.response) {
-						this.toast.error(error.response.data.message);
+						this.$toast.error(error.response.data.message);
 					} else {
 						console.log(error);
 						this.$toast.error("Something went wrong, try again later");

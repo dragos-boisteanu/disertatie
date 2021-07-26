@@ -3,7 +3,7 @@
 		<label class="text-sm font-semibold">{{ label }}</label>
 		<slot />
 		<div class="text-xs text-red-600 font-semibold" v-if="hasErrors">
-			<div class="error" v-for="(error, index) in activeErrorMessages" :key="index">{{ error }}</div>
+			<div v-for="error in activeErrorMessages" :key="error">{{ error }}</div>
 		</div>
 	</div>
 </template>
