@@ -20,12 +20,16 @@ class ReservationsController extends Controller
     public function getAvailableTables(AvailableTablesRequest $request)
     {
         try {
-            $this->reservationService->checkAvailableTables($request->date, $request->time, $request->seats);
-            return response()->json(['tableMessage' => 'Exista mese disponobile pentru reservare'], 200);
+					$this->reservationService->checkAvailableTables($request->date, $request->time, $request->seats);
+					return response()->json(['tableMessage' => 'Exista mese disponobile pentru reservare'], 200);
+
         } catch (NoAvailabeTablesForReservationException $ex) {
-            return response()->json(['tableMessage' => $ex->getMessage()], 400);
+					return response()->json(['tableMessage' => $ex->getMessage()], 400);
+
         } catch (\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 400);
+					debug($ex);
+					return response()->json(['error' => $ex->getMessage()], 500);
+
         }
     }
 }
