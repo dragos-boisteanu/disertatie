@@ -12,9 +12,51 @@ use App\Jobs\SendReservationEmailJob;
 use Illuminate\Support\Facades\Queue;
 use App\Interfaces\ReservationServiceInterface;
 use App\Exceptions\NoAvailabeTablesForReservationException;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ReservationService implements ReservationServiceInterface
 {
+
+	public function getAllReservations(int $perPage = 8, ?int $orderBy = null, ?array $data = null): LengthAwarePaginator
+	{ 
+		try { 
+      $query = Reservation::withTrashed();
+
+      // switch ($orderBy) {
+      //   case 1:
+      //     $query->orderBy('name', 'asc');
+      //     break;
+      //   case 2:
+      //     $query->orderBy('name', 'desc');
+      //     break;
+      //   case 3:
+      //     $query->orderBy('base_price', 'asc');
+      //     break;
+      //   case 4:
+      //     $query->orderBy('base_price', 'desc');
+      //     break;
+      //   case 5:
+      //     $query->orderBy('quantity', 'asc');
+      //     break;
+      //   case 6:
+      //     $query->orderBy('quantity', 'desc');
+      //     break;
+      //   default:
+      //     $query->orderBy('name', 'asc');
+      // }
+
+      $query->orderBy('id', 'asc');;
+
+      $products = $query->Paginate($perPage);
+
+      return $products;
+    } catch (\Exception $e) {
+			debug($e);
+      throw new Exception('Something went wrong, try again later'); 
+    }
+	}
+
+
   public function checkAvailableTables(string $date, string $time, int $seats): bool
   {
 
