@@ -52,7 +52,9 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
-        $paymentMethods = PaymentMethod::withTrashed()->get();
+
+			try {
+$paymentMethods = PaymentMethod::withTrashed()->get();
         $deliveryMethods = DeliveryMethod::withTrashed()->get();
 
         $cart = $this->cartService->getCart(Auth::id(), session()->getId());
@@ -74,6 +76,10 @@ class OrderController extends Controller
         }
 
         return view('store.checkout', compact('cart', 'deliveryMethods', 'paymentMethods', 'selectedDeliveryMethodId', 'orderTotalValue'));
+   
+			} catch (\Exception $ex) {
+				return redirect()->route('home');
+			}
     }
 
     /**
