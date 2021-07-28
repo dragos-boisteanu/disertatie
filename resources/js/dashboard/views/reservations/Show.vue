@@ -9,7 +9,10 @@
 						<span class="font-semibold">Client</span>
 						<span>{{ reservation.clientName }}</span>
 					</div>
-					<div>{{ reservation.status.name }}</div>
+					<reservation-status
+						:status-name="reservation.status.name"
+						v-if="reservation.status.name"
+					></reservation-status>
 				</div>
 				<div class="flex items-center justify-between mt-2">
 					<div>
@@ -64,7 +67,7 @@
 			</div>
 		</div>
 
-		<div class="mt-4 md:flex md:flex-row-reverse md:gap-x-4 md:items-center">
+		<div class="mt-4 md:flex md:flex-row-reverse md:gap-x-4 md:items-center lg:flex-row">
 			<select-component class="w-full md:w-auto">
 				<option value="" selected disabled>Select status</option>
 			</select-component>
@@ -79,8 +82,9 @@ import ViewContainer from "../ViewContainer.vue";
 
 import ButtonComponent from "../../components/buttons/ButtonComponent.vue";
 import SelectComponent from "../../components/inputs/SelectInputComponent.vue";
+import ReservationStatus from "../../components/reservations/ReservationStatus.vue";
 
-import { downloadReservation } from "../../api/reservations.api";
+import { downloadReservation, disableReservation } from "../../api/reservations.api";
 
 export default {
 	async beforeRouteEnter(to, from, next) {
@@ -91,6 +95,8 @@ export default {
 
 	data() {
 		return {
+			reservationStatus: "",
+
 			reservation: {
 				id: "",
 				clientName: "",
@@ -106,6 +112,48 @@ export default {
 	},
 
 	methods: {
+		async callCancelReservation() {
+			try {
+				this.$Progress.start();
+
+				const response = await disableReservation(this.reservation.id);
+
+				this.reservation.deletedAt = response.data.deletedAt;
+
+				this.$Progress.start();
+				this.$toast.success(response.data.message);
+			} catch (error) {
+				this.$Progress.fail();
+
+				if (error.response) {
+					this.$toast.error(error.response.data.message);
+				} else {
+					this.$toast.error("Something went wrong, try again later");
+				}
+
+				console.log(error);
+			}
+		},
+
+		async callUpdateReservationStatus() {
+			try {
+				this.$Progress.start();
+
+				this.$Progress.start();
+				// this.$toast.success(response.data.message);
+			} catch (error) {
+				this.$Progress.fail();
+
+				if (error.response) {
+					this.$toast.error(error.response.data.message);
+				} else {
+					this.$toast.error("Something went wrong, try again later");
+				}
+
+				console.log(error);
+			}
+		},
+
 		setData(response) {
 			this.reservation = response.data.data;
 		},
@@ -115,6 +163,7 @@ export default {
 		ViewContainer,
 		ButtonComponent,
 		SelectComponent,
+		ReservationStatus,
 	},
 };
 </script>
