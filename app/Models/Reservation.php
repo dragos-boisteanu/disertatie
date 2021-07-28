@@ -25,6 +25,7 @@ class Reservation extends Model
 				'staff_id',
     ];
 
+		public $with = ['tables', 'status', 'client', 'staff'];
 
     public function tables()
     {
