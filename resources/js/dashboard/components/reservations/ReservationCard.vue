@@ -2,7 +2,7 @@
 	<card>
 		<router-link :to="{ name: 'Reservation', params: { id: reservation.id } }" class="block">
 			<div class="w-full flex items-center justify-between">
-				<div class="text-lg text-trueGray-800 font-semibold">{{ reservation.id }}</div>
+				<div class="text-lg text-trueGray-800 font-semibold">#{{ reservation.id }}</div>
 				<div class="text-xs py-1 px-2 rounded-sm font-semibold" :class="statusClass">{{ reservation.status.name }}</div>
 			</div>
 			<div class="my-2 w-full flex items-center justify-between">

@@ -17,39 +17,34 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class ReservationService implements ReservationServiceInterface
 {
 
-	public function getAllReservations(int $perPage = 8, ?int $orderBy = null, ?array $data = null): LengthAwarePaginator
+	public function getAllReservations(int $perPage = 8, int $orderBy = null, array $data = null): LengthAwarePaginator
 	{ 
 		try { 
+
       $query = Reservation::withTrashed();
 
-      // switch ($orderBy) {
-      //   case 1:
-      //     $query->orderBy('name', 'asc');
-      //     break;
-      //   case 2:
-      //     $query->orderBy('name', 'desc');
-      //     break;
-      //   case 3:
-      //     $query->orderBy('base_price', 'asc');
-      //     break;
-      //   case 4:
-      //     $query->orderBy('base_price', 'desc');
-      //     break;
-      //   case 5:
-      //     $query->orderBy('quantity', 'asc');
-      //     break;
-      //   case 6:
-      //     $query->orderBy('quantity', 'desc');
-      //     break;
-      //   default:
-      //     $query->orderBy('name', 'asc');
-      // }
+      switch ($orderBy) {
+        case 1:
+          $query->orderBy('begins_at', 'asc');
+          break;
+        case 2:
+          $query->orderBy('begins_at', 'desc');
+          break;
+        case 3:
+          $query->orderBy('created_at', 'asc');
+          break;
+        case 4:
+          $query->orderBy('created_at', 'desc');
+          break;
+        default:
+          $query->orderBy('begins_at', 'desc');
+      }
 
       $query->orderBy('id', 'asc');;
 
-      $products = $query->Paginate($perPage);
-
-      return $products;
+      $reservations = $query->filter($data)->paginate($perPage);
+	
+      return $reservations;
     } catch (\Exception $e) {
 			debug($e);
       throw new Exception('Something went wrong, try again later'); 
