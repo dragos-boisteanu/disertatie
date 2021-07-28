@@ -2,6 +2,7 @@ import httpClient from "../../api/httpClient";
 
 const BASE_URL = "/dashboard/reservations";
 
+const downloadReservations = (query) => httpClient.get(`${BASE_URL}`, { params: query });
 const findUserByPhoneNumber = (phoneNumber) => httpClient.get(`dashboard/clients/phone-number/${phoneNumber}`);
 const checkForAvailableTables = (data) =>
 	httpClient.get("client/reservations/available-tables", {
@@ -9,4 +10,4 @@ const checkForAvailableTables = (data) =>
 	});
 const storeReservation = (data) => httpClient.post(`${BASE_URL}`, data);
 
-export { findUserByPhoneNumber, checkForAvailableTables, storeReservation };
+export { downloadReservations, findUserByPhoneNumber, checkForAvailableTables, storeReservation };
