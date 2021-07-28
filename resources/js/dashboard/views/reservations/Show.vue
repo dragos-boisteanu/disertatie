@@ -80,8 +80,21 @@
     </div>
 
     <div class="mt-4 flex items-center gap-x-2 md:flex-row-reverse lg:flex-row">
-      <select-component class="w-full md:w-auto">
-        <option value="" selected disabled>Select status</option>
+      <select-component
+        v-if="isCanceled"
+        class="w-full md:w-auto"
+        v-model="newStatusId"
+        @change.native="callUpdateReservationStatus"
+      >
+        <option value="" disabled>Select new status</option>
+        <option
+          v-for="status in getReservationStatuses"
+          :key="status.id"
+          :value="status.id"
+          :disabled="status.id == reservation.status.id"
+        >
+          {{ status.name }}
+        </option>
       </select-component>
 
       <button-component
@@ -106,7 +119,9 @@ import ReservationStatus from "../../components/reservations/ReservationStatus.v
 import {
   downloadReservation,
   disableReservation,
+  updateReservationStatus,
 } from "../../api/reservations.api";
+import { mapGetters } from "vuex";
 
 export default {
   async beforeRouteEnter(to, from, next) {
@@ -119,10 +134,24 @@ export default {
     canCancel() {
       return !this.reservation.deletedAt;
     },
+
+    isCanceled() {
+      return !this.reservation.deletedAt;
+    },
+
+    ...mapGetters("Statuses", ["getReservationStatuses"]),
+
+    availableStatuses() {
+      return this.getReservationStatuses.filter(
+        (status) => status.id != this.reservation.status.id
+      );
+    },
   },
 
   data() {
     return {
+      newStatusId: "",
+
       reservationStatus: "",
 
       reservation: {
@@ -149,7 +178,7 @@ export default {
         this.reservation.deletedAt = response.data.deletedAt;
         this.$set(this.reservation, "status", response.data.status);
 
-        this.$Progress.start();
+        this.$Progress.finish();
         this.$toast.success(response.data.message);
       } catch (error) {
         this.$Progress.fail();
@@ -168,8 +197,20 @@ export default {
       try {
         this.$Progress.start();
 
-        this.$Progress.start();
-        // this.$toast.success(response.data.message);
+        const payload = {
+          id: this.reservation.id,
+          statusId: this.newStatusId,
+        };
+
+        const response = await updateReservationStatus(payload);
+
+        this.$set(this.reservation, "status", response.data.status);
+        // this.reservation.status = this.getReservationStatuses.find(
+        //   (status) => status.id == this.newStatusId
+        // );
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
       } catch (error) {
         this.$Progress.fail();
 
