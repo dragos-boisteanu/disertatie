@@ -38,8 +38,15 @@
 				</router-link>
 			</div>
 
-			<select class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm md:w-auto">
-				<option value="" selected disabled>Order by</option>
+			<select
+				v-model="orderBy"
+				class="w-full p-1 mt-2 text-base border-gray-300 border rounded-sm md:w-auto"
+				@change="order"
+			>
+				<option value="1">Order by begins at asc</option>
+				<option value="2">Order by begins at desc</option>
+				<option value="3">Order by created at asc</option>
+				<option value="4">Order by created at desc</option>
 			</select>
 		</div>
 		<cards-list v-if="isLoaded">
@@ -109,6 +116,7 @@ export default {
 			return query;
 		},
 	},
+
 	data() {
 		return {
 			isLoaded: false,
@@ -123,7 +131,7 @@ export default {
 			},
 
 			showFilterState: false,
-			orderBy: 1,
+			orderBy: 4,
 
 			pagination: {
 				currentPage: "",
@@ -151,13 +159,36 @@ export default {
 				this.$router.replace({ name: "Reservations", query: {} });
 			}
 
-			this.orderBy = 1;
+			this.orderBy = 4;
 
 			this.resetFilterData();
 
 			const response = await downloadReservations();
 
 			this.setData(response);
+		},
+
+		async order() {
+			try {
+				const query = {};
+
+				Object.keys(this.filterData).forEach((key) => {
+					if (!_isEmpty(this.filterData[key])) {
+						query[key] = this.filterData[key];
+					}
+				});
+
+				query.orderBy = this.orderBy;
+
+				const response = await downloadReservations(query);
+				this.setReservations(response.data.data.reservations);
+
+				if (!_isEqual(this.$route.query, query)) {
+					this.$router.replace({ name: "Reservations", query });
+				}
+			} catch (error) {
+				console.log(error);
+			}
 		},
 
 		async filter(query) {
