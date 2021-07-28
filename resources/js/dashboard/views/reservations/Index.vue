@@ -196,7 +196,7 @@ export default {
         this.$router.replace({ name: "Reservations", query: {} });
       }
 
-      this.orderBy = 4;
+      this.orderBy = 2;
 
       this.resetFilterData();
 
