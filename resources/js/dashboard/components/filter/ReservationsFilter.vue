@@ -63,20 +63,6 @@
 				:confirm="true"
 				@change="callFilter"
 			></date-picker>
-
-			<!-- <date-picker
-				v-model.trim.lazy="localFilterData.endsAt"
-				type="time"
-				confirm-text="Ok"
-				valueType="format"
-				format="HH:mm"
-				placeholder="Beginning time"
-				:time-picker-options="{ start: '10:00', step: '00:15', end: '21:00' }"
-				:show-second="false"
-				:show-minute="false"
-				:confirm="true"
-				@change="callFilter"
-			></date-picker> -->
 		</div>
 	</filter-component>
 </template>
@@ -110,7 +96,6 @@ export default {
 				phoneNumber: this.filterData.phoneNumber,
 				email: this.filterData.email,
 				beginsAt: this.filterData.beginsAt,
-				endsAt: this.filterData.endsAt,
 			},
 		};
 	},

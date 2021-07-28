@@ -19,7 +19,5 @@ class ReservationsFilter extends AbstractFilter
 		'phoneNumber' => PhoneNumberFilter::class,
 		'email' => EmailFilter::class,
 		'beginsAt' => BeginsAtFilter::class,
-		'fromCreatedAt' => FromDateFilter::class,
-		'untilCreatedAt' => ToDateFilter::class,
 	];
 }
