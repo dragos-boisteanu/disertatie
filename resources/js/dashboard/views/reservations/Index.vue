@@ -15,6 +15,7 @@
 				</button>
 				<button
 					class="w-full py-1 mt-2 text-base text-white ripple-bg-sky-600 rounded-sm active:shadow-inner md:w-20 md:mt-0"
+					@click="refresh"
 				>
 					Refresh
 				</button>
@@ -119,7 +120,6 @@ export default {
 				phoneNumber: "",
 				email: "",
 				beginsAt: "",
-				endsAt: "",
 			},
 
 			showFilterState: false,
@@ -144,6 +144,20 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
+		},
+
+		async refresh() {
+			if (Object.keys(this.$route.query).length > 0) {
+				this.$router.replace({ name: "Reservations", query: {} });
+			}
+
+			this.orderBy = 1;
+
+			this.resetFilterData();
+
+			const response = await downloadReservations();
+
+			this.setData(response);
 		},
 
 		async filter(query) {
@@ -186,6 +200,12 @@ export default {
 		setPagination(meta) {
 			this.pagination.currentPage = meta.current_page;
 			this.pagination.lastPage = meta.last_page;
+		},
+
+		resetFilterData() {
+			Object.keys(this.filterData).forEach((key) => {
+				this.filterData[key] = "";
+			});
 		},
 	},
 
