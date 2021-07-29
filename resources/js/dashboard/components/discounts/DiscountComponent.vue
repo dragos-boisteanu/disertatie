@@ -22,8 +22,8 @@
         <div>
           <div>{{ discount.code }} - {{ discount.value }} %</div>
           <div>
-            {{ discount.startsAt }} >
-            {{ discount.endsAt }}
+            {{ discount.startsAt | formatDate }} >
+            {{ discount.endsAt  | formatDate }}
           </div>
         </div>
         <svg
