@@ -86,25 +86,25 @@
 			$('#orderByForm').submit();
 	})
 
-        $('#searchLink').click(function(event) {
-            event.preventDefault();
+	$('#searchLink').click(function(event) {
+			event.preventDefault();
 
-            const searchInputValue = $('#searchInput').val();
-            const searchInputError = $('#searchInputError');
+			const searchInputValue = $('#searchInput').val();
+			const searchInputError = $('#searchInputError');
 
-            if (searchInputValue.length > 0)
-                if (/^\d+$/.test(searchInputValue)) {
-                    $('#searchLink').attr('href', `/account/orders/${searchInputValue}`);
-                    window.location = $('#searchLink').attr('href')
-                } else {
-                    searchInputError.html('ID-ul trebuie sa fie numeric');
-                    searchInputError.show();
-                }
-            else {
-                searchInputError.html('Nici un ID nu a fost specificat');
-                searchInputError.show();
-            }
+			if (searchInputValue.length > 0)
+					if (/^\d+$/.test(searchInputValue)) {
+							$('#searchLink').attr('href', `/account/orders/${searchInputValue}`);
+							window.location = $('#searchLink').attr('href')
+					} else {
+							searchInputError.html('ID-ul trebuie sa fie numeric');
+							searchInputError.show();
+					}
+			else {
+					searchInputError.html('Nici un ID nu a fost specificat');
+					searchInputError.show();
+			}
 
-        })
+	})
 </script>
 @endpush
