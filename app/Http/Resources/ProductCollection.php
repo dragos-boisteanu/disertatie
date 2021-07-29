@@ -15,7 +15,7 @@ class ProductCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'products' => $this->collection,
+          'products' => $this->collection,
         ];
     }
 }

@@ -208,7 +208,6 @@
                     $v.localProduct.categoryId.$dirty &&
                     !$v.localProduct.categoryId.$error,
                 }"
-                @change.native="getSubCategories"
               >
                 <option value="" disabled>Select category</option>
                 <option
@@ -245,9 +244,9 @@
               >
                 <option value="" disabled>Select sub category</option>
                 <option
-                  :value="subCategory.id"
                   v-for="subCategory in subCategories"
                   :key="subCategory.id"
+                  :value="subCategory.id"
                 >
                   {{ subCategory.name }} ({{ subCategory.vat }}% VAT)
                 </option>
@@ -400,16 +399,6 @@ export default {
     }
   },
 
-  mounted() {
-    this.subCategories = [];
-
-    this.getCategories.forEach((category) => {
-      if (category.id == this.localProduct.categoryId) {
-        this.subCategories.push(...category.subCategories);
-      }
-    });
-  },
-
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Units", ["getUnits"]),
@@ -494,6 +483,23 @@ export default {
     },
   },
 
+  watch: {
+    "localProduct.categoryId": {
+      immediate: true,
+      handler(value) {
+        this.subCategories = [];
+
+        this.getCategories.forEach((category) => {
+          if (category.id == value) {
+            this.subCategories.push(...category.subCategories);
+          }
+        });
+
+        console.log("here");
+      },
+    },
+  },
+
   methods: {
     ...mapActions("Notification", ["openNotification"]),
 
@@ -516,11 +522,6 @@ export default {
               counter++;
             }
           });
-
-          // if (!_isEqual(this.localProduct.ingredients, this.product.ingredients)) {
-          //   payload.product.ingredients = this.localProduct.ingredients;
-          //   counter++;
-          // }
 
           delete payload.ingredients;
           delete payload.discountId;
@@ -551,22 +552,21 @@ export default {
 
             this.$v.$touch();
           }
-
           console.log(error);
         }
       }
     },
 
-    getSubCategories() {
-      this.localProduct.subCategoryId = "";
-      this.subCategories = [];
+    // getSubCategories() {
+    //   this.localProduct.subCategoryId = "";
+    //   this.subCategories = [];
 
-      this.getCategories.forEach((category) => {
-        if (category.id == this.localProduct.categoryId) {
-          this.subCategories.push(...category.subCategories);
-        }
-      });
-    },
+    //   this.getCategories.forEach((category) => {
+    //     if (category.id == this.localProduct.categoryId) {
+    //       this.subCategories.push(...category.subCategories);
+    //     }
+    //   });
+    // },
 
     removeImage() {
       this.product.image = "";
