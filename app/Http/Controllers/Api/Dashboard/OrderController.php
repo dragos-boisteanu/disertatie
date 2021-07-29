@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Jobs\SendOrderEmailJob;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Queue;
 use App\Http\Resources\OrderCollection;
 use App\Http\Requests\OrderPatchRequest;
@@ -70,6 +71,14 @@ class OrderController extends Controller
     {
         try {
             $order = $this->orderService->getOrderById($id);
+
+            if(Auth::check() && Auth::user()->isWaiter && is_null($order->staff_id)) {
+                $order = $this->orderService->linkWaiterWithOrder(Auth::id(), $order);
+                $order->load('staff');
+            }
+
+            debug($order);
+
             return new OrderResource($order); 
         } catch (ModelNotFoundException $me) {
             return  response()->json(['message'=>$me->getMessage()], 404);

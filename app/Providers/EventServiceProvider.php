@@ -3,10 +3,9 @@
 namespace App\Providers;
 
 use App\Events\AccountCreated;
-use App\Events\EmailUpdated;
 use App\Events\UserLogged;
 use App\Listeners\InitUserCart;
-use Illuminate\Support\Facades\Event;
+use App\Listeners\SendOrderEmail;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\SendPasswordResetLink;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -30,6 +29,10 @@ class EventServiceProvider extends ServiceProvider
 
         AccountCreated::class => [
             SendPasswordResetLink::class
+        ],
+
+        OrderCreated::class => [
+            SendOrderEmail::class,
         ],
     ];
 

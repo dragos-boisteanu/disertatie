@@ -31,7 +31,7 @@
 
     <div class="w-full md:flex md:gap-x-4 xl:w-3/4 2xl:w-1/2">
       <div class="flex flex-col bg-white shadow rounded-sm p-5 md:flex-1">
-        <TablesList :tables="getTables" @selected="selectTable"></TablesList>
+        <TablesList :tables="getTables" :selected-id="tableId" @selected="selectTable"></TablesList>
       </div>
 
       <TablesForm

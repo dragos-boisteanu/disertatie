@@ -50,10 +50,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    protected $appends = array('fullName', 'isWaiter');
 
-    public $with = ['role', 'addresses', 'cart'];
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 
-    // protected $appends = array('isAdmin', 'isLocationManager', 'isWaiter', 'isKitchenManager', 'isDelivery', 'isKitchen');
+    public function getIsWaiterAttribute()
+    {
+        return $this->role->name === 'Waiter';
+    }
     
     public function role()
     {
@@ -65,20 +73,23 @@ class User extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
-    public function discount()
-    {
-        return $this->belongsToMany('App\Models\Discount');
-    }
-
     public function cart() 
     {
         return $this->hasOne(Cart::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'client_id', 'id');
+    }
+
+    public function staffOrders()
+    {
+        return $this->hasMany(Order::class, 'staff_id');
+    }
+
     public function scopeFilter(Builder $builder, array $data)
     {
         return (new UserFilter($data))->filter($builder);
-    }
-
-  
+    }  
 }

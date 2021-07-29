@@ -118,13 +118,10 @@
             <div class="flex-1">
               <div class="font-semibold text-base">
                 <span class="border-gray-200">{{ product.name }}</span>
-                <span
-                  >{{ product.weight }}<Unit :unit-id="product.unitId"></Unit
-                ></span>
+                <span>{{ product.weight }} {{ product.unit }}</span>
               </div>
               <div class="text-sm">
-                {{ product.basePrice }} RON /
-                <Vat :category-id="product.categoryId"></Vat>
+                {{ product.basePrice }} RON / {{ product.vat }} % VAT / {{ product.discount }} % discount
               </div>
             </div>
             <div>

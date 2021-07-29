@@ -1,6 +1,5 @@
 @extends('layouts.store')
 
-
 @section('content')
 
 

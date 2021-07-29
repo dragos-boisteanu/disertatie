@@ -47,7 +47,7 @@
                             <div class="col-start-3 col-end-11 w-full md:flex md:items-center">
                                 <div class="w-full p-2 md:flex-1">
                                     <div class="font-semibold">
-                                        {{ $item->name }}
+                                        {{ $item->name }} {{ $item->weight }} {{ $item->unit->name}}
                                     </div>
                                     <div class="text-sm text-gray-800">
                                         @foreach ($item->ingredients as $ingredient)
@@ -56,11 +56,10 @@
                                     </div>
                                 </div>
                                 <div class="md:border-l md:border-gray-30 md:flex-1">
-                                    <div
-                                        class="flex items-center justify-between p-2 border-t border-b border-gray-300">
+                                    <div class="flex items-center justify-between p-2 border-gray-300">
                                         <div class="flex-initial w-20">
                                             <form method="POST"
-                                                action="{{ route('cart.patch', ['id' => $item->id]) }}"
+                                                action="{{ route('carts.patch', ['id' => $item->id]) }}"
                                                 class="text-center flex flex-col justify-center gap-y-2">
                                                 @csrf
                                                 @method('PUT')
@@ -71,11 +70,12 @@
                                                     class="text-sm text-sky-700 hover:text-sky-500">Actualizeaza</button>
                                             </form>
                                         </div>
-                                        <div class="flex-initial text-sm text-center font-semibold">
-                                            {{ $item->price }} Ron / buc.
+                                        <div class="flex-initial text-sm text-center">
+                                            <div>{{ $item->price }}</div>
+                                            <div class="font-semibold"> Ron / buc.</div>
                                         </div>
                                         <form class="flex-initial" method="POST"
-                                            action="{{ route('cart.delete', ['id' => $item->id]) }}">
+                                            action="{{ route('carts.delete', ['id' => $item->id]) }}">
                                             @csrf
                                             @method("DELETE")
                                             <button class="w-full text-sm text-center text-red-700 hover:text-red-500">
@@ -83,7 +83,7 @@
                                             </button>
                                         </form>
                                     </div>
-                                    <div class="flex items-center justify-between p-2 text-sm">
+                                    <div class="flex items-center border-t p-2 text-sm @if ($item->finalDiscount)  justify-between @else justify-evenly @endif ">
                                         <div class="text-center flex-initial w-20">
                                             <div>
                                                 {{ $item->base_price }} Ron
@@ -94,22 +94,23 @@
                                         </div>
                                         <div class="text-center">
                                             <div>
-                                                9 %
+                                                {{ $item->vat }} %
                                             </div>
                                             <div class="font-bold text-xs">
                                                 VAT
                                             </div>
                                         </div>
-                                        <div class="text-center">
-                                            {{-- @if ($item->discount) --}}
-                                            <div>
-                                                - 2 %
+                                        
+                                        @if ($item->finalDiscount)
+                                            <div class="text-center">
+                                                <div>
+                                                    {{ $item->finalDiscount }} %
+                                                </div>
+                                                <div class="font-bold text-xs">
+                                                    Reducere
+                                                </div>
                                             </div>
-                                            <div class="font-bold text-xs">
-                                                Reducere
-                                            </div>
-                                            {{-- @endif --}}
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +132,7 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('order.store') }}">
+            <form method="POST" action="{{ route('orders.store') }}">
                 @csrf
 
                 <div class="w-full md:flex md:items-start md:gap-x-4">
@@ -155,9 +156,9 @@
                                 @endforeach
                             </ul>
                         </div>
-                        @if ($errors->has('deliveryMethod'))
+                        @if ($errors->has('deliveryMethodId'))
                             <div class="text-sm font-semibold text-red-600 mt-2">
-                                {{ $errors->first('deliveryMethod') }}</div>
+                                {{ $errors->first('deliveryMethodId') }}</div>
                         @endif
                     </div>
 
@@ -168,11 +169,10 @@
                             @foreach ($paymentMethods as $paymentMethod)
                                 <li>
                                     <input id="pm{{ $paymentMethod->id }}" type="radio" name="paymentMethod"
-                                        value="{{ $paymentMethod->id }}"
-                                         @if ($paymentMethod->id == old('paymentMethod')) checked @endif 
-                                        @if ($paymentMethod->isDisabled) disabled @endif />
-                                    <label for="pm1">{{ $paymentMethod->name }}</label>
-                                </li>
+                                        value="{{ $paymentMethod->id }}" @if ($paymentMethod->id == old('paymentMethod')) checked @endif @if ($paymentMethod->isDisabled) disabled
+                            @endif />
+                            <label for="pm1">{{ $paymentMethod->name }}</label>
+                            </li>
                             @endforeach
                         </ul>
                         @if ($errors->has('paymentMethod'))
@@ -226,40 +226,37 @@
         const authAddress =
         `
         <select id="deliveryAddressSelect" name="deliveryAddress"
-            class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('deliveryAddress')) !border-red-600 @endif">
+            class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('deliveryAddress')) !border-red-600 @endif">
             <option value="" selected disabled>Alege adresa de livrare</option>
             @foreach ($addresses as $address)
-                <option value="{{ $address->id }}"
-                    @if ($address->is_selected && old('deliveryAddress') == "") 
-                        selected
-                    @elseif (old('deliveryAddress') == $address->id && old('deliveryAddress') != 'new')
-                        selected
-                    @endif
-                >
+                <option value="{{ $address->id }}" @if ($address->is_selected && old('deliveryAddress') == '') selected
+                                @elseif (old('deliveryAddress') == $address->id && old('deliveryAddress') != 'new')
+                                                selected @endif>
                     {{ $address->address }}
                 </option>
             @endforeach
-            <option value="new"  @if( old('deliveryAddress') == "new") selected @endif >Adresa noua</option>
+            <option value="new" @if (old('deliveryAddress') == 'new') selected @endif>Adresa noua</option>
         </select>
         @if ($errors->has('deliveryAddress'))
             <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('deliveryAddress') }}</div>
         @endif
         `
-
+    
         const newAddressField =
         `
-            <div id="newAddressField">
-                <div class="w-full">
-                    <div class="w-full mt-4">
-                        <input type="text" id="newAddress" name="newAddress" value="{{ old('newAddress') }}"
-                            class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('newAddress')) !border-red-600 @endif"
-                            placeholder="Adresa">
-                            @if ($errors->has('newAddress'))
-                                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('newAddress') }}</div>
-                            @endif
-                    </div>
+        <div id="newAddressField">
+            <div class="w-full">
+                <div class="w-full mt-4">
+                    <input type="text" id="newAddress" name="newAddress" value="{{ old('newAddress') }}"
+                        class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('newAddress')) !border-red-600 @endif"
+                    placeholder="Adresa">
+                    @if ($errors->has('newAddress'))
+                        <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                            {{ $errors->first('newAddress') }}</div>
+                    @endif
                 </div>
             </div>
+        </div>
         `;
     @endauth
 
@@ -268,9 +265,19 @@
         `
         <div class="w-full">
             <input type="text" id="name" name="name" value="{{ old('name') }}"
-                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
+                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
             @if ($errors->has('name'))
-                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('name') }}</div>
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('name') }}
+                </div>
+            @endif
+        </div>
+    
+        <div class="w-full mt-4">
+            <input type="email" id="email" name="email" value="{{ old('email') }}"
+                class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
+            @if ($errors->has('email'))
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('email') }}
+                </div>
             @endif
         </div>
     
@@ -278,15 +285,8 @@
             <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
                 class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
             @if ($errors->has('phoneNumber'))
-                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('phoneNumber') }}</div>
-            @endif
-        </div>
-    
-        <div class="w-full mt-4">
-            <input type="text" id="email" name="email" value="{{ old('email') }}"
-                class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
-            @if ($errors->has('email'))
-                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('email') }}</div>
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                    {{ $errors->first('phoneNumber') }}</div>
             @endif
         </div>
     
@@ -294,7 +294,8 @@
             <input type="text" id="address" name="address" value="{{ old('address') }}"
                 class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('address')) !border-red-600 @endif" placeholder="Adresa">
             @if ($errors->has('address'))
-                <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('address') }}</div>
+                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('address') }}
+                </div>
             @endif
         </div>
         `
@@ -306,23 +307,27 @@
                 <input type="text" id="name" name="name" value="{{ old('name') }}"
                     class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
                 @if ($errors->has('name'))
-                    <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('name') }}</div>
+                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                        {{ $errors->first('name') }}</div>
                 @endif
             </div>
-
+    
             <div class="w-full mt-4">
-                <input type="text" id="email" name="email" value="{{ old('email') }}"
+                <input type="email" id="email" name="email" value="{{ old('email') }}"
                     class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
                 @if ($errors->has('email'))
-                    <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('email') }}</div>
+                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                        {{ $errors->first('email') }}</div>
                 @endif
             </div>
     
             <div class="w-full mt-4">
                 <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
-                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
+                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar
+                telefon">
                 @if ($errors->has('phoneNumber'))
-                    <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('phoneNumber') }}</div>
+                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+                        {{ $errors->first('phoneNumber') }}</div>
                 @endif
             </div>
     
@@ -331,7 +336,7 @@
         `
     
         if($('input[name=deliveryMethodId]:checked').val() == 2) {
-            $('#deliveryMethod').append(localDeliveryData);
+        $('#deliveryMethod').append(localDeliveryData);
         }
     @endguest
 
@@ -351,10 +356,23 @@
     const deliveryMethod = $('input[name=deliveryMethodId]');
     const orderTotalValue = $('#orderTotalValue');
 
+    $('input[name=deliveryMethodId]').change(function() {
+        $('.backend-validation-error').each((index, element) => {
+            element.remove();
+        })
+
+        $('.\\!border-red-600').each((index, element) => {
+            element.value = ""
+            element.classList.remove('!border-red-600');
+        })
+    });
+
+
+
     if ($('input[name=deliveryMethodId]:checked').val() == 1) {
 
         $('#deliveryMethod').append(deliveryMethodAddress);
-        
+
         $('#deliveryAddressSelect').change(function() {
             if ($(this).val() === 'new') {
                 $('#deliveryMethodAddress').append(newAddressField);
@@ -363,7 +381,7 @@
             }
         })
 
-        if ( $('#deliveryAddressSelect').val() == 'new' ) {
+        if ($('#deliveryAddressSelect').val() == 'new') {
             $('#deliveryMethodAddress').append(newAddressField);
         }
     }

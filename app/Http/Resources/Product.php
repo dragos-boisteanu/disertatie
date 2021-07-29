@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use App\Http\Resources\IngredientCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use Barryvdh\Debugbar\Facade as Debugbar;
 class Product extends JsonResource
 {
     /**
@@ -23,27 +23,23 @@ class Product extends JsonResource
             'barcode' => $this->barcode,
             'description' => $this->description,
             'basePrice' => $this->base_price,
-            'finalPrice' => $this->price,
+            'discount' => $this->finalDiscount,
             'vat' => $this->category->vat,
             'weight' => $this->weight,
-            'unitId' => $this->unit_id,
+            'unit' => $this->unit->name,
             'categoryId' => $this->category_id,
             'subCategoryId' => $this->sub_category_id,
             'quantity' => $this->quantity,
             'deletedAt' => $this->deleted_at
         ];
 
+        DebugBar::info($arrayData);
+
         if($this->has_ingredients) {
             $arrayData['hasIngredients'] = $this->has_ingredients;
             $arrayData['ingredients'] = new IngredientCollection($this->ingredients);
         }else {
             $arrayData['ingredients'] = array();
-        }
-
-        if($this->relationLoaded('discount')) {
-            $arrayData['discount'] = new DiscountProduct($this->discount);
-        } else if($this->category->relationLoaded('discount')) {
-            $arrayData['discount'] = new DiscountProduct($this->category->discount);
         }
 
         return $arrayData;

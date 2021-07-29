@@ -1,37 +1,73 @@
 <template>
-  <li
-    class="
-      relative
-      w-full
-      min-w-min
-      my-1
-      text-sm
-      cursor-pointer
-      hover:bg-gray-100
-      hover:shadow-md
-      grid grid-cols-5
-    "
-    :class="{
-      'bg-gray-100 shadow-md font-semibold': isSelected,
-      'bg-gray-50': isOdd,
-    }"
-    @click="selectCategory(subcategory)"
-  >
-    <DisabledMarkerComponent v-if="isDisabled"></DisabledMarkerComponent>
-    <div class="p-2 self-center justify-self-center font-semibold">{{ index + 1 }}</div>
-    <div class="p-2 self-center">{{ subcategory.name }}</div>
-    <div class="p-2 self-center justify-self-center">{{ subcategory.vat }} %</div>
-    <div class="p-2 self-center justify-self-center">
-      <span v-if="subcategory.discountId">{{ getDiscount }}</span>
+  <li class="flex items-center">
+    <div class="bg-black">
+      <button @click.capture="updatePosition(1)" v-if="canUp">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 0 24 24"
+          width="18px"
+          fill="#FFFFFF"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
+          />
+        </svg>
+      </button>
+      <button @click.capture="updatePosition(0)" v-if="canDown">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 0 24 24"
+          width="18px"
+          fill="#FFFFFF"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+          />
+        </svg>
+      </button>
     </div>
-    <div class="p-2 self-center justify-self-center">{{ subcategory.productsCount }}</div>
+    <div
+      class="
+        relative
+        w-full
+        min-w-min
+        my-1
+        text-sm
+        cursor-pointer
+        hover:bg-gray-100
+        hover:shadow-md
+        grid grid-cols-5
+      "
+      :class="{
+        'bg-gray-100 shadow-md font-semibold': isSelected,
+        'bg-gray-50': isOdd,
+      }"
+      @click="selectCategory(subcategory)"
+    >
+      <DisabledMarkerComponent v-if="isDisabled"></DisabledMarkerComponent>
+      <div class="p-2 self-center justify-self-center font-semibold">
+        {{ index + 1 }}
+      </div>
+      <div class="p-2 self-center">{{ subcategory.name }}</div>
+      <div class="p-2 self-center justify-self-center">
+        {{ subcategory.vat }} %
+      </div>
+      <div class="p-2 self-center justify-self-center">
+        <span v-if="subcategory.discountId">{{ getDiscount }}</span>
+      </div>
+      <div class="p-2 self-center justify-self-center">
+        {{ subcategory.productsCount }}
+      </div>
+    </div>
   </li>
 </template>
 
-
-
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import _find from "lodash/find";
 
 import DisabledMarkerComponent from "../DisabledMarkerComponent.vue";
@@ -54,10 +90,22 @@ export default {
       type: Number,
       required: true,
     },
+    lastPosition: {
+      type: Number,
+      required: true,
+    },
   },
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
+
+    canUp() {
+      return this.subcategory.position > 1;
+    },
+
+    canDown() {
+      return this.subcategory.position < this.lastPosition;
+    },
 
     isOdd() {
       if (this.index % 2 !== 0) {
@@ -79,17 +127,55 @@ export default {
     },
 
     getDiscount() {
-      const discount = _find(this.getDiscounts, [
-        "id",
-        parseInt(this.subcategory.discountId),
-      ]);
-      return `${discount.code} ${discount.id}%`;
+      const discount = this.getDiscounts.find(
+        (discount) => discount.id === parseInt(this.subcategory.discountId)
+      );
+      if (discount) {
+        return `${discount.code} ${discount.id}%`;
+      } else {
+        return null;
+      }
     },
   },
 
   methods: {
+    ...mapActions("Categories", ["updateSubCategoryPosition"]),
+
     selectCategory(subcategory) {
       this.$emit("selected", subcategory);
+    },
+
+    // 1 up
+    // 0 down
+    async updatePosition(direction) {
+      try {
+        this.$Progress.start();
+
+        const payload = {
+          id: this.subcategory.id,
+          parentId: this.subcategory.parentId,
+          direction,
+          vm: this,
+        };
+
+        // payload = {
+        //     id: 23,
+        //     direction: 1/0, 1 -up, 0 - down
+        //    vm: this
+        // }
+        const response = await this.updateSubCategoryPosition(payload);
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        console.log(error);
+
+        this.$Progress.fail();
+
+        if (error.response) {
+          this.$toast.error(error.response.data.error);
+        }
+      }
     },
   },
 

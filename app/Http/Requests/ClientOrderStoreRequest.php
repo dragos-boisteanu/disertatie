@@ -26,22 +26,22 @@ class ClientOrderStoreRequest extends FormRequest
     {
         $validaitonArray = [
             'observations' => ['sometimes'],
-            'tableId' => ['required_if:deliveryMethod,3', 'numeric', 'exists:tables,id'],
+            'tableId' => ['required_if:deliveryMethodId,3', 'numeric', 'exists:tables,id'],
             'deliveryMethodId' => ['required', 'numeric', 'exists:delivery_methods,id'],
             'paymentMethod' => ['required', 'numeric', 'exists:payment_methods,id'],
         ];
 
         if(Auth::check()) {
             $validaitonArray += [
-                'deliveryAddress' => ['required_if:deliveryMethod,1'],
+                'deliveryAddress' => ['required_if:deliveryMethodId,1'],
                 'newAddress' => ['sometimes:deliveryAddress,new', 'string', 'max:255'],
             ];
         } else {
             $validaitonArray += [
-                'phoneNumber' => ['required_if:deliveryMethod,1,2'],
-                'name' => ['required_if:deliveryMethod,1,2', 'string', 'max:100'],
-                'email' => ['required_if:deliveryMethod,1,2', 'email'],
-                'address' => ['required_if:deliveryMethod,1', 'string', 'max:255'],
+                'phoneNumber' => ['required_if:deliveryMethodId,1,2'],
+                'name' => ['required_if:deliveryMethodId,1,2', 'string', 'max:100'],
+                'email' => ['required_if:deliveryMethodId,1,2', 'email'],
+                'address' => ['required_if:deliveryMethodId,1', 'string', 'max:255'],
             ];
         }
 

@@ -17,18 +17,18 @@
                            <svg class="fill-current text-red-600 hover:text-red-400" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><path d="M17,8l-1.41,1.41L17.17,11H9v2h8.17l-1.58,1.58L17,16l4-4L17,8z M5,5h7V3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h7v-2H5V5z"/></g></svg>
                         </button>
                     </form>
-                    
+
                     <Role :role-name="getLoggedUser.role.name"></Role>
                 </div>
-            </div> 
+            </div>
         </div>
-        
+
         <div class="text-gray-300 hover:text-white pb-2 mb-2 border-b border-coolGray-500">
             <router-link :to="{name: 'Dashboard'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact>Dashboard</router-link>
 
-          
+
         </div>
-        
+
         <div class="overflow-y-auto max-h-96 md:max-h-full  pb-8 md:pb-0">
             <div class="pt-2">
                 <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
@@ -43,7 +43,21 @@
                     </li>
                 </ul>
             </div>
-        
+
+						<div class="pt-2">
+                <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
+                    RESERVATIONS
+                </div>
+                <ul class="mt-1">
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wid">
+                        <router-link :to="{name: 'Reservations'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Reservations list</router-link>
+                    </li>
+                    <li class="text-sm text-gray-300 hover:text-white tracking-wid" v-if="isAdmin || isLocationManager || isWaiter || isKitchenManager">
+                        <router-link :to="{name: 'ReservationCreate'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Create reservation</router-link>
+                    </li>
+                </ul>
+            </div>
+
             <div class="pt-2">
                 <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
                     USERS
@@ -90,7 +104,7 @@
                         <router-link :to="{name: 'Tables'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Tables list</router-link>
                     </li>
                 </ul>
-            </div>  
+            </div>
 
             <div class="pt-2 pb-20 md:pb-8" v-if="isAdmin || isLocationManager">
                 <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
@@ -101,14 +115,14 @@
                         <router-link :to="{name: 'Discounts'}" class="block w-full cursor-pointer py-2 pl-8 border-l-4 border-coolGray-800 hover:border-sky-400 hover:bg-sky-400 hover:bg-opacity-20" exact >Discounts list</router-link>
                     </li>
                 </ul>
-            </div>  
-        </div>      
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
-    
+
     import Role from '../users/RoleComponent';
 
     export default {

@@ -6,7 +6,9 @@ namespace App\Services;
 use Exception;
 use App\Models\Cart;
 use App\Models\User;
+use Barryvdh\Debugbar\Facade as Debugbar;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use App\Interfaces\CartServiceInterface;
 
 class CartService implements CartServiceInterface
@@ -15,13 +17,15 @@ class CartService implements CartServiceInterface
   {
     try {
       if(isset($userId)) {
-        $cart = Cart::where('user_id', $userId)->first();
+        $query = Cart::where('user_id', $userId);
       }else {
-        $cart = Cart::where('session_id', $sessionId)->first();
+        $query = Cart::where('session_id', $sessionId);
       }
 
+      $cart = $query->first('id');
+
       if(isset($cart)) {
-        session(['cartId' =>$cart->id ]);
+        session(['cartId' => $cart->id ]);
       }
 
       return $cart;
@@ -63,7 +67,11 @@ class CartService implements CartServiceInterface
   {
     try {
       if(session()->has('cartId') ) {
-        throw new Exception('Cart already exists');
+        $userCartexists = Cart::where('id', session('cartId'))->where('user_id', $userId)->exists();
+
+        if($userCartexists) {
+          throw new Exception('Cart already exists');
+        }
       }
 
       $cart = new Cart();
@@ -104,6 +112,8 @@ class CartService implements CartServiceInterface
         $newQuantity = $quantity;
         $cart->items()->attach($productId, ['quantity' => $newQuantity]);
       }
+
+      DebugBar::info("added to cart");
 
       return $newQuantity;
 

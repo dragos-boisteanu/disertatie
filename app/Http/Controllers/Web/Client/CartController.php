@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Interfaces\CartServiceInterface;
 
 class CartController extends Controller
@@ -41,6 +42,9 @@ class CartController extends Controller
             }
 
             $this->cartService->addToCart($cart, $productId, $request->quantity);
+
+            Cache::forget('cart');
+
             Toastr::success('Produsul a fost adaugat in cos', 'Succes');
             return redirect()->back();
         } catch ( \Exception $ex) {
@@ -65,6 +69,8 @@ class CartController extends Controller
 
             $this->cartService->patchCartItemQuantity($cart, $id, $request->quantity);
 
+            Cache::forget('cart');
+
             Toastr::info('Cantitatea produsului a fost actualizata', 'Notification');
             return redirect()->back();
         } catch (\Exception $e) {
@@ -86,11 +92,15 @@ class CartController extends Controller
 
             $this->cartService->removeItemFromCart($cart, $id);
             $cart->refresh();
+
             if(count($cart->items) == 0) {
-               
+                Cache::forget('cart');
                 Toastr::info('Cosul este gol', 'Info');
                 return redirect()->route('menu.index');
+
             }
+
+            Cache::forget('cart');
 
             Toastr::success('Produsul a fost scos din cos', 'Success');
             return redirect()->back();

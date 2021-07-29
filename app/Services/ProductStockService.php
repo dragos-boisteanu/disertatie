@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Product;
+use App\Exceptions\NotInStockException;
 use App\Interfaces\ProductStockServiceInterface;
 
 class ProductStockService implements ProductStockServiceInterface
@@ -18,7 +19,7 @@ class ProductStockService implements ProductStockServiceInterface
           $ingredient->stock->quantity -= $ingredient->pivot->quantity * $quantity;
           $ingredient->stock->save();
         } else {
-          throw new  Exception('There are not enought ' . $product->name . ' in stock');
+          throw new  NotInStockException('Cantitatea de  ' . $product->name . ' din stock este insuficienta');
         }
       }
     } else {
@@ -27,7 +28,7 @@ class ProductStockService implements ProductStockServiceInterface
         $product->stock->quantity -= $quantity;
         $product->stock->save();
       } else {
-        throw new  Exception('There are not enought ' . $product->name . ' in stock');
+        throw new NotInStockException('Cantitatea de  ' . $product->name . ' din stock este insuficienta');
       }
     }
   }

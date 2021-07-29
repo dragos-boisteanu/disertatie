@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateReservationsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('reservations', function (Blueprint $table) {
+            $table->id();
+         
+            $table->foreignId('client_id')->nullable();
+            $table->foreignId('staff_id')->nullable();
+
+            $table->string('client_name');
+            $table->string('phone_number');
+            $table->string('email')->nullable();
+
+            $table->integer('seats');
+
+            $table->dateTime('begins_at');
+            $table->dateTime('ends_at');
+
+            $table->foreignId('status_id');
+            
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('reservations');
+    }
+}

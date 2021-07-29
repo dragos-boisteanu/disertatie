@@ -44,7 +44,7 @@ class InitUserCart
         $userCart = $this->cartService->getCart($event->userId, $sessionId);
 
         $sessionCart = $this->cartService->getCart(null, $sessionId);
-
+        
         if (isset($userCart) && isset($sessionCart) && $sessionCart->items->count() > 0) {
             foreach ($sessionCart->items as $item) {
                 //collect all inserted record IDs

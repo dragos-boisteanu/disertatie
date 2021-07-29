@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Web\Client;
 
+use App\Exceptions\NotInStockException;
+use Exception;
 use App\Models\Order;
 use App\Models\Address;
 use Illuminate\Http\Request;
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Interfaces\CartServiceInterface;
 use App\Interfaces\OrderServiceInterface;
 use App\Http\Requests\ClientOrderStoreRequest;
-use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
 {
@@ -30,10 +32,17 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::where('client_id', Auth::id())->paginatnate(10);
-        return view('store.order.index', compact('orders'));
+        $orderBy = 1;
+
+        if ($request->has('orderBy')) {
+            $orderBy = $request->orderBy;
+        }
+
+        $orders = $this->orderService->getOrders(5, $request->orderBy, $request->all(), Auth::id());
+
+        return view('store.orders.index', compact('orders', 'orderBy'));
     }
 
     /**
@@ -43,7 +52,9 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
-        $paymentMethods = PaymentMethod::withTrashed()->get();
+
+			try {
+$paymentMethods = PaymentMethod::withTrashed()->get();
         $deliveryMethods = DeliveryMethod::withTrashed()->get();
 
         $cart = $this->cartService->getCart(Auth::id(), session()->getId());
@@ -65,6 +76,10 @@ class OrderController extends Controller
         }
 
         return view('store.checkout', compact('cart', 'deliveryMethods', 'paymentMethods', 'selectedDeliveryMethodId', 'orderTotalValue'));
+   
+			} catch (\Exception $ex) {
+				return redirect()->route('home');
+			}
     }
 
     /**
@@ -75,7 +90,6 @@ class OrderController extends Controller
      */
     public function store(ClientOrderStoreRequest $request)
     {
-
         try {
 
             $data = $request->validated();
@@ -90,7 +104,7 @@ class OrderController extends Controller
                 }
 
                 if (Auth::check()) {
-                    $data['client_id'] = Auth::id();
+                    $data['clientId'] = Auth::id();
                     $data['phoneNumber'] = Auth::user()->phone_number;
                     $data['name'] = Auth::user()->first_name;
                     $data['email'] = Auth::user()->email;
@@ -99,7 +113,7 @@ class OrderController extends Controller
 
             if ($data['deliveryMethodId'] == 2) {
                 if (Auth::check()) {
-                    $data['client_id'] = Auth::id();
+                    $data['clientId'] = Auth::id();
                     $data['phoneNumber'] = Auth::user()->phone_number;
                     $data['name'] = Auth::user()->first_name;
                     $data['email'] = Auth::user()->email;
@@ -128,9 +142,12 @@ class OrderController extends Controller
             Toastr::success('Comanda a fost plasata cu succes !', 'Succes');
 
             return redirect()->route('menu.index');
+        } catch (NotInStockException $nise) {
+            Toastr::error($nise->getMessage(), 'Eroare');
+            return redirect()->back()->withInput();
+
         } catch (\Exception $ex) {
             Toastr::error('A aparut o problema in plasarea comenzi, incearca dimnou mai tarziu !', 'Eroare');
-
             return redirect()->back()->withInput();
         }
     }
@@ -141,42 +158,17 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        try {
+            $order = $this->orderService->getOrderById($id, Auth::id());
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+            return view('store.orders.show', compact('order'));
+        } catch (ModelNotFoundException $e) {
+            Toastr::info('Nu exista o comanda pentru id-ul ' . $id . ' !', 'Info');
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            return redirect()->route('orders.index');
+        }
     }
 }

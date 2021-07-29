@@ -76,13 +76,14 @@ export default {
         this.fetchDeliveryMethods(),
         this.downloadOrdersStatuses(),
         this.downloadTables(),
+        this.downloadReservationsStatuses(),
       ]);
 
       Echo.private("tables").listen("UpdateTableStatus", (e) => {
         const payload = {
           vm: this,
           status: e.status,
-          id: e.id
+          id: e.id,
         };
         this.updateTableStatus(payload);
       });
@@ -130,6 +131,7 @@ export default {
     ...mapActions("DeliveryMethods", ["fetchDeliveryMethods"]),
     ...mapActions("Statuses", [
       "downloadOrdersStatuses",
+      "downloadReservationsStatuses",
     ]),
     ...mapActions("Tables", ["downloadTables", "updateTableStatus"]),
 
@@ -150,3 +152,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.mx-datepicker {
+  width: 100% !important;
+}
+
+.mx-input {
+  @apply focus:ring-1 focus:ring-sky-500 focus:border-gray-300;
+}
+</style>

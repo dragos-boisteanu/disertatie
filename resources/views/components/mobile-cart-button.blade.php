@@ -1,3 +1,5 @@
+@props(['cart'])
+
 <button id="toggleMobileCart" class="relative rounded bg-trueGray-800 shadow-sm  lg:hidden">
     <div class="relative block h-full w-full p-2">
         <div class="absolute -top-1 -right-3 bg-white text-orange-700 px-1.5 py-0.5 rounded-full text-xs font-semibold cart-quantity">

@@ -31,7 +31,8 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
         Route::put('/', 'AccountController@update')->name('account.update');
         Route::put('/password/update', 'AccountController@updatePassword')->name('account.password.update');
         Route::delete('/'. 'AccountController@destroy')->name('account.delete');
-
+        Route::get('/comenzi', 'OrderController@index')->name('orders.index');
+        Route::get('/comenzi/{id}', 'OrderController@show')->name('orders.show');
     });
 
     Route::group(['prefix'=>'addressess'], function() {
@@ -41,24 +42,32 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
         Route::put('/{id}', 'AddressController@update')->name('address.update');
         Route::delete('/{id}', 'AddressController@destroy')->name('address.delete');
     });
+
+    Route::resource('reservations', 'ReservationController')->except(['create', 'edit']);
 });
 
 Route::group(['namespace' => 'Web\Client'], function () {
     Route::get('/', 'MenuController@index')->name('home');
 
-    Route::get('/menu', 'MenuController@index')->name('menu.index');
-    Route::get('/menu/{id}', 'MenuController@show')->name('menu.show');
+    Route::group(['prefix'=>'meniu'], function() {
+       
 
-    Route::group(['prefix'=>'cart'], function() { 
-        Route::get('/', 'CartController@index')->name('cart.index');
-        Route::post('/{productId}', 'CartController@store')->name('cart.store');
-        Route::put('/{id}', 'CartController@update')->name('cart.patch');
-        Route::delete('/{id}', 'CartController@destroy')->name('cart.delete');
+        Route::get('/', 'MenuController@index')->name('menu.index');
+        Route::get('/{categorySlug}', 'MenuController@show')->name('menu.show');
+        Route::get('/{categorySlug}/{subCategorySlug}/{productSlug}', 'ProductController@show')->name('products.show');
+    });
+  
+
+    Route::group(['prefix'=>'carts'], function() { 
+        // Route::get('/', 'CartController@index')->name('carts.index');
+        Route::post('/{productId}', 'CartController@store')->name('carts.store');
+        Route::put('/{id}', 'CartController@update')->name('carts.patch');
+        Route::delete('/{id}', 'CartController@destroy')->name('carts.delete');
     });
 
     Route::group(['prefix'=>'checkout'], function() { 
-        Route::get('/', 'OrderController@create')->name('order.create');
-        Route::post('/', 'OrderController@store')->name('order.store');
+        Route::get('/', 'OrderController@create')->name('orders.create');
+        Route::post('/', 'OrderController@store')->name('orders.store');
     });
   
 });

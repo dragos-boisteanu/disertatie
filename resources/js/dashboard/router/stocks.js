@@ -1,8 +1,8 @@
 import { dashboardBaseUrl } from './baseUrls'
 
-const Stocks = () => import(/* webpackChunkName: "group-stocks" */ '../views/stocks/StocksView.vue');
-const ProuductsStock = () => import( /* webpackChunkName: "group-stocks" */ '../components/stocks/ProductsStockComponent.vue');
-const IngredientsStock = () => import (/* webpackChunkName: "group-stocks" */ '../components/stocks/IngredientsStockComponent.vue');
+const Stocks = () => import(/* webpackChunkName: "stocks" */ '../views/stocks/StocksView.vue');
+const ProuductsStock = () => import( /* webpackChunkName: "product-stocks" */ '../components/stocks/ProductsStockComponent.vue');
+const IngredientsStock = () => import (/* webpackChunkName: "ingredients-stocks" */ '../components/stocks/IngredientsStockComponent.vue');
 
 export default [
     {

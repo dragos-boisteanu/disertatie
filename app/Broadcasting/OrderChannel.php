@@ -23,8 +23,9 @@ class OrderChannel
      * @param  \App\Models\User  $user
      * @return array|bool
      */
-    public function join(User $user, Order $order)
-    {
-        return $user->id === $order->user_id;
+    public function join($user, $orderId)
+    {   
+        $order = Order::findOrFail($orderId);
+        return $user->id == $order->client_id;
     }
 }

@@ -85,20 +85,21 @@
           >
             <option value="" disabled selected>Select parent category</option>
             <option
-              v-for="parent in parentCategories"
+              v-for="parent in getCategories"
               :key="parent.id"
               :value="parent.id"
             >
               {{ parent.name }}
             </option>
+            <option value="-1" v-if="isSubcategory">Remove parent</option>
           </Select>
         </InputGroup>
 
         <div class="w-full">
           <DiscountComponent
-            :discount-id="category.discountId"
-            @remove="removeDiscount"
-            @add="addDiscount"
+            :discount-id="discountId"
+            @remove="callRemoveDiscount"
+            @add="callAddDiscount"
           ></DiscountComponent>
         </div>
       </div>
@@ -173,7 +174,6 @@ import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
 
 import { mapActions, mapGetters } from "vuex";
 
-import _find from "lodash/find";
 import _isEqual from "lodash/isEqual";
 
 import { alphaSpaces } from "../../validators/index";
@@ -198,16 +198,6 @@ export default {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
 
-    parentCategories() {
-      return this.getCategories.filter((category) => {
-        if (this.selectedCategory) {
-          return category.id === this.selectedCategory.id ? false : true;
-        } else {
-          return true;
-        }
-      });
-    },
-
     availableDiscounts() {
       return this.getDiscounts.filter((discount) => discount.deletedAt === "");
     },
@@ -228,14 +218,22 @@ export default {
       return this.category.parentId === null;
     },
 
+    isSubcategory() {
+      return !this.isParent;
+    },
+
     isCategorySelected() {
       return this.selectedCategory !== null || this.categoryId !== undefined
         ? true
         : false;
     },
 
-    canHaveParent() {
-      //check sometimg to make sure that it can't be marked as a subcategory
+    discountId() {
+      if (this.selectedCategory) {
+        return this.selectedCategory.discountId;
+      }
+
+      return this.category.discountId;
     },
   },
 
@@ -271,9 +269,15 @@ export default {
   },
 
   watch: {
+    "category.parentId": async function (value, oldVaue) {
+      if (parseInt(value) == -1) {
+        await this.callRemoveParent(oldVaue);
+      }
+    },
+
     selectedCategory: function (value) {
       if (value) {
-        this.category = JSON.parse(JSON.stringify(this.selectedCategory));
+        this.category = JSON.parse(JSON.stringify(value));
       } else {
         this.$v.$reset();
 
@@ -295,6 +299,9 @@ export default {
       "deleteCategory",
       "disableCategory",
       "restoreCategory",
+      "addDiscount",
+      "removeDiscount",
+      "removeParent",
     ]),
 
     async create() {
@@ -383,10 +390,10 @@ export default {
                   payload.category.parentId
                 )
               ) {
-                let parentCategory = _find(this.parentCategories, [
-                  "id",
-                  parseInt(payload.category.parentId),
-                ]);
+                let parentCategory = this.getCategories.find(
+                  (category) =>
+                    category.id === parseInt(payload.category.parentId)
+                );
 
                 parentCategory.selectedSubcateogryId = payload.category.id;
                 this.$emit("selectNewParentCategory", parentCategory);
@@ -442,7 +449,7 @@ export default {
           category: this.category,
           vm: this,
         };
-        
+
         const response = await this.disableCategory(payload);
 
         this.category.deletedAt = response.deletedAt;
@@ -467,8 +474,104 @@ export default {
         this.$toast.success(response);
         this.$Progress.finish();
       } catch (error) {
-        this.$Progress.finish();
+        this.$Progress.fail();
         console.log(error);
+      }
+    },
+
+    async callRemoveParent(parentId) {
+      try {
+        this.$Progress.start();
+
+        const payload = {
+          vm: this,
+          id: this.category.id,
+          parentId: parentId,
+        };
+
+        const response = await this.removeParent(payload);
+
+        this.category.parentId = null;
+
+        this.$toast.success(response.data.message);
+        this.$Progress.finish();
+      } catch (error) {
+        if (error.response && error.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong. Try again later");
+        }
+
+        this.$Progress.fail();
+
+        console.log(error);
+      }
+    },
+
+    async callRemoveDiscount() {
+      try {
+        if (this.selectedCategory) {
+          this.$Progress.start();
+          this.waiting = true;
+
+          const payload = {
+            id: this.category.id,
+            parentId: this.category.parentId,
+            vm: this,
+          };
+
+          const response = await this.removeDiscount(payload);
+
+          this.selectedCategory.discountId = "";
+
+          this.$Progress.finish();
+          this.$toast.success(response.data.message);
+          this.waiting = false;
+        } else {
+          this.category.discountId = "";
+        }
+      } catch (error) {
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try agian later");
+        }
+
+        this.$Progress.fail();
+        this.waiting = false;
+      }
+    },
+
+    async callAddDiscount(discountId) {
+      try {
+        if (this.selectedCategory) {
+          this.$Progress.start();
+          this.waiting = true;
+          const payload = {
+            id: this.category.id,
+            parentId: this.category.parentId,
+            discountId,
+            vm: this,
+          };
+
+          const response = await this.addDiscount(payload);
+
+          this.$toast.success(response.data.message);
+          this.$Progress.finish();
+
+          this.selectedCategory.discountId = discountId;
+        } else {
+          this.category.discountId = discountId;
+        }
+
+        this.waiting = false;
+      } catch (error) {
+        this.waiting = false;
+        this.$Progress.fail();
+
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        }
       }
     },
 
@@ -490,14 +593,6 @@ export default {
       if (this.isCategorySelected) {
         this.$emit("resetCategory");
       }
-    },
-
-    removeDiscount() {
-      this.category.discountId = "";
-    },
-
-    addDiscount(discountId) {
-      this.category.discountId = discountId;
     },
   },
 

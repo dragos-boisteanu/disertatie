@@ -8,6 +8,7 @@ use App\Services\OrderService;
 use App\Services\TableService;
 use App\Services\ProductService;
 use App\Services\OrderItemService;
+use Illuminate\Pagination\Paginator;
 use App\Services\ProductStockService;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\CartServiceInterface;
@@ -17,6 +18,8 @@ use App\Interfaces\ProductServiceInterface;
 use App\Http\Resources\IngredientCollection;
 use App\Interfaces\OrderItemServiceInterface;
 use App\Interfaces\ProductStockServiceInterface;
+use App\Interfaces\ReservationServiceInterface;
+use App\Services\ReservationService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductServiceInterface::class, ProductService::class);
         $this->app->bind(TableServiceInterface::class, TableService::class);
         $this->app->bind(CartServiceInterface::class, CartService::class);
+        $this->app->bind(ReservationServiceInterface::class, ReservationService::class);
+     
     }
 
     /**
@@ -42,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // JsonResource::withoutWrapping();
         IngredientCollection::withoutWrapping();
+        Paginator::defaultView('vendor.pagination.custom-pagination');
     }
 }

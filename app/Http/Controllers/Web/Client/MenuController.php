@@ -6,17 +6,12 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Interfaces\CartServiceInterface;
 
 class MenuController extends Controller
 {
 
-    private $cartService;
-
-    public function __construct(CartServiceInterface $cartService)
-    {
-        $this->cartService = $cartService;
-    }
     /**
      * Display a listing of the resource.
      *
@@ -24,11 +19,10 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('parent_id', null)->get();
-     
-        return view('store.menu.index', ['categories'=>$categories]);
-    }
+        $categories = Category::where('parent_id', null)->orderBy('position', 'asc')->get();
 
+        return view('store.menu.index', ['categories' => $categories]);
+    }
 
     /**
      * Display the specified resource.
@@ -36,16 +30,25 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($categorySlug)
     {
-        $categories = Category::where('parent_id', null)->get();
-        $category = Category::with('subCategories')->findOrFail($id);
-
-        $category->subCategories->each( function($subCategory) {
-            $subCategory->load('subProducts');
+        $categories = Cache::remember('categories', 60 * 30, function () {
+            return  Category::where('parent_id', null)->orderBy('position', 'asc')->get();
         });
+        
+        $category =  Category::with(
+            [
+                'subCategories' => function ($query) {
+                    $query->orderBy('position', 'asc');
+                    $query->with([
+                        'subProducts' => function ($query) {
+                            $query->orderBy('name', 'asc');
+                        },
+                    ]);
+                },
+            ]
+        )->whereSlug($categorySlug)->first();
 
-        return view('store.menu.category', ['category'=>$category, 'categories' => $categories]);
+        return view('store.menu.category', ['category' => $category, 'categories' => $categories]);
     }
-
 }

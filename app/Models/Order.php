@@ -47,12 +47,24 @@ class Order extends Model
         $totalValue = 0;
 
         forEach($this->products as $item) {
-            $totalValue += $item->pivot->quantity * $item->pivot->unit_price;
+            // $discountedPrice = $this->calculateDiscount($item->pivot->base_unit_price, $item->pivot->discount);
+            // $totalValue += $item->pivot->quantity * ($discountedPrice + $this->calculateVat($discountedPrice, $item->pivot->vat));
+            $totalValue += $item->pivot->quantity * $item->getOrderProductFinalPrice($item->pivot->base_unit_price, $item->pivot->discount, $item->pivot->vat);
         }
 
         $totalValue += $this->deliveryMethod->price;
 
         return number_format($totalValue, 2, '.', '');
+    }
+
+    private function calculateDiscount($basePrice, $discount) 
+    {
+        return $basePrice - $basePrice * ($discount / 100); 
+    }
+
+    private function calculateVat($price, $vat) 
+    {
+        return  $price + $price * ($vat / 100);
     }
 
     public function paymentMethod()
@@ -62,12 +74,12 @@ class Order extends Model
 
     public function client()
     {
-        return $this->hasOne(User::class, 'id', 'client_id');
+        return $this->belongsTo(User::class, 'client_id', 'id');
     }
 
     public function staff()
     {
-        return $this->hasOne(User::class, 'id', 'staff_id');
+        return $this->belongsTo(User::class, 'staff_id', 'id');
     }
 
     public function deliveryMethod()
@@ -82,7 +94,7 @@ class Order extends Model
 
     public function products() 
     {
-        return $this->belongsToMany(Product::class)->withPivot('product_name', 'quantity', 'unit_price');
+        return $this->belongsToMany(Product::class)->withPivot('product_name', 'quantity', 'base_unit_price', 'discount', 'vat');
     }
 
     public function table()

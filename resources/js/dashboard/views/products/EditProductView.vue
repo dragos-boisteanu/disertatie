@@ -208,7 +208,6 @@
                     $v.localProduct.categoryId.$dirty &&
                     !$v.localProduct.categoryId.$error,
                 }"
-                @change.native="getSubCategories"
               >
                 <option value="" disabled>Select category</option>
                 <option
@@ -245,9 +244,9 @@
               >
                 <option value="" disabled>Select sub category</option>
                 <option
-                  :value="subCategory.id"
                   v-for="subCategory in subCategories"
                   :key="subCategory.id"
+                  :value="subCategory.id"
                 >
                   {{ subCategory.name }} ({{ subCategory.vat }}% VAT)
                 </option>
@@ -325,16 +324,16 @@
           </div>
 
           <DiscountComponent
-            v-if="product"
-            :discount-id="product.discountId"
-            @remove="removeDiscount"
-            @add="addDiscount"
+            v-if="localProduct"
+            :discount-id="localProduct.discountId"
+            @remove="callRemoveDiscount"
+            @add="callAddDiscount"
           ></DiscountComponent>
 
           <IngredientsComponent
             :ingredients="localProduct.ingredients"
-            @saved="saveIngredient"
-            @removed="removeIngredient"
+            @saved="callAddIngredient"
+            @removed="callRemoveIngredient"
           ></IngredientsComponent>
         </div>
       </div>
@@ -381,7 +380,14 @@ import {
   minValue,
 } from "vuelidate/lib/validators";
 import { alphaSpaces, alphaNumSpaces } from "../../validators/index";
-import { patchProduct, downloadEdidProductData } from "../../api/products.api";
+import {
+  patchProduct,
+  addDiscount,
+  removeDiscount,
+  addIngredient,
+  removeIngredient,
+  downloadEdidProductData,
+} from "../../api/products.api";
 
 export default {
   async beforeRouteEnter(to, from, next) {
@@ -391,16 +397,6 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  },
-
-  mounted() {
-    this.subCategories = [];
-
-    this.getCategories.forEach((category) => {
-      if (category.id == this.localProduct.categoryId) {
-        this.subCategories.push(...category.subCategories);
-      }
-    });
   },
 
   computed: {
@@ -487,6 +483,23 @@ export default {
     },
   },
 
+  watch: {
+    "localProduct.categoryId": {
+      immediate: true,
+      handler(value) {
+        this.subCategories = [];
+
+        this.getCategories.forEach((category) => {
+          if (category.id == value) {
+            this.subCategories.push(...category.subCategories);
+          }
+        });
+
+        console.log("here");
+      },
+    },
+  },
+
   methods: {
     ...mapActions("Notification", ["openNotification"]),
 
@@ -510,22 +523,15 @@ export default {
             }
           });
 
-          if (!_isEqual(this.localProduct.ingredients, this.product.ingredients)) {
-            payload.product.ingredients = this.localProduct.ingredients;
-            counter++;
-          }
-
-          if (payload.discountId === "") {
-            delete payload.discountId;
-          }
+          delete payload.ingredients;
+          delete payload.discountId;
 
           if (payload.subCategoryId === "") {
             delete payload.subCategoryId;
           }
 
           if (counter > 0) {
-
-            console.log('here')
+            console.log("here");
             const response = await patchProduct(payload.product);
 
             counter = 0;
@@ -536,33 +542,31 @@ export default {
             });
 
             this.$toast.success(response.data.message);
-
           } else {
             this.$v.$reset();
-            this.$toast.info('Nothing to update');
+            this.$toast.info("Nothing to update");
           }
         } catch (error) {
           if (error.response && error.response.data.errors) {
             this.$toast.error(response.data.message);
-            
+
             this.$v.$touch();
           }
-
           console.log(error);
         }
       }
     },
 
-    getSubCategories() {
-      this.localProduct.subCategoryId = "";
-      this.subCategories = [];
+    // getSubCategories() {
+    //   this.localProduct.subCategoryId = "";
+    //   this.subCategories = [];
 
-      this.getCategories.forEach((category) => {
-        if (category.id == this.localProduct.categoryId) {
-          this.subCategories.push(...category.subCategories);
-        }
-      });
-    },
+    //   this.getCategories.forEach((category) => {
+    //     if (category.id == this.localProduct.categoryId) {
+    //       this.subCategories.push(...category.subCategories);
+    //     }
+    //   });
+    // },
 
     removeImage() {
       this.product.image = "";
@@ -577,39 +581,122 @@ export default {
       this.localProduct.image = imagePath;
     },
 
-    saveIngredient(ingredient) {
-      const ingredientIndex = _findIndex(this.localProduct.ingredients, [
-        "id",
-        parseInt(ingredient.id),
-      ]);
+    async callAddIngredient(ingredient) {
+      try {
+        this.$Progress.start();
 
-      if (ingredientIndex > -1) {
-        Object.keys(ingredient).forEach((key) => {
-          this.$set(
-            this.localProduct.ingredients[ingredientIndex],
-            key,
-            ingredient[key]
-          );
-        });
-      } else {
-        this.localProduct.ingredients.push(ingredient);
+        const data = {
+          id: this.product.id,
+          ingredientId: ingredient.id,
+          quantity: ingredient.quantity,
+        };
+
+        const response = await addIngredient(data);
+
+        const ingredientIndex = _findIndex(this.localProduct.ingredients, [
+          "id",
+          parseInt(ingredient.id),
+        ]);
+
+        if (ingredientIndex > -1) {
+          Object.keys(ingredient).forEach((key) => {
+            this.$set(
+              this.localProduct.ingredients[ingredientIndex],
+              key,
+              ingredient[key]
+            );
+          });
+        } else {
+          this.localProduct.ingredients.push(ingredient);
+        }
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        this.$Progress.fail();
+
+        if (error.response) {
+          this.$toast.error(response.data.message);
+        } else {
+          this.$toast.error("Something went wrong");
+        }
       }
     },
 
-    removeIngredient(ingredientId) {
-      const ingredientIndex = _findIndex(this.localProduct.ingredients, [
-        "id",
-        parseInt(ingredientId),
-      ]);
-      this.localProduct.ingredients.splice(ingredientIndex, 1);
+    async callRemoveIngredient(ingredientId) {
+      try {
+        this.$Progress.start();
+
+        const data = {
+          id: this.product.id,
+          ingredientId,
+        };
+
+        const response = await removeIngredient(data);
+
+        const ingredientIndex = _findIndex(this.localProduct.ingredients, [
+          "id",
+          parseInt(ingredientId),
+        ]);
+
+        this.localProduct.ingredients.splice(ingredientIndex, 1);
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        console.log(error);
+        this.$Progress.fail();
+
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong!");
+        }
+      }
     },
 
-    addDiscount(discountId) {
-      this.localProduct.discountId = discountId;
+    async callAddDiscount(discountId) {
+      try {
+        this.$Progress.start();
+
+        const data = {
+          id: this.product.id,
+          discountId,
+        };
+
+        const response = await addDiscount(data);
+
+        this.localProduct.discountId = discountId;
+
+        this.$Progress.finish();
+
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong");
+        }
+        this.$Progress.fail();
+      }
     },
 
-    removeDiscount() {
-      this.localProduct.discountId = "";
+    async callRemoveDiscount() {
+      try {
+        this.$Progress.start();
+
+        const response = await removeDiscount(this.product.id);
+
+        this.localProduct.discountId = "";
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.$toast.error(response.data.message);
+        }
+        this.$Progress.fail();
+      }
     },
 
     setData(data) {

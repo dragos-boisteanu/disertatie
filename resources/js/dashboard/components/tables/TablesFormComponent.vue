@@ -18,37 +18,43 @@
     >
       <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
         <h2 class="mb-2 text-xl font-semibold">Table</h2>
-        <InputGroup
-          id="name"
-          label="Name"
-          class="w-full"
-          :hasError="$v.table.name.$error"
-        >
-          <template v-slot:errors>
-            <p v-if="!$v.table.name.required">The name field is required</p>
-            <p v-if="!$v.table.name.maxLength">
-              The name field must be no longer than 25 characters
-            </p>
-            <p v-if="!$v.table.name.alphaNumSpaces">
-              The name field must contain only letters, numbers or spaces
-            </p>
-          </template>
-          <TextInput
-            v-model="$v.table.name.$model"
-            :waiting="waiting"
-            :disabled="isTableSelected || waiting"
-            :eclass="{
-              'border-red-600': $v.table.name.$error,
-              'border-green-600': $v.table.name.$dirty && !$v.table.name.$error,
-            }"
+        <div>
+          <InputGroup
             id="name"
-            name="name"
-          ></TextInput>
-        </InputGroup>
+            label="Name"
+            class="w-full"
+          >
+            <TextInput
+              v-model="table.name"
+              :waiting="waiting"
+              :disabled="isTableSelected || waiting"
+              id="name"
+              name="name"
+            ></TextInput>
+          </InputGroup>
+          <InputGroup
+            id="name"
+            label="Name"
+            class="w-full"
+          >
+            <TextInput
+              v-model="table.seats"
+              :waiting="waiting"
+              :disabled="isTableSelected || waiting"
+              id="seats"
+              name="seats"
+            ></TextInput>
+          </InputGroup>
+        </div>
       </div>
       <div class="flex flex-wrap items-center gap-4">
         <div v-if="tableId" class="w-full flex items-center gap-4">
-          <Button type="secondary" @click.native="resetForm" :waiting="waiting" :disabled="waiting">
+          <Button
+            type="secondary"
+            @click.native="resetForm"
+            :waiting="waiting"
+            :disabled="waiting"
+          >
             Reset
           </Button>
 
@@ -60,19 +66,12 @@
             >
               Delete
             </Button>
-            <Button
-              @click.native="callRestoreTable"
-              :disabled="waiting"
-            >
+            <Button @click.native="callRestoreTable" :disabled="waiting">
               Restore
             </Button>
           </div>
 
-          <Button
-            v-else
-            @click.native="callDisableTable"
-            :disabled="waiting"
-          >
+          <Button v-else @click.native="callDisableTable" :disabled="waiting">
             Disable
           </Button>
         </div>
@@ -100,8 +99,6 @@ import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
 import _find from "lodash/find";
 
 import { mapGetters, mapActions } from "vuex";
-import { required, maxLength } from "vuelidate/lib/validators";
-import { alphaNumSpaces } from "../../validators/index";
 
 export default {
   props: {
@@ -134,22 +131,13 @@ export default {
       table: {
         id: "",
         name: "",
+        seats: 0,
         status: {
           id: "",
           name: "",
         },
       },
     };
-  },
-
-  validations: {
-    table: {
-      name: {
-        required,
-        alphaNumSpaces,
-        maxLength: maxLength(25),
-      },
-    },
   },
 
   watch: {

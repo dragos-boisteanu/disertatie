@@ -17,6 +17,7 @@ class Table extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'seats' => $this->seats,
             'status' => ['id'=>$this->status->id, 'name'=>$this->status->name],
         ];
     }

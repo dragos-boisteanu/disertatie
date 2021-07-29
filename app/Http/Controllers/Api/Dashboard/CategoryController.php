@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use Exception;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CategoryController extends Controller
 {
@@ -20,9 +24,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withTrashed()->with(['products', 'subProducts', 'subCategories'=> function($query) {
+        $categories = Category::withTrashed()->with(['products', 'subProducts', 'subCategories' => function ($query) {
             $query->withTrashed();
-        }])->whereNull('parent_id')->get();
+            $query->orderBy('position', 'asc');
+        }])->whereNull('parent_id')->orderBy('position', 'asc')->get();
 
         return new CategoryCollection($categories);
     }
@@ -58,21 +63,35 @@ class CategoryController extends Controller
                     $response['vat'] = $parentCategory->vat;
                 }
 
+                $lastPosition = $this->getLastPosition($request->parentId);
+
                 $response['parentName'] = $parentCategory->name;
+
+            } else {
+               $lastPosition = $this->getLastPosition();
             }
+
+            $input['position'] = $lastPosition + 1;
 
             $category = Category::create($input);
 
+            debug($category);
+
             $response['id'] = $category->id;
             $response['message'] = 'Category ' . $category->name . ' created sucessfuly';
+            $response['position'] = $category->position;
+
+            Cache::forget('categories');
 
             return response()->json($response, 201);
         } catch (QueryException $qex) {
+            dd($qex);
             $errorCode = $qex->errorInfo[1];
-            if ( $errorCode  == 1062) {
+            if ($errorCode  == 1062) {
                 return response()->json(['error' => 'Category already exists'], 500);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return response()->json(['error' => 'Something went wrong, try again later'], 500);
         }
     }
@@ -94,21 +113,26 @@ class CategoryController extends Controller
 
         $responseData = null;
 
-        if ($request->has('discountId')) {
-            $input['discount_id'] = $request->discountId;
-        } else if (!$request->has('discountId') && !is_null($category->discount_id)) {
-            $input['discount_id'] = null;
+        if ($request->has('name')) {
+            $category->slug = null;
         }
 
         if ($request->has('parentId')) {
             $input['parent_id'] = $request->parentId;
             $parentCategory = Category::withTrashed()->findOrFail($request->parentId);
             $responseData['parentName'] = $parentCategory->name;
+            $lastPosition =  $this->getLastPosition($request->parentId);
+
+        } else {
+            $lastPosition =  $this->getLastPosition();
         }
 
+        $input['position'] =  $lastPosition + 1;
         $category->update($input);
 
         $responseData['message'] = "Category updated";
+
+        Cache::forget('categories');
 
         return response()->json($responseData, 200);
     }
@@ -132,7 +156,14 @@ class CategoryController extends Controller
                 }
             }
 
+            DB::table('categories')->whereNull('parent_id')
+                ->where('position', '>', $category->position)
+                ->decrement('position');
+
             $category->forceDelete();
+
+
+            Cache::forget('categories');
 
             return response()->json(['message' => 'Category ' . $category->name . ' was deleted'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
@@ -154,21 +185,71 @@ class CategoryController extends Controller
 
         $category->restore();
 
+
+        Cache::forget('categories');
+
         return response()->json(['message' => 'Category ' . $category->name . ' was restored'], 200);
     }
 
     public function search($catagoryName)
     {
 
-        $categories = Category::with(['products', 'subProducts', 'subCategories'=> function($query) {
+        $categories = Category::with(['products', 'subProducts', 'subCategories' => function ($query) {
             $query->withTrashed();
+            $query->orderBy('position', 'asc');
         }])->where('name', 'like', $catagoryName . '%')->whereNull('parent_id')->get();
-        
+
         if ($categories->isNotEmpty()) {
             return  new CategoryCollection($categories);
             // return response()->json(['categories' => $categories], 200);
         }
 
         return response()->json(null, 404);
+    }
+
+    public function removeParent($id)
+    {
+        try {
+            $category = Category::withTrashed()->findOrFail($id);
+
+            $category->parent_id = null;
+
+            $category->position =  $this->getLastPosition() + 1;
+
+            $category->save();
+
+            return response()->json(['message' => 'Parent category removed'], 200);
+        } catch (ModelNotFoundException $mnfe) {
+            debug($mnfe);
+            return response()->json(['message' => 'Category not found'], 404);
+        } catch (\Exception $e) {
+            debug($e);
+            return response()->json(['message' => 'Failed to remove parent category'], 500);
+        }
+    }
+
+
+    private function getLastPosition(?int $parentId = null): int
+    {
+        $query = DB::table('categories')
+            ->whereNotNull('position');
+
+        if (isset($parentId)) {
+            $query->where('parent_id', $parentId);
+        } else {
+            $query->whereNull('parent_id');
+        }
+
+        $lastPosition = $query->orderBy('position', 'desc')->first(['position']);
+
+        if (isset($lastPosition)) {
+            $lastPosition = $lastPosition->position;
+        } else {
+            $lastPosition = 0;
+        }
+
+        debug($lastPosition);
+        
+        return $lastPosition;
     }
 }

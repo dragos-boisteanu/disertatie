@@ -8,12 +8,15 @@ use App\Models\Product;
 use App\Events\NewMessage;
 use App\Events\OrderCreated;
 use App\Jobs\SendOrderEmailJob;
+use App\Events\OrderStatusUpdate;
 use App\Events\UpdateTableStatus;
 use App\Events\OrderPlacedAtTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
+use App\Exceptions\NotInStockException;
 use App\Interfaces\OrderServiceInterface;
 use App\Interfaces\TableServiceInterface;
+use Barryvdh\Debugbar\Facade as Debugbar;
 use App\Http\Resources\Order as OrderResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\ProductStockServiceInterface;
@@ -31,28 +34,41 @@ class OrderService implements OrderServiceInterface
     $this->tableService = $tableService;
   }
 
-  public function getOrderById(int $orderId): Order
+  public function getOrderById(int $orderId, ?int $authClientId = null): Order
   {
     try {
-      $order = Order::withTrashed()->findOrFail($orderId);
+      $query = Order::withTrashed();
+
+      if (isset($authClientId)) {
+        $query->where('client_id', $authClientId);
+      }
+
+      $order = $query->findOrFail($orderId);
+
       return $order;
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch (\Exception $ex) {
+      dd($ex);
       throw new \Exception('Something went wrong');
     }
   }
 
-  public function getOrders(int $perPage = 8, ?int $orderBy = null, ?array $data = null): LengthAwarePaginator
+  public function getOrders(int $perPage = 8, ?int $orderBy = null, ?array $data = null, ?int $authClientId = null): LengthAwarePaginator
   {
+
     $query = Order::withTrashed();
+
+    if (isset($authClientId)) {
+      $query->where('client_id', $authClientId);
+    }
 
     switch ($orderBy) {
       case 1:
-        $query->orderBy('created_at', 'asc');
+        $query->orderBy('created_at', 'desc');
         break;
       case 2:
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('created_at', 'asc');
         break;
       default: {
           $query->orderBy('created_at', 'desc');
@@ -76,25 +92,25 @@ class OrderService implements OrderServiceInterface
       $order = new Order;
 
       $order->delivery_method_id = $data['deliveryMethodId'];
-      
+
       $order->status_id = 2; // recieved
       $order->staff_id = $userId;
 
-      if(array_key_exists('paymentMethod', $data)) {
+      if (array_key_exists('paymentMethod', $data)) {
         $order->payment_method_id = $data['paymentMethod'];
       }
 
-      if(array_key_exists('phoneNumber', $data)) {
+      if (array_key_exists('phoneNumber', $data)) {
         $order->phone_number = $data['phoneNumber'];
       }
-  
+
       if ($data['deliveryMethodId'] == 1) {
         $order->address = $data['address'];
-      }    
-      
+      }
+
       if ($data['deliveryMethodId'] == 2) {
         $order->address = 'local';
-      } 
+      }
 
       if (array_key_exists('tableId', $data) && $data['deliveryMethodId'] == 3) {
         $order->table_id = $data['tableId'];
@@ -102,7 +118,7 @@ class OrderService implements OrderServiceInterface
 
         $tableStatus = $this->tableService->getStatusById(2);
         broadcast(new UpdateTableStatus($tableStatus, $data['tableId']));
-      }    
+      }
 
       if (array_key_exists('name', $data)) {
         $order->name = $data['name'];
@@ -118,27 +134,27 @@ class OrderService implements OrderServiceInterface
 
       if (array_key_exists('email', $data)) {
         $order->email = $data['email'];
-        //send email
       }
 
       $order->save();
-     
+
       $order = $this->addItems($order, $data['items']);
-     
+
       DB::commit();
 
-      if(isset($order->email)) {
+      if (isset($order->email)) {
         Queue::push(new SendOrderEmailJob($order));
       }
 
       broadcast(new OrderCreated($order))->toOthers();
 
       return $order;
+    } catch (NotInStockException $ex) {
+      throw new NotInStockException($ex->getMessage());
     } catch (\Exception $e) {
       DB::rollBack();
-      dd($e);
-      // throw new \Exception("Error Creating Order");
-      throw new \Exception($e->getMessage());
+      throw new \Exception("Error Creating Order");
+      // throw new \Exception($e->getMessage());
     };
   }
 
@@ -172,7 +188,7 @@ class OrderService implements OrderServiceInterface
       $order = Order::findOrFail($orderId);
 
       $order->status_id = $statusId;
-      if($order->delivery_method_id == 3 && $statusId == 7) {
+      if ($order->delivery_method_id == 3 && $statusId == 7) {
         $this->tableService->setStatus($order->table_id, 1);
         $tableStatus = $this->tableService->getStatusById(1);
         broadcast(new UpdateTableStatus($tableStatus, $order->table_id));
@@ -180,13 +196,14 @@ class OrderService implements OrderServiceInterface
       $order->save();
       $order->refresh();
 
+      broadcast(new OrderStatusUpdate($order));
+
       return $order;
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
     } catch (\Exception $ex) {
       // throw new \Exception('Faied to update order #' . $orderId . ' status');
       throw new \Exception($ex->getMessage());
-      
     }
   }
 
@@ -195,13 +212,15 @@ class OrderService implements OrderServiceInterface
     try {
       $order = Order::findOrFail($orderId);
 
-      if($order->table_id) {
+      if ($order->table_id) {
         $this->tableService->setStatus($order->table_id, 1);
         $tableStatus = $this->tableService->getStatusById(1);
         broadcast(new UpdateTableStatus($tableStatus, $order->table_id));
       }
-      
+
       $order = $this->removeItems($order);
+
+      broadcast(new OrderStatusUpdate($order));
 
       return $order;
     } catch (ModelNotFoundException $mex) {
@@ -211,6 +230,19 @@ class OrderService implements OrderServiceInterface
     }
   }
 
+  public function linkWaiterWithOrder(int $waiterId, Order $order): Order
+  {
+    try {
+      $order->staff_id = $waiterId;
+      $order->save();
+      return $order;
+
+    } catch ( \Exception $ex) {
+      throw new Exception('Failed to link waiter to order');
+    }
+  }
+
+
   private function addItems(Order $order, array $items): Order
   {
     foreach ($items as $item) {
@@ -218,7 +250,9 @@ class OrderService implements OrderServiceInterface
       $order->products()->attach($item['id'], [
         "product_name" => $product->name,
         "quantity" => $item['quantity'],
-        "unit_price" => $product->price,
+        "base_unit_price" => $product->base_price,
+        "discount" => $product->finalDiscount,
+        "vat" => $product->vat
       ]);
 
       $this->productStockService->removeFromStock($product, $item['quantity']);

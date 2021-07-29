@@ -99,9 +99,7 @@ class ProductController extends Controller
             return  response()->json(['message'=>$me->getMessage()], 404);
         } catch (\Exception $e) {
             return  response()->json(['message'=>$e->getMessage()], 500);
-        } 
-
-        
+        }         
     }
 
     public function disable(Request $request, $id) 

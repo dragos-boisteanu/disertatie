@@ -3,7 +3,7 @@
   <select id="categorySelect" class="w-full rounded-sm p-2">
     <option value="" selected disabled>Alege o categorie</option>
     @foreach($categories as $category)
-      <option value="{{$category->id}}" @if (request()->route('id') == $category->id) selected @endif>{{ $category->name }}</option>
+      <option value="{{$category->slug}}" @if (request()->route('id') == $category->id) selected @endif>{{ $category->name }}</option>
     @endforeach
   </select>
 </form>

@@ -4,6 +4,8 @@
 namespace App\Services;
 
 use App\Models\Order;
+use Barryvdh\Debugbar\Facade as Debugbar;
+
 use App\Models\Product;
 use Carbon\Traits\Date;
 use Illuminate\Support\Carbon;
@@ -39,6 +41,7 @@ class OrderItemService implements OrderItemServiceInterface
     } catch (ModelNotFoundException $mex) {
       throw new ModelNotFoundException('No order found with #' . $productId . ' id');
     } catch (\Exception $ex) {
+      ;
       throw new \Exception('Something went wrong');
     }
   }
@@ -86,7 +89,9 @@ class OrderItemService implements OrderItemServiceInterface
           $order->products()->attach($item['id'], [
             "product_name" => $product->name,
             "quantity" => $item['quantity'],
-            "unit_price" => $product['price'],
+            "base_unit_price" => $product['base_price'],
+            "discount" => $product['finalDiscount'],
+            "vat" => $product['vat']
           ]);
         }
 
@@ -142,7 +147,7 @@ class OrderItemService implements OrderItemServiceInterface
 
       $product = $order->products()->where('product_id', $data['itemId'])->first();
 
-      $itemTotalPrice = number_format($product->pivot->unit_price * $product->pivot->quantity, 2, '.', '');
+      $itemTotalPrice =   $product->pivot->quantity * $product->getOrderProductFinalPrice($product->pivot->base_unit_price, $product->pivot->discount, $product->pivot->vat);
 
       return [
         'itemTotalPrice' => $itemTotalPrice,

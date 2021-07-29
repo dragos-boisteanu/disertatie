@@ -1,3 +1,5 @@
+@props(['cart'])
+
 <div class="hidden lg:block">
     <div class="relative group rounded bg-trueGray-800 shadow-sm group-hover:rounded-none hiden lg:block">
         <div class="relative block h-full w-full p-2">
@@ -20,12 +22,12 @@
                     </div>
                     <ul>
                         @foreach ($cart->items as $item)
-                            <li class="grid grid-cols-3 border-b my-1 py-1 px-2 last:border-0">
+                            <li class="grid grid-cols-3 border-b my-1 pt-1 pb-2 px-2 last:border-0">
                                 <div class="col-span-2">
                                     <div class="text-sm font-semibold">
-                                        {{ $item->name }}
+                                        {{ $item->name }} {{ $item->weight }} {{ $item->unit->name}}
                                     </div>
-                                    <div class="text-xs">x{{ $item->pivot->quantity }}</div>
+                                    <div class="text-xs">x{{ $item->pivot->quantity }} buc.</div>
                                 </div>
                                 <div class="text-sm self-center justify-self-end">
                                     {{ $item->price }} Ron
@@ -33,15 +35,15 @@
                             </li>
                         @endforeach
                     </ul>
-                    <div class="w-full text-center mt-2 flex justify-between text-sm" v-if="hasItems">
-                        <a href="{{ route('order.create') }}"
+                    <div class="w-full text-center mt-2text-sm" v-if="hasItems">
+                        <a href="{{ route('orders.create') }}"
                             class="rounded-sm text-white bg-green-600 px-4 py-1 active:shadow-inner hover:bg-green-500">
                             Go to checkout
                         </a>
-                        <a href="{{ route('cart.index') }}"
+                        {{-- <a href="{{ route('carts.index') }}"
                             class="rounded-sm text-white bg-sky-600 px-4 py-1 active:shadow-innerhover:bg-sky-500">
                             View Cart
-                        </a>
+                        </a> --}}
                     </div>
                 @else
                     <div class="w-full bg-blue-500 font-medium text-xs text-white rounded py-1 px-2">

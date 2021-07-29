@@ -7,6 +7,7 @@ use Database\Seeders\RoleSeeder;
 use Database\Seeders\TableSeeder;
 use Database\Seeders\CountySeeder;
 use Database\Seeders\TableStatusSeeder;
+use Database\Seeders\ReservationStatusSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,7 +27,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TableStatusSeeder::class,
             TableSeeder::class,
-            PaymentMethodSeeder::class
+            PaymentMethodSeeder::class,
+            ReservationStatusSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();

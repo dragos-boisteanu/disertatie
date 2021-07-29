@@ -1,9 +1,8 @@
 import { dashboardBaseUrl } from './baseUrls'
 
-const OrdersViews = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/OrdersView.vue')
-const OrderView = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/OrderView.vue')
-// const EditOrderView = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/EditOrderView.vue')
-const CreateOrderView = () => import(/* webpackChunkName: "group-orders" */ '../views/orders/CreateOrderView.vue')
+const OrdersViews = () => import(/* webpackChunkName: "orders-list" */ '../views/orders/OrdersView.vue')
+const OrderView = () => import(/* webpackChunkName: "orders-show" */ '../views/orders/OrderView.vue')
+const CreateOrderView = () => import(/* webpackChunkName: "orders-view" */ '../views/orders/CreateOrderView.vue')
 
 export default [
     {   

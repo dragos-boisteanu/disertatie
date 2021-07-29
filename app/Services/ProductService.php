@@ -23,37 +23,36 @@ class ProductService implements ProductServiceInterface
   {
     try {
       $query = Product::withTrashed()->filter($data);
-  
-      switch($orderBy) {
+
+      switch ($orderBy) {
         case 1:
           $query->orderBy('name', 'asc');
           break;
-        case 2: 
+        case 2:
           $query->orderBy('name', 'desc');
           break;
-        case 3: 
+        case 3:
           $query->orderBy('base_price', 'asc');
           break;
-        case 4: 
+        case 4:
           $query->orderBy('base_price', 'desc');
           break;
-        case 5: 
+        case 5:
           $query->orderBy('quantity', 'asc');
           break;
-        case 6: 
+        case 6:
           $query->orderBy('quantity', 'desc');
           break;
-        default: 
+        default:
           $query->orderBy('name', 'asc');
       }
-      
+
       $query->orderBy('id', 'asc');;
-  
+
       $products = $query->Paginate($perPage);
 
       return $products;
-  
-    } catch ( \Exception $e) {
+    } catch (\Exception $e) {
       throw new Exception('Something went wrong');
     }
   }
@@ -66,7 +65,7 @@ class ProductService implements ProductServiceInterface
       return $product;
     } catch (ModelNotFoundException $mex) {
       throw new Exception('No product found with #' . $productId . ' id');
-    } catch ( \Exception $ex) {
+    } catch (\Exception $ex) {
       throw new \Exception('Something went wrong');
     }
   }
@@ -86,19 +85,19 @@ class ProductService implements ProductServiceInterface
       $product->category_id = $data['categoryId'];
       $product->unit_id = $data['unitId'];
 
-      if(array_key_exists('discountId', $data)) {
+      if (array_key_exists('discountId', $data)) {
         $product->discount_id = $data['discountId'];
       }
-      
-      if(!empty($data['subCategoryId'])) {
+
+      if (!empty($data['subCategoryId'])) {
         $product->sub_category_id = $data['subCategoryId'];
       }
 
-      if(array_key_exists('image', $data)) {
+      if (array_key_exists('image', $data)) {
         $this->setImage($product, $data['image']);
       }
 
-      if(array_key_exists('ingredients', $data) && count($data['ingredients'])) {
+      if (array_key_exists('ingredients', $data) && count($data['ingredients'])) {
         $product->has_ingredients = true;
       } else {
         $product->has_ingredients = false;
@@ -112,70 +111,129 @@ class ProductService implements ProductServiceInterface
       DB::commit();
 
       return $product->id;
-
-    } catch ( \Exception $e) {
+    } catch (\Exception $e) {
       DB::rollBack();
       throw new \Exception($e->getMessage());
-    } 
+    }
   }
 
   public function patch(array $data, int $productId): void
   {
     try {
       $product = Product::withTrashed()->findOrFail($productId);
-    
-      if(array_key_exists('image', $data)) {
+
+      if (array_key_exists('image', $data)) {
         $product->image = $data['image'];
-      } 
+      }
 
-      if(array_key_exists('barcode', $data)) {
+      if (array_key_exists('barcode', $data)) {
         $product->barcode = $data['barcode'];
-      } 
+      }
 
-      if(array_key_exists('name', $data)) {
+      if (array_key_exists('name', $data)) {
+        $product->slug = null;
         $product->name = $data['name'];
-      } 
+      }
 
-      if(array_key_exists('description', $data)) {
+      if (array_key_exists('description', $data)) {
         $product->description = $data['description'];
-      } 
+      }
 
-      if(array_key_exists('basePrice', $data)) {
+      if (array_key_exists('basePrice', $data)) {
         $product->base_price = $data['basePrice'];
-      } 
+      }
 
-      if(array_key_exists('weight', $data)) {
+      if (array_key_exists('weight', $data)) {
+        $product->slug = null;
         $product->weight = $data['weight'];
-      } 
+      }
 
-      if(array_key_exists('categoryId', $data)) {
+      if (array_key_exists('categoryId', $data)) {
         $product->category_id = $data['categoryId'];
-      } 
+      }
 
-      if(array_key_exists('subCategoryId', $data)) {
+      if (array_key_exists('subCategoryId', $data)) {
         $product->sub_category_id = $data['subCategoryId'];
-      } 
+      }
 
-      if(array_key_exists('unitId', $data)) {
+      if (array_key_exists('unitId', $data)) {
+        $product->slug = null;
         $product->unit_id = $data['unitId'];
-      } 
+      }
 
-      $this->updateIngredients($product, $data);
-      
-      $this->updateDiscount($product, $data);
+      // $this->updateIngredients($product, $data);
 
-      if(array_key_exists('image', $data)) {
+      if (array_key_exists('image', $data)) {
         $this->updateImage($product, $data);
       }
 
-      $product->save();      
+      $product->save();
     } catch (ModelNotFoundException $me) {
       throw new ModelNotFoundException('Product with id #' . $productId . ' was not found');
-    } catch ( \Exception $e) {
+    } catch (\Exception $e) {
       throw new \Exception('Something went wrong');
     }
   }
 
+  public function addDiscount(Product $product, int $discountId): Product
+  {
+    try {
+      $product->discount_id = $discountId;
+      
+      return $product;
+    
+    } catch (\Exception $ex) {
+      throw new Exception('Something went wrong, try again later');
+    }
+  }
+
+  public function removeDiscount(Product $product): Product
+  {
+    try {
+      $product->discount_id = null;
+
+      return $product;
+
+    } catch (\Exception $ex) {
+      throw new Exception('Something went wrong, try again later');
+    }
+  }
+
+  public function addIngredient(Product $product, int $ingredientId, int $ingredientQuantity): Product
+  {
+    try {
+      $product->has_ingredients = true;
+
+      $product->ingredients()->sync([$ingredientId => ['quantity' => $ingredientQuantity]], false);
+  
+      if ($product->stock_id) {
+        $product->stock_id = null;
+        $product->stock()->delete();
+      }
+      return $product;
+    } catch (\Exception $ex) {
+      throw new Exception('Something went wrong, try again later');
+    }   
+  }
+
+  public function removeIngredient(Product $product, int $ingredientId): Product 
+  {
+    try {
+
+      $product->ingredients()->detach($ingredientId);
+  
+      $product->load('ingredients');
+      if($product->ingredients->count() == 0) {
+        $stock = Stock::create(['quantity' => 0]);
+        $product->stock_id = $stock->id;
+        $product->has_ingredients = 0;
+      }
+        
+      return $product;
+    } catch (\Exception $ex) {
+      throw new Exception('Something went wrong, try again later');
+    }   
+  }
   public function disable(int $productId): Carbon
   {
     try {
@@ -186,7 +244,7 @@ class ProductService implements ProductServiceInterface
       return $product->deleted_at;
     } catch (ModelNotFoundException $me) {
       throw new ModelNotFoundException('Product with id #' . $productId . ' was not found');
-    } catch ( \Exception $e) {
+    } catch (\Exception $e) {
       throw new \Exception('Something went wrong');
     }
   }
@@ -199,7 +257,7 @@ class ProductService implements ProductServiceInterface
       $product->refresh();
     } catch (ModelNotFoundException $me) {
       throw new ModelNotFoundException('Product with id #' . $productId . ' was not found');
-    } catch ( \Exception $e) {
+    } catch (\Exception $e) {
       throw new \Exception('Something went wrong');
     }
   }
@@ -213,36 +271,34 @@ class ProductService implements ProductServiceInterface
       return $product->name;
     } catch (ModelNotFoundException $me) {
       throw new ModelNotFoundException('Product with id #' . $productId . ' was not found');
-    } catch ( \Exception $e) {
+    } catch (\Exception $e) {
       throw new \Exception('Something went wrong');
     }
-    
   }
 
-  private function setImage(Product $product, string $requestPath): void 
+  private function setImage(Product $product, string $requestPath): void
   {
     try {
       $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
       $filename = 'image_' . $product->id . '_' . now()->timestamp;
       $newPath = '/public/products_images/' . $product->id . '/' . $filename . '.' . $extension;
-  
+
       Storage::move($requestPath, $newPath);
-  
+
       $dbPath = '/storage/products_images/' . $product->id . '/' . $filename . '.' . $extension;
       $product->image = $dbPath;
       $product->save();
-  
+
       Storage::delete($requestPath);
-    } catch ( \Exception $e) {
+    } catch (\Exception $e) {
       throw new \Exception('Failed to add image.');
     }
-   
   }
 
   private function setStock(Product $product, array $data): void
   {
-    if(array_key_exists('ingredients', $data)) {
-      foreach($data['ingredients'] as $ingredient) {
+    if (array_key_exists('ingredients', $data)) {
+      foreach ($data['ingredients'] as $ingredient) {
         $product->ingredients()->attach($ingredient['id'], ['quantity' => $ingredient['quantity']]);
       }
     } else {
@@ -254,7 +310,7 @@ class ProductService implements ProductServiceInterface
 
   private function updateImage(Product $product, array $data): void
   {
-    if($data['image'] !== 'clear') {
+    if ($data['image'] !== 'clear') {
       $requestPath = $data['image'];
       $extension = pathinfo(storage_path($requestPath), PATHINFO_EXTENSION);
 
@@ -265,12 +321,11 @@ class ProductService implements ProductServiceInterface
 
       Storage::move($requestPath, $newPath);
 
-      $dbPath = '/storage/products_images/' . $product->id . '/' .$filename . '.' . $extension;
-      
+      $dbPath = '/storage/products_images/' . $product->id . '/' . $filename . '.' . $extension;
+
       $product->image = $dbPath;
 
       Storage::delete($requestPath);
-        
     } else {
       Storage::deleteDirectory('/public/products_images' . $product->id);
       $product->image = null;
@@ -280,41 +335,16 @@ class ProductService implements ProductServiceInterface
   }
 
   private function updateIngredients(Product $product, array $data): void
-  { 
-    
-    if(array_key_exists('ingredients', $data) && count($data['ingredients']) > 0 ) { 
-  
-      $product->has_ingredients = true;
-  
-      $ingredientsArray = array();
-      
-      foreach ($data['ingredients'] as $ingredient) {
-          $ingredientsArray[$ingredient['id']] = ['quantity' => $ingredient['quantity']];  
-      }
-  
-      $product->ingredients()->sync($ingredientsArray);
-          
-      if($product->stock_id) {
-          $product->stock_id = null;
-          $product->stock()->delete();
-      }
+  {
+
+    if (array_key_exists('ingredients', $data) && count($data['ingredients']) > 0) {
     } else {
       $product->has_ingredients = false;
       $product->ingredients()->detach();
       $stock = Stock::create([
-          'quantity'=> 0,
+        'quantity' => 0,
       ]);
       $product->stock_id = $stock->id;
     }
-  }
-
-  private function updateDiscount(Product $product, array $data): void
-  {
-    if(array_key_exists('discountId', $data) && !empty($data['discountId'])) { 
-      $product->discount_id =  $data['discountId'];
-    } else {
-      $product->discount_id = null;
-    }
-    $product->save();
   }
 }

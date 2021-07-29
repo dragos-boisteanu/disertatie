@@ -30,9 +30,7 @@ class ViewServiceProvider extends ServiceProvider
   public function boot()
   {
     View::composer([
-      'components.mobile-cart', 
-      'components.mobile-cart-button',
-      'components.desktop-cart',
+      'includes.header',
     ], CartComposer::class);
 
     // View::composer('components.mobile-cart-button', CartItemsCountComposer::class);

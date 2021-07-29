@@ -1,8 +1,14 @@
 <template>
-  <li class="w-full min-w-min my-1 relative">
-    <DisabledMarkerComponent
-      v-if="isDisabled"
-    ></DisabledMarkerComponent>
+  <li
+    :id="category.id"
+    class="w-full min-w-min my-1 relative"
+    draggable
+    @dragstart.capture="startDrag($event)"
+    @drop.capture="onDrop($event)"
+    @dragover.prevent
+    @dragenter.prevent
+  >
+    <DisabledMarkerComponent v-if="isDisabled"></DisabledMarkerComponent>
     <div
       @click="selectCategory(category)"
       class="
@@ -33,14 +39,16 @@
       </div>
     </div>
 
-    <ul class="mb-2 pb-2 border-b border-gray"  v-if="showSubcategories">
+    <ul class="mb-2 pb-2 border-b border-gray" v-if="showSubcategories">
       <SubCategoryComponent
-        v-for="(subcategory, index) in getSubCategories" :key="subcategory.id"
-          :subcategory="subcategory"
-          :selected-parent-category-id="selectedParentCategoryId"
-          :selected-id="selectedId"
-          :index="index"
-          @selected="selectCategory"
+        v-for="(subcategory, index) in getSubCategories"
+        :key="subcategory.id"
+        :subcategory="subcategory"
+        :selected-parent-category-id="selectedParentCategoryId"
+        :selected-id="selectedId"
+        :index="index"
+        :last-position="lastPosition"
+        @selected="selectCategory"
       ></SubCategoryComponent>
     </ul>
   </li>
@@ -48,11 +56,11 @@
 
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import _find from "lodash/find";
 
-import SubCategoryComponent from './SubCategoryComponent.vue';
-import DisabledMarkerComponent from '../DisabledMarkerComponent.vue';
+import SubCategoryComponent from "./SubCategoryComponent.vue";
+import DisabledMarkerComponent from "../DisabledMarkerComponent.vue";
 
 export default {
   props: {
@@ -76,6 +84,7 @@ export default {
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
+    ...mapGetters("Categories", ["getCategories"]),
 
     isEven() {
       if (this.index % 2 === 0) {
@@ -85,8 +94,16 @@ export default {
       return false;
     },
 
+    lastPosition() {
+      const categoryIndex = this.getCategories.findIndex(category => category.id == this.category.id);
+      return this.getCategories[categoryIndex].subCategories[this.getCategories[categoryIndex].subCategories.length - 1].position;
+    },
+
     showSubcategories() {
-      return this.category.id === parseInt(this.selectedParentCategoryId) && this.category.subCategories.length > 0;
+      return (
+        this.category.id === parseInt(this.selectedParentCategoryId) &&
+        this.category.subCategories.length > 0
+      );
     },
 
     isSelected() {
@@ -94,7 +111,6 @@ export default {
     },
 
     isDisabled() {
-      console.log('category: ', this.category);
       return (
         this.category.deletedAt !== null &&
         this.category.deletedAt !== undefined
@@ -106,23 +122,72 @@ export default {
         "id",
         parseInt(this.category.discountId),
       ]);
-      return `${discount.code} ${discount.id}%`;
+
+      if (discount) {
+        return `${discount.code} ${discount.id}%`;
+      }
+
+      return "";
     },
 
     getSubCategories() {
       return this.category.subCategories;
-    }
+    },
   },
-  
+
   methods: {
+    ...mapActions("Categories", ["updatePosition"]),
+
     selectCategory(category) {
       this.$emit("selected", category);
+    },
+
+    startDrag(evt) {
+      evt.dataTransfer.dropEffect = "move";
+      evt.dataTransfer.effectAllowed = "move";
+      evt.dataTransfer.setData("categoryId", this.category.id);
+    },
+
+    async onDrop(evt) {
+      if (evt.dataTransfer.getData("categoryId") != evt.currentTarget.id) {
+        const data = {
+          categoryId: evt.dataTransfer.getData("categoryId"),
+          targetCategoryId: evt.currentTarget.id,
+        };
+
+        await this.changePosition(data);
+      } else {
+        this.$toast.info("Can't change position with itself");
+      }
+    },
+
+    async changePosition(data) {
+      try {
+        this.$Progress.start();
+
+        const payload = {
+          categoryId: data.categoryId,
+          targetCategoryId: data.targetCategoryId,
+        };
+
+        const response = await this.updatePosition(payload);
+
+        this.$Progress.finish();
+        this.$toast.success(response);
+      } catch (error) {
+        console.log(error);
+        this.$Progress.fail();
+
+        if (error.response) {
+          this.$toast.error(error.response.data.error);
+        }
+      }
     },
   },
 
   components: {
     SubCategoryComponent,
-    DisabledMarkerComponent
-  }
+    DisabledMarkerComponent,
+  },
 };
 </script>

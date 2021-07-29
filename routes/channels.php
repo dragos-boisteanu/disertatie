@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Broadcast;
 //     return (int) $user->id === (int) $id;
 // });
 
-Broadcast::channel('orders.{order}', OrderChannel::class);
+Broadcast::channel('orders.{orderId}', OrderChannel::class);
 
 Broadcast::channel('orders', OrdersChannel::class);
 Broadcast::channel('tables', TablesChannel::class);
