@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddDiscountRelatedColumnsToCategoriesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->foreignId('discount_id')->nullable()->after('color')->constrained();
-        });
-    }
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::table('categories', function (Blueprint $table) {
+			$table->foreignId('discount_id')->nullable()->constrained();
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('categories', function (Blueprint $table) {
-            //
-        });
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::table('categories', function (Blueprint $table) {
+			//
+		});
+	}
 }
