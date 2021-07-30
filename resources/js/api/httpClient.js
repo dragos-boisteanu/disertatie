@@ -1,9 +1,17 @@
 import axios from "axios";
 import Vue from "vue";
 
+let baseURL = "";
+
+if (process.env.MIX_ENV === 'local') {
+	baseURL = "http://disertatie.test/api";
+} else if (process.env.MIX_ENV === 'heroku') {
+	baseURL = "'https://disertatie-app.herokuapp.com/api"
+} else if (process.env.MIX_ENV === 'live') {
+	baseURL = "http://46.41.137.118/api";
+}
 const httpClient = axios.create({
-	// baseURL: 'http://disertatie.test/api',
-	baseURL: "https://disertatie-app.herokuapp.com/api",
+	baseURL,
 	timeout: 60000, // indicates, 1000ms ie. 1 second
 	withCredentials: true,
 	headers: {
