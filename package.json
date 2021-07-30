@@ -1,52 +1,52 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production",
-        "postinstall": "npm run dev"
-    },
-    "devDependencies": {
-        "autoprefixer": "^10.2.6",
-        "axios": "0.21",
-        "laravel-mix": "6.0.6",
-        "postcss": "^8.3.5",
-        "postcss-import": "12.0.1",
-        "progress-bar-webpack-plugin": "^2.1.0",
-        "tailwindcss": "^2.2.2",
-        "vue-loader": "15.9.5",
-        "vue-template-compiler": "2.6.12"
-    },
-    "dependencies": {
-        "barcode-validator": "1.0.2",
-        "dayjs": "1.10.4",
-        "filepond": "4.26.0",
-        "filepond-plugin-file-validate-size": "^2.2.4",
-        "filepond-plugin-file-validate-type": "1.2.6",
-        "filepond-plugin-image-preview": "4.6.6",
-        "filepond-plugin-image-validate-size": "^1.2.6",
-        "laravel-echo": "^1.10.0",
-        "lodash": "4.17.21",
-        "pusher-js": "^7.0.3",
-        "tailwindcss-ripple": "^0.6.0",
-        "vue": "2.6.12",
-        "vue-2-breadcrumbs": "0.7.12",
-        "vue-filepond": "6.0.0",
-        "vue-mq": "1.0.1",
-        "vue-progressbar": "0.7.5",
-        "vue-router": "3.5.1",
-        "vue-simple-spinner": "^1.2.10",
-        "vue-toastification": "^1.7.11",
-        "vue2-datepicker": "^3.9.0",
-        "vuelidate": "^0.7.6",
-        "vuelidate-error-extractor": "^2.4.1",
-        "vuex": "3.6.2"
-    },
-    "engines": {
-        "node": "14.5.x"
-    }
+	"private": true,
+	"scripts": {
+		"dev": "npm run development",
+		"development": "mix",
+		"watch": "mix watch",
+		"watch-poll": "mix watch -- --watch-options-poll=1000",
+		"hot": "mix watch --hot",
+		"prod": "npm run production",
+		"production": "mix --production",
+		"postinstall": "npm run dev"
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.2.6",
+		"axios": "0.21.1",
+		"laravel-mix": "6.0.6",
+		"postcss": "^8.3.5",
+		"postcss-import": "12.0.1",
+		"progress-bar-webpack-plugin": "^2.1.0",
+		"tailwindcss": "^2.2.2",
+		"vue-loader": "15.9.5",
+		"vue-template-compiler": "2.6.12"
+	},
+	"dependencies": {
+		"barcode-validator": "1.0.2",
+		"dayjs": "1.10.4",
+		"filepond": "4.26.0",
+		"filepond-plugin-file-validate-size": "^2.2.4",
+		"filepond-plugin-file-validate-type": "1.2.6",
+		"filepond-plugin-image-preview": "4.6.6",
+		"filepond-plugin-image-validate-size": "^1.2.6",
+		"laravel-echo": "^1.10.0",
+		"lodash": "4.17.21",
+		"pusher-js": "^7.0.3",
+		"tailwindcss-ripple": "^0.6.0",
+		"vue": "2.6.12",
+		"vue-2-breadcrumbs": "0.7.12",
+		"vue-filepond": "6.0.0",
+		"vue-mq": "1.0.1",
+		"vue-progressbar": "0.7.5",
+		"vue-router": "3.5.1",
+		"vue-simple-spinner": "^1.2.10",
+		"vue-toastification": "^1.7.11",
+		"vue2-datepicker": "^3.9.0",
+		"vuelidate": "^0.7.6",
+		"vuelidate-error-extractor": "^2.4.1",
+		"vuex": "3.6.2"
+	},
+	"engines": {
+		"node": "14.5.x"
+	}
 }
