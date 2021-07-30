@@ -95,7 +95,7 @@ class ReservationController extends Controller
 	public function show($id)
 	{
 		try {
-			$reservation = Reservation::withTrashed()->findOrFail($id);
+			$reservation = Reservation::withTrashed()->with(['tables', 'client', 'staff'])->findOrFail($id);
 
 			return new ResourcesReservation($reservation);
 		} catch (ModelNotFoundException $e) {

@@ -10,45 +10,46 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Reservation extends Model
 {
-    use HasFactory, SoftDeletes;
+	use HasFactory, SoftDeletes;
 
 
-    protected $fillable = [
-        'client_id',
-        'seats',
-        'client_name',
-        'phone_number',
-        'email',
-        'begins_at',
-        'ends_at',
-        'status_id',
-				'staff_id',
-    ];
+	protected $fillable = [
+		'client_id',
+		'seats',
+		'client_name',
+		'phone_number',
+		'email',
+		'begins_at',
+		'ends_at',
+		'status_id',
+		'staff_id',
+	];
 
-		public $with = ['tables', 'status', 'client', 'staff'];
+	// public $with = ['tables', 'status', 'client', 'staff'];
+	public $with = ['status'];
 
-    public function tables()
-    {
-        return $this->belongsToMany(Table::class);
-    }
+	public function tables()
+	{
+		return $this->belongsToMany(Table::class);
+	}
 
-    public function status() 
-    {
-        return $this->belongsTo(ReservationStatus::class);
-    }
+	public function status()
+	{
+		return $this->belongsTo(ReservationStatus::class);
+	}
 
-    public function client()
-    {
-        return $this->hasOne(User::class, 'id', 'client_id');
-    }
+	public function client()
+	{
+		return $this->hasOne(User::class, 'id', 'client_id');
+	}
 
-    public function staff()
-    {
-        return $this->hasOne(User::class, 'id', 'staff_id');
-    }
+	public function staff()
+	{
+		return $this->hasOne(User::class, 'id', 'staff_id');
+	}
 
-		public function scopeFilter(Builder $builder, array $data)
-    {
-        return (new ReservationsFilter($data))->filter($builder);
-    }
+	public function scopeFilter(Builder $builder, array $data)
+	{
+		return (new ReservationsFilter($data))->filter($builder);
+	}
 }
