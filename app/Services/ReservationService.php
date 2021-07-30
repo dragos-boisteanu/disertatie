@@ -94,11 +94,10 @@ class ReservationService implements ReservationServiceInterface
 				if ($seats < $availableTables->min('seats')) {
 					$table = $availableTables->where('seats', '>=', $seats)->sortBy('seats')->shift();
 				} else {
-					$table = $availableTables->where('seats', '<=', $seats)->sortByDesc('seats')->shift();
+					$table = $availableTables->where('seats', '<=', $seats)->sortBy('seats')->pop();
 				}
 
 				array_push($selectedTables, $table);
-
 				$seats -= $table->seats;
 			}
 
@@ -161,7 +160,7 @@ class ReservationService implements ReservationServiceInterface
 				if ($seats < $availableTables->min('seats')) {
 					$table = $availableTables->where('seats', '>=', $seats)->sortBy('seats')->shift();
 				} else {
-					$table = $availableTables->where('seats', '<=', $seats)->sortByDesc('seats')->shift();
+					$table = $availableTables->where('seats', '<=', $seats)->sortBy('seats')->pop();
 				}
 
 				array_push($selectedTables, $table);
