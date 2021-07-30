@@ -36,7 +36,7 @@ class ReservationService implements ReservationServiceInterface
 
 			$query->orderBy('id', 'asc');;
 
-			$reservations = $query->filter($data)->paginate($perPage);
+			$reservations = $query->with(['tables', 'client', 'staff'])->filter($data)->paginate($perPage);
 
 			return $reservations;
 		} catch (\Exception $e) {
