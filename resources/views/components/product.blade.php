@@ -6,8 +6,12 @@
 		@csrf
 
 		<div class="col-span-4 flex flex-col items-start md:col-span-4">
-			<a class="relative block"
-				href="{{ route('products.show', ['categorySlug' => $product->category->slug, @isset($product->subCategory) 'subCategorySlug' => $product->subCategory->slug, @endisset 'productSlug' => $product->slug]) }}">
+			<a class="relative block" @isset($product->subCategory)
+				href="{{ route('products.show', ['categorySlug' => $product->category->slug, 'subCategorySlug' => $product->subCategory->slug, 'productSlug' => $product->slug]) }}"
+				@else
+				href="{{ route('products.show', ['categorySlug' => $product->category->slug,  'productSlug' => $product->slug]) }}"
+				@endisset
+				>
 				<h2 class="text-gray-300 justify-self-start self-center hover:text-gray-200 hover:underline">
 					{{ $product->name }} -
 					{{ $product->weight }}{{ $product->unit->name }}
