@@ -10,9 +10,11 @@
     "require": {
         "php": "^7.4",
         "ext-gd": "*",
+        "barryvdh/laravel-debugbar": "^3.6",
         "beyondcode/laravel-websockets": "^1.12",
         "brian2694/laravel-toastr": "^5.56",
         "cviebrock/eloquent-sluggable": "^8.0",
+        "diglactic/laravel-breadcrumbs": "^7.0",
         "doctrine/dbal": "^3.1",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -21,8 +23,7 @@
         "laravel/framework": "^8.12",
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.5",
-        "pusher/pusher-php-server": "~3.0",
-        "barryvdh/laravel-debugbar": "^3.6"
+        "pusher/pusher-php-server": "~3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

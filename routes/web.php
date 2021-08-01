@@ -51,7 +51,7 @@ Route::group(['namespace' => 'Web\Client'], function () {
 
 	Route::group(['prefix' => 'meniu'], function () {
 		Route::get('/', 'MenuController@index')->name('menu.index');
-		Route::get('/{categorySlug}', 'MenuController@show')->name('menu.show');
+		Route::get('/{categorySlug}', 'MenuController@show')->name('category.show');
 		Route::get('/{categorySlug}/{productSlug}', 'ProductController@show')->name('products.show');
 	});
 
