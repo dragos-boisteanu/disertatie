@@ -1,6 +1,7 @@
 @extends('layouts.store')
 
 @section('content')
+{{ Breadcrumbs::render('category', $category) }}
 <x-menu>
 	@include('includes.menu-categories')
 	@include('includes.menu-categories-select')

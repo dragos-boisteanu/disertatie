@@ -12,15 +12,13 @@ Breadcrumbs::for('menu', function (BreadcrumbTrail $trail) {
 });
 
 // Menu > Category
-Breadcrumbs::for('category', function ($trail, $category) {
+Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category) {
 	$trail->parent('menu');
-	$trail->push($category->name, route('category', $category->slug));
+	$trail->push($category->name, route('category.show', $category->slug));
 });
 
 // Menu > Category > [Product]
-Breadcrumbs::for('product', function ($trail, $category, $subCategory, $product) {
-	$trail->parent('category');
-
-	$trail->push($subCategory->name);
-	$trail->push($product->name, route('product', $product->slug));
+Breadcrumbs::for('product', function (BreadcrumbTrail $trail, $category, $product) {
+	$trail->parent('category', $category);
+	$trail->push($product->name, route('products.show', ['categorySlug' => $category->slug, 'productSlug' => $product->slug]));
 });
