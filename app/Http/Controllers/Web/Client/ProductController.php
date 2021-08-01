@@ -8,11 +8,11 @@ use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
-    public function show($categorySlug, $subCategorySlug, $productSlug) 
-    {
-        $product = Product::findBySlugOrFail($productSlug);
-        
+	public function show($categorySlug, $productSlug)
+	{
+		$product = Product::findBySlugOrFail($productSlug);
 
-        return view('store.product', compact('product'));
-    }
+
+		return view('store.product', compact('product'));
+	}
 }
