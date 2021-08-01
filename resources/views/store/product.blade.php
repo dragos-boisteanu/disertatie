@@ -10,13 +10,11 @@
 		<div class="relative w-full h-64 p-2 md:w-auto">
 			<img src="https://www.fullhouse.ro/images/thumbnails/15968120771633_4STAGIONI.jpg"
 				class="w-full h-full rounded-sm shadow-sm" />
-
 			@isset($product->finalDiscount)
 			<div class="absolute top-5 right-5 text-xs bg-red-600 rounded-sm shadow text-white py-1 px-2">
 				-{{ $product->finalDiscount }} %
 			</div>
 			@endisset
-
 		</div>
 
 		<div class="h-full flex-1 md:flex md:flex-col md:items-start md:justify-center md:gap-y-2">
@@ -43,11 +41,15 @@
 				@csrf
 
 				@if ($product->quantity > 0)
-				<input id="pq{{ $product->id }}" type="number" value="1" min="1" name="quantity"
-					class="w-1/4 flex-initial rounded-sm bg-white text-center md:w-full">
+				<div class="flex items-start gap-2 md:flex-col md:w-full">
+					<label for="pq{{$product->id}}" class="text-sm text-gray-300">Cantitiate</label>
+					<input id="pq{{ $product->id }}" type="number" value="1" min="1" name="quantity"
+						class="w-1/2 flex-1rounded-sm bg-white text-center rounded-sm">
+				</div>
+
 				@endif
 
-				<div class="w-full">
+				<div class="w-full flex-auto">
 					@if ($product->quantity > 0)
 					<button
 						class="w-full self-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200 product-add-to-cart">
