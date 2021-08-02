@@ -10,7 +10,7 @@
 			<input id="searchInput"
 				class="w-full border border-r-0 p-2 rounded-sm rounded-r-none text-sm focus:rounded-r-sm focus:ring focus:ring-orange-600"
 				type="text" name="id" placeholder="ID comanda" value="{{ old('id') }}" />
-			<a href="" id="searchLink" type="submit"
+			<a href="" id="searchLink"
 				class="px-2 border border-l-0 rounded-sm rounded-l-none flex items-center justify-center">
 				<svg class="fill-current text-trueGray-800" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24"
 					width="18px" fill="#000000">
@@ -23,7 +23,7 @@
 		<div id="searchInputError" class="text-sm font-semibold text-red-600 mt-2" style="display: none"></div>
 	</div>
 
-	<form class="orderByForm" method="GET" action="{{ route('orders.index') }}">
+	<form id="orderByForm" method="GET" action="{{ route('orders.index') }}">
 		<select id="orderBy" name="orderBy"
 			class="w-full border border-r-0 p-2 rounded-sm rounded-r-none text-sm focus:ring focus:ring-orange-600">
 			<option value="1" {{ $orderBy == 1 ? 'selected' : '' }}>Cele mai recente</option>
@@ -32,51 +32,49 @@
 	</form>
 </div>
 
-<div class="mt-4">
-	<ul>
-		@forelse($orders as $order)
-		<li class="flex items-center bg-trueGray-50 rounded shadow-md mt-3 first:mt-0 border  hover:border-orange-600">
-			<a href="{{ route('orders.show', ['id' => $order->id]) }}" class="p-2 block w-full text-sm">
-				<div class="flex items-center justify-between">
-					<div class="text-lg text-trueGray-800 font-semibold">
-						#{{ $order->id }}
-					</div>
-					<x-statuses.order-status :statusName="$order->status->name"></x-statuses.order-status>
+<ul class="mt-4">
+	@forelse($orders as $order)
+	<li class="flex items-center bg-trueGray-50 rounded shadow-md mt-3 first:mt-0 border  hover:border-orange-600">
+		<a href="{{ route('orders.show', ['id' => $order->id]) }}" class="p-2 block w-full text-sm">
+			<div class="flex items-center justify-between">
+				<div class="text-lg text-trueGray-800 font-semibold">
+					#{{ $order->id }}
+				</div>
+				<x-statuses.order-status :statusName="$order->status->name"></x-statuses.order-status>
+			</div>
+
+			<div class="flex items-center justify-between my-2">
+				<div>
+					{{ $order->deliveryMethod->name }}
+				</div>
+				<div>
+					{{ $order->created_at }}
+				</div>
+			</div>
+
+			<div class="flex items-center justify-between">
+				<div>
+					{{ $order->totalQuantity }} <span
+						class="font-semibold">produs{{ $order->totalQuantity > 1 ? 'e' : '' }}</span>
 				</div>
 
-				<div class="flex items-center justify-between my-2">
-					<div>
-						{{ $order->deliveryMethod->name }}
-					</div>
-					<div>
-						{{ $order->created_at }}
-					</div>
+				<div>
+					<span class="font-semibold">Total</span> {{ $order->totalValue }} Ron
 				</div>
+			</div>
+		</a>
+	</li>
+	@empty
+	<li class="w-full h-full mt-8 text-gray-700 text-opacity-75 text-4xl flex items-center justify-center font-semibold">
+		Nu ai facut nici o comanda pana acum.
+	</li>
+	@endif
+</ul>
 
-				<div class="flex items-center justify-between">
-					<div>
-						{{ $order->totalQuantity }} <span
-							class="font-semibold">produs{{ $order->totalQuantity > 1 ? 'e' : '' }}</span>
-					</div>
-
-					<div>
-						<span class="font-semibold">Total</span> {{ $order->totalValue }} Ron
-					</div>
-				</div>
-			</a>
-		</li>
-		@empty
-		<li
-			class="w-full h-full mt-8 text-gray-700 text-opacity-75 text-4xl flex items-center justify-center font-semibold">
-			Nu ai facut nici o comanda pana acum.
-		</li>
-		@endif
-	</ul>
-
-	<div class="mt-2">
-		{{ $orders->links() }}
-	</div>
+<div class="mt-2">
+	{{ $orders->links() }}
 </div>
+
 @endsection
 
 
