@@ -42,10 +42,7 @@
 
             <div class="flex-1">
               <ImageUploadComponent
-                :clear="clearImage"
-                @fileAdded="setWaiting"
-                @processFileAbort="setWaiting"
-                @fileProcessed="setWaiting"
+                :url="url"
                 @setImagePath="setImagePath"
               ></ImageUploadComponent>
               <button v-if="hasImage" @click.prevent="removeImage">
@@ -387,6 +384,7 @@ import {
   addIngredient,
   removeIngredient,
   downloadEdidProductData,
+  removeImage,
 } from "../../api/products.api";
 
 export default {
@@ -406,6 +404,10 @@ export default {
 
     hasNoSubCategories() {
       return this.subCategories && this.subCategories.length === 0;
+    },
+
+    url() {
+      return `/api/dashboard/products/${this.localProduct.id}/image`;
     },
 
     hasImage() {
@@ -568,9 +570,17 @@ export default {
     //   });
     // },
 
-    removeImage() {
-      this.product.image = "";
-      this.localProduct.image = "clear";
+    async removeImage() {
+      try {
+        const payload = {
+          id: this.localProduct.id,
+          image: this.localProduct.imagePath,
+        };
+
+        await removeImage(payload);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     setWaiting(value) {
