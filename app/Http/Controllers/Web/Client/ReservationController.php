@@ -12,120 +12,134 @@ use Barryvdh\Debugbar\Facade as Debugbar;
 use App\Interfaces\ReservationServiceInterface;
 use App\Exceptions\NoAvailabeTablesForReservationException;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ReservationController extends Controller
 {
 
-    private $reservationService;
+	private $reservationService;
 
-    public function __construct(ReservationServiceInterface $reservatioService)
-    {
-        $this->reservationService = $reservatioService;
-    }
+	public function __construct(ReservationServiceInterface $reservatioService)
+	{
+		$this->reservationService = $reservatioService;
+	}
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index(Request $request)
+	{
+		$orderBy = 1;
 
-        $reservations = Reservation::withTrashed()->with('tables', 'status')->where('client_id', Auth::id())->orderBy('begins_at','desc')->paginate(5);
-        
-        debug($reservations);
-        return view('store.reservations.index', compact('reservations'));
-    }
+		if ($request->has('orderBy')) {
+			$orderBy = $request->orderBy;
+		}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+		$reservations = $this->reservationService->getAllReservations(5, $orderBy, $request->all(), Auth::id());
+		return view('store.reservations.index', compact('reservations', 'orderBy'));
+	}
 
-        try {
-            DB::beginTransaction();
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
 
-            $input = $request->all();
+		try {
+			DB::beginTransaction();
 
-            $input['client_id'] = Auth::id();
-            $input['client_name'] = Auth::user()->fullName;
-            $input['phone_number'] = Auth::user()->phone_number;
-            $input['email'] = Auth::user()->email;
+			$input = $request->all();
 
-            $input['begins_at'] = Carbon::createFromFormat('d-m-Y H:i', $request->date . ' ' . $request->time)->subMinutes(30);
-            $input['ends_at'] = Carbon::createFromFormat('d-m-Y H:i', $request->date . ' ' . $request->time)->addHours(3);
+			$input['client_id'] = Auth::id();
+			$input['client_name'] = Auth::user()->fullName;
+			$input['phone_number'] = Auth::user()->phone_number;
+			$input['email'] = Auth::user()->email;
 
-            $input['status_id'] = 1;
+			$input['begins_at'] = Carbon::createFromFormat('d-m-Y H:i', $request->date . ' ' . $request->time)->subMinutes(30);
+			$input['ends_at'] = Carbon::createFromFormat('d-m-Y H:i', $request->date . ' ' . $request->time)->addHours(3);
 
-            $availableTables = $this->reservationService->getAvailableTables($request->date, $request->time, $request->seats);
+			$input['status_id'] = 1;
 
-            $this->reservationService->create($input, $availableTables);
+			$availableTables = $this->reservationService->getAvailableTables($request->date, $request->time, $request->seats);
 
-            DB::Commit();
+			$this->reservationService->create($input, $availableTables);
 
-            Toastr::success("Reservarea a fost inregistrata. V-a asteptam !", "Succes");
-            return redirect()->back();
+			DB::Commit();
 
-        } catch ( NoAvailabeTablesForReservationException $ex) {
-            DB::rollBack();
-            Toastr::error($ex->getMessage(), "Eroare");
+			Toastr::success("Reservarea a fost inregistrata. Va asteptam !", "Succes");
+			return redirect()->back();
+		} catch (NoAvailabeTablesForReservationException $ex) {
+			DB::rollBack();
+			Toastr::error($ex->getMessage(), "Eroare");
 
-            return redirect()->back()->withInput();
+			return redirect()->back()->withInput();
+		} catch (\Exception $ex) {
+			DB::rollBack();
 
-        } catch (\Exception $ex) {
-            DB::rollBack();
+			Toastr::error('A aparut o problema. Incercati mai tarziu', "Eroare");
+			return redirect()->back()->withInput();
+		}
+	}
 
-            Toastr::error('A aparut o problema. Incercati mai tarziu', "Eroare");
-            return redirect()->back()->withInput();
-        }  
-    }
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id)
+	{
+		try {
+			$reservation = Reservation::with('tables', 'client', 'staff')->withTrashed()->where('id', $id)->where('client_id', Auth::id())->firstOrFail();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+			return view('store.reservations.show', compact('reservation'));
+		} catch (ModelNotFoundException $e) {
+			debug($e);
+			Toastr::error('Reservarea nu a fost gasita', 'Eroare');
+			return redirect()->back();
+		} catch (\Exception $e) {
+			debug($e);
+			Toastr::error('A aparut o problema. Incercati mai tarziu', "Eroare");
+			return redirect()->back();
+		}
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id)
+	{
+		//
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id)
+	{
+		//
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id)
+	{
+		//
+	}
 }
