@@ -17,18 +17,22 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class ReservationService implements ReservationServiceInterface
 {
 
-	public function getAllReservations(int $perPage = 8, int $orderBy = null, array $data = null): LengthAwarePaginator
+	public function getAllReservations(int $perPage = 8, int $orderBy = null, array $data = null, int $authClientId): LengthAwarePaginator
 	{
 		try {
 
 			$query = Reservation::withTrashed();
 
+			if (isset($authClientId)) {
+				$query->where('client_id', $authClientId);
+			}
+
 			switch ($orderBy) {
 				case 1:
-					$query->orderBy('created_at', 'asc');
+					$query->orderBy('created_at', 'desc');
 					break;
 				case 2:
-					$query->orderBy('created_at', 'desc');
+					$query->orderBy('created_at', 'asc');
 					break;
 				default:
 					$query->orderBy('created_at', 'desc');

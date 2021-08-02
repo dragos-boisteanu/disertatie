@@ -31,8 +31,9 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
 		Route::put('/', 'AccountController@update')->name('account.update');
 		Route::put('/password/update', 'AccountController@updatePassword')->name('account.password.update');
 		Route::delete('/' . 'AccountController@destroy')->name('account.delete');
-		Route::get('/comenzi', 'OrderController@index')->name('orders.index');
-		Route::get('/comenzi/{id}', 'OrderController@show')->name('orders.show');
+		Route::get('/orders', 'OrderController@index')->name('orders.index');
+		Route::get('/orders/{id}', 'OrderController@show')->name('orders.show');
+		Route::resource('reservations', 'ReservationController')->except(['create', 'edit']);
 	});
 
 	Route::group(['prefix' => 'addressess'], function () {
@@ -42,8 +43,6 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
 		Route::put('/{id}', 'AddressController@update')->name('address.update');
 		Route::delete('/{id}', 'AddressController@destroy')->name('address.delete');
 	});
-
-	Route::resource('reservations', 'ReservationController')->except(['create', 'edit']);
 });
 
 Route::group(['namespace' => 'Web\Client'], function () {

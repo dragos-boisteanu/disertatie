@@ -58,7 +58,7 @@
     </div>
 
     <div class="w-full bg-white shadow p-4 rounded mt-4 lg:w-2/3 2xl:w-1/2">
-      <div class="flex items center justify-between hover:cursor-pointer">
+      <div class="flex items-center justify-between hover:cursor-pointer">
         <div class="font-bold">Orders</div>
         <div>
           <svg

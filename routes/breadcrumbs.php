@@ -22,3 +22,26 @@ Breadcrumbs::for('product', function (BreadcrumbTrail $trail, $category, $produc
 	$trail->parent('category', $category);
 	$trail->push($product->name, route('products.show', ['categorySlug' => $category->slug, 'productSlug' => $product->slug]));
 });
+
+// ORders
+Breadcrumbs::for('orders', function (BreadcrumbTrail $trail) {
+	$trail->push('Comenzi', route('orders.index'));
+});
+
+// Order
+Breadcrumbs::for('order', function (BreadcrumbTrail $trail, $order) {
+	$trail->parent('orders');
+	$trail->push('Comanda #' . $order->id, route('orders.show', ['id' => $order->id]));
+});
+
+
+// Rezervations
+Breadcrumbs::for('reservations', function (BreadcrumbTrail $trail) {
+	$trail->push('Rezervari', route('reservations.index'));
+});
+
+// Rezervation
+Breadcrumbs::for('reservation', function (BreadcrumbTrail $trail, $reservation) {
+	$trail->parent('reservations');
+	$trail->push('Resevare #' . $reservation->id, route('reservations.show', ['reservation' => $reservation->id]));
+});
