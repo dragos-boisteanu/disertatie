@@ -14,9 +14,11 @@ class ProductImageController extends Controller
 	{
 		try {
 			$storagePath = '/products_images' . '/' . $id;
-			$path = $request->file('image')->store($storagePath);
-			$path = 'storage/' . $path;
+			$files =  Storage::allFiles($storagePath);
+			Storage::delete($files);
 
+			$path = $request->file('image')->store($storagePath);
+			$path = '/storage/' . $path;
 
 			DB::table('products')->where('id', $id)->update(['image' => $path]);
 
@@ -34,7 +36,7 @@ class ProductImageController extends Controller
 
 			$product = DB::table('products')->select('image')->where('id', $id)->first();
 
-			if (!isset($product->image)) {
+			if (!isset($product)) {
 				throw new ModelNotFoundException();
 			}
 

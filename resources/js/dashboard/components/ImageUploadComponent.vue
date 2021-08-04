@@ -12,7 +12,7 @@
           headers: {
             'X-CSRF-TOKEN': csrf,
           },
-          onload: (response) => addImagePath(imagePath),
+          onload: (response) => addImagePath(response),
         },
         revert: {
           headers: {
@@ -112,7 +112,7 @@ export default {
 
     removeImage() {
       this.$refs.pond.removeFile({ revert: true });
-      this.$emit("setImagePath", "");
+      this.$emit("removeImagePath", "");
     },
   },
 

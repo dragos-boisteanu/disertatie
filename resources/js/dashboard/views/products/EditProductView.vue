@@ -17,33 +17,37 @@
           class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
         >
           <!-- IMAGE UPLOAD -->
-          <div class="flex items-center gap-x-5">
-            <div class="w-32 h-32 rounded-md md:mr-4">
-              <img
-                v-if="hasImage"
-                :src="localProduct.image"
-                class="w-full h-full rounded-md object-cover"
-              />
-              <svg
-                v-else
-                class="bg-gray-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="white"
-                width="128px"
-                height="128px"
-              >
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path
-                  d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+          <div class="flex flex-col gap-4 md:flex-row md:items-center">
+            <div class="w-full flex justify-center md:w-1/5">
+              <div class="w-64 h-64 rounded-md md:h-48 md:w-48 md:mr-4">
+                <img
+                  v-if="hasImage"
+                  :src="localProduct.image"
+                  class="w-full h-full rounded-md object-cover"
                 />
-              </svg>
+                <svg
+                  v-else
+                  class="bg-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  width="128px"
+                  height="128px"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+                  />
+                </svg>
+              </div>
             </div>
 
             <div class="flex-1">
               <ImageUploadComponent
                 :url="url"
+                :clear="clearImage"
                 @setImagePath="setImagePath"
+                @removeImagePath="removeImagePath"
               ></ImageUploadComponent>
               <button v-if="hasImage" @click.prevent="removeImage">
                 Remove image
@@ -411,11 +415,7 @@ export default {
     },
 
     hasImage() {
-      return (
-        this.localProduct.image !== null &&
-        this.localProduct.image !== "" &&
-        this.localProduct.image !== "clear"
-      );
+      return this.localProduct.image !== null && this.localProduct.image !== "";
     },
   },
 
@@ -431,6 +431,7 @@ export default {
       product: null,
 
       localProduct: {
+        image: "",
         barcode: "",
         name: "",
         description: "",
@@ -521,7 +522,13 @@ export default {
           Object.keys(this.localProduct).forEach((key) => {
             if (!_isEqual(this.product[key], this.localProduct[key])) {
               payload.product[key] = this.localProduct[key];
-              counter++;
+              if (
+                key !== "image" &&
+                key !== "ingredients" &&
+                key !== "discountId"
+              ) {
+                counter++;
+              }
             }
           });
 
@@ -574,10 +581,13 @@ export default {
       try {
         const payload = {
           id: this.localProduct.id,
-          image: this.localProduct.imagePath,
+          image: this.localProduct.image,
         };
 
         await removeImage(payload);
+
+        this.localProduct.image = "";
+        this.clearImage = true;
       } catch (error) {
         console.log(error);
       }
@@ -587,8 +597,14 @@ export default {
       this.waiting = value;
     },
 
-    setImagePath(imagePath) {
-      this.localProduct.image = imagePath;
+    setImagePath(response) {
+      const responseObj = JSON.parse(response);
+
+      this.localProduct.image = responseObj.imagePath;
+    },
+
+    removeImagePath() {
+      this.localProduct.image = "";
     },
 
     async callAddIngredient(ingredient) {
