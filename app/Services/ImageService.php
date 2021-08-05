@@ -32,7 +32,7 @@ class ImageService implements ImageServiceInterface
 
 			return $path;
 		} catch (\Exception $e) {
-			throw new Exception('Something went wrong, try again later');
+			throw new Exception('Failed to save image, try again later');
 		}
 	}
 

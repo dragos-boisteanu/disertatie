@@ -401,7 +401,7 @@ export default {
         this.$Progress.start();
         const payload = {
           id: this.localUser.id,
-          imagePath: this.localUser.avatar,
+          imagePath: this.localUser.image,
         };
 
         const response = await removeUserAvatar(payload);

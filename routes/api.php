@@ -64,8 +64,6 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 	Route::apiResource('tables', 'TableController', ['as' => 'api']);
 	Route::apiResource('reservations', 'ReservationController', ['as' => 'api'])->only(['index', 'show', 'store', 'destroy']);
 
-
-
 	Route::group(['prefix' => 'products'], function () {
 		Route::delete('{id}/disable', 'ProductController@disable');
 		Route::post('{id}/restore', 'ProductController@restore');

@@ -1,37 +1,35 @@
 <template>
-  <div>
-    <file-pond
-      name="image"
-      ref="pond"
-      label-idle="Upload image"
-      accepted-file-types="image/jpeg"
-      :allow-multiple="false"
-      :server="{
-        url: url,
-        process: {
-          headers: {
-            'X-CSRF-TOKEN': csrf,
-          },
-          onload: (response) => addImagePath(response),
+  <file-pond
+    name="image"
+    ref="pond"
+    label-idle="Upload image"
+    accepted-file-types="image/jpeg"
+    :allow-multiple="false"
+    :server="{
+      url: url,
+      process: {
+        headers: {
+          'X-CSRF-TOKEN': csrf,
         },
-        revert: {
-          headers: {
-            'X-CSRF-TOKEN': csrf,
-          },
-          onload: () => removeImage(),
+        onload: (response) => addImagePath(response),
+      },
+      revert: {
+        headers: {
+          'X-CSRF-TOKEN': csrf,
         },
-      }"
-      :files="files"
-      @addfile="fileAdded"
-      @processfileabort="processFileAbort"
-      @processfile="fileProcessed"
-      :allowImageValidateSize="true"
-      :imageValidateSizeMinWidth="imageSize"
-      :imageValidateSizeMinHeight="imageSize"
-      :allowFileSizeValidation="true"
-      maxFileSize="15MB"
-    />
-  </div>
+        onload: () => removeImage(),
+      },
+    }"
+    :files="files"
+    @addfile="fileAdded"
+    @processfileabort="processFileAbort"
+    @processfile="fileProcessed"
+    :allowImageValidateSize="true"
+    :imageValidateSizeMinWidth="imageSize"
+    :imageValidateSizeMinHeight="imageSize"
+    :allowFileSizeValidation="true"
+    maxFileSize="15MB"
+  />
 </template>
 
 <script>
