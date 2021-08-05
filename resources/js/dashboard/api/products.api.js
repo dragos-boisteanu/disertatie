@@ -23,7 +23,7 @@ const deleteProduct = (id) => httpClient.delete(`${END_POINT}/${id}`, { data: id
 
 const downloadProductByBarcode = (barcode) => httpClient.get(`${END_POINT}/check-barcode/${barcode}`);
 
-const removeImage = (data) => httpClient.delete(`${END_POINT}/${data.id}/image`, { data: data.image })
+const removeImage = (data) => httpClient.delete(`${END_POINT}/${data.id}/image`, { data: { id: data.id, imagePath: data.image } });
 
 
 export {

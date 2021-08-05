@@ -13,13 +13,30 @@
           2xl:w-2/4
         "
       >
-        <div
-          class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
-        >
+        <div  class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
           <!-- IMAGE UPLOAD -->
           <div class="flex flex-col gap-4 md:flex-row md:items-center">
-            <div class="w-full flex justify-center md:w-1/5">
-              <div class="w-64 h-64 rounded-md md:h-48 md:w-48 md:mr-4">
+            <div
+              class="
+                w-full
+                flex-shrink flex-grow-0 flex
+                items-center
+                justify-center
+                md:w-48
+              "
+            >
+              <div
+                class="
+                  w-64
+                  h-64
+                  flex
+                  items-center
+                  justify-center
+                  rounded-md
+                  md:h-48
+                  md:w-48
+                "
+              >
                 <img
                   v-if="hasImage"
                   :src="localProduct.image"
@@ -31,8 +48,8 @@
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="white"
-                  width="128px"
-                  height="128px"
+                  width="100%"
+                  height="100%"
                 >
                   <path d="M0 0h24v24H0z" fill="none" />
                   <path
@@ -521,26 +538,24 @@ export default {
 
           Object.keys(this.localProduct).forEach((key) => {
             if (!_isEqual(this.product[key], this.localProduct[key])) {
-              payload.product[key] = this.localProduct[key];
               if (
                 key !== "image" &&
                 key !== "ingredients" &&
                 key !== "discountId"
               ) {
+                payload.product[key] = this.localProduct[key];
                 counter++;
               }
             }
           });
-
-          delete payload.ingredients;
-          delete payload.discountId;
 
           if (payload.subCategoryId === "") {
             delete payload.subCategoryId;
           }
 
           if (counter > 0) {
-            console.log("here");
+            this.$Progress.start();
+
             const response = await patchProduct(payload.product);
 
             counter = 0;
@@ -551,6 +566,7 @@ export default {
             });
 
             this.$toast.success(response.data.message);
+            this.$Progress.finish();
           } else {
             this.$v.$reset();
             this.$toast.info("Nothing to update");
@@ -558,10 +574,10 @@ export default {
         } catch (error) {
           if (error.response && error.response.data.errors) {
             this.$toast.error(response.data.message);
-
             this.$v.$touch();
+          } else {
+            this.$toast.error("Something went wrong, try again later");
           }
-          console.log(error);
         }
       }
     },
@@ -579,16 +595,26 @@ export default {
 
     async removeImage() {
       try {
+        this.$Progress.start();
+
         const payload = {
           id: this.localProduct.id,
           image: this.localProduct.image,
         };
 
-        await removeImage(payload);
+        const response = await removeImage(payload);
 
         this.localProduct.image = "";
         this.clearImage = true;
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
       } catch (error) {
+        this.$Progress.fail();
+        if (error.response && this.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
         console.log(error);
       }
     },

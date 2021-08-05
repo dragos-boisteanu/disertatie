@@ -42,6 +42,14 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::delete('/{id}/image', 'ProductImageController@destroy');
 	});
 
+	Route::group(['prefix' => 'users'], function () {
+		Route::delete('{id}/disable', 'UserController@disable');
+		Route::post('{id}/restore', 'UserController@restore');
+
+		Route::post('{id}/image', 'UserImageController@store');
+		Route::delete('{id}/image', 'UserImageController@destroy');
+	});
+
 	Route::apiResource('users', 'UserController', ['as' => 'api']);
 	Route::apiResource('roles', 'RoleController', ['as' => 'api']);
 	Route::apiResource('products', 'ProductController', ['as' => 'api']);
@@ -56,10 +64,7 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 	Route::apiResource('tables', 'TableController', ['as' => 'api']);
 	Route::apiResource('reservations', 'ReservationController', ['as' => 'api'])->only(['index', 'show', 'store', 'destroy']);
 
-	Route::group(['prefix' => 'users'], function () {
-		Route::delete('{id}/disable', 'UserController@disable');
-		Route::post('{id}/restore', 'UserController@restore');
-	});
+
 
 	Route::group(['prefix' => 'products'], function () {
 		Route::delete('{id}/disable', 'ProductController@disable');

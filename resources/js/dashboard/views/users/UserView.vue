@@ -37,15 +37,14 @@
         flex flex-col
         justify-center
         items-center
-        border-b border-gray-100
         md:flex-row
         md:justify-start
       "
     >
       <div class="w-32 h-32 rounded-md md:mr-4">
         <img
-          v-if="user.avatar"
-          :src="user.avatar"
+          v-if="user.image"
+          :src="user.image"
           class="w-full h-full rounded-md object-cover"
         />
         <svg
@@ -141,19 +140,9 @@
               Disable
             </button>
           </div>
-          <!-- <button 
-                        v-if="canDelete"
-                        @click="callDeleteUser"
-                        class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
-                    >
-                        Delete
-                    </button> -->
         </div>
       </div>
     </div>
-    <div>Shifts</div>
-    <div>Orders (20)</div>
-    <div>Reservations</div>
   </ViewContainer>
 </template>
 
@@ -212,9 +201,9 @@ export default {
       try {
         const response = await disableUser(this.user.id);
         this.user.deletedAt = response.data.deletedAt;
-         this.$toast.success(response.data.message);
+        this.$toast.success(response.data.message);
       } catch (error) {
-         if (error.response && error.response.data) {
+        if (error.response && error.response.data) {
           this.$toast.error(error.response.data);
         }
       }
