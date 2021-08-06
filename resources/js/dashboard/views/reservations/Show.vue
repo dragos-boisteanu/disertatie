@@ -1,6 +1,36 @@
 <template>
   <view-container>
-    <template slot="header"> Reservation #{{ reservation.id }}</template>
+    <template slot="header">
+      Reservation #{{ reservation.id }}
+      <reservation-status
+        :status-name="reservation.status.name"
+        v-if="reservation.status.name"
+      ></reservation-status>
+      <button
+        @click="refresh"
+        class="p-1 bg-sky-600 rounded-sm active:shadow-inner active:bg-sky-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 0 24 24"
+          width="24px"
+          fill="#ffffff"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+          />
+        </svg>
+      </button>
+    </template>
+
+    <cancel-reservation-modal
+      v-if="showCancelReservationModal"
+      :reservation-id="reservation.id"
+      @close="toggleCancelReservationModal"
+      @confirm="callCancelReservation"
+    ></cancel-reservation-modal>
 
     <div class="text-sm md:flex md:gap-x-4 lg:w-2/3 2xl:w-1/2">
       <div class="w-full bg-white shadow p-4 rounded md:flex-1">
@@ -9,10 +39,6 @@
             <span class="font-semibold">Client</span>
             <span>{{ reservation.clientName }}</span>
           </div>
-          <reservation-status
-            :status-name="reservation.status.name"
-            v-if="reservation.status.name"
-          ></reservation-status>
         </div>
         <div class="flex items-center justify-between mt-2">
           <div>
@@ -100,7 +126,7 @@
         v-if="canCancel"
         type="danger"
         class="mt-2 md:mt-0"
-        @click.native="callCancelReservation"
+        @click.native="toggleCancelReservationModal"
       >
         Cancel
       </button-component>
@@ -115,6 +141,7 @@ import ViewContainer from "../ViewContainer.vue";
 import ButtonComponent from "../../components/buttons/ButtonComponent.vue";
 import SelectComponent from "../../components/inputs/SelectInputComponent.vue";
 import ReservationStatus from "../../components/reservations/ReservationStatus.vue";
+import CancelReservationModal from "../../components/modals/CancelReservationModal.vue";
 
 import {
   downloadReservation,
@@ -149,6 +176,8 @@ export default {
 
   data() {
     return {
+      showCancelReservationModal: false,
+
       newStatusId: "",
 
       reservationStatus: "",
@@ -179,6 +208,7 @@ export default {
 
         this.$Progress.finish();
         this.$toast.success(response.data.message);
+        this.toggleCancelReservationModal();
       } catch (error) {
         this.$Progress.fail();
 
@@ -204,9 +234,6 @@ export default {
         const response = await updateReservationStatus(payload);
 
         this.$set(this.reservation, "status", response.data.status);
-        // this.reservation.status = this.getReservationStatuses.find(
-        //   (status) => status.id == this.newStatusId
-        // );
 
         this.$Progress.finish();
         this.$toast.success(response.data.message);
@@ -218,9 +245,31 @@ export default {
         } else {
           this.$toast.error("Something went wrong, try again later");
         }
+        console.log(error);
+      }
+    },
+
+    async refresh() {
+      try {
+        this.$Progress.start();
+        const response = await downloadReservation(this.reservation.id);
+        this.setData(response);
+        this.$Progress.finish();
+      } catch (error) {
+        if (error.response && error.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
+
+        this.$Progress.fail();
 
         console.log(error);
       }
+    },
+
+    toggleCancelReservationModal() {
+      this.showCancelReservationModal = !this.showCancelReservationModal;
     },
 
     setData(response) {
@@ -233,6 +282,7 @@ export default {
     ButtonComponent,
     SelectComponent,
     ReservationStatus,
+    CancelReservationModal,
   },
 };
 </script>
