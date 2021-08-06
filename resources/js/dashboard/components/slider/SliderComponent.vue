@@ -1,29 +1,28 @@
 <template>
-    <BackdropComponent @click.native="close">
-        <NavigationComponent/>
-    </BackdropComponent>
+  <div>
+    <BackdropComponent @click.native="close"> </BackdropComponent>
+    <NavigationComponent />
+  </div>
 </template>
 
 <script>
-    import NavigationComponent from '../navigation/NavigationComponent';
-    import BackdropComponent from '../BackdropComponent';
+import NavigationComponent from "../navigation/NavigationComponent";
+import BackdropComponent from "../BackdropComponent";
 
-    export default {
-        data() {
-            return {
-                
-            }
-        },
+export default {
+  data() {
+    return {};
+  },
 
-        methods: {
-            close() {
-                this.$emit('close');
-            }
-        },
+  methods: {
+    close() {
+      this.$emit("close");
+    },
+  },
 
-        components: {
-            BackdropComponent,
-            NavigationComponent
-        },
-    }
+  components: {
+    BackdropComponent,
+    NavigationComponent,
+  },
+};
 </script>

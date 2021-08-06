@@ -2,7 +2,6 @@
   <div class="h-screen flex flex-col" v-if="loaded">
     <vue-progress-bar></vue-progress-bar>
     <Notification :notification="getNotification" v-if="getNotification.show" />
-    <!-- <h1>current: {{$mq}}</h1>   -->
     <div class="block" v-if="mobile">
       <Header />
       <UtilityBar />
