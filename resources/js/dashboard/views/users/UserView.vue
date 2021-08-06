@@ -239,8 +239,22 @@ export default {
     },
 
     async refresh() {
-      const response = await downloadUser(this.user.id);
-      this.setUser(response.data.data);
+      try {
+        this.$Progress.start();
+        const response = await downloadUser(this.user.id);
+        this.setUser(response.data.data);
+        this.$Progress.finish();
+      } catch (error) {
+        if (error.response && error.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
+
+        this.$Progress.fail();
+
+        console.log(error);
+      }
     },
   },
 
