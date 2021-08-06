@@ -13,13 +13,9 @@
         },
         onload: (response) => addImagePath(response),
       },
-      revert: {
-        headers: {
-          'X-CSRF-TOKEN': csrf,
-        },
-        onload: () => removeImage(),
-      },
     }"
+    :allowRevert="false"
+    :allowRemove="false"
     :files="files"
     @addfile="fileAdded"
     @processfileabort="processFileAbort"
