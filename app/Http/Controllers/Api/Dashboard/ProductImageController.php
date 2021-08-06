@@ -35,12 +35,13 @@ class ProductImageController extends Controller
 	public function destroy(Request $request, $id)
 	{
 		try {
+			DB::beginTransaction();
 			$this->imageService->deleteImage('products', 'image', $id, $request->imagePath);
 
+			DB::commit();
 			return response()->json(['message' => 'Image removed'], 200);
-		} catch (ModelNotFoundException $e) {
-			return response()->json(['message' => 'Product not found'], 500);
 		} catch (\Exception $e) {
+			debug($e);
 			return response()->json(['message' => 'Something went wrong, try again later'], 500);
 		}
 	}

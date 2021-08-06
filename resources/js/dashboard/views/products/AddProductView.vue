@@ -13,15 +13,24 @@
           2xl:w-2/4
         "
       >
-        <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
+        <div
+          class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
+        >
           <!-- IMAGE UPLOAD -->
-          <ImageUploadComponent
-            :clear="clearImage"
-            @fileAdded="setWaiting"
-            @processFileAborted="setWaiting"
-            @fileProcessed="setWaiting"
-            @setImagePath="setImagePath"
-          ></ImageUploadComponent>
+          <file-pond
+            name="image"
+            ref="pond"
+            label-idle="Upload image"
+            accepted-file-types="image/jpeg"
+            :allow-multiple="false"
+            :files="files"
+            :allowImageValidateSize="true"
+            :imageValidateSizeMinWidth="imageSize"
+            :imageValidateSizeMinHeight="imageSize"
+            :allowFileSizeValidation="true"
+            maxFileSize="15MB"
+            @updatefiles="onUpdateFiles"
+          />
 
           <div
             class="
@@ -366,6 +375,26 @@ import { alphaSpaces, alphaNumSpaces } from "../../validators/index";
 
 import { storeProduct } from "../../api/products.api";
 
+import vueFilePond from "vue-filepond";
+import "filepond/dist/filepond.min.css";
+
+import FilePondPluginImageValidateSize from "filepond-plugin-image-validate-size";
+
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
+
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+
+const FilePond = vueFilePond(
+  FilePondPluginFileValidateType,
+  FilePondPluginImageValidateSize,
+  FilePondPluginFileValidateSize,
+  FilePondPluginImagePreview
+);
+
 export default {
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
@@ -396,6 +425,9 @@ export default {
 
   data() {
     return {
+      imageSize: "2000",
+      files: [],
+
       checkingBarcode: false,
       waiting: false,
 
@@ -460,34 +492,53 @@ export default {
   methods: {
     ...mapActions("Products", ["addProduct", "getProductByBarcode"]),
 
+    onUpdateFiles(files) {
+      if (files) {
+        this.product.image = files[0].file;
+      }
+    },
     async submit() {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
         try {
+          this.$Progress.start();
+
           this.waiting = true;
 
-          const payload = {};
+          const payload = new FormData();
 
-          Object.keys(this.product).forEach((key) => {
-            payload[key] = this.product[key];
-          });
+          payload.append("barcode", this.product.barcode);
+          payload.append("name", this.product.name);
+          payload.append("description", this.product.description);
+          payload.append("basePrice", this.product.basePrice);
+          payload.append("weight", this.product.weight);
+          payload.append("unitId", this.product.unitId);
+          payload.append("categoryId", this.product.categoryId);
 
-          if (payload.discountId === "") {
-            delete payload.discountId;
+          if (this.product.subCategoryId) {
+            payload.append("subCategoryId", this.product.subCategoryId);
           }
 
-          if (payload.ingredients.length === 0) {
-            delete payload.ingredients;
+          if (this.product.ingredients.length > 0) {
+            payload.append(
+              "ingredients",
+              JSON.stringify(this.product.ingredients)
+            );
           }
 
-          if (payload.subCategoryId === "") {
-            delete payload.subCategoryId;
+          if (this.product.discountId) {
+            payload.append("discountId", this.product.discountId);
+          }
+
+          if (this.product.image) {
+            payload.append("image", this.product.image);
           }
 
           const response = await storeProduct(payload);
 
           this.product = {
+            image: "",
             barcode: "",
             name: "",
             description: "",
@@ -499,23 +550,29 @@ export default {
             subCategoryId: "",
             discountId: "",
             ingredients: [],
-          }
-            
+          };
+
+          this.files = [];
+
           this.waiting = false;
 
           this.clearImage = true;
 
           this.$toast.success(response.data.message);
-
+          this.$Progress.finish();
           this.$v.$reset();
         } catch (error) {
           console.log(error);
+
+          this.$Progress.fail();
 
           this.waiting = false;
 
           if (error.response && error.response.data.errors) {
             this.$toast.error(response.data.message);
             this.$v.$touch();
+          } else {
+            this.$toast.error("Something went wrong, try again later");
           }
         }
       }
@@ -526,12 +583,11 @@ export default {
       this.product.subCategoryId = "";
 
       if (this.product.categoryId) {
-        this.getCategories.forEach(category => {
-          if(category.id == this.product.categoryId) {
+        this.getCategories.forEach((category) => {
+          if (category.id == this.product.categoryId) {
             this.subCategories.push(...category.subCategories);
           }
-        })
-
+        });
       } else {
         this.subCategories = [];
       }
