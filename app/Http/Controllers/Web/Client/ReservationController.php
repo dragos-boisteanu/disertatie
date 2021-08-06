@@ -96,8 +96,17 @@ class ReservationController extends Controller
 	{
 		try {
 			$reservation = Reservation::with('tables', 'client', 'staff')->withTrashed()->where('id', $id)->where('client_id', Auth::id())->firstOrFail();
+			$canCancel = false;
 
-			return view('store.reservations.show', compact('reservation'));
+			$diff_in_hours = Carbon::now()->diffInHours($reservation->begins_at);
+
+			$canCancel = false;
+
+			if ($diff_in_hours > 24 && !isset($reservation->deleted_at)) {
+				$canCancel = true;
+			}
+
+			return view('store.reservations.show', compact('reservation', 'canCancel'));
 		} catch (ModelNotFoundException $e) {
 			debug($e);
 			Toastr::error('Reservarea nu a fost gasita', 'Eroare');
@@ -110,29 +119,6 @@ class ReservationController extends Controller
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
-	}
-
-	/**
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
@@ -140,6 +126,34 @@ class ReservationController extends Controller
 	 */
 	public function destroy($id)
 	{
-		//
+		try {
+
+			$reservation = Reservation::with('client')->where('id', $id)->where('client_id', Auth::id())->firstOrFail();
+
+			$diff_in_hours = Carbon::now()->diffInHours($reservation->begins_at);
+
+			if ($diff_in_hours > 24) {
+				DB::beginTransaction();
+
+				$reservation->status_id = 4;
+				$reservation->save();
+				$reservation->delete();
+
+				DB::commit();
+				Toastr::success('Reservarea a fost anulata', 'Succes');
+				return redirect()->back();
+			} else {
+				Toastr::info('Rezervarea se poate anula doar cu 24 de ore inainte de ora la care incepe.', 'Succes');
+				return redirect()->back();
+			}
+		} catch (ModelNotFoundException $e) {
+			debug($e);
+			Toastr::error('Reservarea nu a fost gasita', 'Eroare');
+			return redirect()->back();
+		} catch (\Exception $e) {
+			debug($e);
+			Toastr::error('A aparut o problema. Incercati mai tarziu', "Eroare");
+			return redirect()->back();
+		}
 	}
 }

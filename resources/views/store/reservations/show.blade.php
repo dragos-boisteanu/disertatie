@@ -59,6 +59,8 @@
 	</div>
 	@endisset
 
+	@if($canCancel)
+
 	<form id="cancelReservationForm" method="post"
 		action="{{ route('reservations.destroy', ['reservation'=>$reservation->id]) }}">
 		@csrf
@@ -68,6 +70,8 @@
 			class="px-2 py-1 text-sm bg-red-600 text-white rounded-sm hover:bg-red-500 active:shadow-inner">Anuleaza
 			rezervarea</button>
 	</form>
+
+	@endif
 
 	<div id="cancelOrderModel" class="modal text-sm">
 		<div class="my-4">Sunteti sigur ca doriti sa anulati rezervarea ?</div>
