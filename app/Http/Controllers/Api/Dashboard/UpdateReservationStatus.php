@@ -23,7 +23,7 @@ class UpdateReservationStatus extends Controller
 
 			$reservation->save();
 
-			$reservation->fresh();
+			$reservation->refresh();
 
 			return response()->json(['message' => 'Reservation status updated', 'status' => $reservation->status], 200);
 		} catch (ModelNotFoundException $e) {

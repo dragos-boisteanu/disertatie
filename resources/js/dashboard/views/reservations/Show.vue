@@ -91,7 +91,6 @@
           v-for="status in getReservationStatuses"
           :key="status.id"
           :value="status.id"
-          :disabled="status.id == reservation.status.id"
         >
           {{ status.name }}
         </option>
@@ -110,6 +109,7 @@
 </template>
 
 <script>
+//  :disabled="status.id == reservation.status.id"
 import ViewContainer from "../ViewContainer.vue";
 
 import ButtonComponent from "../../components/buttons/ButtonComponent.vue";
@@ -126,7 +126,6 @@ import { mapGetters } from "vuex";
 export default {
   async beforeRouteEnter(to, from, next) {
     const response = await downloadReservation(to.params.id);
-
     next((vm) => vm.setData(response));
   },
 
