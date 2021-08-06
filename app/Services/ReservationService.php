@@ -17,7 +17,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class ReservationService implements ReservationServiceInterface
 {
 
-	public function getAllReservations(int $perPage = 8, int $orderBy = null, array $data = null, int $authClientId): LengthAwarePaginator
+	public function getAllReservations(int $perPage = 8, int $orderBy = null, array $data, int $authClientId = null): LengthAwarePaginator
 	{
 		try {
 

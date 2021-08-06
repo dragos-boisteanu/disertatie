@@ -13,40 +13,58 @@
           2xl:w-2/4
         "
       >
-        <div
-          class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
-        >
+        <div  class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
           <!-- IMAGE UPLOAD -->
-          <div class="flex items-center gap-x-5">
-            <div class="w-32 h-32 rounded-md md:mr-4">
-              <img
-                v-if="hasImage"
-                :src="localProduct.image"
-                class="w-full h-full rounded-md object-cover"
-              />
-              <svg
-                v-else
-                class="bg-gray-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="white"
-                width="128px"
-                height="128px"
+          <div class="flex flex-col gap-4 md:flex-row md:items-center">
+            <div
+              class="
+                w-full
+                flex-shrink flex-grow-0 flex
+                items-center
+                justify-center
+                md:w-48
+              "
+            >
+              <div
+                class="
+                  w-64
+                  h-64
+                  flex
+                  items-center
+                  justify-center
+                  rounded-md
+                  md:h-48
+                  md:w-48
+                "
               >
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path
-                  d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+                <img
+                  v-if="hasImage"
+                  :src="localProduct.image"
+                  class="w-full h-full rounded-md object-cover"
                 />
-              </svg>
+                <svg
+                  v-else
+                  class="bg-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  width="100%"
+                  height="100%"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+                  />
+                </svg>
+              </div>
             </div>
 
             <div class="flex-1">
               <ImageUploadComponent
+                :url="url"
                 :clear="clearImage"
-                @fileAdded="setWaiting"
-                @processFileAbort="setWaiting"
-                @fileProcessed="setWaiting"
                 @setImagePath="setImagePath"
+                @removeImagePath="removeImagePath"
               ></ImageUploadComponent>
               <button v-if="hasImage" @click.prevent="removeImage">
                 Remove image
@@ -387,6 +405,7 @@ import {
   addIngredient,
   removeIngredient,
   downloadEdidProductData,
+  removeImage,
 } from "../../api/products.api";
 
 export default {
@@ -408,12 +427,12 @@ export default {
       return this.subCategories && this.subCategories.length === 0;
     },
 
+    url() {
+      return `/api/dashboard/products/${this.localProduct.id}/image`;
+    },
+
     hasImage() {
-      return (
-        this.localProduct.image !== null &&
-        this.localProduct.image !== "" &&
-        this.localProduct.image !== "clear"
-      );
+      return this.localProduct.image !== null && this.localProduct.image !== "";
     },
   },
 
@@ -429,6 +448,7 @@ export default {
       product: null,
 
       localProduct: {
+        image: "",
         barcode: "",
         name: "",
         description: "",
@@ -518,20 +538,24 @@ export default {
 
           Object.keys(this.localProduct).forEach((key) => {
             if (!_isEqual(this.product[key], this.localProduct[key])) {
-              payload.product[key] = this.localProduct[key];
-              counter++;
+              if (
+                key !== "image" &&
+                key !== "ingredients" &&
+                key !== "discountId"
+              ) {
+                payload.product[key] = this.localProduct[key];
+                counter++;
+              }
             }
           });
-
-          delete payload.ingredients;
-          delete payload.discountId;
 
           if (payload.subCategoryId === "") {
             delete payload.subCategoryId;
           }
 
           if (counter > 0) {
-            console.log("here");
+            this.$Progress.start();
+
             const response = await patchProduct(payload.product);
 
             counter = 0;
@@ -542,6 +566,7 @@ export default {
             });
 
             this.$toast.success(response.data.message);
+            this.$Progress.finish();
           } else {
             this.$v.$reset();
             this.$toast.info("Nothing to update");
@@ -549,10 +574,10 @@ export default {
         } catch (error) {
           if (error.response && error.response.data.errors) {
             this.$toast.error(response.data.message);
-
             this.$v.$touch();
+          } else {
+            this.$toast.error("Something went wrong, try again later");
           }
-          console.log(error);
         }
       }
     },
@@ -568,17 +593,44 @@ export default {
     //   });
     // },
 
-    removeImage() {
-      this.product.image = "";
-      this.localProduct.image = "clear";
+    async removeImage() {
+      try {
+        this.$Progress.start();
+
+        const payload = {
+          id: this.localProduct.id,
+          image: this.localProduct.image,
+        };
+
+        const response = await removeImage(payload);
+
+        this.localProduct.image = "";
+        this.clearImage = true;
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        this.$Progress.fail();
+        if (error.response && this.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
+        console.log(error);
+      }
     },
 
     setWaiting(value) {
       this.waiting = value;
     },
 
-    setImagePath(imagePath) {
-      this.localProduct.image = imagePath;
+    setImagePath(response) {
+      const responseObj = JSON.parse(response);
+
+      this.localProduct.image = responseObj.imagePath;
+    },
+
+    removeImagePath() {
+      this.localProduct.image = "";
     },
 
     async callAddIngredient(ingredient) {

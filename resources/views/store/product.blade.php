@@ -3,13 +3,9 @@
 @section('content')
 {{ Breadcrumbs::render('product', $product->category, $product) }}
 <div>
-	<h1 class="text-3xl mb-4 pl-2 font-semibold text-trueGray-300">{{ $product->name }} {{ $product->weight }}
-		{{ $product->unit->name }}</h1>
-
 	<div class="md:flex md:justify-between md:items-center md:gap-x-10">
-		<div class="relative w-full h-64 p-2 md:w-auto">
-			<img src="https://www.fullhouse.ro/images/thumbnails/15968120771633_4STAGIONI.jpg"
-				class="w-full h-full rounded-sm shadow-sm" />
+		<div class="relative w-full h-[256px] p-2 md:w-[256px]">
+			<img src="{{ asset("$product->image")}}" class="w-full h-full rounded-sm shadow-sm object-cover" />
 			@isset($product->finalDiscount)
 			<div class="absolute top-5 right-5 text-xs bg-red-600 rounded-sm shadow text-white py-1 px-2">
 				-{{ $product->finalDiscount }} %
@@ -18,6 +14,8 @@
 		</div>
 
 		<div class="h-full flex-1 md:flex md:flex-col md:items-start md:justify-center md:gap-y-2">
+			<h1 class="text-3xl mb-4 font-semibold text-trueGray-300">{{ $product->name }} {{ $product->weight }}
+				{{ $product->unit->name }}</h1>
 			<div class="my-2 flex items-center justify-between md:flex-col md:items-start md:gap-y-2">
 				@if ($product->quantity > 0)
 				<div class="text-sm text-green-600">In stoc</div>

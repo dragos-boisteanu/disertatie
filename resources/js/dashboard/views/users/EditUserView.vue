@@ -2,45 +2,74 @@
   <ViewContainer>
     <template slot="header"> Edit user #{{ user.id }} </template>
 
-    <form @submit.prevent="submit" class="flex flex-col">
-      <div class="flex flex-col lg:items-start lg:w-full 2xl:w-10/12">
+    <form @submit.prevent="submit">
+      <div class="w-full lg:w-2/3 2xl:w-1/2">
         <div
-          class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
+          class="
+            w-full
+            flex flex-col
+            gap-y-3
+            bg-white
+            shadow
+            rounded-sm
+            p-5
+            lg:flex-1
+          "
         >
           <!-- IMAGE UPLOAD -->
-          <div class="flex items-center gap-x-5">
-            <div class="w-32 h-32 rounded-md md:mr-4">
-              <img
-                v-if="hasAvatar"
-                :src="user.avatar"
-                class="w-full h-full rounded-md object-cover"
-              />
-              <svg
-                v-else
-                class="bg-gray-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="white"
-                width="128px"
-                height="128px"
+          <div class="flex flex-col gap-4 md:flex-row md:items-center">
+            <div
+              class="
+                w-full
+                flex-shrink flex-grow-0 flex
+                items-center
+                justify-center
+                md:w-48
+              "
+            >
+              <div
+                class="
+                  w-64
+                  h-64
+                  flex
+                  items-center
+                  justify-center
+                  rounded-md
+                  md:h-48
+                  md:w-48
+                "
               >
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path
-                  d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+                <img
+                  v-if="hasImage"
+                  :src="localUser.image"
+                  class="w-full h-full rounded-md object-cover"
                 />
-              </svg>
+                <svg
+                  v-else
+                  class="bg-gray-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  width="100%"
+                  height="100%"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M12 2C8.43 2 5.23 3.54 3.01 6L12 22l8.99-16C18.78 3.55 15.57 2 12 2zM7 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+                  />
+                </svg>
+              </div>
             </div>
 
             <div class="flex-1">
               <ImageUploadComponent
+                :url="url"
                 :clear="clearImage"
-                @fileAdded="setWaiting"
-                @processFileAbort="setWaiting"
-                @fileProcessed="setWaiting"
                 @setImagePath="setImagePath"
+                @removeImagePath="removeImagePath"
               ></ImageUploadComponent>
-              <button v-if="hasAvatar" @click.prevent="removeAvatar">
-                Remove avatar
+              <button v-if="hasImage" @click.prevent="removeImage">
+                Remove image
               </button>
             </div>
           </div>
@@ -233,7 +262,7 @@ import { mapActions, mapGetters } from "vuex";
 import { required, email, maxLength } from "vuelidate/lib/validators";
 import { alphaSpaces, phoneNumber } from "../../validators/index";
 
-import { downloadUser, patchUser } from "../../api/users.api";
+import { downloadUser, patchUser, removeUserAvatar } from "../../api/users.api";
 
 import _isEqual from "lodash/isEqual";
 
@@ -247,16 +276,16 @@ export default {
     ...mapGetters("Roles", ["getRoles"]),
     ...mapGetters("Users", ["isAdmin", "isLocationManager"]),
 
+    url() {
+      return `/api/dashboard/users/${this.localUser.id}/image`;
+    },
+
     disableRoleChange() {
       return !(this.isAdmin || this.isLocationManager);
     },
 
-    hasAvatar() {
-      return (
-        this.localUser.avatar !== null &&
-        this.localUser.avatar !== "" &&
-        this.localUser.avatar !== "clear"
-      );
+    hasImage() {
+      return this.localUser.image !== null && this.localUser.image !== "";
     },
   },
 
@@ -268,6 +297,7 @@ export default {
 
       user: {},
       localUser: {
+        image: "",
         id: "",
         firstName: "",
         lastName: "",
@@ -329,18 +359,22 @@ export default {
 
           Object.keys(this.user).forEach((key) => {
             if (!_isEqual(this.localUser[key], this.user[key])) {
-              payload.user[key] = this.localUser[key];
-              counter++;
+              if (key !== "avatar") {
+                payload.user[key] = this.localUser[key];
+                counter++;
+              }
             }
           });
 
           if (counter > 0) {
+            this.$Progress.start();
             const response = await patchUser(payload.user);
 
             payload.user.avatar = response.data.avatar;
 
             this.$router.push({ name: "User", params: { id: this.user.id } });
 
+            this.$Progress.finihs();
             this.$toast.success(response.data.message);
           } else {
             this.$toast.info("Nothing to update");
@@ -349,28 +383,52 @@ export default {
           this.waiting = false;
         } catch (error) {
           console.log(error);
-          
+
           this.$v.$touch();
           this.waiting = false;
 
           if (error.response && error.response.data.message) {
             this.$toast.error(error.response.data.message);
+          } else {
+            this.$toast.error("Something went wrong, try again later");
           }
         }
       }
     },
 
-    removeAvatar() {
-      this.user.avatar = "";
-      this.localUser.avatar = "clear";
+    async removeImage() {
+      try {
+        this.$Progress.start();
+        const payload = {
+          id: this.localUser.id,
+          imagePath: this.localUser.image,
+        };
+
+        const response = await removeUserAvatar(payload);
+
+        this.localUser.image = "";
+        this.clearImage = true;
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        this.$Progress.fail();
+        if (error.response && error.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
+        console.log(error);
+      }
     },
 
-    setWaiting(value) {
-      this.waiting = value;
+    setImagePath(response) {
+      const responseObj = JSON.parse(response);
+
+      this.localUser.image = responseObj.imagePath;
     },
 
-    setImagePath(imagePath) {
-      this.localUser.avatar = imagePath;
+    removeImagePath() {
+      this.localUser.image = "";
     },
 
     setUser(user) {

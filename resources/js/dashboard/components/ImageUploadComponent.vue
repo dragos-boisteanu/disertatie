@@ -1,42 +1,32 @@
 <template>
-  <div>
-    <file-pond
-      name="image"
-      ref="pond"
-      label-idle="Upload image"
-      accepted-file-types="image/jpeg"
-      :allow-multiple="false"
-      :server="{
-        url: '/api/dashboard/images',
-        process: {
-          headers: {
-            'X-CSRF-TOKEN': csrf,
-          },
-          onload: (response) => addImagePath(response),
+  <file-pond
+    name="image"
+    ref="pond"
+    label-idle="Upload image"
+    accepted-file-types="image/jpeg"
+    :allow-multiple="false"
+    :server="{
+      url: url,
+      process: {
+        headers: {
+          'X-CSRF-TOKEN': csrf,
         },
-        revert: {
-          url: '/delete',
-          headers: {
-            'X-CSRF-TOKEN': csrf,
-          },
-          onload: () => clearImage(),
-        },
-      }"
-      :files="files"
-      @addfile="fileAdded"
-      @processfileabort="processFileAbort"
-      @processfile="fileProcessed"
-
-      :allowImageValidateSize="true"
-      :imageValidateSizeMinWidth="imageSize"
-      :imageValidateSizeMaxWidth="imageSize"
-      :imageValidateSizeMinHeight="imageSize"
-      :imageValidateSizeMaxHeight="imageSize"
-      :allowFileSizeValidation="true"
-      maxFileSize="5MB"
-    />
-  </div>
-</template> 
+        onload: (response) => addImagePath(response),
+      },
+    }"
+    :allowRevert="false"
+    :allowRemove="false"
+    :files="files"
+    @addfile="fileAdded"
+    @processfileabort="processFileAbort"
+    @processfile="fileProcessed"
+    :allowImageValidateSize="true"
+    :imageValidateSizeMinWidth="imageSize"
+    :imageValidateSizeMinHeight="imageSize"
+    :allowFileSizeValidation="true"
+    maxFileSize="15MB"
+  />
+</template>
 
 <script>
 import vueFilePond from "vue-filepond";
@@ -50,7 +40,7 @@ import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
 // import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+// import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
@@ -61,6 +51,11 @@ const FilePond = vueFilePond(
 
 export default {
   props: {
+    url: {
+      type: String,
+      required: true,
+    },
+
     disabled: {
       type: Boolean,
       required: false,
@@ -83,7 +78,7 @@ export default {
 
   data() {
     return {
-      imageSize: "512",
+      imageSize: "2000",
       files: [],
       waitForFileToUpload: false,
       csrf: document
@@ -105,14 +100,13 @@ export default {
       this.$emit("fileProcessed", false);
     },
 
-    
     addImagePath(imagePath) {
       this.$emit("setImagePath", imagePath);
     },
 
-    clearImage() {
+    removeImage() {
       this.$refs.pond.removeFile({ revert: true });
-      this.$emit("setImagePath", "");
+      this.$emit("removeImagePath", "");
     },
   },
 

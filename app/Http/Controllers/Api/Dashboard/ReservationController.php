@@ -32,7 +32,7 @@ class ReservationController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$reservations = $this->reservationService->getAllReservations(15, $request->orderBy, $request->all());
+		$reservations = $this->reservationService->getAllReservations(15, $request->orderBy, $request->all(), null);
 
 		return new ReservationListCollection($reservations);
 	}

@@ -6,47 +6,46 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProductPatchRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
+	/**
+	 * Determine if the user is authorized to make this request.
+	 *
+	 * @return bool
+	 */
+	public function authorize()
+	{
+		return true;
+	}
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            'image' => 'sometimes|string',
-            'barcode' => 'sometimes|numeric|unique:products',
-            'name' => 'sometimes|string|max:150',
-            'description' => 'sometimes|string|max:255',
-            'basePrice' => 'sometimes|numeric',
-            'weight' => 'sometimes|numeric',
-            'categoryId' => 'sometimes|numeric|exists:categories,id',
-            'subCategoryId' => ['sometimes', 'numeric', 'exists:categories,id'],
-            'unitId' => 'sometimes|numeric|exists:units,id',
-            'ingredients'=> ['nullable', 'array'],
-            'ingregients.*.id' => 'required_with:ingredients|numeric',
-            'ingredients.*.quantity' => 'required_with:ingredients|numeric',
-            'ingredients.*.unit.id' => 'required_with:ingredients|numeric|exists:units,id',
-            'discountId' => ['nullable','numeric'],
-        ];
-    }
+	/**
+	 * Get the validation rules that apply to the request.
+	 *
+	 * @return array
+	 */
+	public function rules()
+	{
+		return [
+			'barcode' => 'sometimes|numeric|unique:products',
+			'name' => 'sometimes|string|max:150',
+			'description' => 'sometimes|string|max:255',
+			'basePrice' => 'sometimes|numeric',
+			'weight' => 'sometimes|numeric',
+			'categoryId' => 'sometimes|numeric|exists:categories,id',
+			'subCategoryId' => ['sometimes', 'numeric', 'exists:categories,id'],
+			'unitId' => 'sometimes|numeric|exists:units,id',
+			'ingredients' => ['nullable', 'array'],
+			'ingregients.*.id' => 'required_with:ingredients|numeric',
+			'ingredients.*.quantity' => 'required_with:ingredients|numeric',
+			'ingredients.*.unit.id' => 'required_with:ingredients|numeric|exists:units,id',
+			'discountId' => ['nullable', 'numeric'],
+		];
+	}
 
-    public function attributes()
-    {
-        return [
-            'base_price' => 'base price',
-            'category_id' => 'category',
-            'unit_id' => 'weight unit',
-        ];
-    }
+	public function attributes()
+	{
+		return [
+			'base_price' => 'base price',
+			'category_id' => 'category',
+			'unit_id' => 'weight unit',
+		];
+	}
 }
