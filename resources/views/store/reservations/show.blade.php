@@ -12,11 +12,11 @@
 	<div class="w-full text-sm bg-trueGray-50 rounded shadow-md p-2 flex flex-col gap-y-2">
 		<div>
 			<span class="font-semibold">Incepand cu: </span>
-			<span>{{ $reservation->begins_at }}</span>
+			<span>{{ Carbon\Carbon::createFromDate($reservation->begins_at)->addMinutes(30)->format('d-m-Y H:i:s') }}</span>
 		</div>
 		<div>
 			<span class="font-semibold">Creata in data de: </span>
-			<span>{{ $reservation->created_at }}</span>
+			<span>{{ $reservation->created_at->format('d-m-Y H:i:s') }}</span>
 		</div>
 	</div>
 

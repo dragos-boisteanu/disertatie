@@ -49,65 +49,11 @@ class ReservationService implements ReservationServiceInterface
 		}
 	}
 
-
 	public function checkAvailableTables(string $date, string $time, int $seats): bool
 	{
 
 		try {
-			$beginsAt = Carbon::createFromFormat('d-m-Y H:i', $date . ' ' . $time);
-			$endsAt = Carbon::createFromFormat('d-m-Y H:i', $date . ' ' . $time)->subMinutes(30);
-
-			$availableTables = Table::whereNotIn(
-				'id',
-				DB::table('tables')
-					->distinct()
-					->select('tables.id')
-					->join('reservation_table', 'reservation_table.table_id', '=', 'tables.id')
-					->join('reservations', 'reservations.id', '=', 'reservation_table.reservation_id')
-					->where('reservations.begins_at', '<=', $beginsAt->toDateTimeString())
-					->where('reservations.ends_at', '>', $endsAt->toDateTimeString())
-					->where('reservations.status_id', 1)
-					->orWhere('reservations.status_id', 2)
-					->whereNull('reservations.deleted_at')
-					->pluck('id')->toArray()
-			)
-				->orderBy('seats', 'desc')
-				->get(['id', 'seats']);
-
-
-			$totalSeats = 0;
-
-			// only add the table if the number of seats of all selected tables is equal or smaller than
-			// the neeeded number of steas or
-			// if the number is about the needed amount but by much
-			// t1: 2s, t2: 6s, t3:4s, rs: 5 -> select t1 and t3, ignore t2, rs: 6 -> select t2, ignore t1 and t3
-
-			foreach ($availableTables as $table) {
-				$totalSeats += $table->seats;
-			}
-
-			if ($totalSeats < $seats) {
-				throw new NoAvailabeTablesForReservationException('Nu sunt mese disponibile pentru rezervare. Alegeti alta zi sau ora');
-			}
-
-			debug('available tables ' . $availableTables);
-
-			$selectedTables = [];
-
-			while ($seats > 0) {
-				if ($seats < $availableTables->min('seats')) {
-					$availableTables = $availableTables->where('seats', '>=', $seats);
-					$table = $availableTables->shift();
-				} else {
-					$availableTables = $availableTables->where('seats', '<=', $seats);
-					$table = $availableTables->pop();
-				}
-
-				array_push($selectedTables, $table);
-				$seats -= $table->seats;
-			}
-
-			debug('seleted tables ' . json_encode($selectedTables));
+			$this->getTables($date, $time, $seats);
 
 			return false;
 		} catch (NoAvailabeTablesForReservationException $ex) {
@@ -115,11 +61,42 @@ class ReservationService implements ReservationServiceInterface
 			throw new NoAvailabeTablesForReservationException($ex->getMessage());
 		} catch (\Exception $ex) {
 			debug($ex->getMessage());
-			throw new Exception("Error Processing Request", 1);
+			throw new Exception($ex->getMessage());
 		}
 	}
 
 	public function getAvailableTables(string $date, string $time, int $seats): array
+	{
+		try {
+			$availableTables = 	$this->getTables($date, $time, $seats);
+
+			return $availableTables;
+		} catch (NoAvailabeTablesForReservationException $ex) {
+			debug($ex->getMessage());
+			throw new NoAvailabeTablesForReservationException($ex->getMessage());
+		} catch (\Exception $ex) {
+			debug($ex->getMessage());
+			throw new Exception($ex->getMessage());
+		}
+	}
+
+	public function create(array $data, array $tables): Reservation
+	{
+
+		$reservation = Reservation::create($data);
+
+		foreach ($tables as $table) {
+			$reservation->tables()->attach($table->id);
+		}
+
+		if (in_array('email', $data)) {
+			Queue::push(new SendReservationEmailJob($reservation));
+		}
+
+		return $reservation;
+	}
+
+	private function getTables(string $date, string $time, int $seats): array
 	{
 		try {
 			$beginsAt = Carbon::createFromFormat('d-m-Y H:i', $date . ' ' . $time);
@@ -184,23 +161,7 @@ class ReservationService implements ReservationServiceInterface
 			throw new NoAvailabeTablesForReservationException($ex->getMessage());
 		} catch (\Exception $ex) {
 			debug($ex->getMessage());
-			throw new Exception("Error Processing Request", 1);
+			throw new Exception('A aparut o eroare, incerca dimnou');
 		}
-	}
-
-	public function create(array $data, array $tables): Reservation
-	{
-
-		$reservation = Reservation::create($data);
-
-		foreach ($tables as $table) {
-			$reservation->tables()->attach($table->id);
-		}
-
-		if (in_array('email', $data)) {
-			Queue::push(new SendReservationEmailJob($reservation));
-		}
-
-		return $reservation;
 	}
 }
