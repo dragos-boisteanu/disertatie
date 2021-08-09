@@ -171,6 +171,9 @@ class CategoryController extends Controller
 
 	public function disable(Request $request, $id)
 	{
+
+		$request->user()->can('disable', Category::class);
+
 		$category = Category::withTrashed()->findOrFail($id);
 
 		$category->delete();
@@ -179,6 +182,8 @@ class CategoryController extends Controller
 
 	public function restore(Request $request, $id)
 	{
+		$request->user()->can('restore', Category::class);
+
 		$category = Category::withTrashed()->findOrFail($id);
 
 		$category->restore();
