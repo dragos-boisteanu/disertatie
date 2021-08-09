@@ -83,7 +83,10 @@
       </div>
     </div>
 
-    <div class="w-full bg-white shadow p-4 rounded mt-4 lg:w-2/3 2xl:w-1/2">
+    <div
+      v-if="hasOrders"
+      class="w-full bg-white shadow p-4 rounded mt-4 lg:w-2/3 2xl:w-1/2"
+    >
       <div class="flex items-center justify-between hover:cursor-pointer">
         <div class="font-bold">Orders</div>
         <div>
@@ -172,6 +175,10 @@ export default {
         (status) => status.id != this.reservation.status.id
       );
     },
+
+    hasOrders() {
+      return this.reservation.orders.length > 0;
+    },
   },
 
   data() {
@@ -192,6 +199,7 @@ export default {
         deletedAt: "",
         beginsAt: "",
         status: "",
+        orders: [],
       },
     };
   },
