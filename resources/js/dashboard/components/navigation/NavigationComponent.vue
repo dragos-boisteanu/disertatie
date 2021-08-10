@@ -1,5 +1,6 @@
 <template>
   <div
+    @click="close"
     class="
       fixed
       lg:relative
@@ -425,6 +426,12 @@ export default {
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content"),
     };
+  },
+
+  methods: {
+    close() {
+      this.$emit("close");
+    },
   },
 
   components: {

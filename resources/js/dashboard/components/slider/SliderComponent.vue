@@ -1,7 +1,7 @@
 <template>
   <div>
     <BackdropComponent @click.native="close"> </BackdropComponent>
-    <NavigationComponent />
+    <NavigationComponent @close="close" />
   </div>
 </template>
 
