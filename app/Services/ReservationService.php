@@ -111,8 +111,6 @@ class ReservationService implements ReservationServiceInterface
 					->join('reservations', 'reservations.id', '=', 'reservation_table.reservation_id')
 					->where('reservations.begins_at', '<=', $beginsAt->toDateTimeString())
 					->where('reservations.ends_at', '>', $endsAt->toDateTimeString())
-					->where('reservations.status_id', 1)
-					->orWhere('reservations.status_id', 2)
 					->whereNull('reservations.deleted_at')
 					->pluck('id')->toArray()
 			)
@@ -131,7 +129,7 @@ class ReservationService implements ReservationServiceInterface
 				$totalSeats += $table->seats;
 			}
 
-			if ($totalSeats < $seats) {
+			if ($totalSeats <= $seats) {
 				throw new NoAvailabeTablesForReservationException('Nu s-au gasit mese disponibile pentru datele folosite');
 			}
 
