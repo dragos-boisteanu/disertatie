@@ -374,7 +374,7 @@
         </ul>
       </div>
 
-      <div class="pt-2 pb-16 md:pb-8" v-if="isAdmin || isLocationManager">
+      <div class="pt-2 pb-20 md:pb-8" v-if="isAdmin || isLocationManager">
         <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
           DISCOUNTS
         </div>
