@@ -113,7 +113,9 @@ class ProductService implements ProductServiceInterface
 
 			if (array_key_exists('image', $data)) {
 				$storagePath = '/products_images/' . $product->id;
-				$path = $this->imageService->storeImage($data['image'], $storagePath, 'products', 'image', $product->id);
+				$this->imageService->storeImage($data['image'], $storagePath, 'products', 'image', $product->id);
+			} else {
+				$product->image = '/storage/products_images/placeholder.jpg';
 			}
 
 			// ingredients or simple stock
