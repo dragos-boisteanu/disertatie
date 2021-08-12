@@ -4,8 +4,8 @@
 {{ Breadcrumbs::render('product', $product->category, $product) }}
 <div>
 	<div class="md:flex md:justify-between md:items-center md:gap-x-10">
-		<div class="relative w-full h-[256px] p-2 md:w-[256px]">
-			<img src="{{ asset("$product->image")}}" class="w-full h-full rounded-sm shadow-sm object-cover" />
+		<div class="relative w-full h-[170px] px-8 py-2 md:w-[300px] md:px-0 md:h-[234px] lg:w-[350px]">
+			<img src="{{ asset("$product->image")}}" class="w-full h-full rounded shadow-sm object-cover" />
 			@isset($product->finalDiscount)
 			<div class="absolute top-5 right-5 text-xs bg-red-600 rounded-sm shadow text-white py-1 px-2">
 				-{{ $product->finalDiscount }} %
@@ -74,7 +74,7 @@
 		@endif
 	</div>
 
-	<div id="description" class="w-full text-sm text-gray-400">
+	<div id="description" class="w-full text-sm px-4 text-gray-400">
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tincidunt et ligula non auctor. Mauris eget justo
 		ut sapien pulvinar ullamcorper quis vulputate libero. Quisque at arcu convallis, sollicitudin nulla ut,
 		malesuada justo. Nullam vehicula fermentum tellus a mollis. Nulla venenatis pellentesque erat, nec vulputate ex
@@ -86,7 +86,7 @@
 	</div>
 
 	@if ($product->has_ingredients)
-	<ul id="ingredients" class="w-full text-sm text-gray-400 list-disc" style="display: none">
+	<ul id="ingredients" class="w-full text-sm px-4 text-gray-400 list-disc" style="display: none">
 		@foreach ($product->ingredients as $ingredient)
 		<li>
 			{{ $ingredient->pivot->quantity }}{{ $ingredient->unit->name }} {{ $ingredient->name }}
@@ -102,31 +102,31 @@
 @push('scripts')
 <script>
 	const descriptionSelect = $('#descriptionSelect');
-        const ingredientsSelect = $('#ingredientsSelect');
+	const ingredientsSelect = $('#ingredientsSelect');
 
-        const description = $('#description');
-        const ingredients = $('#ingredients');
+	const description = $('#description');
+	const ingredients = $('#ingredients');
 
-        ingredientsSelect.click(function() {
-            descriptionSelect.removeClass('text-gray-100');
-            descriptionSelect.addClass('text-gray-400 border-transparent')
+	ingredientsSelect.click(function() {
+		descriptionSelect.removeClass('text-gray-100');
+		descriptionSelect.addClass('text-gray-400 border-transparent')
 
-            ingredientsSelect.addClass('text-gray-100');
-            ingredientsSelect.removeClass('text-gray-400 border-transparent');
+		ingredientsSelect.addClass('text-gray-100');
+		ingredientsSelect.removeClass('text-gray-400 border-transparent');
 
-            description.hide();
-            ingredients.show();
-        })
+		description.hide();
+		ingredients.show();
+	})
 
-        descriptionSelect.click(function() {
-            ingredientsSelect.removeClass('text-gray-100');
-            ingredientsSelect.addClass('text-gray-400 border-transparent')
+	descriptionSelect.click(function() {
+		ingredientsSelect.removeClass('text-gray-100');
+		ingredientsSelect.addClass('text-gray-400 border-transparent')
 
-            descriptionSelect.addClass('text-gray-100');
-            descriptionSelect.removeClass('text-gray-400 border-transparent');
+		descriptionSelect.addClass('text-gray-100');
+		descriptionSelect.removeClass('text-gray-400 border-transparent');
 
-            ingredients.hide();
-            description.show();
-        })
+		ingredients.hide();
+		description.show();
+	})
 </script>
 @endpush
