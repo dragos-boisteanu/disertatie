@@ -2,10 +2,10 @@
 
 <li class="mb-4 last:mb-0">
 	<form method="POST" action="{{ route('carts.store', ['productId' => $product->id]) }}"
-		class="mb-4 w-full grid grid-cols-4 gap-y-3 md:grid-cols-12">
+		class="mb-4 w-full grid grid-cols-12 gap-4">
 		@csrf
 
-		<div class="col-span-4 flex flex-col items-start md:col-span-4">
+		<div class="col-span-12 flex flex-col items-start md:col-span-6">
 			<a class="relative block"
 				href="{{ route('products.show', ['categorySlug' => $product->category->slug,  'productSlug' => $product->slug]) }}">
 				<h2 class="text-gray-300 justify-self-start self-center hover:text-gray-200 hover:underline">
@@ -32,9 +32,9 @@
 			@endisset
 		</div>
 
-		<div class="col-span-4 self-center justify-self-stretch flex items-center justify-between md:col-span-4">
+		<div class="col-span-12 self-center justify-self-stretch flex items-center justify-between md:col-span-6">
 			@if ($product->quantity > 0)
-			<div class="flex-initial w-1/2 text-sm self-center">
+			<div class="flex-initial w-1/5 text-sm self-center">
 				<input type="number" value="1" min="1" name="quantity" class="w-full rounded-sm bg-white text-center"
 					@if($product->quantity == 0) disabled @endif>
 			</div>
@@ -53,20 +53,24 @@
 				</div>
 				@endisset
 			</div>
-		</div>
-
-		<div class="w-3/4 col-span-4 self-center justify-self-center md:col-span-4">
-			@if ($product->quantity > 0)
-			<button
-				class="w-full text-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200">
-				Adauga in cos
-			</button>
-			@else
-			<div class="w-full text-center py-1 px-2 text-sm rounded border border-red-600 text-red-600 ">
-				Nu este in stock
+			<div class="flex-initial w-1/2">
+				@if ($product->quantity > 0)
+				<button
+					class="w-full text-center py-1 px-2 text-sm rounded border border-gray-400 text-gray-400 hover:text-gray-200 hover:border-gray-200">
+					Adauga in cos
+				</button>
+				@else
+				<div class="w-full text-center py-1 px-2 text-sm rounded border border-red-600 text-red-600 ">
+					Nu este in stock
+				</div>
+				@endif
 			</div>
-			@endif
+
 		</div>
+		{{--
+		<div class="w-3/4 col-span-4 self-center justify-self-center">
+
+		</div> --}}
 
 	</form>
 </li>

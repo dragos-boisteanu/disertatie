@@ -21,3 +21,8 @@
 .breadcrumbs .router-link-active:hover {
     @apply cursor-default pointer-events-none;
 }
+
+
+html {
+  scroll-behavior: smooth;
+}
