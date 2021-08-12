@@ -1,4 +1,7 @@
 <header id="top" class="flex-none bg-gray-900">
+	<div class="w-full h-52">
+		<img class="h-full w-full object-cover" src='{{ asset("/storage/header3.jpg")}}' />
+	</div>
 	{{-- mobile nav --}}
 	<nav class="bg-orange-600 flex items-center justify-between px-4 lg:hidden">
 		<ul class="flex items-center gap-x-4 py-4">
