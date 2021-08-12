@@ -20,9 +20,6 @@
     @addfile="fileAdded"
     @processfileabort="processFileAbort"
     @processfile="fileProcessed"
-    :allowImageValidateSize="true"
-    :imageValidateSizeMinWidth="imageSize"
-    :imageValidateSizeMinHeight="imageSize"
     :allowFileSizeValidation="true"
     maxFileSize="15MB"
   />
@@ -41,6 +38,10 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css
 
 // import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 // import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+
+// :allowImageValidateSize="true"
+// :imageValidateSizeMinWidth="imageSize"
+// :imageValidateSizeMinHeight="imageSize"
 
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,

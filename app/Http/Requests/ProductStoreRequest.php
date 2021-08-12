@@ -28,7 +28,7 @@ class ProductStoreRequest extends FormRequest
 		// $this->ingredients = json_decode($this->ingredients);
 		// debug($this->ingredients);
 		return [
-			'image' => 'sometimes|image|max:15000|dimensions:min_width=2000,min_height=2000',
+			'image' => 'sometimes|image|max:15000',
 			'barcode' => 'required|numeric|unique:products',
 			'name' => 'required|string|max:150',
 			'description' => 'required|string|max:255',
