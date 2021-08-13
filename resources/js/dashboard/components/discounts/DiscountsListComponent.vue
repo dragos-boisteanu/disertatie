@@ -15,15 +15,10 @@
           :key="discount.id"
           @click="selectDiscount(discount.id)"
           class="
-            transition-shadow
-            duration-500
-            ease-in-out
             text-sm
             rounded-md
             cursor-pointer
             border-white
-            transform
-            hover:scale-105
             hover:bg-gray-50
             hover:shadow-md
           "
@@ -54,8 +49,8 @@ export default {
   props: {
     discounts: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
   methods: {
