@@ -112,8 +112,6 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::get('phone-number/{phoneNumber}', 'FindUserByPhoneNumber');
 		Route::get('addresses/{id}', 'ClientController@getClientAddresses');
 	});
-
-	Route::apiResource('images', 'FileController', ['as' => 'api'])->only('store', 'destroy');
 });
 
 Route::group(['middleware' => 'auth:web', 'namespace' => 'Api\Client', 'prefix' => 'client'], function () {
