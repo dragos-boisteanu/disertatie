@@ -15,7 +15,7 @@
 		@endfor
 		</div>
 
-		<div class="absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 h-32">
+		<div class="absolute z-10 bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 h-32">
 			<img class="h-full w-full rounded-full" src='{{ asset("/storage/logo.png") }}' />
 		</div>
 
@@ -46,7 +46,6 @@
 		</ul>
 		<x-desktop-cart :cart="$cart"></x-desktop-cart>
 	</nav>
-
 
 	{{-- mobile menu slider --}}
 	<div id="mobileSlider" class="fixed z-20 left-0 top-0 w-3/4 h-screen bg-trueGray-900 shadow-md flex flex-col"
@@ -146,8 +145,9 @@
 		@endguest
 	</div>
 
+	<div class="h-9 mb-2 lg:hidden"></div>
+
 	@auth
-	<div class="h-9 lg:hidden"></div>
 	{{-- desktop menu --}}
 	<ul class="hidden w-full items-center justify-end gap-x-2 px-2 py-2 text-sm lg:flex">
 		<li>
