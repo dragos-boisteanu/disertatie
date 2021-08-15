@@ -145,7 +145,7 @@
 		@endguest
 	</div>
 
-	<div class="h-9 mb-2 lg:hidden"></div>
+	<div class="h-9 mb-2 lg:mb-0 @auth lg:hidden @endauth"></div>
 
 	@auth
 	{{-- desktop menu --}}
