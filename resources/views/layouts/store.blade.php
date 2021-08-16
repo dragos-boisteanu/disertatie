@@ -50,9 +50,9 @@
 
 	$(window).scroll(function(){
 		if($(this).scrollTop() > 200) {
-			toTopLink.addClass('opacity-100');
+			toTopLink.addClass('!opacity-100');
 		} else {
-			toTopLink.removeClass('opacity-100');
+			toTopLink.removeClass('!opacity-100');
 		}
 	});
 </script>
