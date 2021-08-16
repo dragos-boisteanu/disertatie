@@ -129,6 +129,7 @@ class CategoryController extends Controller
 		$category->update($input);
 
 		$responseData['message'] = "Category updated";
+		$responseData['position'] = $input['position'];
 
 		Cache::forget('categories');
 
@@ -221,7 +222,7 @@ class CategoryController extends Controller
 
 			$category->save();
 
-			return response()->json(['message' => 'Parent category removed'], 200);
+			return response()->json(['message' => 'Parent category removed', 'position' => $category->position], 200);
 		} catch (ModelNotFoundException $mnfe) {
 			debug($mnfe);
 			return response()->json(['message' => 'Category not found'], 404);
