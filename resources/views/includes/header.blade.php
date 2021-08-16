@@ -6,19 +6,15 @@
 		<img class="h-full w-full object-cover" src='{{ asset("/storage/header3.jpg")}}' />
 	</div>
 
-	{{-- mobile nav --}}
 	<x-navigations.mobile :cart="$cart"></x-navigations.mobile>
 
-	{{-- desktop nav --}}
 	<x-navigations.desktop :cart="$cart"></x-navigations.desktop>
 
-	{{-- mobile menu slider --}}
 	<x-navigations.mobile-slider></x-navigations.mobile-slider>
 
 	<div class="h-9 lg:hidden "></div>
 
 	@auth
-	{{-- desktop menu --}}
 	<x-navigations.desktop-user></x-navigations.desktop-user>
 	@endauth
 	@guest
@@ -26,6 +22,9 @@
 	@endguest
 
 	<x-mobile-cart :cart="$cart"></x-mobile-cart>
+
+	@include('includes.auth.login')
+	@include('includes.auth.register')
 </header>
 
 @push('scripts')
@@ -46,23 +45,27 @@
 	const mobileSlider = $('#mobileSlider');
 	const backdrop = $('#backdrop');
 
-	$('#auth').click(function() {
-		backdrop.hide();
-		mobileSlider.hide();
-		loginForm.modal({
-			fadeDuration: 150,
-			fadeDelay: 0.50
-		});
-	})
+	$('[data-auth]').each(function() {
+		$(this).click(function() {
+			backdrop.hide();
+			mobileSlider.hide();
+			$('#loginForm').modal({
+				fadeDuration: 150,
+				fadeDelay: 0.50
+			})
+		})
+	});
 
-	$('#register').click(function() {
-		backdrop.hide();
-		mobileSlider.hide();
-		registerForm.modal({
-			fadeDuration: 150,
-			fadeDelay: 0.50
+	$('[data-register]').each(function() {
+		$(this).click(function() {
+			backdrop.hide();
+			mobileSlider.hide();
+			$('#registerForm').modal({
+				fadeDuration: 150,
+				fadeDelay: 0.50
 			});
-	})
+		})
+	});
 
 	backdrop.click(function() {
 		mobileSlider.hide();

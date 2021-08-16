@@ -46,23 +46,21 @@
 
 @push('scripts')
 <script>
-	const loginForm =  $('#loginForm');
+	$('#loginForm').on($.modal.BEFORE_CLOSE, function(event, modal) {
+		$('#loginForm *').filter(":input").not(':button').not('input[type=hidden]').each(function(index, input) {
+				input.value = "";
+		});
 
-        loginForm.on($.modal.BEFORE_CLOSE, function(event, modal) {
-            $('#loginForm *').filter(":input").not(':button').not('input[type=hidden]').each(function(index, input) {
-                input.value = "";
-            });
-
-            $('#login-errors').html('')
-        });
+		$('#login-errors').html('')
+	});
 </script>
 
 @if ($errors->has('email') || $errors->has('password'))
 <script>
 	$('#loginForm').modal({
-                fadeDuration: 150,
-                fadeDelay: 0.50
-            });
+		fadeDuration: 150,
+		fadeDelay: 0.50
+});
 </script>
 @endif
 

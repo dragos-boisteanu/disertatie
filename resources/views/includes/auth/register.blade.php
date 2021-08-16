@@ -61,48 +61,46 @@
 @push('scripts')
 
 <script>
-	const registerForm = $('#registerForm');
+	$('#registerForm').on($.modal.BEFORE_CLOSE, function(event, modal) {
+	$('#registerForm *').filter(":input").not(':button').not('input[type=hidden]').each(function(index,
+			input) {
+			input.value = "";
+	});
+});
 
-        registerForm.on($.modal.BEFORE_CLOSE, function(event, modal) {
-            $('#registerForm *').filter(":input").not(':button').not('input[type=hidden]').each(function(index,
-                input) {
-                input.value = "";
-            });
-        });
+$('#registerForm').submit(function(event) {
+	event.preventDefault();
 
-        registerForm.submit(function(event) {
-            event.preventDefault();
+	let formData = $(this).serializeArray();
 
-            let formData = $(this).serializeArray();
-
-            $.ajax({
-                method: "POST",
-                headers: {
-                    Accept: "application/json"
-                },
-                url: "{{ route('register') }}",
-                data: formData,
-                success: () => {
-                    // window.location.assign("{{ route('home') }}")
-                    $.modal.close();
-                    toastr.success(
-                        'Inregistrarea reusita. Verifica email-ul pentru confirmarea contului',
-                        'Success');
-                },
-                error: (response) => {
-                    if (response.status === 422) {
-                        let errors = response.responseJSON.errors;
-                        Object.keys(errors).forEach(function(key) {
-                            console.log(key)
-                            $("#registerForm #" + key).addClass("border-red-500");
-                            $("#registerForm #" + key + "Error").text(errors[key][0]);
-                        });
-                    } else {
-                        window.location.reload();
-                    }
-                }
-            })
-        })
+	$.ajax({
+		method: "POST",
+		headers: {
+			Accept: "application/json"
+		},
+		url: "{{ route('register') }}",
+		data: formData,
+		success: () => {
+			// window.location.assign("{{ route('home') }}")
+			$.modal.close();
+			toastr.success(
+					'Inregistrarea reusita. Verifica email-ul pentru confirmarea contului',
+					'Success');
+		},
+		error: (response) => {
+			if (response.status === 422) {
+					let errors = response.responseJSON.errors;
+					Object.keys(errors).forEach(function(key) {
+							console.log(key)
+							$("#registerForm #" + key).addClass("border-red-500");
+							$("#registerForm #" + key + "Error").text(errors[key][0]);
+					});
+			} else {
+					window.location.reload();
+			}
+		}
+	})
+})
 </script>
 
 @endpush

@@ -8,9 +8,9 @@
 	@endfor
 	</div>
 
-	<div class="absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 h-32">
-		<img class="h-full w-full rounded-full" src='{{ asset("/storage/logo.png") }}' />
-	</div>
+	<a class="block absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 h-32" href="{{ route('home') }}">
+		<img class="h-full w-full rounded-full shadow-sm" src='{{ asset("/storage/logo.png") }}' />
+	</a>
 
 	<x-mobile-cart-button :cart="$cart"></x-mobile-cart-button>
 </nav>

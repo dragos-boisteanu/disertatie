@@ -78,19 +78,16 @@
 	<div class="flex-1 h-full flex items-end justify-start">
 		<div
 			class="w-full border-t border-trueGray-400 p-4 flex items-center justify-center gap-x-4 cursor-pointer outline-none text-gray-500 px-1">
-			<div id="auth" class="cursor-pointer outline-none hover:text-gray-100 px-1">
+			<div class="cursor-pointer outline-none hover:text-gray-100 px-1" data-auth>
 				Autentificare
 			</div>
 			<span class="text-red-700 px-1">
 				/
 			</span>
-			<div id="register" class="cursor-pointer hover:text-gray-100 px-1">
+			<div class="cursor-pointer hover:text-gray-100 px-1" data-register>
 				Inregistrare
 			</div>
 		</div>
-
-		@include('includes.auth.login')
-		@include('includes.auth.register')
 	</div>
 	@endguest
 </div>

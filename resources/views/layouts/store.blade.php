@@ -49,7 +49,7 @@
 	const toTopLink = $('#toTop');
 
 	$(window).scroll(function(){
-		if($(this).scrollTop() > 100) {
+		if($(this).scrollTop() > 200) {
 			toTopLink.addClass('opacity-100');
 		} else {
 			toTopLink.removeClass('opacity-100');
