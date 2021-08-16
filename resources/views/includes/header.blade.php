@@ -15,7 +15,7 @@
 		@endfor
 		</div>
 
-		<div class="absolute z-10 bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 h-32">
+		<div class="absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 h-32">
 			<img class="h-full w-full rounded-full" src='{{ asset("/storage/logo.png") }}' />
 		</div>
 
@@ -145,7 +145,8 @@
 		@endguest
 	</div>
 
-	<div class="h-9 mb-2 lg:mb-0 @auth lg:hidden @endauth"></div>
+
+	<div class="h-9 lg:hidden "></div>
 
 	@auth
 	{{-- desktop menu --}}
@@ -184,6 +185,22 @@
 		</li>
 	</ul>
 	@endauth
+	@guest
+	<div class=" hidden w-full items-center justify-end px-2 py-2 text-sm lg:flex">
+		<div id="auth" class="cursor-pointer outline-none text-gray-500 hover:text-gray-100 px-1">
+			Autentificare
+		</div>
+		<span class="text-red-700 px-1">
+			/
+		</span>
+		<div id="register" class="cursor-pointer text-gray-500 hover:text-gray-100 px-1">
+			Inregistrare
+		</div>
+	</div>
+
+	@include('includes.auth.login')
+	@include('includes.auth.register')
+	@endguest
 
 	<x-mobile-cart :cart="$cart"></x-mobile-cart>
 </header>
