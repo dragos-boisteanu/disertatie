@@ -42,7 +42,7 @@
     <ul class="mb-2 pb-2 border-b border-gray" v-if="showSubcategories">
       <SubCategoryComponent
         v-for="(subcategory, index) in getSubCategories"
-        :key="subcategory.id"
+        :key="index"
         :subcategory="subcategory"
         :selected-parent-category-id="selectedParentCategoryId"
         :selected-id="selectedId"
@@ -95,8 +95,12 @@ export default {
     },
 
     lastPosition() {
-      const categoryIndex = this.getCategories.findIndex(category => category.id == this.category.id);
-      return this.getCategories[categoryIndex].subCategories[this.getCategories[categoryIndex].subCategories.length - 1].position;
+      const categoryIndex = this.getCategories.findIndex(
+        (category) => category.id == this.category.id
+      );
+      return this.getCategories[categoryIndex].subCategories[
+        this.getCategories[categoryIndex].subCategories.length - 1
+      ].position;
     },
 
     showSubcategories() {
