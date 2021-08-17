@@ -155,9 +155,15 @@ class CategoryController extends Controller
 				}
 			}
 
-			DB::table('categories')->whereNull('parent_id')
-				->where('position', '>', $category->position)
-				->decrement('position');
+			if (is_null($category->parent_id)) {
+				DB::table('categories')->whereNull('parent_id')
+					->where('position', '>', $category->position)
+					->decrement('position');
+			} else {
+				DB::table('categories')->where('parent_id', $category->parent_id)
+					->where('position', '>', $category->position)
+					->decrement('position');
+			}
 
 			$category->forceDelete();
 
