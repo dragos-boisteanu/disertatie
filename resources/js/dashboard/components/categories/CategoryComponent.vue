@@ -44,11 +44,8 @@
         v-for="(subcategory, index) in getSubCategories"
         :key="index"
         :subcategory="subcategory"
-        :selected-parent-category-id="selectedParentCategoryId"
-        :selected-id="selectedId"
         :index="index"
         :last-position="lastPosition"
-        @selected="selectCategory"
       ></SubCategoryComponent>
     </ul>
   </li>
@@ -68,14 +65,6 @@ export default {
       type: Object,
       required: true,
     },
-    selectedParentCategoryId: {
-      type: [Number, String],
-      required: true,
-    },
-    selectedId: {
-      type: [Number, String],
-      required: true,
-    },
     index: {
       type: Number,
       required: true,
@@ -84,7 +73,11 @@ export default {
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
-    ...mapGetters("Categories", ["getCategories"]),
+    ...mapGetters("Categories", [
+      "getCategories",
+      "getSelectedCategory",
+      "getSelectedCategoryParentId",
+    ]),
 
     isEven() {
       if (this.index % 2 === 0) {
@@ -104,14 +97,22 @@ export default {
     },
 
     showSubcategories() {
-      return (
-        this.category.id === parseInt(this.selectedParentCategoryId) &&
-        this.category.subCategories.length > 0
-      );
+      if (this.getSelectedCategory) {
+        // console.log(this.category.id + " " + this.getSelectedCategoryParentId);
+        return (
+          this.category.id === parseInt(this.getSelectedCategoryParentId) &&
+          this.category.subCategories.length > 0
+        );
+      }
+      return false;
     },
 
     isSelected() {
-      return this.category.id === parseInt(this.selectedId);
+      if (this.getSelectedCategory) {
+        return this.category.id === parseInt(this.getSelectedCategory.id);
+      }
+
+      return false;
     },
 
     isDisabled() {
@@ -140,10 +141,10 @@ export default {
   },
 
   methods: {
-    ...mapActions("Categories", ["updatePosition"]),
+    ...mapActions("Categories", ["updatePosition", "setSelectedCategory"]),
 
     selectCategory(category) {
-      this.$emit("selected", category);
+      this.setSelectedCategory(category);
     },
 
     startDrag(evt) {

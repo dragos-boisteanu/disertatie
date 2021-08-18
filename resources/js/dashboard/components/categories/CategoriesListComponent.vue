@@ -15,10 +15,7 @@
           v-for="(category, index) in getCategories"
           :key="category.id"
           :category="category"
-          :selected-parent-category-id="selectedParentCategoryId"
-          :selected-id="selectedId"
           :index="index"
-          @selected="selectCategory"
         ></CategoryComponent>
       </ul>
     </div>
@@ -27,48 +24,29 @@
 
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 import _find from "lodash/find";
 
 import CategoryComponent from "./CategoryComponent.vue";
 
 export default {
-  props: {
-    selectedCategory: {
-      type: Object,
-      required: false,
-      default: null,
-    },
-  },
-
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
-    ...mapGetters("Categories", ["getCategories"]),
-
-    selectedId() {
-      if (
-        this.selectedCategory !== null &&
-        this.selectedCategory !== undefined
-      ) {
-        return this.selectedCategory.id;
-      }
-      return -1;
-    },
+    ...mapGetters("Categories", ["getCategories", "getSelectedCategory"]),
   },
 
   data() {
     return {
-      selectedParentCategoryId: "",
       selectedSubCategories: [],
     };
   },
 
   watch: {
-    selectedCategory(newValue) {
+    getSelectedCategory(newValue) {
       if (newValue !== null && newValue !== undefined) {
         if (newValue.parentId === null || newValue.parentId === undefined) {
-          this.selectedParentCategoryId = newValue.id;
+          this.setSelectedCategoryParentId(newValue.id);
           this.selectedSubCategories = newValue.subCategories;
 
           if (newValue.selectedSubcateogryId) {
@@ -83,14 +61,19 @@ export default {
           }
         }
       } else {
-        this.selectedParentCategoryId = "";
+        this.setSelectedCategoryParentId(null);
       }
     },
   },
 
   methods: {
+    ...mapActions("Categories", [
+      "setSelectedCategory",
+      "setSelectedCategoryParentId",
+    ]),
+
     selectCategory(category) {
-      this.$emit("selected", category);
+      this.setSelectedCategory(category);
     },
   },
 

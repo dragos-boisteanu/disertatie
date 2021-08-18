@@ -91,14 +91,6 @@ export default {
       type: Object,
       required: true,
     },
-    selectedParentCategoryId: {
-      type: [Number, String],
-      required: true,
-    },
-    selectedId: {
-      type: [Number, String],
-      required: true,
-    },
     index: {
       type: Number,
       required: true,
@@ -111,6 +103,7 @@ export default {
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
+    ...mapGetters("Categories", ["getSelectedCategory"]),
 
     canUp() {
       return this.subcategory.position > 1;
@@ -129,7 +122,11 @@ export default {
     },
 
     isSelected() {
-      return this.subcategory.id === parseInt(this.selectedId);
+      if (this.getSelectedCategory) {
+        return this.subcategory.id === parseInt(this.getSelectedCategory.id);
+      }
+
+      return false;
     },
 
     isDisabled() {
@@ -152,10 +149,13 @@ export default {
   },
 
   methods: {
-    ...mapActions("Categories", ["updateSubCategoryPosition"]),
+    ...mapActions("Categories", [
+      "updateSubCategoryPosition",
+      "setSelectedCategory",
+    ]),
 
     selectCategory(subcategory) {
-      this.$emit("selected", subcategory);
+      this.setSelectedCategory(subcategory);
     },
 
     // 1 up

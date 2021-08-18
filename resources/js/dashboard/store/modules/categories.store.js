@@ -7,18 +7,30 @@ import _isEqual from 'lodash/isEqual'
 
 
 const initialState = () => ({
-	categories: []
+	categories: [],
+	selectedCategory: null,
+	selectedCategoryParentId: null,
 });
 
 const state = initialState();
 
 const getters = {
-	getCategories: (state) => state.categories
+	getCategories: (state) => state.categories,
+	getSelectedCategory: (state) => state.selectedCategory,
+	getSelectedCategoryParentId: (state) => state.selectedCategoryParentId,
 }
 
 const actions = {
 	reset({ commit }) {
 		commit('RESET');
+	},
+
+	setSelectedCategory({ commit }, payload) {
+		commit('SET_SELECTED_CATEGORY', payload);
+	},
+
+	setSelectedCategoryParentId({ commit }, payload) {
+		commit('SET_SELECTED_CATEGORY_PARENT_ID', payload);
 	},
 
 	async fetchCategories({ commit }) {
@@ -68,6 +80,7 @@ const actions = {
 				payload.category.position = response.data.position;
 			}
 
+			console.log(payload);
 			commit('PATCH_CATEGORY', payload);
 			return { category, message: response.data.message, position: response.data.position }
 		} catch (error) {
@@ -199,6 +212,22 @@ const mutations = {
 		})
 	},
 
+	SET_SELECTED_CATEGORY(state, category) {
+
+		if (
+			_isEqual(category, state.selectedCategory) &&
+			(category.parentId === null || category.parentId === undefined)
+		) {
+			state.selectedCategory = null;
+		} else {
+			state.selectedCategory = category;
+		}
+	},
+
+	SET_SELECTED_CATEGORY_PARENT_ID(state, payload) {
+		state.selectedCategoryParentId = payload
+	},
+
 	SET_CATEGORIES(state, payload) {
 		state.categories = payload;
 	},
@@ -238,7 +267,7 @@ const mutations = {
 					state.categories[newParentCategoryIndex].subCategories.push(subCategory);
 				}
 			} else {
-				//problem when changing category from parent to sub
+
 				const newParentCategoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.parentId));
 				const categoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.id));
 
@@ -249,12 +278,17 @@ const mutations = {
 
 				state.categories.splice(categoryIndex, 1);
 
-				// problem here, to be checked
+				console.log(newParentCategoryIndex)
+				console.log(payload.category.parentId)
+				console.log(state.categories[newParentCategoryIndex])
+
+				// not working when moving a category from parent to sub cat of another category
+				// something to do with newParentCategoryIndex
 				state.categories[newParentCategoryIndex].subCategories.push(category);
 
 			}
 		} else {
-			const categoryIndex = state.categories.findIndex(category => category.id === payload(payload.category.id));
+			const categoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.id));
 
 			Object.keys(payload.category).forEach(key => {
 				vm.$set(state.categories[categoryIndex], key, payload.category[key]);
@@ -279,8 +313,6 @@ const mutations = {
 		if (payload.category.parentId) {
 			const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
 			const categoryIndex = _findIndex(state.categories[parentCategoryIndex].subCategories, ['id', parseInt(payload.category.id)]);
-
-			console.log(payload.category.deletedA);
 
 			vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'deletedAt', payload.category.deletedAt);
 		} else {
@@ -308,6 +340,9 @@ const mutations = {
 
 	UPDATE_SUB_CATEGORY_POSITION(state, payload) {
 		try {
+
+			// not working when changing the position of a new category when they are moved from category to subcategory and they are new
+			// the position change is not visible in the list
 			const vm = payload.vm;
 
 			const parentCategoryIndex = state.categories.findIndex(parentCategory => parentCategory.id == payload.parentId);
@@ -315,7 +350,6 @@ const mutations = {
 			const categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id == payload.id);
 
 			let adjenctCategoryIndex = -1;
-			// let categoryNewPosition = -1;
 			let adjenctCategoryNewPosition = -1;
 
 			if (payload.direction == 1) {
