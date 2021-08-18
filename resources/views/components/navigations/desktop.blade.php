@@ -16,9 +16,9 @@
 			</a>
 		</li>
 		<li class="relative w-40">
-			<a class="block h-40 w-40 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 "
+			<a class="block h-40 w-40 absolute top-1/2 left-1/2 z-[1] -translate-x-1/2 -translate-y-1/2 "
 				href="{{ route('home') }}">
-				<img class="w-full h-full rounded-full shadow-sm" src="{{ asset('/storage/logo.png')}}" />
+				<img class="w-full h-full rounded-full shadow-md" src="{{ asset('/storage/logo.png')}}" />
 			</a>
 		</li>
 

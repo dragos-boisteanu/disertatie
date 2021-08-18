@@ -1,6 +1,6 @@
 <template>
-  <li class="flex items-center">
-    <div class="bg-black">
+  <li class="relative flex items-center group">
+    <div class="absolute left-0 top-0 z-[1] hidden group-hover:block bg-black">
       <button @click.capture="updatePosition(1)" v-if="canUp">
         <svg
           xmlns="http://www.w3.org/2000/svg"
