@@ -147,6 +147,8 @@ class CategoryController extends Controller
 		$request->user()->can('forceDelete', Category::class);
 
 		try {
+			DB::beginTransaction();
+
 			$category = Category::withTrashed()->with('subCategories')->findOrFail($id);
 
 			if ($category->subCategories->count() > 0) {
@@ -168,11 +170,16 @@ class CategoryController extends Controller
 			$category->forceDelete();
 
 
-			Cache::forget('categories');
+			DB::commit();
 
 			return response()->json(['message' => 'Category ' . $category->name . ' was deleted'], 200);
 		} catch (\Illuminate\Database\QueryException $e) {
+			DB::rollBack();
+			debug($e);
 			return response()->json(['message' => 'Remove or copy category\'s ( ' .  $category->name . ' ) items before deleting'], 500);
+		} catch (\Exception $e) {
+			DB::rollBack();
+			return response()->json(['message' => 'Something went wrong, try again later'], 500);
 		}
 	}
 
