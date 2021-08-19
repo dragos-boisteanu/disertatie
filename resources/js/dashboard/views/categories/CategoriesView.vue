@@ -82,7 +82,7 @@ export default {
     async refresh() {
       try {
         await this.fetchCategories();
-        this.deselectCatgory();
+        this.setSelectedCategory(null);
         this.resetSearchValue = true;
       } catch (error) {
         console.log(error);

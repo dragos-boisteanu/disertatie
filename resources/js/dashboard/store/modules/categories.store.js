@@ -213,8 +213,8 @@ const mutations = {
 	},
 
 	SET_SELECTED_CATEGORY(state, category) {
-
 		if (
+			(category !== null && category !== undefined) &&
 			_isEqual(category, state.selectedCategory) &&
 			(category.parentId === null || category.parentId === undefined)
 		) {
