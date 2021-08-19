@@ -254,7 +254,7 @@ const mutations = {
 				});
 
 				// if the subCategory has a new parent
-				// remove the subCategory from the actula parent
+				// remove the subCategory from the actual parent
 				// add the subCategory to the new parent
 				if (payload.category.originalParentId && !_isEqual(payload.category.originalParentId, payload.parentId)) {
 					const subCategory = state.categories[originalParentCategoryIndex].subCategories.find(subCategory => subCategory.id === parseInt(payload.category.id));
@@ -267,16 +267,14 @@ const mutations = {
 					state.categories[newParentCategoryIndex].subCategories.push(subCategory);
 				}
 			} else {
-
 				const newParentCategoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.parentId));
 				const categoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.id));
 
-				const category = state.categories.find(category => category.id === parseInt(payload.category.id));
+				const category = state.categories.splice(categoryIndex, 1)[0]; //
+				state.categories.find(category => category.id === parseInt(payload.category.id));
 
 				category.parentId = payload.category.parentId;
 				category.position = payload.category.position;
-
-				state.categories.splice(categoryIndex, 1);
 
 				// console.log(newParentCategoryIndex)
 				// console.log(payload.category.parentId)
