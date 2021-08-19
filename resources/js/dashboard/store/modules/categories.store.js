@@ -278,14 +278,15 @@ const mutations = {
 
 				state.categories.splice(categoryIndex, 1);
 
-				console.log(newParentCategoryIndex)
-				console.log(payload.category.parentId)
-				console.log(state.categories[newParentCategoryIndex])
+				// console.log(newParentCategoryIndex)
+				// console.log(payload.category.parentId)
+				// console.log(state.categories[newParentCategoryIndex])
 
+				// strange thing happening here, sometime it works other times it doesn't
+				// must be investigated
 				// not working when moving a category from parent to sub cat of another category
 				// something to do with newParentCategoryIndex
 				state.categories[newParentCategoryIndex].subCategories.push(category);
-
 			}
 		} else {
 			const categoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.category.id));
@@ -346,35 +347,35 @@ const mutations = {
 			const vm = payload.vm;
 
 			const parentCategoryIndex = state.categories.findIndex(parentCategory => parentCategory.id == payload.parentId);
-
 			const categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id == payload.id);
 
-			let adjenctCategoryIndex = -1;
-			let adjenctCategoryNewPosition = -1;
+			let adjacentCategoryIndex = -1;
+			let adjacentCategoryNewPosition = -1;
+
+			const parentCategory = state.categories[parentCategoryIndex];
 
 			if (payload.direction == 1) {
-				adjenctCategoryIndex = categoryIndex - 1;
+				adjacentCategoryIndex = categoryIndex - 1;
 
-				adjenctCategoryNewPosition = state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex].position + 1;
+				adjacentCategoryNewPosition = parentCategory.subCategories[adjacentCategoryIndex].position + 1;
 
-				const deleted = state.categories[parentCategoryIndex].subCategories.splice(adjenctCategoryIndex, 1);
-				state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 0, deleted[0]);
+				const deleted = parentCategory.subCategories.splice(adjacentCategoryIndex, 1);
+				parentCategory.subCategories.splice(categoryIndex, 0, deleted[0]);
 
 			} else {
-				adjenctCategoryIndex = categoryIndex + 1;
+				adjacentCategoryIndex = categoryIndex + 1;
 
-				adjenctCategoryNewPosition = state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex].position - 1;
+				adjacentCategoryNewPosition = parentCategory.subCategories[adjacentCategoryIndex].position - 1;
 
-				const deleted = state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
-				state.categories[parentCategoryIndex].subCategories.splice(adjenctCategoryIndex, 0, deleted[0]);
+				const deleted = parentCategory.subCategories.splice(categoryIndex, 1);
+				parentCategory.subCategories.splice(adjacentCategoryIndex, 0, deleted[0]);
 			}
 
-			vm.$set(state.categories[parentCategoryIndex].subCategories[adjenctCategoryIndex], 'position', payload.position);
-			vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'position', adjenctCategoryNewPosition);
+			vm.$set(parentCategory.subCategories[adjacentCategoryIndex], 'position', payload.position);
+			vm.$set(parentCategory.subCategories[categoryIndex], 'position', adjacentCategoryNewPosition);
 
 		} catch (error) {
 			console.log(error);
-
 		}
 	},
 

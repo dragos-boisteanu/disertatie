@@ -41,7 +41,7 @@
 
     <ul class="mb-2 pb-2 border-b border-gray" v-if="showSubcategories">
       <SubCategoryComponent
-        v-for="(subcategory, index) in getSubCategories"
+        v-for="(subcategory, index) in category.subCategories"
         :key="index"
         :subcategory="subcategory"
         :index="index"
@@ -134,10 +134,6 @@ export default {
       }
 
       return "";
-    },
-
-    getSubCategories() {
-      return this.category.subCategories;
     },
   },
 

@@ -13,7 +13,7 @@
       <ul class="overflow-y-auto max-h-[400px] w-full px-2 rounded-sm" @>
         <CategoryComponent
           v-for="(category, index) in getCategories"
-          :key="category.id"
+          :key="category.index"
           :category="category"
           :index="index"
         ></CategoryComponent>

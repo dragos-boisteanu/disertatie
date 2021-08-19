@@ -399,7 +399,7 @@ export default {
                 );
 
                 parentCategory.selectedSubcateogryId = payload.category.id;
-                this.$emit("selectNewParentCategory", parentCategory);
+                this.setSelectedCategory(parentCategory);
               }
             }
 
@@ -494,7 +494,7 @@ export default {
 
         const response = await this.removeParent(payload);
 
-        this.category.parentId = null;
+        // this.category.parentId = null;
 
         this.$toast.success(response.data.message);
         this.$Progress.finish();
