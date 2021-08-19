@@ -91,9 +91,10 @@ export default {
       const categoryIndex = this.getCategories.findIndex(
         (category) => category.id == this.category.id
       );
-      return this.getCategories[categoryIndex].subCategories[
-        this.getCategories[categoryIndex].subCategories.length - 1
-      ].position;
+      const subCategoryIndex =
+        this.getCategories[categoryIndex].subCategories.length - 1;
+      return this.getCategories[categoryIndex].subCategories[subCategoryIndex]
+        .position;
     },
 
     showSubcategories() {

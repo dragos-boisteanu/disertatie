@@ -7,13 +7,14 @@
         top-0
         z-[1]
         flex flex-col
-        items-stretch
-        justify-evenly
+        items-center
+        justify-center
+        gap-1
         h-full
       "
     >
-      <div class="flex items-center">
-        <button @click.capture="updatePosition(1)" v-if="canUp">
+      <div class="flex items-center" v-if="canUp">
+        <button @click.capture="updatePosition(1)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24px"
@@ -28,8 +29,8 @@
           </svg>
         </button>
       </div>
-      <div class="flex items-center">
-        <button @click.capture="updatePosition(0)" v-if="canDown">
+      <div class="flex items-center" v-if="canDown">
+        <button @click.capture="updatePosition(0)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24px"
