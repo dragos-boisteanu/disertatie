@@ -14,6 +14,7 @@ use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Http\Resources\Category as CategoryResrouce;
 
 class CategoryController extends Controller
 {
@@ -74,11 +75,10 @@ class CategoryController extends Controller
 
 			$category = Category::create($input);
 
-			debug($category);
+			debug(new CategoryResrouce($category));
 
-			$response['id'] = $category->id;
 			$response['message'] = 'Category ' . $category->name . ' created sucessfuly';
-			$response['position'] = $category->position;
+			$response['category'] = new CategoryResrouce($category);
 
 			Cache::forget('categories');
 

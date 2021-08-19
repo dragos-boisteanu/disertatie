@@ -55,12 +55,7 @@ const actions = {
 				payload.parentId = null;
 			}
 
-			payload.deletedAt = null;
-			payload.productsCount = 0;
-			payload.subCategories = [];
-			payload.position = response.data.position;
-
-			commit('ADD_CATEGORY', payload);
+			commit('ADD_CATEGORY', response.data.category);
 
 			return response.data.message;
 		} catch (error) {
@@ -233,8 +228,9 @@ const mutations = {
 	},
 
 	ADD_CATEGORY(state, payload) {
-		if (payload.parentId !== null && payload.parentId !== undefined) {
-			const parentCategoryIndex = state.categories.findIndex(category => category.id === parseInt(payload.parentId));
+		const category = payload.category;
+		if (category !== null && category !== undefined) {
+			const parentCategoryIndex = state.categories.findIndex(category => category.id === parseInt(category));
 			state.categories[parentCategoryIndex].subCategories.push(payload);
 		} else {
 			state.categories.push(payload);
@@ -243,6 +239,8 @@ const mutations = {
 
 	PATCH_CATEGORY(state, payload) {
 		const vm = payload.vm;
+
+		console.log('store category', payload.category)
 
 		if (payload.category.parentId !== null && payload.category.parentId !== undefined) {
 			if (payload.category.originalParentId !== null && payload.category.originalParentId !== undefined) {
@@ -276,14 +274,6 @@ const mutations = {
 				category.parentId = payload.category.parentId;
 				category.position = payload.category.position;
 
-				// console.log(newParentCategoryIndex)
-				// console.log(payload.category.parentId)
-				// console.log(state.categories[newParentCategoryIndex])
-
-				// strange thing happening here, sometime it works other times it doesn't
-				// must be investigated
-				// not working when moving a category from parent to sub cat of another category
-				// something to do with newParentCategoryIndex
 				state.categories[newParentCategoryIndex].subCategories.push(category);
 			}
 		} else {
@@ -339,9 +329,6 @@ const mutations = {
 
 	UPDATE_SUB_CATEGORY_POSITION(state, payload) {
 		try {
-
-			// not working when changing the position of a new category when they are moved from category to subcategory and they are new
-			// the position change is not visible in the list
 			const vm = payload.vm;
 
 			const parentCategoryIndex = state.categories.findIndex(parentCategory => parentCategory.id == payload.parentId);
