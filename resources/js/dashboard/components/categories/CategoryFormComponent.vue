@@ -85,7 +85,7 @@
           >
             <option value="" disabled selected>Select parent category</option>
             <option
-              v-for="parent in getCategories"
+              v-for="parent in parentCategories"
               :key="parent.id"
               :value="parent.id"
             >
@@ -225,8 +225,17 @@ export default {
       if (this.getSelectedCategory) {
         return this.getSelectedCategory.discountId;
       }
-
       return this.category.discountId;
+    },
+
+    parentCategories() {
+      if (this.getSelectedCategory) {
+        return this.getCategories.filter(
+          (category) => category.id !== this.getSelectedCategory.id
+        );
+      }
+
+      return this.getCategories;
     },
   },
 
