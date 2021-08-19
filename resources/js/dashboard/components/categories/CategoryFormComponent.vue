@@ -215,7 +215,7 @@ export default {
     },
 
     isCategorySelected() {
-      return this.getSelectedCategory !== null ||
+      return this.getSelectedCategory !== null &&
         this.getSelectedCategory !== undefined
         ? true
         : false;
