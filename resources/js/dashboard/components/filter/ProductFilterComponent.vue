@@ -30,8 +30,8 @@
           outline-none
         "
         placeholder="Barcode"
-        v-model.lazy="localFilterData.barcode"
-        @keyup="callFilter"
+        v-model="localFilterData.barcode"
+        @blur="callFilter"
       />
 
       <input
@@ -48,8 +48,8 @@
           outline-none
         "
         placeholder="Product name"
-        v-model.lazy="localFilterData.name"
-        @keyup="callFilter"
+        v-model="localFilterData.name"
+        @blur="callFilter"
       />
 
       <div class="mt-3 pb-2 border-b-2 border-sky-600">

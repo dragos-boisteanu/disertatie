@@ -130,42 +130,6 @@
         </div>
       </div>
 
-      <!-- <div class="mt-3 pb-2 border-b-2 border-sky-600">
-                <div class="mb-2 text-base font-semibold">
-                    Has email verified
-                </div>
-                <div class="flex items-center flex-wrap gap-2">
-                    <div class="flex justify-between items-center">
-                        <input
-                            id="isVerified"
-                            name="verified" type="radio"
-                            value="1"
-                            v-model="localFilterData.verified"
-                            class="mr-1 outline-none"
-                            @click="callFilter"
-                        />
-                        <label for="isVerified" class="text-sm capitalize">Verified</label>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <input
-                            id="isNotVerified"
-                            name="verified" type="radio"
-                            value="2"
-                            v-model="localFilterData.verified"
-                            class="mr-1 outline-none"
-                            @click="callFilter"
-                        />
-                        <label for="isNotVerified" class="text-sm capitalize">Not verified</label>
-                    </div>
-                    <button
-                        class="text-sm  border px-2 py-1 rounded border-gray-400 hover:border-sky-600"
-                        @click="resetVerifiedFilter"
-                    >
-                        Reset
-                    </button>
-                </div>
-            </div> -->
-
       <div class="mt-3 pb-2 border-b-2 border-sky-600">
         <div class="mb-2 text-base font-semibold">Joined date</div>
         <div class="flex flex-col items-start gap-3 md:flex-row">
