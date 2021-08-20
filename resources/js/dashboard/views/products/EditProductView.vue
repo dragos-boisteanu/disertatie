@@ -582,17 +582,6 @@ export default {
       }
     },
 
-    // getSubCategories() {
-    //   this.localProduct.subCategoryId = "";
-    //   this.subCategories = [];
-
-    //   this.getCategories.forEach((category) => {
-    //     if (category.id == this.localProduct.categoryId) {
-    //       this.subCategories.push(...category.subCategories);
-    //     }
-    //   });
-    // },
-
     async removeImage() {
       try {
         this.$Progress.start();
@@ -753,7 +742,7 @@ export default {
 
     setData(data) {
       this.product = data;
-      this.localProduct = JSON.parse(JSON.stringify(data));
+      this.localProduct = Object.assign({}, data);
     },
   },
 
