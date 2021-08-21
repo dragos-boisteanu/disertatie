@@ -35,17 +35,10 @@
           :reset="resetSearchValue"
           @reseted="searchValueReseted"
         ></Search>
-        <CategoriesList
-          :selected-category="selectedCategory"
-          @selected="selectCategory"
-        ></CategoriesList>
+        <CategoriesList></CategoriesList>
       </div>
 
-      <CategoryForm
-        :selected-category="selectedCategory"
-        @selectNewParentCategory="selectCategory"
-        @resetCategory="deselectCatgory"
-      ></CategoryForm>
+      <CategoryForm></CategoryForm>
     </div>
   </ViewContainer>
 </template>
@@ -83,28 +76,13 @@ export default {
   },
 
   methods: {
-    ...mapActions("Categories", ["fetchCategories"]),
+    ...mapActions("Categories", ["fetchCategories", "setSelectedCategory"]),
     ...mapActions("Notification", ["openNotification"]),
-
-    selectCategory(category) {
-      if (
-        _isEqual(category, this.selectedCategory) &&
-        (category.parentId === null || category.parentId === undefined)
-      ) {
-        this.selectedCategory = null;
-      } else {
-        this.selectedCategory = category;
-      }
-    },
-
-    deselectCatgory() {
-      this.selectedCategory = null;
-    },
 
     async refresh() {
       try {
         await this.fetchCategories();
-        this.deselectCatgory();
+        this.setSelectedCategory(null);
         this.resetSearchValue = true;
       } catch (error) {
         console.log(error);

@@ -14,6 +14,7 @@ use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Http\Resources\Category as CategoryResrouce;
 
 class CategoryController extends Controller
 {
@@ -74,11 +75,10 @@ class CategoryController extends Controller
 
 			$category = Category::create($input);
 
-			debug($category);
+			debug(new CategoryResrouce($category));
 
-			$response['id'] = $category->id;
 			$response['message'] = 'Category ' . $category->name . ' created sucessfuly';
-			$response['position'] = $category->position;
+			$response['category'] = new CategoryResrouce($category);
 
 			Cache::forget('categories');
 
@@ -129,6 +129,7 @@ class CategoryController extends Controller
 		$category->update($input);
 
 		$responseData['message'] = "Category updated";
+		$responseData['position'] = $input['position'];
 
 		Cache::forget('categories');
 
@@ -146,6 +147,8 @@ class CategoryController extends Controller
 		$request->user()->can('forceDelete', Category::class);
 
 		try {
+			DB::beginTransaction();
+
 			$category = Category::withTrashed()->with('subCategories')->findOrFail($id);
 
 			if ($category->subCategories->count() > 0) {
@@ -154,18 +157,29 @@ class CategoryController extends Controller
 				}
 			}
 
-			DB::table('categories')->whereNull('parent_id')
-				->where('position', '>', $category->position)
-				->decrement('position');
+			if (is_null($category->parent_id)) {
+				DB::table('categories')->whereNull('parent_id')
+					->where('position', '>', $category->position)
+					->decrement('position');
+			} else {
+				DB::table('categories')->where('parent_id', $category->parent_id)
+					->where('position', '>', $category->position)
+					->decrement('position');
+			}
 
 			$category->forceDelete();
 
 
-			Cache::forget('categories');
+			DB::commit();
 
 			return response()->json(['message' => 'Category ' . $category->name . ' was deleted'], 200);
 		} catch (\Illuminate\Database\QueryException $e) {
+			DB::rollBack();
+			debug($e);
 			return response()->json(['message' => 'Remove or copy category\'s ( ' .  $category->name . ' ) items before deleting'], 500);
+		} catch (\Exception $e) {
+			DB::rollBack();
+			return response()->json(['message' => 'Something went wrong, try again later'], 500);
 		}
 	}
 
@@ -221,7 +235,7 @@ class CategoryController extends Controller
 
 			$category->save();
 
-			return response()->json(['message' => 'Parent category removed'], 200);
+			return response()->json(['message' => 'Parent category removed', 'position' => $category->position], 200);
 		} catch (ModelNotFoundException $mnfe) {
 			debug($mnfe);
 			return response()->json(['message' => 'Category not found'], 404);

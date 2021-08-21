@@ -7,7 +7,8 @@
 
 		<div class="col-span-12 flex flex-col items-start md:col-span-6">
 			<a class="relative block"
-				href="{{ route('products.show', ['categorySlug' => $product->category->slug,  'productSlug' => $product->slug]) }}">
+				href="{{ route('products.show', ['categorySlug' => $product->category->slug,  'productSlug' => $product->slug]) }}"
+				data-product-link>
 				<h2 class="text-gray-300 justify-self-start self-center hover:text-gray-200 hover:underline">
 					{{ $product->name }} -
 					{{ $product->weight }}{{ $product->unit->name }}
@@ -67,10 +68,5 @@
 			</div>
 
 		</div>
-		{{--
-		<div class="w-3/4 col-span-4 self-center justify-self-center">
-
-		</div> --}}
-
 	</form>
 </li>

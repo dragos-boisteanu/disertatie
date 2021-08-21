@@ -121,7 +121,8 @@
                 <span>{{ product.weight }} {{ product.unit }}</span>
               </div>
               <div class="text-sm">
-                {{ product.basePrice }} RON / {{ product.vat }} % VAT / {{ product.discount }} % discount
+                {{ product.basePrice }} RON / {{ product.vat }} % VAT /
+                {{ product.discount }} % discount
               </div>
             </div>
             <div>

@@ -13,7 +13,9 @@
           2xl:w-2/4
         "
       >
-        <div  class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
+        <div
+          class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
+        >
           <!-- IMAGE UPLOAD -->
           <div class="flex flex-col gap-4 md:flex-row md:items-center">
             <div
@@ -514,8 +516,6 @@ export default {
             this.subCategories.push(...category.subCategories);
           }
         });
-
-        console.log("here");
       },
     },
   },
@@ -581,17 +581,6 @@ export default {
         }
       }
     },
-
-    // getSubCategories() {
-    //   this.localProduct.subCategoryId = "";
-    //   this.subCategories = [];
-
-    //   this.getCategories.forEach((category) => {
-    //     if (category.id == this.localProduct.categoryId) {
-    //       this.subCategories.push(...category.subCategories);
-    //     }
-    //   });
-    // },
 
     async removeImage() {
       try {
@@ -753,7 +742,7 @@ export default {
 
     setData(data) {
       this.product = data;
-      this.localProduct = JSON.parse(JSON.stringify(data));
+      this.localProduct = Object.assign({}, data);
     },
   },
 

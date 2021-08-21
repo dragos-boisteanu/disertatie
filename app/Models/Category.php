@@ -32,14 +32,27 @@ class Category extends Model
 		];
 	}
 
+	public function getProductsCountAttribute()
+	{
+		$productsCount = 0;
+
+		if (!is_null($this->parentCategory)) {
+			$productsCount =  $this->subProducts()->count();
+		} else {
+			$productsCount =  $this->products()->count();
+		}
+
+		return $productsCount;
+	}
+
 	public function products()
 	{
-		return $this->hasMany(Product::class);
+		return $this->hasMany(Product::class)->withTrashed();
 	}
 
 	public function subProducts()
 	{
-		return $this->hasMany(Product::class, 'sub_category_id');
+		return $this->hasMany(Product::class, 'sub_category_id')->withTrashed();
 	}
 
 	public function discount()
@@ -49,11 +62,11 @@ class Category extends Model
 
 	public function subCategories()
 	{
-		return $this->hasMany(Category::class, 'parent_id');
+		return $this->hasMany(Category::class, 'parent_id')->withTrashed();
 	}
 
 	public function parentCategory()
 	{
-		return $this->belongsTo(Category::class, 'parent_id');
+		return $this->belongsTo(Category::class, 'parent_id')->withTrashed();
 	}
 }

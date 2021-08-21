@@ -85,7 +85,7 @@
           >
             <option value="" disabled selected>Select parent category</option>
             <option
-              v-for="parent in getCategories"
+              v-for="parent in parentCategories"
               :key="parent.id"
               :value="parent.id"
             >
@@ -186,16 +186,8 @@ import {
 } from "vuelidate/lib/validators";
 
 export default {
-  props: {
-    selectedCategory: {
-      type: Object,
-      required: false,
-      default: null,
-    },
-  },
-
   computed: {
-    ...mapGetters("Categories", ["getCategories"]),
+    ...mapGetters("Categories", ["getCategories", "getSelectedCategory"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
 
     availableDiscounts() {
@@ -223,17 +215,27 @@ export default {
     },
 
     isCategorySelected() {
-      return this.selectedCategory !== null || this.categoryId !== undefined
+      return this.getSelectedCategory !== null &&
+        this.getSelectedCategory !== undefined
         ? true
         : false;
     },
 
     discountId() {
-      if (this.selectedCategory) {
-        return this.selectedCategory.discountId;
+      if (this.getSelectedCategory) {
+        return this.getSelectedCategory.discountId;
+      }
+      return this.category.discountId;
+    },
+
+    parentCategories() {
+      if (this.getSelectedCategory) {
+        return this.getCategories.filter(
+          (category) => category.id !== this.getSelectedCategory.id
+        );
       }
 
-      return this.category.discountId;
+      return this.getCategories;
     },
   },
 
@@ -275,7 +277,7 @@ export default {
       }
     },
 
-    selectedCategory: function (value) {
+    getSelectedCategory: function (value) {
       if (value) {
         this.category = JSON.parse(JSON.stringify(value));
       } else {
@@ -302,6 +304,7 @@ export default {
       "addDiscount",
       "removeDiscount",
       "removeParent",
+      "setSelectedCategory",
     ]),
 
     async create() {
@@ -346,7 +349,7 @@ export default {
           this.waiting = true;
 
           const originalCategory = JSON.parse(
-            JSON.stringify(this.selectedCategory)
+            JSON.stringify(this.getSelectedCategory)
           );
 
           const payload = {
@@ -396,7 +399,7 @@ export default {
                 );
 
                 parentCategory.selectedSubcateogryId = payload.category.id;
-                this.$emit("selectNewParentCategory", parentCategory);
+                this.setSelectedCategory(parentCategory);
               }
             }
 
@@ -491,7 +494,7 @@ export default {
 
         const response = await this.removeParent(payload);
 
-        this.category.parentId = null;
+        // this.category.parentId = null;
 
         this.$toast.success(response.data.message);
         this.$Progress.finish();
@@ -510,7 +513,7 @@ export default {
 
     async callRemoveDiscount() {
       try {
-        if (this.selectedCategory) {
+        if (this.getSelectedCategory) {
           this.$Progress.start();
           this.waiting = true;
 
@@ -522,7 +525,7 @@ export default {
 
           const response = await this.removeDiscount(payload);
 
-          this.selectedCategory.discountId = "";
+          // this.selectedCategory.discountId = "";
 
           this.$Progress.finish();
           this.$toast.success(response.data.message);
@@ -544,7 +547,7 @@ export default {
 
     async callAddDiscount(discountId) {
       try {
-        if (this.selectedCategory) {
+        if (this.getSelectedCategory) {
           this.$Progress.start();
           this.waiting = true;
           const payload = {
@@ -559,7 +562,7 @@ export default {
           this.$toast.success(response.data.message);
           this.$Progress.finish();
 
-          this.selectedCategory.discountId = discountId;
+          // this.selectedCategory.discountId = discountId;
         } else {
           this.category.discountId = discountId;
         }
@@ -590,9 +593,7 @@ export default {
         parentId: null,
       };
 
-      if (this.isCategorySelected) {
-        this.$emit("resetCategory");
-      }
+      this.setSelectedCategory(null);
     },
   },
 

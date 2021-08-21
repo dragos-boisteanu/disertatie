@@ -35,7 +35,7 @@
 	{!! Toastr::message() !!}
 	<div id="store-app" class="h-full flex flex-col">
 		@include('includes.header')
-		<main class="flex-1 bg-gray-800 p-4 w-full flex items-start justify-center">
+		<main class="flex-1 bg-gray-800  p-4 w-full flex items-start justify-center">
 			<div class="relative w-full lg:w-7/12 2xl:w-5/12">
 				@yield('content')
 				<x-to-top></x-to-top>
@@ -49,10 +49,10 @@
 	const toTopLink = $('#toTop');
 
 	$(window).scroll(function(){
-		if($(this).scrollTop() > 100) {
-			toTopLink.addClass('opacity-100');
+		if($(this).scrollTop() > 200) {
+			toTopLink.addClass('!opacity-100');
 		} else {
-			toTopLink.removeClass('opacity-100');
+			toTopLink.removeClass('!opacity-100');
 		}
 	});
 </script>

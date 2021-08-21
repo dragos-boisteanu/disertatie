@@ -34,7 +34,7 @@
 				@endisset
 			</div>
 
-			<form method="post" action="{{ route('carts.store', ['productId' => $product->id]) }}"
+			<form id="addToCartForm" method="post" action="{{ route('carts.store', ['productId' => $product->id]) }}"
 				class="mt-4 mb-4 w-full flex items-center gap-6 md:flex-col md:items-start md:w-auto">
 				@csrf
 
