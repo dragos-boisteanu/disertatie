@@ -6,9 +6,16 @@
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
+
+// Home
+Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
+	$trail->push('Home', route('home'));
+});
+
 // Menu
 Breadcrumbs::for('menu', function (BreadcrumbTrail $trail) {
-	$trail->push('Menu', route('home'));
+	$trail->parent('home');
+	$trail->push('Menu', route('menu.index'));
 });
 
 // Menu > Category
@@ -23,7 +30,7 @@ Breadcrumbs::for('product', function (BreadcrumbTrail $trail, $category, $produc
 	$trail->push($product->name, route('products.show', ['categorySlug' => $category->slug, 'productSlug' => $product->slug]));
 });
 
-// ORders
+// Orders
 Breadcrumbs::for('orders', function (BreadcrumbTrail $trail) {
 	$trail->push('Comenzi', route('orders.index'));
 });
@@ -44,4 +51,11 @@ Breadcrumbs::for('reservations', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('reservation', function (BreadcrumbTrail $trail, $reservation) {
 	$trail->parent('reservations');
 	$trail->push('Resevare #' . $reservation->id, route('reservations.show', ['reservation' => $reservation->id]));
+});
+
+
+// Contact
+Breadcrumbs::for('contact', function (BreadcrumbTrail $trail) {
+	$trail->parent('home');
+	$trail->push('Contact', route('contanct'));
 });

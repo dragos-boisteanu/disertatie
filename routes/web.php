@@ -16,14 +16,10 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
-Route::get('/', function () {
-	return view('store.menu.index');
-})->name('home');
-
-
 Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->where('any', '.*')
 	->middleware(['auth', 'dashboard.access'])->name('dashboard');
 // verified
+
 
 Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function () {
 	Route::group(['prefix' => 'account'], function () {
@@ -46,7 +42,9 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
 });
 
 Route::group(['namespace' => 'Web\Client'], function () {
-	Route::get('/', 'MenuController@index')->name('home');
+	Route::get('/', 'HomeController')->name('home');
+
+	Route::get('/contact', 'Web\Client\ContactController@index')->name('contact');
 
 	Route::group(['prefix' => 'meniu'], function () {
 		Route::get('/', 'MenuController@index')->name('menu.index');
@@ -54,9 +52,7 @@ Route::group(['namespace' => 'Web\Client'], function () {
 		Route::get('/{categorySlug}/{productSlug}', 'ProductController@show')->name('products.show');
 	});
 
-
 	Route::group(['prefix' => 'carts'], function () {
-		// Route::get('/', 'CartController@index')->name('carts.index');
 		Route::post('/{productId}', 'CartController@store')->name('carts.store');
 		Route::put('/{id}', 'CartController@update')->name('carts.patch');
 		Route::delete('/{id}', 'CartController@destroy')->name('carts.delete');
@@ -69,8 +65,3 @@ Route::group(['namespace' => 'Web\Client'], function () {
 });
 
 require __DIR__ . '/auth.php';
-
-Route::get('/order-email/{id}', function ($id) {
-	$order = Order::findOrFail($id);
-	return view('mails.order', compact('order'));
-});

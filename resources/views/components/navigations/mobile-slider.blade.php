@@ -27,20 +27,26 @@
 	<ul class="flex-initial mt-4 w-full @guest h-full @endguest text-sm">
 		<li>
 			<a class="block py-2 px-4 border-transparent border-l-4 cursor-pointer outline-none text-gray-500 hover:text-gray-100 {{ request()->is('/') ? '!text-gray-100 border-white bg-trueGray-100 bg-opacity-10' : '' }}"
-				href="/">
+				href="{{ route('home') }}">
+				Acasa
+			</a>
+		</li>
+		<li>
+			<a class="block py-2 px-4 border-transparent border-l-4 cursor-pointer outline-none text-gray-500 hover:text-gray-100 {{ request()->is('/') ? '!text-gray-100 border-white bg-trueGray-100 bg-opacity-10' : '' }}"
+				href="{{ route('menu.index') }}">
 				Meniu
 			</a>
 		</li>
 		<li>
 			<a class="block py-2 px-4 border-transparent border-l-4 cursor-pointer outline-none text-gray-500 hover:text-gray-100 {{ request()->is('contact') ? '!text-gray-100 border-white bg-trueGray-100 bg-opacity-10' : '' }}"
-				href="/">
+				href="{{ route('contact') }}">
 				Contanct
 			</a>
 		</li>
 		<li>
 			<a class="block py-2 px-4 border-transparent border-l-4 cursor-pointer outline-none text-gray-500 hover:text-gray-100 {{ request()->is('about') ? '!text-gray-100 border-white bg-trueGray-100 bg-opacity-10' : '' }}"
 				href="/">
-				About us
+				Despre noi
 			</a>
 		</li>
 	</ul>
