@@ -7,7 +7,24 @@
 		</div>
 	</div>
 
-	<ul class="flex-initial mt-4 w-full text-sm">
+	@guest
+	<div class="flex-1 flex items-end justify-start">
+		<div
+			class="w-full border-b border-trueGray-400 p-4 flex items-center justify-center gap-x-4 cursor-pointer outline-none text-gray-500 px-1">
+			<div class="cursor-pointer outline-none hover:text-gray-100 px-1" data-auth>
+				Autentificare
+			</div>
+			<span class="text-red-700 px-1">
+				/
+			</span>
+			<div class="cursor-pointer hover:text-gray-100 px-1" data-register>
+				Inregistrare
+			</div>
+		</div>
+	</div>
+	@endguest
+
+	<ul class="flex-initial mt-4 w-full @guest h-full @endguest text-sm">
 		<li>
 			<a class="block py-2 px-4 border-transparent border-l-4 cursor-pointer outline-none text-gray-500 hover:text-gray-100 {{ request()->is('/') ? '!text-gray-100 border-white bg-trueGray-100 bg-opacity-10' : '' }}"
 				href="/">
@@ -74,20 +91,5 @@
 		</form>
 	</div>
 	@endauth
-	@guest
-	<div class="flex-1 h-full flex items-end justify-start">
-		<div
-			class="w-full border-t border-trueGray-400 p-4 flex items-center justify-center gap-x-4 cursor-pointer outline-none text-gray-500 px-1">
-			<div class="cursor-pointer outline-none hover:text-gray-100 px-1" data-auth>
-				Autentificare
-			</div>
-			<span class="text-red-700 px-1">
-				/
-			</span>
-			<div class="cursor-pointer hover:text-gray-100 px-1" data-register>
-				Inregistrare
-			</div>
-		</div>
-	</div>
-	@endguest
+
 </div>
