@@ -3,8 +3,8 @@
 @section('content')
 {{ Breadcrumbs::render('reservation', $reservation) }}
 
-<div class="flex flex-wrap items-center justify-between">
-	<h1 class="text-4xl my-4 pl-2 font-semibold text-trueGray-300 ">Reservare #{{ $reservation->id }} </h1>
+<div class="flex items-center justify-between">
+	<h1 class="text-4xl my-4 max-w-[240px]  font-semibold text-trueGray-300 ">Reservare #{{ $reservation->id }} </h1>
 	<x-statuses.reservation-status :statusName="$reservation->status->name"></x-statuses.reservation-status>
 </div>
 
