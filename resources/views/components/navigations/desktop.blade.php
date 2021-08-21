@@ -24,7 +24,7 @@
 
 		<li class="w-24">
 			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black {{ request()->is('about') ? '!border-black' : '' }}"
-				href="{{ route('about-us')}}">
+				href="{{ route('about.us')}}">
 				Despre noi
 			</a>
 		</li>
