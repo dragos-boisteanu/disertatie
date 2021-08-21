@@ -45,6 +45,7 @@ Route::group(['namespace' => 'Web\Client'], function () {
 	Route::get('/', 'HomeController')->name('home');
 
 	Route::get('/contact', 'Web\Client\ContactController@index')->name('contact');
+	Route::view('/about-us', '')->name('about.us');
 
 	Route::group(['prefix' => 'meniu'], function () {
 		Route::get('/', 'MenuController@index')->name('menu.index');
