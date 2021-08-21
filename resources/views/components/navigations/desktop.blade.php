@@ -4,13 +4,13 @@
 	<div class="w-9"></div>
 	<ul class=" w-full flex items-start justify-center gap-x-20">
 		<li class="w-24">
-			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black  {{ request()->is('menu/*') ? '!border-black !text-black ' : '' }}"
+			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black  {{ request()->is('/') ? '!border-black' : '' }}"
 				href="{{ route('home') }}">
 				Acasa
 			</a>
 		</li>
 		<li class="w-24">
-			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black  {{ request()->is('menu/*') ? '!border-black !text-black ' : '' }}"
+			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black  {{ request()->is('meniu') || request()->is('meniu/*') ? '!border-black ' : '' }}"
 				href="{{ route('menu.index') }}">
 				Meniu
 			</a>
@@ -23,13 +23,13 @@
 		</li>
 
 		<li class="w-24">
-			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black {{ request()->is('about') ? '!border-black !text-black ' : '' }}"
-				href="/">
+			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black {{ request()->is('about') ? '!border-black' : '' }}"
+				href="{{ route('about-us')}}">
 				Despre noi
 			</a>
 		</li>
 		<li class="w-24">
-			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black {{ request()->is('contanct') ? '!border-black !text-black ' : '' }}"
+			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black {{ request()->is('contanct') ? '!border-black' : '' }}"
 				href="{{ route('contact') }}">
 				Contanct
 			</a>
