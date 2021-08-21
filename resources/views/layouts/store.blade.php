@@ -47,7 +47,6 @@
 <script src="{{ asset(mix('js/app.js')) }}"></script>
 <script>
 	const toTopLink = $('#toTop');
-
 	$(window).scroll(function(){
 		if($(this).scrollTop() > 200) {
 			toTopLink.addClass('!opacity-100');
