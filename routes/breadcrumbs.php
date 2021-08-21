@@ -15,7 +15,7 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
 // Menu
 Breadcrumbs::for('menu', function (BreadcrumbTrail $trail) {
 	$trail->parent('home');
-	$trail->push('Menu', route('menu.index'));
+	$trail->push('Meniu', route('menu.index'));
 });
 
 // Menu > Category

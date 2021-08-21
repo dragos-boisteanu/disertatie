@@ -32,7 +32,7 @@
 			</a>
 		</li>
 		<li>
-			<a class="block py-2 px-4 border-transparent border-l-4 cursor-pointer outline-none text-gray-500 hover:text-gray-100 {{ request()->is('meniu/*') ? '!text-gray-100 border-white bg-trueGray-100 bg-opacity-10' : '' }}"
+			<a class="block py-2 px-4 border-transparent border-l-4 cursor-pointer outline-none text-gray-500 hover:text-gray-100 {{ request()->is('meniu') || request()->is('meniu/*') ? '!text-gray-100 border-white bg-trueGray-100 bg-opacity-10' : '' }}"
 				href="{{ route('menu.index') }}">
 				Meniu
 			</a>
