@@ -9,7 +9,7 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
 // Home
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
-	$trail->push('Home', route('home'));
+	$trail->push('Acasa', route('home'));
 });
 
 // Menu
