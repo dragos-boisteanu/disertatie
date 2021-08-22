@@ -23,6 +23,6 @@
 }
 
 
-html {
+html, #menuCategories {
   scroll-behavior: smooth;
 }
