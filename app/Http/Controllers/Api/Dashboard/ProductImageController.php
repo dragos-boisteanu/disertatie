@@ -36,7 +36,7 @@ class ProductImageController extends Controller
 	{
 		try {
 			DB::beginTransaction();
-			$this->imageService->deleteImage('products', 'image', $id, $request->imagePath);
+			$this->imageService->deleteImage('products', 'image', $id, $request->imagePath, '/storage/products_images/placeholder.jpg');
 
 			DB::commit();
 			return response()->json(['message' => 'Image removed'], 200);

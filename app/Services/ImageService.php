@@ -36,12 +36,15 @@ class ImageService implements ImageServiceInterface
 		}
 	}
 
-	public function deleteImage(string $table, string $column, int $id, string $imagePath): void
+	public function deleteImage(string $table, string $column, int $id, string $imagePath, ?string $defaultPath = null): void
 	{
 		try {
 			DB::beginTransaction();
 
 			DB::table($table)->where('id', $id)->update([$column => null]);
+			if ($defaultPath) {
+				DB::table($table)->where('id', $id)->update([$column => $defaultPath]);
+			}
 
 			DB::commit();
 		} catch (\Exception $e) {

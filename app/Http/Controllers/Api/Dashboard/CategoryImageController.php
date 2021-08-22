@@ -37,7 +37,7 @@ class CategoryImageController extends Controller
 	{
 		try {
 			DB::beginTransaction();
-			$this->imageService->deleteImage('categories', 'image', $id, $request->imagePath);
+			$this->imageService->deleteImage('categories', 'image', $id, $request->imagePath, null);
 
 			DB::commit();
 			return response()->json(['message' => 'Image removed'], 200);

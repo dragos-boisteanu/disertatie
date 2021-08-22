@@ -32,7 +32,7 @@ class UserImageController extends Controller
 	public function destroy(Request $request, $id)
 	{
 		try {
-			$this->imageService->deleteImage('users', 'avatar', $id, $request->imagePath);
+			$this->imageService->deleteImage('users', 'avatar', $id, $request->imagePath, null);
 
 			return response()->json(['message' => 'Image removed'], 200);
 		} catch (ModelNotFoundException $e) {
