@@ -1,4 +1,8 @@
-import { searchCategories, downloadCategories, postCategory, removeParent, patchCategory, updatePosition, updateSubCategoryPosition, addDiscount, removeDiscount, disableCategory, restoreCategory, deleteCategory } from '../../api/categories.api';
+import {
+	searchCategories, downloadCategories, postCategory, removeParent,
+	patchCategory, updatePosition, updateSubCategoryPosition, addDiscount,
+	removeDiscount, disableCategory, restoreCategory, deleteCategory, removeImage
+} from '../../api/categories.api';
 
 import _findIndex from 'lodash/findIndex';
 import _filter from 'lodash/filter';
@@ -193,6 +197,22 @@ const actions = {
 			commit('REMOVE_PARENT', payload);
 
 			return response;
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	async removeImage({ commit }, payload) {
+		try {
+			const data = {
+				id: payload.id,
+				image: payload.image
+			}
+			const response = await removeImage(data);
+
+			payload.image = response.data.image;
+
+			commit('REMOVE_CATEGORY_IMAGE', payload);
 		} catch (error) {
 			throw error;
 		}
@@ -413,6 +433,14 @@ const mutations = {
 		state.categories[parentIndex].subCategories.splice(categoryIndex, 1);
 
 		state.categories.push(category);
+	},
+
+	REMOVE_CATEGORY_IMAGE(state, payload) {
+		const vm = payload.vm;
+
+		const categoryIndex = state.categories.findIndex(category => category.id === payload.parentId);
+
+		vm.$set(state.categories[categoryIndex], 'image', payload.image);
 	}
 
 }

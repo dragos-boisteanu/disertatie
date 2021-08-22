@@ -1,5 +1,4 @@
 import axios from "axios";
-import Vue from "vue";
 
 let baseURL = "";
 
@@ -10,6 +9,7 @@ if (process.env.MIX_ENV === 'local') {
 } else if (process.env.MIX_ENV === 'live') {
 	baseURL = "http://46.41.137.118/api";
 }
+
 const httpClient = axios.create({
 	baseURL,
 	timeout: 60000, // indicates, 1000ms ie. 1 second
