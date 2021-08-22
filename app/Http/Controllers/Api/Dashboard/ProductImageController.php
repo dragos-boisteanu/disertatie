@@ -41,6 +41,7 @@ class ProductImageController extends Controller
 			DB::commit();
 			return response()->json(['message' => 'Image removed'], 200);
 		} catch (\Exception $e) {
+			DB::rollBack();
 			debug($e);
 			return response()->json(['message' => 'Something went wrong, try again later'], 500);
 		}
