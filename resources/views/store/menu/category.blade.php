@@ -5,7 +5,7 @@
 <x-menu>
 	@include('includes.menu-categories')
 	{{-- @include('includes.menu-categories-select') --}}
-	<ul class="text-gray-600 w-full lg:mt-6">
+	<ul class="text-gray-600 w-full p-4 lg:mt-6">
 		@if ($category->subCategories->count() > 0)
 		@foreach ($category->subCategories as $subCategory)
 		@if ($subCategory->subProducts->count() > 0)

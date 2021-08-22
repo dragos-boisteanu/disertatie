@@ -2,7 +2,7 @@
 
 @section('content')
 {{ Breadcrumbs::render('product', $product->category, $product) }}
-<div>
+<div class="p-4">
 	<div class="md:flex md:justify-between md:items-center md:gap-x-10">
 		<div class="relative w-full h-[170px] px-8 py-2 md:w-[300px] md:px-0 md:h-[234px] lg:w-[350px]">
 			<img src="{{ asset("$product->image")}}" class="w-full h-full rounded shadow-sm object-cover" />

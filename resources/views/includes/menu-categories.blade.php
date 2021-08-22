@@ -1,8 +1,8 @@
 {{-- should be full width on mobile and tablet --}}
 
 <div id="menuCategories"
-	class="w-full sticky z-[1] top-0 right-0 text-gray-600 bg-gray-800 overflow-x-auto lg:bg-transparent lg:overflow-hidden lg:w-28 lg:top-8 lg:shadow-none">
-	<ul class="flex flex-row items-center gap-x-8 lg:block overflow-x-auto">
+	class="w-full sticky z-[1] top-0 right-0 text-gray-600 bg-gray-800  overflow-x-auto lg:bg-transparent lg:overflow-hidden lg:w-28 lg:top-8 lg:shadow-none">
+	<ul class="flex flex-row items-center gap-x-8 lg:block overflow-x-auto py-1 px-4">
 		@foreach ($categories as $category)
 		<li
 			class="text-center text-lg mt-2 pb-2 w-full border-b border-transparent hover:text-gray-300 lg:hover:border-gray-300 @if (Route::current()->parameter('categorySlug') == $category->slug) !text-gray-300 lg:!border-gray-300 @endif">
@@ -22,9 +22,11 @@
 
 	$(window).scroll(function(){
 	if($(this).scrollTop() > 338) {
-		menuCategories.addClass('shadow-md');
+		menuCategories.removeClass('bg-gray-800')
+		menuCategories.addClass('shadow-lg bg-trueGray-800');
 	} else {
-		menuCategories.removeClass('shadow-md');
+		menuCategories.addClass('bg-gray-800');
+		menuCategories.removeClass('shadow-lg bg-trueGray-800');
 	}
 	});
 </script>
