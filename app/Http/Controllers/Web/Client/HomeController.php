@@ -17,7 +17,7 @@ class HomeController extends Controller
 	 */
 	public function __invoke(Request $request)
 	{
-		$categories = Category::orderBy('position', 'asc')->get(['id', 'slug', 'name']);
+		$categories = Category::orderBy('position', 'asc')->whereNull('parent_id')->get(['id', 'slug', 'name']);
 		return view('home', compact('categories'));
 	}
 }
