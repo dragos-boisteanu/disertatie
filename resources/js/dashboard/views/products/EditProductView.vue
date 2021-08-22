@@ -65,6 +65,7 @@
               <ImageUploadComponent
                 :url="url"
                 :clear="clearImage"
+                @removed="resetClear"
                 @setImagePath="setImagePath"
                 @removeImagePath="removeImagePath"
               ></ImageUploadComponent>
@@ -606,6 +607,10 @@ export default {
         }
         console.log(error);
       }
+    },
+
+    resetClear() {
+      this.clearImage = false;
     },
 
     setWaiting(value) {

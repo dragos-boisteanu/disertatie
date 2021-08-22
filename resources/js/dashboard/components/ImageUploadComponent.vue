@@ -70,9 +70,11 @@ export default {
   },
 
   watch: {
-    clear: function (newVal, oldVal) {
+    clear: function (newVal) {
+      console.log(newVal);
       if (newVal) {
         this.$refs.pond.removeFile({ revert: true });
+        this.$emit("removed");
       }
     },
   },
