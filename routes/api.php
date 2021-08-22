@@ -27,6 +27,9 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::post('/{id}/discounts/{discountId}', 'CategoryDiscountController@addDiscount');
 		Route::delete('/{id}/discounts', 'CategoryDiscountController@removeDiscount');
 
+		Route::post('/{id}/image', 'CategoryImageController@store');
+		Route::delete('/{id}/image', 'CategoryImageController@destroy');
+
 		Route::patch('/parent-removal/{id}', 'CategoryController@removeParent');
 	});
 
