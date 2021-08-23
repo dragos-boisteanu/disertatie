@@ -78,7 +78,7 @@
           @updatefiles="onUpdateFiles"
         ></add-image-component>
 
-        <div class="w-full mt-4">
+        <div class="w-full mt-4 flex flex-col gap-y-4">
           <!-- IMAGE UPLOAD ENDS -->
 
           <InputGroup
