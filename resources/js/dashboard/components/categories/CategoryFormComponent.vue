@@ -359,6 +359,7 @@ export default {
     getSelectedCategory: function (value) {
       if (value) {
         this.category = JSON.parse(JSON.stringify(value));
+        this.clear = true;
       } else {
         this.$v.$reset();
 
