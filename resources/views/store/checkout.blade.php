@@ -383,8 +383,10 @@
 		if ($('#deliveryAddressSelect').val() == 'new') {
 			$('#deliveryMethodAddress').append(newAddressField);
 		}
-	} else {
+	} else if(selectedDeliveryMethodValue) {
 		orderTotalValue.html((parseFloat(deliveryMehtodPrice.html()) + parseFloat(totalProductsValue.html())).toFixed(2))
+	} else {
+		orderTotalValue.html(parseFloat(totalProductsValue.html()).toFixed(2))
 	}
 
 	$('input[name=deliveryMethodId]').click(function(event) {
