@@ -369,6 +369,8 @@ export default {
           discountId: "",
           parentId: null,
         };
+
+        this.clear = true;
       }
     },
   },
