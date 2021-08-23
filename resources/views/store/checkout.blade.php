@@ -182,7 +182,7 @@
 				<div>
 					<h2 class="text-lg text-trueGray-300 my-4 pl-2">Observatii</h2>
 					<textarea class="flex-1 w-full border p-2 text-sm rounded focus:ring focus:ring-orange-600"
-						name="observations"></textarea>
+						name="observations">{{ old('observations')}}</textarea>
 				</div>
 
 				<div class="my-4 bg-trueGray-50 rounded p-2 flex items-center justify-end gap-x-4">
@@ -363,8 +363,6 @@
             element.classList.remove('!border-red-600');
         })
     });
-
-
 
     if ($('input[name=deliveryMethodId]:checked').val() == 1) {
 
