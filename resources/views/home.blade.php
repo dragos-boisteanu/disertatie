@@ -9,7 +9,7 @@
 			<a class="block w-full h-full p-3" href="{{ route('category.show', ['categorySlug'=>$category->slug])}}">
 				<div class="h-80 w-full">
 					@isset($category->image)
-					<img class="h-full w-full rounded bg-cover" src="{{ asset("$category->image")}}" alt="category image" />
+					<img class="h-full w-full rounded object-cover" src="{{ asset("$category->image")}}" alt="category image" />
 					@else
 					<img class="h-full w-full rounded bg-fill"
 						src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="category image" />
