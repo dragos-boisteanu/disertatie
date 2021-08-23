@@ -121,7 +121,7 @@
 					<div class="font-semibold">
 						Total produse
 					</div>
-					<div>
+					<div id="totalProductsValue">
 						{{ $cart->totalValue }} Ron
 					</div>
 				</div>
@@ -219,207 +219,212 @@
 <script>
 	const auth = "{{ Auth::check() }}"
 
-    @auth
-        const authAddress =
-        `
-        <select id="deliveryAddressSelect" name="deliveryAddress"
-            class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('deliveryAddress')) !border-red-600 @endif">
-            <option value="" selected disabled>Alege adresa de livrare</option>
-            @foreach ($addresses as $address)
-                <option value="{{ $address->id }}" @if ($address->is_selected && old('deliveryAddress') == '') selected
-                                @elseif (old('deliveryAddress') == $address->id && old('deliveryAddress') != 'new')
-                                                selected @endif>
-                    {{ $address->address }}
-                </option>
-            @endforeach
-            <option value="new" @if (old('deliveryAddress') == 'new') selected @endif>Adresa noua</option>
-        </select>
-        @if ($errors->has('deliveryAddress'))
-            <div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('deliveryAddress') }}</div>
-        @endif
-        `
+	@auth
+			const authAddress =
+			`
+			<select id="deliveryAddressSelect" name="deliveryAddress"
+					class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('deliveryAddress')) !border-red-600 @endif">
+					<option value="" selected disabled>Alege adresa de livrare</option>
+					@foreach ($addresses as $address)
+							<option value="{{ $address->id }}" @if ($address->is_selected && old('deliveryAddress') == '') selected
+															@elseif (old('deliveryAddress') == $address->id && old('deliveryAddress') != 'new')
+																							selected @endif>
+									{{ $address->address }}
+							</option>
+					@endforeach
+					<option value="new" @if (old('deliveryAddress') == 'new') selected @endif>Adresa noua</option>
+			</select>
+			@if ($errors->has('deliveryAddress'))
+					<div class="text-xs font-semibold text-red-600 mt-2">{{ $errors->first('deliveryAddress') }}</div>
+			@endif
+			`
 
-        const newAddressField =
-        `
-        <div id="newAddressField">
-            <div class="w-full">
-                <div class="w-full mt-4">
-                    <input type="text" id="newAddress" name="newAddress" value="{{ old('newAddress') }}"
-                        class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('newAddress')) !border-red-600 @endif"
-                    placeholder="Adresa">
-                    @if ($errors->has('newAddress'))
-                        <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
-                            {{ $errors->first('newAddress') }}</div>
-                    @endif
-                </div>
-            </div>
-        </div>
-        `;
-    @endauth
+			const newAddressField =
+			`
+			<div id="newAddressField">
+					<div class="w-full">
+							<div class="w-full mt-4">
+									<input type="text" id="newAddress" name="newAddress" value="{{ old('newAddress') }}"
+											class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('newAddress')) !border-red-600 @endif"
+									placeholder="Adresa">
+									@if ($errors->has('newAddress'))
+											<div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+													{{ $errors->first('newAddress') }}</div>
+									@endif
+							</div>
+					</div>
+			</div>
+			`;
+	@endauth
 
-    @guest
-        const guestAddress =
-        `
-        <div class="w-full">
-            <input type="text" id="name" name="name" value="{{ old('name') }}"
-                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
-            @if ($errors->has('name'))
-                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('name') }}
-                </div>
-            @endif
-        </div>
+	@guest
+			const guestAddress =
+			`
+			<div class="w-full">
+					<input type="text" id="name" name="name" value="{{ old('name') }}"
+							class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
+					@if ($errors->has('name'))
+							<div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('name') }}
+							</div>
+					@endif
+			</div>
 
-        <div class="w-full mt-4">
-            <input type="email" id="email" name="email" value="{{ old('email') }}"
-                class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
-            @if ($errors->has('email'))
-                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('email') }}
-                </div>
-            @endif
-        </div>
+			<div class="w-full mt-4">
+					<input type="email" id="email" name="email" value="{{ old('email') }}"
+							class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
+					@if ($errors->has('email'))
+							<div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('email') }}
+							</div>
+					@endif
+			</div>
 
-        <div class="w-full mt-4">
-            <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
-                class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
-            @if ($errors->has('phoneNumber'))
-                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
-                    {{ $errors->first('phoneNumber') }}</div>
-            @endif
-        </div>
+			<div class="w-full mt-4">
+					<input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
+							class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar telefon">
+					@if ($errors->has('phoneNumber'))
+							<div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+									{{ $errors->first('phoneNumber') }}</div>
+					@endif
+			</div>
 
-        <div class="w-full mt-4">
-            <input type="text" id="address" name="address" value="{{ old('address') }}"
-                class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('address')) !border-red-600 @endif" placeholder="Adresa">
-            @if ($errors->has('address'))
-                <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('address') }}
-                </div>
-            @endif
-        </div>
-        `
+			<div class="w-full mt-4">
+					<input type="text" id="address" name="address" value="{{ old('address') }}"
+							class="w-full text-sm border p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('address')) !border-red-600 @endif" placeholder="Adresa">
+					@if ($errors->has('address'))
+							<div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">{{ $errors->first('address') }}
+							</div>
+					@endif
+			</div>
+			`
 
-        const localDeliveryData =
-        `
-        <div id="localDeliveryData" class="p-4 border-t border-gray-800">
-            <div class="w-full">
-                <input type="text" id="name" name="name" value="{{ old('name') }}"
-                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
-                @if ($errors->has('name'))
-                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
-                        {{ $errors->first('name') }}</div>
-                @endif
-            </div>
+			const localDeliveryData =
+			`
+			<div id="localDeliveryData" class="p-4 border-t border-gray-800">
+					<div class="w-full">
+							<input type="text" id="name" name="name" value="{{ old('name') }}"
+									class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('name')) !border-red-600 @endif" placeholder="Nume">
+							@if ($errors->has('name'))
+									<div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+											{{ $errors->first('name') }}</div>
+							@endif
+					</div>
 
-            <div class="w-full mt-4">
-                <input type="email" id="email" name="email" value="{{ old('email') }}"
-                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
-                @if ($errors->has('email'))
-                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
-                        {{ $errors->first('email') }}</div>
-                @endif
-            </div>
+					<div class="w-full mt-4">
+							<input type="email" id="email" name="email" value="{{ old('email') }}"
+									class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('email')) !border-red-600 @endif" placeholder="Email">
+							@if ($errors->has('email'))
+									<div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+											{{ $errors->first('email') }}</div>
+							@endif
+					</div>
 
-            <div class="w-full mt-4">
-                <input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
-                    class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar
-                telefon">
-                @if ($errors->has('phoneNumber'))
-                    <div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
-                        {{ $errors->first('phoneNumber') }}</div>
-                @endif
-            </div>
+					<div class="w-full mt-4">
+							<input type="text" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}"
+									class="w-full border p-2 text-sm rounded-sm focus:ring focus:ring-orange-600  @if ($errors->has('phoneNumber')) !border-red-600 @endif" placeholder="Numar
+							telefon">
+							@if ($errors->has('phoneNumber'))
+									<div class="text-xs font-semibold text-red-600 mt-2 backend-validation-error">
+											{{ $errors->first('phoneNumber') }}</div>
+							@endif
+					</div>
 
-        </div>
+			</div>
 
-        `
+			`
 
-        if($('input[name=deliveryMethodId]:checked').val() == 2) {
-        $('#deliveryMethod').append(localDeliveryData);
-        }
-    @endguest
+			if($('input[name=deliveryMethodId]:checked').val() == 2) {
+			$('#deliveryMethod').append(localDeliveryData);
+			}
+	@endguest
 
-    const deliveryMethodAddress =
-        `
-        <div id="deliveryMethodAddress" class="p-4 border-t border-gray-800">
-           @auth
-               ${authAddress}
-           @endauth
+	const deliveryMethodAddress =
+			`
+			<div id="deliveryMethodAddress" class="p-4 border-t border-gray-800">
+					@auth
+							${authAddress}
+					@endauth
 
-           @guest
-               ${guestAddress}
-           @endguest
-        </div>
-    `
+					@guest
+							${guestAddress}
+					@endguest
+			</div>
+	`
 
-    const deliveryMethod = $('input[name=deliveryMethodId]');
-    const orderTotalValue = $('#orderTotalValue');
+	const deliveryMethod = $('input[name=deliveryMethodId]');
+	const orderTotalValue = $('#orderTotalValue');
+	const totalProductsValue = $('#totalProductsValue');
 
-    $('input[name=deliveryMethodId]').change(function() {
-        $('.backend-validation-error').each((index, element) => {
-            element.remove();
-        })
+	$('input[name=deliveryMethodId]').change(function() {
+		$('.backend-validation-error').each((index, element) => {
+				element.remove();
+		})
 
-        $('.\\!border-red-600').each((index, element) => {
-            element.value = ""
-            element.classList.remove('!border-red-600');
-        })
-    });
+		$('.\\!border-red-600').each((index, element) => {
+				element.value = ""
+				element.classList.remove('!border-red-600');
+		})
+	});
 
-    if ($('input[name=deliveryMethodId]:checked').val() == 1) {
+	const selectedDeliveryMethodValue = $('input[name=deliveryMethodId]:checked').val();
+	const deliveryMehtodPrice = $(`#dmp${selectedDeliveryMethodValue}`);
 
-        $('#deliveryMethod').append(deliveryMethodAddress);
+	if (selectedDeliveryMethodValue == 1) {
+		orderTotalValue.html((parseFloat(deliveryMehtodPrice.html()) + parseFloat(totalProductsValue.html())).toFixed(2))
+		$('#deliveryMethod').append(deliveryMethodAddress);
 
-        $('#deliveryAddressSelect').change(function() {
-            if ($(this).val() === 'new') {
-                $('#deliveryMethodAddress').append(newAddressField);
-            } else {
-                $('#newAddressField').remove();
-            }
-        })
+		$('#deliveryAddressSelect').change(function() {
+			if ($(this).val() === 'new') {
+				$('#deliveryMethodAddress').append(newAddressField);
+			} else {
+				$('#newAddressField').remove();
+			}
+		})
 
-        if ($('#deliveryAddressSelect').val() == 'new') {
-            $('#deliveryMethodAddress').append(newAddressField);
-        }
-    }
+		if ($('#deliveryAddressSelect').val() == 'new') {
+			$('#deliveryMethodAddress').append(newAddressField);
+		}
+	} else {
+		orderTotalValue.html((parseFloat(deliveryMehtodPrice.html()) + parseFloat(totalProductsValue.html())).toFixed(2))
+	}
 
-    $('input[name=deliveryMethodId]').click(function(event) {
+	$('input[name=deliveryMethodId]').click(function(event) {
+		const deliveryMethodRadioValue = $(this).val();
+		const deliveryMehtodPrice = $(`#dmp${deliveryMethodRadioValue}`);
 
-        const deliveryMethodRadioValue = $(this).val();
-        const deliveryMehtodPrice = $(`#dmp${deliveryMethodRadioValue}`);
+		orderTotalValue.html((parseFloat(deliveryMehtodPrice.html()) + parseFloat(totalProductsValue.html())).toFixed(2))
 
-        orderTotalValue.html((parseFloat(deliveryMehtodPrice.html()) + 24.23).toFixed(2))
+		if (deliveryMethodRadioValue == 1) {
+				$('#localDeliveryData').remove();
+				if ($('#deliveryMethod').find('#deliveryMethodAddress').length === 0) {
+						$('#deliveryMethod').append(deliveryMethodAddress);
 
-        if (deliveryMethodRadioValue == 1) {
-            $('#localDeliveryData').remove();
-            if ($('#deliveryMethod').find('#deliveryMethodAddress').length === 0) {
-                $('#deliveryMethod').append(deliveryMethodAddress);
+						if (auth) {
+								const deliveryMethodAddress = $('#deliveryMethodAddress');
+								const deliveryAddressSelect = $('#deliveryAddressSelect');
 
-                if (auth) {
-                    const deliveryMethodAddress = $('#deliveryMethodAddress');
-                    const deliveryAddressSelect = $('#deliveryAddressSelect');
+								deliveryAddressSelect.change(function() {
+										if ($(this).val() === 'new') {
+												deliveryMethodAddress.append(newAddressField);
+										} else {
+												$('#newAddressField').remove();
+										}
+								})
 
-                    deliveryAddressSelect.change(function() {
-                        if ($(this).val() === 'new') {
-                            deliveryMethodAddress.append(newAddressField);
-                        } else {
-                            $('#newAddressField').remove();
-                        }
-                    })
-
-                    if (deliveryAddressSelect.val() == 'new') {
-                        deliveryMethodAddress.append(newAddressField);
-                    }
-                }
-            }
-        } else if (deliveryMethodRadioValue == 2 && !auth) {
-            $('#deliveryMethodAddress').remove();
-            if ($('#deliveryMethod').find('#localDeliveryData').length === 0) {
-                $('#deliveryMethod').append(localDeliveryData);
-            }
-        } else {
-            $('#localDeliveryData').remove();
-            $('#deliveryMethodAddress').remove();
-        }
-    });
+								if (deliveryAddressSelect.val() == 'new') {
+										deliveryMethodAddress.append(newAddressField);
+								}
+						}
+				}
+		} else if (deliveryMethodRadioValue == 2 && !auth) {
+				$('#deliveryMethodAddress').remove();
+				if ($('#deliveryMethod').find('#localDeliveryData').length === 0) {
+						$('#deliveryMethod').append(localDeliveryData);
+				}
+		} else {
+				$('#localDeliveryData').remove();
+				$('#deliveryMethodAddress').remove();
+		}
+	});
 </script>
 
 </html>
