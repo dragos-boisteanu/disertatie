@@ -21,7 +21,7 @@ const disableCategory = (id) => httpClient.delete(`${BASE_URL}/${id}/disable`, {
 const restoreCategory = (id) => httpClient.post(`${BASE_URL}/${id}/restore`);
 const deleteCategory = (id) => httpClient.delete(`${BASE_URL}/${id}`, { data: id });
 
-const removeImage = (data) => httpClient.delete(`${END_POINT}/${data.id}/image`, { data: { id: data.id, imagePath: data.image } });
+const removeImage = (data) => httpClient.delete(`${BASE_URL}/${data.id}/image`, { data: { id: data.id, imagePath: data.image } });
 
 export {
 	searchCategories,

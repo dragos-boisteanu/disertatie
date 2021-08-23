@@ -263,7 +263,7 @@
                 }"
                 :disabled="waiting || hasNoSubCategories"
               >
-                <option value="" disabled>Select sub category</option>
+                <option value="" selected disabled>Select sub category</option>
                 <option
                   v-for="subCategory in subCategories"
                   :key="subCategory.id"
@@ -421,6 +421,10 @@ export default {
     }
   },
 
+  mounted() {
+    console.log(this.localProduct.subCategoryId);
+  },
+
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
     ...mapGetters("Units", ["getUnits"]),
@@ -446,7 +450,7 @@ export default {
       ingredientInput: "",
       foundIngredients: [],
 
-      subCategories: null,
+      subCategories: [],
 
       product: null,
 
@@ -510,13 +514,22 @@ export default {
     "localProduct.categoryId": {
       immediate: true,
       handler(value) {
-        this.subCategories = [];
+        if (value) {
+          //   const selectedCategory = this.getCategories.find(
+          //     (category) => category.id === value
+          //   );
 
-        this.getCategories.forEach((category) => {
-          if (category.id == value) {
-            this.subCategories.push(...category.subCategories);
-          }
-        });
+          //   this.subCategories.splice(0, this.subCategories.length);
+          //   this.subCategories.push(...selectedCategory.subCategories);
+          // }
+
+          this.getCategories.some((category) => {
+            if (category.id == value) {
+              this.subCategories.push(...category.subCategories);
+              return true;
+            }
+          });
+        }
       },
     },
   },

@@ -22,6 +22,8 @@ class ImageService implements ImageServiceInterface
 	public function storeImage(UploadedFile $image, string $storagePath, string $table, string $column, int $id): string
 	{
 		try {
+			DB::beginTransaction();
+
 			$files = Storage::allFiles($storagePath);
 			Storage::delete($files);
 
@@ -30,8 +32,10 @@ class ImageService implements ImageServiceInterface
 
 			DB::table($table)->where('id', $id)->update([$column => $path]);
 
+			DB::commit();
 			return $path;
 		} catch (\Exception $e) {
+			DB::rollBack();
 			throw new Exception('Failed to save image, try again later');
 		}
 	}
@@ -42,6 +46,7 @@ class ImageService implements ImageServiceInterface
 			DB::beginTransaction();
 
 			DB::table($table)->where('id', $id)->update([$column => null]);
+
 			if ($defaultPath) {
 				DB::table($table)->where('id', $id)->update([$column => $defaultPath]);
 			}

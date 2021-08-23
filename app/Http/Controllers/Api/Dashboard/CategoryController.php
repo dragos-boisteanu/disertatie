@@ -10,14 +10,23 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
+use App\Interfaces\ImageServiceInterface;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Resources\Category as CategoryResrouce;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CategoryController extends Controller
 {
+
+	private $imageService;
+
+	public function __construct(ImageServiceInterface $imageService)
+	{
+		$this->imageService = $imageService;
+	}
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -74,6 +83,9 @@ class CategoryController extends Controller
 			$input['position'] = $lastPosition + 1;
 
 			$category = Category::create($input);
+			$storagePath = '/categories_image/' . $category->id;
+			$this->imageService->storeImage($request->image, $storagePath, 'categories', 'image', $category->id);
+			$category->refresh();
 
 			debug(new CategoryResrouce($category));
 
@@ -167,8 +179,10 @@ class CategoryController extends Controller
 					->decrement('position');
 			}
 
-			$category->forceDelete();
+			$storagePath = '/categories_images/' . $id;
+			Storage::deleteDirectory($storagePath);
 
+			$category->forceDelete();
 
 			DB::commit();
 

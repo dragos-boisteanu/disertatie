@@ -17,20 +17,14 @@
           class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
         >
           <!-- IMAGE UPLOAD -->
-          <file-pond
-            name="image"
-            ref="pond"
-            label-idle="Upload image"
-            accepted-file-types="image/jpeg"
-            :allow-multiple="false"
-            :files="files"
-            :allowImageValidateSize="true"
-            :imageValidateSizeMinWidth="imageSize"
-            :imageValidateSizeMinHeight="imageSize"
-            :allowFileSizeValidation="true"
-            maxFileSize="15MB"
+          <add-image-component
+            max-file-size="15MB"
+            imageMinSize="2000"
+            :clear="clear"
+            :allow-image-validate-size="true"
+            :removed="resetClear"
             @updatefiles="onUpdateFiles"
-          />
+          ></add-image-component>
 
           <div
             class="
@@ -347,7 +341,7 @@ import { mapActions, mapGetters } from "vuex";
 
 import ViewContainer from "../ViewContainer";
 
-import ImageUploadComponent from "../../components/ImageUploadComponent";
+import AddImageComponent from "../../components/AddImageComponent.vue";
 import IngredientsComponent from "../../components/products/IngredientsComponent";
 
 import DiscountComponent from "../../components/discounts/DiscountComponent.vue";
@@ -374,26 +368,6 @@ import {
 import { alphaSpaces, alphaNumSpaces } from "../../validators/index";
 
 import { storeProduct } from "../../api/products.api";
-
-import vueFilePond from "vue-filepond";
-import "filepond/dist/filepond.min.css";
-
-import FilePondPluginImageValidateSize from "filepond-plugin-image-validate-size";
-
-import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
-
-import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-
-const FilePond = vueFilePond(
-  FilePondPluginFileValidateType,
-  FilePondPluginImageValidateSize,
-  FilePondPluginFileValidateSize,
-  FilePondPluginImagePreview
-);
 
 export default {
   computed: {
@@ -427,6 +401,7 @@ export default {
     return {
       imageSize: "2000",
       files: [],
+      clear: false,
 
       checkingBarcode: false,
       waiting: false,
@@ -493,10 +468,15 @@ export default {
     ...mapActions("Products", ["addProduct", "getProductByBarcode"]),
 
     onUpdateFiles(files) {
-      if (files) {
+      if (files.length) {
         this.product.image = files[0].file;
       }
     },
+
+    resetClear() {
+      this.clear = false;
+    },
+
     async submit() {
       this.$v.$touch();
 
@@ -551,6 +531,8 @@ export default {
             discountId: "",
             ingredients: [],
           };
+
+          this.clear = true;
 
           this.files = [];
 
@@ -639,7 +621,7 @@ export default {
 
   components: {
     ViewContainer,
-    ImageUploadComponent,
+    AddImageComponent,
     IngredientsComponent,
     DiscountComponent,
     Input,

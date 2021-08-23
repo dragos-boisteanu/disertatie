@@ -4,11 +4,7 @@ import {
 	removeDiscount, disableCategory, restoreCategory, deleteCategory, removeImage
 } from '../../api/categories.api';
 
-import _findIndex from 'lodash/findIndex';
-import _filter from 'lodash/filter';
 import _isEqual from 'lodash/isEqual'
-
-
 
 const initialState = () => ({
 	categories: [],
@@ -49,15 +45,15 @@ const actions = {
 	async postCategory({ commit }, payload) {
 		try {
 			const response = await postCategory(payload);
-			payload.id = response.data.id;
-			payload.color = response.data.color;
-			if (payload.parentId) {
-				payload.parentName = response.data.parentName
-				payload.vat = response.data.vat
-			} else {
-				payload.parentName = null;
-				payload.parentId = null;
-			}
+			// payload.id = response.data.id;
+			// payload.color = response.data.color;
+			// if (payload.parentId) {
+			// 	payload.parentName = response.data.parentName
+			// 	payload.vat = response.data.vat
+			// } else {
+			// 	payload.parentName = null;
+			// 	payload.parentId = null;
+			// }
 
 			commit('ADD_CATEGORY', response.data.category);
 
@@ -179,10 +175,10 @@ const actions = {
 
 	async removeDiscount({ commit }, payload) {
 		try {
-			const reponse = await removeDiscount(payload.id);
+			const response = await removeDiscount(payload.id);
 			commit('REMOVE_DISCOUNT', payload);
 
-			return reponse;
+			return response;
 
 		} catch (error) {
 			throw error;
@@ -202,17 +198,18 @@ const actions = {
 		}
 	},
 
-	async removeImage({ commit }, payload) {
+	async removeCategoryImage({ commit }, payload) {
 		try {
 			const data = {
 				id: payload.id,
 				image: payload.image
 			}
+
 			const response = await removeImage(data);
 
-			payload.image = response.data.image;
-
 			commit('REMOVE_CATEGORY_IMAGE', payload);
+
+			return response;
 		} catch (error) {
 			throw error;
 		}
@@ -307,11 +304,11 @@ const mutations = {
 
 	DELETE_CATEGORY(state, payload) {
 		if (payload.parentId) {
-			const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.parentId)]);
-			const categoryIndex = _findIndex(state.categories[parentCategoryIndex].subCategories, ['id', parseInt(payload.id)]);
+			const parentCategoryIndex = state.categories.findIndex(category => category.id, parseInt(payload.parentId));
+			const categoryIndex = state.categories[parentCategoryIndex].subCategories.findIndex(category => category.id, parseInt(payload.id));
 			state.categories[parentCategoryIndex].subCategories.splice(categoryIndex, 1);
 		} else {
-			const categoryIndex = _findIndex(state.categories, ['id', payload.id]);
+			const categoryIndex = state.categories.findIndex(category => category.id, payload.id);
 			state.categories.splice(categoryIndex, 1);
 		}
 	},
@@ -320,12 +317,12 @@ const mutations = {
 		const vm = payload.vm;
 
 		if (payload.category.parentId) {
-			const parentCategoryIndex = _findIndex(state.categories, ['id', parseInt(payload.category.parentId)]);
-			const categoryIndex = _findIndex(state.categories[parentCategoryIndex].subCategories, ['id', parseInt(payload.category.id)]);
+			const parentCategoryIndex = state.categories.findIndex(category => category.id, parseInt(payload.category.parentId));
+			const categoryIndex = state.categories[parentCategoryIndex].subCategories.finIndex(category => category.id, parseInt(payload.category.id));
 
 			vm.$set(state.categories[parentCategoryIndex].subCategories[categoryIndex], 'deletedAt', payload.category.deletedAt);
 		} else {
-			const categoryIndex = _findIndex(state.categories, ['id', payload.category.id]);
+			const categoryIndex = state.categories.finIndex(category.id, payload.category.id);
 			vm.$set(state.categories[categoryIndex], 'deletedAt', payload.category.deletedAt);
 		}
 
@@ -438,9 +435,9 @@ const mutations = {
 	REMOVE_CATEGORY_IMAGE(state, payload) {
 		const vm = payload.vm;
 
-		const categoryIndex = state.categories.findIndex(category => category.id === payload.parentId);
+		const categoryIndex = state.categories.findIndex(category => category.id === payload.id);
 
-		vm.$set(state.categories[categoryIndex], 'image', payload.image);
+		vm.$set(state.categories[categoryIndex], 'image', "");
 	}
 
 }

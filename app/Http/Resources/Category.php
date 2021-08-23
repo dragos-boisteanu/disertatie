@@ -17,6 +17,7 @@ class Category extends JsonResource
 	{
 		$arrayData = [
 			'id' => $this->id,
+			'image' => $this->image,
 			'name' => $this->name,
 			'vat' => $this->vat,
 			'color' => $this->color,

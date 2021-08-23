@@ -18,20 +18,14 @@
         >
           <h2 class="mb-5 text-xl font-semibold">Account details</h2>
 
-          <file-pond
-            name="image"
-            ref="pond"
-            label-idle="Upload image"
-            accepted-file-types="image/jpeg"
-            :allow-multiple="false"
-            :files="files"
-            :allowImageValidateSize="true"
-            :imageValidateSizeMinWidth="imageSize"
-            :imageValidateSizeMinHeight="imageSize"
-            :allowFileSizeValidation="true"
-            maxFileSize="15MB"
+          <add-image-component
+            max-file-size="15MB"
+            imageMinSize="2000"
+            :clear="clear"
+            :allow-image-validate-size="true"
+            :removed="resetClear"
             @updatefiles="onUpdateFiles"
-          />
+          ></add-image-component>
 
           <div
             class="
@@ -278,32 +272,12 @@
 import { mapActions, mapGetters } from "vuex";
 import ViewContainer from "../ViewContainer";
 
-import ImageUploadComponent from "../../components/ImageUploadComponent";
-
 import Input from "../../components/inputs/TextInputComponent";
 import InputGroup from "../../components/inputs/InputGroupComponent";
 import Select from "../../components/inputs/SelectInputComponent";
 import Button from "../../components/buttons/ButtonComponent";
 
-import vueFilePond from "vue-filepond";
-import "filepond/dist/filepond.min.css";
-
-import FilePondPluginImageValidateSize from "filepond-plugin-image-validate-size";
-
-import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
-
-import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
-
-const FilePond = vueFilePond(
-  FilePondPluginFileValidateType,
-  FilePondPluginImageValidateSize,
-  FilePondPluginFileValidateSize,
-  FilePondPluginImagePreview
-);
+import AddImageComponent from "../../components/AddImageComponent.vue";
 
 import {
   required,
@@ -318,7 +292,7 @@ import {
   phoneNumber,
 } from "../../validators/index";
 
-import { storeUser, removeTempImage } from "../../api/users.api";
+import { storeUser } from "../../api/users.api";
 
 export default {
   computed: {
@@ -342,6 +316,7 @@ export default {
     return {
       imageSize: "2000",
       files: [],
+      clear: false,
 
       waiting: false,
       clearImage: false,
@@ -396,9 +371,13 @@ export default {
     ...mapActions("Notification", ["openNotification"]),
 
     onUpdateFiles(files) {
-      if (files) {
+      if (files.length > 0) {
         this.user.image = files[0].file;
       }
+    },
+
+    resetClear() {
+      this.claer = falsel;
     },
 
     async submit() {
@@ -459,6 +438,7 @@ export default {
 
       this.cities = [];
       this.files = [];
+      this.clear = true;
 
       if (this.user.avatar) {
         delete this.user.avatar;
@@ -521,11 +501,11 @@ export default {
 
   components: {
     ViewContainer,
-    ImageUploadComponent,
     Input,
     Select,
     InputGroup,
     Button,
+    AddImageComponent,
   },
 };
 </script>

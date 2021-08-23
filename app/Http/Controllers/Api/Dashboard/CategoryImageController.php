@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Interfaces\ImageServiceInterface;
 
 class CategoryImageController extends Controller
@@ -23,7 +24,7 @@ class CategoryImageController extends Controller
 		try {
 			$storagePath = '/categories_images/' . $id;
 
-			$path = $this->imageService->storeImage($request->file('image'), $storagePath, 'categories', 'image', $id);
+			$path = $this->imageService->storeImage($request->file('image'), $storagePath, 'categories', 'image', intval($id));
 
 			return response()->json(['imagePath' => $path], 200);
 		} catch (Exception $e) {
@@ -37,7 +38,10 @@ class CategoryImageController extends Controller
 	{
 		try {
 			DB::beginTransaction();
-			$this->imageService->deleteImage('categories', 'image', $id, $request->imagePath, null);
+
+			$this->imageService->deleteImage('categories', 'image', $id, $request->imagePath, "");
+			$storagePath = '/categories_images/' . $id;
+			Storage::deleteDirectory($storagePath);
 
 			DB::commit();
 			return response()->json(['message' => 'Image removed'], 200);
