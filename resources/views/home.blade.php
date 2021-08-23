@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="w-full mx-auto mt-8 lg:w-11/12 2xl:w-5/6">
-	<ul class="mx-auto w-5/6 h-full gap-6 md:grid md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5">
+	<ul class="mx-auto w-5/6 lg:w-full h-full gap-6 md:grid md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5">
 		@foreach($categories as $category)
 		<li
 			class="bg-white mt-6 rounded transition-all duration-700 ease-in-out hover:-translate-y-3 md:mt-0 hover:shadow-lg">
