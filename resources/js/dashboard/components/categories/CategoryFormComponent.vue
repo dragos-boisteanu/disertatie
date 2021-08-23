@@ -69,7 +69,7 @@
         </div>
 
         <add-image-component
-          v-else
+          v-if="!isSubcategory && !isCategorySelected"
           max-file-size="15MB"
           imageMinSize="2000"
           :clear="clear"
