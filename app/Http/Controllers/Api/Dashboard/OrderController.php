@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use App\Models\Order;
 use App\Events\NewMessage;
 use Illuminate\Http\Request;
 use App\Jobs\SendOrderEmailJob;
@@ -16,6 +17,7 @@ use App\Interfaces\OrderServiceInterface;
 use App\Http\Resources\OrderListCollection;
 use App\Http\Requests\OrderPatchStatusRequest;
 use App\Http\Resources\Order as OrderResource;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderController extends Controller
@@ -71,6 +73,8 @@ class OrderController extends Controller
 		try {
 			$order = $this->orderService->getOrderById($id);
 
+			$this->authorize('view', $order);
+
 			if ((Auth::user()->isWaiter() || Auth::user()->isLocationManager() || Auth::user()->isAdminitrator()) && is_null($order->staff_id)) {
 				$order = $this->orderService->linkWaiterWithOrder(Auth::id(), $order);
 				$order->load('staff');
@@ -79,6 +83,8 @@ class OrderController extends Controller
 			return new OrderResource($order);
 		} catch (ModelNotFoundException $me) {
 			return  response()->json(['message' => $me->getMessage()], 404);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $e) {
 			return  response()->json(['message' => $e->getMessage()], 500);
 		}
@@ -94,26 +100,17 @@ class OrderController extends Controller
 	public function update(OrderPatchRequest $request, $id)
 	{
 		try {
-			$order = $this->orderService->update($request->validated(), $id);
+			$order = Order::findOrFail($id);
+
+			$this->authorize('update', $order);
+
+			$order = $this->orderService->update($request->validated(), $order);
+
 			return response()->json($order->updated_at, 200);
 		} catch (ModelNotFoundException $me) {
-			return  response()->json(['message' => $me->getMessage()], 404);
-		} catch (\Exception $e) {
-			return  response()->json(['message' => $e->getMessage()], 500);
-		}
-	}
-
-	public function updateStatus(OrderPatchStatusRequest $request, $id)
-	{
-		try {
-			$order = $this->orderService->updateStatus($request->status['id'], $id);
-
-			return response()->json([
-				'updatedAt' => $order->updated_at,
-				'status' => $order->status
-			]);
-		} catch (ModelNotFoundException $me) {
-			return  response()->json(['message' => $me->getMessage()], 404);
+			return  response()->json(['message' => 'No order found with id #' . $id], 404);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $e) {
 			return  response()->json(['message' => $e->getMessage()], 500);
 		}
@@ -122,14 +119,22 @@ class OrderController extends Controller
 	public function disable($id)
 	{
 		try {
-			$order = $this->orderService->disable($id);
+
+			$order = Order::findOrFail($id);
+
+			$this->authorize('disable', $order);
+
+			$order = $this->orderService->disable($order);
 
 			return response()->json([
 				'deletedAt' => $order->deleted_at,
 				'status' => $order->status,
 			]);
 		} catch (ModelNotFoundException $me) {
-			return  response()->json(['message' => $me->getMessage()], 404);
+			return  response()->json(['message' => 'No order found with id #' . $id], 404);
+			$this->authorize('updateStatus', $order);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $e) {
 			return  response()->json(['message' => $e->getMessage()], 500);
 		}

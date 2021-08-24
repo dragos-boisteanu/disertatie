@@ -2,67 +2,44 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Interfaces\OrderServiceInterface;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderStatusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $statuses = OrderStatus::all();
 
-        return $statuses;
-    }
+	private $orderService;
 
+	public function __construct(OrderServiceInterface $orderService)
+	{
+		$this->orderService = $orderService;
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+	public function __invoke(Request $request, $id)
+	{
+		try {
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+			$order = Order::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+			$this->authorize('updateStatus', $order);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+			$order = $this->orderService->updateStatus($request->status['id'], $order);
+
+			return response()->json([
+				'updatedAt' => $order->updated_at,
+				'status' => $order->status
+			]);
+		} catch (ModelNotFoundException $me) {
+			return  response()->json(['message' => 'No order found with id #' . $id], 404);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (\Exception $e) {
+			return  response()->json(['message' => $e->getMessage()], 500);
+		}
+	}
 }

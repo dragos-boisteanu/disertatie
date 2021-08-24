@@ -91,7 +91,7 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::get('products/name/{name}', 'OrderItemController@getProductsByName');
 		Route::get('products/id/{id}', 'OrderItemController@getProductsById');
 
-		Route::patch('update-status/{orderId}', 'OrderController@updateStatus');
+		Route::patch('update-status/{orderId}', 'OrderStatusController');
 
 		Route::patch('remove-item/{orderId}', 'OrderItemController@removeItem');
 		Route::patch('add-item/{orderId}', 'OrderItemController@addItem');
