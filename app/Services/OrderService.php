@@ -158,10 +158,9 @@ class OrderService implements OrderServiceInterface
 		};
 	}
 
-	public function update(array $data, int $orderId): Order
+	public function update(array $data, Order $order): Order
 	{
 		try {
-			$order = Order::findOrfail($orderId);
 
 			if (array_key_exists('address', $data)) {
 				$order->address = $data['address'];
@@ -175,18 +174,14 @@ class OrderService implements OrderServiceInterface
 			$order->refresh();
 
 			return $order;
-		} catch (ModelNotFoundException $mex) {
-			throw new Exception('No order found with #' . $orderId . ' id');
 		} catch (\Exception $ex) {
-			throw new \Exception('Faied to update order #', $orderId);
+			throw new \Exception('Faied to update order #', $order->id);
 		}
 	}
 
-	public function updateStatus(int $statusId, int $orderId): Order
+	public function updateStatus(int $statusId, Order $order): Order
 	{
 		try {
-			$order = Order::findOrFail($orderId);
-
 			$order->status_id = $statusId;
 			if ($order->delivery_method_id == 3 && $statusId == 7) {
 				$this->tableService->setStatus($order->table_id, 1);
@@ -199,18 +194,15 @@ class OrderService implements OrderServiceInterface
 			broadcast(new OrderStatusUpdate($order));
 
 			return $order;
-		} catch (ModelNotFoundException $mex) {
-			throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
 		} catch (\Exception $ex) {
-			// throw new \Exception('Faied to update order #' . $orderId . ' status');
-			throw new \Exception($ex->getMessage());
+			throw new \Exception('Faied to update order #' . $order->id . ' status');
+			// throw new \Exception($ex->getMessage());
 		}
 	}
 
-	public function disable(int $orderId): Order
+	public function disable(Order $order): Order
 	{
 		try {
-			$order = Order::findOrFail($orderId);
 
 			if ($order->table_id) {
 				$this->tableService->setStatus($order->table_id, 1);
@@ -223,10 +215,8 @@ class OrderService implements OrderServiceInterface
 			broadcast(new OrderStatusUpdate($order));
 
 			return $order;
-		} catch (ModelNotFoundException $mex) {
-			throw new ModelNotFoundException('No order found with #' . $orderId . ' id');
 		} catch (\Exception $ex) {
-			throw new Exception('Failed to disable order');
+			throw new Exception('Failed to disable order #' . $order->id);
 		}
 	}
 
