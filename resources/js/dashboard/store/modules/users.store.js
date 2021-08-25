@@ -1,91 +1,93 @@
-import {downloadLoggedUserData} from '../../api/users.api';
+import { downloadLoggedUserData } from '../../api/users.api';
 import _orderBy from 'lodash/orderBy';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 
 const initialState = () => ({
-    loggedUser: null,
-    subscribedToNewOrders: false,
+	loggedUser: null,
+	subscribedToNewOrders: false,
 });
 
 const state = initialState();
 
 const getters = {
-    getLoggedUser(state) {
-        return state.loggedUser;
-    },
+	getLoggedUser(state) {
+		return state.loggedUser;
+	},
 
-    getSubscribedToNewOrders(state) {
-        return state.subscribedToNewOrders;
-    },
+	getSubscribedToNewOrders(state) {
+		return state.subscribedToNewOrders;
+	},
 
-    isAdmin(state) {
-        return state.loggedUser.role.name === "Administrator";
-    },
+	isAdmin(state) {
+		return state.loggedUser.isAdmin;
+	},
 
-    isLocationManager(state) {
-        return state.loggedUser.role.name === "Location Manager";
-    },
+	isLocationManager(state) {
+		return state.loggedUser.isLocationManager;
+	},
 
-    isWaiter(state) {
-        return state.loggedUser.role.name === "Waiter";
-    },
+	isKitchenManager(state) {
+		return state.loggedUser.isKitchenManager;
+	},
 
-    isKitchenManager(state) {
-        return state.loggedUser.role.name === "Kitchen Manager";
-    },
+	isWaiter(state) {
+		return state.loggedUser.isWaiter;
+	},
 
-    isDelivery(state) {
-        return state.loggedUser.role.name === "Delivery";
-    },
+	isKitchen(state) {
+		return state.loggedUser.isKitchen;
+	},
 
-    isKitchen(state) {
-        return state.loggedUser.role.name === "Kitchen";
-    },
-   
+	isDelivery(state) {
+		return state.loggedUser.isDelivery;
+	},
+
+
+
 }
 
 const actions = {
-    resetUser({ commit }) {
-        commit('RESET');
-    },
+	resetUser({ commit }) {
+		commit('RESET');
+	},
 
-    async downloadLoggedUserData({commit}) {
-        try {
-            const response = await downloadLoggedUserData();
-            commit('SET_LOGGED_USER', response.data.data);
-        } catch (error) {
-            throw error
-        } 
-    },  
+	async downloadLoggedUserData({ commit }) {
+		try {
+			const response = await downloadLoggedUserData();
+			commit('SET_LOGGED_USER', response.data.data);
+		} catch (error) {
+			throw error
+		}
+	},
 
-    toggleSubscribedToNewOrders({commit}){
-        commit('TOGGLE_SUBSCRIBED_TO_NEW_ORDERS');
-    }
+	toggleSubscribedToNewOrders({ commit }) {
+		commit('TOGGLE_SUBSCRIBED_TO_NEW_ORDERS');
+	}
 
 }
 
 const mutations = {
-    RESET(state) {
-        const newState = initialState();
-        Object.keys(newState).forEach(key => {
-            state[key] = newState[key]
-        })
-    },
+	RESET(state) {
+		const newState = initialState();
+		Object.keys(newState).forEach(key => {
+			state[key] = newState[key]
+		})
+	},
 
-    SET_LOGGED_USER(state, payload) {
-        state.loggedUser = payload;
-    },
+	SET_LOGGED_USER(state, payload) {
+		state.loggedUser = payload;
+	},
 
-    TOGGLE_SUBSCRIBED_TO_NEW_ORDERS(state) {
-        state.subscribedToNewOrders = !state.subscribedToNewOrders;
-    }
+	TOGGLE_SUBSCRIBED_TO_NEW_ORDERS(state) {
+		state.subscribedToNewOrders = !state.subscribedToNewOrders;
+	}
 }
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations,
+	namespaced: true,
+	state,
+	getters,
+	actions,
+	mutations,
 }

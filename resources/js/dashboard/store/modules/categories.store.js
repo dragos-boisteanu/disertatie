@@ -45,15 +45,6 @@ const actions = {
 	async postCategory({ commit }, payload) {
 		try {
 			const response = await postCategory(payload);
-			// payload.id = response.data.id;
-			// payload.color = response.data.color;
-			// if (payload.parentId) {
-			// 	payload.parentName = response.data.parentName
-			// 	payload.vat = response.data.vat
-			// } else {
-			// 	payload.parentName = null;
-			// 	payload.parentId = null;
-			// }
 
 			commit('ADD_CATEGORY', response.data.category);
 

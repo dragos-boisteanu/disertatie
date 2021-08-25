@@ -22,9 +22,15 @@ class User extends JsonResource
 			'lastName' => $this->last_name,
 			'email' => $this->email,
 			'phoneNumber' => $this->phone_number,
-			'role' => ['id' => $this->role->id, 'name' => $this->role->name],
 			'deletedAt' => $this->deleted_at,
-			'createdAt' => $this->created_at
+			'createdAt' => $this->created_at,
+			'role' => ['id' => $this->role->id, 'name' => $this->role->name],
+			'isAdmin' => $this->isAdminitrator(),
+			'isLocaltionManager' => $this->isLocationManager(),
+			'isKitchenManager' => $this->isKitchenManager(),
+			'isWaiter' => $this->isWaiter(),
+			'isKitchen' => $this->isKitchen(),
+			'isDelivery' => $this->isDelivery(),
 		];
 	}
 }
