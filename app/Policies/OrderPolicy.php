@@ -31,13 +31,11 @@ class OrderPolicy
 	 */
 	public function view(User $user, Order $order)
 	{
-		if ($user->isClient() && $order->client_id === $user->id) {
-			Response::allow();
-		} else if (!$user->isClient()) {
-			Response::allow();
+		if (($user->isClient() && $order->client_id === $user->id) || !$user->isClient()) {
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 
 	/**
@@ -61,10 +59,10 @@ class OrderPolicy
 	public function update(User $user, Order $order)
 	{
 		if (($user->isWaiter() && $order->staff_id === $user->id) || $user->isAdminitrator() || $user->isLocationManager()) {
-			Response::allow();
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 
 	public function updateStatus(User $user, Order $order)
@@ -75,19 +73,19 @@ class OrderPolicy
 			|| $user->isAdminitrator()
 			|| $user->isLocationManager()
 		) {
-			Response::allow();
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 
 	public function	updateItems(User $user, Order $order)
 	{
 		if (($user->isWaiter() && $order->staff_id === $user->id) || $user->isAdminitrator() || $user->isLocationManager()) {
-			Response::allow();
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 
 	/**
@@ -100,9 +98,9 @@ class OrderPolicy
 	public function disable(User $user, Order $order)
 	{
 		if (($user->isWaiter() && $order->staff_id === $user->id) || $user->isAdminitrator() || $user->isLocationManager()) {
-			Response::allow();
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 }
