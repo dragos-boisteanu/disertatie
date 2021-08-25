@@ -2,7 +2,7 @@
 
 
 @section('content')
-<div class="p-4">
+<div class="w-full md:w-3/4 lg:w-1/2 2xl:w-2/5 mx-auto pt-4 px-4">
 	<h1 class="text-4xl mb-4 pl-2 font-semibold text-trueGray-300 ">Informatii cont</h1>
 
 	<div>

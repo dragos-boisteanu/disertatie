@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="p-4">
+<div class="w-full md:w-3/4 lg:w-1/2 2xl:w-2/5 mx-auto pt-4 px-4">
 	<h1 class="text-4xl mb-4 pl-2 font-semibold text-trueGray-300 ">Adrese</h1>
 
 	<div class="mb-4 pb-4 border-b">
@@ -52,7 +52,7 @@
 				</div>
 				<div class="flex items-center justify-end gap-x-4 text-sm">
 					@if (!$address->is_selected)
-					<form method="POST" action="{{ route('address.update', ['id' => $address->id]) }}">
+					<form method="POST" action="{{ route('address.update', ['id' => $address->id]) }}" class="mb-0">
 						@csrf
 						@method('PUT')
 						<input type="hidden" name="isSelected" value="1" />
@@ -60,7 +60,6 @@
 					</form>
 					@endif
 					<div>
-
 						<form id="amf{{ $address->id }}" method="POST"
 							action="{{ route('address.update', ['id' => $address->id]) }}" style="display: none"
 							class="modal p-4 fixed  w-full flex-col items-center justify-center z-30 bg-white md:rounded address-edit-form">
@@ -86,7 +85,7 @@
 						<button id="amb{{ $address->id }}"
 							class="text-sky-600 hover:text-sky-500 address-edit-btn">Modificare</button>
 					</div>
-					<form method="POST" action="{{ route('address.delete', ['id' => $address->id]) }}">
+					<form method="POST" action="{{ route('address.delete', ['id' => $address->id]) }}" class="mb-0">
 						@csrf
 						@method('DELETE')
 						<button class="text-red-600 hover:text-red-500">Sterge</button>

@@ -33,10 +33,10 @@
 
 <body class="h-full">
 	{!! Toastr::message() !!}
-	<div id="store-app" class="h-full flex flex-col">
+	<div id="store-app" class="h-full ">
 		@include('includes.header')
-		<main class="flex-1 bg-gray-800 w-full flex items-start justify-center">
-			<div class="relative w-full lg:w-7/12 2xl:w-5/12">
+		<main class="flex-1 relative bg-gray-800 w-full flex items-start justify-center">
+			<div class="relative w-full">
 				@yield('content')
 				<x-to-top></x-to-top>
 			</div>

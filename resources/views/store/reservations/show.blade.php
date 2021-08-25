@@ -1,9 +1,10 @@
 @extends('layouts.store')
 
 @section('content')
-{{ Breadcrumbs::render('reservation', $reservation) }}
+<div class="w-full md:w-3/4 lg:w-1/2 2xl:w-2/5 mx-auto pt-4 px-4">
+	{{ Breadcrumbs::render('reservation', $reservation) }}
 
-<div class="p-4">
+
 	<div class="flex items-center justify-between">
 		<h1 class="text-4xl my-4 max-w-[240px]  font-semibold text-trueGray-300 ">Reservare #{{ $reservation->id }} </h1>
 		<x-statuses.reservation-status :statusName="$reservation->status->name"></x-statuses.reservation-status>

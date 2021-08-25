@@ -2,16 +2,17 @@
 
 
 @section('content')
-{{ Breadcrumbs::render('order', $order) }}
-{{-- <a href=" {{ route('orders.index') }}" class="text-sm text-orange-600 flex items-center hover:underline">
-<svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px">
-	<path d="M0 0h24v24H0V0z" fill="none" />
-	<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
-</svg>
-Inapoi la lista comenzilor
-</a> --}}
+<div class="w-full md:w-3/4 lg:w-1/2 2xl:w-2/5 mx-auto pt-4 px-4">
+	{{ Breadcrumbs::render('order', $order) }}
+	{{-- <a href=" {{ route('orders.index') }}" class="text-sm text-orange-600 flex items-center hover:underline">
+	<svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px">
+		<path d="M0 0h24v24H0V0z" fill="none" />
+		<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
+	</svg>
+	Inapoi la lista comenzilor
+	</a> --}}
 
-<div class="p-4">
+
 	<div class="flex flex-wrap items-center justify-between">
 		<h1 class="text-4xl my-4 pl-2 font-semibold text-trueGray-300 ">Comanda #{{ $order->id }} </h1>
 		<div id="finalStatus" class="text-xs py-1 px-2 rounded-sm font-semibold " style="display: none">

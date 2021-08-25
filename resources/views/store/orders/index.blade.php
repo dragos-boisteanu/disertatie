@@ -3,7 +3,7 @@
 
 @section('content')
 
-<div class="p-4">
+<div class="w-full md:w-3/4 lg:w-1/2 2xl:w-2/5 mx-auto pt-4 px-4">
 	<h1 class="text-4xl mb-4 pl-2 font-semibold text-trueGray-300 ">Comenzile mele</h1>
 
 	<div class="flex p-4 flex-col gap-y-4 md:flex-row md:gap-y-0 md:items-center md:justify-between">

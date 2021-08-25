@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.store')
 
 @section('content')
 <div class="w-full mx-auto mt-8 lg:w-11/12 2xl:w-5/6">
