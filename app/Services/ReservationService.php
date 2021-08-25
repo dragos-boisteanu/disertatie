@@ -111,19 +111,15 @@ class ReservationService implements ReservationServiceInterface
 					->join('reservations', 'reservations.id', '=', 'reservation_table.reservation_id')
 					->where('reservations.begins_at', '<=', $beginsAt->toDateTimeString())
 					->where('reservations.ends_at', '>', $endsAt->toDateTimeString())
+					->where('tables.status_id', '!=', '4')
 					->whereNull('reservations.deleted_at')
 					->pluck('id')->toArray()
 			)
 				->orderBy('seats', 'desc')
-				->get(['id', 'seats']);
+				->get(['tables.id', 'tables.seats']);
 
 
 			$totalSeats = 0;
-
-			// only add the table if the number of seats of all selected tables is equal or smaller than
-			// the neeeded number of steas or
-			// if the number is about the needed amount but by much
-			// t1: 2s, t2: 6s, t3:4s, rs: 5 -> select t1 and t3, ignore t2, rs: 6 -> select t2, ignore t1 and t3
 
 			foreach ($availableTables as $table) {
 				$totalSeats += $table->seats;
@@ -140,10 +136,10 @@ class ReservationService implements ReservationServiceInterface
 			while ($seats > 0) {
 				if ($seats < $availableTables->min('seats')) {
 					$availableTables = $availableTables->where('seats', '>=', $seats);
-					$table = $availableTables->shift();
+					$table = $availableTables->pop();
 				} else {
 					$availableTables = $availableTables->where('seats', '<=', $seats);
-					$table = $availableTables->pop();
+					$table = $availableTables->shift();
 				}
 
 				array_push($selectedTables, $table);
@@ -158,7 +154,7 @@ class ReservationService implements ReservationServiceInterface
 			debug($ex->getMessage());
 			throw new NoAvailabeTablesForReservationException($ex->getMessage());
 		} catch (\Exception $ex) {
-			debug($ex->getMessage());
+			debug($ex);
 			throw new Exception('A aparut o eroare, incerca dimnou');
 		}
 	}
