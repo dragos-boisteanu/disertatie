@@ -37,9 +37,9 @@ class Category extends Model
 		$productsCount = 0;
 
 		if (!is_null($this->parentCategory)) {
-			$productsCount =  $this->subProducts()->count();
+			$productsCount =  $this->subProducts()->withTrashed()->count();
 		} else {
-			$productsCount =  $this->products()->count();
+			$productsCount =  $this->products()->withTrashed()->count();
 		}
 
 		return $productsCount;
@@ -47,12 +47,12 @@ class Category extends Model
 
 	public function products()
 	{
-		return $this->hasMany(Product::class)->withTrashed();
+		return $this->hasMany(Product::class);
 	}
 
 	public function subProducts()
 	{
-		return $this->hasMany(Product::class, 'sub_category_id')->withTrashed();
+		return $this->hasMany(Product::class, 'sub_category_id');
 	}
 
 	public function discount()
