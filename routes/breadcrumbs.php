@@ -52,10 +52,3 @@ Breadcrumbs::for('reservation', function (BreadcrumbTrail $trail, $reservation) 
 	$trail->parent('reservations');
 	$trail->push('Resevare #' . $reservation->id, route('reservations.show', ['reservation' => $reservation->id]));
 });
-
-
-// Contact
-Breadcrumbs::for('contact', function (BreadcrumbTrail $trail) {
-	$trail->parent('home');
-	$trail->push('Contact', route('contanct'));
-});

@@ -35,7 +35,7 @@
 	{!! Toastr::message() !!}
 	<div id="store-app" class="h-full ">
 		@include('includes.header')
-		<main class="flex-1 relative bg-gray-800 w-full flex items-start justify-center">
+		<main class="flex-1 relative bg-gray-800 pb-10 w-full flex items-start justify-center">
 			<div class="relative w-full">
 				@yield('content')
 				<x-to-top></x-to-top>

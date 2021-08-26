@@ -133,7 +133,6 @@
 							<span class="text-fuchsia-700">Telekom</span> 1234567890
 						</li>
 					</ul>
-
 				</li>
 				<li>
 					<h5 class="text-trueGray-400 text-base font-semibold">

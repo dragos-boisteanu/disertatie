@@ -29,7 +29,7 @@
 			</a>
 		</li>
 		<li class="w-24">
-			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black {{ request()->is('contanct') ? '!border-black' : '' }}"
+			<a class="text-white text-lg pb-0.5 border-b-2 border-orange-600 hover:border-black hover:text-black {{ request()->is('contact') ? '!border-black' : '' }}"
 				href="{{ route('contact') }}">
 				Contanct
 			</a>

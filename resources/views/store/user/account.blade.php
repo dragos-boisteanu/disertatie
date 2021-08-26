@@ -19,7 +19,7 @@
 
 					{{-- error zone --}}
 					<input type="text" id="firstName" name="firstName" value="{{ old('firstName', $user->first_name) }}"
-						class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('firstName')) border-red-600 @endif ">
+						class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('firstName')) border-red-600 @endif">
 					@if ($errors->has('firstName'))
 					<span class="font-medium text-red-600 mt-2">{{ $errors->first('firstName') }}</span>
 					@endif

@@ -69,7 +69,6 @@
 						<option>21:15</option>
 						<option>21:30</option>
 						<option>21:45</option>
-
 					</select>
 					<div id="timeValidationMessage" class="text-sm font-semibold text-red-600">
 					</div>
