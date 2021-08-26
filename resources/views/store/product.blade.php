@@ -19,11 +19,7 @@
 					{{ $product->unit->name }}</h1>
 
 				<div class=" flex items-center justify-between md:flex-col md:items-start md:gap-y-2">
-					@if ($product->quantity > 0)
-					<div class="text-sm text-green-600">In stoc</div>
-					@else
-					<div class="text-red-600">Nu este in stoc</div>
-					@endif
+					<x-statuses.stock-status :quantity="$product->quantity"></x-statuses.stock-status>
 
 					@isset($product->finalDiscount)
 					<div>
