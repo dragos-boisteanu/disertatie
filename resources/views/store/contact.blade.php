@@ -64,7 +64,7 @@
 		</div>
 	</div>
 
-	<div class="mt-4 md:col-span-2 lg:col-span-1 lg:row-span-1 2xl:col-span-2">
+	<div class="mt-4 md:col-span-2 lg:col-span-1 lg:row-span-1 2xl:col-span-2 2xl:justify-self-center">
 		<h3 class="my-2 text-trueGray-400 text-xl font-semibold">
 			Formular contact
 		</h3>
