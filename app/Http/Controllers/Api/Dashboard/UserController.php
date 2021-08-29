@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Models\User;
 use App\Models\Address;
 use Illuminate\Support\Str;
-use App\Events\EmailUpdated;
 use Illuminate\Http\Request;
 use Intervention\Image\Image;
 use App\Events\AccountCreated;

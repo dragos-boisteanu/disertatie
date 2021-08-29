@@ -14,58 +14,52 @@ use Brian2694\Toastr\Facades\Toastr;
 class AuthenticatedSessionController extends Controller
 {
 
-    private $cartService;
 
-    public function __construct(CartServiceInterface $cartService)
-    {
-        $this->cartService = $cartService;
-    }
-    
-    /**
-     * Display the login view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        return view('auth.login');
-    }
+	/**
+	 * Display the login view.
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	public function create()
+	{
+		return view('auth.login');
+	}
 
-    /**
-     * Handle an incoming authentication request.
-     *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(LoginRequest $request)
-    {
-        $sesionIdBeforLogin = session()->getId();
+	/**
+	 * Handle an incoming authentication request.
+	 *
+	 * @param  \App\Http\Requests\Auth\LoginRequest  $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function store(LoginRequest $request)
+	{
+		$sesionIdBeforLogin = session()->getId();
 
-        $request->authenticate();
-        
-        UserLogged::dispatch(Auth::id(), $sesionIdBeforLogin);
+		$request->authenticate();
 
-        $request->session()->regenerate();
+		UserLogged::dispatch(Auth::id(), $sesionIdBeforLogin);
 
-        Toastr::success('Authentificare reusita', 'Succes');
+		$request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
-    }
+		Toastr::success('Authentificare reusita', 'Succes');
 
-    /**
-     * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Request $request)
-    {
-        Auth::guard('web')->logout();
+		return redirect()->intended(RouteServiceProvider::HOME);
+	}
 
-        $request->session()->invalidate();
+	/**
+	 * Destroy an authenticated session.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function destroy(Request $request)
+	{
+		Auth::guard('web')->logout();
 
-        $request->session()->regenerateToken();
+		$request->session()->invalidate();
 
-        return redirect('/');
-    }
+		$request->session()->regenerateToken();
+
+		return redirect('/');
+	}
 }

@@ -13,36 +13,36 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 
 class EventServiceProvider extends ServiceProvider
 {
-    /**
-     * The event listener mappings for the application.
-     *
-     * @var array
-     */
-    protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
+	/**
+	 * The event listener mappings for the application.
+	 *
+	 * @var array
+	 */
+	protected $listen = [
+		Registered::class => [
+			SendEmailVerificationNotification::class,
+		],
 
-        UserLogged::class => [
-            InitUserCart::class,
-        ],
+		UserLogged::class => [
+			InitUserCart::class,
+		],
 
-        AccountCreated::class => [
-            SendPasswordResetLink::class
-        ],
+		AccountCreated::class => [
+			SendPasswordResetLink::class
+		],
 
-        OrderCreated::class => [
-            SendOrderEmail::class,
-        ],
-    ];
+		OrderCreated::class => [
+			SendOrderEmail::class,
+		],
+	];
 
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
+	/**
+	 * Register any events for your application.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		//
+	}
 }

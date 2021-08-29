@@ -21,7 +21,7 @@
 					<input type="text" id="firstName" name="firstName" value="{{ old('firstName', $user->first_name) }}"
 						class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600 @if ($errors->has('firstName')) border-red-600 @endif">
 					@if ($errors->has('firstName'))
-					<span class="font-medium text-red-600 mt-2">{{ $errors->first('firstName') }}</span>
+					<span class="font-medium text-red-600 mt-1">{{ $errors->first('firstName') }}</span>
 					@endif
 
 				</div>
@@ -31,7 +31,7 @@
 					<input type="text" id="lastName" name="lastName" value="{{ old('lastName', $user->last_name) }}"
 						class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600">
 					@if ($errors->has('lastName'))
-					<div class="font-medium text-red-600">{{ $errors->first('lastName') }}</div>
+					<div class="font-medium text-red-600 mt-1">{{ $errors->first('lastName') }}</div>
 					@endif
 				</div>
 			</div>
@@ -43,16 +43,16 @@
 					<input type="text" id="phoneNumber" name="phoneNumber" value={{ old('phoneNumber', $user->phone_number) }}
 						class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600" />
 					@if ($errors->has('phoneNumber'))
-					<div class="font-medium text-red-600">{{ $errors->first('phoneNumber') }}</div>
+					<div class="font-medium text-red-600 mt-1">{{ $errors->first('phoneNumber') }}</div>
 					@endif
 				</div>
 				<div class="w-full">
 					<label for="email" class="block text-trueGray-400 font-semibold mb-2">Email</label>
 					{{-- error zone --}}
-					<input type="text" id="email" name="email" value="{{ $user->email }}"
+					<input type="text" id="email" name="newEmail" value="{{ $user->email }}"
 						class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600">
-					@if ($errors->has('email'))
-					<div class="font-medium text-red-600">{{ $errors->first('email') }}</div>
+					@if ($errors->has('newEmail'))
+					<div class="font-medium text-red-600 mt-1">{{ $errors->first('newEmail') }}</div>
 					@endif
 				</div>
 
@@ -80,7 +80,7 @@
 				<input type="password" id="currentPassword" name="currentPassword"
 					class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600" />
 				@if ($errors->has('currentPassword'))
-				<div class="font-medium text-red-600">{{ $errors->first('currentPassword') }}</div>
+				<div class="font-medium text-red-600 mt-1">{{ $errors->first('currentPassword') }}</div>
 				@endif
 			</div>
 
@@ -88,17 +88,17 @@
 				<div class="w-full">
 					<label for="password" class="block text-trueGray-400 font-semibold mb-2">Password</label>
 					{{-- error zone --}}
-					<input type="password" id="password" name="password"
+					<input type="password" id="password" name="newPassword"
 						class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600" />
-					@if ($errors->has('password'))
-					<div class="font-medium text-red-600">{{ $errors->first('password') }}</div>
+					@if ($errors->has('newPassword'))
+					<div class="font-medium text-red-600 mt-1">{{ $errors->first('newPassword') }}</div>
 					@endif
 				</div>
 				<div class="w-full">
 					<label for="repeatPassword" class="block text-trueGray-400 font-semibold mb-2">Repeat
 						password</label>
 					{{-- error zone --}}
-					<input type="password" id="repeatPassword" name="password_confirmation"
+					<input type="password" id="repeatPassword" name="newPassword_confirmation"
 						class="w-full border text-sm p-2 rounded-sm focus:ring focus:ring-orange-600">
 				</div>
 			</div>
