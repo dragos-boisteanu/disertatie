@@ -38,9 +38,9 @@
 		@auth
 		@if(!Auth::user()->hasVerifiedEmail())
 		<div class="w-full bg-red-600 text-white py-4 text-center">
-			Pentru a putea folosii anumite functii ale site-ului trebuie sa iti confirm adresa de email. Verifica email-lul
-			primit! Daca nu ai primit email-ul poti schimba adresa si cere altul <a href="{{ route('verification.notice') }}"
-				class="underline">AICI</a>
+			Pentru a putea folosii anumite functii ale site-ului trebuie sa iti confirm adresa de email. Verifica email-ul
+			primit ! <span class="italic">(nu uita sa verifi in spam/junk)</span> Daca nu ai primit email-ul poti schimba
+			adresa si cere altul <a href="{{ route('verification.notice') }}" class="underline">AICI</a>
 		</div>
 		@endif
 		@endauth
