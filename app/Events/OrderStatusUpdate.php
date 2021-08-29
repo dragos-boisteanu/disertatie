@@ -13,39 +13,41 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class OrderStatusUpdate implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+	use Dispatchable, InteractsWithSockets, SerializesModels;
 
 
-    public $order;
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
+	public $order;
+	public $queue = 'ws';
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('orders.'.$this->order->id);
-    }
+	/**
+	 * Create a new event instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(Order $order)
+	{
+		$this->order = $order;
+	}
 
-    public function broadcastWith()
-    {
-        return [
-            'status' => $this->order->status,
-        ];
-    }
+	/**
+	 * Get the channels the event should broadcast on.
+	 *
+	 * @return \Illuminate\Broadcasting\Channel|array
+	 */
+	public function broadcastOn()
+	{
+		return new PrivateChannel('orders.' . $this->order->id);
+	}
 
-    public function broadcastAs()
-    {
-        return 'OrderStatusUpdated';
-    }
+	public function broadcastWith()
+	{
+		return [
+			'status' => $this->order->status,
+		];
+	}
+
+	public function broadcastAs()
+	{
+		return 'OrderStatusUpdated';
+	}
 }
