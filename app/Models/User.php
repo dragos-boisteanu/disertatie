@@ -122,6 +122,6 @@ class User extends Authenticatable
 
 	public function isClient()
 	{
-		return $this->role->levle === 1;
+		return $this->role->level === 1;
 	}
 }
