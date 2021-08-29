@@ -35,6 +35,15 @@
 	{!! Toastr::message() !!}
 	<div id="store-app" class="h-full ">
 		@include('includes.header')
+		@auth
+		@if(!Auth::user()->hasVerifiedEmail())
+		<div class="w-full bg-red-600 text-white py-4 text-center">
+			Pentru a putea folosii anumite functii ale site-ului trebuie sa iti confirm adresa de email. Verifica email-lul
+			primit! Daca nu ai primit email-ul poti schimba adresa si cere altul <a href="{{ route('verification.notice') }}"
+				class="underline">AICI</a>
+		</div>
+		@endif
+		@endauth
 		<main class="flex-1 relative bg-gray-800 pb-10 w-full flex items-start justify-center">
 			<div class="relative w-full">
 				@yield('content')
