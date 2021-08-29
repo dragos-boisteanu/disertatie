@@ -21,7 +21,7 @@ Route::get('/dashboard/{any?}', 'Web\Dashboard\DashboardController@index')->wher
 // verified
 
 
-Route::group(['middleware' => ['auth:web', 'verified'], 'namespace' => 'Web\Client'], function () {
+Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function () {
 	Route::group(['prefix' => 'account'], function () {
 		Route::get('/', 'AccountController@index')->name('account.index');
 		Route::put('/', 'AccountController@update')->name('account.update');
@@ -29,18 +29,22 @@ Route::group(['middleware' => ['auth:web', 'verified'], 'namespace' => 'Web\Clie
 		Route::delete('/' . 'AccountController@destroy')->name('account.delete');
 	});
 
-	Route::group(['prefix' => 'addressess'], function () {
-		Route::get('/', 'AddressController@index')->name('address.index');
-		Route::post('/', 'AddressController@store')->name('address.store');
-		Route::put('/{id}/edit', 'AddressController@edit')->name('address.edit');
-		Route::put('/{id}', 'AddressController@update')->name('address.update');
-		Route::delete('/{id}', 'AddressController@destroy')->name('address.delete');
+
+	Route::middleware(['verified'])->group(function () {
+		Route::group(['prefix' => 'addressess'], function () {
+			Route::get('/', 'AddressController@index')->name('address.index');
+			Route::post('/', 'AddressController@store')->name('address.store');
+			Route::put('/{id}/edit', 'AddressController@edit')->name('address.edit');
+			Route::put('/{id}', 'AddressController@update')->name('address.update');
+			Route::delete('/{id}', 'AddressController@destroy')->name('address.delete');
+		});
+
+		Route::group(['prefix' => 'comenzi'], function () {
+			Route::get('/comenzi', 'OrderController@index')->name('orders.index');
+			Route::get('/comenzi/{id}', 'OrderController@show')->name('orders.show');
+		});
 	});
 
-	Route::group(['prefix' => 'comenzi'], function () {
-		Route::get('/comenzi', 'OrderController@index')->name('orders.index');
-		Route::get('/comenzi/{id}', 'OrderController@show')->name('orders.show');
-	});
 
 	Route::resource('reservations', 'ReservationController')->except(['create', 'edit']);
 });
