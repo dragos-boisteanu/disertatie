@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth:web', 'namespace' => 'Web\Client'], function
 		Route::delete('/{id}', 'AddressController@destroy')->name('address.delete');
 	});
 });
+
 Route::group(['namespace' => 'Web\Client'], function () {
 	Route::get('/', 'HomeController')->name('home');
 

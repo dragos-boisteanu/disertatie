@@ -6,7 +6,7 @@
 
 <body>
 	<h1>Detalii comanda</h1>
-	<ul style="list-style: none;">
+	<ul style="list-style: none; padding-left: 0">
 		<li>
 			<span style="font-weight: bold;">ID comanda:</span>
 			<span>{{ $order->id }}</span>
@@ -101,11 +101,11 @@
 	</table>
 
 	@auth
-	<div style="margin-top: 1rem;">
+	<div style="margin-top: 8px;">
 		<a href="{{ route('orders.show', ['id' => $order->id]) }}">Urmareste comanda</a>
 	</div>
 	@endauth
-	<div style="margin-top: 1rem;">
+	<div style="margin-top: 8px;">
 		<span style="font-weight: bold;">Telefon contact:</span>
 		<a href="tel:0238482384">0238482384</a>
 	</div>
