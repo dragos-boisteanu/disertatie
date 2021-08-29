@@ -143,7 +143,7 @@ class OrderService implements OrderServiceInterface
 			DB::commit();
 
 			if (isset($order->email)) {
-				Queue::push(new SendOrderEmailJob($order));
+				dispatch((new SendOrderEmailJob($order))->onQueue('email'));
 			}
 
 			broadcast(new OrderCreated($order))->toOthers();

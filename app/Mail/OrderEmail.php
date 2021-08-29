@@ -10,26 +10,26 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OrderEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+	use Queueable, SerializesModels;
 
-    protected $order;
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
+	protected $order;
+	/**
+	 * Create a new message instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(Order $order)
+	{
+		$this->order = $order;
+	}
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
-        return $this->subject("Order created test mail")->view('mails.order', ['order'=>$this->order]);
-    }
+	/**
+	 * Build the message.
+	 *
+	 * @return $this
+	 */
+	public function build()
+	{
+		return $this->subject("Comanda # " . $this->order->id . ' a fost plasata')->view('mails.order', ['order' => $this->order]);
+	}
 }

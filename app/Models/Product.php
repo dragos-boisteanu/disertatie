@@ -124,6 +124,20 @@ class Product extends Model
 		return $quantity;
 	}
 
+
+	public function getOrderProductFinalPrice($baesUnitPrice, $discount, $vat)
+	{
+		$finalPrice = 0;
+
+		$finalPrice = $this->calculateDiscount($baesUnitPrice, $discount);
+
+		$finalPrice = $this->calculateVat($finalPrice, $vat);
+
+		return number_format($finalPrice, 2, '.', '');
+	}
+
+
+
 	private function calculateVat($price, $vat)
 	{
 		return $price + $price * $vat / 100;
@@ -172,16 +186,5 @@ class Product extends Model
 	public function scopeFilter(Builder $builder, array $data)
 	{
 		return (new ProductFilter($data))->filter($builder);
-	}
-
-	public function getOrderProductFinalPrice($baesUnitPrice, $discount, $vat)
-	{
-		$finalPrice = 0;
-
-		$finalPrice = $this->calculateDiscount($baesUnitPrice, $discount);
-
-		$finalPrice = $this->calculateVat($finalPrice, $vat);
-
-		return number_format($finalPrice, 2, '.', '');
 	}
 }
