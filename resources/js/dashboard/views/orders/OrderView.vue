@@ -383,15 +383,26 @@ export default {
     },
 
     canMarkAsIsPreparing() {
-      return this.order.status.name == 'Received' && this.order.status.name != 'In delivery' && this.order.status.name != 'Delivered' 
+      return (
+        this.order.status.name == "Received" &&
+        this.order.status.name != "In delivery" &&
+        this.order.status.name != "Delivered"
+      );
     },
 
     canMarkInDelivery() {
-      return this.order.status.name == 'Is preparing' && this.order.status.name != 'In delivery' && this.order.status.name != 'Delivered'
+      return (
+        this.order.status.name == "Is preparing" &&
+        this.order.status.name != "In delivery" &&
+        this.order.status.name != "Delivered"
+      );
     },
 
     canMarkAsDelivered() {
-      return this.order.status.name == 'In delivery' && this.order.status.name != 'Delivered'
+      return (
+        this.order.status.name == "In delivery" &&
+        this.order.status.name != "Delivered"
+      );
     },
   },
 
@@ -448,6 +459,7 @@ export default {
 
     async cancelOrder() {
       try {
+        this.$Progress.start();
         this.waiting = true;
 
         const response = await disableOrder(this.order.id);
@@ -458,21 +470,20 @@ export default {
 
         this.waiting = false;
 
-        this.openNotification({
-          show: true,
-          type: "ok",
-          message: `Order #${this.order.id} was canceled`,
-        });
+        this.$Progress.finish();
+
+        this.$toast.success(response.data.message);
 
         this.toggleRemoveConfirmModalState();
-        // this.$router.push({name: "Orders"});
       } catch (error) {
         this.waiting = false;
-        this.openNotification({
-          show: true,
-          type: "err",
-          message: `Failed to cancel order`,
-        });
+        this.$Progress.fail();
+        this.toggleRemoveConfirmModalState();
+        if (error.response && error.response.data) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
       }
     },
 
@@ -494,36 +505,50 @@ export default {
     },
 
     async callAddItem(item) {
-      const payload = {
-        id: this.order.id,
-        item,
-      };
+      try {
+        this.$Progress.start();
+        const payload = {
+          id: this.order.id,
+          item,
+        };
 
-      const response = await addItem(payload);
-      const responseData = response.data;
-      const itemIndex = _findIndex(this.order.items, [
-        "id",
-        responseData.item.id,
-      ]);
+        const response = await addItem(payload);
 
-      if (itemIndex >= 0) {
-        this.$set(
-          this.order.items[itemIndex],
-          "quantity",
-          responseData.item.quantity
-        );
-        this.$set(
-          this.order.items[itemIndex],
-          "totalPrice",
-          responseData.item.totalPrice
-        );
-      } else {
-        this.order.items.push(responseData.item);
+        const responseData = response.data;
+        const itemIndex = _findIndex(this.order.items, [
+          "id",
+          responseData.item.id,
+        ]);
+
+        if (itemIndex >= 0) {
+          this.$set(
+            this.order.items[itemIndex],
+            "quantity",
+            responseData.item.quantity
+          );
+          this.$set(
+            this.order.items[itemIndex],
+            "totalPrice",
+            responseData.item.totalPrice
+          );
+        } else {
+          this.order.items.push(responseData.item);
+        }
+
+        this.order.totalQuantity = responseData.totalQuantity;
+        this.order.totalValue = responseData.totalValue;
+        this.order.updatedAt = responseData.updatedAt;
+
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        this.$Progress.fail();
+        if (error.response && error.response.data) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
       }
-
-      this.order.totalQuantity = responseData.totalQuantity;
-      this.order.totalValue = responseData.totalValue;
-      this.order.updatedAt = responseData.updatedAt;
     },
 
     async saveEdit(item) {
@@ -556,16 +581,28 @@ export default {
     },
 
     async updateStatus(statusId) {
-      const data = {
-        id: this.order.id,
-        status: {
-          id: statusId,
-        },
-      };
+      try {
+        this.$Progress.start();
+        const data = {
+          id: this.order.id,
+          status: {
+            id: statusId,
+          },
+        };
 
-      const response = await updateOrderStatus(data);
+        const response = await updateOrderStatus(data);
 
-      this.order.status = response.data.status;
+        this.order.status = response.data.status;
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        this.$Progress.fail();
+        if (error.response && error.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.success("Something went wrong, try again later");
+        }
+      }
     },
 
     async markAsIsPreparing() {
