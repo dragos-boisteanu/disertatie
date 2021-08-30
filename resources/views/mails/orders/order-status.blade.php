@@ -6,7 +6,7 @@
 
 <body>
 	<div>
-		Starea comenzii <span style="font-weight: bold">#{{ $order->id }}</span> a fost schimbat din <span
+		Starea comenzii <span style="font-weight: bold">#{{ $order->id }}</span> a fost schimbata din <span
 			style="font-weight: bold">{{ $oldStatus->name }}</span>
 		in
 		<span style="font-weight: bold">{{ $order->status->name}}</span> de catre {{ $order->staff->fullName}}
