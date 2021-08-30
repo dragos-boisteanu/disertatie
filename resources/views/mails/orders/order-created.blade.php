@@ -101,10 +101,11 @@
 	</table>
 
 	@auth
-	<div style="margin-top: 8px;">
-		<a href="{{ route('orders.show', ['id' => $order->id]) }}">Urmareste comanda</a>
+	<div style="margin-top: 8px">
+		Comanda poate fi urmarita <a href="{{ route('order.show', ['id'=>$order->id]) }}">AICI</a>
 	</div>
 	@endauth
+
 	<div style="margin-top: 8px;">
 		<span style="font-weight: bold;">Telefon contact:</span>
 		<a href="tel:0238482384">0238482384</a>

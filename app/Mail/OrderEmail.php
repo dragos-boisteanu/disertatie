@@ -5,6 +5,7 @@ namespace App\Mail;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -30,6 +31,6 @@ class OrderEmail extends Mailable
 	 */
 	public function build()
 	{
-		return $this->subject("Comanda # " . $this->order->id . ' a fost plasata')->view('mails.order', ['order' => $this->order]);
+		return $this->subject("Comanda cu id-ul #" . $this->order->id . ' a fost inregistrata')->view('mails.orders.order-created', ['order' => $this->order]);
 	}
 }
