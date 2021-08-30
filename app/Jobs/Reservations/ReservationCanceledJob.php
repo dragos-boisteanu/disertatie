@@ -1,32 +1,31 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Reservations;
 
+use App\Models\Reservation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationCanceledMail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Mail\ReservationStatusUpdateMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class ReservationStatusUpdated implements ShouldQueue
+class ReservationCanceledJob implements ShouldQueue
 {
 	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
 	protected $reservation;
-	protected $oldStatus;
 
 	/**
 	 * Create a new job instance.
 	 *
 	 * @return void
 	 */
-	public function __construct($reservation, $oldStatus)
+	public function __construct(Reservation $reservation)
 	{
 		$this->reservation = $reservation;
-		$this->oldStatus = $oldStatus;
 	}
 
 	/**
@@ -36,8 +35,7 @@ class ReservationStatusUpdated implements ShouldQueue
 	 */
 	public function handle()
 	{
-
-		$email = new ReservationStatusUpdateMail($this->reservation, $this->oldStatus);
-		Mail::to($this->reservation->email)->send($email);
+		$mail = new ReservationCanceledMail($this->reservation);
+		Mail::to($this->reservation->email)->send($mail);
 	}
 }

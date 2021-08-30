@@ -156,4 +156,15 @@ class ReservationService implements ReservationServiceInterface
 			throw new Exception('A aparut o eroare, incerca dimnou');
 		}
 	}
+
+	public function linkStaffWithReservation(int $staffId, Reservation $reservation): Reservation
+	{
+		try {
+			$reservation->staff_id = $staffId;
+			$reservation->save();
+			return $reservation;
+		} catch (\Exception $ex) {
+			throw new Exception('Failed to link waiter to order');
+		}
+	}
 }

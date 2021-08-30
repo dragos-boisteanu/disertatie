@@ -34,12 +34,21 @@
 
     <div class="text-sm md:flex md:gap-x-4 lg:w-2/3 2xl:w-1/2">
       <div class="w-full bg-white shadow p-4 rounded md:flex-1">
-        <div class="flex items-center justify-between">
+        <div>
           <div>
             <span class="font-semibold">Client</span>
             <span>{{ reservation.clientName }}</span>
           </div>
+          <div class="mt-1">
+            <span class="font-semibold">Phone number</span>
+            <span>{{ reservation.phoneNumber }}</span>
+          </div>
+          <div class="mt-1">
+            <span class="font-semibold">Email</span>
+            <span>{{ reservation.email }}</span>
+          </div>
         </div>
+
         <div class="flex items-center justify-between mt-2">
           <div>
             <span class="font-semibold">Staff</span>

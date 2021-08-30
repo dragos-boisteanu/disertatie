@@ -6,8 +6,11 @@
 
 <body>
 	<div>
-		Statutul rezervarii {{ $reservation->id }} s-a schimbat din <span style="font-weight: 400">{{ $oldStatus }}</span>
-		in <span style="font-weight: 400">{{ $reservation->status->name}}</span>.
+		Starea rezervarii {{ $reservation->id }} a fost schimbat din
+		<span style="font-weight: bold">{{ $oldStatus->name }}</span>
+		in
+		<span style="font-weight: bold">{{ $reservation->status->name}}</span>
+		de catre {{ $reservation->staff->fullName}}
 	</div>
 
 	@auth

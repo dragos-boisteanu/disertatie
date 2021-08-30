@@ -7,13 +7,15 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationCollection;
 use App\Interfaces\ReservationServiceInterface;
 use App\Http\Resources\ReservationListCollection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\NoAvailabeTablesForReservationException;
 use App\Http\Resources\Reservation as ResourcesReservation;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Jobs\Reservations\ReservationCanceledJob;
 
 class ReservationController extends Controller
 {
@@ -97,6 +99,10 @@ class ReservationController extends Controller
 		try {
 			$reservation = Reservation::withTrashed()->with(['tables', 'client', 'staff'])->findOrFail($id);
 
+			if ((Auth::user()->isWaiter() || Auth::user()->isLocationManager() || Auth::user()->isAdminitrator()) && is_null($reservation->staff_id)) {
+				$reservation = $this->reservationService->linkStaffWithReservation(Auth::id(), $reservation);
+				$reservation->load('staff');
+			}
 			return new ResourcesReservation($reservation);
 		} catch (ModelNotFoundException $e) {
 			debug($e);
@@ -129,6 +135,9 @@ class ReservationController extends Controller
 			$reservation->refresh();
 
 			DB::commit();
+
+			dispatch((new ReservationCanceledJob($reservation))->onQueue('email'));
+
 			return response()->json(['message' => 'Reservation canceled', 'deletedAt' => $reservation->deleted_at, 'status' => $reservation->status], 200);
 		} catch (ModelNotFoundException $e) {
 			debug($e);

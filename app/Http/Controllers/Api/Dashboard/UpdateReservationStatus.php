@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\ReservationStatusUpdated;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UpdateReservationStatus extends Controller
@@ -19,12 +20,18 @@ class UpdateReservationStatus extends Controller
 	{
 		try {
 			$reservation = Reservation::findOrFail($id);
+
+			$oldStatus = $reservation->status;
+
 			$reservation->status_id = $request->statusId;
 
 			$reservation->save();
 
 			$reservation->refresh();
 
+			dispatch((new ReservationStatusUpdated($reservation, $oldStatus))->onQueue('email'));
+
+			debug($oldStatus);
 			return response()->json(['message' => 'Reservation status updated', 'status' => $reservation->status], 200);
 		} catch (ModelNotFoundException $e) {
 			debug($e);

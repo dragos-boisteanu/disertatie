@@ -18,6 +18,9 @@ class Reservation extends JsonResource
 			'id' => $this->id,
 
 			'clientName' => $this->client_name,
+			'phoneNumber' => $this->phone_number,
+			'email' => $this->email,
+
 			'staffName' => $this->staff ? $this->staff->fullName : null,
 
 			'seats' => $this->seats,

@@ -14,5 +14,5 @@ interface OrderServiceInterface
 	public function update(array $data, Order  $order): Order;
 	public function updateStatus(int $statusId, Order $order): Order;
 	public function disable(Order $order): Order;
-	public function linkWaiterWithOrder(int $waiterId, Order $order): Order;
+	public function linkStaffWithOrder(int $waiterId, Order $order): Order;
 }
