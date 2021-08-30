@@ -76,7 +76,7 @@ class OrderController extends Controller
 			$this->authorize('view', $order);
 
 			if ((Auth::user()->isWaiter() || Auth::user()->isLocationManager() || Auth::user()->isAdminitrator()) && is_null($order->staff_id)) {
-				$order = $this->orderService->linkWaiterWithOrder(Auth::id(), $order);
+				$order = $this->orderService->linkStaffWithOrder(Auth::id(), $order);
 				$order->load('staff');
 			}
 

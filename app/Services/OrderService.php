@@ -5,19 +5,16 @@ namespace App\Services;
 use Exception;
 use App\Models\Order;
 use App\Models\Product;
-use App\Events\NewMessage;
 use App\Events\OrderCreated;
 use App\Jobs\SendOrderEmailJob;
 use App\Events\OrderStatusUpdate;
 use App\Events\UpdateTableStatus;
-use App\Events\OrderPlacedAtTable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Queue;
+use App\Jobs\Orders\OrderCanceledJob;
 use App\Exceptions\NotInStockException;
 use App\Interfaces\OrderServiceInterface;
 use App\Interfaces\TableServiceInterface;
-use Barryvdh\Debugbar\Facade as Debugbar;
-use App\Http\Resources\Order as OrderResource;
+use App\Jobs\Orders\OrderStatusUpdatedJob;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\ProductStockServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -142,11 +139,10 @@ class OrderService implements OrderServiceInterface
 
 			DB::commit();
 
-			if (isset($order->email)) {
-				dispatch((new SendOrderEmailJob($order))->onQueue('email'));
-			}
+			dispatch((new SendOrderEmailJob($order))->onQueue('email'));
 
 			broadcast(new OrderCreated($order))->toOthers();
+
 
 			return $order;
 		} catch (NotInStockException $ex) {
@@ -182,14 +178,20 @@ class OrderService implements OrderServiceInterface
 	public function updateStatus(int $statusId, Order $order): Order
 	{
 		try {
+			$oldStatus = $order->status;
+
 			$order->status_id = $statusId;
+
 			if ($order->delivery_method_id == 3 && $statusId == 7) {
 				$this->tableService->setStatus($order->table_id, 1);
 				$tableStatus = $this->tableService->getStatusById(1);
 				broadcast(new UpdateTableStatus($tableStatus, $order->table_id));
 			}
+
 			$order->save();
 			$order->refresh();
+
+			dispatch((new OrderStatusUpdatedJob($order, $oldStatus))->onQueue('email'));
 
 			broadcast(new OrderStatusUpdate($order));
 
@@ -212,6 +214,8 @@ class OrderService implements OrderServiceInterface
 
 			$order = $this->removeItems($order);
 
+			dispatch((new OrderCanceledJob($order))->onQueue('email'));
+
 			broadcast(new OrderStatusUpdate($order));
 
 			return $order;
@@ -220,10 +224,10 @@ class OrderService implements OrderServiceInterface
 		}
 	}
 
-	public function linkWaiterWithOrder(int $waiterId, Order $order): Order
+	public function linkStaffWithOrder(int $staffId, Order $order): Order
 	{
 		try {
-			$order->staff_id = $waiterId;
+			$order->staff_id = $staffId;
 			$order->save();
 			return $order;
 		} catch (\Exception $ex) {

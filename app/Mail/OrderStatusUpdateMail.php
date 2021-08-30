@@ -3,25 +3,28 @@
 namespace App\Mail;
 
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderEmail extends Mailable
+class OrderStatusUpdateMail extends Mailable
 {
 	use Queueable, SerializesModels;
 
-	protected Order $order;
+	private Order $order;
+	private OrderStatus $oldStatus;
+
 	/**
 	 * Create a new message instance.
 	 *
 	 * @return void
 	 */
-	public function __construct(Order $order)
+	public function __construct(Order $order, OrderStatus $oldStatus)
 	{
 		$this->order = $order;
+		$this->oldStatus = $oldStatus;
 	}
 
 	/**
@@ -31,6 +34,6 @@ class OrderEmail extends Mailable
 	 */
 	public function build()
 	{
-		return $this->subject("Comanda cu id-ul #" . $this->order->id . ' a fost inregistrata')->view('mails.orders.order-created', ['order' => $this->order]);
+		return $this->subject("Starea comenzii #" . $this->order->id . ' a fost schimbata')->view('mails.orders.order-status', ['order' => $this->order, 'oldStatus' => $this->oldStatus]);
 	}
 }

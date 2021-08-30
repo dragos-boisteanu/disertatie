@@ -6,8 +6,10 @@
 
 <body>
 	<div>
-		Statutul comenzii {{ $order->id }} s-a schimbat din <span style="font-weight: 400">{{ $oldStatus }}</span> in <span
-			style="font-weight: 400">{{ $order->status->name}}</span>.
+		Starea comenzii <span style="font-weight: bold">#{{ $order->id }}</span> a fost schimbat din <span
+			style="font-weight: bold">{{ $oldStatus->name }}</span>
+		in
+		<span style="font-weight: bold">{{ $order->status->name}}</span> de catre {{ $order->staff->fullName}}
 	</div>
 
 	@if(Auth::check())

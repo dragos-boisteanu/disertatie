@@ -6,7 +6,7 @@
 
 <body>
 	<div>
-		Starea rezervarii {{ $reservation->id }} a fost schimbat din
+		Starea rezervarii <span style="font-weight: bold">#{{ $reservation->id }}</span> a fost schimbat din
 		<span style="font-weight: bold">{{ $oldStatus->name }}</span>
 		in
 		<span style="font-weight: bold">{{ $reservation->status->name}}</span>
