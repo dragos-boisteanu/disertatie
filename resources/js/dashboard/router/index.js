@@ -64,7 +64,7 @@ router.beforeEach(async (to, from, next) => {
 	const requireLocationManager = to.matched.some((record) => record.meta.requireLocationManager);
 	const requireWaiter = to.matched.some((record) => record.meta.requireWaiter);
 
-	console.log(isAdmin)
+
 	if (requireAdmin || requireLocationManager || requireWaiter) {
 		if (isAdmin || isLocationManager || isWaiter) {
 			next()
@@ -74,26 +74,6 @@ router.beforeEach(async (to, from, next) => {
 	} else {
 		next();
 	}
-
-	// if (requireAdmin && isAdmin) {
-	// 	next();
-	// } else {
-	// 	next(false)
-	// }
-
-	// if (requireLocationManager && (isLocationManager || isAdmin)) {
-	// 	next();
-	// } else {
-	// 	next(false)
-	// }
-
-	// if (requireWaiter && (isWaiter || isLocationManager || isAdmin)) {
-	// } else {
-	// 	next(false)
-	// }
-
-
-
 })
 
 Vue.use(VueRouter);
