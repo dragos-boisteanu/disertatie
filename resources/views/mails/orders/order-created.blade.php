@@ -12,6 +12,14 @@
 			<span>{{ $order->id }}</span>
 		</li>
 		<li style="margin-top: 8px;">
+			<span style="font-weight: bold;">Nume client:</span>
+			@if(isset($order->client))
+			<span>{{ $order->client->first_name }} {{ $order->client->last_name }}</span>
+			@else
+			<span>{{ $order->name }}</span>
+			@endif
+		</li>
+		<li style="margin-top: 8px;">
 			<span style="font-weight: bold;">Plasata la:</span>
 			<span>{{ $order->created_at }}</span>
 		</li>
@@ -21,14 +29,6 @@
 			<span>{{ $order->staff->first_name }} {{ $order->staff->last_name }}</span>
 		</li>
 		@endisset
-		<li style="margin-top: 8px;">
-			<span style="font-weight: bold;">Nume client:</span>
-			@if(isset($order->client))
-			<span>{{ $order->client->first_name }} {{ $order->client->last_name }}</span>
-			@else
-			<span>{{ $order->name }}</span>
-			@endif
-		</li>
 		<li style="margin-top: 8px;">
 			<span style="font-weight: bold;">Adresa:</span>
 			<span>{{ $order->address }}</span>

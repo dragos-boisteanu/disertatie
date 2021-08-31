@@ -12,6 +12,10 @@
 			<span>#{{ $reservation->id }}</span>
 		</li>
 		<li style="margin-top: 8px;">
+			<span style="font-weight: bold;">Client:</span>
+			<span>{{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</span>
+		</li>
+		<li style="margin-top: 8px;">
 			<span style="font-weight: bold;">Plasata la:</span>
 			<span>{{ $reservation->created_at }}</span>
 		</li>
@@ -26,10 +30,6 @@
 		</li>
 		@endisset
 		<li style="margin-top: 8px;">
-			<span style="font-weight: bold;">Nume client:</span>
-			<span>{{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</span>
-		</li>
-		<li style="margin-top: 8px;">
 			<span style="display:inline-block; font-weight: bold;">Mese:</span>
 			<ul style="display:inline-block; list-style: none; padding: 0;">
 				@foreach ($reservation->tables as $table)
@@ -40,7 +40,7 @@
 			</ul>
 		</li>
 		<li style="margin-top: 8px;">
-			<span style="font-weight: bold;">Telefon contact:</span>
+			<span style="font-weight: bold;">Telefon contact local:</span>
 			<span>{{ $reservation->phone_number }}</span>
 		</li>
 	</ul>
