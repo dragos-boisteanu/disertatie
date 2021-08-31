@@ -53,6 +53,7 @@ class OrderController extends Controller
 	public function store(OrderStoreRequest $request)
 	{
 		try {
+			$this->authorize('create', Order::class);
 			$this->orderService->create($request->validated(), $request->user()->id);
 
 			return response()->json(['message' => 'Order created succesfully'], 201);

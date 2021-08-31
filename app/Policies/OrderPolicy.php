@@ -46,7 +46,11 @@ class OrderPolicy
 	 */
 	public function create(User $user)
 	{
-		//
+		if ($user->isWaiter() || $user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
