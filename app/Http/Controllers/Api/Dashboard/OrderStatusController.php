@@ -31,6 +31,7 @@ class OrderStatusController extends Controller
 			$order = $this->orderService->updateStatus($request->status['id'], $order);
 
 			return response()->json([
+				'message' => 'Order status updated',
 				'updatedAt' => $order->updated_at,
 				'status' => $order->status
 			]);

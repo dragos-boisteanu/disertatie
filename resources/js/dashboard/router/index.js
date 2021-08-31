@@ -53,9 +53,9 @@ router.beforeEach(async (to, from, next) => {
 		await store.dispatch('Users/downloadLoggedUserData');
 	}
 
-	const isAdmin = true;
-	const isLocationManager = true;
-	const isWaiter = true;;
+	const isAdmin = store.getters['Users/isAdmin'];
+	const isLocationManager = store.getters['Users/isLocationManager'];
+	const isWaiter = store.getters['Users/isWaiter'];;
 	const isKitchenManager = true;
 	const isDelivery = true;
 	const isKitchen = true;
@@ -63,18 +63,37 @@ router.beforeEach(async (to, from, next) => {
 	const requireAdmin = to.matched.some((record) => record.meta.requireAdmin);
 	const requireLocationManager = to.matched.some((record) => record.meta.requireLocationManager);
 	const requireWaiter = to.matched.some((record) => record.meta.requireWaiter);
-	// const requireDelivery = to.matched.some((record) => record.meta.requireDelivery);
-	// const requireKitchen = to.matched.some((record) => record.meta.requireKitchen);
 
+	console.log(isAdmin)
 	if (requireAdmin || requireLocationManager || requireWaiter) {
 		if (isAdmin || isLocationManager || isWaiter) {
-			next();
+			next()
 		} else {
-			next({ name: "Dashboard" });
+			next(false);
 		}
 	} else {
 		next();
 	}
+
+	// if (requireAdmin && isAdmin) {
+	// 	next();
+	// } else {
+	// 	next(false)
+	// }
+
+	// if (requireLocationManager && (isLocationManager || isAdmin)) {
+	// 	next();
+	// } else {
+	// 	next(false)
+	// }
+
+	// if (requireWaiter && (isWaiter || isLocationManager || isAdmin)) {
+	// } else {
+	// 	next(false)
+	// }
+
+
+
 })
 
 Vue.use(VueRouter);

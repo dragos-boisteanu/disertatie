@@ -26,7 +26,7 @@ class User extends JsonResource
 			'createdAt' => $this->created_at,
 			'role' => ['id' => $this->role->id, 'name' => $this->role->name],
 			'isAdmin' => $this->isAdminitrator(),
-			'isLocaltionManager' => $this->isLocationManager(),
+			'isLocationManager' => $this->isLocationManager(),
 			'isKitchenManager' => $this->isKitchenManager(),
 			'isWaiter' => $this->isWaiter(),
 			'isKitchen' => $this->isKitchen(),

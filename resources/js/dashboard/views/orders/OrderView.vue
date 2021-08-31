@@ -328,18 +328,21 @@ export default {
 
   computed: {
     ...mapGetters("Users", [
+      "getLoggedUser",
       "isAdmin",
       "isLocationManager",
       "isWaiter",
-      "getLoggedUser",
       "isKitchenManager",
       "isDelivery",
     ]),
 
     canCancel() {
       if (
+        (this.isAdmin ||
+          this.isLocationManager ||
+          (this.isWaiter && this.getLoggedUser.id == this.order.staffId)) &&
         (this.order.deletedAt === null) &
-        (this.order.status.name !== "Completed")
+          (this.order.status.name !== "Completed")
       ) {
         return true;
       } else {
@@ -349,6 +352,9 @@ export default {
 
     canEdit() {
       if (
+        (this.isAdmin ||
+          this.isLocationManager ||
+          (this.isWaiter && this.getLoggedUser.id == this.order.staffId)) &&
         this.order.deletedAt === null &&
         this.order.status.name !== "Completed" &&
         this.order.status.name !== "Delivered"
@@ -373,6 +379,9 @@ export default {
 
     canMarkAsCompleted() {
       if (
+        (this.isAdmin ||
+          this.isLocationManager ||
+          (this.isWaiter && this.getLoggedUser.id == this.order.staffId)) &&
         this.order.deletedAt === null &&
         this.order.status.name !== "Completed"
       ) {
@@ -384,6 +393,7 @@ export default {
 
     canMarkAsIsPreparing() {
       return (
+        (this.isAdmin || this.isLocationManager || this.isKitchenManager) &&
         this.order.status.name == "Received" &&
         this.order.status.name != "In delivery" &&
         this.order.status.name != "Delivered"
@@ -392,6 +402,9 @@ export default {
 
     canMarkInDelivery() {
       return (
+        (this.isAdmin ||
+          this.isLocationManager ||
+          (this.isWaiter && this.getLoggedUser.id == this.order.staffId)) &&
         this.order.status.name == "Is preparing" &&
         this.order.status.name != "In delivery" &&
         this.order.status.name != "Delivered"
@@ -400,6 +413,10 @@ export default {
 
     canMarkAsDelivered() {
       return (
+        (this.isAdmin ||
+          this.isLocationManager ||
+          (this.isWaiter && this.getLoggedUser.id == this.order.staffId) ||
+          this.isDelivery) &&
         this.order.status.name == "In delivery" &&
         this.order.status.name != "Delivered"
       );

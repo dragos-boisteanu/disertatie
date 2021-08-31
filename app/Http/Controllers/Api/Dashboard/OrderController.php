@@ -128,6 +128,7 @@ class OrderController extends Controller
 			$order = $this->orderService->disable($order);
 
 			return response()->json([
+				'message' => 'Order canceled',
 				'deletedAt' => $order->deleted_at,
 				'status' => $order->status,
 			]);
