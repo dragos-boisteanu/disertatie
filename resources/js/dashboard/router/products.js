@@ -20,6 +20,7 @@ export default [
 		children: [
 			{
 				path: "",
+				name: 'Products',
 				component: ProductsListView,
 			},
 			{
@@ -28,7 +29,6 @@ export default [
 				component: AddProductView,
 				meta: {
 					requireLocationManager: true,
-					requiredAdmin: true,
 					breadcrumb: {
 						label: 'Add new product',
 						parent: 'Products'

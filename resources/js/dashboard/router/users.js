@@ -28,8 +28,6 @@ export default [
 				name: 'CreateUser',
 				component: CreateUserView,
 				meta: {
-					requireLocationManager: true,
-					requiredAdmin: true,
 					requireWaiter: true,
 					breadcrumb: {
 						label: 'Create user account',
@@ -56,8 +54,6 @@ export default [
 				path: `:id/edit`,
 				name: 'EditUser',
 				component: EditUserView,
-				requireLocationManager: true,
-				requiredAdmin: true,
 				requireWaiter: true,
 				meta: {
 					breadcrumb: {

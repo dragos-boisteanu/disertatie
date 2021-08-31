@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class CategoryPositionController extends Controller
 {
@@ -14,6 +15,8 @@ class CategoryPositionController extends Controller
 	public function updatePosition(Request $request)
 	{
 		try {
+			$this->authorize('update', Category::class);
+
 			DB::beginTransaction();
 			$selectedCategory = Category::withTrashed()->findOrFail($request->categoryId);
 			$targetCategory = Category::withTrashed()->findOrFail($request->targetCategoryId);
@@ -53,10 +56,12 @@ class CategoryPositionController extends Controller
 
 			DB::commit();
 			return response()->json(['message' => 'Positon changed succesfull'], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $e) {
 			DB::rollBack();
 			debug($e->getMessage());
-			return response()->json(['error' => 'Failed to change position'], 500);
+			return response()->json(['message' => 'Failed to change position'], 500);
 		}
 	}
 
@@ -66,6 +71,8 @@ class CategoryPositionController extends Controller
 	public function updateSubCategoryPosition($id, $direction)
 	{
 		try {
+			$this->authorize('update', Category::class);
+
 			DB::beginTransaction();
 
 			$category = Category::withTrashed()->findOrFail($id);
@@ -104,9 +111,11 @@ class CategoryPositionController extends Controller
 
 			DB::commit();
 			return response()->json(['message' => 'Category ' . $category->name .  ' moved ' . $directionMessage, 'position' => $category->position], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $ex) {
 			DB::rollBack();
-			return response()->json(['error' => 'Failed to move category up'], 500);
+			return response()->json(['message' => 'Failed to move category up'], 500);
 		}
 	}
 }

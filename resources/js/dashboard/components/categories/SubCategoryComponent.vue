@@ -187,7 +187,9 @@ export default {
         this.$Progress.fail();
 
         if (error.response) {
-          this.$toast.error(error.response.data.error);
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
         }
       }
     },

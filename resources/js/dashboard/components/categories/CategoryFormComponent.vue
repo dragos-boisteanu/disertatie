@@ -429,7 +429,7 @@ export default {
         this.$toast.success(response.data.message);
       } catch (error) {
         this.$Progress.fail();
-        if (error.response && this.response.data.message) {
+        if (error.response && error.response.data.message) {
           this.$toast.error(error.response.data.message);
         } else {
           this.$toast.error("Something went wrong, try again later");
@@ -478,7 +478,9 @@ export default {
         console.log(error);
 
         if (error.response) {
-          this.$toast.error(error.response.data.error);
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
         }
       }
     },
@@ -560,7 +562,9 @@ export default {
         console.log(error);
 
         if (error.response) {
-          this.$toast.error(error.response.data.error);
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
         }
       }
     },
@@ -584,6 +588,12 @@ export default {
         this.$Progress.fail();
         this.waiting = false;
         console.log(error);
+
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
       }
     },
 
@@ -604,6 +614,12 @@ export default {
       } catch (error) {
         this.$Progress.fail();
         console.log(error);
+
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
       }
     },
 
@@ -621,6 +637,11 @@ export default {
       } catch (error) {
         this.$Progress.fail();
         console.log(error);
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
       }
     },
 
@@ -716,6 +737,8 @@ export default {
 
         if (error.response) {
           this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
         }
       }
     },

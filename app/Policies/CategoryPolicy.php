@@ -20,11 +20,11 @@ class CategoryPolicy
 	 */
 	public function create(User $user)
 	{
-		if ($user->role->name === "Administrator" || $user->role->name === "Location Manager") {
-			Response::allow();
+		if ($user->isAdminitrator()) {
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 
 	/**
@@ -36,11 +36,11 @@ class CategoryPolicy
 	 */
 	public function update(User $user)
 	{
-		if ($user->role->name === "Administrator" || $user->role->name === "Location Manager") {
-			Response::allow();
+		if ($user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 
 	/**
@@ -52,28 +52,28 @@ class CategoryPolicy
 	 */
 	public function forceDelete(User $user)
 	{
-		if ($user->role->name === "Administrator" || $user->role->name === "Location Manager") {
-			Response::allow();
+		if ($user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 
 	public function disable(User $user)
 	{
-		if ($user->role->name === "Administrator" || $user->role->name === "Location Manager") {
-			Response::allow();
+		if ($user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 
 	public function restore(User $user)
 	{
-		if ($user->role->name === "Administrator" || $user->role->name === "Location Manager") {
-			Response::allow();
+		if ($user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
 		}
 
-		Response::deny('You are not authorized to perform this action.');
+		return false;
 	}
 }

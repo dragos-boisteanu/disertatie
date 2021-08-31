@@ -65,11 +65,23 @@ router.beforeEach(async (to, from, next) => {
 	const requireWaiter = to.matched.some((record) => record.meta.requireWaiter);
 
 
-	if (requireAdmin || requireLocationManager || requireWaiter) {
+	if (requireAdmin) {
+		if (isAdmin) {
+			next()
+		} else {
+			next({ name: 'Dashboard' });
+		}
+	} else if (requireLocationManager) {
+		if (isAdmin || isLocationManager) {
+			next()
+		} else {
+			next({ name: 'Dashboard' });
+		}
+	} else if (requireWaiter) {
 		if (isAdmin || isLocationManager || isWaiter) {
 			next()
 		} else {
-			next(false);
+			next({ name: 'Dashboard' });
 		}
 	} else {
 		next();
