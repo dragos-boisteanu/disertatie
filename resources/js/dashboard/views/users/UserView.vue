@@ -83,6 +83,7 @@
         </div>
         <div class="flex items-center gap-x-2">
           <button
+            v-if="cnaEdit"
             @click="editUser"
             class="
               bg-amber-700
@@ -161,13 +162,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters("Users", ["getLoggedUser", "isAdmin", "isLocationManager"]),
-
-    // canDelete() {
-    //     if(this.getLoggedUser) {
-    //         return this.getLoggedUser.role_id === 7 && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id
-    //     }
-    // },
+    ...mapGetters("Users", [
+      "getLoggedUser",
+      "isAdmin",
+      "isLocationManager",
+      "isWaiter",
+    ]),
 
     canDisable() {
       if (this.getLoggedUser) {
@@ -176,6 +176,10 @@ export default {
           (this.isAdmin || this.isLocationManager)
         );
       }
+    },
+
+    cnaEdit() {
+      return this.isAdmin || this.isLocationManager || this.isWaiter;
     },
   },
 

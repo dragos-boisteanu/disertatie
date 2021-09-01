@@ -27,6 +27,7 @@ export default [
 				name: 'ReservationCreate',
 				component: ReservationCreate,
 				meta: {
+					requireWaiter: true,
 					breadcrumb: {
 						label: 'Create new reservation',
 						parent: 'Reservations'

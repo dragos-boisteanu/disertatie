@@ -44,6 +44,7 @@
           Refresh
         </button>
         <router-link
+          v-if="hideCreateReservation"
           :to="{ name: 'ReservationCreate' }"
           class="
             block
@@ -118,6 +119,8 @@ import ReservationsFilter from "../../components/filter/ReservationsFilter.vue";
 
 import Spinner from "vue-simple-spinner";
 
+import { mapGetters } from "vuex";
+
 import _isEqual from "lodash/isEqual";
 import _isEmpty from "lodash/isEmpty";
 
@@ -141,6 +144,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("Users", ["isAdmin", "isWaiter", "isLocationManager"]),
     query() {
       const query = {};
 
@@ -151,6 +155,10 @@ export default {
       });
 
       return query;
+    },
+
+    hideCreateReservation() {
+      return this.isAdmin || this.isLocationManager || this.isWaiter;
     },
   },
 

@@ -42,6 +42,7 @@
           Refresh
         </button>
         <router-link
+          v-if="canAdd"
           :to="{ name: 'AddProduct' }"
           class="
             block
@@ -208,6 +209,12 @@ export default {
 
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
+    ...mapGetters("Users", [
+      "getLoggedUser",
+      "isAdmin",
+      "isWaiter",
+      "isLocationManager",
+    ]),
 
     query() {
       const query = {};
@@ -221,6 +228,10 @@ export default {
       query.orderBy = this.orderBy;
 
       return query;
+    },
+
+    canAdd() {
+      return this.isLocationManager || this.isAdmin;
     },
   },
 

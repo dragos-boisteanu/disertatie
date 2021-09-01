@@ -75,11 +75,15 @@
         </div>
         <div class="flex justify-center w-full mt-2 md:justify-start">
           <Status :deleted-at="product.deletedAt" />
-          <Category :category-id="product.categoryId" :sub-category-id="product.subCategoryId"></Category>
+          <Category
+            :category-id="product.categoryId"
+            :sub-category-id="product.subCategoryId"
+          ></Category>
           <Stock :quantity="product.quantity"></Stock>
         </div>
         <div class="flex items-center gap-x-2">
           <button
+            v-if="canEdit"
             @click="editProduct"
             class="
               bg-amber-700
@@ -157,7 +161,7 @@
             active:outline-none
           "
         >
-          Update stock
+          View stock
         </router-link>
       </div>
     </div>
@@ -210,7 +214,7 @@
 import ViewContainer from "../ViewContainer";
 import Status from "../../components/StatusComponent";
 import Stock from "../../components/StockComponent";
-import Category from "../../components/products/CategoryComponent";;
+import Category from "../../components/products/CategoryComponent";
 
 import { mapGetters } from "vuex";
 
@@ -227,25 +231,27 @@ export default {
   },
 
   computed: {
-    ...mapGetters("Users", ["getLoggedUser"]),
+    ...mapGetters("Users", [
+      "getLoggedUser",
+      "isAdmin",
+      "isWaiter",
+      "isLocationManager",
+    ]),
 
     canDelete() {
-      if (this.getLoggedUser) {
-        return this.getLoggedUser.role.name === "Administrator";
-      }
+      return this.isAdmin;
     },
 
     canDisable() {
-      if (this.getLoggedUser) {
-        return (
-          this.getLoggedUser.role.name === "Location Manager" ||
-          this.getLoggedUser.role.name === "Administrator"
-        );
-      }
+      return this.isLocationManager || this.isAdmin;
+    },
+
+    canEdit() {
+      return this.isLocationManager || this.isAdmin;
     },
 
     canRestore() {
-      return this.product.deletedAt !== "" && this.product.deletedAt !== null
+      return this.product.deletedAt !== "" && this.product.deletedAt !== null;
     },
 
     hasDiscount() {
@@ -288,9 +294,9 @@ export default {
     },
 
     async refresh() {
-        const response = await downloadProduct(this.product.id);
-        this.setProduct(response.data.data); 
-    }
+      const response = await downloadProduct(this.product.id);
+      this.setProduct(response.data.data);
+    },
   },
 
   components: {

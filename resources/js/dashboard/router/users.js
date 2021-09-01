@@ -56,6 +56,7 @@ export default [
 				component: EditUserView,
 				requireWaiter: true,
 				meta: {
+					requireWaiter: true,
 					breadcrumb: {
 						label: 'Edit',
 						parent: 'User'

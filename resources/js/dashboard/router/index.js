@@ -63,6 +63,7 @@ router.beforeEach(async (to, from, next) => {
 	const requireAdmin = to.matched.some((record) => record.meta.requireAdmin);
 	const requireLocationManager = to.matched.some((record) => record.meta.requireLocationManager);
 	const requireWaiter = to.matched.some((record) => record.meta.requireWaiter);
+	const requireKitchenManager = to.matched.some((record) => record.meta.requireKitchenManager);
 
 
 	if (requireAdmin) {

@@ -133,7 +133,7 @@
           </li>
           <li
             class="text-sm text-gray-300 hover:text-white tracking-wid"
-            v-if="isAdmin || isLocationManager || isWaiter || isKitchenManager"
+            v-if="isAdmin || isLocationManager || isWaiter"
           >
             <router-link
               :to="{ name: 'CreateOrder' }"
@@ -178,7 +178,7 @@
           </li>
           <li
             class="text-sm text-gray-300 hover:text-white tracking-wid"
-            v-if="isAdmin || isLocationManager || isWaiter || isKitchenManager"
+            v-if="isAdmin || isLocationManager || isWaiter"
           >
             <router-link
               :to="{ name: 'ReservationCreate' }"
@@ -326,10 +326,7 @@
               >Ingredients</router-link
             >
           </li>
-          <li
-            class="text-sm text-gray-300 hover:text-white tracking-wide"
-            v-if="!isDelivery"
-          >
+          <li class="text-sm text-gray-300 hover:text-white tracking-wide">
             <router-link
               :to="{ name: 'Stocks' }"
               class="

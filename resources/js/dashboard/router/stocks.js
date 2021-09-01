@@ -10,7 +10,6 @@ export default [
 		name: 'Stocks',
 		component: Stocks,
 		meta: {
-			requireWaiter: true,
 			breadcrumb: {
 				label: 'Stocks',
 				parent: 'Products'
