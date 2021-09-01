@@ -17,6 +17,7 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Interfaces\ProductServiceInterface;
 use App\Http\Resources\ProductOrderCollection;
 use App\Http\Resources\Product as ProductResource;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
@@ -52,10 +53,13 @@ class ProductController extends Controller
 	 */
 	public function store(ProductStoreRequest $request)
 	{
-		$request->user()->can('create');
+		$this->authorize('create', Product::class);
+
 		try {
 			$productId = $this->productService->create($request->validated());
 			return response()->json(['id' => $productId, 'message' => 'Produsul a fost adaugat'], 201);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $e) {
 			return  response()->json(['message' => $e->getMessage()], 400);
 		}
@@ -76,9 +80,19 @@ class ProductController extends Controller
 
 	public function edit($id)
 	{
-		$product = $this->productService->getById($id);
+		try {
+			$this->authorize('update', Product::class);
 
-		return new ProductEdit($product);
+			$product = $this->productService->getById($id);
+
+			return new ProductEdit($product);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (ModelNotFoundException $e) {
+			return  response()->json(['message' => $e->getMessage()], 404);
+		} catch (\Exception $e) {
+			return response()->json($e->getMessage(), 500);
+		}
 	}
 
 	/**
@@ -90,12 +104,14 @@ class ProductController extends Controller
 	 */
 	public function update(ProductPatchRequest $request, $id)
 	{
-		$request->user()->can('update');
+		$this->authorize('update', Product::class);
 
 		try {
 			$this->productService->patch($request->validated(), $id);
 
 			return response()->json(['message' => 'Product updated'], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (ModelNotFoundException $me) {
 			return  response()->json(['message' => $me->getMessage()], 404);
 		} catch (\Exception $e) {
@@ -103,13 +119,15 @@ class ProductController extends Controller
 		}
 	}
 
-	public function disable(Request $request, $id)
+	public function disable($id)
 	{
-		$request->user()->can('delete', Product::class);
+		$this->authorize('delete', Product::class);
 
 		try {
 			$deletedAt = $this->productService->disable($id);
 			return response()->json(['message' => 'Product disabled', 'deleted_at' => $deletedAt], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (ModelNotFoundException $me) {
 			return  response()->json(['message' => $me->getMessage()], 404);
 		} catch (\Exception $e) {
@@ -119,10 +137,13 @@ class ProductController extends Controller
 
 	public function restore(Request $request, $id)
 	{
-		$request->user()->can('restore', Product::class);
+
 		try {
+			$this->authorize('restore', Product::class);
 			$this->productService->restore($id);
 			return response()->json(['message' => 'Product restored', 'deleted_at' => null], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (ModelNotFoundException $me) {
 			return  response()->json(['message' => $me->getMessage()], 404);
 		} catch (\Exception $e) {
@@ -138,11 +159,13 @@ class ProductController extends Controller
 	 */
 	public function destroy(Request $request, $id)
 	{
-		$request->user()->can('forceDelete', Product::class);
+		$this->authorize('forceDelete', Product::class);
 
 		try {
 			$productName = $this->productService->destroy($id);
 			return response()->json(['message' => 'Product ' . $productName . ' deleted'], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (ModelNotFoundException $me) {
 			return  response()->json(['message' => $me->getMessage()], 404);
 		} catch (\Exception $e) {

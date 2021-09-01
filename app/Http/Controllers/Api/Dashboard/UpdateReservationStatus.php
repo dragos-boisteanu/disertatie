@@ -6,6 +6,7 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Jobs\ReservationStatusUpdated;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UpdateReservationStatus extends Controller
@@ -19,6 +20,8 @@ class UpdateReservationStatus extends Controller
 	public function __invoke(Request $request, int $id)
 	{
 		try {
+			$this->authorize('update', Reservation::class);
+
 			$reservation = Reservation::findOrFail($id);
 
 			$oldStatus = $reservation->status;
@@ -33,6 +36,8 @@ class UpdateReservationStatus extends Controller
 
 			debug($oldStatus);
 			return response()->json(['message' => 'Reservation status updated', 'status' => $reservation->status], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (ModelNotFoundException $e) {
 			debug($e);
 			return response()->json(['message' => 'No reservation found'], 404);

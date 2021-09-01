@@ -17,9 +17,10 @@ use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\UserPatchRequest;
 use App\Http\Requests\UserStoreRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Interfaces\ImageServiceInterface;
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\User as ResourcesUser;
-use App\Interfaces\ImageServiceInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class UserController extends Controller
 {
@@ -102,9 +103,11 @@ class UserController extends Controller
 	 */
 	public function store(UserStoreRequest $request)
 	{
-		$request->user()->can('create');
+
 
 		try {
+			$this->authorize('create', User::class);
+
 			DB::beginTransaction();
 
 			$user = new User();
@@ -135,6 +138,8 @@ class UserController extends Controller
 			DB::commit();
 
 			return response()->json(['user' => ['id' => $user->id, 'craetedAt' => $user->created_at], 'message' => 'User account created'], 201);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Illuminate\Database\QueryException $ex) {
 			DB::rollBack();
 			return response()->json($ex->getMessage(), 500);
@@ -167,6 +172,9 @@ class UserController extends Controller
 	public function update(UserPatchRequest $request, $id)
 	{
 		try {
+
+			$this->authorize('update', User::class);
+
 			$user = User::withTrashed()->findOrFail($id);
 
 			$request->user()->can('update', $user);
@@ -234,8 +242,9 @@ class UserController extends Controller
 			$user->save();
 
 			return response()->json(['message' => 'User account updated'], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $e) {
-
 			return response()->json(['message' => 'Something went wrong, try again later !'], 500);
 		}
 	}
@@ -244,6 +253,9 @@ class UserController extends Controller
 	public function disable(Request $request, $id)
 	{
 		try {
+
+			$this->authorize('delete', User::class);
+
 			$user = User::findOrFail($id);
 
 			$request->user()->can('delete', $user);
@@ -253,6 +265,8 @@ class UserController extends Controller
 			$user->refresh();
 
 			return response()->json(['message' => 'User account disabled', 'deletedAt' => $user->deleted_at], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $e) {
 			return response()->json(['message' => 'Something went wrong, try again later !'], 500);
 		}
@@ -261,6 +275,9 @@ class UserController extends Controller
 	public function restore(Request $request, $id)
 	{
 		try {
+
+			$this->authorize('restore', User::class);
+
 			$user = User::withTrashed()->findOrFail($id);
 
 			$request->user()->can('restore', $user);
@@ -270,6 +287,8 @@ class UserController extends Controller
 			$user->refresh();
 
 			return response()->json(['message' => 'User account restored', 'deletedAt' => $user->deleted_at], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (\Exception $e) {
 			return response()->json(['message' => 'Something went wrong, try again later !'], 500);
 		}
@@ -283,13 +302,21 @@ class UserController extends Controller
 	 */
 	public function destroy(Request $request, $id)
 	{
-		$user = User::withTrashed()->findOrFail($id);
 
-		$request->user()->can('forceDelete', $user);
+		try {
+			$this->authorize('forceDelete', User::class);
+			$user = User::withTrashed()->findOrFail($id);
 
-		$user->forceDelete();
+			$request->user()->can('forceDelete', $user);
 
-		return response()->json(['message' => 'User account deleted'], 200);
+			$user->forceDelete();
+
+			return response()->json(['message' => 'User account deleted'], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (\Exception $e) {
+			return response()->json(['message' => 'Something went wrong, try again later !'], 500);
+		}
 	}
 
 	public function getLoggedUser(Request $request)

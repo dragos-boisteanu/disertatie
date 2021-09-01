@@ -12,10 +12,11 @@ use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationCollection;
 use App\Interfaces\ReservationServiceInterface;
 use App\Http\Resources\ReservationListCollection;
+use App\Jobs\Reservations\ReservationCanceledJob;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\NoAvailabeTablesForReservationException;
 use App\Http\Resources\Reservation as ResourcesReservation;
-use App\Jobs\Reservations\ReservationCanceledJob;
 
 class ReservationController extends Controller
 {
@@ -50,6 +51,8 @@ class ReservationController extends Controller
 		debug($request->all());
 
 		try {
+			$this->authorize('create', Reservation::class);
+
 			DB::beginTransaction();
 
 			$input = [];
@@ -76,6 +79,10 @@ class ReservationController extends Controller
 			DB::commit();
 
 			return response()->json(['message' => "Reservation created with id: " . $reservation->id], 201);
+		} catch (\Exception $e) {
+			return response()->json(['message' => 'Something went wrong, try again later !'], 500);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (NoAvailabeTablesForReservationException $ex) {
 			DB::rollBack();
 			debug($ex);
@@ -123,6 +130,8 @@ class ReservationController extends Controller
 	{
 		try {
 
+			$this->authorize('forceDelete', Reservation::class);
+
 			DB::beginTransaction();
 
 			$reservation = Reservation::withTrashed()->findOrFail($id);
@@ -139,6 +148,8 @@ class ReservationController extends Controller
 			dispatch((new ReservationCanceledJob($reservation))->onQueue('email'));
 
 			return response()->json(['message' => 'Reservation canceled', 'deletedAt' => $reservation->deleted_at, 'status' => $reservation->status], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (ModelNotFoundException $e) {
 			debug($e);
 			return response()->json(['message' => 'No reservation found'], 404);
