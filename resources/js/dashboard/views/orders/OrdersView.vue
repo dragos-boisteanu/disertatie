@@ -60,7 +60,7 @@
         >
           Create order
         </router-link>
-        <button
+        <!-- <button
           class="
             flex
             items-center
@@ -93,8 +93,8 @@
             </svg>
           </div>
           <div>Subscribe to new orders</div>
-        </button>
-        <input hidden type="checkbox" :checked="getSubscribedToNewOrders" />
+        </button> -->
+        <!-- <input hidden type="checkbox" :checked="getSubscribedToNewOrders" /> -->
       </div>
 
       <select
@@ -177,21 +177,12 @@ export default {
         ...this.$route.query.deliveryMethods
       );
     }
-
-    if (this.getSubscribedToNewOrders) {
-      this.subscribeToNewOrders();
-    } else {
-      this.unsubscribeFromNewOrders();
-    }
   },
 
   computed: {
-    ...mapGetters("Users", [
-      "getSubscribedToNewOrders",
-      "isAdmin",
-      "isLocationManager",
-      "isWaiter",
-    ]),
+    ...mapGetters("Users", ["isAdmin", "isLocationManager", "isWaiter"]),
+
+    ...mapGetters("Subscribes", ["getNewOrderNotificationState"]),
 
     canCraete() {
       if (this.isAdmin || this.isLocationManager || this.isWaiter) {
@@ -231,18 +222,19 @@ export default {
       },
       orderBy: 1,
       showFilterState: false,
-
-      subscribe: false,
     };
   },
 
   watch: {
-    getSubscribedToNewOrders(newValue) {
-      if (newValue) {
-        this.subscribeToNewOrders();
-      } else {
-        this.unsubscribeFromNewOrders();
-      }
+    getNewOrderNotificationState: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          this.subscribeToNewOrders();
+        } else {
+          this.unsubscribeFromNewOrders();
+        }
+      },
     },
   },
 
@@ -348,22 +340,14 @@ export default {
       }
     },
 
-    // toggleSubscribeState() {
-    //   this.subscribe = !this.subscribe;
-    // },
-
     subscribeToNewOrders() {
       Echo.private("orders").listen("OrderCreated", (e) => {
         const newOrder = e.order;
-        if (this.orders) {
-          this.orders.unshift(newOrder);
-        }
+        // if (this.orders) {
+        //   this.orders.unshift(newOrder);
+        // }
 
-        this.openNotification({
-          type: "info",
-          message: `New order was created with id #${newOrder.id}`,
-          show: true,
-        });
+        this.$notify.info(`New order was created with id #${newOrder.id}`);
       });
     },
 

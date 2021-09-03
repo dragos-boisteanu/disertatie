@@ -371,7 +371,7 @@
         </ul>
       </div>
 
-      <div class="pt-2 pb-28 md:pb-8" v-if="isAdmin || isLocationManager">
+      <div class="pt-2" v-if="isAdmin || isLocationManager">
         <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
           DISCOUNTS
         </div>
@@ -391,6 +391,30 @@
               "
               exact
               >Discounts list</router-link
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="pt-2 pb-28 md:pb-8">
+        <div class="text-sm text-coolGray-400 font-bold px-5 tracking-wider">
+          SETTINGS
+        </div>
+        <ul class="mt-1">
+          <li class="text-sm text-gray-300 hover:text-white tracking-wid">
+            <router-link
+              :to="{ name: 'Settings' }"
+              class="
+                block
+                w-full
+                cursor-pointer
+                py-2
+                pl-8
+                border-l-4 border-coolGray-800
+                hover:border-sky-400
+                hover:bg-sky-400 hover:bg-opacity-20
+              "
+              exact
+              >Notification settings</router-link
             >
           </li>
         </ul>

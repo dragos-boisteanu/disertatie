@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Models\Order;
 use App\Events\NewMessage;
+use App\Events\OrderViewed;
 use Illuminate\Http\Request;
+use App\Events\OrderLinkViewed;
 use App\Jobs\SendOrderEmailJob;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -79,6 +81,7 @@ class OrderController extends Controller
 			if ((Auth::user()->isWaiter() || Auth::user()->isLocationManager() || Auth::user()->isAdminitrator()) && is_null($order->staff_id)) {
 				$order = $this->orderService->linkStaffWithOrder(Auth::id(), $order);
 				$order->load('staff');
+				broadcast(new OrderViewed());
 			}
 
 			return new OrderResource($order);

@@ -53,6 +53,21 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::delete('{id}/image', 'UserImageController@destroy');
 	});
 
+	Route::group(['prefix' => 'orders'], function () {
+		Route::get('new-orders-count', 'NewOrdersCountController');
+		Route::delete('{id}/disable', 'OrderController@disable');
+		// Route::post('{id}/restore', 'OrderController@restore');
+
+		Route::get('products/name/{name}', 'OrderItemController@getProductsByName');
+		Route::get('products/id/{id}', 'OrderItemController@getProductsById');
+
+		Route::patch('update-status/{orderId}', 'OrderStatusController');
+
+		Route::patch('remove-item/{orderId}', 'OrderItemController@removeItem');
+		Route::patch('add-item/{orderId}', 'OrderItemController@addItem');
+		Route::patch('patch-item/{orderId}', 'OrderItemController@patchItem');
+	});
+
 	Route::apiResource('users', 'UserController', ['as' => 'api']);
 	Route::apiResource('roles', 'RoleController', ['as' => 'api']);
 	Route::apiResource('products', 'ProductController', ['as' => 'api']);
@@ -84,19 +99,7 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::post('{id}/restore', 'DiscountController@restore');
 	});
 
-	Route::group(['prefix' => 'orders'], function () {
-		Route::delete('{id}/disable', 'OrderController@disable');
-		// Route::post('{id}/restore', 'OrderController@restore');
 
-		Route::get('products/name/{name}', 'OrderItemController@getProductsByName');
-		Route::get('products/id/{id}', 'OrderItemController@getProductsById');
-
-		Route::patch('update-status/{orderId}', 'OrderStatusController');
-
-		Route::patch('remove-item/{orderId}', 'OrderItemController@removeItem');
-		Route::patch('add-item/{orderId}', 'OrderItemController@addItem');
-		Route::patch('patch-item/{orderId}', 'OrderItemController@patchItem');
-	});
 
 	Route::group(['prefix' => 'tables'], function () {
 		Route::delete('{id}/disable', 'TableController@disable');

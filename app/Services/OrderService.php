@@ -141,7 +141,12 @@ class OrderService implements OrderServiceInterface
 
 			dispatch((new SendOrderEmailJob($order))->onQueue('email'));
 
-			broadcast(new OrderCreated($order))->toOthers();
+			if (is_null($userId)) {
+				broadcast(new OrderCreated($order));
+			} else {
+				broadcast(new OrderCreated($order))->toOthers();
+			}
+
 
 
 			return $order;

@@ -76,7 +76,16 @@ export default {
         this.downloadOrdersStatuses(),
         this.downloadTables(),
         this.downloadReservationsStatuses(),
+        this.fetchNewOrdersCount(),
       ]);
+
+      Echo.private("newOrdersCount").listen("OrderViewed", (e) => {
+        this.decrementNewOrdersCount();
+      });
+
+      Echo.private("newOrdersCount").listen("NewOrder", (e) => {
+        this.incrementNewOrdersCount();
+      });
 
       Echo.private("tables").listen("UpdateTableStatus", (e) => {
         const payload = {
@@ -103,6 +112,7 @@ export default {
 
   computed: {
     ...mapGetters("Notification", ["getNotification"]),
+    ...mapGetters("Subscribes", ["getNewOrderNotificationState"]),
 
     mobile() {
       return this.$mq === "sm" || this.$mq === "md" || this.$mq === "lg";
@@ -119,6 +129,19 @@ export default {
     };
   },
 
+  watch: {
+    getNewOrderNotificationState: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          this.subscribeToNewOrders();
+        } else {
+          this.unsubscribeFromNewOrders();
+        }
+      },
+    },
+  },
+
   methods: {
     ...mapActions("Categories", ["fetchCategories"]),
     ...mapActions("Units", ["fetchUnits"]),
@@ -133,6 +156,11 @@ export default {
       "downloadReservationsStatuses",
     ]),
     ...mapActions("Tables", ["downloadTables", "updateTableStatus"]),
+    ...mapActions("Orders", [
+      "fetchNewOrdersCount",
+      "decrementNewOrdersCount",
+      "incrementNewOrdersCount",
+    ]),
 
     async downloadRoles() {
       try {
@@ -140,6 +168,18 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    subscribeToNewOrders() {
+      Echo.private("orders").listen("OrderCreated", (e) => {
+        const newOrder = e.order;
+
+        this.$toast.info(`New order was created with id # ${newOrder.id}`);
+      });
+    },
+
+    unsubscribeFromNewOrders() {
+      Echo.leave("orders");
     },
   },
   components: {
