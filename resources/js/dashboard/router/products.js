@@ -9,7 +9,6 @@ const IndexView = () => import(/* webpackChunkName: "products-index" */ '../view
 export default [
 	{
 		path: `${dashboardBaseUrl}/products`,
-		name: 'Products',
 		component: IndexView,
 		meta: {
 			breadcrumb: {

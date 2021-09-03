@@ -8,7 +8,6 @@ const IndexView = () => import(/* webpackChunkName: "reservations-index" */ '../
 export default [
 	{
 		path: `${dashboardBaseUrl}/reservations`,
-		name: 'Reservations',
 		component: IndexView,
 		meta: {
 			breadcrumb: {

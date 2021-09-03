@@ -8,7 +8,6 @@ const IndexView = () => import(/* webpackChunkName: "orders-index" */ '../views/
 export default [
 	{
 		path: `${dashboardBaseUrl}/orders`,
-		name: 'Orders',
 		component: IndexView,
 		children: [
 			{

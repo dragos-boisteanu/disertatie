@@ -9,7 +9,6 @@ const IndexView = () => import(/* webpackChunkName: "users-index" */ '../views/u
 export default [
 	{
 		path: `${dashboardBaseUrl}/users`,
-		name: 'Users',
 		component: IndexView,
 		meta: {
 			breadcrumb: {
@@ -65,5 +64,4 @@ export default [
 			}
 		]
 	},
-
 ]

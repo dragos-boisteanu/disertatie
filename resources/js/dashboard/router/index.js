@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import store from '../store/index'
 
 const Home = () => import('../views/HomeView.vue');
+const PageNotFound = () => import('../views/PageNotFoundView.vue');
 
 import usersRoutes from './users'
 import productsRoutes from './products'
@@ -14,6 +15,7 @@ import discountsRoutes from './discounts'
 import ordersRoutes from './orders'
 import tablesRoutes from './tables'
 import reservations from './reservations';
+import settings from './settings';
 
 import { dashboardBaseUrl } from './baseUrls'
 
@@ -34,7 +36,10 @@ const routes = [
 	...discountsRoutes,
 	...ordersRoutes,
 	...tablesRoutes,
-	...reservations
+	...reservations,
+	...settings,
+
+	{ path: "*", component: PageNotFound }
 ];
 
 const router = new VueRouter({
@@ -56,37 +61,35 @@ router.beforeEach(async (to, from, next) => {
 	const isAdmin = store.getters['Users/isAdmin'];
 	const isLocationManager = store.getters['Users/isLocationManager'];
 	const isWaiter = store.getters['Users/isWaiter'];;
-	const isKitchenManager = true;
-	const isDelivery = true;
-	const isKitchen = true;
 
 	const requireAdmin = to.matched.some((record) => record.meta.requireAdmin);
 	const requireLocationManager = to.matched.some((record) => record.meta.requireLocationManager);
 	const requireWaiter = to.matched.some((record) => record.meta.requireWaiter);
-	const requireKitchenManager = to.matched.some((record) => record.meta.requireKitchenManager);
 
 
-	if (requireAdmin) {
-		if (isAdmin) {
-			next()
-		} else {
-			next({ name: 'Dashboard' });
-		}
-	} else if (requireLocationManager) {
-		if (isAdmin || isLocationManager) {
-			next()
-		} else {
-			next({ name: 'Dashboard' });
-		}
-	} else if (requireWaiter) {
-		if (isAdmin || isLocationManager || isWaiter) {
-			next()
-		} else {
-			next({ name: 'Dashboard' });
-		}
-	} else {
-		next();
-	}
+	// if (requireAdmin) {
+	// 	if (isAdmin) {
+	// 		next()
+	// 	} else {
+	// 		next({ name: 'Dashboard' });
+	// 	}
+	// } else if (requireLocationManager) {
+	// 	if (isAdmin || isLocationManager) {
+	// 		next()
+	// 	} else {
+	// 		next({ name: 'Dashboard' });
+	// 	}
+	// } else if (requireWaiter) {
+	// 	if (isAdmin || isLocationManager || isWaiter) {
+	// 		next()
+	// 	} else {
+	// 		next({ name: 'Dashboard' });
+	// 	}
+	// } else {
+	// 	next();
+	// }
+
+	next();
 })
 
 Vue.use(VueRouter);
