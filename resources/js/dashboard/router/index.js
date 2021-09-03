@@ -15,7 +15,7 @@ import discountsRoutes from './discounts'
 import ordersRoutes from './orders'
 import tablesRoutes from './tables'
 import reservations from './reservations';
-import settings from './settings';
+// import settings from './settings';
 
 import { dashboardBaseUrl } from './baseUrls'
 
@@ -37,7 +37,7 @@ const routes = [
 	...ordersRoutes,
 	...tablesRoutes,
 	...reservations,
-	...settings,
+	// ...settings,
 
 	{ path: "*", component: PageNotFound }
 ];
@@ -67,27 +67,27 @@ router.beforeEach(async (to, from, next) => {
 	const requireWaiter = to.matched.some((record) => record.meta.requireWaiter);
 
 
-	// if (requireAdmin) {
-	// 	if (isAdmin) {
-	// 		next()
-	// 	} else {
-	// 		next({ name: 'Dashboard' });
-	// 	}
-	// } else if (requireLocationManager) {
-	// 	if (isAdmin || isLocationManager) {
-	// 		next()
-	// 	} else {
-	// 		next({ name: 'Dashboard' });
-	// 	}
-	// } else if (requireWaiter) {
-	// 	if (isAdmin || isLocationManager || isWaiter) {
-	// 		next()
-	// 	} else {
-	// 		next({ name: 'Dashboard' });
-	// 	}
-	// } else {
-	// 	next();
-	// }
+	if (requireAdmin) {
+		if (isAdmin) {
+			next()
+		} else {
+			next({ name: 'Dashboard' });
+		}
+	} else if (requireLocationManager) {
+		if (isAdmin || isLocationManager) {
+			next()
+		} else {
+			next({ name: 'Dashboard' });
+		}
+	} else if (requireWaiter) {
+		if (isAdmin || isLocationManager || isWaiter) {
+			next()
+		} else {
+			next({ name: 'Dashboard' });
+		}
+	} else {
+		next();
+	}
 
 	next();
 })
