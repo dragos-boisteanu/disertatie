@@ -10,7 +10,7 @@
         border-white
         hover:bg-gray-100
         hover:shadow-md
-        grid grid-cols-3
+        grid grid-cols-4
       "
       :class="{
         'bg-gray-100 shadow-md font-semibold': isSelected,
@@ -19,6 +19,9 @@
     >
       <div class="p-2 text-center font-semibold">{{ index + 1 }}</div>
       <div class="p-2 self-center justify-self-center">{{ table.name }}</div>
+      <div class="p-2 self-center justify-self-center">
+        {{ table.seats }}
+      </div>
       <div class="p-2 self-center justify-self-center">
         {{ table.status.name }}
       </div>
@@ -37,7 +40,7 @@ export default {
     selectedId: {
       type: [Number, String],
       required: false,
-      default: null
+      default: null,
     },
     index: {
       type: Number,

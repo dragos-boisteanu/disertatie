@@ -1,5 +1,5 @@
 <template>
-  <FilterComponent>
+  <FilterComponent @close="close">
     <template slot="close">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -30,8 +30,8 @@
           outline-none
         "
         placeholder="Barcode"
-        v-model.lazy="localFilterData.barcode"
-        @keyup="callFilter"
+        v-model="localFilterData.barcode"
+        @blur="callFilter"
       />
 
       <input
@@ -48,8 +48,8 @@
           outline-none
         "
         placeholder="Product name"
-        v-model.lazy="localFilterData.name"
-        @keyup="callFilter"
+        v-model="localFilterData.name"
+        @blur="callFilter"
       />
 
       <div class="mt-3 pb-2 border-b-2 border-sky-600">
@@ -200,9 +200,9 @@ export default {
 
         const subCategories = [];
 
-        this.getCategories.forEach(category => {
+        this.getCategories.forEach((category) => {
           subCategories.push(...category.subCategories);
-        })
+        });
 
         const selectedSubCategories = [];
 
@@ -214,7 +214,7 @@ export default {
         });
 
         const data = [];
-        
+
         selectedSubCategories.forEach((subCategory) => {
           this.localFilterData.categories.forEach((categoryId) => {
             if (subCategory.parentId == categoryId) data.push(subCategory.id);

@@ -41,14 +41,11 @@
 
     <ul class="mb-2 pb-2 border-b border-gray" v-if="showSubcategories">
       <SubCategoryComponent
-        v-for="(subcategory, index) in getSubCategories"
-        :key="subcategory.id"
+        v-for="(subcategory, index) in category.subCategories"
+        :key="index"
         :subcategory="subcategory"
-        :selected-parent-category-id="selectedParentCategoryId"
-        :selected-id="selectedId"
         :index="index"
         :last-position="lastPosition"
-        @selected="selectCategory"
       ></SubCategoryComponent>
     </ul>
   </li>
@@ -68,14 +65,6 @@ export default {
       type: Object,
       required: true,
     },
-    selectedParentCategoryId: {
-      type: [Number, String],
-      required: true,
-    },
-    selectedId: {
-      type: [Number, String],
-      required: true,
-    },
     index: {
       type: Number,
       required: true,
@@ -84,7 +73,11 @@ export default {
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
-    ...mapGetters("Categories", ["getCategories"]),
+    ...mapGetters("Categories", [
+      "getCategories",
+      "getSelectedCategory",
+      "getSelectedCategoryParentId",
+    ]),
 
     isEven() {
       if (this.index % 2 === 0) {
@@ -95,19 +88,32 @@ export default {
     },
 
     lastPosition() {
-      const categoryIndex = this.getCategories.findIndex(category => category.id == this.category.id);
-      return this.getCategories[categoryIndex].subCategories[this.getCategories[categoryIndex].subCategories.length - 1].position;
+      const categoryIndex = this.getCategories.findIndex(
+        (category) => category.id == this.category.id
+      );
+      const subCategoryIndex =
+        this.getCategories[categoryIndex].subCategories.length - 1;
+      return this.getCategories[categoryIndex].subCategories[subCategoryIndex]
+        .position;
     },
 
     showSubcategories() {
-      return (
-        this.category.id === parseInt(this.selectedParentCategoryId) &&
-        this.category.subCategories.length > 0
-      );
+      if (this.getSelectedCategory) {
+        // console.log(this.category.id + " " + this.getSelectedCategoryParentId);
+        return (
+          this.category.id === parseInt(this.getSelectedCategoryParentId) &&
+          this.category.subCategories.length > 0
+        );
+      }
+      return false;
     },
 
     isSelected() {
-      return this.category.id === parseInt(this.selectedId);
+      if (this.getSelectedCategory) {
+        return this.category.id === parseInt(this.getSelectedCategory.id);
+      }
+
+      return false;
     },
 
     isDisabled() {
@@ -129,17 +135,13 @@ export default {
 
       return "";
     },
-
-    getSubCategories() {
-      return this.category.subCategories;
-    },
   },
 
   methods: {
-    ...mapActions("Categories", ["updatePosition"]),
+    ...mapActions("Categories", ["updatePosition", "setSelectedCategory"]),
 
     selectCategory(category) {
-      this.$emit("selected", category);
+      this.setSelectedCategory(category);
     },
 
     startDrag(evt) {
@@ -179,7 +181,9 @@ export default {
         this.$Progress.fail();
 
         if (error.response) {
-          this.$toast.error(error.response.data.error);
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again");
         }
       }
     },

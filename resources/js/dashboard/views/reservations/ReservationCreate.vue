@@ -316,6 +316,7 @@ export default {
           this.$Progress.fail();
 
           if (error.response) {
+            console.log(error.response);
             this.$toast.error(error.response.data.message);
           } else {
             console.log(error);
@@ -377,7 +378,6 @@ export default {
         try {
           this.$Progress.start();
 
-          console.log(this.reservation);
           const response = await checkForAvailableTables(this.reservation);
 
           this.$Progress.finish();
@@ -386,12 +386,18 @@ export default {
           console.log(error);
 
           if (error.response) {
-            this.$toast.error(error.response.data.tableMessage);
+            console.log(error.response);
+            if (error.response.status === 400) {
+              this.$toast.info(error.response.data.tableMessage);
+              this.$Progress.finish()();
+            } else {
+              this.$Progress.fail();
+              this.$toast.error(error.response.data.tableMessage);
+            }
           } else {
+            this.$Progress.fail();
             this.$toast.error("Something went wrong, try again later");
           }
-
-          this.$Progress.fail();
         }
       }
     },

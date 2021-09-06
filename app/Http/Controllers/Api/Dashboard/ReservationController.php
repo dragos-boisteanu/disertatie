@@ -7,13 +7,16 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationCollection;
 use App\Interfaces\ReservationServiceInterface;
 use App\Http\Resources\ReservationListCollection;
+use App\Jobs\Reservations\ReservationCanceledJob;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\NoAvailabeTablesForReservationException;
 use App\Http\Resources\Reservation as ResourcesReservation;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ReservationController extends Controller
 {
@@ -32,7 +35,7 @@ class ReservationController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$reservations = $this->reservationService->getAllReservations(15, $request->orderBy, $request->all());
+		$reservations = $this->reservationService->getAllReservations(15, $request->orderBy, $request->all(), null);
 
 		return new ReservationListCollection($reservations);
 	}
@@ -48,6 +51,8 @@ class ReservationController extends Controller
 		debug($request->all());
 
 		try {
+			$this->authorize('create', Reservation::class);
+
 			DB::beginTransaction();
 
 			$input = [];
@@ -74,6 +79,10 @@ class ReservationController extends Controller
 			DB::commit();
 
 			return response()->json(['message' => "Reservation created with id: " . $reservation->id], 201);
+		} catch (\Exception $e) {
+			return response()->json(['message' => 'Something went wrong, try again later !'], 500);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (NoAvailabeTablesForReservationException $ex) {
 			DB::rollBack();
 			debug($ex);
@@ -97,6 +106,10 @@ class ReservationController extends Controller
 		try {
 			$reservation = Reservation::withTrashed()->with(['tables', 'client', 'staff'])->findOrFail($id);
 
+			if ((Auth::user()->isWaiter() || Auth::user()->isLocationManager() || Auth::user()->isAdminitrator()) && is_null($reservation->staff_id)) {
+				$reservation = $this->reservationService->linkStaffWithReservation(Auth::id(), $reservation);
+				$reservation->load('staff');
+			}
 			return new ResourcesReservation($reservation);
 		} catch (ModelNotFoundException $e) {
 			debug($e);
@@ -117,6 +130,8 @@ class ReservationController extends Controller
 	{
 		try {
 
+			$this->authorize('forceDelete', Reservation::class);
+
 			DB::beginTransaction();
 
 			$reservation = Reservation::withTrashed()->findOrFail($id);
@@ -129,7 +144,12 @@ class ReservationController extends Controller
 			$reservation->refresh();
 
 			DB::commit();
+
+			dispatch((new ReservationCanceledJob($reservation))->onQueue('email'));
+
 			return response()->json(['message' => 'Reservation canceled', 'deletedAt' => $reservation->deleted_at, 'status' => $reservation->status], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (ModelNotFoundException $e) {
 			debug($e);
 			return response()->json(['message' => 'No reservation found'], 404);

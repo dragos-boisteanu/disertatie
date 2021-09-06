@@ -7,106 +7,115 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class CategoryPositionController extends Controller
 {
 
-    public function updatePosition(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            $selectedCategory = Category::withTrashed()->findOrFail($request->categoryId);
-            $targetCategory = Category::withTrashed()->findOrFail($request->targetCategoryId);
+	public function updatePosition(Request $request)
+	{
+		try {
+			$this->authorize('update', Category::class);
 
-            $initialCategoryPosition = $selectedCategory->position;
-            $targetCategoryInitialPosition = $targetCategory->position;
+			DB::beginTransaction();
+			$selectedCategory = Category::withTrashed()->findOrFail($request->categoryId);
+			$targetCategory = Category::withTrashed()->findOrFail($request->targetCategoryId);
 
-            if (abs($initialCategoryPosition - $targetCategoryInitialPosition) != 1) {
-                $query = Category::withTrashed()->where('id', '!=', $selectedCategory->id)
-                    ->where('id', '!=', $targetCategory->id)
-                    ->whereNull('parent_id');
+			$initialCategoryPosition = $selectedCategory->position;
+			$targetCategoryInitialPosition = $targetCategory->position;
 
-                if ($initialCategoryPosition > $targetCategoryInitialPosition) {
-                    $query->whereBetween('position', [$targetCategoryInitialPosition, $initialCategoryPosition]);
-                    $query->increment('position');
-                    // moving from bottom to top
-                } else {
-                    $query->whereBetween('position', [$initialCategoryPosition, $targetCategoryInitialPosition]);
-                    
-                    $query->decrement('position');
-                    // moving from top to bottom
-                }
-            }
+			if (abs($initialCategoryPosition - $targetCategoryInitialPosition) != 1) {
+				$query = Category::withTrashed()->where('id', '!=', $selectedCategory->id)
+					->where('id', '!=', $targetCategory->id)
+					->whereNull('parent_id');
 
-            $selectedCategory->position = $targetCategory->position;
+				if ($initialCategoryPosition > $targetCategoryInitialPosition) {
+					$query->whereBetween('position', [$targetCategoryInitialPosition, $initialCategoryPosition]);
+					$query->increment('position');
+					// moving from bottom to top
+				} else {
+					$query->whereBetween('position', [$initialCategoryPosition, $targetCategoryInitialPosition]);
 
-            if ($targetCategory->position > $initialCategoryPosition) {
-                $targetCategory->position -= 1;
-            } else {
-                $targetCategory->position += 1;
-            }
+					$query->decrement('position');
+					// moving from top to bottom
+				}
+			}
 
-            $selectedCategory->save();
-            $targetCategory->save();
+			$selectedCategory->position = $targetCategory->position;
 
-            Cache::forget('categories');
+			if ($targetCategory->position > $initialCategoryPosition) {
+				$targetCategory->position -= 1;
+			} else {
+				$targetCategory->position += 1;
+			}
 
-            DB::commit();
-            return response()->json(['message' => 'Positon changed succesfull'], 200);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            debug($e->getMessage());
-            return response()->json(['error' => 'Failed to change position'], 500);
-        }
-    }
+			$selectedCategory->save();
+			$targetCategory->save();
 
-    // direction
-    // 1 - up
-    // 0 - down
-    public function updateSubCategoryPosition($id, $direction)
-    {
-        try {
-            DB::beginTransaction();
+			Cache::forget('categories');
 
-            $category = Category::withTrashed()->findOrFail($id);
+			DB::commit();
+			return response()->json(['message' => 'Positon changed succesfull'], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (\Exception $e) {
+			DB::rollBack();
+			debug($e->getMessage());
+			return response()->json(['message' => 'Failed to change position'], 500);
+		}
+	}
 
-            $directionMessage = "";
+	// direction
+	// 1 - up
+	// 0 - down
+	public function updateSubCategoryPosition($id, $direction)
+	{
+		try {
+			$this->authorize('update', Category::class);
 
-            if ($direction == 1) {
-                $aboveCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '<', $category->position)->orderBy('position', 'desc')->first();
+			DB::beginTransaction();
 
-                $initialCategoryPosition = $category->position;
+			$category = Category::withTrashed()->findOrFail($id);
 
-                $category->position = $aboveCategory->position;
+			$directionMessage = "";
 
-                $aboveCategory->position = $initialCategoryPosition;
+			if ($direction == 1) {
+				$aboveCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '<', $category->position)->orderBy('position', 'desc')->first();
 
-                $directionMessage = 'up';
+				$initialCategoryPosition = $category->position;
 
-                $aboveCategory->save();
-            } else {
-                $bellowCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '>', $category->position)->orderBy('position', 'asc')->first();
+				$category->position = $aboveCategory->position;
 
-                $initialCategoryPosition = $category->position;
+				$aboveCategory->position = $initialCategoryPosition;
 
-                $category->position = $bellowCategory->position;
+				$directionMessage = 'up';
 
-                $bellowCategory->position = $initialCategoryPosition;
+				$aboveCategory->save();
+			} else {
+				$bellowCategory = Category::withTrashed()->where('parent_id', $category->parent_id)->where('position', '>', $category->position)->orderBy('position', 'asc')->first();
 
-                $directionMessage = 'down';
+				$initialCategoryPosition = $category->position;
 
-                $bellowCategory->save();
-            }
+				$category->position = $bellowCategory->position;
 
-            $category->save();
+				$bellowCategory->position = $initialCategoryPosition;
 
-            Cache::forget('categories');
+				$directionMessage = 'down';
 
-            DB::commit();
-            return response()->json(['message' => 'Category ' . $category->name .  ' moved ' . $directionMessage, 'position' => $category->position], 200);
-        } catch (\Exception $ex) {
-            DB::rollBack();
-            return response()->json(['error' => 'Failed to move category up'], 500);
-        }
-    }
+				$bellowCategory->save();
+			}
+
+			$category->save();
+
+			Cache::forget('categories');
+
+			DB::commit();
+			return response()->json(['message' => 'Category ' . $category->name .  ' moved ' . $directionMessage, 'position' => $category->position], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (\Exception $ex) {
+			DB::rollBack();
+			return response()->json(['message' => 'Failed to move category up'], 500);
+		}
+	}
 }

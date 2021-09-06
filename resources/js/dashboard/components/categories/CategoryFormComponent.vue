@@ -19,143 +19,208 @@
     >
       <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
         <h2 class="mb-4 text-xl font-semibold">Category</h2>
-        <InputGroup
-          id="name"
-          label="Name"
-          :hasError="$v.category.name.$error"
-          :required="true"
-        >
-          <template v-slot:errors>
-            <p v-if="!$v.category.name.required">The name field is required</p>
-            <p v-if="!$v.category.name.maxLength">
-              The name field must be no longer than 50 characters
-            </p>
-            <p v-if="!$v.category.name.alphaSpaces">
-              The name field must contain only letters or spaces
-            </p>
-          </template>
-          <Input
-            v-model="$v.category.name.$model"
+
+        <!-- IMAGE UPLOAD -->
+        <div v-if="isCategorySelected && !isSubcategory">
+          <div
+            class="
+              w-full
+              flex-shrink flex-grow-0 flex
+              items-center
+              justify-center
+              mb-4
+            "
+          >
+            <div
+              class="
+                w-32
+                h-32
+                flex
+                items-center
+                justify-center
+                rounded-md
+                md:h-32
+                md:w-32
+              "
+            >
+              <img
+                v-if="hasImage"
+                :src="category.image"
+                class="w-full h-full rounded-md object-cover"
+              />
+              <img
+                v-else
+                src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                class="w-full h-full rounded-md object-cover"
+              />
+            </div>
+          </div>
+
+          <ImageUploadComponent
+            :url="url"
+            :clear="clear"
+            @removed="resetClear"
+            @setImagePath="setImagePath"
+            @removeImagePath="removeImagePath"
+          ></ImageUploadComponent>
+          <button v-if="hasImage" @click.prevent="removeImage">
+            Remove image
+          </button>
+        </div>
+
+        <add-image-component
+          v-if="!isSubcategory && !isCategorySelected"
+          max-file-size="15MB"
+          imageMinSize="2000"
+          :clear="clear"
+          :allow-image-validate-size="true"
+          :removed="resetClear"
+          @updatefiles="onUpdateFiles"
+        ></add-image-component>
+
+        <div class="w-full mt-4 flex flex-col gap-y-4">
+          <!-- IMAGE UPLOAD ENDS -->
+
+          <InputGroup
             id="name"
-            name="name"
-            :eclass="{
-              'border-red-600': $v.category.name.$error,
-              'border-green-600':
-                $v.category.name.$dirty && !$v.category.name.$error,
-            }"
-            :disabled="waiting"
-          ></Input>
-        </InputGroup>
+            label="Name"
+            :hasError="$v.category.name.$error"
+            :required="true"
+          >
+            <template v-slot:errors>
+              <p v-if="!$v.category.name.required">
+                The name field is required
+              </p>
+              <p v-if="!$v.category.name.maxLength">
+                The name field must be no longer than 50 characters
+              </p>
+              <p v-if="!$v.category.name.alphaSpaces">
+                The name field must contain only letters or spaces
+              </p>
+            </template>
+            <Input
+              v-model="$v.category.name.$model"
+              id="name"
+              name="name"
+              :eclass="{
+                'border-red-600': $v.category.name.$error,
+                'border-green-600':
+                  $v.category.name.$dirty && !$v.category.name.$error,
+              }"
+              :disabled="waiting"
+            ></Input>
+          </InputGroup>
 
-        <InputGroup
-          id="vat"
-          label="VAT"
-          :hasError="$v.category.vat.$error"
-          :required="isParent"
-        >
-          <template v-slot:errors>
-            <p v-if="!$v.category.vat.required">The vat field is required</p>
-            <p v-if="!$v.category.vat.integer">
-              The vat field must be an integer
-            </p>
-            <p v-if="!$v.category.vat.minValue">
-              The vat field must be equal or greater than 0
-            </p>
-          </template>
-          <Input
-            v-model="$v.category.vat.$model"
+          <InputGroup
             id="vat"
-            name="vat"
-            :eclass="{
-              'border-red-600': $v.category.vat.$error,
-              'border-green-600':
-                $v.category.vat.$dirty && !$v.category.vat.$error,
-            }"
-            :disabled="waiting"
-          ></Input>
-        </InputGroup>
-
-        <InputGroup id="parentCategory" label="Parent category">
-          <Select
-            id="parentCategory"
-            name="Parent category"
-            type="color"
-            v-model="category.parentId"
-            :disabled="waiting"
+            label="VAT"
+            :hasError="$v.category.vat.$error"
+            :required="isParent"
           >
-            <option value="" disabled selected>Select parent category</option>
-            <option
-              v-for="parent in getCategories"
-              :key="parent.id"
-              :value="parent.id"
+            <template v-slot:errors>
+              <p v-if="!$v.category.vat.required">The vat field is required</p>
+              <p v-if="!$v.category.vat.integer">
+                The vat field must be an integer
+              </p>
+              <p v-if="!$v.category.vat.minValue">
+                The vat field must be equal or greater than 0
+              </p>
+            </template>
+            <Input
+              v-model="$v.category.vat.$model"
+              id="vat"
+              name="vat"
+              :eclass="{
+                'border-red-600': $v.category.vat.$error,
+                'border-green-600':
+                  $v.category.vat.$dirty && !$v.category.vat.$error,
+              }"
+              :disabled="waiting"
+            ></Input>
+          </InputGroup>
+
+          <InputGroup id="parentCategory" label="Parent category">
+            <Select
+              id="parentCategory"
+              name="Parent category"
+              type="color"
+              v-model="category.parentId"
+              :disabled="waiting"
             >
-              {{ parent.name }}
-            </option>
-            <option value="-1" v-if="isSubcategory">Remove parent</option>
-          </Select>
-        </InputGroup>
+              <option value="" disabled selected>Select parent category</option>
+              <option
+                v-for="parent in parentCategories"
+                :key="parent.id"
+                :value="parent.id"
+              >
+                {{ parent.name }}
+              </option>
+              <option value="-1" v-if="isSubcategory">Remove parent</option>
+            </Select>
+          </InputGroup>
 
-        <div class="w-full">
-          <DiscountComponent
-            :discount-id="discountId"
-            @remove="callRemoveDiscount"
-            @add="callAddDiscount"
-          ></DiscountComponent>
+          <div class="w-full">
+            <DiscountComponent
+              :discount-id="discountId"
+              @remove="callRemoveDiscount"
+              @add="callAddDiscount"
+            ></DiscountComponent>
+          </div>
         </div>
-      </div>
 
-      <div>
         <div>
-          <Button
-            type="secondary"
-            @click.native.prevent="resetForm"
-            :disabled="waiting"
-          >
-            Reset
-          </Button>
-        </div>
-        <div class="mt-4 flex items-center gap-4">
-          <div v-if="isCategorySelected" class="flex gap-x-4">
+          <div>
             <Button
-              type="primary"
-              @click.native.prevent="patch"
-              :disabled="waiting"
-            >
-              Update
-            </Button>
-            <Button
-              v-if="canDisable"
-              type="danger"
-              :disabled="waiting"
-              @click.native.prevent="callDisableCategory"
-            >
-              Disable
-            </Button>
-            <Button
-              v-if="canRestore"
               type="secondary"
+              @click.native.prevent="resetForm"
               :disabled="waiting"
-              @click.native.prevent="callRestoreCategory"
             >
-              Restore
-            </Button>
-            <Button
-              v-if="canDelete"
-              type="danger"
-              :disabled="waiting"
-              @click.native.prevent="toggleConfirmModal"
-            >
-              Delete
+              Reset
             </Button>
           </div>
-          <Button
-            v-else
-            type="primary"
-            :disabled="waiting"
-            @click.native.prevent="create"
-          >
-            Create
-          </Button>
+          <div class="mt-4 flex items-center gap-4">
+            <div v-if="isCategorySelected" class="flex gap-x-4">
+              <Button
+                type="primary"
+                @click.native.prevent="patch"
+                :disabled="waiting"
+              >
+                Update
+              </Button>
+              <Button
+                v-if="canDisable"
+                type="danger"
+                :disabled="waiting"
+                @click.native.prevent="callDisableCategory"
+              >
+                Disable
+              </Button>
+              <Button
+                v-if="canRestore"
+                type="secondary"
+                :disabled="waiting"
+                @click.native.prevent="callRestoreCategory"
+              >
+                Restore
+              </Button>
+              <Button
+                v-if="canDelete"
+                type="danger"
+                :disabled="waiting"
+                @click.native.prevent="toggleConfirmModal"
+              >
+                Delete
+              </Button>
+            </div>
+            <Button
+              v-else
+              type="primary"
+              :disabled="waiting"
+              @click.native.prevent="create"
+            >
+              Create
+            </Button>
+          </div>
         </div>
       </div>
     </form>
@@ -171,6 +236,8 @@ import InputGroup from "../../components/inputs/InputGroupComponent";
 import DiscountComponent from "../../components/discounts/DiscountComponent";
 
 import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
+import ImageUploadComponent from "../ImageUploadComponent.vue";
+import AddImageComponent from "../AddImageComponent.vue";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -186,16 +253,8 @@ import {
 } from "vuelidate/lib/validators";
 
 export default {
-  props: {
-    selectedCategory: {
-      type: Object,
-      required: false,
-      default: null,
-    },
-  },
-
   computed: {
-    ...mapGetters("Categories", ["getCategories"]),
+    ...mapGetters("Categories", ["getCategories", "getSelectedCategory"]),
     ...mapGetters("Discounts", ["getDiscounts"]),
 
     availableDiscounts() {
@@ -223,25 +282,47 @@ export default {
     },
 
     isCategorySelected() {
-      return this.selectedCategory !== null || this.categoryId !== undefined
+      return this.getSelectedCategory !== null &&
+        this.getSelectedCategory !== undefined
         ? true
         : false;
     },
 
     discountId() {
-      if (this.selectedCategory) {
-        return this.selectedCategory.discountId;
+      if (this.getSelectedCategory) {
+        return this.getSelectedCategory.discountId;
+      }
+      return this.category.discountId;
+    },
+
+    parentCategories() {
+      if (this.getSelectedCategory) {
+        return this.getCategories.filter(
+          (category) => category.id !== this.getSelectedCategory.id
+        );
       }
 
-      return this.category.discountId;
+      return this.getCategories;
+    },
+
+    hasImage() {
+      return this.category.image !== null && this.category.image !== "";
+    },
+
+    url() {
+      return `/api/dashboard/categories/${this.category.id}/image`;
     },
   },
 
   data() {
     return {
+      imageSize: "2000",
+      files: [],
+      clear: false,
       confirmModalState: false,
       waiting: false,
       category: {
+        image: "",
         name: "",
         vat: "",
         discountId: "",
@@ -275,9 +356,10 @@ export default {
       }
     },
 
-    selectedCategory: function (value) {
+    getSelectedCategory: function (value) {
       if (value) {
         this.category = JSON.parse(JSON.stringify(value));
+        this.clear = true;
       } else {
         this.$v.$reset();
 
@@ -288,6 +370,8 @@ export default {
           discountId: "",
           parentId: null,
         };
+
+        this.clear = true;
       }
     },
   },
@@ -302,25 +386,81 @@ export default {
       "addDiscount",
       "removeDiscount",
       "removeParent",
+      "setSelectedCategory",
+      "removeCategoryImage",
     ]),
+
+    onUpdateFiles(files) {
+      if (files.length) {
+        this.category.image = files[0].file;
+      }
+    },
+
+    resetClear() {
+      this.clear = false;
+    },
+
+    setImagePath(response) {
+      const responseObj = JSON.parse(response);
+
+      this.category.image = responseObj.imagePath;
+    },
+
+    removeImagePath() {
+      this.category.image = "";
+    },
+
+    async removeImage() {
+      try {
+        this.$Progress.start();
+
+        const payload = {
+          id: this.category.id,
+          image: this.category.image,
+          vm: this,
+        };
+
+        const response = await this.removeCategoryImage(payload);
+
+        this.category.image = response.data.placeholderImg;
+        this.clear = true;
+        this.category.image = "";
+        this.$Progress.finish();
+        this.$toast.success(response.data.message);
+      } catch (error) {
+        this.$Progress.fail();
+        if (error.response && error.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
+        console.log(error);
+      }
+    },
 
     async create() {
       try {
         this.$v.$touch();
 
         if (!this.$v.$invalid) {
-          const payload = this.category;
+          this.waiting = true;
+          this.$Progress.start();
 
-          if (payload.vat === "") {
-            delete payload.vat;
+          const payload = new FormData();
+
+          payload.append("image", this.category.image);
+          payload.set("name", this.category.name);
+
+          if (this.category.vat !== "") {
+            payload.append("vat", this.category.vat);
           }
 
-          if (payload.parentId === null) {
-            delete payload.parentId;
+          if (this.category.parentId !== null) {
+            payload.append("parentId", this.category.parentId);
           }
 
-          if (payload.discountId === "") {
-            delete payload.discountId;
+          if (this.category.discountId !== "") {
+            payload.append("discountId", this.category.discountId);
           }
 
           const response = await this.postCategory(payload);
@@ -328,12 +468,19 @@ export default {
           this.$toast.success(response);
 
           this.resetForm();
+          this.waiting = false;
+
+          this.$Progress.finish();
         }
       } catch (error) {
+        this.$Progress.fail();
+        this.waiting = false;
         console.log(error);
 
         if (error.response) {
-          this.$toast.error(error.response.data.error);
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
         }
       }
     },
@@ -346,7 +493,7 @@ export default {
           this.waiting = true;
 
           const originalCategory = JSON.parse(
-            JSON.stringify(this.selectedCategory)
+            JSON.stringify(this.getSelectedCategory)
           );
 
           const payload = {
@@ -396,7 +543,7 @@ export default {
                 );
 
                 parentCategory.selectedSubcateogryId = payload.category.id;
-                this.$emit("selectNewParentCategory", parentCategory);
+                this.setSelectedCategory(parentCategory);
               }
             }
 
@@ -415,7 +562,9 @@ export default {
         console.log(error);
 
         if (error.response) {
-          this.$toast.error(error.response.data.error);
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
         }
       }
     },
@@ -439,6 +588,12 @@ export default {
         this.$Progress.fail();
         this.waiting = false;
         console.log(error);
+
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
       }
     },
 
@@ -459,6 +614,12 @@ export default {
       } catch (error) {
         this.$Progress.fail();
         console.log(error);
+
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
       }
     },
 
@@ -476,6 +637,11 @@ export default {
       } catch (error) {
         this.$Progress.fail();
         console.log(error);
+        if (error.response) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
       }
     },
 
@@ -491,7 +657,7 @@ export default {
 
         const response = await this.removeParent(payload);
 
-        this.category.parentId = null;
+        // this.category.parentId = null;
 
         this.$toast.success(response.data.message);
         this.$Progress.finish();
@@ -510,7 +676,7 @@ export default {
 
     async callRemoveDiscount() {
       try {
-        if (this.selectedCategory) {
+        if (this.getSelectedCategory) {
           this.$Progress.start();
           this.waiting = true;
 
@@ -522,7 +688,7 @@ export default {
 
           const response = await this.removeDiscount(payload);
 
-          this.selectedCategory.discountId = "";
+          // this.selectedCategory.discountId = "";
 
           this.$Progress.finish();
           this.$toast.success(response.data.message);
@@ -544,7 +710,7 @@ export default {
 
     async callAddDiscount(discountId) {
       try {
-        if (this.selectedCategory) {
+        if (this.getSelectedCategory) {
           this.$Progress.start();
           this.waiting = true;
           const payload = {
@@ -559,7 +725,7 @@ export default {
           this.$toast.success(response.data.message);
           this.$Progress.finish();
 
-          this.selectedCategory.discountId = discountId;
+          // this.selectedCategory.discountId = discountId;
         } else {
           this.category.discountId = discountId;
         }
@@ -571,6 +737,8 @@ export default {
 
         if (error.response) {
           this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
         }
       }
     },
@@ -590,9 +758,9 @@ export default {
         parentId: null,
       };
 
-      if (this.isCategorySelected) {
-        this.$emit("resetCategory");
-      }
+      this.clear = true;
+
+      this.setSelectedCategory(null);
     },
   },
 
@@ -603,6 +771,8 @@ export default {
     InputGroup,
     DiscountComponent,
     ConfirmActionModal,
+    ImageUploadComponent,
+    AddImageComponent,
   },
 };
 </script>

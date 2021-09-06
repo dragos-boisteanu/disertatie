@@ -32,6 +32,19 @@ class Category extends Model
 		];
 	}
 
+	public function getProductsCountAttribute()
+	{
+		$productsCount = 0;
+
+		if (!is_null($this->parentCategory)) {
+			$productsCount =  $this->subProducts()->withTrashed()->count();
+		} else {
+			$productsCount =  $this->products()->withTrashed()->count();
+		}
+
+		return $productsCount;
+	}
+
 	public function products()
 	{
 		return $this->hasMany(Product::class);
@@ -49,11 +62,11 @@ class Category extends Model
 
 	public function subCategories()
 	{
-		return $this->hasMany(Category::class, 'parent_id');
+		return $this->hasMany(Category::class, 'parent_id')->withTrashed();
 	}
 
 	public function parentCategory()
 	{
-		return $this->belongsTo(Category::class, 'parent_id');
+		return $this->belongsTo(Category::class, 'parent_id')->withTrashed();
 	}
 }

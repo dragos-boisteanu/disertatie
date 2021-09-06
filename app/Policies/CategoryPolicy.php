@@ -9,53 +9,71 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CategoryPolicy
 {
-    use HandlesAuthorization;
-    
+	use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function create(User $user)
-    {
-        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
-            Response::allow();
-        }
 
-       Response::deny('You are not authorized to perform this action.');
-    }
+	/**
+	 * Determine whether the user can create models.
+	 *
+	 * @param  \App\Models\User  $user
+	 * @return mixed
+	 */
+	public function create(User $user)
+	{
+		if ($user->isAdminitrator()) {
+			return true;
+		}
 
-    /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Category  $category
-     * @return mixed
-     */
-    public function update(User $user)
-    {
-        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
-            Response::allow();
-        }
+		return false;
+	}
 
-       Response::deny('You are not authorized to perform this action.');
-    }
-    
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Category  $category
-     * @return mixed
-     */
-    public function forceDelete(User $user)
-    {
-        if( $user->role->name === "Administrator" || $user->role->name === "Location Manager") {
-            Response::allow();
-        }
+	/**
+	 * Determine whether the user can update the model.
+	 *
+	 * @param  \App\Models\User  $user
+	 * @param  \App\Models\Category  $category
+	 * @return mixed
+	 */
+	public function update(User $user)
+	{
+		if ($user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
+		}
 
-       Response::deny('You are not authorized to perform this action.');
-    }
+		return false;
+	}
+
+	/**
+	 * Determine whether the user can permanently delete the model.
+	 *
+	 * @param  \App\Models\User  $user
+	 * @param  \App\Models\Category  $category
+	 * @return mixed
+	 */
+	public function forceDelete(User $user)
+	{
+		if ($user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function disable(User $user)
+	{
+		if ($user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function restore(User $user)
+	{
+		if ($user->isAdminitrator() || $user->isLocationManager()) {
+			return true;
+		}
+
+		return false;
+	}
 }

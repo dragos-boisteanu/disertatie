@@ -11,28 +11,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Discount extends Model
 {
-    use HasFactory, SoftDeletes;
+	use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'code',
-        'value',
-        'user_id',
-        'starts_at',
-        'ends_at'
-    ];
+	protected $fillable = [
+		'code',
+		'value',
+		'user_id',
+		'starts_at',
+		'ends_at'
+	];
 
-    protected $dates = [
-        'starts_at',
-        'ends_at',
-    ];
+	protected $dates = [
+		'starts_at',
+		'ends_at',
+	];
 
-    public function categories() 
-    {
-        return $this->hasMany('App\Models\Category');
-    }
+	public function categories()
+	{
+		return $this->hasMany('App\Models\Category');
+	}
 
-    public function products()
-    {
-        return $this->hasMany(Product::class);
-    }
+	public function products()
+	{
+		return $this->hasMany(Product::class);
+	}
 }

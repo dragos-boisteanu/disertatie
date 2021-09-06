@@ -7,42 +7,46 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class Category extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
-    {
-        $arrayData = [
-            'id' => $this->id,
-            'name' => $this->name,
-            'vat' => $this->vat,
-            'color' => $this->color,
-          
-            'parentId' => $this->parent_id,
-            'subCategories' => $this->whenLoaded('subCategories', new CategoryCollection($this->subCategories)),
+	/**
+	 * Transform the resource into an array.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return array
+	 */
+	public function toArray($request)
+	{
+		$arrayData = [
+			'id' => $this->id,
+			'image' => $this->image,
+			'name' => $this->name,
+			'vat' => $this->vat,
+			'color' => $this->color,
 
-            'position' => $this->position,
-            'deletedAt' => $this->deleted_at,
-            
-        ];
+			'parentId' => $this->parent_id,
+			'subCategories' => $this->whenLoaded('subCategories', new CategoryCollection($this->subCategories)),
 
-        if(!is_null($this->discount)) {
-            $arrayData['discountId'] = $this->discount->id;
-        }else {
-            $arrayData['discountId'] = null;
-        }
+			'position' => $this->position,
+			'deletedAt' => $this->deleted_at,
 
-        if(!is_null($this->parentCategory)){
-            $arrayData['parentName'] = $this->parentCategory->name;
-            $arrayData['productsCount'] =  $this->subProducts()->count();
-        } else {
-            $arrayData['productsCount'] =  $this->products()->count();
-            $arrayData['parentName'] = "";
-        }
+			'productsCount' =>  $this->productsCount
+		];
 
-        return $arrayData;
-    }
+		if (!is_null($this->discount)) {
+			$arrayData['discountId'] = $this->discount->id;
+		} else {
+			$arrayData['discountId'] = null;
+		}
+
+		if (!is_null($this->parentCategory)) {
+			$arrayData['parentName'] = $this->parentCategory->name;
+		} else {
+			$arrayData['parentName'] = "";
+		}
+
+
+
+		debug($arrayData['productsCount']);
+
+		return $arrayData;
+	}
 }

@@ -1,34 +1,48 @@
 <template>
-  <li class="flex items-center">
-    <div class="bg-black">
-      <button @click.capture="updatePosition(1)" v-if="canUp">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="18px"
-          viewBox="0 0 24 24"
-          width="18px"
-          fill="#FFFFFF"
-        >
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path
-            d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"
-          />
-        </svg>
-      </button>
-      <button @click.capture="updatePosition(0)" v-if="canDown">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="18px"
-          viewBox="0 0 24 24"
-          width="18px"
-          fill="#FFFFFF"
-        >
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path
-            d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
-          />
-        </svg>
-      </button>
+  <li class="relative flex items-center group">
+    <div
+      class="
+        absolute
+        left-0
+        top-0
+        z-[1]
+        flex flex-col
+        items-center
+        justify-center
+        gap-1
+        h-full
+      "
+    >
+      <div class="flex items-center" v-if="canUp">
+        <button @click.capture="updatePosition(1)">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#000000"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="flex items-center" v-if="canDown">
+        <button @click.capture="updatePosition(0)">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#000000"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+          </svg>
+        </button>
+      </div>
     </div>
     <div
       class="
@@ -78,14 +92,6 @@ export default {
       type: Object,
       required: true,
     },
-    selectedParentCategoryId: {
-      type: [Number, String],
-      required: true,
-    },
-    selectedId: {
-      type: [Number, String],
-      required: true,
-    },
     index: {
       type: Number,
       required: true,
@@ -98,6 +104,7 @@ export default {
 
   computed: {
     ...mapGetters("Discounts", ["getDiscounts"]),
+    ...mapGetters("Categories", ["getSelectedCategory"]),
 
     canUp() {
       return this.subcategory.position > 1;
@@ -116,7 +123,11 @@ export default {
     },
 
     isSelected() {
-      return this.subcategory.id === parseInt(this.selectedId);
+      if (this.getSelectedCategory) {
+        return this.subcategory.id === parseInt(this.getSelectedCategory.id);
+      }
+
+      return false;
     },
 
     isDisabled() {
@@ -139,10 +150,13 @@ export default {
   },
 
   methods: {
-    ...mapActions("Categories", ["updateSubCategoryPosition"]),
+    ...mapActions("Categories", [
+      "updateSubCategoryPosition",
+      "setSelectedCategory",
+    ]),
 
     selectCategory(subcategory) {
-      this.$emit("selected", subcategory);
+      this.setSelectedCategory(subcategory);
     },
 
     // 1 up
@@ -173,7 +187,9 @@ export default {
         this.$Progress.fail();
 
         if (error.response) {
-          this.$toast.error(error.response.data.error);
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
         }
       }
     },

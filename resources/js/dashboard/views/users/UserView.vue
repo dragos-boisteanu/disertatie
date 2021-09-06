@@ -37,15 +37,14 @@
         flex flex-col
         justify-center
         items-center
-        border-b border-gray-100
         md:flex-row
         md:justify-start
       "
     >
       <div class="w-32 h-32 rounded-md md:mr-4">
         <img
-          v-if="user.avatar"
-          :src="user.avatar"
+          v-if="user.image"
+          :src="user.image"
           class="w-full h-full rounded-md object-cover"
         />
         <svg
@@ -84,6 +83,7 @@
         </div>
         <div class="flex items-center gap-x-2">
           <button
+            v-if="cnaEdit"
             @click="editUser"
             class="
               bg-amber-700
@@ -141,19 +141,9 @@
               Disable
             </button>
           </div>
-          <!-- <button 
-                        v-if="canDelete"
-                        @click="callDeleteUser"
-                        class="bg-red-700 rounded-sm text-xs py-1 px-4 text-white mt-2 hover:bg-red-600 active:bg-red-400 active:shadow-inner active:outline-none"
-                    >
-                        Delete
-                    </button> -->
         </div>
       </div>
     </div>
-    <div>Shifts</div>
-    <div>Orders (20)</div>
-    <div>Reservations</div>
   </ViewContainer>
 </template>
 
@@ -172,13 +162,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters("Users", ["getLoggedUser", "isAdmin", "isLocationManager"]),
-
-    // canDelete() {
-    //     if(this.getLoggedUser) {
-    //         return this.getLoggedUser.role_id === 7 && this.user.id != this.getLoggedUser.id && this.user.role_id < this.getLoggedUser.role_id
-    //     }
-    // },
+    ...mapGetters("Users", [
+      "getLoggedUser",
+      "isAdmin",
+      "isLocationManager",
+      "isWaiter",
+    ]),
 
     canDisable() {
       if (this.getLoggedUser) {
@@ -187,6 +176,10 @@ export default {
           (this.isAdmin || this.isLocationManager)
         );
       }
+    },
+
+    cnaEdit() {
+      return this.isAdmin || this.isLocationManager || this.isWaiter;
     },
   },
 
@@ -212,9 +205,9 @@ export default {
       try {
         const response = await disableUser(this.user.id);
         this.user.deletedAt = response.data.deletedAt;
-         this.$toast.success(response.data.message);
+        this.$toast.success(response.data.message);
       } catch (error) {
-         if (error.response && error.response.data) {
+        if (error.response && error.response.data) {
           this.$toast.error(error.response.data);
         }
       }
@@ -250,8 +243,22 @@ export default {
     },
 
     async refresh() {
-      const response = await downloadUser(this.user.id);
-      this.setUser(response.data.data);
+      try {
+        this.$Progress.start();
+        const response = await downloadUser(this.user.id);
+        this.setUser(response.data.data);
+        this.$Progress.finish();
+      } catch (error) {
+        if (error.response && error.response.data.message) {
+          this.$toast.error(error.response.data.message);
+        } else {
+          this.$toast.error("Something went wrong, try again later");
+        }
+
+        this.$Progress.fail();
+
+        console.log(error);
+      }
     },
   },
 

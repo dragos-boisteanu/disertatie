@@ -7,19 +7,19 @@ use Illuminate\Http\Request;
 
 class DashboardCheck
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next)
-    {
-        if(auth()->user()->role->id === 1) {
-            return redirect()->route('home')->withErrors(['danger', 'Unauthorized']);
-        }
+	/**
+	 * Handle an incoming request.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Closure  $next
+	 * @return mixed
+	 */
+	public function handle(Request $request, Closure $next)
+	{
+		if (auth()->user()->isClient()) {
+			return redirect()->route('home')->withErrors(['danger', 'Unauthorized']);
+		}
 
-        return $next($request);
-    }
+		return $next($request);
+	}
 }

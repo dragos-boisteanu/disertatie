@@ -2,76 +2,96 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
+use Exception;
 use App\Models\Product;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductStock;
 use App\Http\Resources\IngredientStock;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StockController extends Controller
 {
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $request->user()->can('update', Stock::class);
-        
-        $quantity = 0;
-        
-        if($request->type === 'product') {
-            $product = Product::withTrashed()->findOrFail($id);
-            $product->stock->quantity += $request->newQuantity;
-            $quantity = $product->stock->quantity;
-            $product->stock->save();
-        } else {
-            $ingredient = Ingredient::findOrFail($id);
-            $ingredient->stock->quantity += $request->newQuantity;
-            $quantity = $ingredient->stock->quantity;
-            $ingredient->stock->save();
-        } 
-        
-        return response()->json(['message'=>'Stock updated', 'quantity'=>$quantity], 200);
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id)
+	{
+		try {
+			$this->authorize('update', Stock::class);
 
-    public function getProductStockDetailsByBarcode($barcode) 
-    {
-        $product = Product::withTrashed()->where('barcode', $barcode)->first();
+			$quantity = 0;
 
-        if(isset($product)) {
-            return new ProductStock($product);
-        }
+			if ($request->type === 'product') {
+				try {
+					$product = Product::withTrashed()->findOrFail($id);
+					$product->stock->quantity += $request->newQuantity;
+					$quantity = $product->stock->quantity;
+					$product->stock->save();
+				} catch (ModelNotFoundException $e) {
+					throw new ModelNotFoundException('Product not found');
+				} catch (\Exception $e) {
+					throw new Exception($e);
+				}
+			} else {
+				try {
+					$ingredient = Ingredient::findOrFail($id);
+					$ingredient->stock->quantity += $request->newQuantity;
+					$quantity = $ingredient->stock->quantity;
+					$ingredient->stock->save();
+				} catch (ModelNotFoundException $e) {
+					throw new ModelNotFoundException('Ingredient not found');
+				} catch (\Exception $e) {
+					throw new Exception($e);
+				}
+			}
 
-        return response()->json(['message'=>'No product found with this barcode'], 404);
+			return response()->json(['message' => 'Stock updated', 'quantity' => $quantity], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (ModelNotFoundException $ex) {
+			return response()->json(['message' => $ex->getMessage()], 500);
+		} catch (\Exception $e) {
+			return response()->json(['message' => 'Something went wrong, try again later'], 500);
+		}
+	}
 
-    }
+	public function getProductStockDetailsByBarcode($barcode)
+	{
+		$product = Product::withTrashed()->where('barcode', $barcode)->first();
 
-    public function getIngredientStockDetails($input)
-    {
-        if(is_numeric($input)) {
-            $ingredient = Ingredient::where('id', $input)->first();
+		if (isset($product)) {
+			return new ProductStock($product);
+		}
 
-            if(isset($ingredient)) {
-                return new IngredientStock($ingredient); 
-            }
+		return response()->json(['message' => 'No product found with this barcode'], 404);
+	}
 
-            return response()->json(['message' => 'No ingredient found with this id'], 404);
-        } else {
-            $ingredient = Ingredient::where('name', $input)->first();
+	public function getIngredientStockDetails($input)
+	{
+		if (is_numeric($input)) {
+			$ingredient = Ingredient::where('id', $input)->first();
 
-            if(isset($ingredient)) {
-                return new IngredientStock($ingredient);
-            }
-    
-            return response()->json(['message' => 'No ingredient found with this name'], 404);
-        }
-        
-    }
+			if (isset($ingredient)) {
+				return new IngredientStock($ingredient);
+			}
 
+			return response()->json(['message' => 'No ingredient found with this id'], 404);
+		} else {
+			$ingredient = Ingredient::where('name', $input)->first();
+
+			if (isset($ingredient)) {
+				return new IngredientStock($ingredient);
+			}
+
+			return response()->json(['message' => 'No ingredient found with this name'], 404);
+		}
+	}
 }

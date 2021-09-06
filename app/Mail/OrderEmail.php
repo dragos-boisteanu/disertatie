@@ -5,31 +5,32 @@ namespace App\Mail;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OrderEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+	use Queueable, SerializesModels;
 
-    protected $order;
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
+	protected Order $order;
+	/**
+	 * Create a new message instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(Order $order)
+	{
+		$this->order = $order;
+	}
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
-        return $this->subject("Order created test mail")->view('mails.order', ['order'=>$this->order]);
-    }
+	/**
+	 * Build the message.
+	 *
+	 * @return $this
+	 */
+	public function build()
+	{
+		return $this->subject("Comanda cu id-ul #" . $this->order->id . ' a fost inregistrata')->view('mails.orders.order-created', ['order' => $this->order]);
+	}
 }

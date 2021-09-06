@@ -14,28 +14,28 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class SendOrderEmailJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $order;
+	protected $order;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
+	/**
+	 * Create a new job instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(Order $order)
+	{
+		$this->order = $order;
+	}
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        $email = new OrderEmail($this->order);
-        Mail::to($this->order->email)->send($email);
-    }
+	/**
+	 * Execute the job.
+	 *
+	 * @return void
+	 */
+	public function handle()
+	{
+		$email = new OrderEmail($this->order);
+		Mail::to($this->order->email)->send($email);
+	}
 }

@@ -10,13 +10,24 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
+use App\Interfaces\ImageServiceInterface;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use Illuminate\Auth\Access\AuthorizationException;
+use App\Http\Resources\Category as CategoryResrouce;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CategoryController extends Controller
 {
+
+	private $imageService;
+
+	public function __construct(ImageServiceInterface $imageService)
+	{
+		$this->imageService = $imageService;
+	}
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -41,7 +52,7 @@ class CategoryController extends Controller
 	public function store(CategoryStoreRequest $request)
 	{
 		try {
-			$request->user()->can('create', Category::class);
+			$this->authorize('create', Category::class);
 
 			$input = $request->validated();
 
@@ -73,25 +84,30 @@ class CategoryController extends Controller
 			$input['position'] = $lastPosition + 1;
 
 			$category = Category::create($input);
+			$storagePath = '/categories_image/' . $category->id;
+			$this->imageService->storeImage($request->image, $storagePath, 'categories', 'image', $category->id);
+			$category->refresh();
 
-			debug($category);
+			debug(new CategoryResrouce($category));
 
-			$response['id'] = $category->id;
 			$response['message'] = 'Category ' . $category->name . ' created sucessfuly';
-			$response['position'] = $category->position;
+			$response['category'] = new CategoryResrouce($category);
 
 			Cache::forget('categories');
 
 			return response()->json($response, 201);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (QueryException $qex) {
 			dd($qex);
 			$errorCode = $qex->errorInfo[1];
-			if ($errorCode  == 1062) {
-				return response()->json(['error' => 'Category already exists'], 500);
+			if ($errorCode == 1062) {
+				return response()->json(['message' => 'Category already exists'], 500);
 			}
+			return response()->json(['message' => 'Something went wrong, try again later'], 500);
 		} catch (\Exception $ex) {
 			dd($ex);
-			return response()->json(['error' => 'Something went wrong, try again later'], 500);
+			return response()->json(['message' => 'Something went wrong, try again later'], 500);
 		}
 	}
 
@@ -104,35 +120,48 @@ class CategoryController extends Controller
 	 */
 	public function update(CategoryUpdateRequest $request, $id)
 	{
-		$request->user()->can('update', Category::class);
 
-		$category = Category::withTrashed()->findOrFail($id);
+		try {
+			$this->authorize('update', Category::class);
 
-		$input = $request->validated();
+			$category = Category::withTrashed()->findOrFail($id);
 
-		$responseData = null;
+			$input = $request->validated();
 
-		if ($request->has('name')) {
-			$category->slug = null;
+			$responseData = null;
+
+			if ($request->has('name')) {
+				$category->slug = null;
+			}
+
+			if ($request->has('parentId')) {
+				$input['parent_id'] = $request->parentId;
+				$parentCategory = Category::withTrashed()->findOrFail($request->parentId);
+				$responseData['parentName'] = $parentCategory->name;
+				$lastPosition =  $this->getLastPosition($request->parentId);
+			} else {
+				$lastPosition =  $this->getLastPosition();
+			}
+
+			$input['position'] =  $lastPosition + 1;
+			$category->update($input);
+
+			$responseData['message'] = "Category updated";
+			$responseData['position'] = $input['position'];
+
+			Cache::forget('categories');
+
+			return response()->json($responseData, 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (ModelNotFoundException $e) {
+			DB::rollBack();
+			debug($e);
+			return response()->json(['message' => 'Category not found'], 500);
+		} catch (\Exception $e) {
+			DB::rollBack();
+			return response()->json(['message' => 'Something went wrong, try again later'], 500);
 		}
-
-		if ($request->has('parentId')) {
-			$input['parent_id'] = $request->parentId;
-			$parentCategory = Category::withTrashed()->findOrFail($request->parentId);
-			$responseData['parentName'] = $parentCategory->name;
-			$lastPosition =  $this->getLastPosition($request->parentId);
-		} else {
-			$lastPosition =  $this->getLastPosition();
-		}
-
-		$input['position'] =  $lastPosition + 1;
-		$category->update($input);
-
-		$responseData['message'] = "Category updated";
-
-		Cache::forget('categories');
-
-		return response()->json($responseData, 200);
 	}
 
 	/**
@@ -141,11 +170,14 @@ class CategoryController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Request $request, $id)
+	public function destroy($id)
 	{
-		$request->user()->can('forceDelete', Category::class);
 
 		try {
+			$this->authorize('forceDelete', Category::class);
+
+			DB::beginTransaction();
+
 			$category = Category::withTrashed()->with('subCategories')->findOrFail($id);
 
 			if ($category->subCategories->count() > 0) {
@@ -154,44 +186,79 @@ class CategoryController extends Controller
 				}
 			}
 
-			DB::table('categories')->whereNull('parent_id')
-				->where('position', '>', $category->position)
-				->decrement('position');
+			if (is_null($category->parent_id)) {
+				DB::table('categories')->whereNull('parent_id')
+					->where('position', '>', $category->position)
+					->decrement('position');
+			} else {
+				DB::table('categories')->where('parent_id', $category->parent_id)
+					->where('position', '>', $category->position)
+					->decrement('position');
+			}
+
+			$storagePath = '/categories_images/' . $id;
+			Storage::deleteDirectory($storagePath);
 
 			$category->forceDelete();
 
-
-			Cache::forget('categories');
+			DB::commit();
 
 			return response()->json(['message' => 'Category ' . $category->name . ' was deleted'], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (ModelNotFoundException $e) {
+			return response()->json(['message' => 'Category not found'], 404);
 		} catch (\Illuminate\Database\QueryException $e) {
+			DB::rollBack();
+			debug($e);
 			return response()->json(['message' => 'Remove or copy category\'s ( ' .  $category->name . ' ) items before deleting'], 500);
+		} catch (\Exception $e) {
+			DB::rollBack();
+			return response()->json(['message' => 'Something went wrong, try again later'], 500);
 		}
 	}
 
-	public function disable(Request $request, $id)
+	public function disable($id)
 	{
-		$category = Category::withTrashed()->findOrFail($id);
+		try {
+			$this->authorize('disable', Category::class);
 
-		$category->delete();
-		return response()->json(['message' => 'Category ' . $category->name . ' was disabled', 'deletedAt' => $category->deleted_at], 200);
+			$category = Category::withTrashed()->findOrFail($id);
+
+			$category->delete();
+			return response()->json(['message' => 'Category ' . $category->name . ' was disabled', 'deletedAt' => $category->deleted_at], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (ModelNotFoundException $e) {
+			return response()->json(['message' => 'Category not found'], 404);
+		} catch (Exception $e) {
+			return  response()->json(['message' => $e->getMessage()], 500);
+		}
 	}
 
-	public function restore(Request $request, $id)
+	public function restore($id)
 	{
-		$category = Category::withTrashed()->findOrFail($id);
+		try {
+			$this->authorize('restore', Category::class);
 
-		$category->restore();
+			$category = Category::withTrashed()->findOrFail($id);
 
+			$category->restore();
 
-		Cache::forget('categories');
+			Cache::forget('categories');
 
-		return response()->json(['message' => 'Category ' . $category->name . ' was restored'], 200);
+			return response()->json(['message' => 'Category ' . $category->name . ' was restored'], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
+		} catch (ModelNotFoundException $e) {
+			return response()->json(['message' => 'Category not found'], 404);
+		} catch (Exception $e) {
+			return  response()->json(['message' => $e->getMessage()], 500);
+		}
 	}
 
 	public function search($catagoryName)
 	{
-
 		$categories = Category::with(['discount', 'products', 'subProducts', 'subCategories' => function ($query) {
 			$query->withTrashed();
 			$query->orderBy('position', 'asc');
@@ -208,6 +275,8 @@ class CategoryController extends Controller
 	public function removeParent($id)
 	{
 		try {
+			$this->authorize('update', Category::class);
+
 			$category = Category::withTrashed()->findOrFail($id);
 
 			$category->parent_id = null;
@@ -216,9 +285,10 @@ class CategoryController extends Controller
 
 			$category->save();
 
-			return response()->json(['message' => 'Parent category removed'], 200);
+			return response()->json(['message' => 'Parent category removed', 'position' => $category->position], 200);
+		} catch (AuthorizationException $e) {
+			return  response()->json(['message' => $e->getMessage()], 403);
 		} catch (ModelNotFoundException $mnfe) {
-			debug($mnfe);
 			return response()->json(['message' => 'Category not found'], 404);
 		} catch (\Exception $e) {
 			debug($e);

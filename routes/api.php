@@ -27,6 +27,9 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::post('/{id}/discounts/{discountId}', 'CategoryDiscountController@addDiscount');
 		Route::delete('/{id}/discounts', 'CategoryDiscountController@removeDiscount');
 
+		Route::post('/{id}/image', 'CategoryImageController@store');
+		Route::delete('/{id}/image', 'CategoryImageController@destroy');
+
 		Route::patch('/parent-removal/{id}', 'CategoryController@removeParent');
 	});
 
@@ -37,6 +40,17 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 
 		Route::post('/{id}/ingredients/{ingredientId}/{quantity}', 'ProductIngredientController@addIngredient');
 		Route::delete('/{id}/ingredients/{ingredientId}', 'ProductIngredientController@removeIngredient');
+
+		Route::post('/{id}/image', 'ProductImageController@store');
+		Route::delete('/{id}/image', 'ProductImageController@destroy');
+	});
+
+	Route::group(['prefix' => 'users'], function () {
+		Route::delete('{id}/disable', 'UserController@disable');
+		Route::post('{id}/restore', 'UserController@restore');
+
+		Route::post('{id}/image', 'UserImageController@store');
+		Route::delete('{id}/image', 'UserImageController@destroy');
 	});
 
 	Route::apiResource('users', 'UserController', ['as' => 'api']);
@@ -52,11 +66,6 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 	// Route::apiResource('order-statuses', 'OrderStatusController');
 	Route::apiResource('tables', 'TableController', ['as' => 'api']);
 	Route::apiResource('reservations', 'ReservationController', ['as' => 'api'])->only(['index', 'show', 'store', 'destroy']);
-
-	Route::group(['prefix' => 'users'], function () {
-		Route::delete('{id}/disable', 'UserController@disable');
-		Route::post('{id}/restore', 'UserController@restore');
-	});
 
 	Route::group(['prefix' => 'products'], function () {
 		Route::delete('{id}/disable', 'ProductController@disable');
@@ -82,7 +91,7 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::get('products/name/{name}', 'OrderItemController@getProductsByName');
 		Route::get('products/id/{id}', 'OrderItemController@getProductsById');
 
-		Route::patch('update-status/{orderId}', 'OrderController@updateStatus');
+		Route::patch('update-status/{orderId}', 'OrderStatusController');
 
 		Route::patch('remove-item/{orderId}', 'OrderItemController@removeItem');
 		Route::patch('add-item/{orderId}', 'OrderItemController@addItem');
@@ -106,8 +115,6 @@ Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Api\Dashboard', 'p
 		Route::get('phone-number/{phoneNumber}', 'FindUserByPhoneNumber');
 		Route::get('addresses/{id}', 'ClientController@getClientAddresses');
 	});
-
-	Route::apiResource('images', 'FileController', ['as' => 'api'])->only('store', 'destroy');
 });
 
 Route::group(['middleware' => 'auth:web', 'namespace' => 'Api\Client', 'prefix' => 'client'], function () {

@@ -19,11 +19,7 @@
       <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5">
         <h2 class="mb-2 text-xl font-semibold">Table</h2>
         <div>
-          <InputGroup
-            id="name"
-            label="Name"
-            class="w-full"
-          >
+          <InputGroup id="name" label="Name" class="w-full">
             <TextInput
               v-model="table.name"
               :waiting="waiting"
@@ -32,11 +28,7 @@
               name="name"
             ></TextInput>
           </InputGroup>
-          <InputGroup
-            id="name"
-            label="Name"
-            class="w-full"
-          >
+          <InputGroup id="name" label="Seats" class="w-full">
             <TextInput
               v-model="table.seats"
               :waiting="waiting"
@@ -96,6 +88,9 @@ import Button from "../../components/buttons/ButtonComponent";
 
 import ConfirmActionModal from "../modals/ConfirmActionModalComponent.vue";
 
+import { alphaNumSpaces } from "../../validators/index";
+import { required, integer, minValue } from "vuelidate/lib/validators";
+
 import _find from "lodash/find";
 
 import { mapGetters, mapActions } from "vuex";
@@ -131,13 +126,27 @@ export default {
       table: {
         id: "",
         name: "",
-        seats: 0,
+        seats: "",
         status: {
           id: "",
           name: "",
         },
       },
     };
+  },
+
+  validations: {
+    table: {
+      name: {
+        required,
+        alphaNumSpaces,
+      },
+      seats: {
+        required,
+        integer,
+        minValue: minValue(0),
+      },
+    },
   },
 
   watch: {
@@ -164,11 +173,24 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        const table = await this.storeTable(this.table.name);
-        this.table.id = table.id;
-        this.table.status = table.status;
-        this.resetForm();
-        this.$v.$reset();
+        try {
+          this.$Progress.start();
+
+          const response = await this.storeTable(this.table);
+          // this.table.id = response.table.id;
+          // this.table.status = response.table.status;
+          this.resetForm();
+          this.$v.$reset();
+          this.$Progress.finish();
+          this.$toast.success(response.data.message);
+        } catch (error) {
+          this.$Progress.fail();
+          if (error.response && error.response.data) {
+            this.$toast.error(error.response.data.message);
+          } else {
+            this.$toast.error(error.response.data.message);
+          }
+        }
       }
     },
 

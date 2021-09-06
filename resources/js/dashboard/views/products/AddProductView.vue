@@ -13,15 +13,18 @@
           2xl:w-2/4
         "
       >
-        <div class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1">
+        <div
+          class="flex flex-col gap-y-3 bg-white shadow rounded-sm p-5 lg:flex-1"
+        >
           <!-- IMAGE UPLOAD -->
-          <ImageUploadComponent
-            :clear="clearImage"
-            @fileAdded="setWaiting"
-            @processFileAborted="setWaiting"
-            @fileProcessed="setWaiting"
-            @setImagePath="setImagePath"
-          ></ImageUploadComponent>
+          <add-image-component
+            max-file-size="15MB"
+            imageMinSize="2000"
+            :clear="clear"
+            :allow-image-validate-size="true"
+            :removed="resetClear"
+            @updatefiles="onUpdateFiles"
+          ></add-image-component>
 
           <div
             class="
@@ -338,7 +341,7 @@ import { mapActions, mapGetters } from "vuex";
 
 import ViewContainer from "../ViewContainer";
 
-import ImageUploadComponent from "../../components/ImageUploadComponent";
+import AddImageComponent from "../../components/AddImageComponent.vue";
 import IngredientsComponent from "../../components/products/IngredientsComponent";
 
 import DiscountComponent from "../../components/discounts/DiscountComponent.vue";
@@ -396,6 +399,10 @@ export default {
 
   data() {
     return {
+      imageSize: "2000",
+      files: [],
+      clear: false,
+
       checkingBarcode: false,
       waiting: false,
 
@@ -460,34 +467,58 @@ export default {
   methods: {
     ...mapActions("Products", ["addProduct", "getProductByBarcode"]),
 
+    onUpdateFiles(files) {
+      if (files.length) {
+        this.product.image = files[0].file;
+      }
+    },
+
+    resetClear() {
+      this.clear = false;
+    },
+
     async submit() {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
         try {
+          this.$Progress.start();
+
           this.waiting = true;
 
-          const payload = {};
+          const payload = new FormData();
 
-          Object.keys(this.product).forEach((key) => {
-            payload[key] = this.product[key];
-          });
+          payload.append("barcode", this.product.barcode);
+          payload.append("name", this.product.name);
+          payload.append("description", this.product.description);
+          payload.append("basePrice", this.product.basePrice);
+          payload.append("weight", this.product.weight);
+          payload.append("unitId", this.product.unitId);
+          payload.append("categoryId", this.product.categoryId);
 
-          if (payload.discountId === "") {
-            delete payload.discountId;
+          if (this.product.subCategoryId) {
+            payload.append("subCategoryId", this.product.subCategoryId);
           }
 
-          if (payload.ingredients.length === 0) {
-            delete payload.ingredients;
+          if (this.product.ingredients.length > 0) {
+            payload.append(
+              "ingredients",
+              JSON.stringify(this.product.ingredients)
+            );
           }
 
-          if (payload.subCategoryId === "") {
-            delete payload.subCategoryId;
+          if (this.product.discountId) {
+            payload.append("discountId", this.product.discountId);
+          }
+
+          if (this.product.image) {
+            payload.append("image", this.product.image);
           }
 
           const response = await storeProduct(payload);
 
           this.product = {
+            image: "",
             barcode: "",
             name: "",
             description: "",
@@ -499,23 +530,31 @@ export default {
             subCategoryId: "",
             discountId: "",
             ingredients: [],
-          }
-            
+          };
+
+          this.clear = true;
+
+          this.files = [];
+
           this.waiting = false;
 
           this.clearImage = true;
 
           this.$toast.success(response.data.message);
-
+          this.$Progress.finish();
           this.$v.$reset();
         } catch (error) {
           console.log(error);
+
+          this.$Progress.fail();
 
           this.waiting = false;
 
           if (error.response && error.response.data.errors) {
             this.$toast.error(response.data.message);
             this.$v.$touch();
+          } else {
+            this.$toast.error("Something went wrong, try again later");
           }
         }
       }
@@ -526,12 +565,11 @@ export default {
       this.product.subCategoryId = "";
 
       if (this.product.categoryId) {
-        this.getCategories.forEach(category => {
-          if(category.id == this.product.categoryId) {
+        this.getCategories.forEach((category) => {
+          if (category.id == this.product.categoryId) {
             this.subCategories.push(...category.subCategories);
           }
-        })
-
+        });
       } else {
         this.subCategories = [];
       }
@@ -583,7 +621,7 @@ export default {
 
   components: {
     ViewContainer,
-    ImageUploadComponent,
+    AddImageComponent,
     IngredientsComponent,
     DiscountComponent,
     Input,

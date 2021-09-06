@@ -42,6 +42,7 @@
           Refresh
         </button>
         <router-link
+          v-if="canAdd"
           :to="{ name: 'AddProduct' }"
           class="
             block
@@ -121,7 +122,8 @@
                 <span>{{ product.weight }} {{ product.unit }}</span>
               </div>
               <div class="text-sm">
-                {{ product.basePrice }} RON / {{ product.vat }} % VAT / {{ product.discount }} % discount
+                {{ product.basePrice }} RON / {{ product.vat }} % VAT /
+                {{ product.discount }} % discount
               </div>
             </div>
             <div>
@@ -207,6 +209,12 @@ export default {
 
   computed: {
     ...mapGetters("Categories", ["getCategories"]),
+    ...mapGetters("Users", [
+      "getLoggedUser",
+      "isAdmin",
+      "isWaiter",
+      "isLocationManager",
+    ]),
 
     query() {
       const query = {};
@@ -220,6 +228,10 @@ export default {
       query.orderBy = this.orderBy;
 
       return query;
+    },
+
+    canAdd() {
+      return this.isLocationManager || this.isAdmin;
     },
   },
 
